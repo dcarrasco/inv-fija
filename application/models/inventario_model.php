@@ -652,21 +652,46 @@ primary key(id)
 	}
 
 
-	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC') 
+	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0') 
 	{
-		$this->db->select('tu.tipo_ubicacion');
+		$this->db->select('t.tipo_ubicacion');
+		$this->db->select('d.ubicacion');
+
 		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
 		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
-		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
+		if ($incl_ajustes == '0')
+		{
+			$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');			
+		}
+		else
+		{
+			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
+			$this->db->select_sum('(stock_fisico-stock_sap+stock_ajuste)' , 'sum_stock_diff');			
+		}
+		
 		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
 		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
-		$this->db->select_sum('((stock_fisico-stock_sap)*c.pmp)' , 'sum_valor_diff');
+		if ($incl_ajustes == '0')
+		{
+			$this->db->select_sum('((stock_fisico-stock_sap)*c.pmp)' , 'sum_valor_diff');
+		}
+		else
+		{
+			$this->db->select_sum('(stock_ajuste*c.pmp)' , 'sum_valor_ajuste');
+			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste)*c.pmp)' , 'sum_valor_diff');
+		}
+		
 		$this->db->select_max('fecha_modificacion' , 'fecha');
-		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_tipos_ubicacion as tu', "tu.ubicacion = fija_detalle_inventario.ubicacion and tu.id_inventario = fija_detalle_inventario.id_inventario", 'left');
+		
+		$this->db->from('fija_detalle_inventario d');
+		$this->db->join('fija_inventario2 i', 'd.id_inventario=i.id', 'left');
+		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'd.ubicacion = ut.ubicacion and i.tipo_inventario = ut.tipo_inventario', 'left');
+		$this->db->join('fija_tipo_ubicacion t', 'ut.id_tipo_ubicacion = t.id', 'left');
 		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		
 		$this->db->where('fija_detalle_inventario.id_inventario', $id_inventario);
-		$this->db->group_by('tu.tipo_ubicacion');
+		$this->db->group_by('t.tipo_ubicacion');
+		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
 		return $this->db->get()->result_array();
