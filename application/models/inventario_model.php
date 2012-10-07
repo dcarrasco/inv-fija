@@ -687,9 +687,9 @@ primary key(id)
 		$this->db->join('fija_inventario2 i', 'd.id_inventario=i.id', 'left');
 		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'd.ubicacion = ut.ubicacion and i.tipo_inventario = ut.tipo_inventario', 'left');
 		$this->db->join('fija_tipo_ubicacion t', 'ut.id_tipo_ubicacion = t.id', 'left');
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogo as c', "c.catalogo = d.catalogo", 'left');
 		
-		$this->db->where('fija_detalle_inventario.id_inventario', $id_inventario);
+		$this->db->where('d.id_inventario', $id_inventario);
 		$this->db->group_by('t.tipo_ubicacion');
 		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
