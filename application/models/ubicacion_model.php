@@ -80,7 +80,7 @@ primary key(id)
 		$this->db->select('d.ubicacion');
 		$this->db->from('fija_detalle_inventario d');
 		$this->db->join('fija_inventario2 i','d.id_inventario=i.id');
-		$this->db->join('fija_ubicacion_tipo_ubicacion u','d.ubicacion=u.ubicacion', 'left');
+		$this->db->join('fija_ubicacion_tipo_ubicacion u','d.ubicacion=u.ubicacion and i.tipo_inventario=u.tipo_inventario', 'left');
 		$this->db->where('i.tipo_inventario', $tipo_inventario);
 		$this->db->where('u.id_tipo_ubicacion is null');
 		$this->db->order_by('d.ubicacion');
