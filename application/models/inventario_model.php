@@ -96,11 +96,6 @@ primary key(id)
 	}
 
 
-	public function total_ubicacion_tipo_ubicacion() 
-	{
-		return $this->db->count_all('fija_ubicacion_tipo_ubicacion');
-	}
-
 
 	public function get_inventarios_activos($limit = 0, $offset = 0)
 	{
@@ -109,17 +104,6 @@ primary key(id)
 	}
 
 
-	public function get_tipos_ubicacion($limit = 0, $offset =0)
-	{
-		$this->db->order_by('tipo_inventario ASC, tipo_ubicacion ASC');
-		return $this->db->get('fija_tipo_ubicacion', $limit, $offset)->result_array();
-	}
-
-	public function get_ubicacion_tipo_ubicacion($limit = 0, $offset =0)
-	{
-		$this->db->order_by('tipo_inventario ASC, id_tipo_ubicacion ASC, ubicacion ASC');
-		return $this->db->get('fija_ubicacion_tipo_ubicacion', $limit, $offset)->result_array();
-	}
 
 
 	public function get_combo_inventarios()
@@ -147,42 +131,7 @@ primary key(id)
 	}
 
 
-	public function get_combo_tipos_ubicacion($tipo_inventario = '')
-	{
-		$arr_rs = $this->db->order_by('tipo_ubicacion')->get_where('fija_tipo_ubicacion', array('tipo_inventario'=>$tipo_inventario))->result_array();
 
-		$arr_combo = array();
-		$arr_combo[''] = 'Seleccione tipo de ubicacion...';
-		foreach($arr_rs as $val)
-		{
-			$arr_combo[$val['id']] = $val['tipo_ubicacion'];
-		}
-
-		return $arr_combo;
-
-	}
-
-
-
-	public function get_ubicaciones_libres($tipo_inventario = '')
-	{
-		$this->db->distinct();
-		$this->db->select('d.ubicacion');
-		$this->db->from('fija_detalle_inventario d');
-		$this->db->join('fija_inventario2 i','d.id_inventario=i.id');
-		$this->db->join('fija_ubicacion_tipo_ubicacion u','d.ubicacion=u.ubicacion', 'left');
-		$this->db->where('i.tipo_inventario', $tipo_inventario);
-		$this->db->where('u.id_tipo_ubicacion is null');
-		$this->db->order_by('d.ubicacion');
-		$arr_rs = $this->db->get()->result_array();
-
-		$arr_ubicaciones = array();
-		foreach($arr_rs as $val)
-		{
-			$arr_ubicaciones[$val['ubicacion']] = $val['ubicacion'];
-		}
-		return ($arr_ubicaciones);
-	}
 
 
 	/**
@@ -208,31 +157,6 @@ primary key(id)
 	}
 
 
-	public function guardar_tipo_ubicacion($id = 0, $tipo_inventario = '', $tipo_ubicacion = '')
-	{
-		if ($id == 0)
-		{
-			$this->db->insert('fija_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
-		}
-		else
-		{
-			$this->db->where('id', $id);
-			$this->db->update('fija_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
-		}
-	}
-
-	public function guardar_ubicacion_tipo_ubicacion($id = 0, $tipo_inventario = '', $ubicacion = '', $id_tipo_ubicacion = 0)
-	{
-		if ($id == 0)
-		{
-			$this->db->insert('fija_ubicacion_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
-		}
-		else
-		{
-			$this->db->where('id', $id);
-			$this->db->update('fija_ubicacion_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
-		}
-	}
 
 	public function get_usuario_hoja($id_inventario = 0, $hoja = 0, $tipo = '')
 	{
@@ -349,20 +273,6 @@ primary key(id)
 		return $this->db->get_where('fija_detalle_inventario', array('id_inventario' => $id_inventario))->num_rows();
 	}
 
-	public function borrar_tipo_ubicacion($id = 0)
-	{
-		$this->db->delete('fija_tipo_ubicacion', array('id' => $id));
-	}
-
-	public function borrar_ubicacion_tipo_ubicacion($id = 0)
-	{
-		$this->db->delete('fija_ubicacion_tipo_ubicacion', array('id' => $id));
-	}
-
-	public function get_cant_registros_tipo_ubicacion($id = 0)
-	{
-		return $this->db->get_where('fija_ubicacion_tipo_ubicacion', array('id_tipo_ubicacion' => $id))->num_rows();
-	}
 
 
 	// =====================================================================================================
@@ -656,19 +566,19 @@ primary key(id)
 	{
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');
-
 		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
 		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
 		if ($incl_ajustes == '0')
 		{
-			$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');			
+			$this->db->select_sum('(stock_fisico - stock_sap)' , 'sum_stock_diff');
 		}
 		else
 		{
 			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
-			$this->db->select_sum('(stock_fisico-stock_sap+stock_ajuste)' , 'sum_stock_diff');			
+			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)' , 'sum_stock_diff');
 		}
-		
+
+		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
 		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
 		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
 		if ($incl_ajustes == '0')
@@ -680,21 +590,20 @@ primary key(id)
 			$this->db->select_sum('(stock_ajuste*c.pmp)' , 'sum_valor_ajuste');
 			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste)*c.pmp)' , 'sum_valor_diff');
 		}
-		
+
 		$this->db->select_max('fecha_modificacion' , 'fecha');
-		
 		$this->db->from('fija_detalle_inventario d');
 		$this->db->join('fija_inventario2 i', 'd.id_inventario=i.id', 'left');
-		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'd.ubicacion = ut.ubicacion and i.tipo_inventario = ut.tipo_inventario', 'left');
-		$this->db->join('fija_tipo_ubicacion t', 'ut.id_tipo_ubicacion = t.id', 'left');
+		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = d.ubicacion', 'left');
+		$this->db->join('fija_tipo_ubicacion t', 't.id=ut.id_tipo_ubicacion', 'left');
 		$this->db->join('fija_catalogo as c', "c.catalogo = d.catalogo", 'left');
-		
 		$this->db->where('d.id_inventario', $id_inventario);
+
 		$this->db->group_by('t.tipo_ubicacion');
 		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
-		return $this->db->get()->result_array();
+		return $this->db->get()->result_array();	
 	}
 
 

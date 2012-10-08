@@ -236,6 +236,7 @@ class Config extends CI_Controller {
 	public function tipo_ubicacion($pag = 0)
 	{
 		$this->load->model('inventario_model');
+		$this->load->model('ubicacion_model');
 
 		$this->load->library('pagination');
 		$limite_por_pagina = 15;
@@ -253,7 +254,7 @@ class Config extends CI_Controller {
 		$this->pagination->initialize($config_pagination);
 
 
-		$datos_hoja = $this->inventario_model->get_tipos_ubicacion($limite_por_pagina, $pag);
+		$datos_hoja = $this->ubicacion_model->get_tipos_ubicacion($limite_por_pagina, $pag);
 
 		if ($this->input->post('formulario')=='editar')
 		{
@@ -299,7 +300,7 @@ class Config extends CI_Controller {
 					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or 
 						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['tipo_ubicacion']))
 					{
-						$this->inventario_model->guardar_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-tipo_ubicacion'));
+						$this->ubicacion_model->guardar_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-tipo_ubicacion'));
 						$cant_modif += 1;
 					}
 				}
@@ -307,18 +308,18 @@ class Config extends CI_Controller {
 			}
 			else if ($this->input->post('formulario') == 'agregar')
 			{
-				$this->inventario_model->guardar_tipo_ubicacion(0, set_value('agr-tipo_inventario'), set_value('agr-tipo_ubicacion'));
+				$this->ubicacion_model->guardar_tipo_ubicacion(0, set_value('agr-tipo_inventario'), set_value('agr-tipo_ubicacion'));
 				$this->session->set_flashdata('msg_alerta', 'Tipo de Ubicacion (' . set_value('agr-tipo_inventario') . ', ' . set_value('agr-tipo_ubicacion') . ') agregado correctamente');
 			}
 			else if ($this->input->post('formulario') == 'borrar')
 			{
-				if ($this->inventario_model->get_cant_registros_tipo_ubicacion(set_value('id_borrar')) > 0)
+				if ($this->ubicacion_model->get_cant_registros_tipo_ubicacion(set_value('id_borrar')) > 0)
 				{
 					$this->session->set_flashdata('msg_alerta', 'Inventario (id=' . set_value('id_borrar') . ') no está vacio, por lo que no se puede borrar');
 				}
 				else
 				{
-					$this->inventario_model->borrar_tipo_ubicacion(set_value('id_borrar'));
+					$this->ubicacion_model->borrar_tipo_ubicacion(set_value('id_borrar'));
 					$this->session->set_flashdata('msg_alerta', 'Inventario (id=' . set_value('id_borrar') . ') borrado correctamente');
 				}
 			}
@@ -335,11 +336,12 @@ class Config extends CI_Controller {
 	public function ubicacion_tipo_ubicacion($pag = 0)
 	{
 		$this->load->model('inventario_model');
+		$this->load->model('ubicacion_model');
 
 		$this->load->library('pagination');
 		$limite_por_pagina = 15;
 		$config_pagination = array(
-									'total_rows'  => $this->inventario_model->total_ubicacion_tipo_ubicacion(),
+									'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
 									'per_page'    => $limite_por_pagina,
 									'base_url'    => site_url('config/ubicacion_tipo_ubicacion'),
 									'uri_segment' => 3,
@@ -352,7 +354,7 @@ class Config extends CI_Controller {
 		$this->pagination->initialize($config_pagination);
 
 
-		$datos_hoja = $this->inventario_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pag);
+		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pag);
 
 		if ($this->input->post('formulario')=='editar')
 		{
@@ -390,7 +392,7 @@ class Config extends CI_Controller {
 			}
 			foreach($arr_combo_tipo_ubic as $key => $val)
 			{
-				$arr_combo_tipo_ubic[$key] = $this->inventario_model->get_combo_tipos_ubicacion($key);
+				$arr_combo_tipo_ubic[$key] = $this->ubicacion_model->get_combo_tipos_ubicacion($key);
 			}
 
 
@@ -416,7 +418,7 @@ class Config extends CI_Controller {
 						(set_value($reg['id'].'-ubicacion')       != $reg['ubicacion']) or
 						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['id_tipo_ubicacion']))
 					{
-						$this->inventario_model->guardar_ubicacion_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-ubicacion'), set_value($reg['id'].'-tipo_ubicacion'));
+						$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-ubicacion'), set_value($reg['id'].'-tipo_ubicacion'));
 						$cant_modif += 1;
 					}
 				}
@@ -427,14 +429,14 @@ class Config extends CI_Controller {
 				$count = 0;
 				foreach($this->input->post('agr-ubicacion') as $val)
 				{
-					$this->inventario_model->guardar_ubicacion_tipo_ubicacion(0, set_value('agr-tipo_inventario'), $val, set_value('agr-tipo_ubicacion'));
+					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(0, set_value('agr-tipo_inventario'), $val, set_value('agr-tipo_ubicacion'));
 					$count += 1;
 				}
 				$this->session->set_flashdata('msg_alerta', 'Se agregaron ' . $count . ' ubicaciones correctamente');
 			}
 			else if ($this->input->post('formulario') == 'borrar')
 			{
-				$this->inventario_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
+				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
 				$this->session->set_flashdata('msg_alerta', 'Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
 			}
 			redirect('config/ubicacion_tipo_ubicacion/' . $pag);
@@ -449,8 +451,8 @@ class Config extends CI_Controller {
 	 */
 	public function get_json_ubicaciones_libres($tipo_inventario = '')
 	{
-		$this->load->model('inventario_model');
-		$arr_ubic = $this->inventario_model->get_ubicaciones_libres($tipo_inventario);
+		$this->load->model('ubicacion_model');
+		$arr_ubic = $this->ubicacion_model->get_ubicaciones_libres($tipo_inventario);
 		echo (json_encode($arr_ubic));
 	}
 
@@ -461,8 +463,8 @@ class Config extends CI_Controller {
 	 */
 	public function get_json_tipo_ubicacion($tipo_inventario = '')
 	{
-		$this->load->model('inventario_model');
-		$arr_ubic = $this->inventario_model->get_combo_tipos_ubicacion($tipo_inventario);
+		$this->load->model('ubicacion_model');
+		$arr_ubic = $this->ubicacion_model->get_combo_tipos_ubicacion($tipo_inventario);
 		echo (json_encode($arr_ubic));
 	}
 
