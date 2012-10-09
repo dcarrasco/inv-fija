@@ -42,6 +42,7 @@ class Config extends CI_Controller {
 			{
 				$this->form_validation->set_rules($reg['id'].'-tipo', 'Tipo', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-nombre', 'Nombre', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-usr', 'Username', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-activo', 'Activo', '');
 			}
 		}
@@ -49,6 +50,7 @@ class Config extends CI_Controller {
 		{
 			$this->form_validation->set_rules('agr_tipo', 'Tipo', 'trim|required');
 			$this->form_validation->set_rules('agr_nombre', 'Nombre', 'trim|required');
+			$this->form_validation->set_rules('agr_usr', 'Username', 'trim|required');
 			$this->form_validation->set_rules('agr_activo', 'Activo', '');
 		}
 		else if ($this->input->post('formulario')=='borrar')
@@ -81,11 +83,12 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-tipo') != $reg['tipo']) or 
+					if ((set_value($reg['id'].'-tipo')   != $reg['tipo']) or 
 						(set_value($reg['id'].'-nombre') != $reg['nombre']) or
+						(set_value($reg['id'].'-usr')    != $reg['usr']) or
 						(set_value($reg['id'].'-activo') != $reg['activo']))
 					{
-						$this->usuarios_model->guardar($reg['id'], set_value($reg['id'].'-tipo'), set_value($reg['id'].'-nombre'), set_value($reg['id'].'-activo'));
+						$this->usuarios_model->guardar($reg['id'], set_value($reg['id'].'-tipo'), set_value($reg['id'].'-nombre'), set_value($reg['id'].'-usr'), set_value($reg['id'].'-activo'));
 						$cant_modif += 1;
 					}
 				}
@@ -93,7 +96,7 @@ class Config extends CI_Controller {
 			}
 			else if ($this->input->post('formulario') == 'agregar')
 			{
-				$this->usuarios_model->guardar(0, set_value('agr_tipo'), set_value('agr_nombre'), set_value('agr_activo'));
+				$this->usuarios_model->guardar(0, set_value('agr_tipo'), set_value('agr_nombre'), set_value('agr_usr'), set_value('agr_activo'));
 				$this->session->set_flashdata('msg_alerta', 'Usuario (' . set_value('agr_nombre') . ') agregado correctamente');
 			}
 			else if ($this->input->post('formulario') == 'borrar')

@@ -53,19 +53,19 @@ PRIMARY KEY(id)
 
 
 
-	public function guardar($id = 0, $tipo = '', $nombre = '', $activo = 0)
+	public function guardar($id = 0, $tipo = '', $nombre = '', $username = '', $activo = 0)
 	{
 		$activo = ($activo == null) ? 0 : $activo;
 		
 		if ($id == 0)
 		{
-			$this->db->insert('fija_usuarios', array('tipo' => $tipo, 'nombre' => $nombre, 'activo' => $activo ));
+			$this->db->insert('fija_usuarios', array('tipo' => $tipo, 'nombre' => $nombre, 'usr' => $username, 'activo' => $activo ));
 
 		}
 		else
 		{
 			$this->db->where('id', $id);
-			$this->db->update('fija_usuarios', array('tipo' => $tipo, 'nombre' => $nombre, 'activo' => $activo ));					
+			$this->db->update('fija_usuarios', array('tipo' => $tipo, 'nombre' => $nombre, 'usr' => $username, 'activo' => $activo ));					
 		}
 	}
 

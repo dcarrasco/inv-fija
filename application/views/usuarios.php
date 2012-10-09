@@ -29,6 +29,7 @@
 				<tr>
 					<th class="ac">Tipo</th>
 					<th class="ac">Nombre</th>
+					<th class="ac">Username</th>
 					<th class="ac">Activo</th>
 					<th></th>
 				</tr>
@@ -41,6 +42,10 @@
 				<td class="ac">
 					<?php echo form_input('agr_nombre', set_value('agr_nombre'), 'maxlength="45" size="45"'); ?>
 					<?php echo form_error('agr_nombre'); ?>
+				</td>
+				<td class="ac">
+					<?php echo form_input('agr_usr', set_value('agr_usr'), 'maxlength="30" size="30"'); ?>
+					<?php echo form_error('agr_usr'); ?>
 				</td>
 				<td class="ac">
 					<?php echo form_checkbox('agr_activo', 1, set_checkbox('agr_activo',1, TRUE)); ?>
@@ -63,6 +68,7 @@
 					<th>id</th>
 					<th>Tipo</th>
 					<th>Nombre</th>
+					<th>Username</th>
 					<th class="ac">Activo</th>
 					<th class="ac">Borrar</th>
 				</tr>
@@ -79,6 +85,10 @@
 						<?php echo form_input($reg['id'].'-nombre', set_value($reg['id'].'-nombre', $reg['nombre']),'maxlength="45" size="45"'); ?>
 						<?php echo form_error($reg['id'].'-nombre'); ?>
 					</td>
+					<td>
+						<?php echo form_input($reg['id'].'-usr', set_value($reg['id'].'-usr', $reg['usr']),'maxlength="30" size="30"'); ?>
+						<?php echo form_error($reg['id'].'-usr'); ?>
+					</td>
 					<td class="ac">
 						<?php echo form_checkbox($reg['id'].'-activo', 1, set_checkbox($reg['id'].'-activo', 1, ($reg['activo'] == 1) ? TRUE : FALSE)); ?>
 					</td>
@@ -92,7 +102,7 @@
 
 				<?php if ($links_paginas != ''):?>
 				<tr>
-					<td colspan="4"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
+					<td colspan="6"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
 				</tr>
 			<?php endif; ?>
 			</tbody>
