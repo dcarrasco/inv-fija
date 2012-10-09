@@ -2,13 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="fl">
-			<ul>
-				<li><?php echo anchor('/config/usuarios','Usuarios')?></li>
-				<li><?php echo anchor('/config/materiales','Materiales')?></li>
-				<li><?php echo anchor('/config/inventario','Inventario Activo')?></li>
-				<li><?php echo anchor('/config/tipo_ubicacion','Tipos Ubicacion')?></li>
-				<li class="selected"><?php echo anchor('/config/ubicacion_tipo_ubicacion','Ubicaciones')?></li>
-			</ul>
+			<?php echo $menu_configuracion; ?>
 		</div>
 
 		<div class="fr">

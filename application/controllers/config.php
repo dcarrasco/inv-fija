@@ -14,6 +14,29 @@ class Config extends CI_Controller {
 	}
 
 
+	private function menu_configuracion($opcion)
+	{
+		$arr_menu = array(
+				'usuarios'       => array('url' => '/config/usuarios',       'texto' => 'Usuarios'),
+				'materiales'     => array('url' => '/config/materiales',     'texto' => 'Materiales'),
+				'inventario'     => array('url' => '/config/inventario',     'texto' => 'Inventario Activo'),
+				'tipo_ubicacion' => array('url' => '/config/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
+				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
+				'aplicaciones'   => array('url' => '/config/app',            'texto' => 'Aplicaciones'),
+				'modulos'        => array('url' => '/config/modulo',         'texto' => 'Modulos'),
+				'roles'          => array('url' => '/config/rol',            'texto' => 'Roles'),
+			);
+
+		$menu = '<ul>';
+		foreach($arr_menu as $key => $val)
+		{
+			$selected = ($key == $opcion) ? ' class="selected"' : '';
+			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
+		}
+		$menu .= '</ul>';
+		return $menu;
+	}
+
 	public function usuarios($pag = 0)
 	{
 
@@ -64,6 +87,7 @@ class Config extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('usuarios'),
 					'datos_hoja'      => $datos_hoja,
 					'msg_alerta'      => $this->session->flashdata('msg_alerta'),
 					'links_paginas'   => $this->pagination->create_links(),
@@ -169,6 +193,7 @@ class Config extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('materiales'),
 					'datos_hoja'      => $datos_hoja,
 					'filtro'          => ($filtro == '_') ? '' : $filtro,
 					'links_paginas'   => $this->pagination->create_links(),
@@ -284,6 +309,7 @@ class Config extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('tipo_ubicacion'),
 					'datos_hoja'             => $datos_hoja,
 					'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
 					'msg_alerta'             => $this->session->flashdata('msg_alerta'),
@@ -400,6 +426,7 @@ class Config extends CI_Controller {
 
 
 			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('ubicaciones'),
 					'datos_hoja'             => $datos_hoja,
 					'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
 					'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
@@ -524,6 +551,7 @@ class Config extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('inventario'),
 					'datos_hoja'           => $datos_hoja,
 					'arr_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),					
 					'msg_alerta'           => $this->session->flashdata('msg_alerta'),
@@ -858,6 +886,321 @@ class Config extends CI_Controller {
 		$this->load->view('inventario_print_footer');
 
 	}
+
+
+
+
+
+	public function app($pag = 0)
+	{
+
+		$this->load->model('acl_model');
+
+		$this->load->library('pagination');
+		$limite_por_pagina = 15;
+		$config_pagination = array(
+									'total_rows'  => $this->acl_model->get_total_app(),
+									'per_page'    => $limite_por_pagina,
+									'base_url'    => site_url('config/app'),
+									'uri_segment' => 3,
+									'num_links'   => 5,
+									'first_link'  => 'Primero',
+									'last_link'   => 'Ultimo',
+									'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+									'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+								);
+		$this->pagination->initialize($config_pagination);
+
+		$datos_hoja = $this->acl_model->get_all_app($limite_por_pagina, $pag);
+
+		if ($this->input->post('formulario')=='editar')
+		{
+			foreach($datos_hoja as $reg)
+			{
+				$this->form_validation->set_rules($reg['id'].'-app', 'Aplicacion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-descripcion', 'Descripcion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-url', 'URL aplicacion', 'trim|required');
+			}
+		}
+		else if ($this->input->post('formulario')=='agregar')
+		{
+			$this->form_validation->set_rules('agr-app', 'Aplicacion', 'trim|required');
+			$this->form_validation->set_rules('agr-descripcion', 'Descripcion', 'trim|required');
+			$this->form_validation->set_rules('agr-url', 'URL aplicacion', 'trim|required');
+		}
+		else if ($this->input->post('formulario')=='borrar')
+		{
+			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
+		}
+
+		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('aplicaciones'),
+					'datos_hoja'      => $datos_hoja,
+					'msg_alerta'      => $this->session->flashdata('msg_alerta'),
+					'links_paginas'   => $this->pagination->create_links(),
+				);
+			$this->_render_view('app', $data);
+		}
+		else
+		{
+			if ($this->input->post('formulario') == 'editar')
+			{
+				$cant_modif = 0;
+
+				foreach($datos_hoja as $reg)
+				{
+					if ((set_value($reg['id'].'-app')   != $reg['app']) or 
+						(set_value($reg['id'].'-descripcion') != $reg['descripcion']) or
+						(set_value($reg['id'].'-url')    != $reg['url']))
+					{
+						$this->acl_model->guardar_app($reg['id'], set_value($reg['id'].'-app'), set_value($reg['id'].'-descripcion'), set_value($reg['id'].'-url'));
+						$cant_modif += 1;
+					}
+				}
+				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' aplicacion(es) modificadas correctamente' : ''));
+			}
+			else if ($this->input->post('formulario') == 'agregar')
+			{
+				$this->acl_model->guardar_app(0, set_value('agr-app'), set_value('agr-descripcion'), set_value('agr-url'));
+				$this->session->set_flashdata('msg_alerta', 'Aplicacion (' . set_value('agr_nombre') . ') agregada correctamente');
+			}
+			else if ($this->input->post('formulario') == 'borrar')
+			{
+				if ($this->acl_model->get_cant_registros_app(set_value('id_borrar')) > 0)
+				{
+					$this->session->set_flashdata('msg_alerta', 'Aplicacion (id=' . set_value('id_borrar') . ') está ocupado, por lo que no se puede borrar');
+				}
+				else
+				{
+					$this->acl_model->borrar_app(set_value('id_borrar'));
+					$this->session->set_flashdata('msg_alerta', 'Aplicacion (id=' . set_value('id_borrar') . ') borrada correctamente');
+				}
+			}
+			
+			redirect('config/app/' . $pag);
+		}
+
+	}
+
+
+
+	public function modulo($pag = 0)
+	{
+
+		$this->load->model('acl_model');
+
+		$this->load->library('pagination');
+		$limite_por_pagina = 15;
+		$config_pagination = array(
+									'total_rows'  => $this->acl_model->get_total_modulo(),
+									'per_page'    => $limite_por_pagina,
+									'base_url'    => site_url('config/modulo'),
+									'uri_segment' => 3,
+									'num_links'   => 5,
+									'first_link'  => 'Primero',
+									'last_link'   => 'Ultimo',
+									'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+									'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+								);
+		$this->pagination->initialize($config_pagination);
+
+		$datos_hoja = $this->acl_model->get_all_modulo($limite_por_pagina, $pag);
+
+		if ($this->input->post('formulario')=='editar')
+		{
+			foreach($datos_hoja as $reg)
+			{
+				$this->form_validation->set_rules($reg['id'].'-id_app', 'Aplicacion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-modulo', 'Modulo', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-descripcion', 'Descripcion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-llave_modulo', 'Llave modulo', 'trim|required');
+			}
+		}
+		else if ($this->input->post('formulario')=='agregar')
+		{
+				$this->form_validation->set_rules('agr-id_app', 'Aplicacion', 'trim|required');
+				$this->form_validation->set_rules('agr-modulo', 'Modulo', 'trim|required');
+				$this->form_validation->set_rules('agr-descripcion', 'Descripcion', 'trim|required');
+				$this->form_validation->set_rules('agr-llave_modulo', 'Llave modulo', 'trim|required');
+		}
+		else if ($this->input->post('formulario')=='borrar')
+		{
+			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
+		}
+
+		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('modulos'),
+					'datos_hoja'         => $datos_hoja,
+					'combo_aplicaciones' => $this->acl_model->get_combo_app(),
+					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+					'links_paginas'      => $this->pagination->create_links(),
+				);
+			$this->_render_view('modulo', $data);
+		}
+		else
+		{
+			if ($this->input->post('formulario') == 'editar')
+			{
+				$cant_modif = 0;
+
+				foreach($datos_hoja as $reg)
+				{
+					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or 
+						(set_value($reg['id'].'-modulo')       != $reg['modulo']) or
+						(set_value($reg['id'].'-descripcion')  != $reg['descripcion']) or
+						(set_value($reg['id'].'-llave_modulo') != $reg['llave_modulo']))
+					{
+						$this->acl_model->guardar_modulo($reg['id'], set_value($reg['id'].'-id_app'), set_value($reg['id'].'-modulo'), set_value($reg['id'].'-descripcion'), set_value($reg['id'].'-llave_modulo'));
+						$cant_modif += 1;
+					}
+				}
+				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' modulo(s) modificados correctamente' : ''));
+			}
+			else if ($this->input->post('formulario') == 'agregar')
+			{
+				$this->acl_model->guardar_modulo(0, set_value('agr-id_app'), set_value('agr-modulo'), set_value('agr-descripcion'), set_value('agr-llave_modulo'));
+				$this->session->set_flashdata('msg_alerta', 'Modulo (' . set_value('agr-modulo') . ') agregado correctamente');
+			}
+			else if ($this->input->post('formulario') == 'borrar')
+			{
+				if ($this->acl_model->get_cant_registros_modulo(set_value('id_borrar')) > 0)
+				{
+					$this->session->set_flashdata('msg_alerta', 'Modulo (id=' . set_value('id_borrar') . ') está ocupado, por lo que no se puede borrar');
+				}
+				else
+				{
+					$this->acl_model->borrar_modulo(set_value('id_borrar'));
+					$this->session->set_flashdata('msg_alerta', 'Modulo (id=' . set_value('id_borrar') . ') borrado correctamente');
+				}
+			}
+			
+			redirect('config/modulo/' . $pag);
+		}
+
+	}
+
+
+	public function rol($pag = 0)
+	{
+
+		$this->load->model('acl_model');
+
+		$this->load->library('pagination');
+		$limite_por_pagina = 15;
+		$config_pagination = array(
+									'total_rows'  => $this->acl_model->get_total_rol(),
+									'per_page'    => $limite_por_pagina,
+									'base_url'    => site_url('config/rol'),
+									'uri_segment' => 3,
+									'num_links'   => 5,
+									'first_link'  => 'Primero',
+									'last_link'   => 'Ultimo',
+									'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+									'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+								);
+		$this->pagination->initialize($config_pagination);
+
+		$datos_hoja = $this->acl_model->get_all_rol($limite_por_pagina, $pag);
+		$modulos_rol = array();
+		$combo_modulos = array();
+		foreach ($datos_hoja as $reg)
+		{
+			$modulos_rol[$reg['id']] = $this->acl_model->get_modulos_rol($reg['id']);
+			if (!array_key_exists($reg['id_app'], $combo_modulos))
+			{
+				$combo_modulos[$reg['id_app']] = $this->acl_model->get_combo_modulo($reg['id_app']);
+			}
+		}
+
+		if ($this->input->post('formulario')=='editar')
+		{
+			foreach($datos_hoja as $reg)
+			{
+				$this->form_validation->set_rules($reg['id'].'-id_app', 'Aplicacion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-rol', 'Rol', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-descripcion', 'Descripcion', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-modulo', 'Modulos', '');
+			}
+		}
+		else if ($this->input->post('formulario')=='agregar')
+		{
+				$this->form_validation->set_rules('agr-id_app', 'Aplicacion', 'trim|required');
+				$this->form_validation->set_rules('agr-rol', 'Rol', 'trim|required');
+				$this->form_validation->set_rules('agr-descripcion', 'Descripcion', 'trim|required');
+		}
+		else if ($this->input->post('formulario')=='borrar')
+		{
+			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
+		}
+
+		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('roles'),
+					'datos_hoja'         => $datos_hoja,
+					'modulos_rol'        => $modulos_rol,
+					'combo_modulos'      => $combo_modulos,
+					'combo_aplicaciones' => $this->acl_model->get_combo_app(),
+					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+					'links_paginas'      => $this->pagination->create_links(),
+				);
+			$this->_render_view('rol', $data);
+		}
+		else
+		{
+			if ($this->input->post('formulario') == 'editar')
+			{
+				$cant_modif = 0;
+
+				foreach($datos_hoja as $reg)
+				{
+					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or 
+						(set_value($reg['id'].'-rol')       != $reg['rol']) or
+						(set_value($reg['id'].'-descripcion')  != $reg['descripcion']))
+					{
+						$this->acl_model->guardar_rol($reg['id'], set_value($reg['id'].'-id_app'), set_value($reg['id'].'-rol'), set_value($reg['id'].'-descripcion'));
+						$cant_modif += 1;
+					}
+					$this->acl_model->guardar_rol_modulo($reg['id'], $this->input->post($reg['id'].'-modulo'));
+				}
+				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' modulo(s) modificados correctamente' : ''));
+			}
+			else if ($this->input->post('formulario') == 'agregar')
+			{
+				$this->acl_model->guardar_rol(0, set_value('agr-id_app'), set_value('agr-rol'), set_value('agr-descripcion'));
+				$this->session->set_flashdata('msg_alerta', 'Rol (' . set_value('agr-rol') . ') agregado correctamente');
+			}
+			else if ($this->input->post('formulario') == 'borrar')
+			{
+				if ($this->acl_model->get_cant_registros_rol(set_value('id_borrar')) > 0)
+				{
+					$this->session->set_flashdata('msg_alerta', 'Rol (id=' . set_value('id_borrar') . ') está ocupado, por lo que no se puede borrar');
+				}
+				else
+				{
+					$this->acl_model->borrar_rol(set_value('id_borrar'));
+					$this->session->set_flashdata('msg_alerta', 'Modulo (id=' . set_value('id_borrar') . ') borrado correctamente');
+				}
+			}
+			
+			redirect('config/rol/' . $pag);
+		}
+
+	}
+
 
 
 	private function _render_view($vista = '', $data = array()) 
