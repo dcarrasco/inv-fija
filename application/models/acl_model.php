@@ -26,6 +26,11 @@ class Acl_model extends CI_Model {
 		return $this->db->count_all('acl_rol');
 	}
 
+	public function get_total_usuario_rol() 
+	{
+		return $this->db->count_all('acl_usuario_rol');
+	}
+
 
 
 	public function get_all_app($limit = 0, $offset = 0)
@@ -45,6 +50,17 @@ class Acl_model extends CI_Model {
 		$this->db->order_by('id_app ASC, rol ASC');
 		return $this->db->get('acl_rol', $limit, $offset)->result_array();
 	}
+
+	public function get_all_usuario_rol($limit = 0, $offset = 0)
+	{
+		$this->db->order_by('u.nombre ASC, r.rol ASC');
+		$this->db->join('fija_usuarios u', 'ur.id_usuario = u.id', 'left');
+		$this->db->join('acl_rol r', 'ur.id_rol=r.id', 'left');
+		$this->db->join('acl_app a', 'r.id_app=a.id', 'left');
+		return $this->db->get('acl_usuario_rol ur', $limit, $offset)->result_array();
+	}
+
+
 
 	public function get_modulos_rol($id_rol = 0)
 	{
@@ -85,6 +101,21 @@ class Acl_model extends CI_Model {
 		foreach($arr_rs as $reg)
 		{
 			$arr_combo[$reg['id']] = $reg['modulo'];
+		}
+
+		return $arr_combo;
+	}
+
+	public function get_combo_rol()
+	{
+		$arr_rs = $this->db->order_by('app ASC, rol ASC')->join('acl_app a', 'r.id_app=a.id', 'left')->select('r.id, r.rol, a.app')->get('acl_rol r')->result_array();
+		
+		$arr_combo = array();
+		$arr_combo[''] = 'Seleccione un rol...';
+
+		foreach($arr_rs as $reg)
+		{
+			$arr_combo[$reg['id']] = $reg['app'] . ': ' . $reg['rol'];
 		}
 
 		return $arr_combo;
@@ -148,12 +179,16 @@ class Acl_model extends CI_Model {
 
 	public function guardar_rol_modulo($id_rol = 0, $id_modulos = array())
 	{
-		var_dump($id_modulos);
 		$this->db->delete('acl_rol_modulo', array('id_rol' => $id_rol));
 		foreach ($id_modulos as $id_modulo) 
 		{
 			$this->db->insert('acl_rol_modulo', array('id_rol' => $id_rol, 'id_modulo' => $id_modulo));
 		}
+	}
+
+	public function guardar_usuario_rol($id_usuario = 0, $id_rol = 0)
+	{
+		$this->db->insert('acl_usuario_rol', array('id_usuario' => $id_usuario, 'id_rol' => $id_rol));
 	}
 
 
@@ -170,6 +205,11 @@ class Acl_model extends CI_Model {
 	public function borrar_rol($id = 0)
 	{
 		$this->db->delete('acl_rol', array('id' => $id));
+	}
+
+	public function borrar_usuario_rol($id_usuario = 0, $id_rol = 0)
+	{
+		$this->db->delete('acl_usuario_rol', array('id_usuario' => $id_usuario, 'id_rol' => $id_rol));
 	}
 
 

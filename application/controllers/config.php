@@ -25,6 +25,7 @@ class Config extends CI_Controller {
 				'aplicaciones'   => array('url' => '/config/app',            'texto' => 'Aplicaciones'),
 				'modulos'        => array('url' => '/config/modulo',         'texto' => 'Modulos'),
 				'roles'          => array('url' => '/config/rol',            'texto' => 'Roles'),
+				'usuario_rol'    => array('url' => '/config/usuario_rol',    'texto' => 'Usuarios/Roles'),
 			);
 
 		$menu = '<ul>';
@@ -1197,6 +1198,83 @@ class Config extends CI_Controller {
 			}
 			
 			redirect('config/rol/' . $pag);
+		}
+
+	}
+
+
+	public function usuario_rol($pag = 0)
+	{
+
+		$this->load->model('acl_model');
+		$this->load->model('usuarios_model');
+
+		$this->load->library('pagination');
+		$limite_por_pagina = 15;
+		$config_pagination = array(
+									'total_rows'  => $this->acl_model->get_total_usuario_rol(),
+									'per_page'    => $limite_por_pagina,
+									'base_url'    => site_url('config/usuario_rol'),
+									'uri_segment' => 3,
+									'num_links'   => 5,
+									'first_link'  => 'Primero',
+									'last_link'   => 'Ultimo',
+									'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+									'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+								);
+		$this->pagination->initialize($config_pagination);
+
+		$datos_hoja = $this->acl_model->get_all_usuario_rol($limite_por_pagina, $pag);
+
+		if ($this->input->post('formulario')=='editar')
+		{
+			foreach($datos_hoja as $reg)
+			{
+			}
+		}
+		else if ($this->input->post('formulario')=='agregar')
+		{
+				$this->form_validation->set_rules('agr-id_usuario', 'Usuario', 'trim|required');
+				$this->form_validation->set_rules('agr-id_rol', 'Rol', 'trim|required');
+		}
+		else if ($this->input->post('formulario')=='borrar')
+		{
+			$this->form_validation->set_rules('id_usuario', '', 'trim|required');
+			$this->form_validation->set_rules('id_rol', '', 'trim|required');
+		}
+
+		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data = array(
+					'menu_configuracion' => $this->menu_configuracion('usuario_rol'),
+					'datos_hoja'         => $datos_hoja,
+					'combo_usuarios'     => $this->usuarios_model->get_combo_usuarios('AUD'),
+					'combo_rol'          => $this->acl_model->get_combo_rol(),
+					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+					'links_paginas'      => $this->pagination->create_links(),
+				);
+			$this->_render_view('usuario_rol', $data);
+		}
+		else
+		{
+			if ($this->input->post('formulario') == 'editar')
+			{
+			}
+			else if ($this->input->post('formulario') == 'agregar')
+			{
+				$this->acl_model->guardar_usuario_rol(set_value('agr-id_usuario'), set_value('agr-id_rol'));
+				$this->session->set_flashdata('msg_alerta', 'Asociacion usuario-rol (id_usuario: ' . set_value('agr-id_usuario') . ', id_rol: ' . set_value('agr-id_rol') . ') agregado correctamente');
+			}
+			else if ($this->input->post('formulario') == 'borrar')
+			{
+				$this->acl_model->borrar_usuario_rol(set_value('id_usuario'), set_value('id_rol'));
+				$this->session->set_flashdata('msg_alerta', 'Asociacion usuario-rol (id_usuario: ' . set_value('agr-id_usuario') . ', id_rol: ' . set_value('agr-id_rol') . ') borrado correctamente');
+			}
+			
+			redirect('config/usuario_rol/' . $pag);
 		}
 
 	}
