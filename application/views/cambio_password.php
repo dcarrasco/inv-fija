@@ -14,7 +14,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="cf">
-			<h2 class="fl">Ingreso Digitaci&oacute;n Inventario Fija</h2>
+			<h2 class="fl">Cambio de clave</h2>
 		</div>
 		<div class="msg-alerta cf ac">
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
@@ -23,22 +23,39 @@
 
 	<div class="content-module-main">
 		<div class="login">
-			<?php echo form_open('login', 'id="frm_login"'); ?>
+			<?php echo form_open('login/cambio_password/'.$usr, 'id="frm_login"'); ?>
 			<p></p>
 			<div class="ac">
-				Nombre de Usuario
-				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="30"'); ?>
-				<?php echo form_error('usr'); ?>
+				Nombre de Usuario: 
+				<?php echo $nombre_usuario; ?>
 			</div>
 			<p></p>
+			
+			<?php if ($tiene_clave): ?>
+				<div class="ac">
+					Clave Anterior
+					<?php echo form_password('pwd_old', '','maxlength="45" size="30"'); ?>
+					<?php echo form_error('pwd_old'); ?>
+				</div>
+				<p></p>
+			<?php endif; ?>
+			
 			<div class="ac">
-				Clave
-				<?php echo form_password('pwd', '','maxlength="45" size="30"'); ?>
-				<?php echo form_error('pwd'); ?>
+				Clave Nueva
+				<?php echo form_password('pwd_new1', '','maxlength="45" size="30"'); ?>
+				<?php echo form_error('pwd_new1'); ?>
 			</div>
 			<p></p>
+			
 			<div class="ac">
-				<?php echo form_submit('btn_submit','Ingresar', 'class="button b-active round ic-login"'); ?>
+				Clave Nueva (reingreso)
+				<?php echo form_password('pwd_new2', '','maxlength="45" size="30"'); ?>
+				<?php echo form_error('pwd_new2'); ?>
+			</div>
+			<p></p>
+			
+			<div class="ac">
+				<?php echo form_submit('btn_submit','Cambiar clave', 'class="button b-active round ic-login"'); ?>
 			</div>
 			<p></p>
 			<?php echo form_close(); ?>

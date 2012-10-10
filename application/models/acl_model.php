@@ -9,7 +9,69 @@ class Acl_model extends CI_Model {
 	}
 
 
+	public function login($usr = '', $pwd = '')
+	{
+		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd)))->num_rows() > 0)
+		{
+			// crea cookies con la sesion del usuario
+			$this->set_session_cookies($usr);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
+	private function get_modulos_usuario($usr = '')
+	{
+		$this->db->distinct();
+		$this->db->select('llave_modulo');
+		$this->db->from('fija_usuarios u');
+		$this->db->join('acl_usuario_rol ur', 'ur.id_usuario = u.id');
+		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
+		$this->db->join('acl_modulo m',       'm.id          = rm.id_modulo');
+		$this->db->where('usr', $usr);
+		$arr_rs = $this->db->get()->result_array();
+
+		$arr_modulos = array();
+		foreach($arr_rs as $rs)
+		{
+			array_push($arr_modulos, $rs['llave_modulo']);
+		}
+		return $arr_modulos;
+	}
+
+	private function set_session_cookies($usr)
+	{
+		$this->input->set_cookie(array(
+			'name' => 'movistar_usr', 
+			'value' => $usr, 
+			'expire' => '600'
+			));
+		$this->input->set_cookie(array(
+			'name' => 'movistar_menu', 
+			'value' => json_encode($this->get_modulos_usuario($usr)), 
+			'expire' => '600'
+			));
+	}
+
+	public function autentica($mod = '')
+	{
+
+		if (!$this->input->cookie('movistar_usr'))
+		{
+			redirect('login');
+		}
+		else
+		{
+			$arr_modulos = json_decode($this->input->cookie('movistar_menu'));
+			if (!in_array($mod, $arr_modulos))
+			{
+				redirect('login');				
+			}
+		}
+	}
 
 	public function get_total_app() 
 	{
@@ -58,6 +120,46 @@ class Acl_model extends CI_Model {
 		$this->db->join('acl_rol r', 'ur.id_rol=r.id', 'left');
 		$this->db->join('acl_app a', 'r.id_app=a.id', 'left');
 		return $this->db->get('acl_usuario_rol ur', $limit, $offset)->result_array();
+	}
+
+	public function get_nombre_usuario($usr = '')
+	{
+		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		return $arr_rs['nombre'];
+	}
+
+	public function tiene_clave($usr = '')
+	{
+		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);		
+	}
+	
+	public function existe_usuario($usr = '')
+	{
+		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
+		return (($regs > 0) ? true : false);		
+	}
+
+	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
+	{
+		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		if (!$this->tiene_clave($usr))
+		{
+			$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+			return array(true);
+		}
+		else
+		{
+			if($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
+			{
+				$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+				return array(true);
+			}
+			else
+			{
+				return array(false, 'Clave anterior incorrecta');
+			}
+		}
 	}
 
 

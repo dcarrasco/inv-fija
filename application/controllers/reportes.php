@@ -9,6 +9,7 @@ class Reportes extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
+		$this->acl_model->autentica('reportes');
 
 		$this->load->model('inventario_model');
 	}

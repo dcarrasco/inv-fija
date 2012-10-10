@@ -6,6 +6,8 @@ class Config extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
+		$this->acl_model->autentica('config');
+
 	}
 
 
@@ -66,7 +68,7 @@ class Config extends CI_Controller {
 			{
 				$this->form_validation->set_rules($reg['id'].'-tipo', 'Tipo', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-nombre', 'Nombre', 'trim|required');
-				$this->form_validation->set_rules($reg['id'].'-usr', 'Username', 'trim|required');
+				$this->form_validation->set_rules($reg['id'].'-usr', 'Username', 'trim');
 				$this->form_validation->set_rules($reg['id'].'-activo', 'Activo', '');
 			}
 		}
