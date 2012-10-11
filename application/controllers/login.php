@@ -16,6 +16,9 @@ class Login extends CI_Controller {
 	public function login()
 	{
 		$this->load->model('acl_model');
+		$this->load->helper('cookie');
+
+		$this->acl_model->delete_session_cookies();
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
@@ -48,7 +51,7 @@ class Login extends CI_Controller {
 					}
 					else
 					{
-						$arr_paginas = json_decode($this->input->cookie('movistar_menu'));
+						$arr_paginas = $this->acl_model->get_modulos_usuario(set_value('usr'));
 						redirect($arr_paginas[0]);
 					}
 				}

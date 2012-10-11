@@ -6,6 +6,7 @@ class Acl_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->helper('cookie');
 	}
 
 
@@ -23,7 +24,37 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-	private function get_modulos_usuario($usr = '')
+	public function menu_app()
+	{
+
+		$arr_menu = array(
+					'config' => array('controller' => 'config', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
+					'reportes' => array('controller' => 'reportes', 'texto' => 'Reportes', 'icono' => 'ic-reporte'),
+					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
+					);
+		$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
+
+		$menu = anchor('login','Logout', 'class="button b-active round ic-logout fr"');
+		
+		foreach ($arr_menu as $key => $val)
+		{
+			if (in_array($key, $arr_modulos))
+			{
+				$menu .= anchor($val['controller'], $val['texto'], 'class="button b-active round fr ' . $val['icono'] .'"');
+			}
+		}
+
+		return $menu;
+	}
+
+	public function get_id_usr($usr = '')
+	{
+		$user = ($usr == '') ? $this->input->cookie('movistar_usr') : $usr;
+		$rs = $this->db->get_where('fija_usuarios', array('usr' => $user))->row_array();
+		return (is_array($rs) ? $rs['id'] : '');
+	}
+
+	public function get_modulos_usuario($usr = '')
 	{
 		$this->db->distinct();
 		$this->db->select('llave_modulo');
@@ -47,28 +78,33 @@ class Acl_model extends CI_Model {
 		$this->input->set_cookie(array(
 			'name' => 'movistar_usr', 
 			'value' => $usr, 
-			'expire' => '600'
+			'expire' => '300'
 			));
-		$this->input->set_cookie(array(
-			'name' => 'movistar_menu', 
-			'value' => json_encode($this->get_modulos_usuario($usr)), 
-			'expire' => '600'
-			));
+	}
+
+	public function delete_session_cookies()
+	{
+		delete_cookie('movistar_usr');
+		delete_cookie('movistar_menu');
 	}
 
 	public function autentica($mod = '')
 	{
-
 		if (!$this->input->cookie('movistar_usr'))
 		{
 			redirect('login');
 		}
 		else
 		{
-			$arr_modulos = json_decode($this->input->cookie('movistar_menu'));
+			$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
 			if (!in_array($mod, $arr_modulos))
 			{
 				redirect('login');				
+			}
+			else
+			{
+				// renueva la cookie de usuario (por timeout)
+				$this->set_session_cookies($this->input->cookie('movistar_usr'));
 			}
 		}
 	}

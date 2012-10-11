@@ -34,9 +34,7 @@
 			<?php echo anchor($link_hoja_ant,'Hoja Prev', 'class="button b-active round ic-hoja-ant fl" id="btn_hoja_ant"'); ?>
 			<?php echo anchor($link_hoja_sig,'Hoja Sig', 'class="button b-active round ic-hoja-sig fl" id="btn_hoja_sig"'); ?>
 			
-			<?php echo anchor($link_config,'Configuracion', 'class="button b-active round ic-config fr"'); ?>
-			<?php echo anchor($link_reporte,'Reportes', 'class="button b-active round ic-reporte fr"'); ?>
-			<?php echo anchor($link_inventario,'Inventario', 'class="button b-active round ic-inventario fr"'); ?>
+			<?php echo $menu_app; ?>
 
 			<?php echo form_close(); ?>
 		</div>

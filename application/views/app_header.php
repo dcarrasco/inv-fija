@@ -14,7 +14,5 @@
 
 <div class="app-heading cf">
 	<h2 class="fl"><?php echo $titulo_modulo; ?></h2>
-	<?php echo anchor('config','Configuracion', 'class="button b-active round ic-config fr"'); ?>
-	<?php echo anchor('reportes','Reportes', 'class="button b-active round ic-reporte fr"'); ?>
-	<?php echo anchor('inventario','Inventario', 'class="button b-active round ic-inventario fr"'); ?>
+	<?php echo $menu_app; ?>
 </div> <!-- fin app-heading -->

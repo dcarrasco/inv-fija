@@ -89,6 +89,7 @@ class Inventario extends CI_Controller {
 					'link_hoja_ant'     => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $digitador . '/' . $auditor . '/' . time(),
 					'link_hoja_sig'     => 'inventario/ingreso/' . ($hoja + 1) . '/' . $digitador . '/' . $auditor . '/' . time(),
 					'msg_alerta'        => $this->session->flashdata('msg_alerta'),
+					'menu_app'          => $this->acl_model->menu_app(),
 				);
 			
 			$this->load->view('inventario', $data);
