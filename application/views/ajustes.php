@@ -1,11 +1,7 @@
 <div class="content-module">
 	<div class="content-module-heading cf">
 		<div class="fl">
-			<ul>
-				<li><?php echo anchor('/config/usuarios','Usuarios')?></li>
-				<li><?php echo anchor('/config/materiales','Materiales')?></li>
-				<li class="selected"><?php echo anchor('/config/inventario','Inventario Activo >> Ajuste diferencias')?></li>
-			</ul>
+			<?php echo $nombre_inventario?>
 		</div>
 		<div class="fr">
 			<?php echo anchor('analisis/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . time() ,(($ocultar_regularizadas == 0) ? 'Ocultar' : 'Mostrar') . ' lineas regularizadas') ?>

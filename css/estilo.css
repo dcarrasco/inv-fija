@@ -318,6 +318,7 @@ BOTONES
 .ic-materiales { background-image: url('../img/ic_archive.png');}
 .ic-usuarios { background-image: url('../img/ic_users.png');}
 .ic-inventario { background-image: url('../img/ic_list.png');}
+.ic-ajustes { background-image: url('../img/ic_calc.png');}
 .ic-login { background-image: url('../img/ic_right_circle.png');}
 .ic-logout { background-image: url('../img/ic_power.png');}
 .ic-lock { background-image: url('../img/ic_lock.png');}

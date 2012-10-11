@@ -78,8 +78,7 @@
 					<td>
 						<?php if($reg['activo'] == 1): ?>
 							<?php echo anchor('config/sube_stock' . '/' . $reg['id'], 'Sube stock');; ?> /
-							<?php echo anchor('config/imprime_inventario' . '/' . $reg['id'], 'Imprime inventario');; ?> /
-							<?php echo anchor('analisis', 'Ajuste de diferencias');; ?>
+							<?php echo anchor('config/imprime_inventario' . '/' . $reg['id'], 'Imprime inventario');; ?>
 						<?php endif; ?>
 					</td>
 				</tr>

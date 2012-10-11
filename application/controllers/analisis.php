@@ -61,9 +61,10 @@ class Analisis extends CI_Controller {
 					'nombre_inventario'     => $nombre_inventario,
 					'ocultar_regularizadas' => $ocultar_regularizadas,
 					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
+					'menu_app'              => $this->acl_model->menu_app(),
 				);
 			
-			$data['titulo_modulo'] = 'Configuracion';
+			$data['titulo_modulo'] = 'Ajustes de inventario';
 			$this->load->view('app_header', $data);
 			$this->load->view('ajustes', $data);
 			$this->load->view('app_footer', $data);
