@@ -1253,7 +1253,7 @@ class Config extends CI_Controller {
 			$data = array(
 					'menu_configuracion' => $this->menu_configuracion('usuario_rol'),
 					'datos_hoja'         => $datos_hoja,
-					'combo_usuarios'     => $this->usuarios_model->get_combo_usuarios('AUD'),
+					'combo_usuarios'     => $this->usuarios_model->get_combo_usuarios('DIG'),
 					'combo_rol'          => $this->acl_model->get_combo_rol(),
 					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 					'links_paginas'      => $this->pagination->create_links(),
