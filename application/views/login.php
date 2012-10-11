@@ -33,16 +33,17 @@
 			<p></p>
 			<div class="ac">
 				Clave
-				<?php echo form_password('pwd', '','maxlength="45" size="30"'); ?>
+				<?php echo form_password('pwd', '','maxlength="45" size="30"'); ?> 
+				(<?php echo anchor('login/cambio_password', 'cambiar'); ?>)
 				<?php echo form_error('pwd'); ?>
 			</div>
 			<p></p>
 			<div class="ac">
 				<?php echo form_submit('btn_submit','Ingresar', 'class="button b-active round ic-login"'); ?>
+				<?php echo form_close(); ?>
 			</div>
 			<p></p>
-			<?php echo form_close(); ?>
-		</div>
+	</div>
 	</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">

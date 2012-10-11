@@ -27,32 +27,37 @@
 			<p></p>
 			<div class="ac">
 				Nombre de Usuario: 
-				<?php echo $nombre_usuario; ?>
+				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="30"'); ?>
+				<?php echo form_error('usr'); ?>
 			</div>
 			<p></p>
+			<?php if ($ocultar_password): ?>
 			
-			<?php if ($tiene_clave): ?>
+				<?php if ($tiene_clave): ?>
+					<div class="ac">
+						Clave Anterior
+						<?php echo form_password('pwd_old', '','maxlength="45" size="30"'); ?>
+						<?php echo form_error('pwd_old'); ?>
+					</div>
+					<p></p>
+				<?php endif; ?>
+				
 				<div class="ac">
-					Clave Anterior
-					<?php echo form_password('pwd_old', '','maxlength="45" size="30"'); ?>
-					<?php echo form_error('pwd_old'); ?>
+					Clave Nueva
+					<?php echo form_password('pwd_new1', '','maxlength="45" size="30"'); ?>
+					<?php echo form_error('pwd_new1'); ?>
 				</div>
 				<p></p>
+				
+				<div class="ac">
+					Clave Nueva (reingreso)
+					<?php echo form_password('pwd_new2', '','maxlength="45" size="30"'); ?>
+					<?php echo form_error('pwd_new2'); ?>
+				</div>
+				<p></p>
+
 			<?php endif; ?>
-			
-			<div class="ac">
-				Clave Nueva
-				<?php echo form_password('pwd_new1', '','maxlength="45" size="30"'); ?>
-				<?php echo form_error('pwd_new1'); ?>
-			</div>
-			<p></p>
-			
-			<div class="ac">
-				Clave Nueva (reingreso)
-				<?php echo form_password('pwd_new2', '','maxlength="45" size="30"'); ?>
-				<?php echo form_error('pwd_new2'); ?>
-			</div>
-			<p></p>
+
 			
 			<div class="ac">
 				<?php echo form_submit('btn_submit','Cambiar clave', 'class="button b-active round ic-login"'); ?>

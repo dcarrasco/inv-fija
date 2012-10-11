@@ -64,17 +64,20 @@ class Login extends CI_Controller {
 		}
 	}
 
-	public function cambio_password($usr = '')
+	public function cambio_password()
 	{
 		$this->load->model('acl_model');
+
+		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
+		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', 'trim|required');
+		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
+
+		$usr = ($this->input->post('usr')) ? $this->input->post('usr') : '';
 
 		if ($this->acl_model->tiene_clave($usr))
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
 		}
-		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', 'trim|required');
-		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
-
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 		$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
@@ -86,6 +89,7 @@ class Login extends CI_Controller {
 							'usr'        => $usr,
 							'nombre_usuario' => $this->acl_model->get_nombre_usuario($usr),
 							'tiene_clave'    => $this->acl_model->tiene_clave($usr),
+							'ocultar_password' => (($this->input->post('usr')) ? true : false), 
 						);
 			$this->load->view('cambio_password', $data);
 		}
