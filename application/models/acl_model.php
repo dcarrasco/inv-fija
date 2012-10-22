@@ -34,7 +34,7 @@ class Acl_model extends CI_Model {
 					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
 					);
 		$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
-
+		
 		$menu = anchor('login','Logout', 'class="button b-active round ic-logout fr"');
 		
 		foreach ($arr_menu as $key => $val)

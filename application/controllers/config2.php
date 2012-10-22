@@ -9,7 +9,7 @@ class config2 extends CI_Controller {
 		parent::__construct();
 		$this->output->enable_profiler(TRUE);
 		$this->load->model('acl_model');
-		//$this->load->library('ORM_model');
+		$this->load->library('ORM_model');
 	}
 
 	public function index()
@@ -45,7 +45,7 @@ class config2 extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Configuracion';
-		$data['menu_app'] = $this->acl_model->menu_app();
+		//$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
@@ -54,22 +54,19 @@ class config2 extends CI_Controller {
 
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
+		//dbg($this->db->field_data('acl_app'));
+		//dbg($this->db->list_fields('acl_app'));
 
-		dbg($this->db->field_data('acl_app'));
-		dbg($this->db->list_fields('acl_app'));
-
-		$modelos = new $nombre_modelo;
-
-		$cantidad_registros = $modelos->count();
-		$modelos->get_iterated($this->regs_por_pagina, $pag);
+		$modelo = new $nombre_modelo;
+		$modelo->get_all($filtro, $pag);
 		//dbg($modelo);
 
 
 		$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
-				'modelos'            => $this->_object_list_to_array($modelos),
-				'fields'             => $modelos->fields,
-				'links_paginas'      => $this->_crea_links_paginas($nombre_modelo, $filtro, $cantidad_registros),
+				'modelo'             => $modelo,
+				'all'                => $modelo->get_model_all(),
+				'links_paginas'      => $modelo->crea_links_paginas($filtro),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'url_editar'         => site_url('config2/editar/' . $nombre_modelo . '/'),
 				'url_borrar'         => site_url('config2/borrar/' . $nombre_modelo . '/'),
@@ -83,7 +80,6 @@ class config2 extends CI_Controller {
 		$modelo = new $nombre_modelo($id);
 		//dbg($modelo);
 
-		$modelo->validate();
 		if (!$this->input->post('grabar') and !$this->input->post('borrar'))
 		{
 			$data = array(
@@ -113,91 +109,7 @@ class config2 extends CI_Controller {
 
 	}
 
-	private function _object_list_to_array($mod)
-	{
-		$arr_list = array();
-		$arr_has_one = array();
 
-		foreach($mod->has_one as $key => $arr)
-		{
-			$arr_has_one[$arr['join_other_as'] . '_id'] = $key;
-		}
-
-		foreach($mod as $o)
-		{
-			$arr_reg = array();
-			foreach($o->fields as $c)
-			{
-				if (array_key_exists($c, $arr_has_one))
-				{
-					$arr_reg[$arr_has_one[$c]] = $o->{$arr_has_one[$c]}->__toString();
-				}
-				else
-				{
-					$arr_reg[$c] = $o->$c;
-				}
-			}
-			array_push($arr_list, $arr_reg);
-		}
-
-		return($arr_list);
-	}
-
-	private function _crea_links_paginas($modelo = '', $filtro = '_', $cantidad_registros = 0)
-	{
-		$this->load->library('pagination');
-		$cfg_pagination = array(
-					'uri_segment' => 5,
-					'num_links'   => 5,
-					'per_page'    => $this->regs_por_pagina,
-					'total_rows'  => $cantidad_registros,
-					'base_url'    => site_url('config2/listado/' . $modelo . '/' . $filtro . '/'),
-					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo',
-					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
-					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
-				);
-		$this->pagination->initialize($cfg_pagination);
-		return $this->pagination->create_links();
-	}
-
-	private function _arr_form($modelo)
-	{
-		$arr_form = '';
-		$arr_has_one = array();
-
-		foreach($modelo->has_one as $key => $arr)
-		{
-			$arr_has_one[$arr['join_other_as'] . '_id'] = $key;
-		}
-
-		foreach($modelo->fields as $campo)
-		{
-				if (array_key_exists($campo, $arr_has_one))
-				{
-					$arr_op = array();
-					$arr_op[] = 'Seleccione una opcion...';
-					foreach ($modelo->{$arr_has_one[$campo]} as $o)
-					{
-						$arr_op[$o->id] = $o->__toString();
-					}
-					$arr_form[$campo] = form_dropdown($campo, $arr_op, $modelo->$campo);
-				}
-				else
-				{
-					$arr_form[$campo] = form_input($campo, $modelo->$campo);
-				}
-		}
-	return($arr_form);
-	}
-
-	private function _form_item($tipo = '', $nombre = '', $valor = '', $arr_valores = array())
-	{
-		if ($tipo == 'input')
-		{
-			return form_input($nombre, $valor);
-		}
-	}
 
 
 }

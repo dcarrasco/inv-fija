@@ -21,24 +21,24 @@
 		<table>
 			<thead>
 				<tr>
-				<?php foreach ($fields as $campo): ?>
+				<?php foreach ($modelo as $campo => $valor): ?>
 					<th>
-						<?php echo $campo; ?>
+						<?php echo $modelo->print_label_campo($campo); ?>
 					</th>
 				<?php endforeach; ?>
 				<th class="ac">Editar</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($modelos as $reg): ?>
+				<?php foreach ($modelo->get_model_all() as $o): ?>
 					<tr>
-					<?php foreach ($reg as $campo => $valor): ?>
+					<?php foreach ($o as $campo => $valor): ?>
 						<td>
-							<?php echo $valor; ?>
+							<?php echo $o->print_campo($campo); ?>
 						</td>
 					<?php endforeach; ?>
 					<td class="ac">
-						<a href="<?php echo $url_editar . '/' . $reg['id']; ?>" class="button_micro b-active round boton-borrar">
+						<a href="<?php echo $url_editar . '/' . $o->{$o->get_model_campo_id()}; ?>" class="button_micro b-active round boton-borrar">
 							<img src="<?php echo base_url(); ?>img/ic_edit.png" />
 						</a>
 					</td>

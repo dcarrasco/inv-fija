@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Usuario extends DataMapper {
+class Usuario extends ORM_Model {
 
 	var $table = 'fija_usuarios';
 

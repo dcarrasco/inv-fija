@@ -360,3 +360,9 @@ $config['proxy_ips'] = '';
 
 /* End of file config.php */
 /* Location: ./application/config/config.php */
+
+function __autoload($class) {  
+    if (file_exists(APPPATH."models/".strtolower($class).EXT)) {  
+        include_once(APPPATH."models/".strtolower($class).EXT);  
+    }  
+}  

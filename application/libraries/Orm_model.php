@@ -17,8 +17,8 @@ class ORM_Model extends CI_Model {
 	private $model_order_by     = '';
 	private $model_campo_id     = '';
 	private $model_page_results = 10;
-	private $model_metadata     = array();
-	private $model_rs_list      = array();
+	private $model_fields       = array();
+	private $model_all          = array();
 
 	/**
 	 * Constructor
@@ -29,9 +29,8 @@ class ORM_Model extends CI_Model {
 	function __construct($param = array()) {
 
 		parent::__construct();
-		$this->load->dbforge();
 
-		$this->model_class  = get_called_class();
+		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
 		$this->model_tabla  = $this->model_nombre;
 		$this->model_label  = $this->model_nombre;
@@ -48,6 +47,8 @@ class ORM_Model extends CI_Model {
 		}
 
 		$this->set_model_campo_id($this->_determina_campo_id());
+		$this->_recuperar_relation_fields();
+
 
 	}
 
@@ -68,7 +69,7 @@ class ORM_Model extends CI_Model {
 		foreach ($cfg as $campo => $prop)
 		{
 			$oField = new ORM_Field($campo, $prop);
-			$this->model_metadata[$campo] = $oField;
+			$this->model_fields[$campo] = $oField;
 			$this->$campo = null;
 		}
 	}
@@ -84,7 +85,7 @@ class ORM_Model extends CI_Model {
 	public function set_model_nombre($nombre = '')  { $this->model_nombre = $nombre; }
 
 	public function get_model_class()               { return $this->model_class; }
-	public function set_model_classs($class = '')    { $this->model_class = $class; }
+	public function set_model_classs($class = '')   { $this->model_class = $class; }
 
 	public function get_model_tabla()               { return $this->model_tabla; }
 	public function set_model_tabla($tabla = '')    { $this->model_tabla = $tabla; }
@@ -98,21 +99,21 @@ class ORM_Model extends CI_Model {
 	public function get_model_order_by()               { return $this->model_order_by; }
 	public function set_model_order_by($order_by = '') { $this->model_order_by = $order_by; }
 
-	public function get_model_campo_id()               { return $this->model_campo_id; }
-	public function set_model_campo_id($campo = '')    { $this->model_campo_id = $campo; }
+	public function get_model_campo_id()            { return $this->model_campo_id; }
+	public function set_model_campo_id($campo = '') { $this->model_campo_id = $campo; }
 
 	public function get_model_page_results()        { return $this->model_page_results; }
 
-	public function get_model_metadata()            { return $this->model_metadata; }
+	public function get_model_fields()              { return $this->model_fields; }
 
-	public function get_campos_listado()  { return $this->campos_listado; }
+	public function get_campos_listado()            { return $this->campos_listado; }
 
-	public function get_model_rs_list()                { return $this->model_rs_list; }
+	public function get_model_all()                 { return $this->model_all; }
 
 
 	private function _determina_campo_id()
 	{
-		foreach ($this->get_model_metadata() as $key => $metadata)
+		foreach ($this->get_model_fields() as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
 			{
@@ -186,9 +187,10 @@ class ORM_Model extends CI_Model {
 
 	public function print_campo($campo = '')
 	{
-		if ($this->model_metadata[$campo]->get_tipo() == 'has_many')
+		if ($this->model_fields[$campo]->get_tipo() == 'has_one')
 		{
-			return $this->model_metadata[$campo]->form_field('');
+			$arr_rel = $this->model_fields[$campo]->get_relation();
+			return $arr_rel['data']->__toString();
 		}
 		else
 		{
@@ -196,6 +198,18 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+	public function print_label_campo($campo = '')
+	{
+		if ($this->model_fields[$campo]->get_tipo() == 'has_one')
+		{
+			$arr_rel = $this->model_fields[$campo]->get_relation();
+			return $arr_rel['data']->get_model_label();
+		}
+		else
+		{
+			return $this->model_fields[$campo]->get_label();
+		}
+	}
 
 	// =======================================================================
 	// FUNCIONES DE CONSULTA EN BD
@@ -211,20 +225,20 @@ class ORM_Model extends CI_Model {
 		{
 			$this->db->limit($this->get_model_page_results(), $pag);
 		}
-		$this->db->select($this->_get_select_fields());
+
 		$this->db->order_by($this->get_model_order_by());
 		$rs = $this->db->get($this->get_model_tabla())->result_array();
 		foreach($rs as $reg)
 		{
 			$o = new $this->model_class;
 			$o->recuperar_array($reg);
-			array_push($this->model_rs_list, $o);
+			$o->_recuperar_relation_fields();
+			array_push($this->model_all, $o);
 		}
 	}
 
 	public function get_id($id = '')
 	{
-		$this->db->select($this->_get_select_fields());
 		$rs = $this->db->get_where($this->get_model_tabla(), array($this->get_model_tabla() . '.' . $this->get_model_campo_id() => $id))->row_array();
 		if (count($rs) > 0)
 		{
@@ -235,10 +249,31 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+	private function _recuperar_relation_fields()
+	{
+		foreach($this->model_fields as $campo => $metadata)
+		{
+			if($metadata->get_tipo() == 'has_one')
+			{
+				$arr_rel = $metadata->get_relation();
+				$class = $arr_rel['model'];
+				$obj = new $class;
+				$obj->get_id($this->$campo);
+
+				$arr_rel = $this->model_fields[$campo]->get_relation();
+				$arr_rel['data'] = $obj;
+				$this->model_fields[$campo]->set_relation($arr_rel);
+			}
+		}
+	}
+
+
+
+	/*
 	private function _get_select_fields()
 	{
 		$arr_fields = array();
-		foreach($this->model_metadata as $key => $metadata)
+		foreach($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_tipo() == 'has_one')
 			{
@@ -258,6 +293,7 @@ class ORM_Model extends CI_Model {
 		}
 		return implode(',', $arr_fields);
 	}
+	 */
 
 	public function recuperar_choices($filtro = '_')
 	{
@@ -273,7 +309,7 @@ class ORM_Model extends CI_Model {
 	private function _put_filtro($filtro)
 	{
 		$i = 0;
-		foreach($this->model_metadata as $nombre => $campo)
+		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($i == 0)
 			{
@@ -328,7 +364,7 @@ class ORM_Model extends CI_Model {
 
 	public function recuperar_array($rs = array())
 	{
-		foreach($this->model_metadata as $nombre => $metadata)
+		foreach($this->model_fields as $nombre => $metadata)
 		{
 			if (array_key_exists($nombre, $rs))
 			{
@@ -559,7 +595,7 @@ class ORM_Field {
 
 		$this->nombre    = $nombre;
 		$this->nombre_bd = $nombre;
-		$this->label = $nombre;
+		$this->label     = $nombre;
 
 		if (is_array($param))
 		{
@@ -597,7 +633,9 @@ class ORM_Field {
 	public function get_es_obligatorio()  { return $this->es_obligatorio; }
 	public function get_es_autoincremet() { return $this->es_autoincrement; }
 	public function get_texto_ayuda()     { return $this->texto_ayuda; }
+
 	public function get_relation()        { return $this->relation; }
+	public function set_relation($arr)    { $this->relation = $arr; }
 
 	// --------------------------------------------------------------------
 

@@ -1,32 +1,47 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class App extends DataMapper {
+class App extends ORM_Model {
 
-	var $table = 'acl_app';
-
-	var $has_many = array(
-		'rol',
-		);
-
-	var $validation = array(
-						'app' => array(
-								'label' => 'Aplicacion',
-								'rules' => array('required', 'trim', 'unique'),
-							),
-						'descripcion' => array(
-								'label' => 'Descripcion de la aplicacion',
-								'rules' => array('required', 'trim', 'unique'),
-							),
-						'url' => array(
-								'label' => 'Direccion de la aplicacion',
-								'rules' => array('trim'),
-							),
-					);
-
-
-	public function __construct($id = NULL)
+	public function __construct()
 	{
-		parent::__construct($id);
+		$cfg = array(
+		'modelo' => array(
+				'model_tabla'        => 'acl_app',
+				'model_label'        => 'Aplicacion',
+				'model_label_plural' => 'Aplicaciones',
+				'model_order_by'     => 'app',
+			),
+		'campos' => array(
+				'id' => array(
+						'tipo'   => 'id',
+					),
+				'app' => array(
+						'label'          => 'Aplicacion',
+						'tipo'           => 'char',
+						'largo'          => 50,
+						'texto_ayuda'    => 'Maximo 50 caracteres.',
+						'es_obligatorio' => true,
+						'es_unico'       => true
+					),
+				'descripcion' => array(
+						'label'          => 'Descripcion de la Aplicacion',
+						'tipo'           =>  'char',
+						'largo'          => 50,
+						'texto_ayuda'    => 'Maximo 50 caracteres.',
+						'es_obligatorio' => true,
+						'es_unico'       => true
+					),
+				'url' => array(
+						'label'          => 'Direccion de la Aplicacion',
+						'tipo'           =>  'char',
+						'largo'          => 100,
+						'texto_ayuda'    => 'Maximo 100 caracteres.',
+						'es_obligatorio' => true,
+						'es_unico'       => true
+					),
+				),
+			);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()

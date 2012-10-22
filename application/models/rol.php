@@ -1,30 +1,45 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Rol extends DataMapper {
-
-	var $table = 'acl_rol';
-
-	var $has_one = array(
-			'app' => array(
-					'auto_populate' => TRUE,
-				)
-		);
-
-	var $validation = array(
-						'rol' => array(
-								'label' => 'Rol',
-								'rules' => array('required', 'trim', 'unique', 'max_length' => 30),
-							),
-						'descripcion' => array(
-								'label' => 'Descripcion de la aplicacion',
-								'rules' => array('required', 'trim', 'max_length' => 50),
-							),
-					);
-
+class Rol extends ORM_Model {
 
 	public function __construct($id = NULL)
 	{
-		parent::__construct($id);
+		$cfg = array(
+		'modelo' => array(
+				'model_tabla'        => 'acl_rol',
+				'model_label'        => 'Rol',
+				'model_label_plural' => 'Roles',
+				'model_order_by'     => 'rol',
+			),
+		'campos' => array(
+				'id' => array(
+						'tipo'   => 'id',
+					),
+				'id_app' => array(
+						'tipo'           => 'has_one',
+						'relation'       => array(
+								'model' => 'app',
+							),
+					),
+				'rol' => array(
+						'label'          => 'Rol',
+						'tipo'           => 'char',
+						'largo'          => 50,
+						'texto_ayuda'    => 'Maximo 50 caracteres.',
+						'es_obligatorio' => true,
+						'es_unico'       => true
+					),
+				'descripcion' => array(
+						'label'          => 'Descripcion de la Aplicacion',
+						'tipo'           =>  'char',
+						'largo'          => 100,
+						'texto_ayuda'    => 'Maximo 100 caracteres.',
+						'es_obligatorio' => true,
+						'es_unico'       => true
+					),
+				),
+			);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
