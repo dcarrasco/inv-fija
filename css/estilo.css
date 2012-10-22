@@ -1,10 +1,10 @@
 
 /* ---------- RESET ---------- */
-/* ---------- 
-Based upon 'reset.css' in the 
-Yahoo! User Interface Library: http://developer.yahoo.com/yui 
+/* ----------
+Based upon 'reset.css' in the
+Yahoo! User Interface Library: http://developer.yahoo.com/yui
 ---------- */
-*, html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, 
+*, html, body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4,
 h5, h6, pre, form, label, fieldset, input, p, blockquote, th, td {
 	margin: 0;
 	padding: 0;
@@ -73,16 +73,21 @@ GENERAL
 
 .bold {font-weight: bolder; }
 
-.error { 
-	background-color: red; 
+.error {
+	background-color: red;
 	color: #ffffff;
 	padding: 0.5em;
 	margin: 0.3em;
 	display: inline-block;
 }
 
-.search_found {	
-	background-color: yellow; 
+.search_found {
+	background-color: yellow;
+}
+
+.texto-ayuda {
+	font-size: 10px;
+	font-style: italic;
 }
 
 /* =========================================================
@@ -220,7 +225,7 @@ td.subtotal {
 }
 
 tr:nth-child(even) {
-	background-color: #efefef;	
+	background-color: #efefef;
 }
 
 /* =========================================================
@@ -299,6 +304,7 @@ BOTONES
 .b-active {
 	background-color: #5081B3;
 	color: #ffffff;
+	border: none;
 }
 
 .b-active:visited {

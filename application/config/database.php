@@ -47,6 +47,7 @@
 
 $active_group = 'default';
 //$active_group = 'dcr';
+$active_group = 'mac';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
@@ -80,6 +81,22 @@ $db['dcr']['dbcollat'] = 'utf8_general_ci';
 $db['dcr']['swap_pre'] = '';
 $db['dcr']['autoinit'] = TRUE;
 $db['dcr']['stricton'] = FALSE;
+
+$db['mac']['hostname'] = 'localhost';
+$db['mac']['username'] = 'logistica';
+$db['mac']['password'] = 'logistica';
+$db['mac']['database'] = 'logistica';
+$db['mac']['dbdriver'] = 'mysql';   
+$db['mac']['dbprefix'] = '';
+$db['mac']['pconnect'] = FALSE;
+$db['mac']['db_debug'] = TRUE;
+$db['mac']['cache_on'] = FALSE;
+$db['mac']['cachedir'] = '';
+$db['mac']['char_set'] = 'utf8';
+$db['mac']['dbcollat'] = 'utf8_general_ci';
+$db['mac']['swap_pre'] = '';
+$db['mac']['autoinit'] = TRUE;
+$db['mac']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
