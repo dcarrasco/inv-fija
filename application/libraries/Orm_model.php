@@ -16,7 +16,7 @@ class ORM_Model extends CI_Model {
 	private $model_label_plural = '';
 	private $model_order_by     = '';
 	private $model_campo_id     = '';
-	private $model_page_results = 10;
+	private $model_page_results = 15;
 	private $model_fields       = array();
 	private $model_all          = array();
 

@@ -7,6 +7,8 @@ class Acl_model extends CI_Model {
 	{
 		parent::__construct();
 		$this->load->helper('cookie');
+		$this->load->library('ORM_model');
+
 	}
 
 
@@ -29,7 +31,7 @@ class Acl_model extends CI_Model {
 
 		$arr_menu = array(
 					'analisis' => array('controller' => 'analisis', 'texto' => 'Ajustes de inventario', 'icono' => 'ic-ajustes'),
-					'config' => array('controller' => 'config', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
+					'config' => array('controller' => 'config2', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
 					'reportes' => array('controller' => 'reportes', 'texto' => 'Reportes', 'icono' => 'ic-reporte'),
 					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
 					);

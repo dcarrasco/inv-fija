@@ -2,38 +2,36 @@
 
 class config2 extends CI_Controller {
 
-	var $regs_por_pagina = 10;
+	private $arr_menu = array(
+				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
+				'catalogo'     => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
+				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
+				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
+				'ubicaciones'    => array('url' => '/config2/listado/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
+				'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
+				'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
+				'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
+			);
 
 	public function __construct()
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
-		$this->load->model('acl_model');
-		$this->load->library('ORM_model');
+		$this->acl_model->autentica('config');
 	}
 
 	public function index()
 	{
-		$this->listado();
+		$arr_keys = array_keys($this->arr_menu);
+		$this->listado($arr_keys[0]);
 
 	}
 
 	private function _menu_configuracion($modelo)
 	{
-		$arr_menu = array(
-				'usuario'        => array('url' => '/config2/listado/usuario',       'texto' => 'Usuarios'),
-				'materiales'     => array('url' => '/config2/listado/materiales',     'texto' => 'Materiales'),
-				'inventario'     => array('url' => '/config2/listado/inventario',     'texto' => 'Inventario Activo'),
-				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
-				'ubicaciones'    => array('url' => '/config2/listado/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
-				'app'            => array('url' => '/config2/listado/app',            'texto' => 'Aplicaciones'),
-				'rol'            => array('url' => '/config2/listado/rol',            'texto' => 'Roles'),
-				'modulo'         => array('url' => '/config2/listado/modulo',         'texto' => 'Modulos'),
-				'usuario_rol'    => array('url' => '/config2/listado/usuario_rol',    'texto' => 'Usuarios/Roles'),
-			);
 
 		$menu = '<ul>';
-		foreach($arr_menu as $key => $val)
+		foreach($this->arr_menu as $key => $val)
 		{
 			$selected = ($key == $modelo) ? ' class="selected"' : '';
 			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';

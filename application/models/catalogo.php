@@ -1,25 +1,51 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Catalogo_model extends CI_Model {
-
-/*
-drop table bd_inventario.dbo.fija_catalogo;
-
-CREATE TABLE bd_inventario.dbo.fija_catalogo
-(
-catalogo    varchar(45) not null,
-descripcion varchar(100),
-pmp         decimal(10,2),
-PRIMARY KEY(catalogo)
-);
-*/
+class Catalogo extends ORM_Model {
 
 	public function __construct()
 	{
-		parent::__construct();
+		$cfg = array(
+				'modelo' => array(
+						'model_tabla'        => 'fija_catalogo',
+						'model_label'        => 'Catalogo',
+						'model_label_plural' => 'Catalogos',
+						'model_order_by'     => 'catalogo',
+					),
+				'campos' => array(
+						'catalogo' => array(
+								'label'          => 'Catalogo',
+								'tipo'           => 'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'es_id'          => true,
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						'descripcion' => array(
+								'label'          => 'Descripcion del catalogo',
+								'tipo'           =>  'char',
+								'largo'          => 100,
+								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						'pmp' => array(
+								'label'          => 'Precio Medio Ponderado PMP',
+								'tipo'           =>  'int',
+								'largo'          => 10,
+								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						),
+					);
+		parent::__construct($cfg);
 	}
 
-
+	public function __toString()
+	{
+		return $this->descripcion;
+	}
 
 	public function get_combo_catalogo($filtro = '')
 	{

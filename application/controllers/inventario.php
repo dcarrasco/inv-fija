@@ -20,9 +20,9 @@ class Inventario extends CI_Controller {
 
 	public function ingreso($hoja = 0, $digitador = 0, $auditor = 0)
 	{
-		$this->load->model('usuarios_model');
+		$this->load->model('usuario');
 		$this->load->model('inventario_model');
-		$this->load->model('catalogo_model');
+		$this->load->model('catalogo');
 
 		// recupera el inventario activo
 		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
@@ -81,8 +81,8 @@ class Inventario extends CI_Controller {
 					'nombre_auditor'    => $nombre_auditor,
 					'id_digitador'      => $digitador,
 					'id_auditor'        => $auditor,
-					'combo_auditores'   => $this->usuarios_model->get_combo_usuarios('AUD'),
-					'combo_digitadores' => $this->usuarios_model->get_combo_usuarios('DIG'),
+					'combo_auditores'   => $this->usuario->get_combo_usuarios('AUD'),
+					'combo_digitadores' => $this->usuario->get_combo_usuarios('DIG'),
 					'link_config'       => 'config',
 					'link_reporte'      => 'reportes',
 					'link_inventario'   => 'inventario',

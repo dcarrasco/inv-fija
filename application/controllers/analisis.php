@@ -30,9 +30,9 @@ class Analisis extends CI_Controller {
 	 */
 	public function ajustes($ocultar_regularizadas = 0)
 	{
-		$this->load->model('usuarios_model');
+		$this->load->model('usuario');
 		$this->load->model('inventario_model');
-		$this->load->model('catalogo_model');
+		$this->load->model('catalogo');
 
 		// recupera el inventario activo
 		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
