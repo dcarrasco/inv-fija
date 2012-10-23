@@ -1,42 +1,35 @@
-<!doctype html>
-<html>
-<head>
-	<title>inventario fija</title>
-	<meta charset="utf-8" />
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/estilo.css" /	>
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/view_inventario.js"></script>
-	<script type="text/javascript">
-		js_base_url = '<?php echo base_url(); ?>';
-	</script>
-</head>
-<body>
 
 <div class="content-module">
 
 	<div class="content-module-heading cf">
 		<div class="cf">
 			<div class="fl" style="margin-right: 10px;">
-			<?php echo form_open('/inventario/ingreso', 'id="frm_buscar"'); ?>
-			<?php echo form_hidden('formulario','buscar'); ?>
-			<p>
-				Digitador <?php echo form_dropdown('sel_digitador', $combo_digitadores, set_value('sel_digitador', $id_digitador)); ?>
-				<?php echo form_error('sel_digitador');?>
-			</p>
-			<p>
-				Hoja <?php echo form_input('sel_hoja', set_value('sel_hoja', $hoja), 'maxlength="3" size="3"'); ?>
-				<?php echo form_error('sel_hoja');?>
-				| Auditor <?php echo form_dropdown('sel_auditor', $combo_auditores, set_value('sel_auditor', $id_auditor)); ?>
-				<?php echo form_error('sel_auditor');?>
-			</p>
+				<?php echo form_open('/inventario/ingreso', 'id="frm_buscar"'); ?>
+				<?php echo form_hidden('formulario','buscar'); ?>
+				<p>
+					Hoja <?php echo form_input('sel_hoja', set_value('sel_hoja', $hoja), 'maxlength="3" size="3"'); ?>
+					<?php echo form_error('sel_hoja');?>
+					| Auditor <?php echo form_dropdown('sel_auditor', $combo_auditores, set_value('sel_auditor', $id_auditor)); ?>
+					<?php echo form_error('sel_auditor');?>
+				</p>
 			</div>
-			<?php echo anchor('#','Buscar', 'class="button b-active round ic-search fl" id="btn_buscar"'); ?>
-			<?php echo anchor($link_hoja_ant,'Hoja Prev', 'class="button b-active round ic-hoja-ant fl" id="btn_hoja_ant"'); ?>
-			<?php echo anchor($link_hoja_sig,'Hoja Sig', 'class="button b-active round ic-hoja-sig fl" id="btn_hoja_sig"'); ?>
-			
-			<?php echo $menu_app; ?>
+			<div class="fl" style="margin-right: 10px;">
+				<?php echo anchor('#','Buscar', 'class="button b-active round ic-search fl" id="btn_buscar"'); ?>
+				<?php echo anchor($link_hoja_ant,'Hoja Prev', 'class="button b-active round ic-hoja-ant fl" id="btn_hoja_ant"'); ?>
+				<?php echo anchor($link_hoja_sig,'Hoja Sig', 'class="button b-active round ic-hoja-sig fl" id="btn_hoja_sig"'); ?>
+				
 
-			<?php echo form_close(); ?>
+				<?php echo form_close(); ?>
+			</div>
+
+			<div class="fl" style="margin-right: 10px;">
+				Digitador: <?php echo $nombre_digitador; ?><br>
+				Auditor:<?php echo $nombre_auditor; ?>
+			</div>
+
+			<div class="fr" style="margin-right: 10px;">
+				<?php echo anchor('#','Nuevo material ...', 'class="button b-active round ic-desplegar fr" id="btn_mostrar_agregar"'); ?>
+			</div>
 		</div>
 		<div class="msg-alerta cf ac">
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
@@ -44,30 +37,13 @@
 	</div> <!-- fin content-module-heading -->
 
 	<div class="content-module-main">
-		<table id="resumen_inventario">
-			<tbody>
-				<tr>
-					<td class="ar">Inventario</td>
-					<td colspan="8"><?php echo $nombre_inventario; ?></td>
-					<td rowspan="2">
-						<?php echo anchor('#','Nuevo material ...', 'class="button b-active round ic-desplegar fr" id="btn_mostrar_agregar"'); ?>
-					</td>
-				</tr>
-				<tr>
-					<td class="ar">Digitador</td>
-					<td colspan="2"><?php echo $nombre_digitador; ?></td>
-					<td colspan="2" class="ar">Auditor</td>
-					<td colspan="4"><?php echo $nombre_auditor; ?></td>
-				</tr>
-			</tbody>
-		</table>
 
 		<div class="content-module-main-agregar" style="display: none;">
 			<?php echo form_open('','id=frm_agregar')?>
 			<?php echo form_hidden('formulario','agregar'); ?>
 			<?php echo form_hidden('accion','agregar'); ?>
 			<?php echo form_hidden('sel_hoja', $hoja); ?>
-			<?php echo form_hidden('sel_digitador', $id_digitador); ?>
+			<?php //echo form_hidden('sel_digitador', $id_digitador); ?>
 			<?php echo form_hidden('sel_auditor', $id_auditor); ?>
 			<?php echo form_hidden('agr_id', 0); ?>
 			<table>
@@ -171,13 +147,13 @@
 		</div> <!-- fin content-module-main-agregar -->
 
 		<div class="content-module-main-principal">
-		<?php echo form_open("inventario/ingreso/$hoja/$id_digitador/$id_auditor/".time(), 'id="frm_inventario"'); ?>
+		<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 		<?php echo form_hidden('formulario','inventario'); ?>
 		<?php echo form_hidden('sel_hoja', $hoja); ?>
-		<?php echo form_hidden('sel_digitador', $id_digitador); ?>
+		<?php //echo form_hidden('sel_digitador', $id_digitador); ?>
 		<?php echo form_hidden('sel_auditor', $id_auditor); ?>
-		<?php echo form_error('sel_digitador'); ?>
-		<?php echo form_error('sel_auditor'); ?>
+		<?php //echo form_error('sel_digitador'); ?>
+		<?php //echo form_error('sel_auditor'); ?>
 		<table>
 			<thead>
 				<tr>
@@ -257,5 +233,4 @@
 
 </div> <!-- fin content-module -->
 
-</body>
-</html>
+<script type="text/javascript" src="<?php echo base_url(); ?>js/view_inventario.js"></script>

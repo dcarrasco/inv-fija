@@ -2,7 +2,7 @@
 
 class Catalogo extends ORM_Model {
 
-	public function __construct()
+	public function __construct($recursion_lvl = 0)
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -39,7 +39,7 @@ class Catalogo extends ORM_Model {
 							),
 						),
 					);
-		parent::__construct($cfg);
+		parent::__construct($cfg, $recursion_lvl);
 	}
 
 	public function __toString()

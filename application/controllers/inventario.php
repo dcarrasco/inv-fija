@@ -18,9 +18,10 @@ class Inventario extends CI_Controller {
 	}
 
 
-	public function ingreso($hoja = 0, $digitador = 0, $auditor = 0)
+	public function ingreso($hoja = 0, $auditor = 0)
 	{
-		$this->load->model('usuario');
+		//$this->load->model('usuario');
+		$this->load->model('auditor');
 		$this->load->model('inventario_model');
 		$this->load->model('catalogo');
 
@@ -29,20 +30,20 @@ class Inventario extends CI_Controller {
 
 		$nombre_inventario = $this->inventario_model->get_nombre_inventario($this->id_inventario);
 		$datos_hoja        = $this->inventario_model->get_hoja($this->id_inventario, $hoja);
-		$nombre_digitador  = $this->inventario_model->get_usuario_hoja($this->id_inventario, $hoja, 'DIG');
-		$nombre_auditor    = $this->inventario_model->get_usuario_hoja($this->id_inventario, $hoja, 'AUD');
+		$nombre_auditor    = $this->inventario_model->get_auditor_hoja($this->id_inventario, $hoja);
+		$nombre_digitador  = $this->inventario_model->get_digitador_hoja($this->id_inventario, $hoja);
+
+		$id_usuario_login  = $this->acl_model->get_id_usr();
 
 		if ($this->input->post('formulario') == 'buscar')
 		{
 			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
 			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|greater_than[0]');
-			$this->form_validation->set_rules('sel_digitador', 'Digitador', 'trim|required|greater_than[0]');
 		}
 		else if ($this->input->post('formulario') == 'inventario')
 		{
 			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
 			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|numeric|greater_than[0]');
-			$this->form_validation->set_rules('sel_digitador', 'Digitador', 'trim|required|numeric|greater_than[0]');
 			foreach($datos_hoja as $reg)
 			{
 				$this->form_validation->set_rules('stock_fisico_' . $reg['id'], 'cantidad', 'trim|required|numeric|greater_than[-1]');
@@ -53,7 +54,6 @@ class Inventario extends CI_Controller {
 		{
 			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
 			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|greater_than[0]');
-			$this->form_validation->set_rules('sel_digitador', 'Digitador', 'trim|required|greater_than[0]');
 			$this->form_validation->set_rules('agr_ubicacion', 'Ubicacion', 'trim|required');
 			$this->form_validation->set_rules('agr_material', 'Material', 'trim|required');
 			$this->form_validation->set_rules('agr_lote', 'Lote', 'trim|required');
@@ -79,20 +79,19 @@ class Inventario extends CI_Controller {
 					'nombre_inventario' => $nombre_inventario,
 					'nombre_digitador'  => $nombre_digitador,
 					'nombre_auditor'    => $nombre_auditor,
-					'id_digitador'      => $digitador,
+					//'id_digitador'      => $digitador,
 					'id_auditor'        => $auditor,
-					'combo_auditores'   => $this->usuario->get_combo_usuarios('AUD'),
-					'combo_digitadores' => $this->usuario->get_combo_usuarios('DIG'),
+					'combo_auditores'   => $this->auditor->get_combo(),
 					'link_config'       => 'config',
 					'link_reporte'      => 'reportes',
 					'link_inventario'   => 'inventario',
-					'link_hoja_ant'     => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $digitador . '/' . $auditor . '/' . time(),
-					'link_hoja_sig'     => 'inventario/ingreso/' . ($hoja + 1) . '/' . $digitador . '/' . $auditor . '/' . time(),
+					'link_hoja_ant'     => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time(),
+					'link_hoja_sig'     => 'inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time(),
 					'msg_alerta'        => $this->session->flashdata('msg_alerta'),
 					'menu_app'          => $this->acl_model->menu_app(),
 				);
 			
-			$this->load->view('inventario', $data);
+			$this->_render_view('inventario', $data);
 		}
 		else
 		{
@@ -105,7 +104,7 @@ class Inventario extends CI_Controller {
 														$reg['id'], 
 														$this->id_inventario,
 														$hoja, 
-														set_value('sel_digitador'), 
+														$id_usuario_login, 
 														set_value('sel_auditor'), 
 														$reg['ubicacion'], 
 														$reg['catalogo'], 
@@ -138,7 +137,7 @@ class Inventario extends CI_Controller {
 														$this->input->post('agr_id'), 
 														$this->id_inventario,
 														$hoja, 
-														set_value('sel_digitador'), 
+														$id_usuario_login, 
 														set_value('sel_auditor'), 
 														$this->input->post('agr_ubicacion'), 
 														$this->input->post('agr_material'), 
@@ -156,7 +155,7 @@ class Inventario extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);					
 				}
 			}
-			redirect('inventario/ingreso/' . $this->input->post('sel_hoja') . '/' . $this->input->post('sel_digitador') . '/' . $this->input->post('sel_auditor') . '/' . time());
+			redirect('inventario/ingreso/' . $this->input->post('sel_hoja') . '/' . $this->input->post('sel_auditor') . '/' . time());
 		}
 
 	}
@@ -171,6 +170,16 @@ class Inventario extends CI_Controller {
 			$options .= '<option value="' . $key . '">' . $val . '</option>';
 		}
 		echo($options);
+	}
+
+
+	private function _render_view($vista = '', $data = array())
+	{
+		$data['titulo_modulo'] = 'Ingreso de Inventario ('.$data['nombre_inventario'].')';
+		$data['menu_app'] = $this->acl_model->menu_app();
+		$this->load->view('app_header', $data);
+		$this->load->view($vista, $data);
+		$this->load->view('app_footer', $data);
 	}
 
 

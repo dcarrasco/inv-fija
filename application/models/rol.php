@@ -2,7 +2,7 @@
 
 class Rol extends ORM_Model {
 
-	public function __construct($id = NULL)
+	public function __construct($recursion_lvl = 0)
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -48,7 +48,7 @@ class Rol extends ORM_Model {
 							),
 						),
 					);
-		parent::__construct($cfg);
+		parent::__construct($cfg, $recursion_lvl);
 	}
 
 	public function __toString()

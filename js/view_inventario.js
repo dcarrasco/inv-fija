@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-	var alto_div_fijo = $('div.content-module-heading').height() + $('table#resumen_inventario').height() + $('div.content-module-footer').height() + 26;
+	var alto_div_fijo = $('div.content-module-heading').height() + $('div.content-module-footer').height() + 70;
 	var alto_div = $(window).height() - alto_div_fijo;
 	$('div.content-module-main-principal').css({'overflow': 'auto'});
 	$('div.content-module-main-principal').height(alto_div);
@@ -35,7 +35,6 @@ $(document).ready(function() {
 
 	$('#btn_guardar').click(function (event) {
 		event.preventDefault();
-		$('form#frm_inventario input[name="sel_digitador"]').val($('form#frm_buscar select[name="sel_digitador"]').val());
 		$('form#frm_inventario input[name="sel_auditor"]').val($('form#frm_buscar select[name="sel_auditor"]').val());
 		$('form#frm_inventario').submit();
 	});

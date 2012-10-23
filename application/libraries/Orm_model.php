@@ -9,16 +9,17 @@
  */
 class ORM_Model extends CI_Model {
 
-	private $model_nombre       = '';
-	private $model_class        = '';
-	private $model_tabla        = '';
-	private $model_label        = '';
-	private $model_label_plural = '';
-	private $model_order_by     = '';
-	private $model_campo_id     = '';
-	private $model_page_results = 15;
-	private $model_fields       = array();
-	private $model_all          = array();
+	private $model_nombre        = '';
+	private $model_class         = '';
+	private $model_tabla         = '';
+	private $model_label         = '';
+	private $model_label_plural  = '';
+	private $model_order_by      = '';
+	private $model_campo_id      = '';
+	private $model_recursion_lvl = '';
+	private $model_page_results  = 15;
+	private $model_fields        = array();
+	private $model_all           = array();
 
 	/**
 	 * Constructor
@@ -26,15 +27,18 @@ class ORM_Model extends CI_Model {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	function __construct($param = array()) {
+	function __construct($param = array(), $lvl = 0) {
 
 		parent::__construct();
+
+		//dbg($lvl . ' -> ' . get_class($this));
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
 		$this->model_tabla  = $this->model_nombre;
 		$this->model_label  = $this->model_nombre;
 		$this->model_label_plural = $this->model_label . 's';
+		$this->model_recursion_lvl = $lvl;
 
 		if (array_key_exists('modelo', $param))
 		{
@@ -101,6 +105,8 @@ class ORM_Model extends CI_Model {
 
 	public function get_model_campo_id()            { return $this->model_campo_id; }
 	public function set_model_campo_id($campo = '') { $this->model_campo_id = $campo; }
+
+	public function get_recursion_lvl()            { return $this->model_recursion_lvl; }
 
 	public function get_model_page_results()        { return $this->model_page_results; }
 
@@ -207,7 +213,7 @@ class ORM_Model extends CI_Model {
 		$rs = $this->db->get($this->get_model_tabla())->result_array();
 		foreach($rs as $reg)
 		{
-			$o = new $this->model_class;
+			$o = new $this->model_class($this->get_recursion_lvl() + 1);
 			$o->recuperar_array($reg);
 			$o->_recuperar_relation_fields();
 			array_push($this->model_all, $o);
@@ -240,7 +246,7 @@ class ORM_Model extends CI_Model {
 
 		foreach($rs as $reg)
 		{
-			$o = new $this->model_class;
+			$o = new $this->model_class($this->get_recursion_lvl() + 1);
 			$o->recuperar_array($reg);
 			$o->_recuperar_relation_fields();
 			array_push($this->model_all, $o);
@@ -255,7 +261,7 @@ class ORM_Model extends CI_Model {
 			{
 				$arr_rel = $metadata->get_relation();
 				$class = $arr_rel['model'];
-				$obj = new $class;
+				$obj = new $class($this->get_recursion_lvl() + 1);
 				$obj->get_id($this->$campo);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
@@ -274,7 +280,7 @@ class ORM_Model extends CI_Model {
 				}
 
 				$class = $arr_rel['model'];
-				$obj = new $class;
+				$obj = new $class($this->get_recursion_lvl() + 1);
 				$obj->get_where($obj->get_model_campo_id(), $arr_rs);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
@@ -346,7 +352,7 @@ class ORM_Model extends CI_Model {
 		foreach($arr as $e)
 		{
 			$nom_clase = get_class($this);
-			$o = new $nom_clase();
+			$o = new $nom_clase($this->get_recursion_lvl() + 1);
 			foreach($e as $key => $value)
 			{
 				$o->$key = $value;
@@ -761,14 +767,14 @@ class ORM_Field {
 		else if ($this->tipo == 'has_one')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo;
+			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="id_' . $this->nombre . '"';
 			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'has_many')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo;
+			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="id_' . $this->nombre . '" size="7"';
 			$form = form_multiselect($this->nombre.'[]', $modelo_rel->get_combo(false), $valor_field, $param_adic);
 		}
@@ -799,6 +805,10 @@ class ORM_Field {
 				$campo .= $obj->__toString() . '<br>';
 			}
 			return $campo;
+		}
+		else if (count($this->choices) > 0)
+		{
+			return $this->choices[$valor];
 		}
 		else
 		{

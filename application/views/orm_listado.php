@@ -47,7 +47,7 @@
 
 				<?php if ($links_paginas != ''):?>
 				<tr>
-					<td colspan="5"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
+					<td colspan="10"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
 				</tr>
 			<?php endif; ?>
 			</tbody>

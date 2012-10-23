@@ -2,7 +2,7 @@
 
 class Usuario extends ORM_Model {
 
-	public function __construct()
+	public function __construct($recursion_lvl = 0)
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -23,6 +23,7 @@ class Usuario extends ORM_Model {
 								'es_obligatorio' => true,
 								'es_unico'       => true
 							),
+/*
 						'tipo' => array(
 								'label'          => 'Descripcion de la Aplicacion',
 								'tipo'           =>  'char',
@@ -30,6 +31,7 @@ class Usuario extends ORM_Model {
 								'texto_ayuda'    => 'Maximo 50 caracteres.',
 								'es_obligatorio' => true,
 							),
+ */
 						'activo' => array(
 								'label'          => 'Activo',
 								'tipo'           =>  'boolean',
@@ -53,13 +55,59 @@ class Usuario extends ORM_Model {
 							),
 				),
 			);
-		parent::__construct($cfg);
+		parent::__construct($cfg, $recursion_lvl);
 	}
 
 	public function __toString()
 	{
 		return $this->nombre;
 	}
+
+	public function get_combo_usuarios($tipo = 'AUD')
+	{
+		$arr_result = array();
+		$arr_combo = array();
+	
+		$arr_combo[''] = 'Seleccione un ';
+		$arr_combo[''] .= ($tipo == 'AUD') ? 'auditor ...' : 'digitador ...';
+
+		$this->db->order_by('nombre');
+		$this->db->where('tipo', $tipo);
+		$this->db->where('activo','1');
+		$arr_result = $this->db->get('fija_usuarios')->result_array();
+
+		foreach($arr_result as $reg)
+		{
+			$arr_combo[$reg['id']] = $reg['nombre'];
+		}
+
+		return $arr_combo;
+	}
+
+
+
+	public function get_usuarios($limit = 0, $offset = 0)
+	{
+		$this->db->order_by('tipo ASC, nombre ASC');
+
+		return $this->db->get('fija_usuarios', $limit, $offset)->result_array();
+	}
+
+
+
+	public function total_usuarios() 
+	{
+		return $this->db->count_all('fija_usuarios');
+	}
+
+
+	public function get_cant_registros_usuario($id = 0)
+	{
+		return ($this->db->get_where('fija_detalle_inventario', array('digitador' => $id))->num_rows() + 
+				$this->db->get_where('fija_detalle_inventario', array('auditor' => $id))->num_rows());
+	}
+
+
 
 }
 

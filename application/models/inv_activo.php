@@ -2,7 +2,7 @@
 
 class Inv_activo extends ORM_Model {
 
-	public function __construct()
+	public function __construct($recursion_lvl = 0)
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -33,14 +33,15 @@ class Inv_activo extends ORM_Model {
 						'tipo_inventario' => array(
 								'label'          => 'Tipo de inventario',
 								'tipo'           =>  'char',
-								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'largo'          => 30,
+								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+								'choices'        => array('MAIMONIDES' => 'Inventario Maimonides', 'FIJA' => 'Inventario Fija'),
 								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_unico'       => true,
 							),
 						),
 					);
-		parent::__construct($cfg);
+		parent::__construct($cfg, $recursion_lvl);
 	}
 
 	public function __toString()

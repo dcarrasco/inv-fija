@@ -158,21 +158,24 @@ primary key(id)
 
 
 
-	public function get_usuario_hoja($id_inventario = 0, $hoja = 0, $tipo = '')
+	public function get_auditor_hoja($id_inventario = 0, $hoja = 0)
+	{
+		$this->db->distinct();
+		$this->db->select('a.nombre as nombre');
+		$this->db->from('fija_detalle_inventario');
+		$this->db->join('fija_auditores as a', 'a.id = fija_detalle_inventario.auditor', 'left');	
+		$this->db->where(array('fija_detalle_inventario.id_inventario' => $id_inventario, 'fija_detalle_inventario.hoja' => $hoja));
+		$row = $this->db->get()->row_array();
+
+		return (array_key_exists('nombre', $row) ? $row['nombre'] : '');
+	}
+
+	public function get_digitador_hoja($id_inventario = 0, $hoja = 0)
 	{
 		$this->db->distinct();
 		$this->db->select('d.nombre as nombre');
 		$this->db->from('fija_detalle_inventario');
-
-		if ($tipo == 'AUD')
-		{
-			$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.auditor and d.tipo='AUD'", 'left');	
-		}
-		elseif ($tipo == 'DIG')
-		{
-			$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador and d.tipo='DIG'", 'left');	
-		}
-		
+		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador and d.tipo='DIG'", 'left');	
 		$this->db->where(array('fija_detalle_inventario.id_inventario' => $id_inventario, 'fija_detalle_inventario.hoja' => $hoja));
 		$row = $this->db->get()->row_array();
 

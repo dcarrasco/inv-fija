@@ -3,14 +3,15 @@
 class config2 extends CI_Controller {
 
 	private $arr_menu = array(
-				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
-				'catalogo'     => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
+				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
+				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
 				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
 				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
-				'ubicaciones'    => array('url' => '/config2/listado/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
+				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
 				'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
 				'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
 				'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
+				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
 			);
 
 	public function __construct()
@@ -24,8 +25,8 @@ class config2 extends CI_Controller {
 	{
 		$arr_keys = array_keys($this->arr_menu);
 		$this->listado($arr_keys[0]);
-
 	}
+
 
 	private function _menu_configuracion($modelo)
 	{
@@ -39,6 +40,7 @@ class config2 extends CI_Controller {
 		$menu .= '</ul>';
 		return $menu;
 	}
+
 
 	private function _render_view($vista = '', $data = array())
 	{
@@ -56,6 +58,7 @@ class config2 extends CI_Controller {
 		//dbg($this->db->list_fields('acl_app'));
 
 		$modelo = new $nombre_modelo;
+		
 		$modelo->get_all($filtro, $pag);
 		//dbg($modelo);
 
@@ -99,7 +102,7 @@ class config2 extends CI_Controller {
 			else if ($this->input->post('borrar'))
 			{
 				$modelo->borrar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' borrado correctamente');
+				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo->__toString() . ') borrado correctamente');
 			}
 			redirect('config2/listado/' . $nombre_modelo);
 		}

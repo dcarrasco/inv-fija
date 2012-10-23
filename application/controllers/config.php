@@ -19,15 +19,15 @@ class Config extends CI_Controller {
 	private function menu_configuracion($opcion)
 	{
 		$arr_menu = array(
-				'usuarios'       => array('url' => '/config/usuarios',       'texto' => 'Usuarios'),
-				'materiales'     => array('url' => '/config/materiales',     'texto' => 'Materiales'),
-				'inventario'     => array('url' => '/config/inventario',     'texto' => 'Inventario Activo'),
-				'tipo_ubicacion' => array('url' => '/config/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
+				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
+				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
+				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
+				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
 				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
-				'aplicaciones'   => array('url' => '/config/app',            'texto' => 'Aplicaciones'),
-				'modulos'        => array('url' => '/config/modulo',         'texto' => 'Modulos'),
-				'roles'          => array('url' => '/config/rol',            'texto' => 'Roles'),
-				'usuario_rol'    => array('url' => '/config/usuario_rol',    'texto' => 'Usuarios/Roles'),
+				'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
+				'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
+				'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
+				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
 			);
 
 		$menu = '<ul>';
