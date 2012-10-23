@@ -131,29 +131,42 @@ class ORM_Model extends CI_Model {
 
 	public function valida_form()
 	{
-		foreach ($this->model_metadata as $campo => $metadata)
+		foreach ($this->model_fields as $campo => $metadata)
 		{
 			$this->form_validation->set_rules($campo, ucfirst($metadata->get_label()), $metadata->get_form_validation());
 		}
 		$this->form_validation->set_error_delimiters('<br/><div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+		$this->form_validation->set_message('greater_than', 'Seleccione un valor para %s');
 
 		return $this->form_validation->run();
 	}
 
-	public function form_field($campo = '')
+	public function print_form_campo($campo = '')
 	{
-		return $this->model_metadata[$campo]->form_field($this->$campo);
+		return $this->model_fields[$campo]->form_field($this->$campo);
 	}
 
-	public function label_field($campo = '')
+	public function get_label_field($campo = '')
 	{
-		return $this->model_metadata[$campo]->get_label();
+		return $this->model_fields[$campo]->get_label();
 	}
 
-	public function texto_ayuda_field($campo = '')
+	public function get_texto_ayuda_field($campo = '')
 	{
-		return $this->model_metadata[$campo]->get_texto_ayuda();
+		return $this->model_fields[$campo]->get_texto_ayuda();
+	}
+
+	public function get_valor_field($campo = '', $formatted = TRUE)
+	{
+		if (!$formatted)
+		{
+			return $this->$campo;
+		}
+		else
+		{
+			return $this->model_fields[$campo]->get_formatted_value($this->$campo);
+		}
 	}
 
 	public function get_combo($glosa_seleccion = true)
@@ -165,50 +178,14 @@ class ORM_Model extends CI_Model {
 			$combo[] = 'Seleccione un(a) ' . $this->get_model_label() . '...';
 		}
 
-		//determina el campo id
-		$campo_id = '';
-		foreach($this->get_model_metadata() as $key => $metadata)
-		{
-			if ($metadata->get_es_id())
-			{
-				$campo_id = $key;
-			}
-		}
-
 		// llena los valores del combo
 		$this->get_all('_', -1);
-		foreach ($this->model_rs_list as $o)
+		foreach ($this->model_all as $o)
 		{
-			$combo[$o->$campo_id] = $o->to_string();
+			$combo[$o->{$o->get_model_campo_id()}] = $o->__toString();
 		}
 
 		return $combo;
-	}
-
-	public function print_campo($campo = '')
-	{
-		if ($this->model_fields[$campo]->get_tipo() == 'has_one')
-		{
-			$arr_rel = $this->model_fields[$campo]->get_relation();
-			return $arr_rel['data']->__toString();
-		}
-		else
-		{
-			return $this->$campo;
-		}
-	}
-
-	public function print_label_campo($campo = '')
-	{
-		if ($this->model_fields[$campo]->get_tipo() == 'has_one')
-		{
-			$arr_rel = $this->model_fields[$campo]->get_relation();
-			return $arr_rel['data']->get_model_label();
-		}
-		else
-		{
-			return $this->model_fields[$campo]->get_label();
-		}
 	}
 
 	// =======================================================================
@@ -242,10 +219,31 @@ class ORM_Model extends CI_Model {
 		$rs = $this->db->get_where($this->get_model_tabla(), array($this->get_model_tabla() . '.' . $this->get_model_campo_id() => $id))->row_array();
 		if (count($rs) > 0)
 		{
-			foreach ($rs as $key => $value)
-			{
-				$this->$key = $value;
-			}
+			$this->recuperar_array($rs);
+			$this->_recuperar_relation_fields();
+		}
+	}
+
+	public function get_where($campo = '', $valores = '')
+	{
+		$this->db->order_by($this->get_model_order_by());
+		if (is_array($valores))
+		{
+			$valores = (count($valores) == 0) ? array('') : $valores;
+			$this->db->where_in($campo, $valores);
+		}
+		else
+		{
+			$this->db->where_in($campo, $valores);
+		}
+		$rs = $this->db->get($this->get_model_tabla())->result_array();
+
+		foreach($rs as $reg)
+		{
+			$o = new $this->model_class;
+			$o->recuperar_array($reg);
+			$o->_recuperar_relation_fields();
+			array_push($this->model_all, $o);
 		}
 	}
 
@@ -263,6 +261,26 @@ class ORM_Model extends CI_Model {
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
+			}
+			if($metadata->get_tipo() == 'has_many')
+			{
+				$arr_rel = $metadata->get_relation();
+
+				$arr_rs = array();
+				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], array($arr_rel['id_one_table'] => $this->{$this->get_model_campo_id()}))->result_array();
+				foreach($rs as $val)
+				{
+					array_push($arr_rs, $val[$arr_rel['id_many_table']]);
+				}
+
+				$class = $arr_rel['model'];
+				$obj = new $class;
+				$obj->get_where($obj->get_model_campo_id(), $arr_rs);
+
+				$arr_rel = $this->model_fields[$campo]->get_relation();
+				$arr_rel['data'] = $obj;
+				$this->model_fields[$campo]->set_relation($arr_rel);
+				$this->$campo = $arr_rs;
 			}
 		}
 	}
@@ -343,7 +361,7 @@ class ORM_Model extends CI_Model {
 
 	public function recuperar_post()
 	{
-		foreach($this->model_metadata as $nombre => $metadata)
+		foreach($this->model_fields as $nombre => $metadata)
 		{
 			// si el valor del post es un arreglo, transforma los valores a llaves del arreglo
 			if (is_array($this->input->post($nombre)))
@@ -355,7 +373,7 @@ class ORM_Model extends CI_Model {
 				}
 				$this->$nombre = $arr;
 			}
-			else if ($this->input->post($nombre) != "")
+			else if ($this->input->post($nombre) != '')
 			{
 				$this->$nombre = $this->input->post($nombre);
 			}
@@ -419,7 +437,7 @@ class ORM_Model extends CI_Model {
 		$id_en_insert = true;
 		$es_insert    = false;
 
-		foreach($this->model_metadata as $nombre => $campo)
+		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincremet())
 			{
@@ -432,7 +450,10 @@ class ORM_Model extends CI_Model {
 			}
 			else
 			{
-				$data_update[$nombre] = $this->$nombre;
+				if ($campo->get_tipo() != 'has_many')
+				{
+					$data_update[$nombre] = $this->$nombre;
+				}
 			}
 		}
 
@@ -457,6 +478,7 @@ class ORM_Model extends CI_Model {
 			else
 			{
 				$this->db->insert($this->get_model_tabla(), $data_update);
+				$data_where[$this->get_model_campo_id()] = $this->db->insert_id();
 			}
 		}
 		else
@@ -464,12 +486,30 @@ class ORM_Model extends CI_Model {
 			$this->db->where($data_where);
 			$this->db->update($this->get_model_tabla(), $data_update);
 		}
+
+		foreach($this->model_fields as $nombre => $campo)
+		{
+			if ($campo->get_tipo() == 'has_many')
+			{
+				$rel = $campo->get_relation();
+				foreach($data_where as $key => $val_key)
+				{
+					$this->db->delete($rel['join_table'], array($rel['id_one_table'] => $val_key));
+					foreach($this->$nombre as $valor_campo)
+					{
+						$this->db->insert($rel['join_table'], array($rel['id_one_table'] => $val_key, $rel['id_many_table'] => $valor_campo));
+					}
+				}
+
+			}
+		}
+
 	}
 
 	public function borrar()
 	{
 		$data_where = array();
-		foreach($this->model_metadata as $nombre => $campo)
+		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id())
 			{
@@ -477,25 +517,20 @@ class ORM_Model extends CI_Model {
 			}
 		}
 		$this->db->delete($this->get_model_tabla(), $data_where);
-	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Representacion string del modelo
-	 *
-	 * @access  public
-	 * @return  string  representacion string del modelo
-	 * @author  dcr
-	 **/
-	function to_string()
-	{
-		$s = '';
-		foreach($this->fields as $f)
+		foreach($this->model_fields as $nombre => $campo)
 		{
-			$s .= $f->value . '-';
+			if ($campo->get_tipo() == 'has_many')
+			{
+				$rel = $campo->get_relation();
+				foreach($data_where as $key => $val_key)
+				{
+					$this->db->delete($rel['join_table'], array($rel['id_one_table'] => $val_key));
+				}
+
+			}
 		}
-		return $s;
+
 	}
 
 	// --------------------------------------------------------------------
@@ -628,7 +663,23 @@ class ORM_Field {
 	}
 
 	public function get_tipo()            { return $this->tipo; }
-	public function get_label()           { return $this->label; }
+
+	public function get_label()
+	{
+		if ($this->tipo == 'has_one')
+		{
+			return $this->relation['data']->get_model_label();
+		}
+		else if ($this->tipo == 'has_many')
+		{
+			return $this->relation['data']->get_model_label_plural();
+		}
+		else
+		{
+			return $this->label;
+		}
+	}
+
 	public function get_es_id()           { return $this->es_id; }
 	public function get_es_obligatorio()  { return $this->es_obligatorio; }
 	public function get_es_autoincremet() { return $this->es_autoincrement; }
@@ -650,6 +701,7 @@ class ORM_Field {
 	{
 		$form = '';
 		$valor_field = ($valor == '' and $this->default != '') ? $this->default : $valor;
+		$valor_field = set_value($this->nombre, $valor_field);
 
 		if (!empty($this->choices) and $this->tipo != 'has_many')
 		{
@@ -708,18 +760,17 @@ class ORM_Field {
 		}
 		else if ($this->tipo == 'has_one')
 		{
-			$nombre_rel_modelo = $this->relation['rel_modelo'];
+			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo;
 			$param_adic = ' id="id_' . $this->nombre . '"';
 			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'has_many')
 		{
-			$modelo_join = $this->relation['modelo'];
-			$CI =& get_instance();
-			$CI->load->model($modelo_join);
-			$param_adic = ' id="id_' . $this->nombre . '" size ="5"';
-			$form = form_multiselect($this->nombre, $CI->$modelo_join->get_combo(false), $valor_field, $param_adic);
+			$nombre_rel_modelo = $this->relation['model'];
+			$modelo_rel = new $nombre_rel_modelo;
+			$param_adic = ' id="id_' . $this->nombre . '" size="7"';
+			$form = form_multiselect($this->nombre.'[]', $modelo_rel->get_combo(false), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'id')
 		{
@@ -730,10 +781,42 @@ class ORM_Field {
 		return $form;
 	}
 
+	public function get_formatted_value($valor)
+	{
+		if ($this->tipo == 'boolean')
+		{
+			return ($valor == 1) ? 'SI' : 'NO';
+		}
+		else if ($this->tipo == 'has_one')
+		{
+			return $this->relation['data']->__toString();
+		}
+		else if ($this->tipo == 'has_many')
+		{
+			$campo = '';
+			foreach ($this->relation['data']->get_model_all() as $obj)
+			{
+				$campo .= $obj->__toString() . '<br>';
+			}
+			return $campo;
+		}
+		else
+		{
+			return $valor;
+		}
+	}
+
 	public function get_form_validation()
 	{
 		$regla = 'trim';
 		$regla .= ($this->es_obligatorio == true and $this->es_autoincrement == false) ? '|required' : '';
+		$regla .= ($this->tipo == 'has_one') ? '|greater_than[0]' : '';
+
+		if ($this->tipo == 'has_many')
+		{
+			$regla = '';
+		}
+
 		return $regla;
 	}
 

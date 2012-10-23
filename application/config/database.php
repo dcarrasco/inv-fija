@@ -47,7 +47,7 @@
 
 $active_group = 'default';
 $active_group = 'dcr';
-//$active_group = 'mac';
+$active_group = 'mac';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
@@ -70,7 +70,7 @@ $db['dcr']['hostname'] = 'localhost,1500';
 $db['dcr']['username'] = 'patripio';
 $db['dcr']['password'] = 'patripio';
 $db['dcr']['database'] = 'BD_inventario';
-$db['dcr']['dbdriver'] = 'mssql';   
+$db['dcr']['dbdriver'] = 'mssql';
 $db['dcr']['dbprefix'] = '';
 $db['dcr']['pconnect'] = FALSE;
 $db['dcr']['db_debug'] = TRUE;
@@ -86,7 +86,7 @@ $db['mac']['hostname'] = 'localhost';
 $db['mac']['username'] = 'logistica';
 $db['mac']['password'] = 'logistica';
 $db['mac']['database'] = 'logistica';
-$db['mac']['dbdriver'] = 'mysql';   
+$db['mac']['dbdriver'] = 'mysql';
 $db['mac']['dbprefix'] = '';
 $db['mac']['pconnect'] = FALSE;
 $db['mac']['db_debug'] = TRUE;

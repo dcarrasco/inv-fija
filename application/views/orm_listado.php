@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="fr">
-			<a href="<?php echo $url_editar; ?>" class="button b-active round ic-desplegar fl" id="btn_mostrar_agregar">Nueva aplicacion ...</a>
+			<a href="<?php echo $url_editar; ?>" class="button b-active round ic-agregar fl" id="btn_mostrar_agregar">Agregar <?php echo strtolower($modelo->get_model_label()); ?></a>
 		</div>
 
 	</div> <!-- fin content-module-heading -->
@@ -23,7 +23,7 @@
 				<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>
 					<th>
-						<?php echo $modelo->print_label_campo($campo); ?>
+						<?php echo ucfirst($modelo->get_label_field($campo)); ?>
 					</th>
 				<?php endforeach; ?>
 				<th class="ac">Editar</th>
@@ -34,7 +34,7 @@
 					<tr>
 					<?php foreach ($o as $campo => $valor): ?>
 						<td>
-							<?php echo $o->print_campo($campo); ?>
+							<?php echo $o->get_valor_field($campo); ?>
 						</td>
 					<?php endforeach; ?>
 					<td class="ac">

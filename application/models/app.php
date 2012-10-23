@@ -36,8 +36,6 @@ class App extends ORM_Model {
 						'tipo'           =>  'char',
 						'largo'          => 100,
 						'texto_ayuda'    => 'Maximo 100 caracteres.',
-						'es_obligatorio' => true,
-						'es_unico'       => true
 					),
 				),
 			);

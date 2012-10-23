@@ -7,7 +7,7 @@ class config2 extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->output->enable_profiler(TRUE);
+		//$this->output->enable_profiler(TRUE);
 		$this->load->model('acl_model');
 		$this->load->library('ORM_model');
 	}
@@ -45,7 +45,7 @@ class config2 extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Configuracion';
-		//$data['menu_app'] = $this->acl_model->menu_app();
+		$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
@@ -78,13 +78,13 @@ class config2 extends CI_Controller {
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
 		$modelo = new $nombre_modelo($id);
+		$modelo->get_id($id);
 		//dbg($modelo);
 
-		if (!$this->input->post('grabar') and !$this->input->post('borrar'))
+		if (!$modelo->valida_form())
 		{
 			$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
-				'arr_form'           => $this->_arr_form($modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
 				);
@@ -92,16 +92,15 @@ class config2 extends CI_Controller {
 		}
 		else
 		{
-			//$modelo->recuperar_post();
-			$this->session->set_flashdata('msg_alerta', ' !!!!!!!!!!');
+			$modelo->recuperar_post();
 			if ($this->input->post('grabar'))
 			{
-				$modelo->save();
+				$modelo->grabar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' grabado correctamente');
 			}
 			else if ($this->input->post('borrar'))
 			{
-				$modelo->delete();
+				$modelo->borrar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' borrado correctamente');
 			}
 			redirect('config2/listado/' . $nombre_modelo);

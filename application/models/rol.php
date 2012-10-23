@@ -5,40 +5,49 @@ class Rol extends ORM_Model {
 	public function __construct($id = NULL)
 	{
 		$cfg = array(
-		'modelo' => array(
-				'model_tabla'        => 'acl_rol',
-				'model_label'        => 'Rol',
-				'model_label_plural' => 'Roles',
-				'model_order_by'     => 'rol',
-			),
-		'campos' => array(
-				'id' => array(
-						'tipo'   => 'id',
+				'modelo' => array(
+						'model_tabla'        => 'acl_rol',
+						'model_label'        => 'Rol',
+						'model_label_plural' => 'Roles',
+						'model_order_by'     => 'rol',
 					),
-				'id_app' => array(
-						'tipo'           => 'has_one',
-						'relation'       => array(
-								'model' => 'app',
+				'campos' => array(
+						'id' => array(
+								'tipo'   => 'id',
 							),
-					),
-				'rol' => array(
-						'label'          => 'Rol',
-						'tipo'           => 'char',
-						'largo'          => 50,
-						'texto_ayuda'    => 'Maximo 50 caracteres.',
-						'es_obligatorio' => true,
-						'es_unico'       => true
-					),
-				'descripcion' => array(
-						'label'          => 'Descripcion de la Aplicacion',
-						'tipo'           =>  'char',
-						'largo'          => 100,
-						'texto_ayuda'    => 'Maximo 100 caracteres.',
-						'es_obligatorio' => true,
-						'es_unico'       => true
-					),
-				),
-			);
+						'id_app' => array(
+								'tipo'           => 'has_one',
+								'relation'       => array(
+										'model' => 'app',
+									),
+							),
+						'rol' => array(
+								'label'          => 'Rol',
+								'tipo'           => 'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						'descripcion' => array(
+								'label'          => 'Descripcion del rol',
+								'tipo'           =>  'char',
+								'largo'          => 100,
+								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						'modulo' => array(
+								'tipo'           => 'has_many',
+								'relation'       => array(
+										'model'         => 'modulo',
+										'join_table'    => 'acl_rol_modulo',
+										'id_one_table'  => 'id_rol',
+										'id_many_table' => 'id_modulo'
+									),
+							),
+						),
+					);
 		parent::__construct($cfg);
 	}
 

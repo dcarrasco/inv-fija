@@ -14,9 +14,10 @@ class Modulo extends ORM_Model {
 								'tipo'   => 'id',
 							),
 						'id_app' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array('rel_table' => 'acl_app', 'local_id' => 'id_app', 'external_id' => 'id', 'rel_modelo' => 'app'),
-								'label'          => 'aplicacion',
+								'tipo'           => 'has_one',
+								'relation'       => array(
+										'model' => 'app',
+									),
 							),
 						'modulo' => array(
 								'tipo'           =>  'char',
@@ -46,7 +47,7 @@ class Modulo extends ORM_Model {
 
 	}
 
-	public function to_string()
+	public function __toString()
 	{
 		return $this->modulo;
 	}

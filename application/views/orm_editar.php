@@ -12,11 +12,29 @@
 	</div>
 
 	<div class="content-module-main-agregar">
-		<?php echo $modelo->render_form($modelo->fields); ?>
+		<?php echo form_open('', 'id="frm_editar"'); ?>
+		<table>
+			<tbody>
+				<?php foreach ($modelo as $campo => $valor): ?>
+				<tr>
+					<th>
+						<?php echo ucfirst($modelo->get_label_field($campo)); ?>
+					</th>
+					<td>
+						<br>
+						<?php echo $modelo->print_form_campo($campo); ?><?php echo form_error($campo); ?>
+
+						<br><span class="texto-ayuda"><?php echo $modelo->get_texto_ayuda_field($campo); ?></span>
+						<br>
+					</td>
+				</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
 	</div> <!-- fin content-module-main-agregar -->
 
 	<div class="content-module-footer cf">
-		<?php echo form_submit('borrar', 'Borrar', 'class="button b-active round ic-borrar fr"'); ?>
+		<?php echo form_submit('borrar', 'Borrar', 'class="button b-active round ic-borrar fr" onclick="return confirm(\'Esta seguro de borrar este ' . $modelo->get_model_label() . '?\');" '); ?>
 		<?php echo form_submit('grabar', 'Guardar', 'class="button b-active round ic-ok fr"'); ?>
 	</div> <!-- fin content-module-footer -->
 	<?php echo form_close(); ?>

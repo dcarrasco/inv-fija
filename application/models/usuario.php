@@ -2,33 +2,64 @@
 
 class Usuario extends ORM_Model {
 
-	var $table = 'fija_usuarios';
-
-	var $validation = array(
+	public function __construct()
+	{
+		$cfg = array(
+				'modelo' => array(
+						'model_tabla'        => 'fija_usuarios',
+						'model_label'        => 'Usuario',
+						'model_label_plural' => 'Usuarios',
+						'model_order_by'     => 'nombre',
+					),
+				'campos' => array(
+						'id' => array(
+								'tipo'   => 'id',
+							),
 						'nombre' => array(
-								'label' => 'Nombre de usuario',
-								'rules' => array('required', 'trim', 'unique'),
+								'label'          => 'Nombre de usuario',
+								'tipo'           => 'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
 							),
 						'tipo' => array(
-								'label' => 'Tipo de usuario',
-								'rules' => array('required', 'trim', 'unique'),
+								'label'          => 'Descripcion de la Aplicacion',
+								'tipo'           =>  'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'es_obligatorio' => true,
 							),
 						'activo' => array(
-								'label' => 'Activo?',
-								'rules' => array('required', 'trim'),
+								'label'          => 'Activo',
+								'tipo'           =>  'boolean',
+								'texto_ayuda'    => 'Indica se el usuario esta activo dentro del sistema.',
+								'es_obligatorio' => true,
 							),
 						'usr' => array(
-								'label' => 'Username',
-								'rules' => array('required', 'trim', 'unique'),
+								'label'          => 'Username',
+								'tipo'           =>  'char',
+								'largo'          => 100,
+								'texto_ayuda'    => 'Maximo 100 caracteres.',
 							),
-					);
-
-
-	public function __construct($id = NULL)
-	{
-		parent::__construct($id);
+						'rol' => array(
+								'tipo'           => 'has_many',
+								'relation'       => array(
+										'model'         => 'rol',
+										'join_table'    => 'acl_usuario_rol',
+										'id_one_table'  => 'id_usuario',
+										'id_many_table' => 'id_rol'
+									),
+							),
+				),
+			);
+		parent::__construct($cfg);
 	}
 
+	public function __toString()
+	{
+		return $this->nombre;
+	}
 
 }
 
