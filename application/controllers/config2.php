@@ -54,25 +54,22 @@ class config2 extends CI_Controller {
 
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
-		//dbg($this->db->field_data('acl_app'));
-		//dbg($this->db->list_fields('acl_app'));
+		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
 		$modelo = new $nombre_modelo;
-
 		$modelo->get_all($filtro, $pag);
-		//dbg($modelo);
-
 
 		$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
 				'modelo'             => $modelo,
-				'all'                => $modelo->get_model_all(),
 				'links_paginas'      => $modelo->crea_links_paginas($filtro),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+				'filtro'             => ($filtro == '_') ? '' : $filtro,
+				'url_filtro'         => site_url('config2/listado/' . $nombre_modelo . '/'),
 				'url_editar'         => site_url('config2/editar/' . $nombre_modelo . '/'),
 				'url_borrar'         => site_url('config2/borrar/' . $nombre_modelo . '/'),
 			);
-		$this->_render_view('orm_listado', $data);
+		$this->_render_view('ORM/orm_listado', $data);
 	}
 
 
@@ -80,7 +77,6 @@ class config2 extends CI_Controller {
 	{
 		$modelo = new $nombre_modelo($id);
 		$modelo->get_id($id);
-		//dbg($modelo);
 
 		if (!$modelo->valida_form())
 		{
@@ -89,7 +85,7 @@ class config2 extends CI_Controller {
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
 				);
-			$this->_render_view('orm_editar', $data);
+			$this->_render_view('ORM/orm_editar', $data);
 		}
 		else
 		{

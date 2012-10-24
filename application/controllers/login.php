@@ -29,7 +29,7 @@ class Login extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array('msg_alerta' => '');
-			$this->load->view('login', $data);
+			$this->load->view('ACL/login', $data);
 		}
 		else
 		{
@@ -47,7 +47,7 @@ class Login extends CI_Controller {
 					if (!$login_ok) 
 					{
 						$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
-						$this->load->view('login', $data);
+						$this->load->view('ACL/login', $data);
 					}
 					else
 					{
@@ -59,7 +59,7 @@ class Login extends CI_Controller {
 			else
 			{
 				$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
-				$this->load->view('login', $data);
+				$this->load->view('ACL/login', $data);
 			}
 		}
 	}
@@ -91,7 +91,7 @@ class Login extends CI_Controller {
 							'tiene_clave'    => $this->acl_model->tiene_clave($usr),
 							'ocultar_password' => (($this->input->post('usr')) ? true : false), 
 						);
-			$this->load->view('cambio_password', $data);
+			$this->load->view('ACL/cambio_password', $data);
 		}
 		else
 		{
@@ -103,7 +103,7 @@ class Login extends CI_Controller {
 			else
 			{
 				$data = array('msg_alerta' => $res[1]);
-				$this->load->view('cambio_password', $data);
+				$this->load->view('ACL/cambio_password', $data);
 			}
 		}
 	}

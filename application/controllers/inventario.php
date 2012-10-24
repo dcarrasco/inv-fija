@@ -162,12 +162,13 @@ class Inventario extends CI_Controller {
 
 	public function ajax_act_agr_materiales($filtro = '')
 	{
-		$this->load->model('catalogo_model');
-		$datos_combo = $this->catalogo_model->get_combo_catalogo($filtro);
+		$material = new catalogo;
+		$material->get_combo(false, $filtro);
+
 		$options = '';
-		foreach ($datos_combo as $key => $val)
+		foreach ($material->get_model_all() as $o)
 		{
-			$options .= '<option value="' . $key . '">' . $val . '</option>';
+			$options .= '<option value="' . $o->catalogo . '">' . $o . '</option>';
 		}
 		echo($options);
 	}

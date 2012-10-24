@@ -2,7 +2,7 @@
 
 class Tipo_ubicacion extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -34,7 +34,7 @@ class Tipo_ubicacion extends ORM_Model {
 							),
 						),
 					);
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
@@ -45,5 +45,5 @@ class Tipo_ubicacion extends ORM_Model {
 
 }
 
-/* End of file catalogo_model.php */
-/* Location: ./application/models/catalogo_model.php */
+/* End of file tipo_ubicacion.php */
+/* Location: ./application/models/tipo_ubicacion.php */

@@ -2,7 +2,7 @@
 
 class Rol extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -48,7 +48,7 @@ class Rol extends ORM_Model {
 							),
 						),
 					);
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
@@ -58,5 +58,5 @@ class Rol extends ORM_Model {
 
 }
 
-/* End of file modulo_model.php */
-/* Location: ./application/models/modulo_model.php */
+/* End of file rol.php */
+/* Location: ./application/models/rol.php */

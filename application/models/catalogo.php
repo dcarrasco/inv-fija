@@ -2,7 +2,7 @@
 
 class Catalogo extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -30,7 +30,7 @@ class Catalogo extends ORM_Model {
 								'es_unico'       => true
 							),
 						'pmp' => array(
-								'label'          => 'Precio Medio Ponderado PMP',
+								'label'          => 'Precio Medio Ponderado (PMP)',
 								'tipo'           =>  'int',
 								'largo'          => 10,
 								'texto_ayuda'    => 'Maximo 100 caracteres.',
@@ -39,7 +39,7 @@ class Catalogo extends ORM_Model {
 							),
 						),
 					);
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
@@ -176,5 +176,5 @@ class Catalogo extends ORM_Model {
 
 }
 
-/* End of file catalogo_model.php */
-/* Location: ./application/models/catalogo_model.php */
+/* End of file catalogo.php */
+/* Location: ./application/models/catalogo.php */

@@ -31,7 +31,7 @@ class Acl_model extends CI_Model {
 
 		$arr_menu = array(
 					'analisis' => array('controller' => 'analisis', 'texto' => 'Ajustes de inventario', 'icono' => 'ic-ajustes'),
-					'config' => array('controller' => 'config2', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
+					'config2' => array('controller' => 'config2', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
 					'reportes' => array('controller' => 'reportes', 'texto' => 'Reportes', 'icono' => 'ic-reporte'),
 					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
 					);
@@ -164,13 +164,27 @@ class Acl_model extends CI_Model {
 	public function get_nombre_usuario($usr = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
-		return $arr_rs['nombre'];
+		if (count($arr_rs) > 0)
+		{
+			return $arr_rs['nombre'];
+		}
+		else
+		{
+			return '';
+		}
 	}
 
 	public function tiene_clave($usr = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
-		return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);		
+		if (count($arr_rs) > 0)
+		{
+			return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);			
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public function existe_usuario($usr = '')

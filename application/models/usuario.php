@@ -2,7 +2,7 @@
 
 class Usuario extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -55,7 +55,7 @@ class Usuario extends ORM_Model {
 							),
 				),
 			);
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
@@ -63,7 +63,7 @@ class Usuario extends ORM_Model {
 		return $this->nombre;
 	}
 
-	public function get_combo_usuarios($tipo = 'AUD')
+	public function ___get_combo_usuarios($tipo = 'AUD')
 	{
 		$arr_result = array();
 		$arr_combo = array();
@@ -86,7 +86,7 @@ class Usuario extends ORM_Model {
 
 
 
-	public function get_usuarios($limit = 0, $offset = 0)
+	public function ___get_usuarios($limit = 0, $offset = 0)
 	{
 		$this->db->order_by('tipo ASC, nombre ASC');
 
@@ -95,13 +95,13 @@ class Usuario extends ORM_Model {
 
 
 
-	public function total_usuarios() 
+	public function ___total_usuarios() 
 	{
 		return $this->db->count_all('fija_usuarios');
 	}
 
 
-	public function get_cant_registros_usuario($id = 0)
+	public function ___get_cant_registros_usuario($id = 0)
 	{
 		return ($this->db->get_where('fija_detalle_inventario', array('digitador' => $id))->num_rows() + 
 				$this->db->get_where('fija_detalle_inventario', array('auditor' => $id))->num_rows());
@@ -111,5 +111,5 @@ class Usuario extends ORM_Model {
 
 }
 
-/* End of file usuarios_model.php */
-/* Location: ./application/models/usuarios_model.php */
+/* End of file usuario.php */
+/* Location: ./application/models/usuario.php */

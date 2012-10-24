@@ -16,7 +16,7 @@ class ORM_Model extends CI_Model {
 	private $model_label_plural  = '';
 	private $model_order_by      = '';
 	private $model_campo_id      = '';
-	private $model_recursion_lvl = '';
+	private $model_got_relations = false;
 	private $model_page_results  = 15;
 	private $model_fields        = array();
 	private $model_all           = array();
@@ -27,18 +27,15 @@ class ORM_Model extends CI_Model {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	function __construct($param = array(), $lvl = 0) {
+	function __construct($param = array()) {
 
 		parent::__construct();
-
-		//dbg($lvl . ' -> ' . get_class($this));
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
 		$this->model_tabla  = $this->model_nombre;
 		$this->model_label  = $this->model_nombre;
 		$this->model_label_plural = $this->model_label . 's';
-		$this->model_recursion_lvl = $lvl;
 
 		if (array_key_exists('modelo', $param))
 		{
@@ -50,9 +47,8 @@ class ORM_Model extends CI_Model {
 			$this->_config_campos($param['campos']);
 		}
 
-		$this->set_model_campo_id($this->_determina_campo_id());
-		$this->_recuperar_relation_fields();
-
+		$this->model_campo_id = $this->_determina_campo_id();
+		//$this->_recuperar_relation_fields();
 
 	}
 
@@ -85,41 +81,24 @@ class ORM_Model extends CI_Model {
 	// SETTERS Y GETTERS
 	// =======================================================================
 
-	public function get_model_nombre()              { return $this->model_nombre; }
-	public function set_model_nombre($nombre = '')  { $this->model_nombre = $nombre; }
+	public function get_model_nombre()       { return $this->model_nombre; }
 
-	public function get_model_class()               { return $this->model_class; }
-	public function set_model_classs($class = '')   { $this->model_class = $class; }
+	public function get_model_label()        { return $this->model_label; }
 
-	public function get_model_tabla()               { return $this->model_tabla; }
-	public function set_model_tabla($tabla = '')    { $this->model_tabla = $tabla; }
+	public function get_model_label_plural() { return $this->model_label_plural; }
 
-	public function get_model_label()               { return $this->model_label; }
-	public function set_model_label($label = '')    { $this->model_label = $label; }
+	public function get_model_campo_id()     { return $this->model_campo_id; }
 
-	public function get_model_label_plural()             { return $this->model_label_plural; }
-	public function set_model_label_plural($nombre = '') { $this->model_label_plural = $nombre; }
+	public function get_model_fields()       { return $this->model_fields; }
 
-	public function get_model_order_by()               { return $this->model_order_by; }
-	public function set_model_order_by($order_by = '') { $this->model_order_by = $order_by; }
+	public function get_campos_listado()     { return $this->campos_listado; }
 
-	public function get_model_campo_id()            { return $this->model_campo_id; }
-	public function set_model_campo_id($campo = '') { $this->model_campo_id = $campo; }
-
-	public function get_recursion_lvl()            { return $this->model_recursion_lvl; }
-
-	public function get_model_page_results()        { return $this->model_page_results; }
-
-	public function get_model_fields()              { return $this->model_fields; }
-
-	public function get_campos_listado()            { return $this->campos_listado; }
-
-	public function get_model_all()                 { return $this->model_all; }
+	public function get_model_all()          { return $this->model_all; }
 
 
 	private function _determina_campo_id()
 	{
-		foreach ($this->get_model_fields() as $key => $metadata)
+		foreach ($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
 			{
@@ -155,6 +134,12 @@ class ORM_Model extends CI_Model {
 
 	public function get_label_field($campo = '')
 	{
+		$tipo = $this->model_fields[$campo]->get_tipo();
+		if(($tipo == 'has_one' or $tipo == 'has_many') and !($this->model_got_relations))
+		{
+			$this->_recuperar_relation_fields();
+
+		}
 		return $this->model_fields[$campo]->get_label();
 	}
 
@@ -175,17 +160,17 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
-	public function get_combo($glosa_seleccion = true)
+	public function get_combo($muestra_glosa_seleccion = true, $filtro = '')
 	{
 		$combo = array();
 
-		if ($glosa_seleccion)
+		if ($muestra_glosa_seleccion)
 		{
-			$combo[] = 'Seleccione un(a) ' . $this->get_model_label() . '...';
+			$combo[] = 'Seleccione un(a) ' . $this->model_label . '...';
 		}
 
 		// llena los valores del combo
-		$this->get_all('_', -1);
+		$this->get_all($filtro, -1, false);
 		foreach ($this->model_all as $o)
 		{
 			$combo[$o->{$o->get_model_campo_id()}] = $o->__toString();
@@ -194,11 +179,31 @@ class ORM_Model extends CI_Model {
 		return $combo;
 	}
 
+	public function crea_links_paginas($filtro = '_')
+	{
+		$this->load->library('pagination');
+		$cfg_pagination = array(
+					'uri_segment' => 5,
+					'num_links'   => 5,
+					'per_page'    => $this->model_page_results,
+					'total_rows'  => $this->_get_all_count($filtro),
+					'base_url'    => site_url('config2/listado/' . $this->get_model_nombre() . '/' . $filtro . '/'),
+					'first_link'  => 'Primero',
+					'last_link'   => 'Ultimo',
+					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+				);
+		$this->pagination->initialize($cfg_pagination);
+		return $this->pagination->create_links();
+	}
+
+
+
 	// =======================================================================
-	// FUNCIONES DE CONSULTA EN BD
+	// FUNCIONES PUBLICAS DE CONSULTA EN BD
 	// =======================================================================
 
-	public function get_all($filtro = '_', $pag = 0)
+	public function get_all($filtro = '_', $pag = 0, $recupera_relation = true)
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
@@ -206,33 +211,44 @@ class ORM_Model extends CI_Model {
 		}
 		if ($pag != -1)
 		{
-			$this->db->limit($this->get_model_page_results(), $pag);
+			$this->db->limit($this->model_page_results, $pag);
 		}
 
-		$this->db->order_by($this->get_model_order_by());
-		$rs = $this->db->get($this->get_model_tabla())->result_array();
+		$this->db->order_by($this->model_order_by);
+		$rs = $this->db->get($this->model_tabla)->result_array();
+
 		foreach($rs as $reg)
 		{
-			$o = new $this->model_class($this->get_recursion_lvl() + 1);
-			$o->recuperar_array($reg);
-			$o->_recuperar_relation_fields();
+			$o = new $this->model_class();
+			$o->_recuperar_array($reg);
+			
+			if ($recupera_relation)
+			{
+				$o->_recuperar_relation_fields();
+			}
+			
 			array_push($this->model_all, $o);
 		}
 	}
 
-	public function get_id($id = '')
+	public function get_id($id = '', $recupera_relation = true)
 	{
-		$rs = $this->db->get_where($this->get_model_tabla(), array($this->get_model_tabla() . '.' . $this->get_model_campo_id() => $id))->row_array();
+		$rs = $this->db->get_where($this->model_tabla, array($this->model_tabla . '.' . $this->model_campo_id => $id))->row_array();
 		if (count($rs) > 0)
 		{
-			$this->recuperar_array($rs);
-			$this->_recuperar_relation_fields();
+			$this->_recuperar_array($rs);
+
+			if ($recupera_relation)
+			{
+				$this->_recuperar_relation_fields();
+			}
+			
 		}
 	}
 
-	public function get_where($campo = '', $valores = '')
+	public function get_where($campo = '', $valores = '', $recupera_relation = true)
 	{
-		$this->db->order_by($this->get_model_order_by());
+		$this->db->order_by($this->model_order_by);
 		if (is_array($valores))
 		{
 			$valores = (count($valores) == 0) ? array('') : $valores;
@@ -242,13 +258,18 @@ class ORM_Model extends CI_Model {
 		{
 			$this->db->where_in($campo, $valores);
 		}
-		$rs = $this->db->get($this->get_model_tabla())->result_array();
+		$rs = $this->db->get($this->model_tabla)->result_array();
 
 		foreach($rs as $reg)
 		{
-			$o = new $this->model_class($this->get_recursion_lvl() + 1);
-			$o->recuperar_array($reg);
-			$o->_recuperar_relation_fields();
+			$o = new $this->model_class();
+			$o->_recuperar_array($reg);
+
+			if ($recupera_relation)
+			{
+				$o->_recuperar_relation_fields();
+			}
+			
 			array_push($this->model_all, $o);
 		}
 	}
@@ -261,109 +282,76 @@ class ORM_Model extends CI_Model {
 			{
 				$arr_rel = $metadata->get_relation();
 				$class = $arr_rel['model'];
-				$obj = new $class($this->get_recursion_lvl() + 1);
-				$obj->get_id($this->$campo);
+				$obj = new $class();
+				$obj->get_id($this->$campo, false);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
+
+				$this->model_got_relations = true;
 			}
 			if($metadata->get_tipo() == 'has_many')
 			{
 				$arr_rel = $metadata->get_relation();
 
 				$arr_rs = array();
-				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], array($arr_rel['id_one_table'] => $this->{$this->get_model_campo_id()}))->result_array();
+				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], array($arr_rel['id_one_table'] => $this->{$this->model_campo_id}))->result_array();
 				foreach($rs as $val)
 				{
 					array_push($arr_rs, $val[$arr_rel['id_many_table']]);
 				}
 
 				$class = $arr_rel['model'];
-				$obj = new $class($this->get_recursion_lvl() + 1);
-				$obj->get_where($obj->get_model_campo_id(), $arr_rs);
+				$obj = new $class();
+				$obj->get_where($obj->get_model_campo_id(), $arr_rs, false);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
 				$this->$campo = $arr_rs;
+
+				$this->model_got_relations = true;
 			}
 		}
 	}
 
 
 
-	/*
-	private function _get_select_fields()
-	{
-		$arr_fields = array();
-		foreach($this->model_fields as $key => $metadata)
-		{
-			if ($metadata->get_tipo() == 'has_one')
-			{
-				$relation = $metadata->get_relation();
-				$this->db->join($relation['rel_table'], $this->get_model_tabla() . '.' . $relation['local_id'] . '=' . $relation['rel_table'] . '.' . $relation['external_id'], 'left');
-				array_push($arr_fields, $relation['rel_table'] . '.' . $key);
-				array_push($arr_fields, $this->get_model_tabla() . '.' . $relation['local_id']);
-			}
-			else if ($metadata->get_tipo() == 'has_many')
-			{
-
-			}
-			else
-			{
-				array_push($arr_fields, $this->get_model_tabla() . '.' . $key);
-			}
-		}
-		return implode(',', $arr_fields);
-	}
-	 */
-
-	public function recuperar_choices($filtro = '_')
-	{
-		$this->recuperar_all($filtro, -1);
-		foreach ($this->result_array as $key => $value)
-		{
-			$arr_choices[$value->fields[$value->id_field]->value] = $value->to_string();
-		}
-		return $arr_choices;
-	}
-
+	// =======================================================================
+	// FUNCIONES PRIVADAS DE CONSULTA EN BD
+	// =======================================================================
 
 	private function _put_filtro($filtro)
 	{
 		$i = 0;
 		foreach($this->model_fields as $nombre => $campo)
 		{
-			if ($i == 0)
+			if ($campo->get_tipo() == 'char')
 			{
-				$this->db->like($nombre, $filtro, 'both');
+				if ($i == 0)
+				{
+					$this->db->like($nombre, $filtro, 'both');
+				}
+				else
+				{
+					$this->db->or_like($nombre, $filtro, 'both');
+				}
+				$i++;				
 			}
-			else
-			{
-				$this->db->or_like($nombre, $filtro, 'both');
-			}
-			$i++;
 		}
 	}
 
-	public function result_to_array($arr)
+	private function _recuperar_array($rs = array())
 	{
-		foreach($arr as $e)
+		foreach($this->model_fields as $nombre => $metadata)
 		{
-			$nom_clase = get_class($this);
-			$o = new $nom_clase($this->get_recursion_lvl() + 1);
-			foreach($e as $key => $value)
+			if (array_key_exists($nombre, $rs))
 			{
-				$o->$key = $value;
+				$this->$nombre = $rs[$nombre];
 			}
-			$this->result_array[] = $o;
 		}
 	}
-
-
-
-
 
 	public function recuperar_post()
 	{
@@ -386,50 +374,21 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
-	public function recuperar_array($rs = array())
-	{
-		foreach($this->model_fields as $nombre => $metadata)
-		{
-			if (array_key_exists($nombre, $rs))
-			{
-				$this->$nombre = $rs[$nombre];
-			}
-		}
-	}
-
-	public function get_all_count($filtro = '_')
+	private function _get_all_count($filtro = '_')
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
 			$this->db->select('count(*) as cant');
 			$this->_put_filtro($filtro);
-			$rs = $this->db->get($this->get_model_tabla())->row();
+			$rs = $this->db->get($this->model_tabla)->row();
 			return $rs->cant;
 		}
 		else
 		{
-			return $this->db->count_all($this->get_model_tabla());
+			return $this->db->count_all($this->model_tabla);
 		}
 	}
 
-
-	public function crea_links_paginas($filtro = '_')
-	{
-		$this->load->library('pagination');
-		$cfg_pagination = array(
-					'uri_segment' => 5,
-					'num_links'   => 5,
-					'per_page'    => $this->get_model_page_results(),
-					'total_rows'  => $this->get_all_count($filtro),
-					'base_url'    => site_url('config2/listado/' . $this->get_model_nombre() . '/' . $filtro . '/'),
-					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo',
-					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
-					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
-				);
-		$this->pagination->initialize($cfg_pagination);
-		return $this->pagination->create_links();
-	}
 
 
 	// =======================================================================
@@ -472,25 +431,25 @@ class ORM_Model extends CI_Model {
 		}
 		else
 		{
-			$es_insert = ($this->db->get_where($this->get_model_tabla(), $data_where)->num_rows() == 0);
+			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
 		}
 
 		if ($es_insert)
 		{
 			if ($id_en_insert)
 			{
-				$this->db->insert($this->get_model_tabla(), array_merge($data_where, $data_update));
+				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
 			}
 			else
 			{
-				$this->db->insert($this->get_model_tabla(), $data_update);
-				$data_where[$this->get_model_campo_id()] = $this->db->insert_id();
+				$this->db->insert($this->model_tabla, $data_update);
+				$data_where[$this->model_campo_id] = $this->db->insert_id();
 			}
 		}
 		else
 		{
 			$this->db->where($data_where);
-			$this->db->update($this->get_model_tabla(), $data_update);
+			$this->db->update($this->model_tabla, $data_update);
 		}
 
 		foreach($this->model_fields as $nombre => $campo)
@@ -506,10 +465,8 @@ class ORM_Model extends CI_Model {
 						$this->db->insert($rel['join_table'], array($rel['id_one_table'] => $val_key, $rel['id_many_table'] => $valor_campo));
 					}
 				}
-
 			}
 		}
-
 	}
 
 	public function borrar()
@@ -522,7 +479,7 @@ class ORM_Model extends CI_Model {
 				$data_where[$nombre] = $this->$nombre;
 			}
 		}
-		$this->db->delete($this->get_model_tabla(), $data_where);
+		$this->db->delete($this->model_tabla, $data_where);
 
 		foreach($this->model_fields as $nombre => $campo)
 		{
@@ -533,33 +490,11 @@ class ORM_Model extends CI_Model {
 				{
 					$this->db->delete($rel['join_table'], array($rel['id_one_table'] => $val_key));
 				}
-
 			}
 		}
-
 	}
 
-	// --------------------------------------------------------------------
 
-	/**
-	 * Formulario utilizado para la vista de detalle
-	 *
-	 * @access  public
-	 * @return  array  arreglo con formulario de detalle
-	 * @author  dcr
-	 **/
-	function detail_form()
-	{
-		$form_array = array();
-		foreach ($this->fields as $field)
-		{
-			$form_array[$field->nombre] = array(
-				'nombre'     => $field->nombre,
-				'form_field' => $field->form_field()
-				);
-		}
-		return $form_array;
-	}
 
 	// --------------------------------------------------------------------
 
@@ -590,6 +525,42 @@ class ORM_Model extends CI_Model {
 			$this->dbforge->create_table($this->tabla_bd);
 		}
 	}
+
+
+
+
+
+
+
+
+
+
+
+	public function ___result_to_array($arr)
+	{
+		foreach($arr as $e)
+		{
+			$nom_clase = get_class($this);
+			$o = new $nom_clase();
+			foreach($e as $key => $value)
+			{
+				$o->$key = $value;
+			}
+			$this->result_array[] = $o;
+		}
+	}
+
+	public function ___recuperar_choices($filtro = '_')
+	{
+		$this->recuperar_all($filtro, -1);
+		foreach ($this->result_array as $key => $value)
+		{
+			$arr_choices[$value->fields[$value->id_field]->value] = $value->to_string();
+		}
+		return $arr_choices;
+	}
+
+
 
 
 

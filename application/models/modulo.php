@@ -2,7 +2,7 @@
 
 class Modulo extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -43,19 +43,19 @@ class Modulo extends ORM_Model {
 						),
 			);
 
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 
 	}
 
 	public function __toString()
 	{
-		$fields = $this->get_model_fields();
-		$relation = $fields['id_app']->get_relation();
-
-		return $relation['data']->__toString() . ' > ' . $this->modulo;
+		//$fields = $this->get_model_fields();
+		//$relation = $fields['id_app']->get_relation();
+		//return $relation['data']->__toString() . ' > ' . $this->modulo;
+		return $this->modulo;
 	}
 
 }
 
-/* End of file modulo_model.php */
-/* Location: ./application/models/modulo_model.php */
+/* End of file modulo.php */
+/* Location: ./application/models/modulo.php */

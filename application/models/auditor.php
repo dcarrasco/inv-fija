@@ -2,7 +2,7 @@
 
 class Auditor extends ORM_Model {
 
-	public function __construct($recursion_lvl = 0)
+	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
@@ -32,7 +32,7 @@ class Auditor extends ORM_Model {
 							),
 				),
 			);
-		parent::__construct($cfg, $recursion_lvl);
+		parent::__construct($cfg);
 	}
 
 	public function __toString()
