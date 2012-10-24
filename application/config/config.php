@@ -26,7 +26,7 @@ $config['base_url']	= '';
 | variable so that it is blank.
 |
 */
-$config['index_page'] = 'index.php';
+$config['index_page'] = '';
 
 /*
 |--------------------------------------------------------------------------
@@ -361,8 +361,8 @@ $config['proxy_ips'] = '';
 /* End of file config.php */
 /* Location: ./application/config/config.php */
 
-function __autoload($class) {  
-    if (file_exists(APPPATH."models/".strtolower($class).EXT)) {  
-        include_once(APPPATH."models/".strtolower($class).EXT);  
-    }  
-}  
+function __autoload($class) {
+    if (file_exists(APPPATH."models/".strtolower($class).EXT)) {
+        include_once(APPPATH."models/".strtolower($class).EXT);
+    }
+}

@@ -40,7 +40,7 @@
 					<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion')); ?>
 					<?php echo form_error('agr-tipo_ubicacion'); ?>
 				</td>
-				<td class="ac">		
+				<td class="ac">
 					<a href="#" class="button b-active round ic-agregar fl" id="btn_agregar">Agregar</a>
 				</td>
 			</tr>
@@ -110,7 +110,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		if ($('div.content-module-main-agregar div.error').length > 0) {
-			$('div.content-module-main-agregar').toggle();				
+			$('div.content-module-main-agregar').toggle();
 		}
 
 		$('#btn_mostrar_agregar').click(function (event) {
@@ -121,12 +121,12 @@
 		$('#btn_guardar').click(function (event) {
 			event.preventDefault();
 			$('form#frm_usuarios').submit();
-		});			
+		});
 
 		$('#btn_agregar').click(function (event) {
 			event.preventDefault();
 			$('form#frm_agregar').submit();
-		});			
+		});
 
 		$('a.boton-borrar').click(function (event) {
 			event.preventDefault();
@@ -139,7 +139,7 @@
 
 		$('form#frm_agregar select[name="agr-tipo_inventario"]').change(function() {
 
-			var url_json_ubic = js_base_url + 'index.php/config/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
+			var url_json_ubic = js_base_url + 'config/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_ubic, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {
@@ -148,7 +148,7 @@
 				$('select[name="agr-ubicacion[]"]').empty().append(items.join(''));
 			});
 
-			var url_json_tipo = js_base_url + 'index.php/config/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
+			var url_json_tipo = js_base_url + 'config/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_tipo, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {

@@ -83,7 +83,7 @@ $(document).ready(function() {
 
 	function actualizaMateriales(filtro) {
 		var tt = new Date().getTime();
-		var url_datos = js_base_url + 'index.php/inventario/ajax_act_agr_materiales/' + filtro + '/' + tt;
+		var url_datos = js_base_url + 'inventario/ajax_act_agr_materiales/' + filtro + '/' + tt;
 		$.get(url_datos, function (data) {$('#agr_material').html(data); });
 	}
 

@@ -18,7 +18,7 @@ class config2 extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
-		$this->acl_model->autentica('config');
+		$this->acl_model->autentica('config2');
 	}
 
 	public function index()
@@ -58,7 +58,7 @@ class config2 extends CI_Controller {
 		//dbg($this->db->list_fields('acl_app'));
 
 		$modelo = new $nombre_modelo;
-		
+
 		$modelo->get_all($filtro, $pag);
 		//dbg($modelo);
 

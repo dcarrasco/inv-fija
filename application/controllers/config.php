@@ -6,7 +6,7 @@ class Config extends CI_Controller {
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
-		$this->acl_model->autentica('config');
+		$this->acl_model->autentica('config2');
 
 	}
 
@@ -95,8 +95,8 @@ class Config extends CI_Controller {
 					'msg_alerta'      => $this->session->flashdata('msg_alerta'),
 					'links_paginas'   => $this->pagination->create_links(),
 					'combo_tipos'     => array(
-												'' => 'Seleccione un tipo...', 
-												'AUD' => 'Auditor', 
+												'' => 'Seleccione un tipo...',
+												'AUD' => 'Auditor',
 												'DIG'=>'Digitador'
 												),
 				);
@@ -110,7 +110,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-tipo')   != $reg['tipo']) or 
+					if ((set_value($reg['id'].'-tipo')   != $reg['tipo']) or
 						(set_value($reg['id'].'-nombre') != $reg['nombre']) or
 						(set_value($reg['id'].'-usr')    != $reg['usr']) or
 						(set_value($reg['id'].'-activo') != $reg['activo']))
@@ -138,7 +138,7 @@ class Config extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Inventario (id=' . set_value('id_borrar') . ') borrado correctamente');
 				}
 			}
-			
+
 			redirect('config/usuarios/' . $pag);
 		}
 
@@ -176,7 +176,7 @@ class Config extends CI_Controller {
 				$this->form_validation->set_rules($reg['catalogo'].'-catalogo', 'Catalogo', 'trim|required');
 				$this->form_validation->set_rules($reg['catalogo'].'-descripcion', 'Descripcion', 'trim|required');
 				$this->form_validation->set_rules($reg['catalogo'].'-pmp', 'PMP', 'trim|required');
-			}			
+			}
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
@@ -212,13 +212,13 @@ class Config extends CI_Controller {
 				$cant_modif = 0;
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['catalogo'].'-catalogo') != $reg['catalogo']) or 
+					if ((set_value($reg['catalogo'].'-catalogo') != $reg['catalogo']) or
 						(set_value($reg['catalogo'].'-descripcion') != $reg['descripcion']) or
 						(set_value($reg['catalogo'].'-pmp') != $reg['pmp']))
-					{	
+					{
 						$this->catalogo_model->guardar(
-														$reg['catalogo'], 
-														set_value($reg['catalogo'].'-catalogo'), 
+														$reg['catalogo'],
+														set_value($reg['catalogo'].'-catalogo'),
 														set_value($reg['catalogo'].'-descripcion'),
 														set_value($reg['catalogo'].'-pmp')
 														);
@@ -293,7 +293,7 @@ class Config extends CI_Controller {
 			{
 				$this->form_validation->set_rules($reg['id'].'-tipo_inventario', 'Tipo Inventario', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-tipo_ubicacion',  'Tipo Ubicacion', 'trim|required');
-			}			
+			}
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
@@ -329,7 +329,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or 
+					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or
 						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['tipo_ubicacion']))
 					{
 						$this->ubicacion_model->guardar_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-tipo_ubicacion'));
@@ -395,7 +395,7 @@ class Config extends CI_Controller {
 				$this->form_validation->set_rules($reg['id'].'-tipo_inventario', 'Tipo Inventario', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-tipo_ubicacion',  'Tipo Ubicacion', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-ubicacion',  'Ubicacion', 'trim|required');
-			}			
+			}
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
@@ -447,7 +447,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or 
+					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or
 						(set_value($reg['id'].'-ubicacion')       != $reg['ubicacion']) or
 						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['id_tipo_ubicacion']))
 					{
@@ -476,7 +476,7 @@ class Config extends CI_Controller {
 		}
 	}
 
-	
+
 	/**
 	 * Devuelve string JSON con las ubicaciones libres
 	 * @param  string $tipo_inventario Tipo de inventario a buscar
@@ -535,7 +535,7 @@ class Config extends CI_Controller {
 				$this->form_validation->set_rules($reg['id'].'-nombre', 'Nombre', 'trim|required');
 				$this->form_validation->set_rules($reg['id'].'-tipo', 'Tipo', 'trim');
 				$this->form_validation->set_rules($reg['id'].'-activo', 'Activo', 'trim');
-			}			
+			}
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
@@ -556,7 +556,7 @@ class Config extends CI_Controller {
 			$data = array(
 					'menu_configuracion' => $this->menu_configuracion('inventario'),
 					'datos_hoja'           => $datos_hoja,
-					'arr_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),					
+					'arr_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
 					'msg_alerta'           => $this->session->flashdata('msg_alerta'),
 					'links_paginas'        => $this->pagination->create_links(),
 				);
@@ -571,7 +571,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-nombre') != $reg['nombre']) or 
+					if ((set_value($reg['id'].'-nombre') != $reg['nombre']) or
 						(set_value($reg['id'].'-tipo')   != $reg['tipo']) or
 						(((set_checkbox($reg['id'].'-activo',1,FALSE) == '') ? 0 : 1) != $reg['activo']))
 					{
@@ -613,7 +613,7 @@ class Config extends CI_Controller {
 		$regs_error   = 0;
 		$msj_error    = '';
 
-		if ($this->input->post('formulario') == 'upload') 
+		if ($this->input->post('formulario') == 'upload')
 		{
 
 			if ($this->input->post('password') == 'logistica2012')
@@ -732,7 +732,7 @@ class Config extends CI_Controller {
 			fclose($fh);
 		}
 
-		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')'; 
+		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')';
 		if ($count_error > 0)
 		{
 			$msj_termino .= '<br>Lineas con errores (';
@@ -744,7 +744,7 @@ class Config extends CI_Controller {
 				}
 				$msj_termino .= $lin_error;
 			}
-			$msj_termino .= ')'; 
+			$msj_termino .= ')';
 		}
 
 		return array('script' => $script_carga, 'regs_OK' => $count_OK, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
@@ -770,8 +770,8 @@ class Config extends CI_Controller {
 				$stock_sap   = trim($arr_datos[7]);
 				$hoja        = trim($arr_datos[8]);
 
-				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO' or $centro    == 'CENTRO' or 
-					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'     or $um        == 'UM'     or 
+				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO' or $centro    == 'CENTRO' or
+					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'     or $um        == 'UM'     or
 					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA')
 				{
 					// cabecera del archivo, no se hace nada
@@ -783,7 +783,7 @@ class Config extends CI_Controller {
 					{
 						return (
 							'0,' .
-							$id_inventario      . ',' . 
+							$id_inventario      . ',' .
 							$hoja               . ',' .
 							'0,' .
 							'0,' .
@@ -846,7 +846,7 @@ class Config extends CI_Controller {
 					'msg_alerta'        => $this->session->flashdata('msg_alerta'),
 				);
 
-			$this->_render_view('imprime_inventario', $data);		
+			$this->_render_view('imprime_inventario', $data);
 		}
 		else
 		{
@@ -881,7 +881,7 @@ class Config extends CI_Controller {
 					'oculta_stock_sap'  => $oculta_stock_sap,
 					'hoja'              => $hoja,
 					'nombre_inventario' => $nombre_inventario,
-				);			
+				);
 
 			$this->load->view('inventario_print_body', $data);
 		}
@@ -957,7 +957,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-app')   != $reg['app']) or 
+					if ((set_value($reg['id'].'-app')   != $reg['app']) or
 						(set_value($reg['id'].'-descripcion') != $reg['descripcion']) or
 						(set_value($reg['id'].'-url')    != $reg['url']))
 					{
@@ -984,7 +984,7 @@ class Config extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Aplicacion (id=' . set_value('id_borrar') . ') borrada correctamente');
 				}
 			}
-			
+
 			redirect('config/app/' . $pag);
 		}
 
@@ -1058,7 +1058,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or 
+					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or
 						(set_value($reg['id'].'-modulo')       != $reg['modulo']) or
 						(set_value($reg['id'].'-descripcion')  != $reg['descripcion']) or
 						(set_value($reg['id'].'-llave_modulo') != $reg['llave_modulo']))
@@ -1086,7 +1086,7 @@ class Config extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Modulo (id=' . set_value('id_borrar') . ') borrado correctamente');
 				}
 			}
-			
+
 			redirect('config/modulo/' . $pag);
 		}
 
@@ -1170,7 +1170,7 @@ class Config extends CI_Controller {
 
 				foreach($datos_hoja as $reg)
 				{
-					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or 
+					if ((set_value($reg['id'].'-id_app')       != $reg['id_app']) or
 						(set_value($reg['id'].'-rol')       != $reg['rol']) or
 						(set_value($reg['id'].'-descripcion')  != $reg['descripcion']))
 					{
@@ -1198,7 +1198,7 @@ class Config extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Modulo (id=' . set_value('id_borrar') . ') borrado correctamente');
 				}
 			}
-			
+
 			redirect('config/rol/' . $pag);
 		}
 
@@ -1275,7 +1275,7 @@ class Config extends CI_Controller {
 				$this->acl_model->borrar_usuario_rol(set_value('id_usuario'), set_value('id_rol'));
 				$this->session->set_flashdata('msg_alerta', 'Asociacion usuario-rol (id_usuario: ' . set_value('agr-id_usuario') . ', id_rol: ' . set_value('agr-id_rol') . ') borrado correctamente');
 			}
-			
+
 			redirect('config/usuario_rol/' . $pag);
 		}
 
@@ -1283,7 +1283,7 @@ class Config extends CI_Controller {
 
 
 
-	private function _render_view($vista = '', $data = array()) 
+	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Configuracion';
 		$data['menu_app'] = $this->acl_model->menu_app();

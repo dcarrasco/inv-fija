@@ -28,6 +28,7 @@ class Auditor extends ORM_Model {
 								'tipo'           =>  'boolean',
 								'texto_ayuda'    => 'Indica se el auditor esta activo dentro del sistema.',
 								'es_obligatorio' => true,
+								'default'        => 1
 							),
 				),
 			);
