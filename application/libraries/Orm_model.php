@@ -52,8 +52,12 @@ class ORM_Model extends CI_Model {
 
 	}
 
-
-	private function _config_modelo($cfg)
+	/**
+	 * Configura las propiedades del modelo
+	 * @param  array $cfg arreglo con la configuración del modelo
+	 * @return nada
+	 */
+	private function _config_modelo($cfg = array())
 	{
 		foreach($cfg as $key => $val)
 		{
@@ -64,7 +68,13 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
-	private function _config_campos($cfg)
+
+	/**
+	 * Configura las propiedades de los campos del modelo
+	 * @param  array $cfg arreglo con la configuración de los campos del modelo
+	 * @return nada
+	 */
+	private function _config_campos($cfg = array())
 	{
 		foreach ($cfg as $campo => $prop)
 		{
@@ -96,6 +106,10 @@ class ORM_Model extends CI_Model {
 	public function get_model_all()          { return $this->model_all; }
 
 
+	/**
+	 * determina y fija el campo id del modelo
+	 * @return string nombre del campo id
+	 */
 	private function _determina_campo_id()
 	{
 		foreach ($this->model_fields as $key => $metadata)
@@ -114,6 +128,10 @@ class ORM_Model extends CI_Model {
 	// FUNCIONES DE FORMULARIOS
 	// =======================================================================
 
+	/**
+	 * Ejecuta la validacion de los campos de formulario del modelo
+	 * @return boolean Indica si el formulario fue validad OK o no
+	 */
 	public function valida_form()
 	{
 		foreach ($this->model_fields as $campo => $metadata)
@@ -127,11 +145,23 @@ class ORM_Model extends CI_Model {
 		return $this->form_validation->run();
 	}
 
+
+	/**
+	 * Devuelve el formulario para el despliegue de un campo del modelo
+	 * @param  string $campo Nombre del campo
+	 * @return string        Elemento de formulario
+	 */
 	public function print_form_campo($campo = '')
 	{
 		return $this->model_fields[$campo]->form_field($this->$campo);
 	}
 
+
+	/**
+	 * Devuelve el texto label de un campo del modelo
+	 * @param  string $campo Nombre del campo
+	 * @return string        Label del campo
+	 */
 	public function get_label_field($campo = '')
 	{
 		$tipo = $this->model_fields[$campo]->get_tipo();
@@ -143,11 +173,24 @@ class ORM_Model extends CI_Model {
 		return $this->model_fields[$campo]->get_label();
 	}
 
+
+	/**
+	 * Devuelve el texto de ayuda de un campo del modelo
+	 * @param  string $campo Nombre del campo
+	 * @return string        Texto de ayuda del campo
+	 */
 	public function get_texto_ayuda_field($campo = '')
 	{
 		return $this->model_fields[$campo]->get_texto_ayuda();
 	}
 
+
+	/**
+	 * Devuelve el valor de un campo del modelo
+	 * @param  string  $campo     Nombre del campo
+	 * @param  boolean $formatted Indica si se devuelve el valor formateado o no (ej. id de relaciones)
+	 * @return string             Texto con el valor del campo
+	 */
 	public function get_valor_field($campo = '', $formatted = TRUE)
 	{
 		if (!$formatted)
@@ -160,6 +203,13 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Devuelve arreglo con los valores del modelo para ser usado en un combobox
+	 * @param  boolean $muestra_glosa_seleccion Indica si despliega glosa "seleccione ..."
+	 * @param  string  $filtro                  Filtro para los valores del modelo
+	 * @return array                            Arreglo para usar en un combo
+	 */
 	public function get_combo($muestra_glosa_seleccion = true, $filtro = '')
 	{
 		$combo = array();
@@ -179,6 +229,12 @@ class ORM_Model extends CI_Model {
 		return $combo;
 	}
 
+
+	/**
+	 * Crea links de paginación para desplegar un listado del modelo
+	 * @param  string $filtro Filtro de los valores del modelo
+	 * @return string         Links de paginación
+	 */
 	public function crea_links_paginas($filtro = '_')
 	{
 		$this->load->library('pagination');
@@ -203,6 +259,13 @@ class ORM_Model extends CI_Model {
 	// FUNCIONES PUBLICAS DE CONSULTA EN BD
 	// =======================================================================
 
+	/**
+	 * Recupera todos los valores del modelo, filtrados y paginados
+	 * @param  string  $filtro            Filtro de los valores del modelo
+	 * @param  integer $pag               Offset del registro a desplegar
+	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
+	 * @return nada
+	 */
 	public function get_all($filtro = '_', $pag = 0, $recupera_relation = true)
 	{
 		if ($filtro != '_' && $filtro != '')
@@ -221,16 +284,23 @@ class ORM_Model extends CI_Model {
 		{
 			$o = new $this->model_class();
 			$o->_recuperar_array($reg);
-			
+
 			if ($recupera_relation)
 			{
 				$o->_recuperar_relation_fields();
 			}
-			
+
 			array_push($this->model_all, $o);
 		}
 	}
 
+
+	/**
+	 * Recupera un elemento del modelo
+	 * @param  string  $id                Identificador del elemento del modelo
+	 * @param  boolean $recupera_relation Indica si se recuperarán los mdelos dependientes
+	 * @return nada
+	 */
 	public function get_id($id = '', $recupera_relation = true)
 	{
 		$rs = $this->db->get_where($this->model_tabla, array($this->model_tabla . '.' . $this->model_campo_id => $id))->row_array();
@@ -242,22 +312,28 @@ class ORM_Model extends CI_Model {
 			{
 				$this->_recuperar_relation_fields();
 			}
-			
+
 		}
 	}
 
-	public function get_where($campo = '', $valores = '', $recupera_relation = true)
+
+	/**
+	 * Recupera elementos del modelo, filtrados por una condición
+	 * @param  string  $campo             Nombre del campo para filtrar
+	 * @param  array   $valores           Valor o valores con los cuales se filtrará
+	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
+	 * @return nada
+	 */
+	public function get_where($campo = '', $valores = array(), $recupera_relation = true)
 	{
 		$this->db->order_by($this->model_order_by);
-		if (is_array($valores))
+
+		if (!is_array($valores))
 		{
-			$valores = (count($valores) == 0) ? array('') : $valores;
-			$this->db->where_in($campo, $valores);
+			$valores = array($valores);
 		}
-		else
-		{
-			$this->db->where_in($campo, $valores);
-		}
+		$this->db->where_in($campo, $valores);
+
 		$rs = $this->db->get($this->model_tabla)->result_array();
 
 		foreach($rs as $reg)
@@ -269,11 +345,16 @@ class ORM_Model extends CI_Model {
 			{
 				$o->_recuperar_relation_fields();
 			}
-			
+
 			array_push($this->model_all, $o);
 		}
 	}
 
+
+	/**
+	 * Recupera los mdelos dependientes (de las relaciones has_one y has_many)
+	 * @return nada
+	 */
 	private function _recuperar_relation_fields()
 	{
 		foreach($this->model_fields as $campo => $metadata)
@@ -322,7 +403,12 @@ class ORM_Model extends CI_Model {
 	// FUNCIONES PRIVADAS DE CONSULTA EN BD
 	// =======================================================================
 
-	private function _put_filtro($filtro)
+	/**
+	 * Agrega un filtro para seleccionar elementos del modelo
+	 * @param  string $filtro Filtro para seleccionar elementos
+	 * @return nada
+	 */
+	private function _put_filtro($filtro = '')
 	{
 		$i = 0;
 		foreach($this->model_fields as $nombre => $campo)
@@ -337,11 +423,17 @@ class ORM_Model extends CI_Model {
 				{
 					$this->db->or_like($nombre, $filtro, 'both');
 				}
-				$i++;				
+				$i++;
 			}
 		}
 	}
 
+
+	/**
+	 * Puebla los campos del modelo con los valores de un arreglo
+	 * @param  array  $rs Arreglo con los valores
+	 * @return nada
+	 */
 	private function _recuperar_array($rs = array())
 	{
 		foreach($this->model_fields as $nombre => $metadata)
@@ -353,6 +445,11 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Puebla los campos del modelo con los valores del post
+	 * @return nada
+	 */
 	public function recuperar_post()
 	{
 		foreach($this->model_fields as $nombre => $metadata)
@@ -374,6 +471,12 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Devuelve la cantidad de elementos del modelo, dado un filtro
+	 * @param  string $filtro Filtro de los elementos del modelo
+	 * @return int            Cantidad de elementos
+	 */
 	private function _get_all_count($filtro = '_')
 	{
 		if ($filtro != '_' && $filtro != '')
@@ -395,6 +498,10 @@ class ORM_Model extends CI_Model {
 	// Funciones de interaccion modelo <--> base de datos
 	// =======================================================================
 
+	/**
+	 * Graba el modelo en la base de datos (inserta o modifica, dependiendo si el modelo ya existe)
+	 * @return nada
+	 */
 	public function grabar()
 	{
 		$data_update  = array();
@@ -469,6 +576,11 @@ class ORM_Model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Elimina el modelo de la base de datos
+	 * @return nada
+	 */
 	public function borrar()
 	{
 		$data_where = array();
@@ -496,15 +608,10 @@ class ORM_Model extends CI_Model {
 
 
 
-	// --------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------
+	// ----------------------------------------------------------------------------------------------------
 
-	/**
-	 * Chequea si la tabla del modelo esta creada en la base de datos, si no, la crea
-	 *
-	 * @access  public
-	 * @return  voif
-	 * @author  dcr
-	 **/
+
 	function valida_tabla_creada()
 	{
 		if (!$this->db->table_exists($this->tabla_bd))
@@ -525,15 +632,6 @@ class ORM_Model extends CI_Model {
 			$this->dbforge->create_table($this->tabla_bd);
 		}
 	}
-
-
-
-
-
-
-
-
-
 
 
 	public function ___result_to_array($arr)
@@ -559,10 +657,6 @@ class ORM_Model extends CI_Model {
 		}
 		return $arr_choices;
 	}
-
-
-
-
 
 
 }
@@ -668,13 +762,11 @@ class ORM_Field {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Genera texto para desplegar un campo en un formulario html
-	 *
-	 * @access  public
-	 * @return  string   texto para desplegar el formulario
-	 * @author  dcr
-	 **/
-	function form_field($valor = '')
+	 * Genera el elemento de formulario para el campo
+	 * @param  string $valor Valor a desplegar en el elemento de formulario
+	 * @return string        Elemento de formulario
+	 */
+	public function form_field($valor = '')
 	{
 		$form = '';
 		$valor_field = ($valor == '' and $this->default != '') ? $this->default : $valor;
@@ -758,6 +850,12 @@ class ORM_Field {
 		return $form;
 	}
 
+
+	/**
+	 * Devuelve el valor, formateado de acuerdo al tipo del campo
+	 * @param  [type] $valor Valor a desplegar
+	 * @return string        Valor formateado
+	 */
 	public function get_formatted_value($valor)
 	{
 		if ($this->tipo == 'boolean')
@@ -787,6 +885,11 @@ class ORM_Field {
 		}
 	}
 
+
+	/**
+	 * Devuelve la regla de validación del campo del modelo
+	 * @return string Regla de validación
+	 */
 	public function get_form_validation()
 	{
 		$regla = 'trim';
@@ -801,7 +904,12 @@ class ORM_Field {
 		return $regla;
 	}
 
-	function get_bd_attrib()
+
+	/**
+	 * Devuelve los atributos para construir el campo en la base de datos
+	 * @return array Configuración del campo para construirlo en la base de datos
+	 */
+	public function get_bd_attrib()
 	{
 		if ($this->tipo == 'id')
 		{
@@ -858,4 +966,5 @@ class ORM_Field {
 
 }
 
-/* End of file Someclass.php */
+/* End of file orm_model.php */
+/* Location: ./application/libraries/orm_model.php */
