@@ -7,7 +7,7 @@
  * @author		dcr
  * @link
  */
-class ORM_Model extends CI_Model {
+class ORM_Model {
 
 	private $model_nombre        = '';
 	private $model_class         = '';
@@ -29,7 +29,7 @@ class ORM_Model extends CI_Model {
 	 **/
 	function __construct($param = array()) {
 
-		parent::__construct();
+		//parent::__construct();
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
@@ -50,6 +50,12 @@ class ORM_Model extends CI_Model {
 		$this->model_campo_id = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
 
+	}
+
+	public function __get($key)
+	{
+		$CI =& get_instance();
+		return $CI->$key;
 	}
 
 	/**
@@ -324,7 +330,7 @@ class ORM_Model extends CI_Model {
 	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
 	 * @return nada
 	 */
-	public function get_where($campo = '', $valores = array(), $recupera_relation = true)
+	public function get_all_where($campo = '', $valores = array(), $recupera_relation = true)
 	{
 		$this->db->order_by($this->model_order_by);
 
@@ -332,8 +338,13 @@ class ORM_Model extends CI_Model {
 		{
 			$valores = array($valores);
 		}
-		$this->db->where_in($campo, $valores);
 
+		if (count($valores) == 0)
+		{
+			$valores[] = '';
+		}
+
+		$this->db->where_in($campo, $valores);
 		$rs = $this->db->get($this->model_tabla)->result_array();
 
 		foreach($rs as $reg)
@@ -385,7 +396,7 @@ class ORM_Model extends CI_Model {
 
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_where($obj->get_model_campo_id(), $arr_rs, false);
+				$obj->get_all_where($obj->get_model_campo_id(), $arr_rs, false);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;

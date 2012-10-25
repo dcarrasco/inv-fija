@@ -7,8 +7,6 @@ class Acl_model extends CI_Model {
 	{
 		parent::__construct();
 		$this->load->helper('cookie');
-		$this->load->library('ORM_model');
-
 	}
 
 
@@ -36,9 +34,9 @@ class Acl_model extends CI_Model {
 					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
 					);
 		$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
-		
+
 		$menu = anchor('login','Logout', 'class="button b-active round ic-logout fr"');
-		
+
 		foreach ($arr_menu as $key => $val)
 		{
 			if (in_array($key, $arr_modulos))
@@ -79,8 +77,8 @@ class Acl_model extends CI_Model {
 	private function set_session_cookies($usr)
 	{
 		$this->input->set_cookie(array(
-			'name' => 'movistar_usr', 
-			'value' => $usr, 
+			'name' => 'movistar_usr',
+			'value' => $usr,
 			'expire' => '300'
 			));
 	}
@@ -102,7 +100,7 @@ class Acl_model extends CI_Model {
 			$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
 			if (!in_array($mod, $arr_modulos))
 			{
-				redirect('login');				
+				redirect('login');
 			}
 			else
 			{
@@ -112,22 +110,22 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-	public function get_total_app() 
+	public function get_total_app()
 	{
 		return $this->db->count_all('acl_app');
 	}
 
-	public function get_total_modulo() 
+	public function get_total_modulo()
 	{
 		return $this->db->count_all('acl_modulo');
 	}
 
-	public function get_total_rol() 
+	public function get_total_rol()
 	{
 		return $this->db->count_all('acl_rol');
 	}
 
-	public function get_total_usuario_rol() 
+	public function get_total_usuario_rol()
 	{
 		return $this->db->count_all('acl_usuario_rol');
 	}
@@ -179,18 +177,18 @@ class Acl_model extends CI_Model {
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
 		if (count($arr_rs) > 0)
 		{
-			return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);			
+			return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);
 		}
 		else
 		{
 			return false;
 		}
 	}
-	
+
 	public function existe_usuario($usr = '')
 	{
 		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
-		return (($regs > 0) ? true : false);		
+		return (($regs > 0) ? true : false);
 	}
 
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
@@ -234,7 +232,7 @@ class Acl_model extends CI_Model {
 	public function get_combo_app()
 	{
 		$arr_rs = $this->db->order_by('app ASC')->get('acl_app')->result_array();
-		
+
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccione una aplicacion...';
 
@@ -249,7 +247,7 @@ class Acl_model extends CI_Model {
 	public function get_combo_modulo($id_app = 0)
 	{
 		$arr_rs = $this->db->order_by('modulo ASC')->get_where('acl_modulo', array('id_app' => $id_app))->result_array();
-		
+
 		$arr_combo = array();
 		//$arr_combo[''] = 'Seleccione una aplicacion...';
 
@@ -264,7 +262,7 @@ class Acl_model extends CI_Model {
 	public function get_combo_rol()
 	{
 		$arr_rs = $this->db->order_by('app ASC, rol ASC')->join('acl_app a', 'r.id_app=a.id', 'left')->select('r.id, r.rol, a.app')->get('acl_rol r')->result_array();
-		
+
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccione un rol...';
 
@@ -302,7 +300,7 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
-			$this->db->where('id', $id)->update('acl_app', $arr_datos);					
+			$this->db->where('id', $id)->update('acl_app', $arr_datos);
 		}
 	}
 
@@ -315,7 +313,7 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
-			$this->db->where('id', $id)->update('acl_modulo', $arr_datos);					
+			$this->db->where('id', $id)->update('acl_modulo', $arr_datos);
 		}
 	}
 
@@ -328,14 +326,14 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
-			$this->db->where('id', $id)->update('acl_rol', $arr_datos);					
+			$this->db->where('id', $id)->update('acl_rol', $arr_datos);
 		}
 	}
 
 	public function guardar_rol_modulo($id_rol = 0, $id_modulos = array())
 	{
 		$this->db->delete('acl_rol_modulo', array('id_rol' => $id_rol));
-		foreach ($id_modulos as $id_modulo) 
+		foreach ($id_modulos as $id_modulo)
 		{
 			$this->db->insert('acl_rol_modulo', array('id_rol' => $id_rol, 'id_modulo' => $id_modulo));
 		}
