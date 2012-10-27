@@ -6,6 +6,7 @@ class config2 extends CI_Controller {
 				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
 				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
 				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
+				'detalle_inventario' => array('url' => '/config2/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
 				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
 				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
 				'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
@@ -104,9 +105,6 @@ class config2 extends CI_Controller {
 		}
 
 	}
-
-
-
 
 }
 

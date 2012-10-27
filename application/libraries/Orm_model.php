@@ -147,6 +147,7 @@ class ORM_Model {
 		$this->form_validation->set_error_delimiters('<br/><div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para %s');
+		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para %s');
 
 		return $this->form_validation->run();
 	}
@@ -289,7 +290,7 @@ class ORM_Model {
 		foreach($rs as $reg)
 		{
 			$o = new $this->model_class();
-			$o->_recuperar_array($reg);
+			$o->get_from_array($reg);
 
 			if ($recupera_relation)
 			{
@@ -312,7 +313,7 @@ class ORM_Model {
 		$rs = $this->db->get_where($this->model_tabla, array($this->model_tabla . '.' . $this->model_campo_id => $id))->row_array();
 		if (count($rs) > 0)
 		{
-			$this->_recuperar_array($rs);
+			$this->get_from_array($rs);
 
 			if ($recupera_relation)
 			{
@@ -330,27 +331,40 @@ class ORM_Model {
 	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
 	 * @return nada
 	 */
-	public function get_all_where($campo = '', $valores = array(), $recupera_relation = true)
+	public function get_all_where($campos = array(), $recupera_relation = true)
 	{
 		$this->db->order_by($this->model_order_by);
 
-		if (!is_array($valores))
+		if (!is_array($campos))
 		{
-			$valores = array($valores);
+			$campos = array('id' => $campos);
 		}
 
-		if (count($valores) == 0)
+		foreach ($campos as $campo => $valor)
 		{
-			$valores[] = '';
+			if (is_array($valor))
+			{
+				if (count($valor) == 0)
+				{
+				$this->db->where($campo, '');
+				}
+				else
+				{
+					$this->db->where_in($campo, $valor);
+				}
+			}
+			else
+			{
+				$this->db->where($campo, $valor);
+			}
 		}
 
-		$this->db->where_in($campo, $valores);
 		$rs = $this->db->get($this->model_tabla)->result_array();
 
 		foreach($rs as $reg)
 		{
 			$o = new $this->model_class();
-			$o->_recuperar_array($reg);
+			$o->get_from_array($reg);
 
 			if ($recupera_relation)
 			{
@@ -396,7 +410,7 @@ class ORM_Model {
 
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_all_where($obj->get_model_campo_id(), $arr_rs, false);
+				$obj->get_all_where(array($obj->get_model_campo_id() => $arr_rs), false);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
@@ -407,6 +421,24 @@ class ORM_Model {
 			}
 		}
 	}
+
+
+	/**
+	 * Puebla los campos del modelo con los valores de un arreglo
+	 * @param  array  $rs Arreglo con los valores
+	 * @return nada
+	 */
+	public function get_from_array($rs = array())
+	{
+		foreach($this->model_fields as $nombre => $metadata)
+		{
+			if (array_key_exists($nombre, $rs))
+			{
+				$this->$nombre = $rs[$nombre];
+			}
+		}
+	}
+
 
 
 
@@ -435,23 +467,6 @@ class ORM_Model {
 					$this->db->or_like($nombre, $filtro, 'both');
 				}
 				$i++;
-			}
-		}
-	}
-
-
-	/**
-	 * Puebla los campos del modelo con los valores de un arreglo
-	 * @param  array  $rs Arreglo con los valores
-	 * @return nada
-	 */
-	private function _recuperar_array($rs = array())
-	{
-		foreach($this->model_fields as $nombre => $metadata)
-		{
-			if (array_key_exists($nombre, $rs))
-			{
-				$this->$nombre = $rs[$nombre];
 			}
 		}
 	}
@@ -779,20 +794,22 @@ class ORM_Field {
 	 */
 	public function form_field($valor = '')
 	{
+		$id_prefix = 'id_';
+
 		$form = '';
 		$valor_field = ($valor == '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
-		if (!empty($this->choices) and $this->tipo != 'has_many')
+		if (!empty($this->choices))
 		{
-			$param_adic = ' id="id_' . $this->nombre . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 		else if (!empty($this->choices) and $this->tipo == 'has_many')
 		{
+			/*
 			$param_adic = ' id="id_' . $this->nombre . '" size="5"';
 			$form = form_multiselect($this->nombre . '[]', $this->choices, $valor_field, $param_adic);
-			/*
 			$form = '<div class="scroll_checkboxes">';
 			$lin = 0;
 			foreach($this->choices as $val => $choice)
@@ -806,55 +823,88 @@ class ORM_Field {
 		}
 		else if ($this->tipo == 'char')
 		{
-			$param_adic = ' maxlength="' . $this->largo . '"';
-			$param_adic .= ' size="' . $this->largo . '"';
-			$param_adic .= ' id=id_"' . $this->nombre . '"';
-			//$param_adic .= ($this->is_editable) ? '' : ' readonly="readonly"';
-			$form = form_input($this->nombre, $valor_field, $param_adic);
+			if ($this->largo >= 100)
+			{
+				$arr_param = array(
+									'name'      => $this->nombre,
+									'value'     => $valor_field,
+									'maxlength' => $this->largo,
+									'id'        => $id_prefix . $this->nombre,
+									'cols'      => '50',
+									'rows'      => '5',
+								);
+				$form = form_textarea($arr_param);
+			}
+			else
+			{
+				$arr_param = array(
+									'name'      => $this->nombre,
+									'value'     => $valor_field,
+									'maxlength' => $this->largo,
+									'size'      => $this->largo,
+									'id'        => $id_prefix . $this->nombre,
+								);
+				$form = form_input($arr_param);
+			}
 		}
 		else if ($this->tipo == 'password')
 		{
-			$param_adic = ' maxlength="' . $this->max_length . '"';
-			$param_adic .= ' id="id_' . $this->nombre . '"';
-			$param_adic .= ($this->is_editable) ? '' : ' readonly="readonly"';
-			$form = form_password($this->nombre, $valor_field, $param_adic);
+			$arr_param = array(
+								'name'      => $this->nombre,
+								'value'     => $valor_field,
+								'maxlength' => $this->largo,
+								'size'      => $this->largo,
+								'id'        => $id_prefix . $this->nombre,
+							);
+			$form = form_password($arr_param);
+		}
+		else if ($this->tipo == 'int')
+		{
+			$arr_param = array(
+								'name'      => $this->nombre,
+								'value'     => $valor_field,
+								'maxlength' => $this->max_digits,
+								'size'      => $this->max_digits,
+								'id'        => $id_prefix . $this->nombre,
+							);
+			$form = form_input($arr_param);
 		}
 		else if ($this->tipo == 'datetime')
 		{
-			$param_adic = ' maxlength="' . $this->max_length . '"';
-			$param_adic .= ' id="id_' . $this->nombre . '"';
-			$param_adic .= ($this->is_editable) ? '' : ' readonly="readonly"';
-			$form = form_input($this->nombre, $valor_field, $param_adic);
-		}
-		else if ($this->tipo == 'integer')
-		{
-			$param_adic = ' maxlength="' . $this->largo . '"';
-			$param_adic .= ' id="id_' . $this->nombre . '"';
-			//$param_adic .= ($this->is_editable) ? '' : ' readonly="readonly"';
-			$form = form_input($this->nombre, $valor_field, $param_adic);
+			$arr_param = array(
+								'name'      => $this->nombre,
+								'value'     => $valor_field,
+								'maxlength' => $this->largo,
+								'size'      => $this->largo,
+								'id'        => $id_prefix . $this->nombre,
+							);
+			$form = form_input($arr_param);
 		}
 		else if ($this->tipo == 'boolean')
 		{
-			$form  = form_radio($this->nombre, 1, ($valor_field==1) ? true : false) . 'Si &nbsp; &nbsp; &nbsp; &nbsp;';
-			$form .= form_radio($this->nombre, 0, ($valor_field==1) ? false : true) . 'No';
+			$form  = form_radio($this->nombre, 1, ($valor_field == 1) ? true : false) . 'Si &nbsp; &nbsp; &nbsp; &nbsp;';
+			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? false : true) . 'No';
 		}
 		else if ($this->tipo == 'has_one')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="id_' . $this->nombre . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
+
 			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'has_many')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="id_' . $this->nombre . '" size="7"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7"';
+
 			$form = form_multiselect($this->nombre.'[]', $modelo_rel->get_combo(false), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'id')
 		{
-			$param_adic = ' id=id_"' . $this->nombre . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
+
 			$form = $valor;
 			$form .= form_hidden($this->nombre, $valor, $param_adic);
 		}
@@ -906,6 +956,7 @@ class ORM_Field {
 		$regla = 'trim';
 		$regla .= ($this->es_obligatorio == true and $this->es_autoincrement == false) ? '|required' : '';
 		$regla .= ($this->tipo == 'has_one') ? '|greater_than[0]' : '';
+		$regla .= ($this->tipo == 'int') ? '|numeric' : '';
 
 		if ($this->tipo == 'has_many')
 		{

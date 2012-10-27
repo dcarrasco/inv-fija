@@ -17,7 +17,7 @@
 				<?php echo anchor('#','Buscar', 'class="button b-active round ic-search fl" id="btn_buscar"'); ?>
 				<?php echo anchor($link_hoja_ant,'Hoja Prev', 'class="button b-active round ic-hoja-ant fl" id="btn_hoja_ant"'); ?>
 				<?php echo anchor($link_hoja_sig,'Hoja Sig', 'class="button b-active round ic-hoja-sig fl" id="btn_hoja_sig"'); ?>
-				
+
 
 				<?php echo form_close(); ?>
 			</div>
@@ -45,7 +45,7 @@
 			<?php echo form_hidden('sel_hoja', $hoja); ?>
 			<?php //echo form_hidden('sel_digitador', $id_digitador); ?>
 			<?php echo form_hidden('sel_auditor', $id_auditor); ?>
-			<?php echo form_hidden('agr_id', 0); ?>
+			<?php echo form_hidden('agr_id', ''); ?>
 			<table>
 				<tr>
 					<th></th>
@@ -85,19 +85,19 @@
 				<tr>
 					<th class="ar">centro</th>
 					<td>
-						<?php echo form_dropdown('agr_centro', 
+						<?php echo form_dropdown('agr_centro',
 													array(
-														''     => 'Seleccionar centro...', 
-														'CH01' => 'CH01', 
-														'CH02' => 'CH02', 
-														'CH04' => 'CH04', 
-														'CH05' => 'CH05', 
-														'CH11' => 'CH11', 
-														'CH19' => 'CH19', 
+														''     => 'Seleccionar centro...',
+														'CH01' => 'CH01',
+														'CH02' => 'CH02',
+														'CH04' => 'CH04',
+														'CH05' => 'CH05',
+														'CH11' => 'CH11',
+														'CH19' => 'CH19',
 														'CH24' => 'CH24',
-														'CH28' => 'CH28', 
+														'CH28' => 'CH28',
 														'CH29' => 'CH29',
-													), 
+													),
 													set_value('agr_centro')); ?>
 						<?php echo form_error('agr_centro'); ?>
 					</td>
@@ -105,13 +105,13 @@
 				<tr>
 					<th class="ar">almacen</th>
 					<td>
-						<?php echo form_dropdown('agr_almacen', 
+						<?php echo form_dropdown('agr_almacen',
 													array(
-														''     => 'Seleccionar almacen...', 
-														'CM01' => 'CM01', 
-														'CM02' => 'CM02', 
-														'CM03' => 'CM03', 
-														'CM04' => 'CM04', 
+														''     => 'Seleccionar almacen...',
+														'CM01' => 'CM01',
+														'CM02' => 'CM02',
+														'CM03' => 'CM03',
+														'CM04' => 'CM04',
 														'CM11' => 'CM11',
 														'CM15' => 'CM15',
 														'GM01' => 'GM01',
@@ -172,41 +172,41 @@
 			<tbody>
 				<?php $sum_sap = 0; $sum_fisico = 0;?>
 				<?php $tab_index = 10; ?>
-				<?php foreach ($datos_hoja as $reg): ?>
+				<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
 					<tr>
 						<td class="ac">
-							<?php echo $reg['ubicacion']; ?>
+							<?php echo $linea_det->ubicacion; ?>
 
-							<?php if ($reg['reg_nuevo'] == 'S'):?>
-							<?php echo anchor('#', 'Ed', 'class="button_mini b-active round ic-edit fl" id="btn_editar_id_' . $reg['id'] . '"'); ?>
-							<?php echo form_hidden('ubicacion_' . $reg['id'], $reg['ubicacion']); ?>
-							<?php echo form_hidden('catalogo_' . $reg['id'], $reg['catalogo']); ?>
-							<?php echo form_hidden('descripcion_' . $reg['id'], $reg['descripcion']); ?>
-							<?php echo form_hidden('lote_' . $reg['id'], $reg['lote']); ?>
-							<?php echo form_hidden('centro_' . $reg['id'], $reg['centro']); ?>
-							<?php echo form_hidden('almacen_' . $reg['id'], $reg['almacen']); ?>
-							<?php echo form_hidden('um_' . $reg['id'], $reg['um']); ?>
+							<?php if ($linea_det->reg_nuevo == 'S'):?>
+							<?php echo anchor('#', 'Ed', 'class="button_mini b-active round ic-edit fl" id="btn_editar_id_' . $linea_det->id . '"'); ?>
+							<?php echo form_hidden('ubicacion_' . $linea_det->id, $linea_det->ubicacion); ?>
+							<?php echo form_hidden('catalogo_' . $linea_det->id, $linea_det->catalogo); ?>
+							<?php echo form_hidden('descripcion_' . $linea_det->id, $linea_det->descripcion); ?>
+							<?php echo form_hidden('lote_' . $linea_det->id, $linea_det->lote); ?>
+							<?php echo form_hidden('centro_' . $linea_det->id, $linea_det->centro); ?>
+							<?php echo form_hidden('almacen_' . $linea_det->id, $linea_det->almacen); ?>
+							<?php echo form_hidden('um_' . $linea_det->id, $linea_det->um); ?>
 							<?php endif; ?>
 						</td>
-						<td><?php echo $reg['catalogo']; ?></td>
-						<td><?php echo $reg['descripcion']; ?></td>
-						<td><?php echo $reg['lote']; ?></td>
-						<td><?php echo $reg['centro']; ?></td>
-						<td><?php echo $reg['almacen']; ?></td>
-						<td><?php echo $reg['um']; ?></td>
-						<td class="ar"><?php echo number_format($reg['stock_sap'],0,',','.'); ?></td>
+						<td><?php echo $linea_det->catalogo; ?></td>
+						<td><?php echo $linea_det->descripcion; ?></td>
+						<td><?php echo $linea_det->lote; ?></td>
+						<td><?php echo $linea_det->centro; ?></td>
+						<td><?php echo $linea_det->almacen; ?></td>
+						<td><?php echo $linea_det->um; ?></td>
+						<td class="ar"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
 						<td>
-							<?php echo form_input('stock_fisico_' . $reg['id'], set_value('stock_fisico_' . $reg['id'], $reg['stock_fisico']), 'class="ar" size="10" tabindex="' . $tab_index . '"'); ?>
-							<?php echo form_error('stock_fisico_' . $reg['id']); ?>
+							<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="ar" size="10" tabindex="' . $tab_index . '"'); ?>
+							<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 						</td>
 						<td>
-							<?php echo form_input('observacion_' . $reg['id'], set_value('observacion_' . $reg['id'], $reg['observacion']), 'size="20" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
+							<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'size="20" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
 						</td>
 					</tr>
-					<?php $sum_sap += $reg['stock_sap']; $sum_fisico += $reg['stock_fisico'];?>
+					<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>
 					<?php $tab_index += 1; ?>
 				<?php endforeach; ?>
-				
+
 				<!-- totales -->
 				<tr>
 					<td colspan="2">

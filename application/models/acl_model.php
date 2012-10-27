@@ -79,7 +79,7 @@ class Acl_model extends CI_Model {
 		$this->input->set_cookie(array(
 			'name' => 'movistar_usr',
 			'value' => $usr,
-			'expire' => '300'
+			'expire' => '600'
 			));
 	}
 

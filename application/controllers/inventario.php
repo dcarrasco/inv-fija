@@ -21,17 +21,21 @@ class Inventario extends CI_Controller {
 	public function ingreso($hoja = 0, $auditor = 0)
 	{
 		//$this->load->model('usuario');
-		$this->load->model('auditor');
-		$this->load->model('inventario_model');
-		$this->load->model('catalogo');
+
+		$obj_auditor = new Auditor;
 
 		// recupera el inventario activo
-		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
+		$inv_activo = new Inv_activo;
+		$this->id_inventario = $inv_activo->get_id_inventario_activo();
+		$inv_activo->get_id($this->id_inventario);
 
-		$nombre_inventario = $this->inventario_model->get_nombre_inventario($this->id_inventario);
-		$datos_hoja        = $this->inventario_model->get_hoja($this->id_inventario, $hoja);
-		$nombre_auditor    = $this->inventario_model->get_auditor_hoja($this->id_inventario, $hoja);
-		$nombre_digitador  = $this->inventario_model->get_digitador_hoja($this->id_inventario, $hoja);
+		$detalle_inventario = new Detalle_inventario;
+		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
+		//dbg($detalle_inventario);
+
+		$nombre_inventario = $inv_activo->nombre;
+		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
+		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
 
 		$id_usuario_login  = $this->acl_model->get_id_usr();
 
@@ -44,11 +48,11 @@ class Inventario extends CI_Controller {
 		{
 			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
 			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|numeric|greater_than[0]');
-			foreach($datos_hoja as $reg)
+			foreach($detalle_inventario->get_model_all() as $linea_detalle)
 			{
-				$this->form_validation->set_rules('stock_fisico_' . $reg['id'], 'cantidad', 'trim|required|numeric|greater_than[-1]');
-				$this->form_validation->set_rules('observacion_' . $reg['id'], 'observacion', 'trim');
-			}			
+				$this->form_validation->set_rules('stock_fisico_' . $linea_detalle->id, 'cantidad', 'trim|required|numeric|greater_than[-1]');
+				$this->form_validation->set_rules('observacion_' . $linea_detalle->id, 'observacion', 'trim');
+			}
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
@@ -74,23 +78,23 @@ class Inventario extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-					'datos_hoja'        => $datos_hoja,
-					'hoja'              => $hoja,
-					'nombre_inventario' => $nombre_inventario,
-					'nombre_digitador'  => $nombre_digitador,
-					'nombre_auditor'    => $nombre_auditor,
+					'detalle_inventario' => $detalle_inventario,
+					'hoja'               => $hoja,
+					'nombre_inventario'  => $nombre_inventario,
+					'nombre_digitador'   => $nombre_digitador,
+					'nombre_auditor'     => $nombre_auditor,
 					//'id_digitador'      => $digitador,
-					'id_auditor'        => $auditor,
-					'combo_auditores'   => $this->auditor->get_combo(),
-					'link_config'       => 'config',
-					'link_reporte'      => 'reportes',
-					'link_inventario'   => 'inventario',
-					'link_hoja_ant'     => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time(),
-					'link_hoja_sig'     => 'inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time(),
-					'msg_alerta'        => $this->session->flashdata('msg_alerta'),
-					'menu_app'          => $this->acl_model->menu_app(),
+					'id_auditor'         => $auditor,
+					'combo_auditores'    => $obj_auditor->get_combo(),
+					'link_config'        => 'config',
+					'link_reporte'       => 'reportes',
+					'link_inventario'    => 'inventario',
+					'link_hoja_ant'      => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time(),
+					'link_hoja_sig'      => 'inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time(),
+					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+					'menu_app'           => $this->acl_model->menu_app(),
 				);
-			
+
 			$this->_render_view('inventario', $data);
 		}
 		else
@@ -98,27 +102,14 @@ class Inventario extends CI_Controller {
 			if ($this->input->post('formulario') == 'inventario')
 			{
 				$cant_modif = 0;
-				foreach($datos_hoja as $reg)
+				foreach($detalle_inventario->get_model_all() as $linea_detalle)
 				{
-					$this->inventario_model->guardar(
-														$reg['id'], 
-														$this->id_inventario,
-														$hoja, 
-														$id_usuario_login, 
-														set_value('sel_auditor'), 
-														$reg['ubicacion'], 
-														$reg['catalogo'], 
-														$reg['descripcion'], 
-														$reg['lote'], 
-														$reg['centro'], 
-														$reg['almacen'], 
-														$reg['um'], 
-														$reg['stock_sap'], 
-														set_value('stock_fisico_' . $reg['id']), 
-														set_value('observacion_' . $reg['id']), 
-														date('Y-d-m H:i:s'),
-														$reg['reg_nuevo']
-													);
+					$linea_detalle->auditor            = set_value('sel_auditor');
+					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
+					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
+					$linea_detalle->fecha_modificacion = date('Y-d-m H:i:s');
+					//dbg($linea_detalle);
+					$linea_detalle->grabar();
 					$cant_modif += 1;
 				}
 
@@ -128,31 +119,38 @@ class Inventario extends CI_Controller {
 			{
 				if ($this->input->post('accion') == 'borrar')
 				{
-					$this->inventario_model->borrar($this->input->post('agr_id'));
-					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('agr_id') . ') borrada correctamente en hoja '. $hoja);					
+					$nuevo_detalle_inventario = new Detalle_inventario;
+					$nuevo_detalle_inventario->get_id($this->input->post('agr_id'));
+					$nuevo_detalle_inventario->borrar();
+					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('agr_id') . ') borrada correctamente en hoja '. $hoja);
 				}
 				else
 				{
-					$this->inventario_model->guardar(
-														$this->input->post('agr_id'), 
-														$this->id_inventario,
-														$hoja, 
-														$id_usuario_login, 
-														set_value('sel_auditor'), 
-														$this->input->post('agr_ubicacion'), 
-														$this->input->post('agr_material'), 
-														$this->catalogo_model->get_descripcion($this->input->post('agr_material')), 
-														$this->input->post('agr_lote'), 
-														$this->input->post('agr_centro'), 
-														$this->input->post('agr_almacen'), 
-														$this->input->post('agr_um'), 
-														0,
-														$this->input->post('agr_cantidad'), 
-														$this->input->post('agr_observacion'), 
-														date('Y-d-m H:i:s'),
-														'S'
-													);
-					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);					
+					$nuevo_detalle_inventario = new Detalle_inventario;
+					$nuevo_material = new Catalogo;
+					$nuevo_material->get_id($this->input->post('agr_material'));
+
+					$nuevo_detalle_inventario->get_from_array(array(
+														'id'            => $this->input->post('agr_id'),
+														'id_inventario' => $this->id_inventario,
+														'hoja'          => $hoja,
+														'digitador'     => $id_usuario_login,
+														'auditor'       => set_value('sel_auditor'),
+														'ubicacion'     => $this->input->post('agr_ubicacion'),
+														'catalogo'      => $this->input->post('agr_material'),
+														'descripcion'   => $nuevo_material->descripcion,
+														'lote'          => $this->input->post('agr_lote'),
+														'centro'        => $this->input->post('agr_centro'),
+														'almacen'       => $this->input->post('agr_almacen'),
+														'um'            => $this->input->post('agr_um'),
+														'stock_sap'     => 0,
+														'stock_fisico'  => $this->input->post('agr_cantidad'),
+														'observacion'   => $this->input->post('agr_observacion'),
+														'fecha_modificacion' => date('Y-d-m H:i:s'),
+														'reg_nuevo'     => 'S',
+												));
+					$nuevo_detalle_inventario->grabar();
+					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
 			redirect('inventario/ingreso/' . $this->input->post('sel_hoja') . '/' . $this->input->post('sel_auditor') . '/' . time());
