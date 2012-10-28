@@ -7,10 +7,12 @@
 				<?php echo form_open('/inventario/ingreso', 'id="frm_buscar"'); ?>
 				<?php echo form_hidden('formulario','buscar'); ?>
 				<p>
-					Hoja <?php echo form_input('sel_hoja', set_value('sel_hoja', $hoja), 'maxlength="3" size="3"'); ?>
-					<?php echo form_error('sel_hoja');?>
-					| Auditor <?php echo form_dropdown('sel_auditor', $combo_auditores, set_value('sel_auditor', $id_auditor)); ?>
-					<?php echo form_error('sel_auditor');?>
+					Hoja
+					<?php echo $nuevo_detalle_inventario->print_form_campo('hoja'); ?>
+					<?php echo form_error('hoja');?>
+					| Auditor
+					<?php echo $nuevo_detalle_inventario->print_form_campo('auditor'); ?>
+					<?php echo form_error('auditor');?>
 				</p>
 			</div>
 			<div class="fl" style="margin-right: 10px;">
@@ -42,22 +44,22 @@
 			<?php echo form_open('','id=frm_agregar')?>
 			<?php echo form_hidden('formulario','agregar'); ?>
 			<?php echo form_hidden('accion','agregar'); ?>
-			<?php echo form_hidden('sel_hoja', $hoja); ?>
-			<?php //echo form_hidden('sel_digitador', $id_digitador); ?>
-			<?php echo form_hidden('sel_auditor', $id_auditor); ?>
-			<?php echo form_hidden('agr_id', ''); ?>
+			<?php echo form_hidden('hoja', $hoja); ?>
+			<?php echo form_hidden('auditor', $id_auditor); ?>
+			<?php echo form_hidden('id', ''); ?>
 			<table>
 				<tr>
 					<th></th>
 					<th class="ac">Ingreso datos inventario</th>
 				</tr>
+
 				<tr>
-					<th class="ar">ubicacion</th>
-					<td>
-						<?php echo form_input('agr_ubicacion', set_value('agr_ubicacion'), 'size="10"'); ?>
-						<?php echo form_error('agr_ubicacion'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('ubicacion'); ?>
+						<?php echo form_error('ubicacion'); ?>
 					</td>
 				</tr>
+
 				<tr>
 					<th class="ar">material</th>
 					<td>
@@ -68,73 +70,49 @@
 						<?php echo form_error('agr_material'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">lote</th>
-					<td>
-						<?php echo form_input('agr_lote', set_value('agr_lote'), 'size="5"'); ?>
-						<?php echo form_error('agr_lote'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('lote'); ?>
+						<?php echo form_error('lote'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">um</th>
-					<td>
-						<?php echo form_dropdown('agr_um', array('' => 'Seleccionar UM...', 'UN' => 'UN', 'M' => 'M', 'KG' => 'KG', 'ST' => 'ST', 'EA' => 'EA' ),set_value('agr_um')); ?>
-						<?php echo form_error('agr_um'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('um'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('um'); ?>
+						<?php echo form_error('um'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">centro</th>
-					<td>
-						<?php echo form_dropdown('agr_centro',
-													array(
-														''     => 'Seleccionar centro...',
-														'CH01' => 'CH01',
-														'CH02' => 'CH02',
-														'CH04' => 'CH04',
-														'CH05' => 'CH05',
-														'CH11' => 'CH11',
-														'CH19' => 'CH19',
-														'CH24' => 'CH24',
-														'CH28' => 'CH28',
-														'CH29' => 'CH29',
-													),
-													set_value('agr_centro')); ?>
-						<?php echo form_error('agr_centro'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('centro'); ?>
+						<?php echo form_error('centro'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">almacen</th>
-					<td>
-						<?php echo form_dropdown('agr_almacen',
-													array(
-														''     => 'Seleccionar almacen...',
-														'CM01' => 'CM01',
-														'CM02' => 'CM02',
-														'CM03' => 'CM03',
-														'CM04' => 'CM04',
-														'CM11' => 'CM11',
-														'CM15' => 'CM15',
-														'GM01' => 'GM01',
-														'GM03' => 'GM03',
-													),
-													set_value('agr_almacen')); ?>
-						<?php echo form_error('agr_almacen'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('almacen'); ?>
+						<?php echo form_error('almacen'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">cantidad</th>
-					<td>
-						<?php echo form_input('agr_cantidad', set_value('agr_cantidad'), 'size="10"'); ?>
-						<?php echo form_error('agr_cantidad'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('stock_fisico'); ?>
+						<?php echo form_error('stock_fisico'); ?>
 					</td>
 				</tr>
+
 				<tr>
-					<th class="ar">observacion</th>
-					<td>
-						<?php echo form_input('agr_observacion', set_value('agr_observacion'), 'max'); ?>
-						<?php echo form_error('agr_observacion'); ?>
+					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?></th>
+					<td><?php echo $nuevo_detalle_inventario->print_form_campo('observacion'); ?>
+						<?php echo form_error('observacion'); ?>
 					</td>
 				</tr>
+
 				<tr>
 					<th></th>
 					<td class="ac cf">
@@ -149,9 +127,8 @@
 		<div class="content-module-main-principal">
 		<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 		<?php echo form_hidden('formulario','inventario'); ?>
-		<?php echo form_hidden('sel_hoja', $hoja); ?>
-		<?php //echo form_hidden('sel_digitador', $id_digitador); ?>
-		<?php echo form_hidden('sel_auditor', $id_auditor); ?>
+		<?php echo form_hidden('hoja', $hoja); ?>
+		<?php echo form_hidden('auditor', $id_auditor); ?>
 		<?php //echo form_error('sel_digitador'); ?>
 		<?php //echo form_error('sel_auditor'); ?>
 		<table>
@@ -179,13 +156,13 @@
 
 							<?php if ($linea_det->reg_nuevo == 'S'):?>
 							<?php echo anchor('#', 'Ed', 'class="button_mini b-active round ic-edit fl" id="btn_editar_id_' . $linea_det->id . '"'); ?>
-							<?php echo form_hidden('ubicacion_' . $linea_det->id, $linea_det->ubicacion); ?>
-							<?php echo form_hidden('catalogo_' . $linea_det->id, $linea_det->catalogo); ?>
+							<?php echo form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>
+							<?php echo form_hidden('catalogo_'    . $linea_det->id, $linea_det->catalogo); ?>
 							<?php echo form_hidden('descripcion_' . $linea_det->id, $linea_det->descripcion); ?>
-							<?php echo form_hidden('lote_' . $linea_det->id, $linea_det->lote); ?>
-							<?php echo form_hidden('centro_' . $linea_det->id, $linea_det->centro); ?>
-							<?php echo form_hidden('almacen_' . $linea_det->id, $linea_det->almacen); ?>
-							<?php echo form_hidden('um_' . $linea_det->id, $linea_det->um); ?>
+							<?php echo form_hidden('lote_'        . $linea_det->id, $linea_det->lote); ?>
+							<?php echo form_hidden('centro_'      . $linea_det->id, $linea_det->centro); ?>
+							<?php echo form_hidden('almacen_'     . $linea_det->id, $linea_det->almacen); ?>
+							<?php echo form_hidden('um_'          . $linea_det->id, $linea_det->um); ?>
 							<?php endif; ?>
 						</td>
 						<td><?php echo $linea_det->catalogo; ?></td>

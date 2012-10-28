@@ -31,7 +31,7 @@ class Acl_model extends CI_Model {
 					'analisis' => array('controller' => 'analisis', 'texto' => 'Ajustes de inventario', 'icono' => 'ic-ajustes'),
 					'config2' => array('controller' => 'config2', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
 					'reportes' => array('controller' => 'reportes', 'texto' => 'Reportes', 'icono' => 'ic-reporte'),
-					'inventario' => array('controller' => 'inventario/ingreso/0/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
+					'inventario' => array('controller' => 'inventario/ingreso/1/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
 					);
 		$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
 

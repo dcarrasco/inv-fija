@@ -20,9 +20,10 @@ class Inventario extends CI_Controller {
 
 	public function ingreso($hoja = 0, $auditor = 0)
 	{
-		//$this->load->model('usuario');
-
-		$obj_auditor = new Auditor;
+		$nuevo_detalle_inventario = new Detalle_inventario;
+		$nuevo_detalle_inventario->get_relation_fields();
+		$nuevo_detalle_inventario->hoja = $hoja;
+		$nuevo_detalle_inventario->auditor = $auditor;
 
 		// recupera el inventario activo
 		$inv_activo = new Inv_activo;
@@ -41,13 +42,14 @@ class Inventario extends CI_Controller {
 
 		if ($this->input->post('formulario') == 'buscar')
 		{
-			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
-			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|greater_than[0]');
+			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
+			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 		}
 		else if ($this->input->post('formulario') == 'inventario')
 		{
-			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
-			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|numeric|greater_than[0]');
+			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
+			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+
 			foreach($detalle_inventario->get_model_all() as $linea_detalle)
 			{
 				$this->form_validation->set_rules('stock_fisico_' . $linea_detalle->id, 'cantidad', 'trim|required|numeric|greater_than[-1]');
@@ -56,16 +58,15 @@ class Inventario extends CI_Controller {
 		}
 		else if ($this->input->post('formulario')=='agregar')
 		{
-			$this->form_validation->set_rules('sel_hoja', 'Hoja', 'trim|required|numeric');
-			$this->form_validation->set_rules('sel_auditor', 'Auditor', 'trim|required|greater_than[0]');
-			$this->form_validation->set_rules('agr_ubicacion', 'Ubicacion', 'trim|required');
-			$this->form_validation->set_rules('agr_material', 'Material', 'trim|required');
-			$this->form_validation->set_rules('agr_lote', 'Lote', 'trim|required');
-			$this->form_validation->set_rules('agr_centro', 'Centro', 'trim|required');
-			$this->form_validation->set_rules('agr_almacen', 'Almacen', 'trim|required');
-			$this->form_validation->set_rules('agr_um', 'Unidad de Medida', 'trim|required');
-			$this->form_validation->set_rules('agr_cantidad', 'Cantidad', 'trim|required|numeric|greater_than[-1]');
-
+			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
+			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_validation_rules_field('ubicacion');
+			$nuevo_detalle_inventario->set_validation_rules_field('catalogo');
+			$nuevo_detalle_inventario->set_validation_rules_field('lote');
+			$nuevo_detalle_inventario->set_validation_rules_field('centro');
+			$nuevo_detalle_inventario->set_validation_rules_field('almacen');
+			$nuevo_detalle_inventario->set_validation_rules_field('um');
+			$nuevo_detalle_inventario->set_validation_rules_field('stock_fisico');
 		}
 
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
@@ -78,6 +79,7 @@ class Inventario extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+					'nuevo_detalle_inventario' => $nuevo_detalle_inventario,
 					'detalle_inventario' => $detalle_inventario,
 					'hoja'               => $hoja,
 					'nombre_inventario'  => $nombre_inventario,
@@ -85,7 +87,6 @@ class Inventario extends CI_Controller {
 					'nombre_auditor'     => $nombre_auditor,
 					//'id_digitador'      => $digitador,
 					'id_auditor'         => $auditor,
-					'combo_auditores'    => $obj_auditor->get_combo(),
 					'link_config'        => 'config',
 					'link_reporte'       => 'reportes',
 					'link_inventario'    => 'inventario',
@@ -126,26 +127,25 @@ class Inventario extends CI_Controller {
 				}
 				else
 				{
-					$nuevo_detalle_inventario = new Detalle_inventario;
 					$nuevo_material = new Catalogo;
 					$nuevo_material->get_id($this->input->post('agr_material'));
 
 					$nuevo_detalle_inventario->get_from_array(array(
-														'id'            => $this->input->post('agr_id'),
+														'id'            => $this->input->post('id'),
 														'id_inventario' => $this->id_inventario,
 														'hoja'          => $hoja,
 														'digitador'     => $id_usuario_login,
-														'auditor'       => set_value('sel_auditor'),
-														'ubicacion'     => $this->input->post('agr_ubicacion'),
+														'auditor'       => set_value('auditor'),
+														'ubicacion'     => $this->input->post('ubicacion'),
 														'catalogo'      => $this->input->post('agr_material'),
 														'descripcion'   => $nuevo_material->descripcion,
-														'lote'          => $this->input->post('agr_lote'),
-														'centro'        => $this->input->post('agr_centro'),
-														'almacen'       => $this->input->post('agr_almacen'),
-														'um'            => $this->input->post('agr_um'),
+														'lote'          => $this->input->post('lote'),
+														'centro'        => $this->input->post('centro'),
+														'almacen'       => $this->input->post('almacen'),
+														'um'            => $this->input->post('um'),
 														'stock_sap'     => 0,
-														'stock_fisico'  => $this->input->post('agr_cantidad'),
-														'observacion'   => $this->input->post('agr_observacion'),
+														'stock_fisico'  => $this->input->post('stock_fisico'),
+														'observacion'   => $this->input->post('observacion'),
 														'fecha_modificacion' => date('Y-d-m H:i:s'),
 														'reg_nuevo'     => 'S',
 												));
@@ -153,7 +153,7 @@ class Inventario extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
-			redirect('inventario/ingreso/' . $this->input->post('sel_hoja') . '/' . $this->input->post('sel_auditor') . '/' . time());
+			redirect('inventario/ingreso/' . $this->input->post('hoja') . '/' . $this->input->post('auditor') . '/' . time());
 		}
 
 	}
