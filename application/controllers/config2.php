@@ -60,6 +60,9 @@ class config2 extends CI_Controller {
 		$modelo = new $nombre_modelo;
 		$modelo->get_all($filtro, $pag);
 
+		//dbg($this->db->field_data($modelo->get_model_tabla()));
+		//dbg($modelo);
+
 		$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
 				'modelo'             => $modelo,

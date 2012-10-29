@@ -18,7 +18,7 @@
 		</div>
 		<div class="msg-alerta cf ac">
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
-		</div>		
+		</div>
 	</div> <!-- fin content-module-heading -->
 
 	<div class="content-module-main">
@@ -26,13 +26,14 @@
 			<?php echo form_open('login/cambio_password/'.$usr, 'id="frm_login"'); ?>
 			<p></p>
 			<div class="ac">
-				Nombre de Usuario: 
+				Nombre de Usuario:
 				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="30"'); ?>
 				<?php echo form_error('usr'); ?>
 			</div>
 			<p></p>
+
 			<?php if ($ocultar_password): ?>
-			
+
 				<?php if ($tiene_clave): ?>
 					<div class="ac">
 						Clave Anterior
@@ -41,14 +42,14 @@
 					</div>
 					<p></p>
 				<?php endif; ?>
-				
+
 				<div class="ac">
 					Clave Nueva
 					<?php echo form_password('pwd_new1', '','maxlength="45" size="30"'); ?>
 					<?php echo form_error('pwd_new1'); ?>
 				</div>
 				<p></p>
-				
+
 				<div class="ac">
 					Clave Nueva (reingreso)
 					<?php echo form_password('pwd_new2', '','maxlength="45" size="30"'); ?>
@@ -58,9 +59,10 @@
 
 			<?php endif; ?>
 
-			
+
 			<div class="ac">
 				<?php echo form_submit('btn_submit','Cambiar clave', 'class="button b-active round ic-login"'); ?>
+				<?php echo anchor('', 'Enviar nueva clave', 'class="button b-active round ic-correo"'); ?>
 			</div>
 			<p></p>
 			<?php echo form_close(); ?>

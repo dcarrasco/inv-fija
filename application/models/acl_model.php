@@ -12,7 +12,7 @@ class Acl_model extends CI_Model {
 
 	public function login($usr = '', $pwd = '')
 	{
-		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd)))->num_rows() > 0)
+		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))->num_rows() > 0)
 		{
 			// crea cookies con la sesion del usuario
 			$this->set_session_cookies($usr);
@@ -177,7 +177,7 @@ class Acl_model extends CI_Model {
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
 		if (count($arr_rs) > 0)
 		{
-			return ((is_null($arr_rs['pwd']) or $arr_rs['pwd'] == '') ? false : true);
+			return ((is_null($arr_rs['pwd']) OR $arr_rs['pwd'] == ' ' OR $arr_rs['pwd'] == '') ? false : true);
 		}
 		else
 		{
@@ -213,7 +213,18 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
+	public function get_correo($usr = '')
+	{
+		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		if (count($arr_rs) > 0)
+		{
+			return $arr_rs['correo'];
+		}
+		else
+		{
+			return '';
+		}
+	}
 
 	public function get_modulos_rol($id_rol = 0)
 	{

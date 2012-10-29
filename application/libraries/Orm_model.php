@@ -84,6 +84,7 @@ class ORM_Model {
 	{
 		foreach ($cfg as $campo => $prop)
 		{
+			$prop['tabla_bd'] = $this->model_tabla;
 			$oField = new ORM_Field($campo, $prop);
 			$this->model_fields[$campo] = $oField;
 			$this->$campo = null;
@@ -98,6 +99,8 @@ class ORM_Model {
 	// =======================================================================
 
 	public function get_model_nombre()       { return $this->model_nombre; }
+
+	public function get_model_tabla()        { return $this->model_tabla; }
 
 	public function get_model_label()        { return $this->model_label; }
 
@@ -144,10 +147,11 @@ class ORM_Model {
 		{
 			$this->set_validation_rules_field($campo);
 		}
-		$this->form_validation->set_error_delimiters('<br/><div class="error round">', '</div>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
-		$this->form_validation->set_message('greater_than', 'Seleccione un valor para %s');
-		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para %s');
+		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
+		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
+		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
+		$this->form_validation->set_message('is_unique', 'El valor del campo "%s" debe ser único');
 
 		return $this->form_validation->run();
 	}
@@ -170,9 +174,9 @@ class ORM_Model {
 	 * @param  string $campo Nombre del campo
 	 * @return string        Elemento de formulario
 	 */
-	public function print_form_campo($campo = '')
+	public function print_form_field($campo = '', $filtra_activos = FALSE)
 	{
-		return $this->model_fields[$campo]->form_field($this->$campo);
+		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos);
 	}
 
 
@@ -229,7 +233,7 @@ class ORM_Model {
 	 * @param  string  $filtro                  Filtro para los valores del modelo
 	 * @return array                            Arreglo para usar en un combo
 	 */
-	public function get_combo($muestra_glosa_seleccion = true, $filtro = '')
+	public function get_combo($muestra_glosa_seleccion = TRUE, $filtro = '', $where = array())
 	{
 		$combo = array();
 
@@ -239,7 +243,15 @@ class ORM_Model {
 		}
 
 		// llena los valores del combo
-		$this->get_all($filtro, -1, false);
+		if (count($where) > 0)
+		{
+			$this->get_all_where($where, FALSE);
+		}
+		else
+		{
+			$this->get_all($filtro, -1, FALSE);
+		}
+
 		foreach ($this->model_all as $o)
 		{
 			$combo[$o->{$o->get_model_campo_id()}] = $o->__toString();
@@ -285,7 +297,7 @@ class ORM_Model {
 	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
 	 * @return nada
 	 */
-	public function get_all($filtro = '_', $pag = 0, $recupera_relation = true)
+	public function get_all($filtro = '_', $pag = 0, $recupera_relation = TRUE)
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
@@ -320,18 +332,17 @@ class ORM_Model {
 	 * @param  boolean $recupera_relation Indica si se recuperarán los mdelos dependientes
 	 * @return nada
 	 */
-	public function get_id($id = '', $recupera_relation = true)
+	public function get_id($id = '', $recupera_relation = TRUE)
 	{
 		$rs = $this->db->get_where($this->model_tabla, array($this->model_tabla . '.' . $this->model_campo_id => $id))->row_array();
 		if (count($rs) > 0)
 		{
 			$this->get_from_array($rs);
+		}
 
-			if ($recupera_relation)
-			{
-				$this->_recuperar_relation_fields();
-			}
-
+		if ($recupera_relation)
+		{
+			$this->_recuperar_relation_fields();
 		}
 	}
 
@@ -343,7 +354,7 @@ class ORM_Model {
 	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
 	 * @return nada
 	 */
-	public function get_all_where($campos = array(), $recupera_relation = true)
+	public function get_all_where($campos = array(), $recupera_relation = TRUE)
 	{
 		$this->db->order_by($this->model_order_by);
 
@@ -401,13 +412,13 @@ class ORM_Model {
 				$arr_rel = $metadata->get_relation();
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_id($this->$campo, false);
+				$obj->get_id($this->$campo, FALSE);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
 
-				$this->model_got_relations = true;
+				$this->model_got_relations = TRUE;
 			}
 			if($metadata->get_tipo() == 'has_many')
 			{
@@ -422,14 +433,14 @@ class ORM_Model {
 
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_all_where(array($obj->get_model_campo_id() => $arr_rs), false);
+				$obj->get_all_where(array($obj->get_model_campo_id() => $arr_rs), FALSE);
 
 				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
 				$this->$campo = $arr_rs;
 
-				$this->model_got_relations = true;
+				$this->model_got_relations = TRUE;
 			}
 		}
 	}
@@ -502,7 +513,7 @@ class ORM_Model {
 				}
 				$this->$nombre = $arr;
 			}
-			else if ($this->input->post($nombre) != '')
+			else
 			{
 				$this->$nombre = $this->input->post($nombre);
 			}
@@ -544,14 +555,14 @@ class ORM_Model {
 	{
 		$data_update  = array();
 		$data_where   = array();
-		$id_en_insert = true;
-		$es_insert    = false;
+		$id_en_insert = TRUE;
+		$es_insert    = FALSE;
 
 		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincremet())
 			{
-				$id_en_insert = false;
+				$id_en_insert = FALSE;
 			}
 
 			if ($campo->get_es_id())
@@ -567,11 +578,11 @@ class ORM_Model {
 			}
 		}
 
-		if ($id_en_insert)
+		if (!$id_en_insert)
 		{
 			foreach($data_where as $key => $val)
 			{
-				$es_insert = ($val == '') ? true : false;
+				$es_insert = ($val == '') ? TRUE : FALSE;
 			}
 		}
 		else
@@ -706,23 +717,23 @@ class ORM_Model {
 // **********************************************************************************************************
 
 class ORM_Field {
-	private $nombre        = '';
-	private $nombre_bd     = '';
-	private $label         = '';
-	private $texto_ayuda   = '';
-	private $default       = '';
+	private $nombre           = '';
+	private $tabla_bd         = '';
+	private $nombre_bd        = '';
+	private $label            = '';
+	private $texto_ayuda      = '';
+	private $default          = '';
 
-	private $tipo           = 'char';
-	private $largo          = 20;
-	private $max_digits     = 10;
-	private $decimal_places = 2;
-	private $choices        = array();
-	private $relation       = array();
+	private $tipo             = 'char';
+	private $largo            = 10;
+	private $decimales        = 2;
+	private $choices          = array();
+	private $relation         = array();
 
-	private $es_id            = false;
-	private $es_obligatorio   = false;
-	private $es_unico         = false;
-	private $es_autoincrement = false;
+	private $es_id            = FALSE;
+	private $es_obligatorio   = FALSE;
+	private $es_unico         = FALSE;
+	private $es_autoincrement = FALSE;
 
 
 	// --------------------------------------------------------------------
@@ -762,14 +773,17 @@ class ORM_Field {
 			$this->tipo  = 'id';
 			$this->largo = 10;
 
-			$this->es_id            = true;
-			$this->es_obligatorio   = true;
-			$this->es_unico         = true;
-			$this->es_autoincrement = true;
+			$this->es_id            = TRUE;
+			$this->es_obligatorio   = TRUE;
+			$this->es_unico         = TRUE;
+			$this->es_autoincrement = TRUE;
 		}
 
 
 	}
+
+
+
 
 	public function get_tipo()            { return $this->tipo; }
 
@@ -804,34 +818,26 @@ class ORM_Field {
 	 * @param  string $valor Valor a desplegar en el elemento de formulario
 	 * @return string        Elemento de formulario
 	 */
-	public function form_field($valor = '')
+	public function form_field($valor = '', $filtra_activos = FALSE)
 	{
-		$id_prefix = 'id_';
+		$form       = '';
+		$id_prefix  = 'id_';
+		$form_class = 'form_edit' . ((form_error($this->nombre) == '') ? '' : ' form_edit_error');
 
-		$form = '';
-		$valor_field = ($valor == '' and $this->default != '') ? $this->default : $valor;
+		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
-		if (!empty($this->choices))
+		if ($this->tipo == 'id' OR ($this->es_id AND $valor_field != ''))
+		{
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
+
+			$form = $valor;
+			$form .= form_hidden($this->nombre, $valor, $param_adic);
+		}
+		else if (!empty($this->choices))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
-		}
-		else if (!empty($this->choices) and $this->tipo == 'has_many')
-		{
-			/*
-			$param_adic = ' id="id_' . $this->nombre . '" size="5"';
-			$form = form_multiselect($this->nombre . '[]', $this->choices, $valor_field, $param_adic);
-			$form = '<div class="scroll_checkboxes">';
-			$lin = 0;
-			foreach($this->choices as $val => $choice)
-			{
-				$form .= ($lin++ > 0) ? '<br>' : '';
-				$form .= form_checkbox($this->nombre . '[]', $val, array_key_exists($val, $this->value));
-				$form .= ' ' . $choice;
-			}
-			$form .= "</div>";
-			*/
 		}
 		else if ($this->tipo == 'char')
 		{
@@ -844,6 +850,7 @@ class ORM_Field {
 									'id'        => $id_prefix . $this->nombre,
 									'cols'      => '50',
 									'rows'      => '5',
+									'class'     => $form_class,
 								);
 				$form = form_textarea($arr_param);
 			}
@@ -855,6 +862,7 @@ class ORM_Field {
 									'maxlength' => $this->largo,
 									'size'      => $this->largo,
 									'id'        => $id_prefix . $this->nombre,
+									'class'     => $form_class,
 								);
 				$form = form_input($arr_param);
 			}
@@ -867,6 +875,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
+								'class'     => $form_class,
 							);
 			$form = form_password($arr_param);
 		}
@@ -875,9 +884,22 @@ class ORM_Field {
 			$arr_param = array(
 								'name'      => $this->nombre,
 								'value'     => $valor_field,
-								'maxlength' => $this->max_digits,
-								'size'      => $this->max_digits,
+								'maxlength' => $this->largo,
+								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
+								'class'     => $form_class,
+							);
+			$form = form_input($arr_param);
+		}
+		else if ($this->tipo == 'real')
+		{
+			$arr_param = array(
+								'name'      => $this->nombre,
+								'value'     => $valor_field,
+								'maxlength' => $this->largo + $this->decimales + 1,
+								'size'      => $this->largo + $this->decimales + 1,
+								'id'        => $id_prefix . $this->nombre,
+								'class'     => $form_class,
 							);
 			$form = form_input($arr_param);
 		}
@@ -889,6 +911,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
+								'class'     => $form_class,
 							);
 			$form = form_input($arr_param);
 		}
@@ -901,25 +924,33 @@ class ORM_Field {
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="' . $form_class . '"';
 
-			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(), $valor_field, $param_adic);
+			// ingresa condiciones a cumplir para el combo-box.
+			$arr_cond = array();
+			if ($filtra_activos)
+			{
+				foreach ($modelo_rel->get_model_fields() as $nombre => $campo)
+				{
+					// si existe un campo llamado activo y es boolean ==> filtrar los registros activos
+					if ($nombre == 'activo' AND $campo->get_tipo() == 'boolean')
+					{
+						$arr_cond[$nombre] = 1;
+					}
+				}
+			}
+
+			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(TRUE, '', $arr_cond), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'has_many')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="' . $form_class . '"';
 
 			$form = form_multiselect($this->nombre.'[]', $modelo_rel->get_combo(false), $valor_field, $param_adic);
 		}
-		else if ($this->tipo == 'id')
-		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = $valor;
-			$form .= form_hidden($this->nombre, $valor, $param_adic);
-		}
 		return $form;
 	}
 
@@ -966,9 +997,10 @@ class ORM_Field {
 	public function get_form_validation()
 	{
 		$regla = 'trim';
-		$regla .= ($this->es_obligatorio == true and $this->es_autoincrement == false) ? '|required' : '';
+		$regla .= ($this->es_obligatorio and !$this->es_autoincrement) ? '|required' : '';
 		$regla .= ($this->tipo == 'has_one') ? '|greater_than[0]' : '';
-		$regla .= ($this->tipo == 'int') ? '|numeric' : '';
+		$regla .= ($this->tipo == 'int' OR $this->tipo == 'real') ? '|numeric' : '';
+		//$regla .= ($this->es_unico AND !$this->es_id) ? '|is_unique['. $this->tabla_bd . '.' . $this->nombre_bd.']' : '';
 
 		if ($this->tipo == 'has_many')
 		{

@@ -15,27 +15,28 @@ class Catalogo extends ORM_Model {
 						'catalogo' => array(
 								'label'          => 'Catalogo',
 								'tipo'           => 'char',
-								'largo'          => 50,
-								'texto_ayuda'    => 'Maximo 50 caracteres.',
-								'es_id'          => true,
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'largo'          => 20,
+								'texto_ayuda'    => 'Código del catálogo. Máximo 20 caracteres',
+								'es_id'          => TRUE,
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'descripcion' => array(
-								'label'          => 'Descripcion del catalogo',
+								'label'          => 'Descripcion del material',
 								'tipo'           =>  'char',
-								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'largo'          => 50,
+								'texto_ayuda'    => 'Descripción del material. Máximo 50 caracteres.',
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'pmp' => array(
 								'label'          => 'Precio Medio Ponderado (PMP)',
-								'tipo'           =>  'int',
+								'tipo'           =>  'real',
 								'largo'          => 10,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'decimales'      => 2,
+								'texto_ayuda'    => 'Valor PMP del material',
+								'es_obligatorio' => TRUE,
+								'es_unico'       => FALSE
 							),
 						),
 					);
@@ -57,7 +58,7 @@ class Catalogo extends ORM_Model {
 		$this->db->like('descripcion', $filtro);
 		$this->db->or_like('catalogo', $filtro);
 		$arr_result = $this->db->get('fija_catalogo')->result_array();
-		
+
 		foreach($arr_result as $reg)
 		{
 			$arr_combo[$reg['catalogo']] = $reg['catalogo'] . ' - ' . $reg['descripcion'];
@@ -89,29 +90,7 @@ class Catalogo extends ORM_Model {
 
 
 
-	public function guardar($catalogo_old = '', $catalogo = '', $descripcion = '', $pmp = 0)
-	{
-		if ($catalogo_old == '')
-		{
-			$this->db->insert('fija_catalogo', array(
-													'catalogo'    => $catalogo, 
-													'descripcion' => $descripcion,
-													'pmp'         => $pmp, 
-												));
-
-		}
-		else
-		{
-			$this->db->where(array('catalogo' => $catalogo_old));
-			$this->db->update('fija_catalogo', array(
-													'catalogo' => $catalogo, 
-													'descripcion' => $descripcion, 
-													'pmp' => $pmp));					
-		}
-	}
-
-
-	public function total_materiales($filtro = '_') 
+	public function total_materiales($filtro = '_')
 	{
 		if ($filtro != '_')
 		{
@@ -121,11 +100,6 @@ class Catalogo extends ORM_Model {
 		return $this->db->get('fija_catalogo')->num_rows();
 	}
 
-
-	public function borrar($id = 0)
-	{
-		$this->db->delete('fija_catalogo', array('catalogo' => $id));
-	}
 
 	public function get_cant_registros_catalogo($id = 0)
 	{
@@ -140,8 +114,8 @@ class Catalogo extends ORM_Model {
 		// actualiza precios nulos --> 0
 		$this->db->where('pmp is null');
 		$this->db->update('fija_catalogo', array(
-												'pmp' => 0, 
-						));					
+												'pmp' => 0,
+						));
 
 		// selecciona maxima fecha del stock_sap_fija
 		$arr_max_fecha = $this->db->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', false)->get('bd_logistica..bd_stock_sap_fija')->row();

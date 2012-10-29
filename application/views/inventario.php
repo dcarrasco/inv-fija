@@ -8,10 +8,10 @@
 				<?php echo form_hidden('formulario','buscar'); ?>
 				<p>
 					Hoja
-					<?php echo $nuevo_detalle_inventario->print_form_campo('hoja'); ?>
+					<?php echo $nuevo_detalle_inventario->print_form_field('hoja'); ?>
 					<?php echo form_error('hoja');?>
 					| Auditor
-					<?php echo $nuevo_detalle_inventario->print_form_campo('auditor'); ?>
+					<?php echo $nuevo_detalle_inventario->print_form_field('auditor'); ?>
 					<?php echo form_error('auditor');?>
 				</p>
 			</div>
@@ -55,7 +55,7 @@
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('ubicacion'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
 						<?php echo form_error('ubicacion'); ?>
 					</td>
 				</tr>
@@ -73,42 +73,42 @@
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('lote'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('lote'); ?>
 						<?php echo form_error('lote'); ?>
 					</td>
 				</tr>
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('um'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('um'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('um'); ?>
 						<?php echo form_error('um'); ?>
 					</td>
 				</tr>
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('centro'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('centro'); ?>
 						<?php echo form_error('centro'); ?>
 					</td>
 				</tr>
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('almacen'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('almacen'); ?>
 						<?php echo form_error('almacen'); ?>
 					</td>
 				</tr>
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('stock_fisico'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico'); ?>
 						<?php echo form_error('stock_fisico'); ?>
 					</td>
 				</tr>
 
 				<tr>
 					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_campo('observacion'); ?>
+					<td><?php echo $nuevo_detalle_inventario->print_form_field('observacion'); ?>
 						<?php echo form_error('observacion'); ?>
 					</td>
 				</tr>

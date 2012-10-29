@@ -22,8 +22,8 @@
 					</th>
 					<td>
 						<br>
-						<?php echo $modelo->print_form_campo($campo); ?><?php echo form_error($campo); ?>
-
+						<?php echo $modelo->print_form_field($campo); ?>
+						<?php echo form_error($campo); ?>
 						<br><span class="texto-ayuda"><?php echo $modelo->get_texto_ayuda_field($campo); ?></span>
 						<br>
 					</td>

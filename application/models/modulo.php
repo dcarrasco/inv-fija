@@ -18,25 +18,24 @@ class Modulo extends ORM_Model {
 								'relation'       => array(
 										'model' => 'app',
 									),
+								'texto_ayuda'    => 'Aplicación a la que pertenece el módulo.',
 							),
 						'modulo' => array(
 								'tipo'           =>  'char',
 								'largo'          => 50,
-								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'texto_ayuda'    => 'Nombre del módulo. Maximo 50 caracteres.',
 								'es_obligatorio' => true,
 								'es_unico'       => true
 							),
 						'descripcion' => array(
 								'tipo'           =>  'char',
 								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'texto_ayuda'    => 'Descripción del módulo. Maximo 100 caracteres.',
 							),
 						'llave_modulo' => array(
 								'tipo'           =>  'char',
-								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'largo'          => 20,
+								'texto_ayuda'    => 'Llave del módulo. Maximo 20 caracteres.',
 								'es_obligatorio' => true,
 								'es_unico'       => true
 							),

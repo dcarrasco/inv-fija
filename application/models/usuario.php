@@ -18,8 +18,8 @@ class Usuario extends ORM_Model {
 						'nombre' => array(
 								'label'          => 'Nombre de usuario',
 								'tipo'           => 'char',
-								'largo'          => 50,
-								'texto_ayuda'    => 'Maximo 50 caracteres.',
+								'largo'          => 45,
+								'texto_ayuda'    => 'Nombre del usuario. Maximo 45 caracteres.',
 								'es_obligatorio' => true,
 								'es_unico'       => true
 							),
@@ -41,8 +41,22 @@ class Usuario extends ORM_Model {
 						'usr' => array(
 								'label'          => 'Username',
 								'tipo'           =>  'char',
-								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'largo'          => 30,
+								'texto_ayuda'    => 'Username para el ingreso al sistema. Maximo 30 caracteres.',
+								'es_obligatorio' => true,
+								'es_unico'       => true
+							),
+						'pwd' => array(
+								'label'          => 'Password',
+								'tipo'           =>  'char',
+								'largo'          => 40,
+								'texto_ayuda'    => 'Password para el ingreso al sistema. Maximo 40 caracteres.',
+							),
+						'correo' => array(
+								'label'          => 'Correo',
+								'tipo'           =>  'char',
+								'largo'          => 40,
+								'texto_ayuda'    => 'Correo del usuario. Maximo 40 caracteres.',
 							),
 						'rol' => array(
 								'tipo'           => 'has_many',
@@ -52,6 +66,7 @@ class Usuario extends ORM_Model {
 										'id_one_table'  => 'id_usuario',
 										'id_many_table' => 'id_rol'
 									),
+								'texto_ayuda'    => 'Roles asociados al usuario.',
 							),
 				),
 			);
@@ -67,7 +82,7 @@ class Usuario extends ORM_Model {
 	{
 		$arr_result = array();
 		$arr_combo = array();
-	
+
 		$arr_combo[''] = 'Seleccione un ';
 		$arr_combo[''] .= ($tipo == 'AUD') ? 'auditor ...' : 'digitador ...';
 
@@ -95,7 +110,7 @@ class Usuario extends ORM_Model {
 
 
 
-	public function ___total_usuarios() 
+	public function ___total_usuarios()
 	{
 		return $this->db->count_all('fija_usuarios');
 	}
@@ -103,7 +118,7 @@ class Usuario extends ORM_Model {
 
 	public function ___get_cant_registros_usuario($id = 0)
 	{
-		return ($this->db->get_where('fija_detalle_inventario', array('digitador' => $id))->num_rows() + 
+		return ($this->db->get_where('fija_detalle_inventario', array('digitador' => $id))->num_rows() +
 				$this->db->get_where('fija_detalle_inventario', array('auditor' => $id))->num_rows());
 	}
 

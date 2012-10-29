@@ -24,15 +24,15 @@ class Detalle_inventario extends ORM_Model {
 						'hoja' => array(
 								'label'          => 'Hoja',
 								'tipo'           => 'int',
-								'largo'          => 50,
-								'texto_ayuda'    => 'Numero de la hoja',
+								'largo'          => 10,
+								'texto_ayuda'    => 'Numero de la hoja usada en el inventario',
 								'es_obligatorio' => true,
 							),
 						'ubicacion' => array(
 								'label'          => 'Ubicación del material',
 								'tipo'           =>  'char',
 								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
+								'texto_ayuda'    => 'Indica la posición del material en el almacén.',
 								'es_obligatorio' => true,
 							),
 						'catalogo' => array(
@@ -40,6 +40,7 @@ class Detalle_inventario extends ORM_Model {
 								'relation'       => array(
 										'model' => 'catalogo',
 									),
+								'texto_ayuda'    => 'Catálogo del material.',
 							),
 						'descripcion' => array(
 								'label'          => 'Descripcion del material',
@@ -52,16 +53,17 @@ class Detalle_inventario extends ORM_Model {
 								'label'          => 'Lote del material',
 								'tipo'           =>  'char',
 								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
+								'texto_ayuda'    => 'Lote del material.',
 								'es_obligatorio' => true,
 							),
 						'centro' => array(
 								'label'          => 'Centro SAP del material',
 								'tipo'           =>  'char',
 								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
+								'texto_ayuda'    => 'Centro SAP del material.',
 								'es_obligatorio' => true,
 								'choices'        => array(
+														''     => 'Seleccione un centro...',
 														'CH01' => 'CH01',
 														'CH02' => 'CH02',
 														'CH04' => 'CH04',
@@ -77,9 +79,10 @@ class Detalle_inventario extends ORM_Model {
 								'label'          => 'Almacen SAP del material',
 								'tipo'           =>  'char',
 								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
+								'texto_ayuda'    => 'Almacén SAP del material.',
 								'es_obligatorio' => true,
 								'choices'        => array(
+														''     => 'Seleccione un almacen...',
 														'CM01' => 'CM01',
 														'CM02' => 'CM02',
 														'CM03' => 'CM03',
@@ -97,6 +100,7 @@ class Detalle_inventario extends ORM_Model {
 								'texto_ayuda'    => 'Maximo 45 caracteres.',
 								'es_obligatorio' => true,
 								'choices'        => array(
+														''     => 'Seleccione una unidad...',
 														'UN' => 'UN',
 														'M' => 'M',
 														'KG' => 'KG',
@@ -108,14 +112,14 @@ class Detalle_inventario extends ORM_Model {
 								'label'          => 'Stock SAP del material',
 								'tipo'           =>  'int',
 								'largo'          => 10,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'texto_ayuda'    => 'Stock sistémico (SAP) del material.',
 								'es_obligatorio' => true,
 							),
 						'stock_fisico' => array(
 								'label'          => 'Stock Fisico del material',
 								'tipo'           =>  'int',
 								'largo'          => 10,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
+								'texto_ayuda'    => 'Stock físico (inventariado) del material.',
 								'es_obligatorio' => true,
 							),
 						'digitador' => array(
@@ -123,12 +127,14 @@ class Detalle_inventario extends ORM_Model {
 								'relation'       => array(
 										'model' => 'usuario',
 									),
+								'texto_ayuda'    => 'Digitador de la hoja.',
 							),
 						'auditor' => array(
 								'tipo'           => 'has_one',
 								'relation'       => array(
 										'model' => 'auditor',
 									),
+								'texto_ayuda'    => 'Auditor de la hoja.',
 							),
 						'reg_nuevo' => array(
 								'label'          => 'Registro nuevo',

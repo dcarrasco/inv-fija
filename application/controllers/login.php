@@ -8,7 +8,7 @@ class Login extends CI_Controller {
 		//$this->output->enable_profiler(TRUE);
 	}
 
-	public function index() 
+	public function index()
 	{
 		$this->login();
 	}
@@ -44,7 +44,7 @@ class Login extends CI_Controller {
 				else
 				{
 					$login_ok = $this->acl_model->login(set_value('usr'), set_value('pwd'));
-					if (!$login_ok) 
+					if (!$login_ok)
 					{
 						$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
 						$this->load->view('ACL/login', $data);
@@ -89,7 +89,7 @@ class Login extends CI_Controller {
 							'usr'        => $usr,
 							'nombre_usuario' => $this->acl_model->get_nombre_usuario($usr),
 							'tiene_clave'    => $this->acl_model->tiene_clave($usr),
-							'ocultar_password' => (($this->input->post('usr')) ? true : false), 
+							'ocultar_password' => (($this->input->post('usr')) ? true : false),
 						);
 			$this->load->view('ACL/cambio_password', $data);
 		}
@@ -98,7 +98,7 @@ class Login extends CI_Controller {
 			$res = $this->acl_model->cambio_clave($usr, set_value('pwd_old'), set_value('pwd_new1'));
 			if ($res[0])
 			{
-				redirect('login');				
+				redirect('login');
 			}
 			else
 			{
@@ -106,6 +106,26 @@ class Login extends CI_Controller {
 				$this->load->view('ACL/cambio_password', $data);
 			}
 		}
+	}
+
+	public function enviar_correo($usr = '')
+	{
+		$this->load->model('acl_model');
+		$this->load->helper('string');
+		$this->load->library('email');
+
+		$correo = $this->acl_model->get_correo($usr);
+		if ($correo != '')
+		{
+			$clave = random_string('alnum', 10);
+
+			$this->email->from('your@example.com', 'Your Name');
+			$this->email->to($correo);
+			$this->email->subject('Cambio de clave');
+			$this->email->message('Su nueva clave es: ' . $clave);
+			$this->email->send();
+		}
+
 	}
 
 }

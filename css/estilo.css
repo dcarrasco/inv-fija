@@ -81,19 +81,11 @@ GENERAL
 	display: inline-block;
 }
 
-.search_found {
-	background-color: yellow;
-}
-
-.texto-ayuda {
-	font-size: 10px;
-	font-style: italic;
-}
-
 /* =========================================================
 FUENTES
 ============================================================ */
 body, form { font-family: verdana, sans-serif; font-size: 12px;}
+
 
 
 /* =========================================================
@@ -231,7 +223,7 @@ tr:nth-child(even) {
 /* =========================================================
 LOGIN
 ============================================================ */
-div.login p, div.login input {
+div.login p, div.login input div.login a {
 	font-size: 1.3em;
 }
 div.login p {
@@ -269,6 +261,33 @@ div.paginacion a:hover {
 div.paginacion strong {
 	background-color: #3F4551;
 }
+
+
+/* =========================================================
+FORMULARIOS
+============================================================ */
+
+.form_edit {
+	font-family: verdana, sans-serif;
+	font-size: 14px;
+	border: 1px solid #777777;
+}
+
+.form_edit_error{
+	background-color: #ffff88;
+	border: 1px solid red;
+}
+
+.search_found {
+	background-color: yellow;
+}
+
+.texto-ayuda {
+	font-size: 10px;
+	font-style: italic;
+	color: #777777;
+}
+
 
 
 /* =========================================================
@@ -334,6 +353,7 @@ BOTONES
 .ic-borrar { background-image: url('../img/ic_delete.png');}
 .ic-config { background-image: url('../img/ic_settings.png');}
 .ic-update { background-image: url('../img/ic_sync.png');}
+.ic-correo { background-image: url('../img/ic_mail.png');}
 
 /* =========================================================
 PRINT-MEDIA

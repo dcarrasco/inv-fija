@@ -19,7 +19,7 @@ class App extends ORM_Model {
 						'label'          => 'Aplicacion',
 						'tipo'           => 'char',
 						'largo'          => 50,
-						'texto_ayuda'    => 'Maximo 50 caracteres.',
+						'texto_ayuda'    => 'Nombre de la aplicación. Maximo 50 caracteres.',
 						'es_obligatorio' => true,
 						'es_unico'       => true
 					),
@@ -27,15 +27,14 @@ class App extends ORM_Model {
 						'label'          => 'Descripcion de la Aplicacion',
 						'tipo'           =>  'char',
 						'largo'          => 50,
-						'texto_ayuda'    => 'Maximo 50 caracteres.',
+						'texto_ayuda'    => 'Breve descripcion de la aplicacion. Maximo 50 caracteres.',
 						'es_obligatorio' => true,
-						'es_unico'       => true
 					),
 				'url' => array(
 						'label'          => 'Direccion de la Aplicacion',
 						'tipo'           =>  'char',
 						'largo'          => 100,
-						'texto_ayuda'    => 'Maximo 100 caracteres.',
+						'texto_ayuda'    => 'Dirección web (URL) de la aplicacion. Maximo 100 caracteres.',
 					),
 				),
 			);
