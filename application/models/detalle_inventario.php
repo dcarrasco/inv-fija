@@ -31,7 +31,7 @@ class Detalle_inventario extends ORM_Model {
 						'ubicacion' => array(
 								'label'          => 'Ubicación del material',
 								'tipo'           =>  'char',
-								'largo'          => 45,
+								'largo'          => 10,
 								'texto_ayuda'    => 'Indica la posición del material en el almacén.',
 								'es_obligatorio' => true,
 							),
@@ -52,7 +52,7 @@ class Detalle_inventario extends ORM_Model {
 						'lote' => array(
 								'label'          => 'Lote del material',
 								'tipo'           =>  'char',
-								'largo'          => 45,
+								'largo'          => 10,
 								'texto_ayuda'    => 'Lote del material.',
 								'es_obligatorio' => true,
 							),

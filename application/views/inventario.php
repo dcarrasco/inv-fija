@@ -41,7 +41,7 @@
 	<div class="content-module-main">
 
 		<div class="content-module-main-agregar" style="display: none;">
-			<?php echo form_open('','id=frm_agregar')?>
+			<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id=frm_agregar')?>
 			<?php echo form_hidden('formulario','agregar'); ?>
 			<?php echo form_hidden('accion','agregar'); ?>
 			<?php echo form_hidden('hoja', $hoja); ?>
@@ -66,8 +66,8 @@
 						Filtrar <?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'id="agr_filtrar"'); ?>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						Seleccionar
-						<?php echo form_dropdown('agr_material', array('' => 'Seleccionar material...'), '', 'id="agr_material"'); ?>
-						<?php echo form_error('agr_material'); ?>
+						<?php echo form_dropdown('catalogo', array('' => 'Seleccionar material...'), '', 'id="agr_material"'); ?>
+						<?php echo form_error('catalogo'); ?>
 					</td>
 				</tr>
 

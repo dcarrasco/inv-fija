@@ -39,7 +39,7 @@ class Tipo_ubicacion extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->descripcion;
+		return $this->tipo_ubicacion;
 	}
 
 

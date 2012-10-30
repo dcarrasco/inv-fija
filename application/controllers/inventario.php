@@ -105,10 +105,10 @@ class Inventario extends CI_Controller {
 				$cant_modif = 0;
 				foreach($detalle_inventario->get_model_all() as $linea_detalle)
 				{
-					$linea_detalle->auditor            = set_value('sel_auditor');
+					$linea_detalle->auditor            = set_value('auditor');
 					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
 					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
-					$linea_detalle->fecha_modificacion = date('Y-d-m H:i:s');
+					$linea_detalle->fecha_modificacion = date('Y-m-d H:i:s');
 					//dbg($linea_detalle);
 					$linea_detalle->grabar();
 					$cant_modif += 1;
@@ -121,14 +121,14 @@ class Inventario extends CI_Controller {
 				if ($this->input->post('accion') == 'borrar')
 				{
 					$nuevo_detalle_inventario = new Detalle_inventario;
-					$nuevo_detalle_inventario->get_id($this->input->post('agr_id'));
+					$nuevo_detalle_inventario->get_id($this->input->post('id'));
 					$nuevo_detalle_inventario->borrar();
-					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('agr_id') . ') borrada correctamente en hoja '. $hoja);
+					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('id') . ') borrada correctamente en hoja '. $hoja);
 				}
 				else
 				{
 					$nuevo_material = new Catalogo;
-					$nuevo_material->get_id($this->input->post('agr_material'));
+					$nuevo_material->get_id($this->input->post('catalogo'));
 
 					$nuevo_detalle_inventario->get_from_array(array(
 														'id'            => $this->input->post('id'),
@@ -137,7 +137,7 @@ class Inventario extends CI_Controller {
 														'digitador'     => $id_usuario_login,
 														'auditor'       => set_value('auditor'),
 														'ubicacion'     => $this->input->post('ubicacion'),
-														'catalogo'      => $this->input->post('agr_material'),
+														'catalogo'      => $this->input->post('catalogo'),
 														'descripcion'   => $nuevo_material->descripcion,
 														'lote'          => $this->input->post('lote'),
 														'centro'        => $this->input->post('centro'),
@@ -146,7 +146,7 @@ class Inventario extends CI_Controller {
 														'stock_sap'     => 0,
 														'stock_fisico'  => $this->input->post('stock_fisico'),
 														'observacion'   => $this->input->post('observacion'),
-														'fecha_modificacion' => date('Y-d-m H:i:s'),
+														'fecha_modificacion' => date('Y-m-d H:i:s'),
 														'reg_nuevo'     => 'S',
 												));
 					$nuevo_detalle_inventario->grabar();

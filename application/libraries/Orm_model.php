@@ -151,6 +151,7 @@ class ORM_Model {
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
 		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
+		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
 		$this->form_validation->set_message('is_unique', 'El valor del campo "%s" debe ser único');
 
 		return $this->form_validation->run();
@@ -239,7 +240,7 @@ class ORM_Model {
 
 		if ($muestra_glosa_seleccion)
 		{
-			$combo[] = 'Seleccione un(a) ' . $this->model_label . '...';
+			$combo[''] = 'Seleccione un(a) ' . $this->model_label . '...';
 		}
 
 		// llena los valores del combo
@@ -555,14 +556,14 @@ class ORM_Model {
 	{
 		$data_update  = array();
 		$data_where   = array();
-		$id_en_insert = TRUE;
+		$es_auto_id   = FALSE;
 		$es_insert    = FALSE;
 
 		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincremet())
 			{
-				$id_en_insert = FALSE;
+				$es_auto_id = TRUE;
 			}
 
 			if ($campo->get_es_id())
@@ -578,7 +579,7 @@ class ORM_Model {
 			}
 		}
 
-		if (!$id_en_insert)
+		if ($es_auto_id)
 		{
 			foreach($data_where as $key => $val)
 			{
@@ -592,7 +593,7 @@ class ORM_Model {
 
 		if ($es_insert)
 		{
-			if ($id_en_insert)
+			if (!$es_auto_id)
 			{
 				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
 			}
@@ -768,6 +769,16 @@ class ORM_Field {
 			$this->default = 0;
 		}
 
+		if ($this->tipo == 'has_one')
+		{
+			$this->es_obligatorio = TRUE;
+		}
+
+		if ($this->tipo == 'datetime')
+		{
+			$this->largo = 20;
+		}
+
 		if ($nombre == 'id')
 		{
 			$this->tipo  = 'id';
@@ -831,12 +842,12 @@ class ORM_Field {
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = $valor;
-			$form .= form_hidden($this->nombre, $valor, $param_adic);
+			$form = $valor_field;
+			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 		}
 		else if (!empty($this->choices))
 		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="' . $form_class . '"';
 			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'char')
@@ -998,8 +1009,8 @@ class ORM_Field {
 	{
 		$regla = 'trim';
 		$regla .= ($this->es_obligatorio and !$this->es_autoincrement) ? '|required' : '';
-		$regla .= ($this->tipo == 'has_one') ? '|greater_than[0]' : '';
-		$regla .= ($this->tipo == 'int' OR $this->tipo == 'real') ? '|numeric' : '';
+		$regla .= ($this->tipo == 'int') ? '|integer' : '';
+		$regla .= ($this->tipo == 'real') ? '|numeric' : '';
 		//$regla .= ($this->es_unico AND !$this->es_id) ? '|is_unique['. $this->tabla_bd . '.' . $this->nombre_bd.']' : '';
 
 		if ($this->tipo == 'has_many')
