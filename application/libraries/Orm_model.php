@@ -67,7 +67,7 @@ class ORM_Model {
 	{
 		foreach($cfg as $key => $val)
 		{
-			if (property_exists($this, $key))
+			if (isset($key))
 			{
 				$this->$key = $val;
 			}
@@ -742,7 +742,7 @@ class ORM_Field {
 		{
 			foreach($param as $key => $val)
 			{
-				if (property_exists($this, $key))
+				if (isset($key))
 				{
 					$this->$key = $val;
 				}
