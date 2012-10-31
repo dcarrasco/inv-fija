@@ -333,7 +333,10 @@ class ORM_Model {
 		}
 		else if ($tipo == 'all')
 		{
-			$this->db->order_by($this->model_order_by);
+			if ($this->model_order_by != '')
+			{
+				$this->db->order_by($this->model_order_by);
+			}
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
@@ -360,7 +363,10 @@ class ORM_Model {
 		else if ($tipo == 'list')
 		{
 			$arr_list = array();
-			$this->db->order_by($this->model_order_by);
+			if ($this->model_order_by != '')
+			{
+				$this->db->order_by($this->model_order_by);
+			}
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
@@ -376,12 +382,7 @@ class ORM_Model {
 
 	public function find_id($id = 0)
 	{
-		$this->find(
-					'first',
-					array(
-						'conditions' => array($this->model_campo_id => $id),
-					)
-				);
+		$this->find('first', array('conditions' => array($this->model_campo_id => $id)));
 	}
 
 
