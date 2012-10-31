@@ -28,7 +28,7 @@ class Inventario extends CI_Controller {
 		// recupera el inventario activo
 		$inv_activo = new Inv_activo;
 		$this->id_inventario = $inv_activo->get_id_inventario_activo();
-		$inv_activo->get_id($this->id_inventario);
+		$inv_activo->find_id($this->id_inventario);
 
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
@@ -161,12 +161,12 @@ class Inventario extends CI_Controller {
 	public function ajax_act_agr_materiales($filtro = '')
 	{
 		$material = new catalogo;
-		$material->get_combo(false, $filtro);
+		$arr_dropdown = $material->find('list', array('filtro' => $filtro));
 
 		$options = '';
-		foreach ($material->get_model_all() as $o)
+		foreach ($arr_dropdown as $key => $val)
 		{
-			$options .= '<option value="' . $o->catalogo . '">' . $o . '</option>';
+			$options .= '<option value="' . $key . '">' . $val . '</option>';
 		}
 		echo($options);
 	}

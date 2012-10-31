@@ -58,7 +58,7 @@ class config2 extends CI_Controller {
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
 		$modelo = new $nombre_modelo;
-		$modelo->get_all($filtro, $pag);
+		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
 
 		//dbg($this->db->field_data($modelo->get_model_tabla()));
 		//dbg($modelo);
@@ -80,7 +80,7 @@ class config2 extends CI_Controller {
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
 		$modelo = new $nombre_modelo($id);
-		$modelo->get_id($id);
+		$modelo->find_id($id);
 
 		if (!$modelo->valida_form())
 		{

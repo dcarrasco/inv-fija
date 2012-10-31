@@ -51,9 +51,8 @@ class Inv_activo extends ORM_Model {
 
 	public function get_id_inventario_activo()
 	{
-		$this->get_all_where(array('activo' => '1'));
-		$arr_obj = $this->get_model_all();
-		return $arr_obj[0]->{$arr_obj[0]->get_model_campo_id()};
+		$this->find('first', array('conditions' => array('activo' => 1)));
+		return ($this->{$this->get_model_campo_id()});
 	}
 
 

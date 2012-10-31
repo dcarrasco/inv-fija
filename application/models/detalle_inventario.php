@@ -132,7 +132,8 @@ class Detalle_inventario extends ORM_Model {
 						'auditor' => array(
 								'tipo'           => 'has_one',
 								'relation'       => array(
-										'model' => 'auditor',
+										'model'      => 'auditor',
+										'conditions' => array('activo' => 1),
 									),
 								'texto_ayuda'    => 'Auditor de la hoja.',
 							),
@@ -187,7 +188,7 @@ class Detalle_inventario extends ORM_Model {
 
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		$this->get_all_where(array('id_inventario'=>$id_inventario, 'hoja'=>$hoja));
+		$this->find('all', array('conditions' => array('id_inventario'=>$id_inventario, 'hoja'=>$hoja)));
 	}
 
 	public function get_nombre_auditor()

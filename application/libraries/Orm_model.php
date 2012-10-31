@@ -108,6 +108,8 @@ class ORM_Model {
 
 	public function get_model_campo_id()     { return $this->model_campo_id; }
 
+	public function get_model_page_results() { return $this->model_page_results; }
+
 	public function get_model_fields()       { return $this->model_fields; }
 
 	public function get_campos_listado()     { return $this->campos_listado; }
@@ -229,40 +231,6 @@ class ORM_Model {
 
 
 	/**
-	 * Devuelve arreglo con los valores del modelo para ser usado en un combobox
-	 * @param  boolean $muestra_glosa_seleccion Indica si despliega glosa "seleccione ..."
-	 * @param  string  $filtro                  Filtro para los valores del modelo
-	 * @return array                            Arreglo para usar en un combo
-	 */
-	public function get_combo($muestra_glosa_seleccion = TRUE, $filtro = '', $where = array())
-	{
-		$combo = array();
-
-		if ($muestra_glosa_seleccion)
-		{
-			$combo[''] = 'Seleccione un(a) ' . $this->model_label . '...';
-		}
-
-		// llena los valores del combo
-		if (count($where) > 0)
-		{
-			$this->get_all_where($where, FALSE);
-		}
-		else
-		{
-			$this->get_all($filtro, -1, FALSE);
-		}
-
-		foreach ($this->model_all as $o)
-		{
-			$combo[$o->{$o->get_model_campo_id()}] = $o->__toString();
-		}
-
-		return $combo;
-	}
-
-
-	/**
 	 * Crea links de paginación para desplegar un listado del modelo
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
@@ -274,7 +242,7 @@ class ORM_Model {
 					'uri_segment' => 5,
 					'num_links'   => 5,
 					'per_page'    => $this->model_page_results,
-					'total_rows'  => $this->_get_all_count($filtro),
+					'total_rows'  => $this->find('count', array('filtro' => $filtro), FALSE),
 					'base_url'    => site_url('config2/listado/' . $this->get_model_nombre() . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo',
@@ -292,112 +260,129 @@ class ORM_Model {
 	// =======================================================================
 
 	/**
-	 * Recupera todos los valores del modelo, filtrados y paginados
-	 * @param  string  $filtro            Filtro de los valores del modelo
-	 * @param  integer $pag               Offset del registro a desplegar
-	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
-	 * @return nada
+	 * Recupera registros de la base de datos
+	 * @param  string  $tipo              Indica el tipo de consulta
+	 *                                    * all    todos los registros
+	 *                                    * first  primer registro
+	 *                                    * list   listado para combobox
+	 *                                    * count  cantidad de registros
+	 * @param  array   $param             Parametros para la consulta
+	 *                                    * condition arreglo con condiciones para where
+	 *                                    * filtro    string  con filtro de resultaods
+	 *                                    * limit     cantidad de registros a devolver
+	 *                                    * offset    pagina de registros a recuperar
+	 * @param  boolean $recupera_relation Indica si se recuperan los modelos relacionados
+	 * @return array                      Arreglo de resultados
 	 */
-	public function get_all($filtro = '_', $pag = 0, $recupera_relation = TRUE)
-	{
-		if ($filtro != '_' && $filtro != '')
-		{
-			$this->_put_filtro($filtro);
-		}
-		if ($pag != -1)
-		{
-			$this->db->limit($this->model_page_results, $pag);
-		}
-
-		$this->db->order_by($this->model_order_by);
-		$rs = $this->db->get($this->model_tabla)->result_array();
-
-		foreach($rs as $reg)
-		{
-			$o = new $this->model_class();
-			$o->get_from_array($reg);
-
-			if ($recupera_relation)
-			{
-				$o->_recuperar_relation_fields();
-			}
-
-			array_push($this->model_all, $o);
-		}
-	}
-
-
-	/**
-	 * Recupera un elemento del modelo
-	 * @param  string  $id                Identificador del elemento del modelo
-	 * @param  boolean $recupera_relation Indica si se recuperarán los mdelos dependientes
-	 * @return nada
-	 */
-	public function get_id($id = '', $recupera_relation = TRUE)
-	{
-		$rs = $this->db->get_where($this->model_tabla, array($this->model_tabla . '.' . $this->model_campo_id => $id))->row_array();
-		if (count($rs) > 0)
-		{
-			$this->get_from_array($rs);
-		}
-
-		if ($recupera_relation)
-		{
-			$this->_recuperar_relation_fields();
-		}
-	}
-
-
-	/**
-	 * Recupera elementos del modelo, filtrados por una condición
-	 * @param  string  $campo             Nombre del campo para filtrar
-	 * @param  array   $valores           Valor o valores con los cuales se filtrará
-	 * @param  boolean $recupera_relation Indica si se recuperarán los modelos dependientes
-	 * @return nada
-	 */
-	public function get_all_where($campos = array(), $recupera_relation = TRUE)
+	public function find($tipo = 'first', $param = array(), $recupera_relation = TRUE)
 	{
 		$this->db->order_by($this->model_order_by);
 
-		if (!is_array($campos))
+		if (array_key_exists('conditions', $param))
 		{
-			$campos = array('id' => $campos);
-		}
-
-		foreach ($campos as $campo => $valor)
-		{
-			if (is_array($valor))
+			foreach ($param['conditions'] as $campo => $valor)
 			{
-				if (count($valor) == 0)
+				if (is_array($valor))
 				{
-				$this->db->where($campo, '');
+					if (count($valor) == 0)
+					{
+						$this->db->where($campo, '');
+					}
+					else
+					{
+						$this->db->where_in($campo, $valor);
+					}
 				}
 				else
 				{
-					$this->db->where_in($campo, $valor);
+					$this->db->where($campo, $valor);
 				}
+			}
+		}
+
+		if(array_key_exists('filtro', $param))
+		{
+			if ($param['filtro'] != '_' AND $param['filtro'] != '')
+			{
+				$this->_put_filtro($param['filtro']);
+			}
+		}
+
+		if (array_key_exists('limit', $param))
+		{
+			if (array_key_exists('offset', $param))
+			{
+				$this->db->limit($param['limit'], $param['offset']);
 			}
 			else
 			{
-				$this->db->where($campo, $valor);
+				$this->db->limit($param['limit']);
 			}
 		}
 
-		$rs = $this->db->get($this->model_tabla)->result_array();
-
-		foreach($rs as $reg)
+		if ($tipo == 'first')
 		{
-			$o = new $this->model_class();
-			$o->get_from_array($reg);
+			$rs = $this->db->get($this->model_tabla)->row_array();
+			$this->get_from_array($rs);
 
 			if ($recupera_relation)
 			{
-				$o->_recuperar_relation_fields();
+				$this->_recuperar_relation_fields();
 			}
 
-			array_push($this->model_all, $o);
+			return $rs;
 		}
+		else if ($tipo == 'all')
+		{
+			$rs = $this->db->get($this->model_tabla)->result_array();
+
+			foreach($rs as $reg)
+			{
+				$o = new $this->model_class();
+				$o->get_from_array($reg);
+
+				if ($recupera_relation)
+				{
+					$o->_recuperar_relation_fields();
+				}
+
+				array_push($this->model_all, $o);
+			}
+
+			return $rs;
+		}
+		else if ($tipo == 'count')
+		{
+			$this->db->select('count(*) as cant');
+			$rs = $this->db->get($this->model_tabla)->row_array();
+			return $rs['cant'];
+		}
+		else if ($tipo == 'list')
+		{
+			$arr_list = array();
+			$rs = $this->db->get($this->model_tabla)->result_array();
+
+			foreach($rs as $reg)
+			{
+				$o = new $this->model_class();
+				$o->get_from_array($reg);
+				$arr_list[$o->{$o->get_model_campo_id()}] = $o->__toString();
+			}
+			return $arr_list;
+		}
+
 	}
+
+	public function find_id($id = 0)
+	{
+		$this->find(
+					'first',
+					array(
+						'conditions' => array($this->model_campo_id => $id),
+					)
+				);
+	}
+
 
 
 	/**
@@ -411,12 +396,12 @@ class ORM_Model {
 			if($metadata->get_tipo() == 'has_one')
 			{
 				$arr_rel = $metadata->get_relation();
+
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_id($this->$campo, FALSE);
-
-				$arr_rel = $this->model_fields[$campo]->get_relation();
+				$obj->find_id($this->$campo, FALSE);
 				$arr_rel['data'] = $obj;
+
 				$this->model_fields[$campo]->set_relation($arr_rel);
 
 				$this->model_got_relations = TRUE;
@@ -434,9 +419,8 @@ class ORM_Model {
 
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->get_all_where(array($obj->get_model_campo_id() => $arr_rs), FALSE);
+				$obj->find('all', array('conditions' => array($obj->get_model_campo_id() => $arr_rs)), FALSE);
 
-				$arr_rel = $this->model_fields[$campo]->get_relation();
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
 				$this->$campo = $arr_rs;
@@ -936,22 +920,8 @@ class ORM_Field {
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="' . $form_class . '"';
-
-			// ingresa condiciones a cumplir para el combo-box.
-			$arr_cond = array();
-			if ($filtra_activos)
-			{
-				foreach ($modelo_rel->get_model_fields() as $nombre => $campo)
-				{
-					// si existe un campo llamado activo y es boolean ==> filtrar los registros activos
-					if ($nombre == 'activo' AND $campo->get_tipo() == 'boolean')
-					{
-						$arr_cond[$nombre] = 1;
-					}
-				}
-			}
-
-			$form = form_dropdown($this->nombre, $modelo_rel->get_combo(TRUE, '', $arr_cond), $valor_field, $param_adic);
+			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'has_many')
 		{
@@ -959,7 +929,7 @@ class ORM_Field {
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="' . $form_class . '"';
 
-			$form = form_multiselect($this->nombre.'[]', $modelo_rel->get_combo(false), $valor_field, $param_adic);
+			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', array(), FALSE), $valor_field, $param_adic);
 		}
 
 		return $form;
