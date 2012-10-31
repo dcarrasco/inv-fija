@@ -276,7 +276,6 @@ class ORM_Model {
 	 */
 	public function find($tipo = 'first', $param = array(), $recupera_relation = TRUE)
 	{
-		$this->db->order_by($this->model_order_by);
 
 		if (array_key_exists('conditions', $param))
 		{
@@ -334,6 +333,7 @@ class ORM_Model {
 		}
 		else if ($tipo == 'all')
 		{
+			$this->db->order_by($this->model_order_by);
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
@@ -360,6 +360,7 @@ class ORM_Model {
 		else if ($tipo == 'list')
 		{
 			$arr_list = array();
+			$this->db->order_by($this->model_order_by);
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
