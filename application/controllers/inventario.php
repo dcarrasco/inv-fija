@@ -128,7 +128,7 @@ class Inventario extends CI_Controller {
 				else
 				{
 					$nuevo_material = new Catalogo;
-					$nuevo_material->get_id($this->input->post('catalogo'));
+					$nuevo_material->find_id($this->input->post('catalogo'));
 
 					$nuevo_detalle_inventario->get_from_array(array(
 														'id'            => $this->input->post('id'),
