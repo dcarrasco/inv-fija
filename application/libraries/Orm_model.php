@@ -154,15 +154,27 @@ class ORM_Model {
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
 		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
 		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
-		$this->form_validation->set_message('is_unique', 'El valor del campo "%s" debe ser único');
+		$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
 
 		return $this->form_validation->run();
 	}
 
 	public function set_validation_rules_field($campo)
 	{
-		$metadata = $this->model_fields[$campo];
-		$this->form_validation->set_rules($campo, ucfirst($metadata->get_label()), $metadata->get_form_validation());
+		$field = $this->model_fields[$campo];
+
+		$reglas = 'trim';
+		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
+		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
+		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
+		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . $this->id . ']' : '';
+
+		if ($field->get_tipo() == 'has_many')
+		{
+			$reglas = '';
+		}
+
+		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
 	}
 
 
@@ -547,7 +559,7 @@ class ORM_Model {
 
 		foreach($this->model_fields as $nombre => $campo)
 		{
-			if ($campo->get_es_id() and $campo->get_es_autoincremet())
+			if ($campo->get_es_id() and $campo->get_es_autoincrement())
 			{
 				$es_auto_id = TRUE;
 			}
@@ -800,13 +812,16 @@ class ORM_Field {
 		}
 	}
 
-	public function get_es_id()           { return $this->es_id; }
-	public function get_es_obligatorio()  { return $this->es_obligatorio; }
-	public function get_es_autoincremet() { return $this->es_autoincrement; }
-	public function get_texto_ayuda()     { return $this->texto_ayuda; }
+	public function get_nombre_bd()        { return $this->nombre_bd; }
 
-	public function get_relation()        { return $this->relation; }
-	public function set_relation($arr)    { $this->relation = $arr; }
+	public function get_es_id()            { return $this->es_id; }
+	public function get_es_unico()         { return $this->es_unico; }
+	public function get_es_obligatorio()   { return $this->es_obligatorio; }
+	public function get_es_autoincrement() { return $this->es_autoincrement; }
+	public function get_texto_ayuda()      { return $this->texto_ayuda; }
+
+	public function get_relation()         { return $this->relation; }
+	public function set_relation($arr)     { $this->relation = $arr; }
 
 	// --------------------------------------------------------------------
 
@@ -970,27 +985,6 @@ class ORM_Field {
 		{
 			return $valor;
 		}
-	}
-
-
-	/**
-	 * Devuelve la regla de validación del campo del modelo
-	 * @return string Regla de validación
-	 */
-	public function get_form_validation()
-	{
-		$regla = 'trim';
-		$regla .= ($this->es_obligatorio and !$this->es_autoincrement) ? '|required' : '';
-		$regla .= ($this->tipo == 'int') ? '|integer' : '';
-		$regla .= ($this->tipo == 'real') ? '|numeric' : '';
-		//$regla .= ($this->es_unico AND !$this->es_id) ? '|is_unique['. $this->tabla_bd . '.' . $this->nombre_bd.']' : '';
-
-		if ($this->tipo == 'has_many')
-		{
-			$regla = '';
-		}
-
-		return $regla;
 	}
 
 
