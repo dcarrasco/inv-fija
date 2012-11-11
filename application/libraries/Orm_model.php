@@ -147,7 +147,7 @@ class ORM_Model {
 	{
 		foreach ($this->model_fields as $campo => $metadata)
 		{
-			$this->set_validation_rules_field($campo);
+			$this->form_validation->set_rules($campo, ucfirst($metadata->get_label()), $this->set_validation_rules_field($campo));
 		}
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
@@ -159,7 +159,13 @@ class ORM_Model {
 		return $this->form_validation->run();
 	}
 
-	public function set_validation_rules_field($campo)
+
+
+	/**
+	 * Genera la regla de validación para un campo, de acuerdo a la definición del campo
+	 * @param string $campo Nombre del campo
+	 */
+	public function set_validation_rules_field($campo = '')
 	{
 		$field = $this->model_fields[$campo];
 
@@ -174,7 +180,7 @@ class ORM_Model {
 			$reglas = '';
 		}
 
-		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
+		return $reglas;
 	}
 
 
