@@ -4,6 +4,7 @@ class config2 extends CI_Controller {
 
 	private $arr_menu = array(
 				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
+				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
 				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
 				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
 				'detalle_inventario' => array('url' => '/config2/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
