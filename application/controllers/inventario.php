@@ -108,7 +108,7 @@ class Inventario extends CI_Controller {
 					$linea_detalle->auditor            = set_value('auditor');
 					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
 					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
-					$linea_detalle->fecha_modificacion = date('Y-m-d H:i:s');
+					$linea_detalle->fecha_modificacion = date('Ymd H:i:s');
 					//dbg($linea_detalle);
 					$linea_detalle->grabar();
 					$cant_modif += 1;
