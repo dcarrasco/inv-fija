@@ -223,12 +223,45 @@ tr:nth-child(even) {
 /* =========================================================
 LOGIN
 ============================================================ */
-div.login p, div.login input div.login a {
-	font-size: 1.3em;
+div.login {
+	display: inline-block;
 }
+
+div.login a {
+	font-size: 0.8em;
+	font-weight: bold;
+	color: #236ab3;
+	/*font-style: italic;*/
+}
+
+div.login a:hover {
+	color: #ff0000;
+}
+
 div.login p {
-	padding: 1.3em;
+	padding: 1.5em;
 }
+
+div.login input {
+	font-size: 1.5em;
+}
+
+div.login input[type="text"], div.login input[type="password"] {
+	color: #555555;
+	border: 1px solid #555555;
+}
+
+div.login label {
+	display: block;
+	font-size: 1.2em;
+	color: #555555;
+	font-weight: bold;
+	line-height: 1.5em;
+
+}
+	background-color: #5081B3;
+
+	background-color: #236ab3;
 
 /* =========================================================
 PAGINACION

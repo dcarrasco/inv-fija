@@ -20,7 +20,6 @@ class Inv_activo extends ORM_Model {
 								'tipo'           => 'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Maximo 50 caracteres.',
-								'es_id'          => true,
 								'es_obligatorio' => true,
 								'es_unico'       => true
 							),
@@ -35,9 +34,12 @@ class Inv_activo extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 30,
 								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'choices'        => array('MAIMONIDES' => 'Inventario Maimonides', 'FIJA' => 'Inventario Fija'),
+								'choices'        => array(
+														'MAIMONIDES' => 'Inventario Maimonides',
+														'FIJA'       => 'Inventario Fija',
+														'CABLES'     => 'Inventario Proveedores Cables',
+														),
 								'es_obligatorio' => true,
-								'es_unico'       => true,
 							),
 						),
 					);

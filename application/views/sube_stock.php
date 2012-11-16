@@ -2,11 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="fl">
-			<ul>
-				<li><?php echo anchor('/config/usuarios','Usuarios')?></li>
-				<li><?php echo anchor('/config/materiales','Materiales')?></li>
-				<li class="selected"><?php echo anchor('/config/inventario','Inventario Activo >> Sube Stock')?></li>
-			</ul>
+			Sube stock: <?php echo $inventario_nombre;?>
 		</div>
 	</div> <!-- fin content-module-heading -->
 
@@ -15,7 +11,7 @@
 	</div>
 
 	<div class="content-module-main">
-		<?php echo form_open_multipart('config/sube_stock/' . $inventario_id); ?>
+		<?php echo form_open_multipart('analisis/sube_stock/' . $inventario_id); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 		<table>
 			<thead>
@@ -46,7 +42,7 @@
 						</div>
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="4">
 						<?php echo form_submit('submit', 'Subir archivo', ' class="button b-active round ic-ok fr" id="btn_guardar"'); ?>
@@ -60,7 +56,7 @@ Formato del archivo:
 	Archivo de texto
 	Extension .txt
 	Campos separados por tabulación
-	
+
 	Campos
 			Ubicacion
 			Catalogo
@@ -78,7 +74,7 @@ Formato del archivo:
 		</tbody>
 		</table>
 		<?php echo form_close(); ?>
-		
+
 	</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">
@@ -142,11 +138,9 @@ $(document).ready(function() {
 		$('#id_nvo').val(nvo);
 
 
-
-
 		$.ajax({
 			type:  "POST",
-			url:   js_base_url + "index.php/config/inserta_linea_archivo",
+			url:   js_base_url + "analisis/inserta_linea_archivo",
 			async: false,
 			data:  $('#frm_aux').serialize(),
 			success: function(datos) {

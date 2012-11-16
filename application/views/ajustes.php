@@ -2,6 +2,11 @@
 	<div class="content-module-heading cf">
 		<div class="fl">
 			<?php echo $nombre_inventario?>
+			[
+			<?php echo anchor('analisis/sube_stock/' . $id_inventario, 'Sube Inventario') ?>
+			/
+			<?php echo anchor('analisis/imprime_inventario/' . $id_inventario, 'Imprime Inventario') ?>
+			]
 		</div>
 		<div class="fr">
 			<?php echo anchor('analisis/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . time() ,(($ocultar_regularizadas == 0) ? 'Ocultar' : 'Mostrar') . ' lineas regularizadas') ?>
@@ -78,7 +83,7 @@
 					<?php $tab_index += 1; ?>
 					<?php $cat_ant = $reg['catalogo']; ?>
 				<?php endforeach; ?>
-				
+
 				<!-- totales -->
 				<tr>
 					<td></td>
@@ -114,7 +119,7 @@
 		$('#btn_guardar').click(function(event) {
 			event.preventDefault();
 			$('form#frm_inventario').submit();
-		});			
+		});
 
 	});
 </script>

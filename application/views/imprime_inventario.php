@@ -2,11 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="fl">
-			<ul>
-				<li><?php echo anchor('/config/usuarios','Usuarios')?></li>
-				<li><?php echo anchor('/config/materiales','Materiales')?></li>
-				<li class="selected"><?php echo anchor('/config/inventario','Inventario Activo >> Imprime Inventario')?></li>
-			</ul>
+			Imprime inventario: <?php echo $inventario_nombre;?>
 		</div>
 	</div> <!-- fin content-module-heading -->
 
@@ -30,11 +26,11 @@
 					<td><?php echo $inventario_id; ?></td>
 					<td><?php echo $inventario_nombre; ?></td>
 					<td>
-						Pagina Desde: 
+						Pagina Desde:
 						<?php echo form_input('pag_desde', set_value('pag_desde',1), ' size="5" maxlength="5"'); ?>
 						<?php echo form_error('pag_desde'); ?>
 						<br>
-						Pagina Hasta: 
+						Pagina Hasta:
 						<?php echo form_input('pag_hasta', set_value('pag_hasta',$max_hoja), ' size="5" maxlength="5"'); ?>
 						<?php echo form_error('pag_hasta'); ?>
 						<br>
@@ -44,7 +40,7 @@
 
 					</td>
 				</tr>
-				
+
 				<tr>
 					<td colspan="4">
 						<?php echo form_submit('submit', 'Imprimir', ' class="button b-active round ic-ok fr" id="btn_imprimir"'); ?>
@@ -54,7 +50,7 @@
 		</tbody>
 		</table>
 		<?php echo form_close(); ?>
-		
+
 	</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">
