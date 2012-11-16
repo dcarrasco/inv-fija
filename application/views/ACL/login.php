@@ -5,8 +5,6 @@
 	<meta charset="utf-8" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/estilo.css" /	>
 	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
-	<script type="text/javascript">
-	</script>
 </head>
 <body>
 
@@ -28,7 +26,7 @@
 			<p></p>
 			<div>
 				<label for="usr">Nombre de Usuario</label>
-				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="40"'); ?>
+				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="40" tabindex="1"'); ?>
 				<?php echo form_error('usr'); ?>
 			</div>
 			<p></p>
@@ -38,7 +36,7 @@
 					<div class="fr"><?php echo anchor('login/cambio_password', 'cambiar clave'); ?></div>
 				</label>
 
-				<?php echo form_password('pwd', '','maxlength="45" size="40"'); ?>
+				<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2"'); ?>
 				<?php echo form_error('pwd'); ?>
 			</div>
 			<p></p>

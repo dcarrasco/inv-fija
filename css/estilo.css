@@ -84,7 +84,19 @@ GENERAL
 /* =========================================================
 FUENTES
 ============================================================ */
-body, form { font-family: verdana, sans-serif; font-size: 12px;}
+body, form, input {
+	font-family: verdana, sans-serif;
+	font-size: 12px;
+}
+
+input[type="text"] {
+	font-family: verdana;
+	padding: 1px 0.5em 1px 0.5em;
+	color: #000000;
+	border: 1px solid #888888;
+	margin: 1px;
+	background-color: #FAFAFA;
+}
 
 
 
@@ -249,6 +261,8 @@ div.login input {
 div.login input[type="text"], div.login input[type="password"] {
 	color: #555555;
 	border: 1px solid #555555;
+	background-color: #FAFAFA;
+	padding: 0.3em;
 }
 
 div.login label {
@@ -259,9 +273,7 @@ div.login label {
 	line-height: 1.5em;
 
 }
-	background-color: #5081B3;
 
-	background-color: #236ab3;
 
 /* =========================================================
 PAGINACION
