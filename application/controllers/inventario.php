@@ -146,7 +146,7 @@ class Inventario extends CI_Controller {
 														'stock_sap'     => 0,
 														'stock_fisico'  => $this->input->post('stock_fisico'),
 														'observacion'   => $this->input->post('observacion'),
-														'fecha_modificacion' => date('Y-m-d H:i:s'),
+														'fecha_modificacion' => date('Ymd H:i:s'),
 														'reg_nuevo'     => 'S',
 												));
 					$nuevo_detalle_inventario->grabar();
