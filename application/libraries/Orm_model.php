@@ -147,7 +147,7 @@ class ORM_Model {
 	{
 		foreach ($this->model_fields as $campo => $metadata)
 		{
-			$this->form_validation->set_rules($campo, ucfirst($metadata->get_label()), $this->set_validation_rules_field($campo));
+			$this->set_validation_rules_field($campo);
 		}
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
@@ -180,7 +180,7 @@ class ORM_Model {
 			$reglas = '';
 		}
 
-		return $reglas;
+		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
 	}
 
 
