@@ -5,8 +5,8 @@
 			<?php echo $menu_configuracion; ?>
 			<br>
 			<?php echo form_open($url_filtro); ?>
-			Filtro:
-			<?php echo form_input('filtro',set_value('filtro', $filtro), 'size="30" maxlength="30" style="' . (($filtro == '') ? '' : 'background-color: yellow;') . '"'); ?>
+			Buscar
+			<?php echo form_input('filtro',set_value('filtro', $filtro), 'size="30" maxlength="30" class="form_edit round" style="' . (($filtro == '') ? '' : 'background-color: yellow;') . '"'); ?>
 			<?php echo form_submit('btn_filtrar', 'Filtrar', 'class="button_mini b-active round ic-search"') ?>
 			<?php echo form_close(''); ?>
 		</div>

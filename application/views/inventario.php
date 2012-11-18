@@ -54,8 +54,12 @@
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('ubicacion')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('ubicacion'); ?>
 					</td>
 				</tr>
@@ -63,52 +67,78 @@
 				<tr>
 					<th class="ar">material</th>
 					<td>
-						Filtrar <?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'id="agr_filtrar"'); ?>
+						Filtrar
+						<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form_edit round" id="agr_filtrar"'); ?>
 						&nbsp;&nbsp;&nbsp;&nbsp;
 						Seleccionar
-						<?php echo form_dropdown('catalogo', array('' => 'Seleccionar material...'), '', 'id="agr_material"'); ?>
+						<?php echo form_dropdown('catalogo', array('' => 'Seleccionar material...'), '', 'class="form_edit round" id="agr_material"'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('catalogo')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('catalogo'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('lote'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('lote'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('lote')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('lote'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('um'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('um'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('um'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('um'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('um')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('um'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('centro'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('centro'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('centro')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('centro'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('almacen'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('almacen'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('almacen')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('almacen'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('stock_fisico')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('stock_fisico'); ?>
 					</td>
 				</tr>
 
 				<tr>
-					<th class="ar"><?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?></th>
-					<td><?php echo $nuevo_detalle_inventario->print_form_field('observacion'); ?>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('observacion'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('observacion')) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error('observacion'); ?>
 					</td>
 				</tr>
@@ -173,11 +203,11 @@
 						<td><?php echo $linea_det->um; ?></td>
 						<td class="ar"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
 						<td>
-							<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="ar" size="10" tabindex="' . $tab_index . '"'); ?>
+							<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="form_edit round ar" size="10" tabindex="' . $tab_index . '"'); ?>
 							<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 						</td>
 						<td>
-							<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'size="20" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
+							<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="form_edit round" size="20" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
 						</td>
 					</tr>
 					<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>

@@ -154,27 +154,23 @@ class Detalle_inventario extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 200,
 								'texto_ayuda'    => 'Maximo 200 caracteres.',
-								'es_obligatorio' => true,
 							),
 						'stock_ajuste' => array(
 								'label'          => 'Stock de ajuste del material',
 								'tipo'           =>  'int',
 								'largo'          => 10,
 								'texto_ayuda'    => 'Maximo 100 caracteres.',
-								'es_obligatorio' => true,
 							),
 						'glosa_ajuste' => array(
 								'label'          => 'Observacion del ajuste',
 								'tipo'           =>  'char',
 								'largo'          => 100,
 								'texto_ayuda'    => 'Maximo 100 caracteres.',
-								'es_obligatorio' => true,
 							),
 						'fecha_ajuste' => array(
 								'label'          => 'Fecha del ajuste',
 								'tipo'           =>  'datetime',
 								'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
-								'es_obligatorio' => true,
 							),
 				),
 			);

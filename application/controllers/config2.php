@@ -98,7 +98,7 @@ class config2 extends CI_Controller {
 			if ($this->input->post('grabar'))
 			{
 				$modelo->grabar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' grabado correctamente');
+				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' (id=' . $modelo->{$modelo->get_model_campo_id()}. ') grabado correctamente');
 			}
 			else if ($this->input->post('borrar'))
 			{

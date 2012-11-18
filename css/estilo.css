@@ -57,19 +57,20 @@ body { font-size: 1em; /* Prevents an IE bug where em's scale out of proportion 
 GENERAL
 ============================================================ */
 .round {
-	border-radius: 0.4375em; /* 5/16 */
-	-moz-border-radius: 0.4375em; /* 5/16 */
+	-moz-border-radius:    0.4375em; /* 5/16 */
 	-webkit-border-radius: 0.4375em; /* 5/16 */
+	border-radius:         0.4375em; /* 5/16 */
 }
 
 .fl { float: left; }
 .fr { float: right; }
 .cb { clear: both; }
+.dib { display: inline-block; }
 
 .ar { text-align: right; }
 .al { text-align: left; }
 .ac { text-align: center; }
-.ac2 { align:center; }
+.ac2 { align: center; }
 
 .bold {font-weight: bolder; }
 
@@ -85,18 +86,16 @@ GENERAL
 FUENTES
 ============================================================ */
 body, form, input {
-	font-family: verdana, sans-serif;
-	font-size: 12px;
+	font-family: tahoma, arial, sans-serif;
+	font-size: 13px;
 }
 
-input[type="text"] {
-	font-family: verdana;
-	padding: 1px 0.5em 1px 0.5em;
-	color: #000000;
-	border: 1px solid #888888;
-	margin: 1px;
-	background-color: #FAFAFA;
+h2 {
+	font-family: verdana, arial, sans-serif;
+	font-size: 1.6em;
+	font-weight: normal;
 }
+
 
 
 
@@ -148,9 +147,9 @@ div.content-module-heading li {
 
 div.content-module-heading li.selected {
 	background-color: #5081B3;
-	border-radius: 0.4375em; /* 5/16 */
 	-moz-border-radius: 0.4375em; /* 5/16 */
 	-webkit-border-radius: 0.4375em; /* 5/16 */
+	border-radius: 0.4375em; /* 5/16 */
 }
 
 div.content-module-heading ul a {
@@ -160,9 +159,9 @@ div.content-module-heading ul a {
 
 div.content-module-heading ul a:hover {
 	background-color: #236ab3;
-	border-radius: 0.4375em; /* 5/16 */
 	-moz-border-radius: 0.4375em; /* 5/16 */
 	-webkit-border-radius: 0.4375em; /* 5/16 */
+	border-radius: 0.4375em; /* 5/16 */
 }
 
 div.content-module-footer {
@@ -292,9 +291,9 @@ div.paginacion a, div.paginacion strong {
 	font-size: 0.9em;
 	padding: 0.3em 0.6em;
 	text-decoration: none;
-	border-radius: 0.3125em; /* 5/16 */
 	-moz-border-radius: 0.3125em; /* 5/16 */
 	-webkit-border-radius: 0.3125em; /* 5/16 */
+	border-radius: 0.3125em; /* 5/16 */
 
 }
 
@@ -314,8 +313,23 @@ FORMULARIOS
 
 .form_edit {
 	font-family: verdana, sans-serif;
-	font-size: 14px;
+	font-size: 1.0em;
+	color: #333333;
+
+	padding: 1px 0.5em 1px 0.5em;
+	margin: 1px;
 	border: 1px solid #777777;
+
+	background-color: #eaf5ff;
+}
+
+.formulario_edit {
+	display: inline-block;
+}
+
+.form_requerido {
+	color: red;
+	font-weight: bold;
 }
 
 .form_edit_error{
@@ -333,6 +347,11 @@ FORMULARIOS
 	color: #777777;
 }
 
+label {
+	font-size: 1.2em;
+	display: block;
+	color: #555555;
+}
 
 
 /* =========================================================

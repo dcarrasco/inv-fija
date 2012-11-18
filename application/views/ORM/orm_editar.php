@@ -23,8 +23,12 @@
 					<td>
 						<br>
 						<?php echo $modelo->print_form_field($campo); ?>
+						<?php echo ($modelo->get_es_obligatorio_field($campo)) ? '<span class="form_requerido">*</span>' : ''; ?>
 						<?php echo form_error($campo); ?>
-						<br><span class="texto-ayuda"><?php echo $modelo->get_texto_ayuda_field($campo); ?></span>
+						<br>
+						<span class="texto-ayuda">
+							<?php echo $modelo->get_texto_ayuda_field($campo); ?>
+						</span>
 						<br>
 					</td>
 				</tr>

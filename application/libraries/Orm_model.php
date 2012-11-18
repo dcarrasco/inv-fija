@@ -249,6 +249,17 @@ class ORM_Model {
 
 
 	/**
+	 * Devuelve la propiedad es_obligatorio de un campo del modelo
+	 * @param  string $campo Nombre del campo
+	 * @return boolean       Indicador si el campo es obligatorio
+	 */
+	public function get_es_obligatorio_field($campo = '')
+	{
+		return $this->model_fields[$campo]->get_es_obligatorio();
+	}
+
+
+	/**
 	 * Crea links de paginación para desplegar un listado del modelo
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
@@ -840,7 +851,7 @@ class ORM_Field {
 	{
 		$form       = '';
 		$id_prefix  = 'id_';
-		$form_class = 'form_edit' . ((form_error($this->nombre) == '') ? '' : ' form_edit_error');
+		$form_class = 'form_edit round' . ((form_error($this->nombre) == '') ? '' : ' form_edit_error');
 
 		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
