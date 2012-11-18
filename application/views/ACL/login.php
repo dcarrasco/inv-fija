@@ -27,7 +27,7 @@
 			<div>
 				<label for="usr">Nombre de Usuario</label>
 				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="40" tabindex="1"'); ?>
-				<?php echo form_error('usr'); ?>
+				<div><?php echo form_error('usr'); ?></div>
 			</div>
 			<p></p>
 			<div>
@@ -37,7 +37,7 @@
 				</label>
 
 				<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2"'); ?>
-				<?php echo form_error('pwd'); ?>
+				<div><?php echo form_error('pwd'); ?></div>
 			</div>
 			<p></p>
 			<div class="ar">
