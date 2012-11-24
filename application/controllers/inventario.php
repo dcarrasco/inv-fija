@@ -105,6 +105,7 @@ class Inventario extends CI_Controller {
 				$cant_modif = 0;
 				foreach($detalle_inventario->get_model_all() as $linea_detalle)
 				{
+					$linea_detalle->digitador          = $id_usuario_login;
 					$linea_detalle->auditor            = set_value('auditor');
 					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
 					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
