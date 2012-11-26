@@ -366,6 +366,24 @@ class ORM_Model {
 			{
 				$this->db->order_by($this->model_order_by);
 			}
+
+			foreach ($this->model_fields as $nombre => $field)
+			{
+				$nombre_campo = $nombre;
+				if ($field->get_tipo() == 'has_many')
+				{
+				}
+				else if ($field->get_tipo() == 'datetime')
+				{
+					$this->db->select('convert(varchar,' . $nombre_campo . ', 120) as ' . $nombre_campo);
+				}
+				else
+				{
+					$this->db->select($nombre_campo);
+				}
+
+			}
+
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
