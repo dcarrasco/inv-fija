@@ -182,7 +182,7 @@
 				<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
 					<tr>
 						<td class="ac">
-							<?php echo $linea_det->ubicacion; ?>
+							<?php echo $linea_det->get_valor_field('ubicacion'); ?>
 
 							<?php if ($linea_det->reg_nuevo == 'S'):?>
 							<?php echo anchor('#', 'Ed', 'class="button_mini b-active round ic-edit fl" id="btn_editar_id_' . $linea_det->id . '"'); ?>
@@ -196,10 +196,10 @@
 							<?php endif; ?>
 						</td>
 						<td><?php echo $linea_det->catalogo; ?></td>
-						<td><?php echo $linea_det->descripcion; ?></td>
-						<td><?php echo $linea_det->lote; ?></td>
-						<td><?php echo $linea_det->centro; ?></td>
-						<td><?php echo $linea_det->almacen; ?></td>
+						<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
+						<td><?php echo $linea_det->get_valor_field('lote'); ?></td>
+						<td><?php echo $linea_det->get_valor_field('centro'); ?></td>
+						<td><?php echo $linea_det->get_valor_field('almacen'); ?></td>
 						<td><?php echo $linea_det->um; ?></td>
 						<td class="ar"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
 						<td>

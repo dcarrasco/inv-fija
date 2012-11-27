@@ -57,56 +57,22 @@ class Detalle_inventario extends ORM_Model {
 								'es_obligatorio' => true,
 							),
 						'centro' => array(
-								'label'          => 'Centro SAP del material',
-								'tipo'           =>  'char',
-								'largo'          => 45,
-								'texto_ayuda'    => 'Centro SAP del material.',
-								'es_obligatorio' => true,
-								'choices'        => array(
-														''     => 'Seleccione un centro...',
-														'CH01' => 'CH01',
-														'CH02' => 'CH02',
-														'CH04' => 'CH04',
-														'CH05' => 'CH05',
-														'CH11' => 'CH11',
-														'CH19' => 'CH19',
-														'CH24' => 'CH24',
-														'CH28' => 'CH28',
-														'CH29' => 'CH29',
-													),
+								'tipo'           =>  'has_one',
+								'relation'       => array(
+										'model' => 'centro'
+									),
 							),
 						'almacen' => array(
-								'label'          => 'Almacen SAP del material',
-								'tipo'           =>  'char',
-								'largo'          => 45,
-								'texto_ayuda'    => 'Almacén SAP del material.',
-								'es_obligatorio' => true,
-								'choices'        => array(
-														''     => 'Seleccione un almacen...',
-														'CM01' => 'CM01',
-														'CM02' => 'CM02',
-														'CM03' => 'CM03',
-														'CM04' => 'CM04',
-														'CM11' => 'CM11',
-														'CM15' => 'CM15',
-														'GM01' => 'GM01',
-														'GM03' => 'GM03',
-													),
+								'tipo'           =>  'has_one',
+								'relation'       => array(
+										'model' => 'almacen'
+									),
 							),
 						'um' => array(
-								'label'          => 'Unidad de medida',
-								'tipo'           =>  'char',
-								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
-								'es_obligatorio' => true,
-								'choices'        => array(
-														''     => 'Seleccione una unidad...',
-														'UN' => 'UN',
-														'M' => 'M',
-														'KG' => 'KG',
-														'ST' => 'ST',
-														'EA' => 'EA',
-													),
+								'tipo'           =>  'has_one',
+								'relation'       => array(
+										'model' => 'unidad_medida'
+									),
 							),
 						'stock_sap' => array(
 								'label'          => 'Stock SAP del material',
