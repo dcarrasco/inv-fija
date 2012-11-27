@@ -28,7 +28,7 @@
 			<p></p>
 			<div>
 				<label for="usr">Nombre de usuario</label>
-				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="30"'); ?>
+				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="30" class="round"'); ?>
 				<div><?php echo form_error('usr'); ?></div>
 			</div>
 			<p></p>
@@ -38,7 +38,7 @@
 				<?php if ($tiene_clave): ?>
 					<div>
 						<label for="pwd_old">Clave anterior</label>
-						<?php echo form_password('pwd_old', '','maxlength="45" size="30"'); ?>
+						<?php echo form_password('pwd_old', '','maxlength="45" size="30" class="round"'); ?>
 						<div><?php echo form_error('pwd_old'); ?></div>
 					</div>
 					<p></p>
@@ -46,14 +46,14 @@
 
 				<div>
 					<label for="pwd_new1">Clave nueva</label>
-					<?php echo form_password('pwd_new1', '','maxlength="45" size="30"'); ?>
+					<?php echo form_password('pwd_new1', '','maxlength="45" size="30" class="round"'); ?>
 					<div><?php echo form_error('pwd_new1'); ?></div>
 				</div>
 				<p></p>
 
 				<div>
 					<label for="pwd_new2">Reingrese clave nueve</label>
-					<?php echo form_password('pwd_new2', '','maxlength="45" size="30"'); ?>
+					<?php echo form_password('pwd_new2', '','maxlength="45" size="30" class="round"'); ?>
 					<div><?php echo form_error('pwd_new2'); ?></div>
 				</div>
 				<p></p>
