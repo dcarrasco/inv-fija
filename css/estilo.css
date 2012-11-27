@@ -227,9 +227,110 @@ td.subtotal {
 	font-weight: bold;
 }
 
+tr {
+	background-color: #ffffff;
+}
+
 tr:nth-child(even) {
 	background-color: #efefef;
 }
+
+/* =========================================================
+MODULO LOGISTICA
+============================================================ */
+div.content-header {
+	padding: 1em;
+	cursor: pointer;
+	text-transform: uppercase;
+}
+
+
+div.content-header h3 {
+	font-size: 1.2em;
+	display: block;
+	margin: 0;
+	float: left;
+}
+
+div.content-header span {
+	font-size: 0.8em;
+	float: right;
+}
+
+div.movimientos {
+	background-color: #D95929;
+	color: #FFFFFF;
+}
+
+div.despachos {
+	background-color: #9966CC;
+	color: #FFFFFF;
+}
+
+div.stock-sap {
+	background-color: #3D5221;
+	color: #FFFFFF;
+}
+
+div.stock-scl {
+	background-color: #063559;
+	color: #FFFFFF;
+}
+
+div.trafico {
+	background-color: #F27405;
+	color: #FFFFFF;
+}
+
+div.cuerpo-movimientos {
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #FAD6C8;
+	border: 2px solid #D95929;
+	padding: 0.5em;
+	white-space: nowrap;
+}
+div.cuerpo-despachos {
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #FFCCFF;
+	border: 2px solid #9966CC;
+	padding: 0.5em;
+	white-space: nowrap;
+}
+div.cuerpo-stock-sap {
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #CEEBB1;
+	border: 2px solid #3D5221;
+	padding: 0.5em;
+	white-space: nowrap;
+}
+div.cuerpo-stock-scl {
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #B3D0F0;
+	border: 2px solid #063559;
+	padding: 0.5em;
+	white-space: nowrap;
+}
+div.cuerpo-trafico {
+	font-family: Tahoma;
+	font-size: 8pt;
+	color: #000000;
+	background-color: #F2CEB3;
+	border: 2px solid #F27405;
+	padding: 0.5em;
+	white-space: nowrap;
+}
+
+
+
+
 
 /* =========================================================
 LOGIN
@@ -418,6 +519,8 @@ BOTONES
 .ic-config { background-image: url('../img/ic_settings.png');}
 .ic-update { background-image: url('../img/ic_sync.png');}
 .ic-correo { background-image: url('../img/ic_mail.png');}
+.ic-grafico { background-image: url('../img/ic_graph.png');}
+.ic-reset { background-image: url('../img/ic_refresh.png');}
 
 /* =========================================================
 PRINT-MEDIA
