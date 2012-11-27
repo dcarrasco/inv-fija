@@ -50,11 +50,11 @@ primary key(id)
 		$this->db->where('id_inventario', $id_inventario);
 		if ($ocultar_regularizadas == 1)
 		{
-			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');			
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
 		}
 		else
 		{
-			$this->db->where('stock_sap <> stock_fisico');			
+			$this->db->where('stock_sap <> stock_fisico');
 		}
 
 		return $this->db->get('fija_detalle_inventario')->result_array();
@@ -86,11 +86,11 @@ primary key(id)
 		$this->db->select_max('hoja');
 		$row = $this->db->get('fija_detalle_inventario')->row_array();
 
-		return ($row['hoja']);		
+		return ($row['hoja']);
 	}
 
 
-	public function total_inventarios_activos() 
+	public function total_inventarios_activos()
 	{
 		return $this->db->count_all('fija_inventario2');
 	}
@@ -127,6 +127,7 @@ primary key(id)
 					''           => 'Seleccione tipo de inventario...',
 					'FIJA'       => 'Inventario Fija (Puerto Madero)',
 					'MAIMONIDES' => 'Inventario Empresas (Maimonides)',
+					'CABLES'     => 'Inventario Proveedores Cables',
 					);
 	}
 
@@ -163,7 +164,7 @@ primary key(id)
 		$this->db->distinct();
 		$this->db->select('a.nombre as nombre');
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_auditores as a', 'a.id = fija_detalle_inventario.auditor', 'left');	
+		$this->db->join('fija_auditores as a', 'a.id = fija_detalle_inventario.auditor', 'left');
 		$this->db->where(array('fija_detalle_inventario.id_inventario' => $id_inventario, 'fija_detalle_inventario.hoja' => $hoja));
 		$row = $this->db->get()->row_array();
 
@@ -175,7 +176,7 @@ primary key(id)
 		$this->db->distinct();
 		$this->db->select('d.nombre as nombre');
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador and d.tipo='DIG'", 'left');	
+		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador and d.tipo='DIG'", 'left');
 		$this->db->where(array('fija_detalle_inventario.id_inventario' => $id_inventario, 'fija_detalle_inventario.hoja' => $hoja));
 		$row = $this->db->get()->row_array();
 
@@ -183,9 +184,9 @@ primary key(id)
 	}
 
 
-	public function guardar($id = 0, $id_inventario = 0, 
-							$hoja = 0, $digitador = 0, $auditor = 0, 
-							$ubicacion = '', $catalogo = '', $descripcion = '', $lote = '', $centro = '', $almacen = '', 
+	public function guardar($id = 0, $id_inventario = 0,
+							$hoja = 0, $digitador = 0, $auditor = 0,
+							$ubicacion = '', $catalogo = '', $descripcion = '', $lote = '', $centro = '', $almacen = '',
 							$um = '', $stock_sap = 0, $stock_fisico = 0, $observacion = '', $fecha_modificacion = '', $reg_nuevo = '')
 	{
 		// insertar un nuevo registro
@@ -193,9 +194,9 @@ primary key(id)
 		{
 			$this->db->insert('fija_detalle_inventario', array(
 				'id_inventario' => $id_inventario,
-				'hoja'          => $hoja, 
+				'hoja'          => $hoja,
 				'digitador'     => $digitador,
-				'auditor'       => $auditor, 
+				'auditor'       => $auditor,
 				'ubicacion'     => $ubicacion,
 				'catalogo'      => $catalogo,
 				'descripcion'   => $descripcion,
@@ -204,8 +205,8 @@ primary key(id)
 				'almacen'       => $almacen,
 				'um'            => $um,
 				'stock_sap'     => $stock_sap,
-				'stock_fisico'  => (int) $stock_fisico, 
-				'observacion'   => $observacion, 
+				'stock_fisico'  => (int) $stock_fisico,
+				'observacion'   => $observacion,
 				'fecha_modificacion' => $fecha_modificacion,
 				'reg_nuevo'     => $reg_nuevo,
 				));
@@ -218,7 +219,7 @@ primary key(id)
 				'id_inventario' => $id_inventario,
 				'hoja'          => $hoja,
 				'digitador'     => $digitador,
-				'auditor'       => $auditor, 
+				'auditor'       => $auditor,
 				'ubicacion'     => $ubicacion,
 				'catalogo'      => $catalogo,
 				'descripcion'   => $descripcion,
@@ -227,8 +228,8 @@ primary key(id)
 				'almacen'       => $almacen,
 				'um'            => $um,
 				'stock_sap'     => $stock_sap,
-				'stock_fisico'  => (int) $stock_fisico, 
-				'observacion'   => $observacion, 
+				'stock_fisico'  => (int) $stock_fisico,
+				'observacion'   => $observacion,
 				'fecha_modificacion' => $fecha_modificacion,
 				'reg_nuevo'     => $reg_nuevo,
 				));
@@ -241,9 +242,9 @@ primary key(id)
 		$this->db->where('id', $reg_id);
 		$this->db->update('fija_detalle_inventario', array(
 			'stock_ajuste' => $stock_ajuste,
-			'glosa_ajuste' => $glosa_ajuste, 
+			'glosa_ajuste' => $glosa_ajuste,
 			'fecha_ajuste' => $fecha_ajuste,
-			));		
+			));
 	}
 
 	public function inserta_bulk($arr_bulk = array())
@@ -282,8 +283,8 @@ primary key(id)
 	// REPORTES
 	// =====================================================================================================
 
-	public function get_reporte_hoja($id_inventario = 0, $orden_campo = 'hoja', $orden_tipo = 'ASC', 
-										$incl_ajustes = '0', $elim_sin_dif = '0') 
+	public function get_reporte_hoja($id_inventario = 0, $orden_campo = 'hoja', $orden_tipo = 'ASC',
+										$incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('fija_detalle_inventario.hoja, d.nombre as digitador, a.nombre as auditor');
 
@@ -323,8 +324,8 @@ primary key(id)
 		return $this->db->get()->result_array();
 	}
 
-	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', 
-												$hoja = 0, $incl_ajustes = '0', $elim_sin_dif = '0') 
+	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC',
+												$hoja = 0, $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('fija_detalle_inventario.ubicacion');
 		$this->db->select('fija_detalle_inventario.catalogo');
@@ -382,9 +383,9 @@ primary key(id)
 
 
 
-	
-	
-	public function get_reporte_material($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0') 
+
+
+	public function get_reporte_material($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre as nombre_fam");
 		$this->db->select("f.codigo + '_' + sf.codigo as fam_subfam");
@@ -422,7 +423,7 @@ primary key(id)
 		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->join('fija_catalogo_familias as f', "f.codigo = substring(fija_detalle_inventario.catalogo,1,5) and f.tipo='FAM'", 'left');
 		$this->db->join('fija_catalogo_familias as sf', "sf.codigo = substring(fija_detalle_inventario.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
-		
+
 		$this->db->where('id_inventario', $id_inventario);
 
 		$this->db->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre");
@@ -445,7 +446,7 @@ primary key(id)
 	}
 
 
-	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0') 
+	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('i.catalogo, i.descripcion, i.um, c.pmp');
 		$this->db->select_sum('stock_fisico', 'q_fisico');
@@ -492,7 +493,7 @@ primary key(id)
 	}
 
 
-	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $catalogo = '', $incl_ajustes = '0', $elim_sin_dif = '0') 
+	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $catalogo = '', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('i.*, c.pmp');
 		$this->db->select('stock_fisico as stock_fisico');
@@ -513,7 +514,7 @@ primary key(id)
 			$this->db->select('(stock_fisico - stock_sap) as stock_diff');
 			$this->db->select('(stock_fisico - stock_sap)*c.pmp as valor_diff');
 			$this->db->select('(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
-			$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');			
+			$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
 		}
 		$this->db->select('(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
 		$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
@@ -545,7 +546,7 @@ primary key(id)
 	}
 
 
-	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC') 
+	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC')
 	{
 		$this->db->select('fija_detalle_inventario.ubicacion');
 		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
@@ -565,7 +566,7 @@ primary key(id)
 	}
 
 
-	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0') 
+	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');
@@ -606,7 +607,7 @@ primary key(id)
 		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
-		return $this->db->get()->result_array();	
+		return $this->db->get()->result_array();
 	}
 
 
@@ -629,7 +630,7 @@ primary key(id)
 	}
 
 
-	public function get_reporte_material2($id_inventario = 0, $catalogo = 0) 
+	public function get_reporte_material2($id_inventario = 0, $catalogo = 0)
 	{
 		$this->db->select('fija_detalle_inventario.*, d.nombre as digitador, a.nombre as auditor');
 		$this->db->from('fija_detalle_inventario');

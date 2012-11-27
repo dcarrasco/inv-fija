@@ -30,15 +30,11 @@ class Inv_activo extends ORM_Model {
 								'es_obligatorio' => true,
 							),
 						'tipo_inventario' => array(
-								'label'          => 'Tipo de inventario',
-								'tipo'           =>  'char',
-								'largo'          => 30,
+								'tipo'           =>  'has_one',
+								'relation'       => array(
+										'model' => 'tipo_inventario'
+									),
 								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'choices'        => array(
-														'MAIMONIDES' => 'Inventario Maimonides',
-														'FIJA'       => 'Inventario Fija',
-														'CABLES'     => 'Inventario Proveedores Cables',
-														),
 								'es_obligatorio' => true,
 							),
 						),

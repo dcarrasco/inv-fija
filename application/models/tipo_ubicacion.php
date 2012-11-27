@@ -16,13 +16,12 @@ class Tipo_ubicacion extends ORM_Model {
 								'tipo'   => 'id',
 							),
 						'tipo_inventario' => array(
-								'label'          => 'Tipo de inventario',
-								'tipo'           =>  'char',
-								'largo'          => 30,
+								'tipo'           =>  'has_one',
+								'relation'       => array(
+										'model' => 'tipo_inventario'
+									),
 								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'choices'        => array('MAIMONIDES' => 'Inventario Maimonides', 'FIJA' => 'Inventario Fija'),
 								'es_obligatorio' => true,
-								'es_unico'       => true,
 							),
 						'tipo_ubicacion' => array(
 								'label'          => 'Tipo de ubicacion',
