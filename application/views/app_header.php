@@ -14,5 +14,5 @@
 
 <div class="app-heading cf">
 	<h2 class="fl"><?php echo $titulo_modulo; ?></h2>
-	<?php echo $menu_app; ?>
+	<nav class="fr round"><?php echo $menu_app; ?></nav>
 </div> <!-- fin app-heading -->

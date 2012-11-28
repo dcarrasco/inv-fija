@@ -27,25 +27,27 @@ class Acl_model extends CI_Model {
 	public function menu_app()
 	{
 
-		$arr_menu = array(
-					'analisis' => array('controller' => 'analisis', 'texto' => 'Ajustes de inventario', 'icono' => 'ic-ajustes'),
-					'config2' => array('controller' => 'config2', 'texto' => 'Configuracion', 'icono' => 'ic-config'),
-					'reportes' => array('controller' => 'reportes', 'texto' => 'Reportes', 'icono' => 'ic-reporte'),
-					'inventario' => array('controller' => 'inventario/ingreso/1/' . $this->get_id_usr() , 'texto' => 'Inventario', 'icono' => 'ic-inventario'),
-					'analisis_series' => array('controller' => 'analisis_series', 'texto' => 'Analisis series', 'icono' => 'ic-grafico'),
-					'stock_sap' => array('controller' => 'stock_sap', 'texto' => 'Stock SAP', 'icono' => 'ic-grafico'),
-					);
-		$arr_modulos = $this->get_modulos_usuario($this->input->cookie('movistar_usr'));
+		$arr_modulos = $this->get_menu_usuario($this->input->cookie('movistar_usr'));
 
-		$menu = anchor('login','Logout', 'class="button b-active round ic-logout fr"');
-
-		foreach ($arr_menu as $key => $val)
+		$app_ant = '';
+		$menu = '<ul>';
+		foreach ($arr_modulos as $modulo)
 		{
-			if (in_array($key, $arr_modulos))
+			if ($modulo['app'] != $app_ant)
 			{
-				$menu .= anchor($val['controller'], $val['texto'], 'class="button b-active round fr ' . $val['icono'] .'"');
+				if ($app_ant != '')
+				{
+					$menu .= '</ul></li>';
+				}
+				$menu .= '<li><span class="button ' . $modulo['app_icono'] .'">' . $modulo['app'] . '</span>';
+				$menu .= '<ul>';
 			}
+			$menu .= '<li>' . anchor($modulo['url'], $modulo['modulo'], 'class="button ' . $modulo['modulo_icono'] .'"');
+			$app_ant = $modulo['app'];
 		}
+		$menu .= '</ul></li>';
+		$menu .= '<li>' . anchor('login','Logout', 'class="button ic-logout"') . '</li>';
+		$menu .= '</ul>';
 
 		return $menu;
 	}
@@ -75,6 +77,21 @@ class Acl_model extends CI_Model {
 		}
 		return $arr_modulos;
 	}
+
+
+	public function get_menu_usuario($usr = '')
+	{
+		$this->db->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono');
+		$this->db->from('fija_usuarios u');
+		$this->db->join('acl_usuario_rol ur', 'ur.id_usuario = u.id');
+		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
+		$this->db->join('acl_modulo m',       'm.id          = rm.id_modulo');
+		$this->db->join('acl_app a',          'a.id          = m.id_app');
+		$this->db->where('usr', $usr);
+		$this->db->order_by('a.orden, m.orden');
+		return $this->db->get()->result_array();
+	}
+
 
 	private function set_session_cookies($usr)
 	{

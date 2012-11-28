@@ -100,7 +100,7 @@ h2 {
 
 
 /* =========================================================
-APLICACION
+APLICACION Y MENU NAVEGACION
 ============================================================ */
 div.app-heading {
 	background-color: #3F4551;
@@ -108,6 +108,82 @@ div.app-heading {
 	padding: 3px;
 }
 
+
+div.app-heading nav ul ul {
+	display: none;
+}
+
+div.app-heading nav ul li:hover > ul {
+	display: block;
+}
+
+
+div.app-heading nav ul {
+	background: #5081B3;
+	color : #FFFFFF;
+	list-style: none;
+	position: relative;
+	display: inline-table;
+	-moz-border-radius:    0.4375em; /* 5/16 */
+	-webkit-border-radius: 0.4375em; /* 5/16 */
+	border-radius:         0.4375em; /* 5/16 */
+}
+
+div.app-heading	nav ul:after {
+	content: "";
+	clear: both;
+	display: block;
+}
+
+
+div.app-heading nav ul li {
+	float: left;
+	color: #FFFFFF;
+	padding: 0em 1em;
+	-moz-border-radius:    0.4375em; /* 5/16 */
+	-webkit-border-radius: 0.4375em; /* 5/16 */
+	border-radius:         0.4375em; /* 5/16 */
+}
+
+div.app-heading nav ul li:hover{
+	background: #236ab3;
+}
+
+div.app-heading nav ul li:hover a {
+	color: #FFFFFF;
+}
+
+div.app-heading nav ul li:hover a:hover {
+	color: #FFFFFF;
+}
+
+div.app-heading	nav ul li a {
+	display: block;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+div.app-heading	nav ul li span {
+	display: block;
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+
+div.app-heading	nav ul ul {
+	background: #5081B3;
+	padding: 0;
+	position: absolute;
+	top: 100%;
+}
+div.app-heading	nav ul ul li {
+	float: none;
+	border-top: 1px solid #5D6677;
+	position: relative;
+}
+div.app-heading	nav ul ul li a {
+	color: #FFFFFF;
+}
 
 /* =========================================================
 CONTENIDO

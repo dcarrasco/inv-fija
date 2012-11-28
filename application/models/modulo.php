@@ -7,7 +7,7 @@ class Modulo extends ORM_Model {
 		$cfg = array(
 				'modelo' => array(
 						'model_tabla'    => 'acl_modulo',
-						'model_order_by' => 'modulo',
+						'model_order_by' => 'id_app, orden, modulo',
 					),
 				'campos' => array(
 						'id' => array(
@@ -31,6 +31,24 @@ class Modulo extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 100,
 								'texto_ayuda'    => 'Descripción del módulo. Maximo 100 caracteres.',
+							),
+						'orden' => array(
+								'label'          => 'Orden del módulo',
+								'tipo'           =>  'int',
+								'texto_ayuda'    => 'Orden del modulo en el menu.',
+								'es_obligatorio' => true,
+							),
+						'url' => array(
+								'label'          => 'Direccion del módulo',
+								'tipo'           => 'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Dirección web (URL) del módulo. Maximo 50 caracteres.',
+							),
+						'icono' => array(
+								'label'          => 'Icono del módulo',
+								'tipo'           =>  'char',
+								'largo'          => 50,
+								'texto_ayuda'    => 'Nombre de archivo del icono del modulo. Maximo 50 caracteres.',
 							),
 						'llave_modulo' => array(
 								'tipo'           =>  'char',
