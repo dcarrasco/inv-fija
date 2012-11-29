@@ -6,7 +6,7 @@
 		</div>
 
 		<div class="fr">
-			<a href="#" class="button b-active round ic-desplegar fl" id="btn_mostrar_agregar">Nuevo tipo de ubicacion ...</a>
+			<a href="#" class="button b-active round ic-agregar fl" id="btn_mostrar_agregar">Nuevo tipo de ubicacion ...</a>
 		</div>
 
 	</div> <!-- fin content-module-heading -->
