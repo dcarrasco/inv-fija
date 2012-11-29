@@ -1,30 +1,19 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class config2 extends CI_Controller {
+class Acl extends CI_Controller {
 
 	private $arr_menu = array(
-				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
-				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
-				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
-				'tipo_inventario' => array('url' => '/config2/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
-				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
-				//'detalle_inventario' => array('url' => '/config2/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
-				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
-				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
-				'centro'         => array('url' => '/config2/listado/centro', 'texto' => 'Centros'),
-				'almacen'        => array('url' => '/config2/listado/almacen', 'texto' => 'Almacenes'),
-				'unidad_medida'  => array('url' => '/config2/listado/unidad_medida', 'texto' => 'Unidades de medida'),
-				//'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
-				//'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
-				//'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
-				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
+				'usuario'        => array('url' => '/acl/listado/usuario', 'texto' => 'Usuarios'),
+				'app'            => array('url' => '/acl/listado/app', 'texto' => 'Aplicaciones'),
+				'rol'            => array('url' => '/acl/listado/rol', 'texto' => 'Roles'),
+				'modulo'         => array('url' => '/acl/listado/modulo', 'texto' => 'Modulos'),
 			);
 
 	public function __construct()
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
-		$this->acl_model->autentica('config2');
+		$this->acl_model->autentica('acl_config');
 	}
 
 	public function index()
@@ -50,7 +39,7 @@ class config2 extends CI_Controller {
 
 	private function _render_view($vista = '', $data = array())
 	{
-		$data['titulo_modulo'] = 'Configuracion';
+		$data['titulo_modulo'] = 'Configuración Control de Acceso';
 		$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
@@ -73,9 +62,9 @@ class config2 extends CI_Controller {
 				'links_paginas'      => $modelo->crea_links_paginas($filtro),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
-				'url_filtro'         => site_url('config2/listado/' . $nombre_modelo . '/'),
-				'url_editar'         => site_url('config2/editar/' . $nombre_modelo . '/'),
-				'url_borrar'         => site_url('config2/borrar/' . $nombre_modelo . '/'),
+				'url_filtro'         => site_url('acl/listado/' . $nombre_modelo . '/'),
+				'url_editar'         => site_url('acl/editar/' . $nombre_modelo . '/'),
+				'url_borrar'         => site_url('acl/borrar/' . $nombre_modelo . '/'),
 			);
 		$this->_render_view('ORM/orm_listado', $data);
 	}
@@ -108,12 +97,12 @@ class config2 extends CI_Controller {
 				$modelo->borrar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo->__toString() . ') borrado correctamente');
 			}
-			redirect('config2/listado/' . $nombre_modelo);
+			redirect('acl/listado/' . $nombre_modelo);
 		}
 
 	}
 
 }
 
-/* End of file config2.php */
-/* Location: ./application/controllers/config2.php */
+/* End of file acl.php */
+/* Location: ./application/controllers/acl.php */

@@ -51,8 +51,8 @@ class Login extends CI_Controller {
 					}
 					else
 					{
-						$arr_paginas = $this->acl_model->get_modulos_usuario(set_value('usr'));
-						redirect($arr_paginas[0]);
+						$arr_menu = $this->acl_model->get_menu_usuario(set_value('usr'));
+						redirect($arr_menu[0]['url']);
 					}
 				}
 			}
