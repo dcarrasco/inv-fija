@@ -28,7 +28,7 @@ class Login extends CI_Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
-			$data = array('msg_alerta' => '');
+			$data = array('msg_alerta' => $this->session->flashdata('msg_alerta'));
 			$this->load->view('ACL/login', $data);
 		}
 		else
@@ -98,6 +98,7 @@ class Login extends CI_Controller {
 			$res = $this->acl_model->cambio_clave($usr, set_value('pwd_old'), set_value('pwd_new1'));
 			if ($res[0])
 			{
+				$this->session->set_flashdata('msg_alerta', 'La clave se cambió con exito. Vuelva a ingresar al sistema.');
 				redirect('login');
 			}
 			else

@@ -90,12 +90,12 @@ class Acl extends CI_Controller {
 			if ($this->input->post('grabar'))
 			{
 				$modelo->grabar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' (' . $modelo->__toString() . ') grabado correctamente');
+				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' (' . $modelo . ') grabado correctamente');
 			}
 			else if ($this->input->post('borrar'))
 			{
 				$modelo->borrar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo->__toString() . ') borrado correctamente');
+				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo . ') borrado correctamente');
 			}
 			redirect('acl/listado/' . $nombre_modelo);
 		}
