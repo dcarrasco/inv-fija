@@ -44,7 +44,7 @@
 						</td>
 					<?php endforeach; ?>
 					<td class="ac">
-						<a href="<?php echo $url_editar . '/' . $o->{$o->get_model_campo_id()}; ?>" class="button_micro b-active round boton-borrar">
+						<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="button_micro b-active round boton-borrar">
 							<img src="<?php echo base_url(); ?>img/ic_edit.png" />
 						</a>
 					</td>

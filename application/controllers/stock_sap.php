@@ -5,10 +5,10 @@ class Stock_sap extends CI_Controller {
 	private $arr_menu = array(
 				'stock_movil'     => array('url' => 'stock_sap/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),
 				'stock_fija'      => array('url' => 'stock_sap/mostrar_stock/FIJA', 'texto' => 'Stock Fija'),
-				'grupos_movil'    => array('url' => 'stock_sap/lista_grupos/MOVIL', 'texto' => 'Grupos Movil'),
-				'grupos_fija'     => array('url' => 'stock_sap/lista_grupos/FIJA', 'texto' => 'Grupos Fija'),
-				'almacenes_movil' => array('url' => 'stock_sap/lista_almacenes/MOVIL', 'texto' => 'Almacenes Movil'),
-				'almacenes_fija'  => array('url' => 'stock_sap/lista_almacenes/FIJA', 'texto' => 'Almacenes Fija'),
+				//'grupos_movil'    => array('url' => 'stock_sap/lista_grupos/MOVIL', 'texto' => 'Grupos Movil'),
+				//'grupos_fija'     => array('url' => 'stock_sap/lista_grupos/FIJA', 'texto' => 'Grupos Fija'),
+				//'almacenes_movil' => array('url' => 'stock_sap/lista_almacenes/MOVIL', 'texto' => 'Almacenes Movil'),
+				//'almacenes_fija'  => array('url' => 'stock_sap/lista_almacenes/FIJA', 'texto' => 'Almacenes Fija'),
 			);
 
 	public function __construct()

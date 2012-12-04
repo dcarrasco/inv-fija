@@ -123,15 +123,46 @@ class ORM_Model {
 	 */
 	private function _determina_campo_id()
 	{
+		$arr_key = array();
 		foreach ($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
 			{
-				return $key;
+				array_push($arr_key, $key);
 			}
+		}
+
+		if (count($arr_key) == 0)
+		{
+			return '';
+		}
+		else if (count($arr_key) == 1)
+		{
+			return $arr_key[0];
+		}
+		else
+		{
+			return $arr_key;
 		}
 	}
 
+
+	public function get_model_id()
+	{
+		if (!is_array($this->model_campo_id))
+		{
+			return $this->{$this->model_campo_id};
+		}
+		else
+		{
+			$arr_id = array();
+			foreach ($this->model_campo_id as $campo)
+			{
+				array_push($arr_id, $this->{$campo});
+			}
+			return implode('~', $arr_id);
+		}
+	}
 
 
 
@@ -312,14 +343,7 @@ class ORM_Model {
 			{
 				if (is_array($valor))
 				{
-					if (count($valor) == 0)
-					{
-						$this->db->where($campo, '');
-					}
-					else
-					{
-						$this->db->where_in($campo, $valor);
-					}
+					(count($valor) == 0) ? $this->db->where($campo, '') : $this->db->where_in($campo, $valor);
 				}
 				else
 				{
@@ -402,7 +426,7 @@ class ORM_Model {
 			{
 				$o = new $this->model_class();
 				$o->get_from_array($reg);
-				$arr_list[$o->{$o->get_model_campo_id()}] = $o->__toString();
+				$arr_list[$o->get_model_id()] = $o->__toString();
 			}
 			return $arr_list;
 		}
@@ -411,7 +435,20 @@ class ORM_Model {
 
 	public function find_id($id = 0)
 	{
-		$this->find('first', array('conditions' => array($this->model_campo_id => $id)));
+		$arr_condiciones = array();
+		if (!is_array($this->model_campo_id))
+		{
+			$arr_condiciones[$this->model_campo_id] = $id;
+		}
+		else
+		{
+			$arr_val_id = explode('~', $id);
+			foreach($this->model_campo_id as $i => $campo_id)
+			{
+				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
+			}
+		}
+		$this->find('first', array('conditions' => $arr_condiciones));
 	}
 
 
@@ -437,20 +474,40 @@ class ORM_Model {
 
 				$this->model_got_relations = TRUE;
 			}
-			if($metadata->get_tipo() == 'has_many')
+			else if ($metadata->get_tipo() == 'has_many')
 			{
 				$arr_rel = $metadata->get_relation();
 
 				$arr_rs = array();
-				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], array($arr_rel['id_one_table'] => $this->{$this->model_campo_id}))->result_array();
+				$arr_where = array();
+				if (!is_array($this->model_campo_id))
+				{
+					$arr_where[$arr_rel['id_one_table']] = $this->get_model_id();
+				}
+				else
+				{
+					foreach ($this->model_campo_id as $i => $campo_key)
+					{
+						$arr_where[$arr_rel['id_one_table'][$i]] = $this->$campo_key;
+					}
+				}
+				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], $arr_where)->result_array();
 				foreach($rs as $val)
 				{
-					array_push($arr_rs, $val[$arr_rel['id_many_table']]);
+					if (!is_array($arr_rel['id_many_table']))
+					{
+						array_push($arr_rs, $val[$arr_rel['id_many_table']]);
+					}
+					else
+					{
+						array_push($arr_rs, implode('~', $val));
+					}
 				}
 
 				$class = $arr_rel['model'];
 				$obj = new $class();
-				$obj->find('all', array('conditions' => array($obj->get_model_campo_id() => $arr_rs)), FALSE);
+
+				$obj->find('all', array('conditions' => array(is_array($obj->get_model_campo_id()) ? implode("+'~'+", $obj->get_model_campo_id()) : $obj->get_model_campo_id() => $arr_rs)), FALSE);
 
 				$arr_rel['data'] = $obj;
 				$this->model_fields[$campo]->set_relation($arr_rel);
@@ -639,13 +696,61 @@ class ORM_Model {
 			if ($campo->get_tipo() == 'has_many')
 			{
 				$rel = $campo->get_relation();
-				foreach($data_where as $key => $val_key)
+
+				$arr_where_delete = array();
+				if (is_array($rel['id_one_table']))
 				{
-					$this->db->delete($rel['join_table'], array($rel['id_one_table'] => $val_key));
-					foreach($this->$nombre as $valor_campo)
+					foreach($rel['id_one_table'] as $id_one_table_key)
 					{
-						$this->db->insert($rel['join_table'], array($rel['id_one_table'] => $val_key, $rel['id_many_table'] => $valor_campo));
+						$arr_where_delete[$id_one_table_key] = $data_where[$id_one_table_key];
 					}
+				}
+				else
+				{
+					foreach($data_where as $k => $v)
+					{
+						$arr_where_delete[$rel['id_one_table']] = $v;
+					}
+				}
+				$this->db->delete($rel['join_table'], $arr_where_delete);
+
+
+				foreach($this->$nombre as $valor_campo)
+				{
+					$arr_values = array();
+
+
+					if (is_array($rel['id_one_table']))
+					{
+						foreach($rel['id_one_table'] as $id_one_table_key)
+						{
+							$arr_values[$id_one_table_key] = $data_where[$id_one_table_key];
+						}
+					}
+					else
+					{
+						foreach($data_where as $k => $v)
+						{
+							$arr_values[$rel['id_one_table']] = $v;
+						}
+					}
+
+
+					if (is_array($rel['id_many_table']))
+					{
+						$arr_many_valores = explode('~', $valor_campo);
+						$i = 0;
+						foreach($rel['id_many_table'] as $id_many)
+						{
+							$arr_values[$id_many] = $arr_many_valores[$i++];
+						}
+					}
+					else
+					{
+						$arr_values[$rel['id_many_table']] = $valor_campo;
+					}
+
+					$this->db->insert($rel['join_table'], $arr_values);
 				}
 			}
 		}
@@ -866,7 +971,7 @@ class ORM_Field {
 		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
-		if ($this->tipo == 'id' OR ($this->es_id AND $valor_field != ''))
+		if ($this->tipo == 'id' OR ($this->es_id AND $valor_field != '') OR ($this->es_id AND $this->es_autoincrement))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
@@ -972,8 +1077,8 @@ class ORM_Field {
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="' . $form_class . '"';
-
-			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', array(), FALSE), $valor_field, $param_adic);
+			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 		}
 
 		return $form;
