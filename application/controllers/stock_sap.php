@@ -81,14 +81,16 @@ class Stock_sap extends CI_Controller {
 		$this->form_validation->set_rules('tipo_stock_otros', '', '');
 		$this->form_validation->run();
 
-		$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+		$stock        = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+
 		$data = array(
 						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('stock_movil') : $this->_menu_configuracion('stock_fija'),
 						'stock'                  => $stock,
 						'combo_tipo_alm'         => $this->almacen_sap_model->get_combo_tiposalm($tipo_op),
 						'combo_almacenes'        => $this->almacen_sap_model->get_combo_almacenes($tipo_op),
-						'combo_fechas_ultimodia' => $this->stock_sap_model->get_combo_fechas($tipo_op, TRUE),
-						'combo_fechas_todas'     => $this->stock_sap_model->get_combo_fechas($tipo_op, FALSE),
+						'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
+						'combo_fechas_todas'     => $combo_fechas['todas'],
 						'tipo_op'                => $tipo_op,
 						'arr_mostrar'            => $arr_mostrar,
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)

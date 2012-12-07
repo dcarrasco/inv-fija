@@ -415,28 +415,23 @@ class stock_sap_model extends CI_Model {
 
 
 
-	public function get_combo_fechas($tipo_op = '', $ult_dia_mes = FALSE)
+	public function get_combo_fechas($tipo_op = '')
 	{
 		$arr_fecha_tmp = ($tipo_op == 'MOVIL') ? $this->_get_combo_fechas_movil() : $this->_get_combo_fechas_fija();
-		$arr_fecha = array();
+		$arr_fecha = array('ultimodia' => array(), 'todas' => array());
 
-		if ($ult_dia_mes)
+		$año_mes_ant = '';
+		foreach($arr_fecha_tmp as $key => $val)
 		{
-			$año_mes_ant = '';
-			foreach($arr_fecha_tmp as $key => $val)
+			if ($año_mes_ant != substr($key, 0, 6))
 			{
-				if ($año_mes_ant != substr($key, 0, 6))
-				{
-					$arr_fecha[$key] = $val;
-				}
-
-				$año_mes_ant = substr($key, 0, 6);
+				$arr_fecha['ultimodia'][$key] = $val;
 			}
+
+			$año_mes_ant = substr($key, 0, 6);
 		}
-		else
-		{
-			$arr_fecha = $arr_fecha_tmp;
-		}
+
+		$arr_fecha['todas'] = $arr_fecha_tmp;
 
 		return $arr_fecha;
 	}
