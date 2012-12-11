@@ -33,7 +33,7 @@
 			<div>
 				<label for="pwd">
 					<div class="fl">Clave</div>
-					<div class="fr"><?php echo anchor('login/cambio_password', 'cambiar clave'); ?></div>
+					<div class="fr"><?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?></div>
 				</label>
 
 				<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="round"'); ?>
@@ -49,10 +49,26 @@
 	</div>
 	</div> <!-- fin content-module-main -->
 
+	<?php echo form_open('login/cambio_password', 'id="frm_cambio_password"') ?>
+	<?php echo form_hidden('usr',''); ?>
+	<?php echo form_close(); ?>
+
 	<div class="content-module-footer cf">
 	</div> <!-- fin content-module-footer -->
 
 </div> <!-- fin content-module -->
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+$('#lnk_cambio_password').click(function(e) {
+	e.preventDefault();
+	$('#frm_cambio_password input[name="usr"]').val($('#frm_login input[name="usr"]').val());
+	$('#frm_cambio_password').submit();
+});
+
+});
+</script>
 
 </body>
 </html>
