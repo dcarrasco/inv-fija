@@ -2,6 +2,8 @@
 
 class stock_sap_model extends CI_Model {
 
+	var $bd_logistica     = 'bd_logistica..';
+	var $bd_planificacion = 'bd_planificacion..';
 
 	public function __construct()
 	{
@@ -108,17 +110,17 @@ class stock_sap_model extends CI_Model {
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			$this->db->from('bd_logistica..stock_scl s');
-			$this->db->join('bd_planificacion..ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
-			$this->db->join('bd_logistica..cp_tipos_almacenes ta', 's.centro=ta.centro and s.cod_bodega=ta.cod_almacen');
-			$this->db->join('bd_logistica..cp_tiposalm t',         't.id_tipo=ta.id_tipo');
-			$this->db->join('bd_logistica..cp_almacenes a',        's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			$this->db->from($this->bd_logistica . 'stock_scl s');
+			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
+			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 's.centro=ta.centro and s.cod_bodega=ta.cod_almacen');
+			$this->db->join($this->bd_logistica . 'cp_tiposalm t',         't.id_tipo=ta.id_tipo');
+			$this->db->join($this->bd_logistica . 'cp_almacenes a',        's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
 		}
 		else
 		{
-			$this->db->from('bd_logistica..stock_scl s');
-			$this->db->join('bd_planificacion..ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
-			$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			$this->db->from($this->bd_logistica . 'stock_scl s');
+			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
+			$this->db->join($this->bd_logistica . 'cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
 		}
 
 
@@ -342,7 +344,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select('s.material, m.desc_material, s.umb');
-			$this->db->join('bd_logistica..cp_material_fija m', 's.material=m.material', 'left');
+			$this->db->join($this->bd_logistica . 'cp_material_fija m', 's.material=m.material', 'left');
 			$this->db->group_by('s.material, m.desc_material, s.umb');
 			$this->db->order_by('s.material, m.desc_material, s.umb');
 		}
@@ -367,15 +369,15 @@ class stock_sap_model extends CI_Model {
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			$this->db->from('bd_logistica..bd_stock_sap_fija s');
-			$this->db->join('bd_logistica..cp_tipos_almacenes ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
-			$this->db->join('bd_logistica..cp_tiposalm t',         't.id_tipo=ta.id_tipo');
-			$this->db->join('bd_logistica..cp_almacenes a',        'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+			$this->db->from($this->bd_logistica . 'bd_stock_sap_fija s');
+			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
+			$this->db->join($this->bd_logistica . 'cp_tiposalm t',         't.id_tipo=ta.id_tipo');
+			$this->db->join($this->bd_logistica . 'cp_almacenes a',        'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
 		}
 		else
 		{
-			$this->db->from('bd_logistica..bd_stock_sap_fija s');
-			$this->db->join('bd_logistica..cp_almacenes a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
+			$this->db->from($this->bd_logistica . 'bd_stock_sap_fija s');
+			$this->db->join($this->bd_logistica . 'cp_almacenes a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
 		}
 
 		// condiciones
@@ -443,7 +445,7 @@ class stock_sap_model extends CI_Model {
 
 		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 103) as fecha');
 		$this->db->order_by('fecha_stock','desc');
-		$arr_result = $this->db->get('bd_logistica..stock_scl_fechas')->result_array();
+		$arr_result = $this->db->get($this->bd_logistica . 'stock_scl_fechas')->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -460,7 +462,7 @@ class stock_sap_model extends CI_Model {
 
 		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 103) as fecha');
 		$this->db->order_by('fecha_stock','desc');
-		$arr_result = $this->db->get('bd_logistica..bd_stock_sap_fija_fechas')->result_array();
+		$arr_result = $this->db->get($this->bd_logistica . 'bd_stock_sap_fija_fechas')->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -481,9 +483,9 @@ class stock_sap_model extends CI_Model {
 
 			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario');
 
-			$this->db->from('bd_logistica..bd_stock_sap as s');
-			$this->db->join('bd_logistica..cp_almacenes as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
-			$this->db->join('bd_logistica..cp_usuarios as u', 'u.usuario=s.modificado_por', 'left');
+			$this->db->from($this->bd_logistica . 'bd_stock_sap as s');
+			$this->db->join($this->bd_logistica . 'cp_almacenes as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
+			$this->db->join($this->bd_logistica . 'cp_usuarios as u', 'u.usuario=s.modificado_por', 'left');
 			$this->db->order_by('material, lote, serie');
 
 			return $this->db->get()->result_array();
