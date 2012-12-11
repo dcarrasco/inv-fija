@@ -105,7 +105,7 @@ class stock_sap_model extends CI_Model {
 			$this->db->select('sum(s.otros*p.pmp)             as VAL_OT', FALSE);
 		}
 		$this->db->select('sum(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros) as total', FALSE);
-		$this->db->select('sum((s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp) as monto', FALSE);
+		$this->db->select('sum((s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros*0)*p.pmp) as monto', FALSE);
 
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
