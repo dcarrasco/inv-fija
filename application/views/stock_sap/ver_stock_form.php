@@ -10,8 +10,10 @@
 			<tr>
 				<th>Seleccionar Fechas</th>
 				<th>Seleccionar Almacenes</th>
-				<th>Seleccionar detalle materiales</th>
-				<th><div class="mostrar-ocultar ar"><span>Ocultar</span></div></th>
+				<th>
+					Seleccionar detalle materiales
+					<div class="mostrar-ocultar fr"><span>Ocultar</span></div>
+				</th>
 			</tr>
 			<tr>
 				<th>
@@ -21,10 +23,10 @@
 					Seleccionar todas las fechas <br/>
 
 					<div id="show_fecha_ultimodia">
-						<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, set_value('fecha_ultimodia'),'size="10"'); ?>
+						<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, set_value('fecha_ultimodia'),'size="10" class="form_edit round"'); ?>
 					</div>
 					<div id="show_fecha_todas">
-						<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, set_value('fecha_todas'),'size="10"'); ?>
+						<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, set_value('fecha_todas'),'size="10" class="form_edit round"'); ?>
 					</div>
 				</th>
 				<th>
@@ -34,11 +36,11 @@
 					Seleccionar Almacenes <br/>
 
 					<div id="show_tiposalm">
-						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, set_value('tipo_alm'), 'size="10"'); ?> <br/ > <br/>
+						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, set_value('tipo_alm'), 'size="10" class="form_edit round"'); ?> <br/ > <br/>
 						<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?> Desplegar detalle almacenes
 					</div>
 					<div id="show_almacenes">
-						<?php echo form_multiselect('almacenes[]', $combo_almacenes, set_value('almacenes'), 'size="10"'); ?>
+						<?php echo form_multiselect('almacenes[]', $combo_almacenes, set_value('almacenes'), 'size="10" class="form_edit round"'); ?>
 					</div>
 				</th>
 				<th>
@@ -57,8 +59,12 @@
 					<br>
 					<hr>
 					<br>
-					<?php echo form_submit('submit', 'Reporte'); ?><br/>
-					<?php echo form_submit('excel', 'Exportar a Excel...'); ?><br>
+					<div class="fr">
+						<?php echo form_submit('excel', 'Exportar a Excel...', 'class="button b-active round ic-reporte"'); ?><br>
+					</div>
+					<div class="fr">
+						<?php echo form_submit('submit', 'Reporte', 'class="button b-active round ic-reporte"'); ?><br/>
+					</div>
 					<!--
 					<div class="ar">
 						<a id="boton-submit" class="button b-active round ic-reporte" href="#">Reporte</a><br><br>
@@ -69,7 +75,6 @@
 					</div>
 					-->
 				</th>
-				<th></th>
 			</tr>
 		</table>
 		<?php echo form_close(); ?>

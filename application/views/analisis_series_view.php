@@ -33,11 +33,13 @@
 					<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?> Mostrar trafico
 						(ver <?php echo anchor('analisis_series/trafico_por_mes','detalle trafico'); ?>)
 						<br />
+						<br />
+						<br />
+					<?php echo anchor('#','Consulta','id="boton-submit" class="button b-active round ic-ok"'); ?>
+					<?php echo anchor('#','Limpiar','id="boton-reset" class="button b-active round ic-reset"'); ?>
 				</th>
 			</tr>
 		</table>
-		<?php echo anchor('#','Consulta','id="boton-submit" class="button b-active round ic-ok"'); ?>
-		<?php echo anchor('#','Limpiar','id="boton-reset" class="button b-active round ic-reset"'); ?>
 		<?php echo form_close(); ?>
 		</div> <!-- fin cuerpo-formulario -->
 
@@ -46,7 +48,6 @@
 	<div class="content-module-main">
 
 </div>
-<br />
 
 <?php if (set_value('show_mov')): ?>
 <div>
