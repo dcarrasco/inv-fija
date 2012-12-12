@@ -110,11 +110,11 @@ class stock_sap_model extends CI_Model {
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			$this->db->from($this->bd_logistica . 'stock_scl s');
-			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
-			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 's.centro=ta.centro and s.cod_bodega=ta.cod_almacen');
-			$this->db->join($this->bd_logistica . 'cp_tiposalm t',         't.id_tipo=ta.id_tipo');
-			$this->db->join($this->bd_logistica . 'cp_almacenes a',        's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			$this->db->from($this->bd_logistica . 'cp_tiposalm t');
+			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 'ta.id_tipo = t.id_tipo');
+			$this->db->join($this->bd_logistica . 'cp_almacenes a',        'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+			$this->db->join($this->bd_logistica . 'stock_scl s',           's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
 		}
 		else
 		{
