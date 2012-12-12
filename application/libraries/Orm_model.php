@@ -298,14 +298,16 @@ class ORM_Model {
 	public function crea_links_paginas($filtro = '_', $url = '')
 	{
 		$this->load->library('pagination');
+		$total_rows = $this->find('count', array('filtro' => $filtro), FALSE);
+
 		$cfg_pagination = array(
 					'uri_segment' => 5,
 					'num_links'   => 5,
 					'per_page'    => $this->model_page_results,
-					'total_rows'  => $this->find('count', array('filtro' => $filtro), FALSE),
+					'total_rows'  => $total_rows,
 					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo',
+					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results) . ')',
 					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
 					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
 				);
