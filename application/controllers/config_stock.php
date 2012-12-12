@@ -57,7 +57,7 @@ class config_stock extends CI_Controller {
 		$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
 				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro),
+				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'config_stock/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
 				'url_filtro'         => site_url('config_stock/listado/' . $nombre_modelo . '/'),

@@ -295,7 +295,7 @@ class ORM_Model {
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
 	 */
-	public function crea_links_paginas($filtro = '_')
+	public function crea_links_paginas($filtro = '_', $url = '')
 	{
 		$this->load->library('pagination');
 		$cfg_pagination = array(
@@ -303,7 +303,7 @@ class ORM_Model {
 					'num_links'   => 5,
 					'per_page'    => $this->model_page_results,
 					'total_rows'  => $this->find('count', array('filtro' => $filtro), FALSE),
-					'base_url'    => site_url('config2/listado/' . $this->get_model_nombre() . '/' . $filtro . '/'),
+					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo',
 					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',

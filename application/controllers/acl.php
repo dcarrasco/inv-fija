@@ -59,7 +59,7 @@ class Acl extends CI_Controller {
 		$data = array(
 				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
 				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro),
+				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'acl/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
 				'url_filtro'         => site_url('acl/listado/' . $nombre_modelo . '/'),
