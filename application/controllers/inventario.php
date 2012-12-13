@@ -52,7 +52,7 @@ class Inventario extends CI_Controller {
 
 			foreach($detalle_inventario->get_model_all() as $linea_detalle)
 			{
-				$this->form_validation->set_rules('stock_fisico_' . $linea_detalle->id, 'cantidad', 'trim|required|numeric|greater_than[-1]');
+				$this->form_validation->set_rules('stock_fisico_' . $linea_detalle->id, 'cantidad', 'trim|required|integer|greater_than[-1]');
 				$this->form_validation->set_rules('observacion_' . $linea_detalle->id, 'observacion', 'trim');
 			}
 		}
@@ -71,7 +71,7 @@ class Inventario extends CI_Controller {
 
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
-		$this->form_validation->set_message('numeric', 'El valor del campo %s debe ser numerico');
+		$this->form_validation->set_message('integer', 'El valor del campo %s debe ser numero entero');
 		$this->form_validation->set_message('greater_than', 'El valor del campo %s debe ser positivo');
 
 		$msg_alerta = '';
