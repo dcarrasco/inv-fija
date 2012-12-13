@@ -314,8 +314,8 @@ primary key(id)
 
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador and d.tipo='DIG'", 'left');
-		$this->db->join('fija_usuarios as a', "a.id = fija_detalle_inventario.auditor   and a.tipo='AUD'", 'left');
+		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador", 'left');
+		$this->db->join('fija_auditores as a', "a.id = fija_detalle_inventario.auditor", 'left');
 		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('fija_detalle_inventario.hoja, d.nombre, a.nombre');
