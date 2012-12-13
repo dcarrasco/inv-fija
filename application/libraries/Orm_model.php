@@ -667,7 +667,7 @@ class ORM_Model {
 		{
 			foreach($data_where as $key => $val)
 			{
-				$es_insert = ($val == '') ? TRUE : FALSE;
+				$es_insert = ($val == '' || $val == 0) ? TRUE : FALSE;
 			}
 		}
 		else
