@@ -122,7 +122,7 @@ class Inventario extends CI_Controller {
 				if ($this->input->post('accion') == 'borrar')
 				{
 					$nuevo_detalle_inventario = new Detalle_inventario;
-					$nuevo_detalle_inventario->get_id($this->input->post('id'));
+					$nuevo_detalle_inventario->find_id($this->input->post('id'));
 					$nuevo_detalle_inventario->borrar();
 					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('id') . ') borrada correctamente en hoja '. $hoja);
 				}
