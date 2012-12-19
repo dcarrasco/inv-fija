@@ -53,6 +53,17 @@ class Inv_activo extends ORM_Model {
 		return ($this->{$this->get_model_campo_id()});
 	}
 
+	public function get_max_hoja_inventario()
+	{
+		$rs = $this->db->select('max(hoja) as max_hoja')->get_where('fija_detalle_inventario', array('id_inventario' => $this->id))->row_array();
+		return ($rs['max_hoja']);
+	}
+
+	public function borrar_detalle_inventario()
+	{
+		$this->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
+	}
+
 
 }
 

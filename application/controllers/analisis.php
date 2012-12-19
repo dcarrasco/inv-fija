@@ -3,6 +3,7 @@
 class Analisis extends CI_Controller {
 
 	private $id_inventario = 0;
+	private $nombre_inventario = '';
 
 
 	public function __construct()
@@ -11,9 +12,12 @@ class Analisis extends CI_Controller {
 		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('analisis');
 
+		$inventario_activo = new Inv_activo;
+		$this->id_inventario     = $inventario_activo->get_id_inventario_activo();
+		$inventario_activo->find_id($this->id_inventario);
+
+		$this->nombre_inventario = $inventario_activo->nombre;
 	}
-
-
 
 	/**
 	 * accion por defecto del controlador
@@ -30,28 +34,23 @@ class Analisis extends CI_Controller {
 	 */
 	public function ajustes($ocultar_regularizadas = 0)
 	{
-		$this->load->model('usuario');
-		$this->load->model('inventario_model');
-		$this->load->model('catalogo');
 
-		// recupera el inventario activo
-		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
-
-		$nombre_inventario = $this->inventario_model->get_nombre_inventario($this->id_inventario);
-		$datos_hoja        = $this->inventario_model->get_ajustes($this->id_inventario, $ocultar_regularizadas);
+		// recupera el detalle de registros con diferencias
+		$detalle_ajustes   = new Detalle_inventario;
+		$detalle_ajustes->get_ajustes($this->id_inventario, $ocultar_regularizadas);
 
 		if ($this->input->post('formulario') == 'ajustes')
 		{
-			foreach($datos_hoja as $reg)
+			foreach($detalle_ajustes->get_model_all() as $detalle)
 			{
-				$this->form_validation->set_rules('stock_ajuste_' . $reg['id'], 'cantidad', 'trim|numeric');
-				$this->form_validation->set_rules('observacion_' . $reg['id'], 'observacion', 'trim');
+				$this->form_validation->set_rules('stock_ajuste_' . $detalle->id, 'cantidad', 'trim|integer');
+				$this->form_validation->set_rules('observacion_'  . $detalle->id, 'observacion', 'trim');
 			}
 		}
 
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
-		$this->form_validation->set_message('numeric', 'El valor del campo %s debe ser numerico');
+		$this->form_validation->set_message('integer', 'El valor del campo %s debe ser un numero entero');
 		$this->form_validation->set_message('greater_than', 'El valor del campo %s debe ser positivo');
 
 		$msg_alerta = '';
@@ -59,35 +58,28 @@ class Analisis extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-					'datos_hoja'            => $datos_hoja,
-					'id_inventario'         => $this->id_inventario,
-					'nombre_inventario'     => $nombre_inventario,
+					'detalle_ajustes'       => $detalle_ajustes,
 					'ocultar_regularizadas' => $ocultar_regularizadas,
 					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
 					'menu_app'              => $this->acl_model->menu_app(),
 				);
 
-			$data['titulo_modulo'] = 'Ajustes de inventario';
-			$this->load->view('app_header', $data);
-			$this->load->view('ajustes', $data);
-			$this->load->view('app_footer', $data);
+			$this->_render_view('ajustes', $data);
 		}
 		else
 		{
 			if ($this->input->post('formulario') == 'ajustes')
 			{
 				$cant_modif = 0;
-				foreach($datos_hoja as $reg)
+				foreach($detalle_ajustes->get_model_all() as $detalle)
 				{
-					if (((int) set_value('stock_ajuste_' . $reg['id']) != $reg['stock_ajuste']) or
-						(trim(set_value('observacion_' . $reg['id']))   != trim($reg['glosa_ajuste'])) )
+					if (((int) set_value('stock_ajuste_' . $detalle->id)  != $detalle->stock_ajuste) or
+						(trim(set_value('observacion_' . $detalle->id))   != trim($detalle->glosa_ajuste)) )
 					{
-						$this->inventario_model->guardar_ajuste(
-															$reg['id'],
-															set_value('stock_ajuste_' . $reg['id']),
-															trim(set_value('observacion_' . $reg['id'])),
-															date('Y-d-m H:i:s')
-														);
+						$detalle->stock_ajuste = (int) set_value('stock_ajuste_' . $detalle->id);
+						$detalle->glosa_ajuste = trim(set_value('observacion_' . $detalle->id));
+						$detalle->fecha_ajuste = date('Ymd H:i:s');
+						$detalle->grabar();
 						$cant_modif += 1;
 					}
 
@@ -101,9 +93,8 @@ class Analisis extends CI_Controller {
 	}
 
 
-	public function sube_stock($id_inventario = 0)
+	public function sube_stock()
 	{
-		$this->load->model('inventario_model');
 
 		$upload_error = '';
 		$script_carga = '';
@@ -134,9 +125,11 @@ class Analisis extends CI_Controller {
 					$upload_data = $this->upload->data();
 					$archivo_cargado = $upload_data['full_path'];
 
-					$this->inventario_model->borrar_inventario($id_inventario);
+					$inv_activo = new Inv_activo;
+					$inv_activo->find_id($this->id_inventario);
+					$inv_activo->borrar_detalle_inventario();
 
-					$res_procesa_archivo = $this->_procesa_archivo_cargado($id_inventario, $archivo_cargado);
+					$res_procesa_archivo = $this->_procesa_archivo_cargado($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
@@ -147,8 +140,8 @@ class Analisis extends CI_Controller {
 		}
 
 		$data = array(
-				'inventario_id'     => $id_inventario,
-				'inventario_nombre' => $this->inventario_model->get_nombre_inventario($id_inventario),
+				'inventario_id'     => $this->id_inventario,
+				'inventario_nombre' => $this->nombre_inventario,
 				'upload_error'      => $upload_error,
 				'script_carga'      => $script_carga,
 				'regs_OK'           => $regs_OK,
@@ -165,7 +158,7 @@ class Analisis extends CI_Controller {
 	}
 
 
-	private function _procesa_archivo_cargado($id_inventario = '', $archivo = '')
+	private function _procesa_archivo_cargado($archivo = '')
 	{
 		$count_OK    = 0;
 		$count_error = 0;
@@ -181,7 +174,7 @@ class Analisis extends CI_Controller {
 			{
 				$c += 1;
 				$num_linea += 1;
-				$resultado_procesa_linea = $this->_procesa_linea($id_inventario, $linea);
+				$resultado_procesa_linea = $this->_procesa_linea($linea);
 				if ($resultado_procesa_linea == 'no_procesar')
 				{
 
@@ -223,7 +216,7 @@ class Analisis extends CI_Controller {
 	}
 
 
-	private function _procesa_linea($id_inventario = '', $linea = '')
+	private function _procesa_linea($linea = '')
 	{
 		$arr_linea = explode("\r", $linea);
 		if ($arr_linea[0] != '')
@@ -255,21 +248,21 @@ class Analisis extends CI_Controller {
 					{
 						return (
 							'0,' .
-							$id_inventario      . ',' .
-							$hoja               . ',' .
+							$this->id_inventario . ',' .
+							$hoja                . ',' .
 							'0,' .
 							'0,' .
-							'\'' . $ubicacion   . '\',' .
-							'\'' . $catalogo    . '\',' .
-							'\'' . $descripcion . '\',' .
-							'\'' . $lote        . '\',' .
-							'\'' . $centro      . '\',' .
-							'\'' . $almacen     . '\',' .
-							'\'' . $um          . '\',' .
-							$stock_sap          . ',' .
+							'\'' . $ubicacion    . '\',' .
+							'\'' . $catalogo     . '\',' .
+							'\'' . $descripcion  . '\',' .
+							'\'' . $lote         . '\',' .
+							'\'' . $centro       . '\',' .
+							'\'' . $almacen      . '\',' .
+							'\'' . $um           . '\',' .
+							$stock_sap           . ',' .
 							'0,' .
 							'\'\',' .
-							'\'' . date('Y-d-m H:i:s') . '\',' .
+							'\'' . date('Ydm H:i:s') . '\',' .
 							'\'\''
 							);
 
@@ -298,35 +291,34 @@ class Analisis extends CI_Controller {
 
 	public function inserta_linea_archivo()
 	{
-		$this->load->model('inventario_model');
-		$this->inventario_model->guardar(
-			$this->input->post('id'),
-			$this->input->post('id_inv'),
-			$this->input->post('hoja'),
-			$this->input->post('aud'),
-			$this->input->post('dig'),
-			$this->input->post('ubic'),
-			$this->input->post('cat'),
-			$this->input->post('desc'),
-			$this->input->post('lote'),
-			$this->input->post('cen'),
-			$this->input->post('alm'),
-			$this->input->post('um'),
-			$this->input->post('ssap'),
-			$this->input->post('sfis'),
-			$this->input->post('obs'),
-			$this->input->post('fec'),
-			$this->input->post('nvo')
-			);
-
-
+		$detalle = new Detalle_inventario;
+		$detalle->id_inventario      = $this->input->post('id_inv');
+		$detalle->hoja               = $this->input->post('hoja');
+		$detalle->ubicacion          = $this->input->post('ubic');
+		$detalle->catalogo           = $this->input->post('cat');
+		$detalle->descripcion        = $this->input->post('desc');
+		$detalle->lote               = $this->input->post('lote');
+		$detalle->centro             = $this->input->post('cen');
+		$detalle->almacen            = $this->input->post('alm');
+		$detalle->um                 = $this->input->post('um');
+		$detalle->stock_sap          = $this->input->post('ssap');
+		$detalle->stock_fisico       = $this->input->post('sfis');
+		$detalle->digitador          = $this->input->post('aud');
+		$detalle->auditor            = $this->input->post('dig');
+		$detalle->reg_nuevo	         = $this->input->post('nvo');
+		$detalle->fecha_modificacion = $this->input->post('fec');
+		$detalle->observacion        = $this->input->post('obs');
+		$detalle->stock_ajuste       = 0;
+		$detalle->glosa_ajuste       = '';
+		$detalle->grabar();
 	}
 
 
 
 	public function imprime_inventario($id_inventario = 0)
 	{
-		$this->load->model('inventario_model');
+		$inv_activo = new Inv_activo;
+		$inv_activo->find_id($this->id_inventario);
 
 		$this->form_validation->set_rules('pag_desde', 'Pagina Desde', 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('pag_hasta', 'Pagina Hasta', 'trim|required|greater_than[0]');
@@ -338,9 +330,9 @@ class Analisis extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-					'inventario_id'     => $id_inventario,
-					'inventario_nombre' => $this->inventario_model->get_nombre_inventario($id_inventario),
-					'max_hoja'          => $this->inventario_model->get_max_hoja_inventario($id_inventario),
+					'inventario_id'     => $this->id_inventario,
+					'inventario_nombre' => $this->nombre_inventario,
+					'max_hoja'          => $inv_activo->get_max_hoja_inventario(),
 					'link_config'       => 'config',
 					'link_reporte'      => 'reportes',
 					'link_inventario'   => 'inventario',
@@ -361,43 +353,58 @@ class Analisis extends CI_Controller {
 	public function imprime_hojas($hoja_desde = 0, $hoja_hasta = 0, $oculta_stock_sap = 0)
 	{
 
+		$detalle = new Detalle_inventario;
+
 		if ($hoja_hasta == 0 or $hoja_hasta < $hoja_desde)
 		{
 			$hoja_hasta = $hoja_desde;
 		}
 
-		$this->load->model('inventario_model');
-
-		// recupera el inventario activo
-		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
-		$nombre_inventario = $this->inventario_model->get_nombre_inventario($this->id_inventario);
 
 		$this->load->view('inventario_print_head');
 
 		for($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
-			$datos_hoja        = $this->inventario_model->get_hoja($this->id_inventario, $hoja);
+			$detalle->find('all', array('conditions' => array('id_inventario' => $this->id_inventario, 'hoja' => $hoja)));
 			$data = array(
-					'datos_hoja'        => $datos_hoja,
+					'datos_hoja'        => $detalle->get_model_all(),
 					'oculta_stock_sap'  => $oculta_stock_sap,
 					'hoja'              => $hoja,
-					'nombre_inventario' => $nombre_inventario,
+					'nombre_inventario' => $this->nombre_inventario,
 				);
 
 			$this->load->view('inventario_print_body', $data);
 		}
 
 		$this->load->view('inventario_print_footer');
-
 	}
 
 
+	private function _menu_ajustes($arr_menu, $op_menu)
+	{
+		$menu = '<ul>';
+		foreach($arr_menu as $key => $val)
+		{
+			$selected = ($key == $op_menu) ? ' class="selected"' : '';
+			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
+		}
+		$menu .= '</ul>';
+		return $menu;
+	}
 
 
 	private function _render_view($vista = '', $data = array())
 	{
-		$data['titulo_modulo'] = 'Ajustes de inventario';
+
+		$arr_menu = array(
+				'ajustes'            => array('url' => 'analisis/ajustes', 'texto' => 'Ajustes de inventario'),
+				'sube_stock'         => array('url' => 'analisis/sube_stock', 'texto' => 'Subir Stock'),
+				'imprime_inventario' => array('url' => 'analisis/imprime_inventario', 'texto' => 'Imprimir Hojas'),
+			);
+
+		$data['titulo_modulo'] = 'Ajustes de inventario: ' . $this->nombre_inventario;
 		$data['menu_app'] = $this->acl_model->menu_app();
+		$data['menu_ajustes'] = $this->_menu_ajustes($arr_menu, $vista);
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);

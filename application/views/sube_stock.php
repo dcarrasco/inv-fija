@@ -2,7 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="fl">
-			Sube stock: <?php echo $inventario_nombre;?>
+			<?php echo $menu_ajustes; ?>
 		</div>
 	</div> <!-- fin content-module-heading -->
 
@@ -11,7 +11,7 @@
 	</div>
 
 	<div class="content-module-main">
-		<?php echo form_open_multipart('analisis/sube_stock/' . $inventario_id); ?>
+		<?php echo form_open_multipart('analisis/sube_stock'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 		<table>
 			<thead>
@@ -137,11 +137,10 @@ $(document).ready(function() {
 		$('#id_fec').val(fec);
 		$('#id_nvo').val(nvo);
 
-
 		$.ajax({
 			type:  "POST",
 			url:   js_base_url + "analisis/inserta_linea_archivo",
-			async: false,
+			async: true,
 			data:  $('#frm_aux').serialize(),
 			success: function(datos) {
 				regs_procesados += 1;
@@ -155,7 +154,6 @@ $(document).ready(function() {
 				//alert( "Se guardaron los datos: " + datos);
 			}
 		});
-
 	}
 </script>
 

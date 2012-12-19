@@ -33,6 +33,20 @@ primary key(id)
 		parent::__construct();
 	}
 
+	/**
+	 * Devuelve datos para poblar combobox de tipos de inventario
+	 * @return array Arreglo con los tipos de inventiaro
+	 */
+	public function get_combo_tipos_inventario()
+	{
+		return array(
+					''           => 'Seleccione tipo de inventario...',
+					'FIJA'       => 'Inventario Fija (Puerto Madero)',
+					'MAIMONIDES' => 'Inventario Empresas (Maimonides)',
+					'CABLES'     => 'Inventario Proveedores Cables',
+					);
+	}
+
 
 	/**
 	 * Devuelve el identificador del inventario activo
@@ -66,176 +80,7 @@ primary key(id)
 	}
 
 
-	/**
-	 * Devuelve arreglo con detalle del inventario (y ajustes)
-	 * @param  integer $id_inventario         ID del inventario a consultar
-	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
-	 * @return array                          Arreglo con el detalle de los registros
-	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0)
-	{
-		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
-		$this->db->where('id_inventario', $id_inventario);
-		if ($ocultar_regularizadas == 1)
-		{
-			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
-		}
-		else
-		{
-			$this->db->where('stock_sap <> stock_fisico');
-		}
 
-		return $this->db->get('fija_detalle_inventario')->result_array();
-	}
-
-
-	/**
-	 * Graba los ajustes de inventario en la BD
-	 * @param  integer $reg_id       ID del registro a grabar
-	 * @param  integer $stock_ajuste Cantidad del ajuste
-	 * @param  string  $glosa_ajuste Descripcion del ajuste
-	 * @param  integer $fecha_ajuste Fecha del ajuste
-	 * @return nada
-	 */
-	public function guardar_ajuste($reg_id = 0, $stock_ajuste = 0, $glosa_ajuste = '', $fecha_ajuste = 0)
-	{
-		$this->db->where('id', $reg_id);
-		$this->db->update('fija_detalle_inventario', array(
-			'stock_ajuste' => $stock_ajuste,
-			'glosa_ajuste' => $glosa_ajuste,
-			'fecha_ajuste' => $fecha_ajuste,
-			));
-	}
-
-
-	/**
-	 * Borra los registros de inventario
-	 * @param  integer $id_inventario ID del inventario a borrar
-	 * @return nada
-	 */
-	public function borrar_inventario($id_inventario = 0)
-	{
-		$this->db->delete('fija_detalle_inventario', array('id_inventario' => $id_inventario));
-	}
-
-
-	/**
-	 * Recupera el nombre de un inventario
-	 * @param  integer $id_inventario ID del inventario a consultar el nombre
-	 * @return string                 Nombre del inventario
-	 */
-	public function get_nombre_inventario($id_inventario = 0)
-	{
-		$this->db->where('id', $id_inventario);
-		$row = $this->db->get('fija_inventario2')->row_array();
-
-		return ($row['nombre']);
-	}
-
-
-	/**
-	 * Graba en la BD un registro de detalle de inventario
-	 * @param  integer $id                 ID del registro a grabar
-	 * @param  integer $id_inventario      ID del inventario
-	 * @param  integer $hoja               Numero de la hoja
-	 * @param  integer $digitador          ID del digitador
-	 * @param  integer $auditor            ID del auditor
-	 * @param  string  $ubicacion          Ubicacion inventariada
-	 * @param  string  $catalogo           Catalogo inventariado
-	 * @param  string  $descripcion        Descripcion del catalogo inventariado
-	 * @param  string  $lote               Lote del catalogo
-	 * @param  string  $centro             Centro del catalogo
-	 * @param  string  $almacen            Almacen del catalogo
-	 * @param  string  $um                 UM del catalogo
-	 * @param  integer $stock_sap          Cantidad en SAP del catalogo
-	 * @param  integer $stock_fisico       Cantidad inventariada del catalogo
-	 * @param  string  $observacion        Observacion del registro
-	 * @param  string  $fecha_modificacion Fecha de modificacion del registro
-	 * @param  string  $reg_nuevo          Indica si es un registro nuevo
-	 * @return nada
-	 */
-	public function guardar($id = 0, $id_inventario = 0,
-							$hoja = 0, $digitador = 0, $auditor = 0,
-							$ubicacion = '', $catalogo = '', $descripcion = '', $lote = '', $centro = '', $almacen = '',
-							$um = '', $stock_sap = 0, $stock_fisico = 0, $observacion = '', $fecha_modificacion = '', $reg_nuevo = '')
-	{
-		// insertar un nuevo registro
-		if ($id == 0)
-		{
-			$this->db->insert('fija_detalle_inventario', array(
-				'id_inventario' => $id_inventario,
-				'hoja'          => $hoja,
-				'digitador'     => $digitador,
-				'auditor'       => $auditor,
-				'ubicacion'     => $ubicacion,
-				'catalogo'      => $catalogo,
-				'descripcion'   => $descripcion,
-				'lote'          => $lote,
-				'centro'        => $centro,
-				'almacen'       => $almacen,
-				'um'            => $um,
-				'stock_sap'     => $stock_sap,
-				'stock_fisico'  => (int) $stock_fisico,
-				'observacion'   => $observacion,
-				'fecha_modificacion' => $fecha_modificacion,
-				'reg_nuevo'     => $reg_nuevo,
-				));
-		}
-		//modificar un registro existente
-		else
-		{
-			$this->db->where('id', $id);
-			$this->db->update('fija_detalle_inventario', array(
-				'id_inventario' => $id_inventario,
-				'hoja'          => $hoja,
-				'digitador'     => $digitador,
-				'auditor'       => $auditor,
-				'ubicacion'     => $ubicacion,
-				'catalogo'      => $catalogo,
-				'descripcion'   => $descripcion,
-				'lote'          => $lote,
-				'centro'        => $centro,
-				'almacen'       => $almacen,
-				'um'            => $um,
-				'stock_sap'     => $stock_sap,
-				'stock_fisico'  => (int) $stock_fisico,
-				'observacion'   => $observacion,
-				'fecha_modificacion' => $fecha_modificacion,
-				'reg_nuevo'     => $reg_nuevo,
-				));
-		}
-	}
-
-
-	/**
-	 * Devuelve el mayor valor de hojas de un inventario
-	 * @param  integer $id_inventario ID del inventario a consultar
-	 * @return integer                Numero de la hoja
-	 */
-	public function get_max_hoja_inventario($id_inventario = 0)
-	{
-		$this->db->where('id_inventario', $id_inventario);
-		$this->db->select_max('hoja');
-		$row = $this->db->get('fija_detalle_inventario')->row_array();
-
-		return ((int)$row['hoja']);
-	}
-
-
-	/**
-	 * Recupera los datos de una hoja de inventario
-	 * @param  integer $id_inventario ID del inventario
-	 * @param  integer $hoja          Numero de la hoja
-	 * @return array                  Arreglo con el detalle de la hoja de inventario
-	 */
-	public function get_hoja($id_inventario = 0, $hoja = 0)
-	{
-		$this->db->order_by('ubicacion ASC, catalogo ASC, lote ASC');
-		$this->db->where('hoja', $hoja);
-		$this->db->where('id_inventario', $id_inventario);
-
-		return $this->db->get('fija_detalle_inventario')->result_array();
-	}
 
 
 
@@ -651,6 +496,122 @@ primary key(id)
 /*
 
 
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0)
+	{
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($ocultar_regularizadas == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_sap <> stock_fisico');
+		}
+
+		return $this->db->get('fija_detalle_inventario')->result_array();
+	}
+
+
+	public function guardar_ajuste($reg_id = 0, $stock_ajuste = 0, $glosa_ajuste = '', $fecha_ajuste = 0)
+	{
+		$this->db->where('id', $reg_id);
+		$this->db->update('fija_detalle_inventario', array(
+			'stock_ajuste' => $stock_ajuste,
+			'glosa_ajuste' => $glosa_ajuste,
+			'fecha_ajuste' => $fecha_ajuste,
+			));
+	}
+
+
+	public function borrar_inventario($id_inventario = 0)
+	{
+		$this->db->delete('fija_detalle_inventario', array('id_inventario' => $id_inventario));
+	}
+
+
+	public function get_nombre_inventario($id_inventario = 0)
+	{
+		$this->db->where('id', $id_inventario);
+		$row = $this->db->get('fija_inventario2')->row_array();
+
+		return ($row['nombre']);
+	}
+
+
+	public function guardar($id = 0, $id_inventario = 0,
+							$hoja = 0, $digitador = 0, $auditor = 0,
+							$ubicacion = '', $catalogo = '', $descripcion = '', $lote = '', $centro = '', $almacen = '',
+							$um = '', $stock_sap = 0, $stock_fisico = 0, $observacion = '', $fecha_modificacion = '', $reg_nuevo = '')
+	{
+		// insertar un nuevo registro
+		if ($id == 0)
+		{
+			$this->db->insert('fija_detalle_inventario', array(
+				'id_inventario' => $id_inventario,
+				'hoja'          => $hoja,
+				'digitador'     => $digitador,
+				'auditor'       => $auditor,
+				'ubicacion'     => $ubicacion,
+				'catalogo'      => $catalogo,
+				'descripcion'   => $descripcion,
+				'lote'          => $lote,
+				'centro'        => $centro,
+				'almacen'       => $almacen,
+				'um'            => $um,
+				'stock_sap'     => $stock_sap,
+				'stock_fisico'  => (int) $stock_fisico,
+				'observacion'   => $observacion,
+				'fecha_modificacion' => $fecha_modificacion,
+				'reg_nuevo'     => $reg_nuevo,
+				));
+		}
+		//modificar un registro existente
+		else
+		{
+			$this->db->where('id', $id);
+			$this->db->update('fija_detalle_inventario', array(
+				'id_inventario' => $id_inventario,
+				'hoja'          => $hoja,
+				'digitador'     => $digitador,
+				'auditor'       => $auditor,
+				'ubicacion'     => $ubicacion,
+				'catalogo'      => $catalogo,
+				'descripcion'   => $descripcion,
+				'lote'          => $lote,
+				'centro'        => $centro,
+				'almacen'       => $almacen,
+				'um'            => $um,
+				'stock_sap'     => $stock_sap,
+				'stock_fisico'  => (int) $stock_fisico,
+				'observacion'   => $observacion,
+				'fecha_modificacion' => $fecha_modificacion,
+				'reg_nuevo'     => $reg_nuevo,
+				));
+		}
+	}
+
+
+	public function get_max_hoja_inventario($id_inventario = 0)
+	{
+		$this->db->where('id_inventario', $id_inventario);
+		$this->db->select_max('hoja');
+		$row = $this->db->get('fija_detalle_inventario')->row_array();
+
+		return ((int)$row['hoja']);
+	}
+
+
+	public function get_hoja($id_inventario = 0, $hoja = 0)
+	{
+		$this->db->order_by('ubicacion ASC, catalogo ASC, lote ASC');
+		$this->db->where('hoja', $hoja);
+		$this->db->where('id_inventario', $id_inventario);
+
+		return $this->db->get('fija_detalle_inventario')->result_array();
+	}
+
+
 
 	public function total_inventarios_activos()
 	{
@@ -665,16 +626,6 @@ primary key(id)
 		return $this->db->get('fija_inventario2', $limit, $offset)->result_array();
 	}
 
-
-	public function get_combo_tipos_inventario()
-	{
-		return array(
-					''           => 'Seleccione tipo de inventario...',
-					'FIJA'       => 'Inventario Fija (Puerto Madero)',
-					'MAIMONIDES' => 'Inventario Empresas (Maimonides)',
-					'CABLES'     => 'Inventario Proveedores Cables',
-					);
-	}
 
 
 	public function get_auditor_hoja($id_inventario = 0, $hoja = 0)

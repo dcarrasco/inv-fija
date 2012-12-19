@@ -29,37 +29,37 @@
 				<th class="ac">cen</th>
 				<th class="ac">alm</th>
 				<th class="ac">UM</th>
-	
+
 				<?php if (!$oculta_stock_sap): ?>
 					<th class="ac">cant <br> sap</th>
 				<?php endif; ?>
-	
+
 				<th class="ac">cant <br> fisico</th>
-	
+
 				<?php if (!$oculta_stock_sap): ?>
 					<th class="ac">F</th>
 					<th class="ac">A</th>
 				<?php endif; ?>
-	
+
 				<th  class="ac" style="width: 22%">observacion</th>
 			</tr>
 		</thead>
 		<tbody>
 			<?php $sum_sap = 0; ?>
 			<?php $lin = 0; ?>
-			<?php foreach ($datos_hoja as $reg): ?>
+			<?php foreach ($datos_hoja as $detalle): ?>
 				<?php $lin += 1; ?>
 				<tr>
-					<td class="ac"><?php echo $reg['ubicacion']; ?></td>
-					<td class="ac"><?php echo $reg['catalogo']; ?></td>
-					<td><?php echo $reg['descripcion']; ?></td>
-					<td class="ac"><?php echo $reg['lote']; ?></td>
-					<td class="ac"><?php echo $reg['centro']; ?></td>
-					<td class="ac"><?php echo $reg['almacen']; ?></td>
-					<td class="ac"><?php echo $reg['um']; ?></td>
+					<td class="ac"><?php echo $detalle->ubicacion; ?></td>
+					<td class="ac"><?php echo $detalle->catalogo; ?></td>
+					<td><?php echo $detalle->descripcion; ?></td>
+					<td class="ac"><?php echo $detalle->lote; ?></td>
+					<td class="ac"><?php echo $detalle->centro; ?></td>
+					<td class="ac"><?php echo $detalle->almacen; ?></td>
+					<td class="ac"><?php echo $detalle->um; ?></td>
 
 					<?php if (!$oculta_stock_sap): ?>
-						<td class="ac"><?php echo number_format($reg['stock_sap'],0,',','.'); ?></td>
+						<td class="ac"><?php echo number_format($detalle->stock_sap, 0, ',', '.'); ?></td>
 					<?php endif; ?>
 
 					<td></td>
@@ -71,9 +71,9 @@
 
 					<td></td>
 				</tr>
-				<?php $sum_sap += $reg['stock_sap']; ?>
+				<?php $sum_sap += (int) $detalle->stock_sap; ?>
 			<?php endforeach; ?>
-			
+
 			<?php for($i=$lin; $i<21; $i++): ?>
 				<tr>
 					<td>&nbsp;</td>

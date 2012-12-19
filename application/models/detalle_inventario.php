@@ -183,6 +183,40 @@ class Detalle_inventario extends ORM_Model {
 		}
 	}
 
+
+	/**
+	 * Recuoera las lineas de detalle del inventario para ajustar
+	 * @param  integer $id_inventario         ID del inventario a consultar
+	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
+	 * @return array                          Arreglo con el detalle de los registros
+	 */
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0)
+	{
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($ocultar_regularizadas == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_fisico - stock_sap <> 0');
+		}
+
+		$rs = $this->db->get('fija_detalle_inventario')->result_array();
+		$model_all = array();
+		foreach($rs as $reg)
+		{
+			$o = new Detalle_inventario();
+			$o->get_from_array($reg);
+			array_push($model_all, $o);
+		}
+		$this->set_model_all($model_all);
+	}
+
+
+
+
 }
 
 /* End of file detalle_inventario.php */

@@ -115,6 +115,7 @@ class ORM_Model {
 	public function get_campos_listado()     { return $this->campos_listado; }
 
 	public function get_model_all()          { return $this->model_all; }
+	public function set_model_all($model_all = array()) {$this->model_all = $model_all;}
 
 
 	/**

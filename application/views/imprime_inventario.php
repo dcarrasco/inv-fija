@@ -2,7 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<div class="fl">
-			Imprime inventario: <?php echo $inventario_nombre;?>
+			<?php echo $menu_ajustes; ?>
 		</div>
 	</div> <!-- fin content-module-heading -->
 
