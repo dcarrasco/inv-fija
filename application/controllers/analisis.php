@@ -262,7 +262,7 @@ class Analisis extends CI_Controller {
 							$stock_sap           . ',' .
 							'0,' .
 							'\'\',' .
-							'\'' . date('Ydm H:i:s') . '\',' .
+							'\'' . date('Ymd H:i:s') . '\',' .
 							'\'\''
 							);
 
