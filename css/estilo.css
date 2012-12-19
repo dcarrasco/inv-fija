@@ -565,6 +565,7 @@ BOTONES
 	background-color: #5081B3;
 	color: #ffffff;
 	border: none;
+	cursor: pointer;
 }
 
 .b-active:visited {
