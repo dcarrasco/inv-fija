@@ -47,6 +47,15 @@ class Inv_activo extends ORM_Model {
 		return $this->nombre;
 	}
 
+	public function grabar()
+	{
+		parent::grabar();
+		if ($this->activo)
+		{
+			$this->db->update($this->get_model_tabla(), array('activo' => 0), 'id<>' . $this->id);
+		}
+	}
+
 	public function get_id_inventario_activo()
 	{
 		$this->find('first', array('conditions' => array('activo' => 1)));
