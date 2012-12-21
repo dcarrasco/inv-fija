@@ -24,8 +24,6 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-
-
 	public function _get_stock_movil($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
@@ -344,7 +342,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select('s.material, m.desc_material, s.umb');
-			$this->db->join($this->bd_logistica . 'cp_material_fija m', 's.material=m.material', 'left');
+			$this->db->join('fija_catalogo m', 's.material=m.catalogo', 'left');
 			$this->db->group_by('s.material, m.desc_material, s.umb');
 			$this->db->order_by('s.material, m.desc_material, s.umb');
 		}
@@ -399,6 +397,96 @@ class stock_sap_model extends CI_Model {
 		{
 			$this->db->where_in("s.centro+'-'+s.almacen", $filtrar['almacenes']);
 		}
+
+		// tipos de articulo
+		/*
+		if (array_key_exists('tipo_articulo', $filtrar))
+		{
+			$this->db->where_in('tipo_articulo', $filtrar['tipo_articulo']);
+		}
+		*/
+
+		$arr_result = $this->db->get()->result_array();
+		//print_r($arr_result);
+
+
+		return $arr_result;
+	}
+
+
+
+
+	public function get_stock_transito($tipo_op = '', $mostrar = array(), $filtrar = array())
+	{
+		if ($tipo_op == 'MOVIL')
+		{
+			return $this->_get_stock_transito_movil($mostrar, $filtrar);
+		}
+		else
+		{
+			return $this->_get_stock_transito_fijo($mostrar, $filtrar);
+		}
+	}
+
+
+	public function _get_stock_transito_fijo($mostrar = array(), $filtrar = array())
+	{
+		$arr_result = array();
+
+		// fecha stock
+		if (in_array('fecha', $mostrar))
+		{
+			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
+			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)');
+			$this->db->order_by('fecha_stock');
+		}
+
+		// almacenes
+		$this->db->select('s.centro');
+		$this->db->group_by('s.centro');
+		$this->db->order_by('s.centro');
+
+		// cantidades y tipos de stock
+		if (in_array('tipo_stock', $mostrar))
+		{
+			$this->db->select('s.estado, s.acreedor, p.des_proveedor');
+			$this->db->group_by('s.estado, s.acreedor, p.des_proveedor');
+			$this->db->order_by('s.estado, s.acreedor');
+		}
+
+		// materiales
+		if (in_array('material', $mostrar))
+		{
+			$this->db->select('s.material, m.desc_material, s.umb');
+			$this->db->join($this->bd_logistica . 'cp_material_fija m', 's.material=m.material', 'left');
+			$this->db->group_by('s.material, m.desc_material, s.umb');
+			$this->db->order_by('s.material, m.desc_material, s.umb');
+		}
+
+		// lotes
+		if (in_array('lote', $mostrar))
+		{
+			$this->db->select('s.lote');
+			$this->db->group_by('s.lote');
+		}
+
+		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE);
+
+		// tablas
+		$this->db->from($this->bd_logistica . 'bd_stock_sap_fija s');
+		if (in_array('tipo_stock', $mostrar))
+		{
+			$this->db->join($this->bd_logistica . 'cp_proveedores p', 'p.cod_proveedor=s.acreedor', 'left');
+		}
+
+		// condiciones
+		// fechas
+		if (array_key_exists('fecha', $filtrar))
+		{
+			$this->db->where_in('s.fecha_stock', $filtrar['fecha']);
+		}
+
+		$this->db->where('s.almacen is null');
 
 		// tipos de articulo
 		/*

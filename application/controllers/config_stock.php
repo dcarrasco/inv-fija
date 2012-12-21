@@ -5,6 +5,7 @@ class config_stock extends CI_Controller {
 	private $arr_menu = array(
 				'almacen_sap'        => array('url' => '/config_stock/listado/almacen_sap', 'texto' => 'Almacenes SAP'),
 				'tipoalmacen_sap'    => array('url' => '/config_stock/listado/tipoalmacen_sap', 'texto' => 'Tipo Almacenes SAP'),
+				'proveedor  '        => array('url' => '/config_stock/listado/proveedor', 'texto' => 'Proveedores'),
 			);
 
 	public function __construct()

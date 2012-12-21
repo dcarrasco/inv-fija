@@ -5,6 +5,7 @@ class Stock_sap extends CI_Controller {
 	private $arr_menu = array(
 				'stock_movil'     => array('url' => 'stock_sap/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),
 				'stock_fija'      => array('url' => 'stock_sap/mostrar_stock/FIJA', 'texto' => 'Stock Fija'),
+				'transito_fija'   => array('url' => 'stock_sap/transito/FIJA', 'texto' => 'Transito Fija'),
 				//'grupos_movil'    => array('url' => 'stock_sap/lista_grupos/MOVIL', 'texto' => 'Grupos Movil'),
 				//'grupos_fija'     => array('url' => 'stock_sap/lista_grupos/FIJA', 'texto' => 'Grupos Fija'),
 				//'almacenes_movil' => array('url' => 'stock_sap/lista_almacenes/MOVIL', 'texto' => 'Almacenes Movil'),
@@ -42,6 +43,7 @@ class Stock_sap extends CI_Controller {
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
 	}
+
 
 	public function mostrar_stock($tipo_op = '')
 	{
@@ -133,7 +135,74 @@ class Stock_sap extends CI_Controller {
 	}
 
 
+	public function transito($tipo_op = '')
+	{
+		$this->load->model('stock_sap_model');
+		$this->load->model('almacen_sap_model');
 
+		$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
+		foreach (array('almacen','material','lote','tipo_stock') as $val)
+		{
+			if ($this->input->post($val) == $val)
+			{
+				array_push($arr_mostrar, $val);
+			}
+		}
+
+		$arr_filtrar = 	array();
+		foreach (array('tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $val)
+		{
+			$arr_filtrar[$val] = $this->input->post($val);
+		}
+
+		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia') ? $this->input->post('fecha_ultimodia') : $this->input->post('fecha_todas');
+
+		$this->form_validation->set_rules('sel_fechas', '', '');
+		$this->form_validation->set_rules('fecha_ultimodia', '', '');
+		$this->form_validation->set_rules('fecha_todas', '', '');
+		$this->form_validation->set_rules('material', '', '');
+		$this->form_validation->set_rules('lote', '', '');
+		$this->form_validation->set_rules('tipo_stock', '', '');
+		$this->form_validation->set_rules('tipo_stock_equipos', '', '');
+		$this->form_validation->set_rules('tipo_stock_simcard', '', '');
+		$this->form_validation->set_rules('tipo_stock_otros', '', '');
+		$this->form_validation->run();
+
+		$stock        = $this->stock_sap_model->get_stock_transito($tipo_op, $arr_mostrar, $arr_filtrar);
+		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+
+		$data = array(
+						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('transito_movil') : $this->_menu_configuracion('transito_fija'),
+						'stock'                  => $stock,
+						'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
+						'combo_fechas_todas'     => $combo_fechas['todas'],
+						'tipo_op'                => $tipo_op,
+						'arr_mostrar'            => $arr_mostrar,
+						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
+														|| in_array('material', $arr_mostrar)
+														|| in_array('lote', $arr_mostrar)
+														|| in_array('tipo_stock', $arr_mostrar)
+														)
+														&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
+														) ? TRUE : FALSE),
+					);
+
+		$data['titulo_modulo'] = 'Consulta stock SAP';
+		$data['menu_app'] = $this->acl_model->menu_app();
+
+		if ($this->input->post('excel'))
+		{
+			$this->load->view('stock_sap/ver_stock_encab_excel', $data);
+			$this->load->view('stock_sap/ver_stock_datos', $data);
+		}
+		else
+		{
+			$this->load->view('app_header', $data);
+			$this->load->view('stock_sap/ver_stock_form_transito', $data);
+			$this->load->view('stock_sap/ver_stock_datos', $data);
+			$this->load->view('app_footer', $data);
+		}
+	}
 
 
 
