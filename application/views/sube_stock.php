@@ -140,7 +140,7 @@ $(document).ready(function() {
 		$.ajax({
 			type:  "POST",
 			url:   js_base_url + "analisis/inserta_linea_archivo",
-			async: true,
+			async: false,
 			data:  $('#frm_aux').serialize(),
 			success: function(datos) {
 				regs_procesados += 1;
