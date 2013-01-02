@@ -18,43 +18,54 @@
 			<tr>
 				<th>
 					<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
-					Seleccionar ultimo dia mes <br/>
+					Seleccionar ultimo dia mes
+					<br/>
 					<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-					Seleccionar todas las fechas <br/>
-
+					Seleccionar todas las fechas
+					<br/>
 					<div id="show_fecha_ultimodia">
-						<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, set_value('fecha_ultimodia'),'size="10" class="form_edit round"'); ?>
+						<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form_edit round"'); ?>
 					</div>
 					<div id="show_fecha_todas">
-						<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, set_value('fecha_todas'),'size="10" class="form_edit round"'); ?>
+						<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="form_edit round"'); ?>
 					</div>
 				</th>
 				<th>
 					<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
-					Seleccionar Tipos de Almacen <br/>
+					Seleccionar Tipos de Almacen
+					<br/>
 					<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
-					Seleccionar Almacenes <br/>
+					Seleccionar Almacenes
+					<br/>
 
 					<div id="show_tiposalm">
-						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, set_value('tipo_alm'), 'size="10" class="form_edit round"'); ?> <br/ > <br/>
+						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form_edit round"'); ?>
+						<br/ >
+						<br/>
 						<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?> Desplegar detalle almacenes
 					</div>
 					<div id="show_almacenes">
-						<?php echo form_multiselect('almacenes[]', $combo_almacenes, set_value('almacenes'), 'size="10" class="form_edit round"'); ?>
+						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="10" class="form_edit round"'); ?>
 					</div>
 				</th>
 				<th>
 					<?php //echo form_checkbox('tipo_articulo', 'tipo_articulo', set_checkbox('tipo_articulo', 'tipo_articulo')); ?> <!-- Desplegar detalle tipos articulo <br/> -->
-					<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?> Desplegar detalle materiales <br/>
-					<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?> Desplegar detalle lotes <br/>
-					<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?> Desplegar detalle tipos stock <br/>
+					<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?> Desplegar detalle materiales
+					<br/>
+					<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?> Desplegar detalle lotes
+					<br/>
+					<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?> Desplegar detalle tipos stock
+					<br/>
 					<?php if($tipo_op == 'MOVIL'): ?>
 						<?php echo '&nbsp;&nbsp;&nbsp;&nbsp;' ?>
-						<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?> Equipos<br/>
+						<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?> Equipos
+						<br/>
 						<?php echo '&nbsp;&nbsp;&nbsp;&nbsp;' ?>
-						<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?> Simcard<br/>
+						<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?> Simcard
+						<br/>
 						<?php echo '&nbsp;&nbsp;&nbsp;&nbsp;' ?>
-						<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?> Otros<br/>
+						<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?> Otros
+						<br/>
 					<?php endif; ?>
 					<br>
 					<hr>
@@ -65,15 +76,6 @@
 					<div class="fr">
 						<?php echo form_submit('submit', 'Reporte', 'class="button b-active round ic-reporte"'); ?><br/>
 					</div>
-					<!--
-					<div class="ar">
-						<a id="boton-submit" class="button b-active round ic-reporte" href="#">Reporte</a><br><br>
-					</div>
-					<br>
-					<div class="ar">
-						<a id="boton-reset" class="button b-active round ic-exportar" href="#">Exportar a Excel...</a>
-					</div>
-					-->
 				</th>
 			</tr>
 		</table>
