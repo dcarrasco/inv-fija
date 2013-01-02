@@ -1081,7 +1081,11 @@ class ORM_Field {
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="' . $form_class . '"';
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
-			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
+			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			$CI =& get_instance();
+			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
+			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $opciones, $param_adic);
 		}
 
 		return $form;
