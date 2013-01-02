@@ -27,7 +27,7 @@ class Catalogo extends ORM_Model {
 								'largo'          => 50,
 								'texto_ayuda'    => 'Descripción del material. Máximo 50 caracteres.',
 								'es_obligatorio' => TRUE,
-								'es_unico'       => TRUE
+								//'es_unico'       => TRUE
 							),
 						'pmp' => array(
 								'label'          => 'Precio Medio Ponderado (PMP)',
