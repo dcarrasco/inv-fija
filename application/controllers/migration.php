@@ -21,6 +21,17 @@ class Migration extends CI_Controller {
 
 	}
 
+	public function version($version = -1)
+	{
+		$this->load->library('migration');
+
+		if ($version > -1)
+		{
+			$this->migration->version($version);
+		}
+
+	}
+
 
 
 

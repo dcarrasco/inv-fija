@@ -8,6 +8,7 @@ class Migration_agrega_HU extends CI_Migration {
 		// ***************************************************************************
 		// TABLA FIJA_DETALLE_INVENTARIO
 		// ***************************************************************************
+		echo "Agregando columna a tabla 'fija_detalle_inventario'... ";
 		$fields = array(
 			'HU' => array(
 					'type'       => 'VARCHAR',
@@ -17,6 +18,7 @@ class Migration_agrega_HU extends CI_Migration {
 				),
 		);
 		$this->dbforge->add_column('fija_detalle_inventario', $fields);
+		echo "OK<br/>";
 
 
 	}
@@ -24,7 +26,9 @@ class Migration_agrega_HU extends CI_Migration {
 
 	public function down()
 	{
+		echo "Quitando columna a tabla 'fija_detalle_inventario'... ";
 		$this->dbforge->drop_column('fija_detalle_inventario', 'HU');
+		echo "OK<br/>";
 	}
 
 }

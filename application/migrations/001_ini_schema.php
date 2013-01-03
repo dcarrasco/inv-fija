@@ -8,6 +8,7 @@ class Migration_ini_schema extends CI_Migration {
 		// ***************************************************************************
 		// TABLA FIJA_ALMACENES
 		// ***************************************************************************
+		echo "Creando tabla 'fija_almacenes'... ";
 		$fields = array(
 			'almacen' => array(
 					'type'       => 'VARCHAR',
@@ -18,11 +19,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('almacen', TRUE);
 		$this->dbforge->create_table('fija_almacenes');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_AUDITORES
 		// ***************************************************************************
+		echo "Creando tabla 'fija_auditores'... ";
 		$fields = array(
 			'id' => array(
 					'type'           => 'BIGINT',
@@ -43,11 +46,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_auditores');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_CATALOGO
 		// ***************************************************************************
+		echo "Creando tabla 'fija_catalogo'... ";
 		$fields = array(
 			'catalogo' => array(
 					'type'       => 'VARCHAR',
@@ -67,11 +72,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('catalogo', TRUE);
 		$this->dbforge->create_table('fija_catalogo');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_CATALOGO_FAMILIAS
 		// ***************************************************************************
+		echo "Creando tabla 'fija_catalogo_familias'... ";
 		$fields = array(
 			'codigo' => array(
 					'type'       => 'VARCHAR',
@@ -90,11 +97,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('codigo', TRUE);
 		$this->dbforge->create_table('fija_catalogo_familias');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_CENTROS
 		// ***************************************************************************
+		echo "Creando tabla 'fija_centros'... ";
 		$fields = array(
 			'centro' => array(
 					'type'       => 'VARCHAR',
@@ -105,11 +114,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('centro', TRUE);
 		$this->dbforge->create_table('fija_centros');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_DETALLE_INVENTARIO
 		// ***************************************************************************
+		echo "Creando tabla 'fija_detalle_inventario'... ";
 		$fields = array(
 			'id' => array(
 					'type'           => 'BIGINT',
@@ -224,11 +235,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_detalle_inventario');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_INVENTARIO2
 		// ***************************************************************************
+		echo "Creando tabla 'fija_inventario2'... ";
 		$fields = array(
 			'id' => array(
 					'type'           => 'BIGINT',
@@ -258,11 +271,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_inventario2');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_TIPO_UBICACION
 		// ***************************************************************************
+		echo "Creando tabla 'fija_tipo_ubicacion'... ";
 		$fields = array(
 			'id' => array(
 					'type'           => 'BIGINT',
@@ -286,11 +301,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_tipo_ubicacion');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_TIPOS_INVENTARIO
 		// ***************************************************************************
+		echo "Creando tabla 'fija_tipos_inventario'... ";
 		$fields = array(
 			'id_tipo_inventario' => array(
 					'type'           => 'VARCHAR',
@@ -308,11 +325,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id_tipo_inventario', TRUE);
 		$this->dbforge->create_table('fija_tipos_inventario');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_UBICACION_TIPO_UBICACION
 		// ***************************************************************************
+		echo "Creando tabla 'fija_ubicacion_tipo_ubicacion'... ";
 		$fields = array(
 			'id' => array(
 					'type'           => 'BIGINT',
@@ -342,11 +361,13 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_ubicacion_tipo_ubicacion');
+		echo "OK<br/>";
 
 
 		// ***************************************************************************
 		// TABLA FIJA_UNIDADES
 		// ***************************************************************************
+		echo "Creando tabla 'fija_unidades'... ";
 		$fields = array(
 			'unidad' => array(
 					'type'       => 'VARCHAR',
@@ -364,6 +385,7 @@ class Migration_ini_schema extends CI_Migration {
 		$this->dbforge->add_field($fields);
 		$this->dbforge->add_key('unidad', TRUE);
 		$this->dbforge->create_table('fija_unidades');
+		echo "OK<br/>";
 
 
 	}
@@ -371,17 +393,50 @@ class Migration_ini_schema extends CI_Migration {
 
 	public function down()
 	{
+		echo "Borrando tabla 'fija_almacenes'... ";
 		$this->dbforge->drop_table('fija_almacenes');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_auditores'... ";
 		$this->dbforge->drop_table('fija_auditores');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_catalogo'... ";
 		$this->dbforge->drop_table('fija_catalogo');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_catalogo_familias'... ";
 		$this->dbforge->drop_table('fija_catalogo_familias');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_centros'... ";
 		$this->dbforge->drop_table('fija_centros');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_detalle_inventario'... ";
 		$this->dbforge->drop_table('fija_detalle_inventario');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_inventario2'... ";
 		$this->dbforge->drop_table('fija_inventario2');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_tipo_ubicacion'... ";
 		$this->dbforge->drop_table('fija_tipo_ubicacion');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_tipos_inventario'... ";
 		$this->dbforge->drop_table('fija_tipos_inventario');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_ubicacion_tipo_ubicacion'... ";
 		$this->dbforge->drop_table('fija_ubicacion_tipo_ubicacion');
+		echo "OK<br/>";
+
+		echo "Borrando tabla 'fija_unidades'... ";
 		$this->dbforge->drop_table('fija_unidades');
+		echo "OK<br/>";
+
 	}
 
 }
