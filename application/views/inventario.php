@@ -65,6 +65,17 @@
 				</tr>
 
 				<tr>
+					<th class="ar">
+						<?php echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
+					</th>
+					<td>
+						<?php echo $nuevo_detalle_inventario->print_form_field('hu'); ?>
+						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('hu')) ? '<span class="form_requerido">*</span>' : ''; ?>
+						<?php echo form_error('hu'); ?>
+					</td>
+				</tr>
+
+				<tr>
 					<th class="ar">material</th>
 					<td>
 						Filtrar
@@ -165,6 +176,7 @@
 			<thead>
 				<tr>
 					<th class="ac">ubicacion</th>
+					<th class="ac">HU</th>
 					<th>material</th>
 					<th>descripcion</th>
 					<th>lote</th>
@@ -187,6 +199,7 @@
 							<?php if ($linea_det->reg_nuevo == 'S'):?>
 							<?php echo anchor('#', 'Ed', 'class="button_mini b-active round ic-edit fl" id="btn_editar_id_' . $linea_det->id . '"'); ?>
 							<?php echo form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>
+							<?php echo form_hidden('hu_'          . $linea_det->id, $linea_det->hu); ?>
 							<?php echo form_hidden('catalogo_'    . $linea_det->id, $linea_det->catalogo); ?>
 							<?php echo form_hidden('descripcion_' . $linea_det->id, $linea_det->descripcion); ?>
 							<?php echo form_hidden('lote_'        . $linea_det->id, $linea_det->lote); ?>
@@ -195,6 +208,7 @@
 							<?php echo form_hidden('um_'          . $linea_det->id, $linea_det->um); ?>
 							<?php endif; ?>
 						</td>
+						<td class="ac"><?php echo $linea_det->hu; ?></td>
 						<td><?php echo $linea_det->catalogo; ?></td>
 						<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
 						<td><?php echo $linea_det->get_valor_field('lote'); ?></td>
@@ -218,6 +232,7 @@
 				<tr>
 					<td colspan="2">
 					</td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>

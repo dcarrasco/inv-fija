@@ -35,6 +35,13 @@ class Detalle_inventario extends ORM_Model {
 								'texto_ayuda'    => 'Indica la posición del material en el almacén.',
 								'es_obligatorio' => true,
 							),
+						'hu' => array(
+								'label'          => 'HU del material',
+								'tipo'           =>  'char',
+								'largo'          => 20,
+								'texto_ayuda'    => 'Indica la HU del material en el almacén.',
+								'es_obligatorio' => true,
+							),
 						'catalogo' => array(
 								'tipo'           => 'has_one',
 								'relation'       => array(

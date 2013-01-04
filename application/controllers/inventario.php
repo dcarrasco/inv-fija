@@ -61,6 +61,7 @@ class Inventario extends CI_Controller {
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 			$nuevo_detalle_inventario->set_validation_rules_field('ubicacion');
+			$nuevo_detalle_inventario->set_validation_rules_field('hu');
 			$nuevo_detalle_inventario->set_validation_rules_field('catalogo');
 			$nuevo_detalle_inventario->set_validation_rules_field('lote');
 			$nuevo_detalle_inventario->set_validation_rules_field('centro');
@@ -138,6 +139,7 @@ class Inventario extends CI_Controller {
 														'digitador'     => $id_usuario_login,
 														'auditor'       => set_value('auditor'),
 														'ubicacion'     => $this->input->post('ubicacion'),
+														'hu'            => $this->input->post('hu'),
 														'catalogo'      => $this->input->post('catalogo'),
 														'descripcion'   => $nuevo_material->descripcion,
 														'lote'          => $this->input->post('lote'),
