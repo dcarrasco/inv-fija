@@ -569,11 +569,12 @@ class stock_sap_model extends CI_Model {
 			if ($material != '' && $material != '_') $this->db->where('s.material', $material);
 			if ($lote     != '' && $lote     != '_') $this->db->where('s.lote', $lote);
 
-			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario');
+			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario, p.pmp');
 
 			$this->db->from($this->bd_logistica . 'bd_stock_sap as s');
 			$this->db->join($this->bd_logistica . 'cp_almacenes as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
 			$this->db->join($this->bd_logistica . 'cp_usuarios as u', 'u.usuario=s.modificado_por', 'left');
+			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.material and p.lote=s.lote and p.estado_stock=s.estado_stock",'left');
 			$this->db->order_by('material, lote, serie');
 
 			return $this->db->get()->result_array();

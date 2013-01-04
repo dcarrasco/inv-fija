@@ -8,7 +8,7 @@
 	</div> <!-- fin content-module-heading -->
 
 	<div class="content-module-main">
-		<table class="reporte">
+		<table class="reporte" style="white-space: nowrap;">
 			<tr>
 				<th>n</th>
 				<th>fecha stock</th>
@@ -19,6 +19,7 @@
 				<th>lote</th>
 				<th>serie</th>
 				<th>estado stock</th>
+				<th>pmp</th>
 				<th>fecha modificacion</th>
 				<th>usuario modificacion</th>
 				<th>nombre usuario modificacion</th>
@@ -36,6 +37,7 @@
 					<td><?php echo $reg['lote']; ?></td>
 					<td><span class="serie"><?php echo $reg['serie']; ?></span></td>
 					<td><?php echo $reg['estado_stock']; ?></td>
+					<td><?php echo $reg['pmp']; ?></td>
 					<td><?php echo $reg['fecha_modificacion']; ?></td>
 					<td><?php echo $reg['modificado_por']; ?></td>
 					<td><?php echo $reg['nom_usuario']; ?></td>
