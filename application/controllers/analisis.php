@@ -236,9 +236,9 @@ class Analisis extends CI_Controller {
 				$stock_sap   = trim($arr_datos[8]);
 				$hoja        = trim($arr_datos[9]);
 
-				if ($ubicacion == 'UBICACION' or $$catalogo == 'CATALOGO' or $centro    == 'CENTRO' or
-					$almacen   == 'ALMACEN'   or $lote      == 'LOTE'     or $um        == 'UM'     or
-					$stock_sap == 'STOCK_SAP' or $hoja      == 'HOJA'     or $hu        == 'HU')
+				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO'  or $centro    == 'CENTRO' or
+					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'      or $um        == 'UM'     or
+					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA'      or $hu        == 'HU')
 				{
 					// cabecera del archivo, no se hace nada
 					return 'no_procesar';
