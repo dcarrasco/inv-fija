@@ -364,7 +364,7 @@ class Analisis extends CI_Controller {
 		}
 
 
-		$this->load->view('inventario_print_head');
+		$this->load->view('inventario/inventario_print_head');
 
 		for($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
@@ -376,10 +376,10 @@ class Analisis extends CI_Controller {
 					'nombre_inventario' => $this->nombre_inventario,
 				);
 
-			$this->load->view('inventario_print_body', $data);
+			$this->load->view('inventario/inventario_print_body', $data);
 		}
 
-		$this->load->view('inventario_print_footer');
+		$this->load->view('inventario/inventario_print_footer');
 	}
 
 
@@ -409,7 +409,7 @@ class Analisis extends CI_Controller {
 		$data['menu_app'] = $this->acl_model->menu_app();
 		$data['menu_ajustes'] = $this->_menu_ajustes($arr_menu, $vista);
 		$this->load->view('app_header', $data);
-		$this->load->view($vista, $data);
+		$this->load->view('inventario/' . $vista, $data);
 		$this->load->view('app_footer', $data);
 	}
 
