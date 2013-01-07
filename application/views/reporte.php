@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="fr" style="padding-right: 30px;">
-			Inventario: <?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?> 
+			Inventario: <?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
 		</div>
 
 
@@ -103,9 +103,20 @@
 					</tr>
 				<?php endforeach; ?>
 
+				<!-- ultima linea de subtotales -->
+				<?php foreach ($arr_campos as $c => $arr_c): ?>
+					<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+					<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
+					</td>
+				<?php endforeach; ?>
+				</tr>
+				<tr>
+					<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+				</tr>
+
 				<tr> <!-- totales -->
 					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-						<td <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
+						<td <?php echo ($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
 							<?php echo ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') ? '<strong>' . number_format($totales[$campo],0,',','.') . '</strong>' : ''; ?>
 						</td>
 					<?php endforeach; ?>
