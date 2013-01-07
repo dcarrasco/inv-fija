@@ -104,15 +104,19 @@
 				<?php endforeach; ?>
 
 				<!-- ultima linea de subtotales -->
-				<?php foreach ($arr_campos as $c => $arr_c): ?>
-					<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-					<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
-					</td>
+				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
+					<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
+						<?php foreach ($arr_campos as $c => $arr_c): ?>
+							<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+							<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
+							</td>
+						<?php endforeach; ?>
+						</tr>
+						<tr>
+							<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+						</tr>
+					<?php endif; ?>
 				<?php endforeach; ?>
-				</tr>
-				<tr>
-					<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
-				</tr>
 
 				<tr> <!-- totales -->
 					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
