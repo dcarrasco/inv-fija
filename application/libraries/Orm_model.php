@@ -676,6 +676,7 @@ class ORM_Model {
 			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
 		}
 
+		// NUEVO REGISTRO
 		if ($es_insert)
 		{
 			if (!$es_auto_id)
@@ -686,8 +687,10 @@ class ORM_Model {
 			{
 				$this->db->insert($this->model_tabla, $data_update);
 				$data_where[$this->model_campo_id] = $this->db->insert_id();
+				$this->{$this->model_campo_id} = $this->db->insert_id();
 			}
 		}
+		// REGISTRO EXISTENTE
 		else
 		{
 			$this->db->where($data_where);
