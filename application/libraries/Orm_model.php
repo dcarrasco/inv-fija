@@ -271,11 +271,11 @@ class ORM_Model {
 	{
 		if (!$formatted)
 		{
-			return $this->$campo;
+			return htmlspecialchars($this->$campo);
 		}
 		else
 		{
-			return $this->model_fields[$campo]->get_formatted_value($this->$campo);
+			return htmlspecialchars($this->model_fields[$campo]->get_formatted_value($this->$campo));
 		}
 	}
 
