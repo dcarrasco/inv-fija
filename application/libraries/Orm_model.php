@@ -271,11 +271,11 @@ class ORM_Model {
 	{
 		if (!$formatted)
 		{
-			return htmlspecialchars($this->$campo);
+			return ($this->$campo);
 		}
 		else
 		{
-			return htmlspecialchars($this->model_fields[$campo]->get_formatted_value($this->$campo));
+			return ($this->model_fields[$campo]->get_formatted_value($this->$campo));
 		}
 	}
 
@@ -1112,11 +1112,12 @@ class ORM_Field {
 		}
 		else if ($this->tipo == 'has_many')
 		{
-			$campo = '';
+			$campo = '<ul class="formatted_has_many">';
 			foreach ($this->relation['data']->get_model_all() as $obj)
 			{
-				$campo .= $obj->__toString() . '<br>';
+				$campo .= '<li>' . $obj . '</li>';
 			}
+			$campo .= '</ul>';
 			return $campo;
 		}
 		else if (count($this->choices) > 0)

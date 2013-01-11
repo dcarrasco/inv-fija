@@ -311,6 +311,10 @@ tr:nth-child(even) {
 	background-color: #efefef;
 }
 
+ul.formatted_has_many {
+	padding: 0 1em;
+}
+
 /* =========================================================
 MODULO LOGISTICA
 ============================================================ */
