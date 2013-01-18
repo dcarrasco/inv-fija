@@ -10,12 +10,18 @@ class Acl_model extends CI_Model {
 	}
 
 
+	/**
+	 * Loguea un usuario en el sistema
+	 * @param  string $usr usuario
+	 * @param  string $pwd clave
+	 * @return boolean     TRUE si se loguea al usuario, FALSE si no
+	 */
 	public function login($usr = '', $pwd = '')
 	{
 		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))->num_rows() > 0)
 		{
 			// crea cookies con la sesion del usuario
-			$this->set_session_cookies($usr);
+			$this->_set_session_cookies($usr);
 			return true;
 		}
 		else
@@ -24,6 +30,11 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Devuelve el menu de las aplicaciones del sistema
+	 * @return string    Texto con el menu (<ul>) de las aplicaciones
+	 */
 	public function menu_app()
 	{
 
@@ -52,6 +63,12 @@ class Acl_model extends CI_Model {
 		return $menu;
 	}
 
+
+	/**
+	 * Devuelve el id del usuario, dado el nombre de usuario
+	 * @param  string $usr Usuario
+	 * @return string      ID del usuario
+	 */
 	public function get_id_usr($usr = '')
 	{
 		$user = ($usr == '') ? $this->input->cookie('movistar_usr') : $usr;
@@ -59,6 +76,12 @@ class Acl_model extends CI_Model {
 		return (is_array($rs) ? $rs['id'] : '');
 	}
 
+
+	/**
+	 * Devuelve arreglo con todos los modulos para un usuario
+	 * @param  string $usr Usuario
+	 * @return array       Arreglo con los módulos del usuario
+	 */
 	public function get_modulos_usuario($usr = '')
 	{
 		$this->db->distinct();
@@ -79,6 +102,11 @@ class Acl_model extends CI_Model {
 	}
 
 
+	/**
+	 * Devuelve el menu de módulos del usuario
+	 * @param  string $usr Usuario
+	 * @return array       Modulos asociados al usuario
+	 */
 	public function get_menu_usuario($usr = '')
 	{
 		$this->db->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono');
@@ -93,7 +121,11 @@ class Acl_model extends CI_Model {
 	}
 
 
-	private function set_session_cookies($usr)
+	/**
+	 * Crea las cookies de login para un usuario
+	 * @param string $usr Usuario
+	 */
+	private function _set_session_cookies($usr = '')
 	{
 		$this->input->set_cookie(array(
 			'name'   => 'movistar_usr',
@@ -102,12 +134,23 @@ class Acl_model extends CI_Model {
 			));
 	}
 
+
+	/**
+	 * Borra las cookies de login
+	 * @return none
+	 */
 	public function delete_session_cookies()
 	{
 		delete_cookie('movistar_usr');
 		delete_cookie('movistar_menu');
 	}
 
+
+	/**
+	 * Autentica el uso de un módulo de la aplicacion
+	 * @param  string $mod Modulo a autenticar
+	 * @return none
+	 */
 	public function autentica($mod = '')
 	{
 		if (!$this->input->cookie('movistar_usr'))
@@ -124,11 +167,15 @@ class Acl_model extends CI_Model {
 			else
 			{
 				// renueva la cookie de usuario (por timeout)
-				$this->set_session_cookies($this->input->cookie('movistar_usr'));
+				$this->_set_session_cookies($this->input->cookie('movistar_usr'));
 			}
 		}
 	}
 
+
+
+
+/*
 	public function get_total_app()
 	{
 		return $this->db->count_all('acl_app');
@@ -148,8 +195,6 @@ class Acl_model extends CI_Model {
 	{
 		return $this->db->count_all('acl_usuario_rol');
 	}
-
-
 
 	public function get_all_app($limit = 0, $offset = 0)
 	{
@@ -177,7 +222,14 @@ class Acl_model extends CI_Model {
 		$this->db->join('acl_app a', 'r.id_app=a.id', 'left');
 		return $this->db->get('acl_usuario_rol ur', $limit, $offset)->result_array();
 	}
+*/
 
+
+	/**
+	 * Devuelve el nombre de un usuario
+	 * @param  string $usr Usuario
+	 * @return string      Nombre del usuario
+	 */
 	public function get_nombre_usuario($usr = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
@@ -191,6 +243,12 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Indica si un usuario tiene o no una clave
+	 * @param  string $usr Usuario
+	 * @return boolean     Indica si el usuario tiene o no clave
+	 */
 	public function tiene_clave($usr = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
@@ -204,12 +262,26 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Indica si un usuario existe o no en el sistema
+	 * @param  string $usr Usuario
+	 * @return boolean     Indica si el usuario existe o no
+	 */
 	public function existe_usuario($usr = '')
 	{
 		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
 		return (($regs > 0) ? true : false);
 	}
 
+
+	/**
+	 * Cambia la clave de un usuario
+	 * @param  string $usr       Usuario
+	 * @param  string $clave_old Clave anterior
+	 * @param  string $clave_new Nueva clave
+	 * @return array             Estado de cambio de clave
+	 */
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
@@ -232,6 +304,12 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+	/**
+	 * Devuelve el correo de un usuario
+	 * @param  string $usr Usuario
+	 * @return string      Correo del usuario
+	 */
 	public function get_correo($usr = '')
 	{
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
@@ -245,6 +323,9 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+/*
+
 	public function get_modulos_rol($id_rol = 0)
 	{
 		$arr_rs = $this->db->get_where('acl_rol_modulo', array('id_rol' => $id_rol))->result_array();
@@ -257,7 +338,6 @@ class Acl_model extends CI_Model {
 
 		return $arr_modulos;
 	}
-
 
 	public function get_combo_app()
 	{
@@ -304,7 +384,6 @@ class Acl_model extends CI_Model {
 		return $arr_combo;
 	}
 
-
 	public function get_cant_registros_app($id = 0)
 	{
 		return $this->db->get_where('acl_app', array('id'=>$id))->num_rows();
@@ -319,7 +398,6 @@ class Acl_model extends CI_Model {
 	{
 		return $this->db->get_where('acl_rol_modulo', array('id_rol'=>$id))->num_rows() + $this->db->get_where('acl_usuario_rol', array('id_rol'=>$id))->num_rows();
 	}
-
 
 	public function guardar_app($id = 0, $app = '', $descripcion = '', $url = '')
 	{
@@ -374,7 +452,6 @@ class Acl_model extends CI_Model {
 		$this->db->insert('acl_usuario_rol', array('id_usuario' => $id_usuario, 'id_rol' => $id_rol));
 	}
 
-
 	public function borrar_app($id = 0)
 	{
 		$this->db->delete('acl_app', array('id' => $id));
@@ -394,6 +471,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db->delete('acl_usuario_rol', array('id_usuario' => $id_usuario, 'id_rol' => $id_rol));
 	}
+*/
 
 
 }
