@@ -13,11 +13,12 @@ class Analisis extends CI_Controller {
 		$this->acl_model->autentica('analisis');
 
 		$inventario_activo = new Inv_activo;
-		$this->id_inventario     = $inventario_activo->get_id_inventario_activo();
+		$this->id_inventario = $inventario_activo->get_id_inventario_activo();
 		$inventario_activo->find_id($this->id_inventario);
 
 		$this->nombre_inventario = $inventario_activo->nombre;
 	}
+
 
 	/**
 	 * accion por defecto del controlador
@@ -26,6 +27,7 @@ class Analisis extends CI_Controller {
 	public function index() {
 		$this->ajustes();
 	}
+
 
 	/**
 	 * Despliega la página de ajustes de inventarios
@@ -36,7 +38,7 @@ class Analisis extends CI_Controller {
 	{
 
 		// recupera el detalle de registros con diferencias
-		$detalle_ajustes   = new Detalle_inventario;
+		$detalle_ajustes = new Detalle_inventario;
 		$detalle_ajustes->get_ajustes($this->id_inventario, $ocultar_regularizadas);
 
 		if ($this->input->post('formulario') == 'ajustes')
@@ -84,7 +86,6 @@ class Analisis extends CI_Controller {
 					}
 
 				}
-
 				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente' : ''));
 			}
 			redirect('analisis/ajustes/' . $ocultar_regularizadas . '/' . time());
