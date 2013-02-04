@@ -130,7 +130,8 @@ class Analisis extends CI_Controller {
 					$inv_activo->find_id($this->id_inventario);
 					$inv_activo->borrar_detalle_inventario();
 
-					$res_procesa_archivo = $this->_procesa_archivo_cargado($archivo_cargado);
+					$res_procesa_archivo = $inv_activo->cargar_datos_archivo($archivo_cargado);
+					//$res_procesa_archivo = $this->_procesa_archivo_cargado($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
@@ -158,136 +159,6 @@ class Analisis extends CI_Controller {
 
 	}
 
-
-	private function _procesa_archivo_cargado($archivo = '')
-	{
-		$count_OK    = 0;
-		$count_error = 0;
-		$num_linea   = 0;
-		$c           = 0;
-		$arr_lineas_error = array();
-		$arr_bulk_insert  = array();
-		$script_carga = '';
-		$fh = fopen($archivo, 'r');
-		if ($fh)
-		{
-			while ($linea = fgets($fh))
-			{
-				$c += 1;
-				$num_linea += 1;
-				$resultado_procesa_linea = $this->_procesa_linea($linea);
-				if ($resultado_procesa_linea == 'no_procesar')
-				{
-
-				}
-				elseif ($resultado_procesa_linea == 'error')
-				{
-					$count_error += 1;
-					array_push($arr_lineas_error, $num_linea);
-				}
-				else
-				{
-					$count_OK += 1;
-					if ($resultado_procesa_linea != '')
-					{
-						$script_carga .= 'proc_linea_carga(' . $c . ',' . $resultado_procesa_linea . ');' . "\n";
-					}
-				}
-			}
-			fclose($fh);
-		}
-
-		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')';
-		if ($count_error > 0)
-		{
-			$msj_termino .= '<br>Lineas con errores (';
-			foreach ($arr_lineas_error as $key => $lin_error)
-			{
-				if ($key > 0)
-				{
-					$msj_termino .= ', ';
-				}
-				$msj_termino .= $lin_error;
-			}
-			$msj_termino .= ')';
-		}
-
-		return array('script' => $script_carga, 'regs_OK' => $count_OK, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
-
-	}
-
-
-	private function _procesa_linea($linea = '')
-	{
-		$arr_linea = explode("\r", $linea);
-		if ($arr_linea[0] != '')
-		{
-			$arr_datos = explode("\t", $arr_linea[0]);
-
-			if (count($arr_datos) == 9)
-			{
-				$ubicacion   = trim(str_replace("'", '"', $arr_datos[0]));
-				$catalogo    = trim(str_replace("'", '"', $arr_datos[1]));
-				$descripcion = trim(str_replace("'", '"', $arr_datos[2]));
-				$lote        = trim(str_replace("'", '"', $arr_datos[3]));
-				$centro      = trim(str_replace("'", '"', $arr_datos[4]));
-				$almacen     = trim(str_replace("'", '"', $arr_datos[5]));
-				$um          = trim(str_replace("'", '"', $arr_datos[6]));
-				$stock_sap   = trim($arr_datos[7]);
-				$hoja        = trim($arr_datos[8]);
-
-				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO' or $centro    == 'CENTRO' or
-					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'     or $um        == 'UM'     or
-					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA')
-				{
-					// cabecera del archivo, no se hace nada
-					return 'no_procesar';
-				}
-				else
-				{
-					if (is_numeric($stock_sap) and is_numeric($hoja))
-					{
-						return (
-							'0,' .
-							$this->id_inventario . ',' .
-							$hoja                . ',' .
-							'0,' .
-							'0,' .
-							'\'' . $ubicacion    . '\',' .
-							'\'' . $catalogo     . '\',' .
-							'\'' . $descripcion  . '\',' .
-							'\'' . $lote         . '\',' .
-							'\'' . $centro       . '\',' .
-							'\'' . $almacen      . '\',' .
-							'\'' . $um           . '\',' .
-							$stock_sap           . ',' .
-							'0,' .
-							'\'\',' .
-							'\'' . date('Ymd H:i:s') . '\',' .
-							'\'\''
-							);
-
-					}
-					else
-					{
-						// error: stock y/o hoja no son numericos
-						return 'error';
-					}
-				}
-
-			}
-			else
-			{
-				// error: linea con cantidad de campos <> 9
-				return 'error';
-			}
-		}
-		else
-		{
-			// no error: linea en blanco
-			return 'no_procesar';
-		}
-	}
 
 
 	public function inserta_linea_archivo()
