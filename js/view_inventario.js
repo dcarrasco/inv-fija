@@ -15,6 +15,7 @@ $(document).ready(function() {
 		$('#agr_material').html('<option value="">Seleccionar material...</option>');
 		$('form#frm_agregar input[name="id"]').val('0');
 		$('form#frm_agregar input[name="ubicacion"]').val('');
+		$('form#frm_agregar input[name="hu"]').val('');
 		$('form#frm_agregar select[name="agr_material"]').val('');
 		$('form#frm_agregar input[name="lote"]').val('');
 		$('form#frm_agregar select[name="um"]').val('');
@@ -71,6 +72,7 @@ $(document).ready(function() {
 		$('#agr_material').html('<option value="' + $('form#frm_inventario input[name="catalogo_' + id + '"]').val() + '">' + $('form#frm_inventario input[name="descripcion_' + id + '"]').val()+ '</option>');
 		$('form#frm_agregar input[name="id"]').val(id);
 		$('form#frm_agregar input[name="ubicacion"]').val($('form#frm_inventario input[name="ubicacion_' + id + '"]').val());
+		$('form#frm_agregar input[name="hu"]').val($('form#frm_inventario input[name="hu_' + id + '"]').val());
 		$('form#frm_agregar select[name="agr_material"]').val($('form#frm_inventario input[name="catalogo_' + id + '"]').val());
 		$('form#frm_agregar input[name="lote"]').val($('form#frm_inventario input[name="lote_' + id + '"]').val());
 		$('form#frm_agregar select[name="um"]').val($('form#frm_inventario input[name="um_' + id + '"]').val());

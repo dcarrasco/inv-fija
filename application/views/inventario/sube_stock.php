@@ -59,6 +59,7 @@ Formato del archivo:
 
 	Campos
 			Ubicacion
+			HU
 			Catalogo
 			Descripcion catalogo
 			Lote
@@ -87,6 +88,7 @@ Formato del archivo:
 		<input type="hidden" name="aud" id="id_aud" value="">
 		<input type="hidden" name="dig" id="id_dig" value="">
 		<input type="hidden" name="ubic" id="id_ubic" value="">
+		<input type="hidden" name="hu" id="id_hu" value="">
 		<input type="hidden" name="cat" id="id_cat" value="">
 		<input type="hidden" name="desc" id="id_desc" value="">
 		<input type="hidden" name="lote" id="id_lote" value="">
@@ -116,7 +118,7 @@ $(document).ready(function() {
 
 	var regs_procesados = 0;
 
-	function proc_linea_carga(count, id, id_inv, hoja, aud, dig, ubic, cat, desc, lote, cen, alm, um, ssap, sfis, obs, fec, nvo) {
+	function proc_linea_carga(count, id, id_inv, hoja, aud, dig, ubic, hu, cat, desc, lote, cen, alm, um, ssap, sfis, obs, fec, nvo) {
 		var total_regs = <?php echo ($regs_OK); ?>;
 		var total_carac = 40;
 		$('#id_id').val(id);
@@ -125,6 +127,7 @@ $(document).ready(function() {
 		$('#id_aud').val(aud);
 		$('#id_dig').val(dig);
 		$('#id_ubic').val(ubic);
+		$('#id_hu').val(hu);
 		$('#id_cat').val(cat);
 		$('#id_desc').val(desc);
 		$('#id_lote').val(lote);

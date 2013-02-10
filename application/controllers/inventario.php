@@ -20,6 +20,11 @@ class Inventario extends CI_Controller {
 
 	public function ingreso($hoja = 0, $auditor = 0)
 	{
+		if ($hoja == 0 OR $hoja == "" or $hoja == NULL)
+		{
+			$hoja = 1;
+		}
+
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
 		$nuevo_detalle_inventario->hoja = $hoja;
@@ -61,6 +66,7 @@ class Inventario extends CI_Controller {
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 			$nuevo_detalle_inventario->set_validation_rules_field('ubicacion');
+			$nuevo_detalle_inventario->set_validation_rules_field('hu');
 			$nuevo_detalle_inventario->set_validation_rules_field('catalogo');
 			$nuevo_detalle_inventario->set_validation_rules_field('lote');
 			$nuevo_detalle_inventario->set_validation_rules_field('centro');
@@ -138,6 +144,7 @@ class Inventario extends CI_Controller {
 														'digitador'     => $id_usuario_login,
 														'auditor'       => set_value('auditor'),
 														'ubicacion'     => $this->input->post('ubicacion'),
+														'hu'            => $this->input->post('hu'),
 														'catalogo'      => $this->input->post('catalogo'),
 														'descripcion'   => $nuevo_material->descripcion,
 														'lote'          => $this->input->post('lote'),
@@ -178,7 +185,7 @@ class Inventario extends CI_Controller {
 		$data['titulo_modulo'] = 'Ingreso de Inventario ('.$data['nombre_inventario'].')';
 		$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
-		$this->load->view($vista, $data);
+		$this->load->view('inventario/'.$vista, $data);
 		$this->load->view('app_footer', $data);
 	}
 

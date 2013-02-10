@@ -158,13 +158,13 @@ class Analisis extends CI_Controller {
 	}
 
 
-
 	public function inserta_linea_archivo()
 	{
 		$detalle = new Detalle_inventario;
 		$detalle->id_inventario      = $this->input->post('id_inv');
 		$detalle->hoja               = $this->input->post('hoja');
 		$detalle->ubicacion          = $this->input->post('ubic');
+		$detalle->hu                 = $this->input->post('hu');
 		$detalle->catalogo           = $this->input->post('cat');
 		$detalle->descripcion        = $this->input->post('desc');
 		$detalle->lote               = $this->input->post('lote');
@@ -226,7 +226,7 @@ class Analisis extends CI_Controller {
 		$hoja_desde = ($hoja_desde < 1) ? 1 : $hoja_desde;
 		$hoja_hasta = ($hoja_hasta < $hoja_desde) ? $hoja_desde : $hoja_hasta;
 
-		$this->load->view('inventario_print_head');
+		$this->load->view('inventario/inventario_print_head');
 
 		for($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
@@ -238,10 +238,10 @@ class Analisis extends CI_Controller {
 					'nombre_inventario' => $this->nombre_inventario,
 				);
 
-			$this->load->view('inventario_print_body', $data);
+			$this->load->view('inventario/inventario_print_body', $data);
 		}
 
-		$this->load->view('inventario_print_footer');
+		$this->load->view('inventario/inventario_print_footer');
 	}
 
 
@@ -271,7 +271,7 @@ class Analisis extends CI_Controller {
 		$data['menu_app'] = $this->acl_model->menu_app();
 		$data['menu_ajustes'] = $this->_menu_ajustes($arr_menu, $vista);
 		$this->load->view('app_header', $data);
-		$this->load->view($vista, $data);
+		$this->load->view('inventario/' . $vista, $data);
 		$this->load->view('app_footer', $data);
 	}
 
