@@ -129,9 +129,7 @@ class Analisis extends CI_Controller {
 					$inv_activo = new Inv_activo;
 					$inv_activo->find_id($this->id_inventario);
 					$inv_activo->borrar_detalle_inventario();
-
 					$res_procesa_archivo = $inv_activo->cargar_datos_archivo($archivo_cargado);
-					//$res_procesa_archivo = $this->_procesa_archivo_cargado($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
@@ -222,16 +220,11 @@ class Analisis extends CI_Controller {
 	}
 
 
-	public function imprime_hojas($hoja_desde = 0, $hoja_hasta = 0, $oculta_stock_sap = 0)
+	public function imprime_hojas($hoja_desde = 1, $hoja_hasta = 1, $oculta_stock_sap = 0)
 	{
-
 		$detalle = new Detalle_inventario;
-
-		if ($hoja_hasta == 0 or $hoja_hasta < $hoja_desde)
-		{
-			$hoja_hasta = $hoja_desde;
-		}
-
+		$hoja_desde = ($hoja_desde < 1) ? 1 : $hoja_desde;
+		$hoja_hasta = ($hoja_hasta < $hoja_desde) ? $hoja_desde : $hoja_hasta;
 
 		$this->load->view('inventario_print_head');
 
