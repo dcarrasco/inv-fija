@@ -229,6 +229,24 @@ class ORM_Model {
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE)
 	{
+
+		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
+		$arr_relation = $this->model_fields[$campo]->get_relation();
+		if (array_key_exists('conditions', $arr_relation))
+		{
+			foreach($arr_relation['conditions'] as $cond_key => $cond_value)
+			{
+				// si encontramos un valor que comience por @filed_value,
+				// se reemplaza por el valor del campo en el objeto
+				if (strpos($cond_value, '@field_value') === 0)
+				{
+					$arr_field_value = explode(':', $cond_value);
+					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
+				}
+			}
+			$this->model_fields[$campo]->set_relation($arr_relation);
+		}
+
 		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos);
 	}
 

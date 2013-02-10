@@ -42,7 +42,8 @@ class Rol extends ORM_Model {
 										'model'         => 'modulo',
 										'join_table'    => 'acl_rol_modulo',
 										'id_one_table'  => 'id_rol',
-										'id_many_table' => 'id_modulo'
+										'id_many_table' => 'id_modulo',
+										'conditions'    => array('id_app' => '@field_value:id_app'),
 									),
 								'texto_ayuda'    => 'Módulos del rol.',
 							),
