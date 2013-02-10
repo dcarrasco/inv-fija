@@ -110,7 +110,7 @@ class Acl_model extends CI_Model {
 	public function get_menu_usuario($usr = '')
 	{
 		$this->db->distinct();
-		$this->db->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono');
+		$this->db->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden');
 		$this->db->from('fija_usuarios u');
 		$this->db->join('acl_usuario_rol ur', 'ur.id_usuario = u.id');
 		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
