@@ -66,11 +66,11 @@ $db['default']['swap_pre'] = '';
 $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
-$db['dcr']['hostname'] = 'localhost,1500';
+$db['dcr']['hostname'] = 'tcp:127.0.0.1,1500';
 $db['dcr']['username'] = 'patripio';
 $db['dcr']['password'] = 'patripio';
 $db['dcr']['database'] = 'BD_inventario';
-$db['dcr']['dbdriver'] = 'mssql';
+$db['dcr']['dbdriver'] = 'sqlsrv';
 $db['dcr']['dbprefix'] = '';
 $db['dcr']['pconnect'] = FALSE;
 $db['dcr']['db_debug'] = TRUE;
