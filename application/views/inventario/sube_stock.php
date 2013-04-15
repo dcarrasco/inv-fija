@@ -30,7 +30,7 @@
 						<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
 							"<?php echo $inventario_nombre?>"</span>
 						<br><br>
-						<?php echo form_upload('upload_file','',' size=60'); ?>
+						<?php echo form_upload('upload_file','','size=60'); ?>
 						<br><br>
 						Password de administrador <?php echo form_password('password',''); ?>
 						<br><br>

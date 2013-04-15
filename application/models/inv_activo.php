@@ -143,7 +143,7 @@ class Inv_activo extends ORM_Model {
 		{
 			$arr_datos = explode("\t", $arr_linea[0]);
 
-			if (count($arr_datos) == 9)
+			if (count($arr_datos) == 10)
 			{
 				$ubicacion   = trim(str_replace("'", '"', $arr_datos[0]));
 				$hu          = trim(str_replace("'", '"', $arr_datos[1]));
