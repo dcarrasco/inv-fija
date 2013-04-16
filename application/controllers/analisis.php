@@ -222,7 +222,6 @@ class Analisis extends CI_Controller {
 
 	public function imprime_hojas($hoja_desde = 1, $hoja_hasta = 1, $oculta_stock_sap = 0)
 	{
-		$detalle = new Detalle_inventario;
 		$hoja_desde = ($hoja_desde < 1) ? 1 : $hoja_desde;
 		$hoja_hasta = ($hoja_hasta < $hoja_desde) ? $hoja_desde : $hoja_hasta;
 
@@ -230,6 +229,7 @@ class Analisis extends CI_Controller {
 
 		for($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
+			$detalle = new Detalle_inventario;
 			$detalle->find('all', array('conditions' => array('id_inventario' => $this->id_inventario, 'hoja' => $hoja)));
 			$data = array(
 					'datos_hoja'        => $detalle->get_model_all(),

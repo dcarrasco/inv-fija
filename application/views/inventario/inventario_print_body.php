@@ -76,7 +76,7 @@
 				<?php $sum_sap += (int) $detalle->stock_sap; ?>
 			<?php endforeach; ?>
 
-			<?php for($i=$lin; $i<21; $i++): ?>
+			<?php for($i=$lin; $i<20; $i++): ?>
 				<tr>
 					<td>&nbsp;</td>
 					<td></td>
@@ -97,7 +97,7 @@
 			<!-- totales -->
 			<?php if (!$oculta_stock_sap): ?>
 				<tr>
-					<td colspan="7" class="no-border"></td>
+					<td colspan="8" class="no-border"></td>
 					<td class="ac"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
 					<td colspan="4" class="no-border"></td>
 				</tr>
@@ -107,7 +107,7 @@
 				<?php if (!$oculta_stock_sap): ?>
 					<td class="no-border"></td>
 				<?php endif; ?>
-				<td colspan="8" class="ar no-border">TOTAL HOJA: _____________</td>
+				<td colspan="9" class="ar no-border">TOTAL HOJA: _____________</td>
 				<td colspan="3" class="no-border"></td>
 			</tr>
 
