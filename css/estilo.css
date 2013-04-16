@@ -639,7 +639,7 @@ div.print-main tr {
 }
 
 div.print-main th, div.print-main td {
-	border: 1px solid #BBBBBB;
+	border: 1px solid #999999;
 	background-color: #FFFFFF;
 	color: #000000;
 	height: 23px;
