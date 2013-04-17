@@ -46,7 +46,7 @@
 				<?php foreach ($detalle_ajustes->get_model_all() as $detalle): ?>
 					<?php if($cat_ant != $detalle->catalogo and $cat_ant != ''): ?>
 						<tr>
-							<td colspan="14">&nbsp;</td>
+							<td colspan="15">&nbsp;</td>
 						</tr>
 					<?php endif; ?>
 
@@ -98,6 +98,13 @@
 					<td></td>
 					<td></td>
 				</tr>
+
+				<?php if ($links_paginas != ''):?>
+					<tr>
+						<td colspan="15"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
+					</tr>
+				<?php endif; ?>
+
 			</tbody>
 		</table>
 		<?php echo form_close(); ?>

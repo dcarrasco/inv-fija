@@ -197,7 +197,7 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
 	 * @return array                          Arreglo con el detalle de los registros
 	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0)
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
 	{
 		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
 		$this->db->where('id_inventario', $id_inventario);
@@ -209,6 +209,34 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$this->db->where('stock_fisico - stock_sap <> 0');
 		}
+		$total_rows = count($this->db->get('fija_detalle_inventario')->result_array());
+
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($ocultar_regularizadas == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_fisico - stock_sap <> 0');
+		}
+		$per_page = 30;
+		$this->db->limit($per_page, $pag);
+
+		$this->load->library('pagination');
+		$cfg_pagination = array(
+					'uri_segment' => 4,
+					'num_links'   => 5,
+					'per_page'    => $per_page,
+					'total_rows'  => $total_rows,
+					'base_url'    => site_url('analisis/ajustes/' . $ocultar_regularizadas . '/'),
+					'first_link'  => 'Primero',
+					'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
+					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
+					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+				);
+		$this->pagination->initialize($cfg_pagination);
 
 		$rs = $this->db->get('fija_detalle_inventario')->result_array();
 		$model_all = array();
@@ -219,6 +247,8 @@ class Detalle_inventario extends ORM_Model {
 			array_push($model_all, $o);
 		}
 		$this->set_model_all($model_all);
+
+		return $this->pagination->create_links();
 	}
 
 

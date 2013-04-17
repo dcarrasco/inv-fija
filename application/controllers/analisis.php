@@ -34,12 +34,12 @@ class Analisis extends CI_Controller {
 	 * @param  integer $ocultar_regularizadas Oculta los regustros que están modificados
 	 * @return nada
 	 */
-	public function ajustes($ocultar_regularizadas = 0)
+	public function ajustes($ocultar_regularizadas = 0, $pag = 0)
 	{
 
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
-		$detalle_ajustes->get_ajustes($this->id_inventario, $ocultar_regularizadas);
+		$links_paginas = $detalle_ajustes->get_ajustes($this->id_inventario, $ocultar_regularizadas, $pag);
 
 		if ($this->input->post('formulario') == 'ajustes')
 		{
@@ -62,6 +62,7 @@ class Analisis extends CI_Controller {
 			$data = array(
 					'detalle_ajustes'       => $detalle_ajustes,
 					'ocultar_regularizadas' => $ocultar_regularizadas,
+					'links_paginas'         => $links_paginas,
 					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
 					'menu_app'              => $this->acl_model->menu_app(),
 				);
