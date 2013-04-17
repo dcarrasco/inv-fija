@@ -17,7 +17,7 @@
 		</div> <!-- fin content-module-main-agregar -->
 
 		<div class="content-module-main-principal">
-		<?php echo form_open('analisis/ajustes/' . $ocultar_regularizadas . '/' . time(), 'id="frm_inventario"'); ?>
+		<?php echo form_open('analisis/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 		<?php echo form_hidden('formulario','ajustes'); ?>
 		<table>
 			<thead>

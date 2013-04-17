@@ -62,6 +62,7 @@ class Analisis extends CI_Controller {
 			$data = array(
 					'detalle_ajustes'       => $detalle_ajustes,
 					'ocultar_regularizadas' => $ocultar_regularizadas,
+					'$pag'                  => $pag,
 					'links_paginas'         => $links_paginas,
 					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
 					'menu_app'              => $this->acl_model->menu_app(),
@@ -89,7 +90,7 @@ class Analisis extends CI_Controller {
 				}
 				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente' : ''));
 			}
-			redirect('analisis/ajustes/' . $ocultar_regularizadas . '/' . time());
+			redirect('analisis/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
 		}
 
 	}
