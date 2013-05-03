@@ -47,14 +47,17 @@ class Acl_model extends CI_Model {
 	{
 		if (!$this->input->cookie('movistar_menu_app'))
 		{
+			$arr_modulos = $this->get_menu_usuario($this->input->cookie('movistar_usr'));
 			$this->input->set_cookie(array(
 				'name'   => 'movistar_menu_app',
-				'value'  => json_encode($this->get_menu_usuario($this->input->cookie('movistar_usr'))),
+				'value'  => json_encode($arr_modulos),
 				'expire' => '0'
 				));
 		}
-
-		$arr_modulos = json_decode($this->input->cookie('movistar_menu_app'), TRUE);
+		else
+		{
+			$arr_modulos = json_decode($this->input->cookie('movistar_menu_app'), TRUE);
+		}
 
 		$app_ant = '';
 		$menu = '<ul>';
