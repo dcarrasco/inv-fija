@@ -17,7 +17,7 @@ class config2 extends CI_Controller {
 				//'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
 				//'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
 				//'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
-				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
+				//'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
 			);
 
 	public function __construct()
