@@ -2,7 +2,7 @@
 
 	<div class="content-module-heading cf">
 		<?php echo form_open('','id="frm_param"'); ?>
-		<div class="fl">
+		<div class="">
 			<ul>
 				<li <?php echo ($nombre_reporte=='permanencia') ? 'class="selected"' : '' ?>>
 					<?php echo anchor('/reporte_stock/listado/permanencia','Permanencia')?>
@@ -10,12 +10,22 @@
 			</ul>
 		</div>
 
-		<div class="fr">
-		<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', false), 'id="incl_almacen"') ?> Incluir almacenes<br>
-		<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', false), 'id="incl_lote"') ?> Incluir lotes <br>
-		<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', false), 'id="incl_estado"') ?> Incluir estado SAP<br>
-		<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?> Incluir modelos equipos<br>
+		<div class="fl">
+			Seleccionar Almacenes
+			<br/>
+			<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form_edit round"'); ?>
 		</div>
+		<div class="fl">
+			<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', false), 'id="incl_almacen"') ?> Incluir almacenes<br>
+			<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', false), 'id="incl_lote"') ?> Incluir lotes <br>
+			<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', false), 'id="incl_estado"') ?> Incluir estado SAP<br>
+			<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?> Incluir modelos equipos<br>
+		</div>
+		<div class="fl">
+			<?php echo form_submit('submit', 'Reporte', 'class="button b-active round ic-reporte"'); ?><br/>
+		</div>
+
+
 
 		<div class="">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha reporte: <?php echo $fecha_reporte; ?>
