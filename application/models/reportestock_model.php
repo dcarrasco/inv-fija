@@ -51,16 +51,13 @@ class Reportestock_model extends CI_Model {
 
 
 		$this->db->select('t.tipo');
-		$this->db->select('count(case when p.dias<= 30 then 1 else null end) as \'000-030\'');
-		$this->db->select('count(case when p.dias > 30 and p.dias<= 60 then 1 else null end) as \'031-060\'');
-		$this->db->select('count(case when p.dias > 60 and p.dias<= 90 then 1 else null end) as \'061-090\'');
-		$this->db->select('count(case when p.dias > 90 and p.dias<= 120 then 1 else null end) as \'091-120\'');
-		$this->db->select('count(case when p.dias > 120 and p.dias<= 150 then 1 else null end) as \'121-150\'');
-		$this->db->select('count(case when p.dias > 150 and p.dias<= 180 then 1 else null end) as \'151-180\'');
-		$this->db->select('count(case when p.dias > 180 and p.dias<= 360 then 1 else null end) as \'181-360\'');
-		$this->db->select('count(case when p.dias > 360 and p.dias<= 500 then 1 else null end) as \'361-500\'');
-		$this->db->select('count(case when p.dias > 500 and p.dias<= 720 then 1 else null end) as \'501-720\'');
-		$this->db->select('count(case when p.dias > 720 then 1 else null end) as \'+720\'');
+		$this->db->select('count(case when p.dias<= 120 then 1 else null end) as m120');
+		$this->db->select('count(case when p.dias > 120 and p.dias<= 150 then 1 else null end) as m150');
+		$this->db->select('count(case when p.dias > 150 and p.dias<= 180 then 1 else null end) as m180');
+		$this->db->select('count(case when p.dias > 180 and p.dias<= 360 then 1 else null end) as m360');
+		$this->db->select('count(case when p.dias > 360 and p.dias<= 540 then 1 else null end) as m540');
+		$this->db->select('count(case when p.dias > 540 and p.dias<= 720 then 1 else null end) as m720');
+		$this->db->select('count(case when p.dias > 720 then 1 else null end) as mas720');
 		$this->db->select('count(1) as \'total\'');
 		$this->db->from('bd_controles..ctrl00_equipos_cl15_permanencia as p');
 		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=p.centro and ta.cod_almacen=p.cod_almacen', 'left');
