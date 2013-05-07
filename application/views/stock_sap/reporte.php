@@ -17,6 +17,10 @@
 		<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?> Incluir modelos equipos<br>
 		</div>
 
+		<div class="">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha reporte: <?php echo $fecha_reporte; ?>
+		</div>
+
 		<?php echo form_hidden('order_by', set_value('order_by','')); ?>
 		<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 		<?php echo form_close(); ?>

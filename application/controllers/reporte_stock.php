@@ -107,6 +107,7 @@ class Reporte_stock extends CI_Controller {
 				'arr_link_sort'   => $arr_link_sort,
 				'arr_img_orden'   => $arr_img_orden,
 				'titulo_modulo'   => 'Reportes Stock',
+				'fecha_reporte'   => $this->reportestock_model->get_fecha_reporte(),
 				'menu_app'          => $this->acl_model->menu_app(),
 			);
 
