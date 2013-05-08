@@ -27,6 +27,7 @@ class Reporte_stock extends CI_Controller {
 
 		// define reglas para usar set_value
 		$this->form_validation->set_rules('tipo_alm');
+		$this->form_validation->set_rules('estado_sap');
 		$this->form_validation->set_rules('incl_almacen', '', 'trim');
 		$this->form_validation->set_rules('incl_lote', '', 'trim');
 		$this->form_validation->set_rules('incl_estado', '', 'trim');
@@ -38,6 +39,7 @@ class Reporte_stock extends CI_Controller {
 		$orden_campo   = set_value('order_by');
 		$orden_tipo    = set_value('order_sort');
 		$tipo_alm      = $this->input->post('tipo_alm');
+		$estado_sap    = $this->input->post('estado_sap');
 		$incl_almacen  = set_value('incl_almacen');
 		$incl_lote     = set_value('incl_lote');
 		$incl_estado   = set_value('incl_estado');
@@ -49,7 +51,7 @@ class Reporte_stock extends CI_Controller {
 		if ($tipo == 'permanencia')
 		{
 			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
-			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($orden_campo, $orden_tipo, $tipo_alm, $incl_almacen, $incl_lote, $incl_estado, $incl_modelos);
+			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $incl_almacen, $incl_lote, $incl_estado, $incl_modelos);
 
 			$arr_campos = array();
 
@@ -60,13 +62,13 @@ class Reporte_stock extends CI_Controller {
 				$arr_campos['cod_almacen']    = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
 				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
-			if ($incl_lote == '1')
-			{
-				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
-			}
 			if ($incl_estado == '1')
 			{
 				$arr_campos['estado_sap']    = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
+			}
+			if ($incl_lote == '1')
+			{
+				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
 			}
 			if ($incl_modelos == '1')
 			{
@@ -108,7 +110,8 @@ class Reporte_stock extends CI_Controller {
 				'titulo_modulo'   => 'Reportes Stock',
 				'fecha_reporte'   => $this->reportestock_model->get_fecha_reporte(),
 				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm(),
-				'menu_app'          => $this->acl_model->menu_app(),
+				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
+				'menu_app'        => $this->acl_model->menu_app(),
 			);
 
 		$this->load->view('app_header', $data);

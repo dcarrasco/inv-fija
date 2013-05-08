@@ -10,24 +10,26 @@
 			</ul>
 		</div>
 
-		<div class="fl">
+		<div class="fl" style="padding: 1em;">
 			Seleccionar Almacenes
 			<br/>
 			<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form_edit round"'); ?>
 		</div>
-		<div class="fl">
-			<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', false), 'id="incl_almacen"') ?> Incluir almacenes<br>
-			<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', false), 'id="incl_lote"') ?> Incluir lotes <br>
-			<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', false), 'id="incl_estado"') ?> Incluir estado SAP<br>
-			<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?> Incluir modelos equipos<br>
+		<div class="fl" style="padding: 1em;">
+			Seleccionar Estados
+			<br/>
+			<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form_edit round"'); ?>
 		</div>
-		<div class="fl">
+		<div class="fl" style="padding: 1em;">
+			<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', false), 'id="incl_almacen"') ?> Mostrar almacenes<br>
+			<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', false), 'id="incl_estado"') ?> Mostrar estado SAP<br>
+			<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', false), 'id="incl_lote"') ?> Mostrar lotes <br>
+			<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?> Mostrar modelos equipos<br>
+			<br/>
 			<?php echo form_submit('submit', 'Reporte', 'class="button b-active round ic-reporte"'); ?><br/>
 		</div>
 
-
-
-		<div class="">
+		<div class="fl" style="padding: 1em;">
 			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fecha reporte: <?php echo $fecha_reporte; ?>
 		</div>
 
@@ -130,26 +132,6 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-	$('#sel_inv_activo').change(function () {
-		$('form').submit();
-	});
-
-	$('#incl_almacen').change(function () {
-		$('form').submit();
-	});
-
-	$('#incl_lote').change(function () {
-		$('form').submit();
-	});
-
-	$('#incl_estado').change(function () {
-		$('form').submit();
-	});
-
-	$('#incl_modelos').change(function () {
-		$('form').submit();
-	});
-
 	$('#filtrar_material').keyup(function (event) {
 		$('tr.not_found').show();
 		$('tr.not_found').removeClass('not_found');

@@ -46,6 +46,18 @@ class Reportestock_model extends CI_Model {
 	}
 
 
+	public function combo_estado_sap()
+	{
+		return array(
+				'01' => '01 Libre Utilizacion',
+				'02' => '02 Control de Calidad',
+				'03' => '03 Devolucion Cliente',
+				'06' => '06 Transito',
+				'07' => '07 Bloqueado',
+			);
+	}
+
+
 
 
 
@@ -63,7 +75,7 @@ class Reportestock_model extends CI_Model {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_permanencia($orden_campo = 'tipo', $orden_tipo = 'ASC', $tipo_alm = array(),
+	public function get_reporte_permanencia($orden_campo = 'tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(),
 										$incl_almacen = '0', $incl_lote = '0', $incl_estado = '0', $incl_modelos = '0')
 	{
 
@@ -81,6 +93,7 @@ class Reportestock_model extends CI_Model {
 		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
 		$this->db->group_by('t.tipo');
 		$this->db->order_by('t.tipo');
+
 		if (count($tipo_alm) > 0)
 		{
 			$this->db->where_in('t.id_tipo', $tipo_alm);
@@ -88,6 +101,11 @@ class Reportestock_model extends CI_Model {
 		else
 		{
 			$this->db->where('t.id_tipo', -1);
+		}
+
+		if (count($estado_sap) > 0 and is_array($estado_sap))
+		{
+			$this->db->where_in('p.estado_sap', $estado_sap);
 		}
 
 		if ($incl_almacen == '1')
@@ -98,6 +116,13 @@ class Reportestock_model extends CI_Model {
 			$this->db->order_by('p.centro, p.cod_almacen, a.des_almacen');
 		}
 
+		if ($incl_estado == '1')
+		{
+			$this->db->select('case p.estado_sap when \'01\' then \'01 Libre util\' when \'02\' then \'02 Control Calidad\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_sap end as estado_sap');
+			$this->db->group_by('p.estado_sap');
+			$this->db->order_by('p.estado_sap');
+		}
+
 		if ($incl_lote == '1')
 		{
 			$this->db->select('p.lote');
@@ -105,17 +130,10 @@ class Reportestock_model extends CI_Model {
 			$this->db->order_by('p.lote');
 		}
 
-		if ($incl_estado == '1')
-		{
-			$this->db->select('case p.estado_sap when \'01\' then \'01 Libre util\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_sap end as estado_sap');
-			$this->db->group_by('p.estado_sap');
-			$this->db->order_by('p.estado_sap');
-		}
-
 		if ($incl_modelos == '1')
 		{
-			$this->db->select('substring(p.cod_material_sap, 6, 7) as modelo');
-			$this->db->group_by('substring(p.cod_material_sap, 6, 7)');
+			$this->db->select('substring(p.cod_material_sap, 6, 2) + \' \' + substring(p.cod_material_sap, 8, 5) as modelo');
+			$this->db->group_by('substring(p.cod_material_sap, 6, 2) + \' \' + substring(p.cod_material_sap, 8, 5)');
 			$this->db->order_by('modelo');
 		}
 
