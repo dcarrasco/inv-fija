@@ -86,6 +86,50 @@ class Stock_sap extends CI_Controller {
 		$stock        = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
+		if (count($arr_filtrar['fecha']) > 1 and count($stock) > 0)
+		{
+			$graph_q_equipos = array();
+			$graph_q_simcard = array();
+			$graph_q_otros   = array();
+			$graph_v_equipos = array();
+			$graph_v_simcard = array();
+			$graph_v_otros   = array();
+
+			$arr_graph_fechas = array();
+			$arr_graph_label_series = array();
+
+			foreach($stock as $reg)
+			{
+				if (!array_key_exists($reg['tipo_almacen'], $graph_q_equipos))
+				{
+					$graph_q_equipos[$reg['tipo_almacen']] = array();
+				}
+
+				if (!in_array("'" . $reg['fecha_stock'] . "'", $arr_graph_fechas))
+				{
+					array_push($arr_graph_fechas, "'" . $reg['fecha_stock'] . "'");
+				}
+
+				$label_serie = '{label:\'' . $reg['tipo_almacen'] . '\'}';
+				if (!in_array($label_serie, $arr_graph_label_series))
+				{
+					array_push($arr_graph_label_series, $label_serie);
+				}
+
+				$graph_q_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['EQUIPOS'];
+				$graph_q_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['SIMCARD'];
+				$graph_q_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['OTROS'];
+				$graph_v_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_EQUIPOS']/1000000;
+				$graph_v_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_SIMCARD']/1000000;
+				$graph_v_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_OTROS']/1000000;
+			}
+			$serie_q_equipos = $this->_arr_series_to_string($graph_q_equipos);
+			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
+			//dbg($serie_q_equipos);
+		}
+
+
+
 		$data = array(
 						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('stock_movil') : $this->_menu_configuracion('stock_fija'),
 						'stock'                  => $stock,
@@ -95,6 +139,10 @@ class Stock_sap extends CI_Controller {
 						'combo_fechas_todas'     => $combo_fechas['todas'],
 						'tipo_op'                => $tipo_op,
 						'arr_mostrar'            => $arr_mostrar,
+						'serie_q_equipos'        => $serie_q_equipos,
+						'serie_v_equipos'        => $serie_v_equipos,
+						'arr_graph_fechas'       => '[' . implode(',', $arr_graph_fechas) . ']',
+						'arr_graph_label_series' => '[' . implode(',', $arr_graph_label_series) . ']',
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
 														|| in_array('material', $arr_mostrar)
 														|| in_array('lote', $arr_mostrar)
@@ -120,6 +168,18 @@ class Stock_sap extends CI_Controller {
 			$this->load->view('app_footer', $data);
 		}
 	}
+
+
+	private function _arr_series_to_string($arr = array())
+	{
+		$arr_temp = array();
+		foreach($arr as $arr_elem)
+		{
+			array_push($arr_temp, '[' . implode(',', $arr_elem) . ']');
+		}
+		return('[' . implode(',', $arr_temp) . ']');
+	}
+
 
 	public function detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
