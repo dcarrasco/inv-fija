@@ -100,11 +100,6 @@ class Stock_sap extends CI_Controller {
 
 			foreach($stock as $reg)
 			{
-				if (!array_key_exists($reg['tipo_almacen'], $graph_q_equipos))
-				{
-					$graph_q_equipos[$reg['tipo_almacen']] = array();
-				}
-
 				if (!in_array("'" . $reg['fecha_stock'] . "'", $arr_graph_fechas))
 				{
 					array_push($arr_graph_fechas, "'" . $reg['fecha_stock'] . "'");
@@ -125,6 +120,8 @@ class Stock_sap extends CI_Controller {
 			}
 			$serie_q_equipos = $this->_arr_series_to_string($graph_q_equipos);
 			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
+			$graph_fechas = '[' . implode(',', $arr_graph_fechas) . ']';
+			$graph_label_series = '[' . implode(',', $arr_graph_label_series) . ']';
 			//dbg($serie_q_equipos);
 		}
 
@@ -141,8 +138,8 @@ class Stock_sap extends CI_Controller {
 						'arr_mostrar'            => $arr_mostrar,
 						'serie_q_equipos'        => $serie_q_equipos,
 						'serie_v_equipos'        => $serie_v_equipos,
-						'arr_graph_fechas'       => '[' . implode(',', $arr_graph_fechas) . ']',
-						'arr_graph_label_series' => '[' . implode(',', $arr_graph_label_series) . ']',
+						'arr_graph_fechas'       => $graph_fechas,
+						'arr_graph_label_series' => $graph_label_series,
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
 														|| in_array('material', $arr_mostrar)
 														|| in_array('lote', $arr_mostrar)
