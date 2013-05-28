@@ -106,7 +106,7 @@ $(document).ready(function(){
 					barMargin: 30,
 					// Highlight bars when mouse button pressed.
 					// Disables default highlighting on mouse over.
-					highlightMouseDown: true
+					highlightMouseOver: true
 				},
 				pointLabels: {show: true}
 			},
