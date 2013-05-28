@@ -86,7 +86,16 @@ class Stock_sap extends CI_Controller {
 		$stock        = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
-		if (count($arr_filtrar['fecha']) > 1 and count($stock) > 0)
+
+		$serie_q_equipos = '[]';
+		$serie_v_equipos = '[]';
+		$serie_q_simcard = '[]';
+		$serie_v_simcard = '[]';
+		$serie_q_otros = '[]';
+		$serie_v_otros = '[]';
+		$graph_fechas = '[]';
+		$graph_label_series = '[]';
+		if (count($stock) > 0)
 		{
 			$graph_q_equipos = array();
 			$graph_q_simcard = array();
@@ -118,6 +127,7 @@ class Stock_sap extends CI_Controller {
 				$graph_v_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_SIMCARD']/1000000;
 				$graph_v_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_OTROS']/1000000;
 			}
+
 			$serie_q_equipos = $this->_arr_series_to_string($graph_q_equipos);
 			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
 			$graph_fechas = '[' . implode(',', $arr_graph_fechas) . ']';
