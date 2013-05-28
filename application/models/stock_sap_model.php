@@ -31,8 +31,8 @@ class stock_sap_model extends CI_Model {
 		// fecha stock
 		if (in_array('fecha', $mostrar))
 		{
-			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)');
+			$this->db->select('s.fecha_stock');
+			$this->db->group_by('s.fecha_stock');
 			$this->db->order_by('fecha_stock');
 		}
 
@@ -64,11 +64,8 @@ class stock_sap_model extends CI_Model {
 		// tipos de articulos
 		if (in_array('tipo_articulo', $mostrar))
 		{
-			//$this->db->select("CASE WHEN (s.largo_serie=15) THEN 'EQUIPOS' WHEN (s.largo_serie=19) THEN 'SIMCARD' ELSE 'OTROS' END as tipo_articulo", FALSE);
-			//$this->db->group_by("CASE WHEN (s.largo_serie=15) THEN 'EQUIPOS' WHEN (s.largo_serie=19) THEN 'SIMCARD' ELSE 'OTROS' END", FALSE);
-			//$this->db->order_by('tipo_articulo');
-			$this->db->select("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END as tipo_articulo", FALSE);
-			$this->db->group_by("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", FALSE);
+			$this->db->select('s.tipo_articulo');
+			$this->db->group_by('s.tipo_articulo');
 			$this->db->order_by('tipo_articulo');
 		}
 
@@ -90,20 +87,20 @@ class stock_sap_model extends CI_Model {
 		// cantidades y tipos de stock
 		if (in_array('tipo_stock', $mostrar))
 		{
-			$this->db->select('sum(s.libre_utilizacion) as LU', FALSE);
-			$this->db->select('sum(s.bloqueado)         as BQ', FALSE);
-			$this->db->select('sum(s.contro_calidad)    as CC', FALSE);
-			$this->db->select('sum(s.transito_traslado) as TT', FALSE);
-			$this->db->select('sum(s.otros)             as OT', FALSE);
+			$this->db->select_sum('s.LU','LU');
+			$this->db->select_sum('s.BQ','BQ');
+			$this->db->select_sum('s.CC','CC');
+			$this->db->select_sum('s.TT','TT');
+			$this->db->select_sum('s.OT','OT');
 
-			$this->db->select('sum(s.libre_utilizacion*p.pmp) as VAL_LU', FALSE);
-			$this->db->select('sum(s.bloqueado*p.pmp)         as VAL_BQ', FALSE);
-			$this->db->select('sum(s.contro_calidad*p.pmp)    as VAL_CC', FALSE);
-			$this->db->select('sum(s.transito_traslado*p.pmp) as VAL_TT', FALSE);
-			$this->db->select('sum(s.otros*p.pmp)             as VAL_OT', FALSE);
+			$this->db->select_sum('s.V_LU','VAL_LU');
+			$this->db->select_sum('s.V_BQ','VAL_BQ');
+			$this->db->select_sum('s.V_CC','VAL_CC');
+			$this->db->select_sum('s.V_TT','VAL_TT');
+			$this->db->select_sum('s.V_OT','VAL_OT');
 		}
-		$this->db->select('sum(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros) as total', FALSE);
-		$this->db->select('sum((s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros*0)*p.pmp) as monto', FALSE);
+		$this->db->select_sum('s.cant','total');
+		$this->db->select_sum('s.monto','monto');
 
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
@@ -111,13 +108,11 @@ class stock_sap_model extends CI_Model {
 			$this->db->from($this->bd_logistica . 'cp_tiposalm t');
 			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 'ta.id_tipo = t.id_tipo');
 			$this->db->join($this->bd_logistica . 'cp_almacenes a',        'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
-			$this->db->join($this->bd_logistica . 'stock_scl s',           's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
-			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
+			$this->db->join($this->bd_logistica . 'stock_scl_res01 s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 		}
 		else
 		{
-			$this->db->from($this->bd_logistica . 'stock_scl s');
-			$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p',"s.centro=p.centro and s.cod_articulo=p.material and s.lote=p.lote and p.estado_stock='01'",'left');
+			$this->db->from($this->bd_logistica . 'stock_scl_res01 s');
 			$this->db->join($this->bd_logistica . 'cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
 		}
 
@@ -150,7 +145,7 @@ class stock_sap_model extends CI_Model {
 		}
 		*/
 
-		$this->db->where('s.origen', 'SAP');
+		//$this->db->where('s.origen', 'SAP');
 
 		if (in_array('tipo_stock', $mostrar))
 		{
@@ -171,7 +166,7 @@ class stock_sap_model extends CI_Model {
 				array_push($arr_filtro_tipo_stock, 'OTROS');
 			}
 
-			$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END",$arr_filtro_tipo_stock);
+			$this->db->where_in('s.tipo_articulo', $arr_filtro_tipo_stock);
 		}
 
 		$arr_result = $this->db->get()->result_array();
@@ -531,7 +526,7 @@ class stock_sap_model extends CI_Model {
 		$arr_result = array();
 		$arr_combo  = array();
 
-		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 103) as fecha');
+		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 102) as fecha');
 		$this->db->order_by('fecha_stock','desc');
 		$arr_result = $this->db->get($this->bd_logistica . 'stock_scl_fechas')->result_array();
 

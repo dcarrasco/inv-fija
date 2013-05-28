@@ -83,7 +83,11 @@ class Stock_sap extends CI_Controller {
 		$this->form_validation->set_rules('tipo_stock_otros', '', '');
 		$this->form_validation->run();
 
-		$stock        = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+		$stock = array();
+		if($this->input->post('sel_fechas'))
+		{
+			$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+		}
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
 
