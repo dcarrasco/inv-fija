@@ -125,15 +125,19 @@ class Stock_sap extends CI_Controller {
 				}
 
 				$graph_q_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['EQUIPOS'];
-				$graph_q_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['SIMCARD'];
-				$graph_q_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['OTROS'];
 				$graph_v_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_EQUIPOS']/1000000;
+
+				$graph_q_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['SIMCARD'];
 				$graph_v_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_SIMCARD']/1000000;
+
+				$graph_q_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['OTROS'];
 				$graph_v_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_OTROS']/1000000;
 			}
 
 			$serie_q_equipos = $this->_arr_series_to_string($graph_q_equipos);
 			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
+			$serie_q_simcard = $this->_arr_series_to_string($graph_q_simcard);
+			$serie_v_simcard = $this->_arr_series_to_string($graph_v_simcard);
 			$graph_fechas = '[' . implode(',', $arr_graph_fechas) . ']';
 			$graph_label_series = '[' . implode(',', $arr_graph_label_series) . ']';
 			//dbg($serie_q_equipos);
@@ -152,6 +156,8 @@ class Stock_sap extends CI_Controller {
 						'arr_mostrar'            => $arr_mostrar,
 						'serie_q_equipos'        => $serie_q_equipos,
 						'serie_v_equipos'        => $serie_v_equipos,
+						'serie_q_simcard'        => $serie_q_simcard,
+						'serie_v_simcard'        => $serie_v_simcard,
 						'arr_graph_fechas'       => $graph_fechas,
 						'arr_graph_label_series' => $graph_label_series,
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)

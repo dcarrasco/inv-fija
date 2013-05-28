@@ -70,12 +70,16 @@
 	</div> <!-- fin content-module-main -->
 
 	<div class="ac">
-		<div id="chart-q" class="jqplot-target" style="width: 600px; height: 500px; position: relative;"></div>
+		<div id="chart-qe" class="jqplot-target fl" style="width: 600px; height: 500px; position: relative;"></div>
+		<div id="chart-ve" class="jqplot-target fl" style="width: 600px; height: 500px; position: relative;"></div>
 	</div>
 
 	<div class="ac">
-		<div id="chart-v" class="jqplot-target" style="width: 600px; height: 500px; position: relative;"></div>
+		<div id="chart-qs" class="jqplot-target fl" style="width: 600px; height: 500px; position: relative;"></div>
+		<div id="chart-vs" class="jqplot-target fl" style="width: 600px; height: 500px; position: relative;"></div>
 	</div>
+
+	<div class="cf"></div>
 
 	<div class="content-module-footer cf">
 	</div> <!-- fin content-module-footer -->
@@ -130,11 +134,15 @@ $(document).ready(function(){
 
 	var datos_q_equipos = <?php echo $serie_q_equipos; ?>;
 	var datos_v_equipos = <?php echo $serie_v_equipos; ?>;
+	var datos_q_simcard = <?php echo $serie_q_simcard; ?>;
+	var datos_v_simcard = <?php echo $serie_v_simcard; ?>;
 	var x_label = <?php echo $arr_graph_fechas; ?>;
 	var series_label = <?php echo $arr_graph_label_series; ?>;
 
-	plot3 = jq_grafico('chart-q', datos_q_equipos, x_label, 'Cantidad', series_label, 'Equipos');
-	plot4 = jq_grafico('chart-v', datos_v_equipos, x_label, 'Monto (MM$)', series_label, 'Equipos');
+	plot3 = jq_grafico('chart-qe', datos_q_equipos, x_label, 'Cantidad', series_label, 'Cantidad Equipos');
+	plot4 = jq_grafico('chart-ve', datos_v_equipos, x_label, 'Monto (MM$)', series_label, 'Valor Equipos');
+	plot5 = jq_grafico('chart-qs', datos_q_simcard, x_label, 'Cantidad', series_label, 'Cantidad Simcard');
+	plot6 = jq_grafico('chart-vs', datos_v_simcard, x_label, 'Monto (MM$)', series_label, 'Valor Simcard');
 
 });
 </script>
