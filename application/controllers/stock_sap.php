@@ -97,8 +97,8 @@ class Stock_sap extends CI_Controller {
 		$serie_v_simcard = '[]';
 		$serie_q_otros = '[]';
 		$serie_v_otros = '[]';
-		$graph_fechas = '[]';
-		$graph_label_series = '[]';
+		$str_eje_x = '[]';
+		$str_label_series = '[]';
 		if (count($stock) > 0)
 		{
 			$graph_q_equipos = array();
@@ -108,38 +108,86 @@ class Stock_sap extends CI_Controller {
 			$graph_v_simcard = array();
 			$graph_v_otros   = array();
 
-			$arr_graph_fechas = array();
-			$arr_graph_label_series = array();
+			$arr_eje_x = array();
+			$arr_label_series = array();
 
 			foreach($stock as $reg)
 			{
-				if (!in_array("'" . $reg['fecha_stock'] . "'", $arr_graph_fechas))
+				// si seleccionamos mas de una fecha, entonces usamos la fecha en el eje_X
+				if (count($this->input->post('fecha_ultimodia'))>0)
 				{
-					array_push($arr_graph_fechas, "'" . $reg['fecha_stock'] . "'");
+					$idx_eje_x = 'fecha_stock';
+					if (!in_array("'" . $reg[$idx_eje_x] . "'", $arr_eje_x))
+					{
+						array_push($arr_eje_x, "'" . $reg[$idx_eje_x] . "'");
+					}
 				}
 
-				$label_serie = '{label:\'' . $reg['tipo_almacen'] . '\'}';
-				if (!in_array($label_serie, $arr_graph_label_series))
+				// si seleccionamos tipos de almacen, entonces usamos el tipo de almacen como las series
+				if ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
 				{
-					array_push($arr_graph_label_series, $label_serie);
+					// si no se ha seleccionado la apertura por almacenes, usa el tipo de almacen
+					if (!$this->input->post('almacen'))
+					{
+						$idx_series = 'tipo_almacen';
+						$label_serie = '{label:\'' . $reg[$idx_series] . '\'}';
+						if (!in_array($label_serie, $arr_label_series))
+						{
+							array_push($arr_label_series, $label_serie);
+						}
+					}
+					// si se selecciono apertura por almacén
+					else
+					{
+						// si hay mas de un tipo de almacen seleccionado...
+						if ($this->input->post('almacen') and count($this->input->post('tipo_alm'))>1)
+						{
+							$idx_series = 'cod_almacen';
+							$label_serie = '{label:\'' . $reg['tipo_almacen'] . '/'. $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}';
+							if (!in_array($label_serie, $arr_label_series))
+							{
+								array_push($arr_label_series, $label_serie);
+							}
+						}
+						// si hay solo un tipo de almacen seleccionado...
+						else
+						{
+							$idx_series = 'cod_almacen';
+							$label_serie = '{label:\'' . $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}';
+							if (!in_array($label_serie, $arr_label_series))
+							{
+								array_push($arr_label_series, $label_serie);
+							}
+						}
+					}
+				}
+				// si seleccionamos solo almacenes...
+				else
+				{
+					$idx_series = 'cod_bodega';
+					$label_serie = '{label:\'' . $reg['centro'] . '-' . $reg[$idx_series] . ' ' . $reg['des_almacen'] . '\'}';
+					if (!in_array($label_serie, $arr_label_series))
+					{
+						array_push($arr_label_series, $label_serie);
+					}
 				}
 
-				$graph_q_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['EQUIPOS'];
-				$graph_v_equipos[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_EQUIPOS']/1000000;
+				$graph_q_equipos[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['EQUIPOS'];
+				$graph_v_equipos[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['VAL_EQUIPOS']/1000000;
 
-				$graph_q_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['SIMCARD'];
-				$graph_v_simcard[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_SIMCARD']/1000000;
+				$graph_q_simcard[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['SIMCARD'];
+				$graph_v_simcard[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['VAL_SIMCARD']/1000000;
 
-				$graph_q_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['OTROS'];
-				$graph_v_otros[$reg['tipo_almacen']][$reg['fecha_stock']] = $reg['VAL_OTROS']/1000000;
+				$graph_q_otros[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['OTROS'];
+				$graph_v_otros[$reg[$idx_series]][$reg[$idx_eje_x]] = $reg['VAL_OTROS']/1000000;
 			}
 
 			$serie_q_equipos = $this->_arr_series_to_string($graph_q_equipos);
 			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
 			$serie_q_simcard = $this->_arr_series_to_string($graph_q_simcard);
 			$serie_v_simcard = $this->_arr_series_to_string($graph_v_simcard);
-			$graph_fechas = '[' . implode(',', $arr_graph_fechas) . ']';
-			$graph_label_series = '[' . implode(',', $arr_graph_label_series) . ']';
+			$str_eje_x = '[' . implode(',', $arr_eje_x) . ']';
+			$str_label_series = '[' . implode(',', $arr_label_series) . ']';
 			//dbg($serie_q_equipos);
 		}
 
@@ -158,8 +206,8 @@ class Stock_sap extends CI_Controller {
 						'serie_v_equipos'        => $serie_v_equipos,
 						'serie_q_simcard'        => $serie_q_simcard,
 						'serie_v_simcard'        => $serie_v_simcard,
-						'arr_graph_fechas'       => $graph_fechas,
-						'arr_graph_label_series' => $graph_label_series,
+						'str_eje_x'              => $str_eje_x,
+						'str_label_series'       => $str_label_series,
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
 														|| in_array('material', $arr_mostrar)
 														|| in_array('lote', $arr_mostrar)
