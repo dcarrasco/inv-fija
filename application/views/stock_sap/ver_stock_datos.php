@@ -69,16 +69,27 @@
 
 	</div> <!-- fin content-module-main -->
 
-	<div class="ac">
-		<div id="chart-qe" class="jqplot-target fl" style="width: 45%; height: 450px; position: relative;"></div>
-		<div id="chart-ve" class="jqplot-target fl" style="width: 45%; height: 450px; position: relative;"></div>
+	<div class="ac2">
+		<div class="fl">
+			<?php echo form_button('grafico', 'Grafico', 'class="button b-active round ic-grafico" id="btn_grafico"'); ?><br>
+			<br />
+			<hr />
+			<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo','equipos'), 'id="sel_graph_tipo_equipos"'); ?> Equipos
+			<br/>
+			<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo','simcard'), 'id="sel_graph_tipo_simcard"'); ?> Simcard
+			<br/>
+			<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo','otros'), 'id="sel_graph_tipo_otros"'); ?> Otros
+			<br/>
+			<hr />
+			<?php echo form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?> Cantidad
+			<br/>
+			<?php echo form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?> Monto
+			<br/>
+		</div>
+		<div style="width:600px; margin-left:auto; margin-right:auto;">
+			<div id="chart" class="jqplot-target" style="width: 100%; height: 450px;"></div>
+		</div>
 	</div>
-
-	<div class="ac">
-		<div id="chart-qs" class="jqplot-target fl" style="width: 45%; height: 450px; position: relative;"></div>
-		<div id="chart-vs" class="jqplot-target fl" style="width: 45%; height: 450px; position: relative;"></div>
-	</div>
-
 	<div class="cf"></div>
 
 	<div class="content-module-footer cf">
@@ -92,21 +103,21 @@
 </div> <!-- fin content-module -->
 <script language="javascript">
 $(document).ready(function(){
-	function jq_grafico(div_id, datos, x_label, y_label, series_label, title)
+	jq_grafico = function(div_id, datos, x_label, y_label, series_label, title)
 	{
 		return $.jqplot(div_id, datos, {
 			title: title,
-			// Tell the plot to stack the bars.
+			animate: true,
+			animateReplot: true,
 			stackSeries: true,
 			captureRightClick: true,
 			seriesDefaults:{
 				renderer:$.jqplot.BarRenderer,
 				rendererOptions: {
-					// Put a 30 pixel margin between bars.
-					barMargin: 30,
-					// Highlight bars when mouse button pressed.
-					// Disables default highlighting on mouse over.
-					highlightMouseOver: true
+					highlightMouseOver: true,
+					animation: {
+						speed: 300
+					}
 				},
 				pointLabels: {show: true}
 			},
@@ -130,19 +141,65 @@ $(document).ready(function(){
 				placement: 'outsideGrid'
 			}
 		});
-	}
+	};
+
+
+
 
 	var datos_q_equipos = <?php echo $serie_q_equipos; ?>;
 	var datos_v_equipos = <?php echo $serie_v_equipos; ?>;
 	var datos_q_simcard = <?php echo $serie_q_simcard; ?>;
 	var datos_v_simcard = <?php echo $serie_v_simcard; ?>;
+	var datos_q_otros   = <?php echo $serie_q_otros; ?>;
+	var datos_v_otros   = <?php echo $serie_v_otros; ?>;
 	var x_label = <?php echo $str_eje_x; ?>;
 	var series_label = <?php echo $str_label_series; ?>;
 
-	plot3 = jq_grafico('chart-qe', datos_q_equipos, x_label, 'Cantidad', series_label, 'Cantidad Equipos');
-	plot4 = jq_grafico('chart-ve', datos_v_equipos, x_label, 'Monto (MM$)', series_label, 'Valor Equipos');
-	plot5 = jq_grafico('chart-qs', datos_q_simcard, x_label, 'Cantidad', series_label, 'Cantidad Simcard');
-	plot6 = jq_grafico('chart-vs', datos_v_simcard, x_label, 'Monto (MM$)', series_label, 'Valor Simcard');
+	var plot;
+
+	var render_grafico = function(tipo, datos)
+	{
+		var data;
+		var tipo  = $('input:radio[name=sel_graph_tipo]:checked').val();
+		var datos = $('input:radio[name=sel_graph_valor]:checked').val()
+		var str_tipo = '';
+		var str_dato = '';
+		var str_ejey = '';
+
+		str_dato = (datos == 'monto') ? 'Valor (MM$)' : 'Cantidad';
+
+		if (tipo == 'simcard')
+		{
+			str_tipo = 'Simcard';
+			data = (datos == 'monto') ? datos_v_simcard : datos_q_simcard;
+		}
+		else if (tipo == 'otros')
+		{
+			str_tipo = 'Otros';
+			data = (datos == 'monto') ? datos_v_otros : datos_q_otros;
+		}
+		else
+		{
+			str_tipo = 'Equipos';
+			data = (datos == 'monto') ? datos_v_equipos : datos_q_equipos;
+		}
+
+		if (plot !== undefined) plot.destroy();
+		plot = jq_grafico('chart', data, x_label, str_dato, series_label, str_dato + ' ' + str_tipo);
+	};
+
+	$('input:radio[name=sel_graph_tipo]').click(function (event) {
+		render_grafico();
+	});
+
+	$('input:radio[name=sel_graph_valor]').click(function (event) {
+		render_grafico();
+	});
+
+	$('#btn_grafico').click(function (event) {
+		render_grafico();
+	});
+
 
 });
 </script>

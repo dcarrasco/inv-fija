@@ -186,9 +186,10 @@ class Stock_sap extends CI_Controller {
 			$serie_v_equipos = $this->_arr_series_to_string($graph_v_equipos);
 			$serie_q_simcard = $this->_arr_series_to_string($graph_q_simcard);
 			$serie_v_simcard = $this->_arr_series_to_string($graph_v_simcard);
+			$serie_q_otros = $this->_arr_series_to_string($graph_q_otros);
+			$serie_v_otros= $this->_arr_series_to_string($graph_v_otros);
 			$str_eje_x = '[' . implode(',', $arr_eje_x) . ']';
 			$str_label_series = '[' . implode(',', $arr_label_series) . ']';
-			//dbg($serie_q_equipos);
 		}
 
 
@@ -206,7 +207,9 @@ class Stock_sap extends CI_Controller {
 						'serie_v_equipos'        => $serie_v_equipos,
 						'serie_q_simcard'        => $serie_q_simcard,
 						'serie_v_simcard'        => $serie_v_simcard,
-						'str_eje_x'              => $str_eje_x,
+						'serie_q_otros'          => $serie_q_otros,
+  						'serie_v_otros'          => $serie_v_otros,
+  						'str_eje_x'              => $str_eje_x,
 						'str_label_series'       => $str_label_series,
 						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
 														|| in_array('material', $arr_mostrar)

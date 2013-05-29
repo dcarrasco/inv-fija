@@ -69,7 +69,6 @@
 					<?php endif; ?>
 					<br>
 					<hr>
-					<br>
 					<div class="fr">
 						<?php echo form_submit('excel', 'Exportar a Excel...', 'class="button b-active round ic-reporte"'); ?><br>
 					</div>
