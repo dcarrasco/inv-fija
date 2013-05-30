@@ -13,7 +13,7 @@
 
 	<div class="content-module-main-agregar">
 		<?php echo form_open('', 'id="frm_editar"'); ?>
-		<table>
+		<table class="reporte">
 			<tbody>
 				<?php foreach ($modelo as $campo => $valor): ?>
 				<tr>

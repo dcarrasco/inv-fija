@@ -24,7 +24,7 @@
 	<div class="content-module-main">
 		<?php echo form_open('', 'id="frm_editar"'); ?>
 		<?php echo form_hidden('formulario','editar'); ?>
-		<table>
+		<table class="reporte">
 			<thead>
 				<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>

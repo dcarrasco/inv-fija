@@ -43,7 +43,7 @@
 		<?php $totales    = array(); ?>
 		<?php $subtotales = array(); ?>
 		<?php $subtot_ant = array(); ?>
-		<table>
+		<table class="reporte">
 			<thead>
 				<tr>
 					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
