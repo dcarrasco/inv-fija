@@ -19,7 +19,7 @@
 		<div class="content-module-main-principal">
 		<?php echo form_open('analisis/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 		<?php echo form_hidden('formulario','ajustes'); ?>
-		<table>
+		<table class="reporte">
 			<thead>
 				<tr>
 					<th class="ac">material</th>

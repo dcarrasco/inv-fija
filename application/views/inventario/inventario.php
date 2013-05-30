@@ -47,7 +47,7 @@
 			<?php echo form_hidden('hoja', $hoja); ?>
 			<?php echo form_hidden('auditor', $id_auditor); ?>
 			<?php echo form_hidden('id', ''); ?>
-			<table>
+			<table class="reporte">
 				<tr>
 					<th></th>
 					<th class="ac">Ingreso datos inventario</th>
@@ -172,7 +172,7 @@
 		<?php echo form_hidden('auditor', $id_auditor); ?>
 		<?php //echo form_error('sel_digitador'); ?>
 		<?php //echo form_error('sel_auditor'); ?>
-		<table>
+		<table class="reporte">
 			<thead>
 				<tr>
 					<th class="ac">ubicacion</th>
