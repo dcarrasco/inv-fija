@@ -3,11 +3,14 @@
 <head>
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/estilo.css" /	>
+
+	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" /	>
+	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.jqplot.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
+	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+
 
 
 	<script type="text/javascript">
@@ -17,7 +20,13 @@
 <body>
 
 
-<div class="app-heading cf">
-	<h2 class="fl"><?php echo $titulo_modulo; ?></h2>
-	<nav class="fr round"><?php echo $menu_app; ?></nav>
+<div class="row-fluid">
+	<div class="span4"><h2><?php echo $titulo_modulo; ?></h2></div>
+	<div class="span8">
+		<div class="navbar">
+			<div class="navbar-inner">
+				<?php echo $menu_app; ?>
+			</div>
+		</div>
+	</div>
 </div> <!-- fin app-heading -->

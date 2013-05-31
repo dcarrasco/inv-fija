@@ -60,7 +60,7 @@ class Acl_model extends CI_Model {
 		}
 
 		$app_ant = '';
-		$menu = '<ul>';
+		$menu = '<ul class="nav">';
 		foreach ($arr_modulos as $modulo)
 		{
 			if ($modulo['app'] != $app_ant)
@@ -69,10 +69,10 @@ class Acl_model extends CI_Model {
 				{
 					$menu .= '</ul></li>';
 				}
-				$menu .= '<li><span class="button ' . $modulo['app_icono'] .'">' . $modulo['app'] . '</span>';
-				$menu .= '<ul>';
+				$menu .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $modulo['app_icono'] .' icon-white"></i>' . $modulo['app'] . '<b class="caret"></b></a>';
+				$menu .= '<ul class="dropdown-menu">';
 			}
-			$menu .= '<li>' . anchor($modulo['url'], $modulo['modulo'], 'class="button ' . $modulo['modulo_icono'] .'"');
+			$menu .= '<li><i class="' . $modulo['modulo_icono'] . '"></i>' . anchor($modulo['url'], $modulo['modulo'], '"');
 			$app_ant = $modulo['app'];
 		}
 		$menu .= '</ul></li>';

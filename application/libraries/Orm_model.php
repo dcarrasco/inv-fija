@@ -17,7 +17,7 @@ class ORM_Model {
 	private $model_order_by      = '';
 	private $model_campo_id      = '';
 	private $model_got_relations = false;
-	private $model_page_results  = 15;
+	private $model_page_results  = 10;
 	private $model_fields        = array();
 	private $model_all           = array();
 
@@ -322,13 +322,31 @@ class ORM_Model {
 		$cfg_pagination = array(
 					'uri_segment' => 5,
 					'num_links'   => 5,
+
+					'full_tag_open'   => '<ul>',
+					'flil_tag_close'  => '</ul>',
+
+					'first_tag_open'  => '<li>',
+					'first_tag_close' => '</li>',
+					'last_tag_open'   => '<li>',
+					'last_tag_close'  => '</li>',
+					'next_tag_open'   => '<li>',
+					'next_tag_close'  => '</li>',
+					'prev_tag_open'   => '<li>',
+					'prev_tag_close'  => '</li>',
+					'cur_tag_open'    => '<li class="active"><a href="#">',
+					'cur_tag_close'   => '</a></li>',
+					'num_tag_open'    => '<li>',
+					'num_tag_close'   => '</li>',
+
+
 					'per_page'    => $this->model_page_results,
 					'total_rows'  => $total_rows,
 					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results) . ')',
-					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
-					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+					'prev_link'   => '&laquo;',
+					'next_link'   => '&raquo;',
 				);
 		$this->pagination->initialize($cfg_pagination);
 		return $this->pagination->create_links();
