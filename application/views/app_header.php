@@ -8,22 +8,25 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.jqplot.min.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-
-
+	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.jqplot.min.js"></script>
 
 	<script type="text/javascript">
 		js_base_url = '<?php echo ($this->config->item('index_page') == '') ? base_url() : base_url() . $this->config->item('index_page') . '/'; ?>';
 	</script>
 </head>
+
 <body>
 
+<div class="container-fluid">
 
 <div class="row-fluid">
-	<div class="span4"><h2><?php echo $titulo_modulo; ?></h2></div>
-	<div class="span8">
-		<div class="navbar">
+	<div class="span5">
+		<h3><?php echo $titulo_modulo; ?></h3>
+	</div>
+
+	<div class="span7">
+		<div class="navbar pull-right">
 			<div class="navbar-inner">
 				<?php echo $menu_app; ?>
 			</div>

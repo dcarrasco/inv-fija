@@ -181,7 +181,7 @@ class ORM_Model {
 		{
 			$this->set_validation_rules_field($campo);
 		}
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: ', '</strong></p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
 		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
@@ -1008,7 +1008,7 @@ class ORM_Field {
 	{
 		$form       = '';
 		$id_prefix  = 'id_';
-		$form_class = 'form_edit round' . ((form_error($this->nombre) == '') ? '' : ' form_edit_error');
+		$form_class = '';
 
 		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
@@ -1017,7 +1017,7 @@ class ORM_Field {
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = $valor_field;
+			$form = '<span class="uneditable-input">' . $valor_field . '</span>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 		}
 		else if (!empty($this->choices))
@@ -1042,19 +1042,44 @@ class ORM_Field {
 			}
 			else
 			{
+				if ($this->largo > 40)
+				{
+					$class_largo = ' input-xxlarge';
+				}
+				else if ($this->largo > 10)
+				{
+					$class_largo = ' input-large';
+				}
+				else
+				{
+					$class_largo = ' input-mini';
+				}
+
 				$arr_param = array(
 									'name'      => $this->nombre,
 									'value'     => $valor_field,
 									'maxlength' => $this->largo,
-									'size'      => $this->largo,
 									'id'        => $id_prefix . $this->nombre,
-									'class'     => $form_class,
+									'class'     => $form_class . $class_largo,
 								);
 				$form = form_input($arr_param);
 			}
 		}
 		else if ($this->tipo == 'password')
 		{
+			if ($this->largo > 40)
+			{
+				$class_largo = ' input-xxlarge';
+			}
+			else if ($this->largo > 10)
+			{
+				$class_largo = ' input-large';
+			}
+			else
+			{
+				$class_largo = ' input-mini';
+			}
+
 			$arr_param = array(
 								'name'      => $this->nombre,
 								'value'     => $valor_field,
@@ -1103,8 +1128,12 @@ class ORM_Field {
 		}
 		else if ($this->tipo == 'boolean')
 		{
-			$form  = form_radio($this->nombre, 1, ($valor_field == 1) ? true : false) . 'Si &nbsp; &nbsp; &nbsp; &nbsp;';
+			$form = '<label class="radio inline">';
+			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? true : false) . 'Si';
+			$form .= '</label>';
+			$form .= '<label class="radio inline">';
 			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? false : true) . 'No';
+			$form .= '</label>';
 		}
 		else if ($this->tipo == 'has_one')
 		{

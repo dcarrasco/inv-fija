@@ -1,3 +1,3 @@
-<!-- app-footer -->
+</div>
 </body>
 </html>

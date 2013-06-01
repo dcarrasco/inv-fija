@@ -69,14 +69,14 @@ class Acl_model extends CI_Model {
 				{
 					$menu .= '</ul></li>';
 				}
-				$menu .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $modulo['app_icono'] .' icon-white"></i>' . $modulo['app'] . '<b class="caret"></b></a>';
+				$menu .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $modulo['app_icono'] . '"></i>&nbsp;' . $modulo['app'] . '<b class="caret"></b></a>';
 				$menu .= '<ul class="dropdown-menu">';
 			}
-			$menu .= '<li><i class="' . $modulo['modulo_icono'] . '"></i>' . anchor($modulo['url'], $modulo['modulo'], '"');
+			$menu .= '<li><a href="' . site_url($modulo['url']) . '"><i class="' . $modulo['modulo_icono'] . '"></i>&nbsp;' . $modulo['modulo'] . '</a>';
 			$app_ant = $modulo['app'];
 		}
 		$menu .= '</ul></li>';
-		$menu .= '<li>' . anchor('login','Logout', 'class="button ic-logout"') . '</li>';
+		$menu .= '<li><a href="' . site_url('login') . '"><i class="icon-off"></i>&nbsp;Logout</a>';
 		$menu .= '</ul>';
 
 		return $menu;

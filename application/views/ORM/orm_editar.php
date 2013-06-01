@@ -1,39 +1,44 @@
-<div class="container-fluid">
+<div class="row-fluid">
+	<?php echo $menu_configuracion; ?>
+</div>
 
-	<div>
-		<div>
-			<?php echo $menu_configuracion; ?>
-		</div>
-
-	</div> <!-- fin content-module-heading -->
-
-	<div class="msg-alerta ac">
-		<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
+<?php if ($msg_alerta != ''): ?>
+	<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<?php echo $msg_alerta; ?>
 	</div>
+<?php endif; ?>
 
-	<div>
-		<?php echo form_open('', 'id="frm_editar" class="form-horizontal"'); ?>
+<div class="span8 offset2">
+	<?php echo form_open('', 'id="frm_editar" class="form-horizontal"'); ?>
 
-		<?php foreach ($modelo as $campo => $valor): ?>
+	<?php foreach ($modelo as $campo => $valor): ?>
 		<div class="control-group">
-			<label class="control-label"><?php echo ucfirst($modelo->get_label_field($campo)); ?></label>
+			<label class="control-label">
+				<?php echo ucfirst($modelo->get_label_field($campo)); ?>
+				<?php echo ($modelo->get_es_obligatorio_field($campo)) ? '<span>[*]</span>' : ''; ?>
+
+			</label>
+
 			<div class="controls">
 				<?php echo $modelo->print_form_field($campo); ?>
-				<?php echo ($modelo->get_es_obligatorio_field($campo)) ? '<span class="form_requerido">*</span>' : ''; ?>
-				<?php echo form_error($campo); ?>
 				<span class="help-block"><?php echo $modelo->get_texto_ayuda_field($campo); ?></span>
+				<?php echo form_error($campo); ?>
 			</div>
 		</div>
-		<?php endforeach; ?>
+	<?php endforeach; ?>
 
-		<div class="control-group">
-			<div class="controls">
-				<button type="submit" class="btn btn-primary" name="grabar"><i class="icon-ok icon-white"></i>Guardar</button>
-				<button type="submit" class="btn" name="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n\');"><i class="icon-trash"></i>Borrar</button>
-			</div>
-		</div> <!-- fin content-module-footer -->
-		<?php echo form_close(); ?>
-	</div> <!-- fin content-module-main-agregar -->
-
-
-</div> <!-- fin content-module -->
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
+				<i class="icon-ok icon-white"></i>
+				Guardar
+			</button>
+			<button type="submit" class="btn" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
+				<i class="icon-trash"></i>
+				Borrar
+			</button>
+		</div>
+	</div>
+	<?php echo form_close(); ?>
+</div>
