@@ -2,6 +2,9 @@
 
 class Almacen_sap_model extends CI_Model {
 
+	var $bd_logistica     = 'bd_logistica..';
+	var $bd_planificacion = 'bd_planificacion..';
+
 
 	public function __construct()
 	{
@@ -16,7 +19,7 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo[''] = 'Seleccionar centro ...';
 
 		$this->db->distinct()->select('centro')->order_by('centro');
-		$arr_result = $this->db->get('bd_logistica..cp_almacenes')->result_array();
+		$arr_result = $this->db->get($this->bd_logistica . 'cp_almacenes')->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -34,8 +37,7 @@ class Almacen_sap_model extends CI_Model {
 		//$arr_combo[''] = 'Seleccionar almacenes ...';
 
 		$this->db->order_by('centro, cod_almacen');
-		//$arr_result = $this->db->get_where('bd_logistica..cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
-		$arr_result = $this->db->get_where('cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
+		$arr_result = $this->db->get_where($this->bd_logistica . 'cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -52,8 +54,7 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo[''] = 'Seleccionar tipo almacen ...';
 
 		$this->db->order_by('tipo');
-		//$arr_result = $this->db->get_where('bd_logistica..cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
-		$arr_result = $this->db->get_where('cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
+		$arr_result = $this->db->get_where($this->bd_logistica . 'cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -67,11 +68,11 @@ class Almacen_sap_model extends CI_Model {
 	{
 		if ($grupo == 0)
 		{
-			return $this->db->order_by('tipo')->get_where('bd_logistica..cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
+			return $this->db->order_by('tipo')->get_where($this->bd_logistica . 'cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
 		}
 		else
 		{
-			return $this->db->where('id_tipo', $grupo)->get('bd_logistica..cp_tiposalm')->row_array();
+			return $this->db->where('id_tipo', $grupo)->get($this->bd_logistica . 'cp_tiposalm')->row_array();
 		}
 
 	}
@@ -79,7 +80,7 @@ class Almacen_sap_model extends CI_Model {
 	public function get_tipos_almacenes($grupo = 0)
 	{
 		$arr_result = array();
-		$arr_tmp = $this->db->where('id_tipo', $grupo)->get('bd_logistica..cp_tipos_almacenes')->result_array();
+		$arr_tmp = $this->db->where('id_tipo', $grupo)->get($this->bd_logistica . 'cp_tipos_almacenes')->result_array();
 		foreach($arr_tmp as $reg)
 		{
 			array_push($arr_result, $reg['centro'].'-'.$reg['cod_almacen']);
@@ -94,8 +95,8 @@ class Almacen_sap_model extends CI_Model {
 			$this->db->where('id_tipo',$grupo);
 		}
 		$this->db->select('ta.id_tipo, ta.centro, ta.cod_almacen, a.des_almacen');
-		$this->db->from('bd_logistica..cp_tipos_almacenes ta');
-		$this->db->join('bd_logistica..cp_almacenes a','a.centro=ta.centro and a.cod_almacen=ta.cod_almacen','left');
+		$this->db->from($this->bd_logistica . 'cp_tipos_almacenes ta');
+		$this->db->join($this->bd_logistica . 'cp_almacenes a','a.centro=ta.centro and a.cod_almacen=ta.cod_almacen','left');
 		$arr_datos = $this->db->get()->result_array();
 
 		$arr_result = array();

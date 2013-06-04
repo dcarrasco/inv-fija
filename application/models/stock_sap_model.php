@@ -2,10 +2,8 @@
 
 class stock_sap_model extends CI_Model {
 
-	var $bd_logistica     = '';
-	var $bd_planificacion = '';
-	//var $bd_logistica     = 'bd_logistica..';
-	//var $bd_planificacion = 'bd_planificacion..';
+	var $bd_logistica     = 'bd_logistica..';
+	var $bd_planificacion = 'bd_planificacion..';
 
 	public function __construct()
 	{
@@ -528,8 +526,7 @@ class stock_sap_model extends CI_Model {
 		$arr_result = array();
 		$arr_combo  = array();
 
-		//$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 102) as fecha');
-		$this->db->select('fecha_stock as fecha_stock, fecha_stock as fecha');
+		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 102) as fecha');
 		$this->db->order_by('fecha_stock','desc');
 		$arr_result = $this->db->get($this->bd_logistica . 'stock_scl_fechas')->result_array();
 

@@ -1,99 +1,119 @@
-	<div class="content-module-main">
+<?php $totales = array(); ?>
+<?php $campos  = array(); ?>
+<?php $campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
+<?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
+<table class="table table-bordered table-striped table-hover table-condensed">
+	<?php foreach($stock as $key_reg => $reg): ?>
+		<?php // ********************************************************* ?>
+		<?php // Imprime encabezados                                       ?>
+		<?php // ********************************************************* ?>
+		<?php if ($key_reg == 0): ?>
+			<thead>
+				<tr>
+				<?php foreach($reg as $key => $val): ?>
+					<th <?php echo (in_array($key, $campos_sumables) ? 'class="ar"' : '')?>><?php echo str_replace('_', ' ', $key); ?></th>
+					<?php array_push($campos, $key); ?>
+				<?php endforeach; ?>
+				</tr>
+			</thead>
+			<tbody>
+		<?php endif; ?>
 
-		<?php $totales = array(); ?>
-		<?php $campos  = array(); ?>
-		<?php $campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
-		<?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
-		<table class="reporte">
-			<?php foreach($stock as $key_reg => $reg): ?>
-				<?php // ********************************************************* ?>
-				<?php // Imprime encabezados                                       ?>
-				<?php // ********************************************************* ?>
-				<?php if ($key_reg == 0): ?>
-					<thead>
-						<tr>
-						<?php foreach($reg as $key => $val): ?>
-							<th <?php echo (in_array($key, $campos_sumables) ? 'class="ar"' : '')?>><?php echo str_replace('_', ' ', $key); ?></th>
-							<?php array_push($campos, $key); ?>
-						<?php endforeach; ?>
-						</tr>
-					</thead>
-					<tbody>
+
+		<?php // ********************************************************* ?>
+		<?php // Imprime linea normal con datos                            ?>
+		<?php // ********************************************************* ?>
+		<tr>
+			<?php foreach($reg as $key => $val): ?>
+				<?php if (in_array($key, $campos_sumables)): ?>
+					<td class="ar">
+						<?php echo anchor('stock_sap/detalle_series/' .
+												(array_key_exists('centro', $reg) ? $reg['centro'] : '_') . '/' .
+												(array_key_exists('cod_almacen', $reg) ? $reg['cod_almacen'] : '_') . '/' .
+												(array_key_exists('cod_articulo', $reg) ? $reg['cod_articulo'] : '_') . '/' .
+												(array_key_exists('lote', $reg) ? $reg['lote'] : '_'),
+											((in_array($key, $campos_montos)) ? '$ ' : '') . number_format($val,0,',','.')
+										); ?>
+					</td>
+					<?php if (!array_key_exists($key, $totales)) $totales[$key] = 0; ?>
+					<?php $totales[$key] += $val; ?>
+				<?php else: ?>
+					<td><?php echo ($val); ?></td>
 				<?php endif; ?>
-
-
-				<?php // ********************************************************* ?>
-				<?php // Imprime linea normal con datos                            ?>
-				<?php // ********************************************************* ?>
-				<tr>
-					<?php foreach($reg as $key => $val): ?>
-						<?php if (in_array($key, $campos_sumables)): ?>
-							<td class="ar">
-								<?php echo anchor('stock_sap/detalle_series/' .
-														(array_key_exists('centro', $reg) ? $reg['centro'] : '_') . '/' .
-														(array_key_exists('cod_almacen', $reg) ? $reg['cod_almacen'] : '_') . '/' .
-														(array_key_exists('cod_articulo', $reg) ? $reg['cod_articulo'] : '_') . '/' .
-														(array_key_exists('lote', $reg) ? $reg['lote'] : '_'),
-													((in_array($key, $campos_montos)) ? '$ ' : '') . number_format($val,0,',','.')
-												); ?>
-							</td>
-							<?php if (!array_key_exists($key, $totales)) $totales[$key] = 0; ?>
-							<?php $totales[$key] += $val; ?>
-						<?php else: ?>
-							<td><?php echo ($val); ?></td>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				</tr>
 			<?php endforeach; ?>
-			</tbody>
+		</tr>
+	<?php endforeach; ?>
+	</tbody>
 
-			<?php // ********************************************************* ?>
-			<?php // Imprime totales finales de la tabla                       ?>
-			<?php // ********************************************************* ?>
-			<tfoot>
-				<tr>
-					<?php foreach($campos as $val): ?>
-						<?php if (in_array($val, $campos_sumables)): ?>
-							<th class="ar">
-									<?php if (in_array($val, $campos_montos)): ?> $ <?php endif; ?>
-									<?php echo number_format($totales[$val],0,',','.'); ?>
-							</th>
-						<?php else: ?>
-							<th></th>
-						<?php endif; ?>
-					<?php endforeach; ?>
-				</tr>
-			</tfoot>
+	<?php // ********************************************************* ?>
+	<?php // Imprime totales finales de la tabla                       ?>
+	<?php // ********************************************************* ?>
+	<tfoot>
+		<tr>
+			<?php foreach($campos as $val): ?>
+				<?php if (in_array($val, $campos_sumables)): ?>
+					<th class="ar">
+							<?php if (in_array($val, $campos_montos)): ?> $ <?php endif; ?>
+							<?php echo number_format($totales[$val],0,',','.'); ?>
+					</th>
+				<?php else: ?>
+					<th></th>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		</tr>
+	</tfoot>
+</table>
 
-		</table>
 
-	</div> <!-- fin content-module-main -->
-
-	<div class="ac2">
-		<div class="fl">
-			<?php echo form_button('grafico', 'Grafico', 'class="button b-active round ic-grafico" id="btn_grafico"'); ?><br>
-			<br />
-			<hr />
-			<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo','equipos'), 'id="sel_graph_tipo_equipos"'); ?> Equipos
-			<br/>
-			<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo','simcard'), 'id="sel_graph_tipo_simcard"'); ?> Simcard
-			<br/>
-			<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo','otros'), 'id="sel_graph_tipo_otros"'); ?> Otros
-			<br/>
-			<hr />
-			<?php echo form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?> Cantidad
-			<br/>
-			<?php echo form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?> Monto
-			<br/>
+<div class="accordion">
+	<div class="accordion-group">
+		<div class="accordion-heading">
+			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">Ver grafico</a>
 		</div>
-		<div style="width:600px; margin-left:auto; margin-right:auto;">
-			<div id="chart" class="jqplot-target" style="width: 100%; height: 450px;"></div>
+		<div class="accordion-body collapse" id="panel_graficos">
+			<div class="row-fluid">
+				<div class="span4">
+					<div>
+						<strong>Mostrar tipo de material</strong>
+					</div>
+					<div>
+						<label class="checkbox inline">
+							<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo','equipos'), 'id="sel_graph_tipo_equipos"'); ?>
+							Equipos
+						</label>
+						<label class="checkbox inline">
+							<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo','simcard'), 'id="sel_graph_tipo_simcard"'); ?>
+							Simcard
+						</label>
+						<label class="checkbox inline">
+							<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo','otros'), 'id="sel_graph_tipo_otros"'); ?>
+							Otros
+						</label>
+					</div>
+					<div>
+						<strong>Mostrar tipo de dato</strong>
+					</div>
+					<div>
+						<label class="checkbox inline">
+							<?php echo form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?>
+							Cantidad
+						</label>
+						<label class="checkbox inline">
+							<?php echo form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?>
+							Monto
+						</label>
+					</div>
+				</div>
+				<div class="span8">
+					<div style="width:600px; margin-left:auto; margin-right:auto;">
+						<div id="chart" class="jqplot-target" style="width: 100%; height: 450px;"></div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
-	<div class="cf"></div>
+</div>
 
-	<div class="content-module-footer cf">
-	</div> <!-- fin content-module-footer -->
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.barRenderer.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.pointLabels.min.js"></script>
