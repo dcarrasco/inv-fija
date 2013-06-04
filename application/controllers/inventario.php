@@ -75,7 +75,7 @@ class Inventario extends CI_Controller {
 			$nuevo_detalle_inventario->set_validation_rules_field('stock_fisico');
 		}
 
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: ', '</strong></p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 		$this->form_validation->set_message('integer', 'El valor del campo %s debe ser numero entero');
 		$this->form_validation->set_message('greater_than', 'El valor del campo %s debe ser positivo');
@@ -96,10 +96,9 @@ class Inventario extends CI_Controller {
 					'link_config'        => 'config',
 					'link_reporte'       => 'reportes',
 					'link_inventario'    => 'inventario',
-					'link_hoja_ant'      => 'inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time(),
-					'link_hoja_sig'      => 'inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time(),
+					'link_hoja_ant'      => base_url('inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time()),
+					'link_hoja_sig'      => base_url('inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time()),
 					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
-					'menu_app'           => $this->acl_model->menu_app(),
 				);
 
 			$this->_render_view('inventario', $data);
@@ -183,7 +182,6 @@ class Inventario extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Ingreso de Inventario ('.$data['nombre_inventario'].')';
-		$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/'.$vista, $data);
 		$this->load->view('app_footer', $data);

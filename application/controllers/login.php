@@ -23,7 +23,7 @@ class Login extends CI_Controller {
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
 
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: </strong>', '</p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 
 		if ($this->form_validation->run() == FALSE)
@@ -78,7 +78,7 @@ class Login extends CI_Controller {
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
 		}
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
+		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: </strong>', '</p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 		$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
 
@@ -103,7 +103,12 @@ class Login extends CI_Controller {
 			}
 			else
 			{
-				$data = array('msg_alerta' => $res[1]);
+				$data = array(
+					'msg_alerta' => $res[1],
+					'usr'        => $usr,
+					'ocultar_password' => (($this->input->post('usr')) ? true : false),
+					'tiene_clave'    => $this->acl_model->tiene_clave($usr),
+				);
 				$this->load->view('ACL/cambio_password', $data);
 			}
 		}

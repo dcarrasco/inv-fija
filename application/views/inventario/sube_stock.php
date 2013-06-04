@@ -1,57 +1,76 @@
-<div class="content-module">
+<div>
+	<?php echo $menu_ajustes; ?>
+</div>
 
-	<div class="content-module-heading cf">
-		<div class="fl">
-			<?php echo $menu_ajustes; ?>
+<div class="msg-alerta cf ac">
+	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
+</div>
+
+<div class="row-fluid">
+	<div class="span8 offset2">
+	<?php echo form_open_multipart('analisis/sube_stock', 'class="form-horizontal"'); ?>
+	<?php echo form_hidden('formulario','upload'); ?>
+
+	<div class="control-group">
+		<label class="control-label">
+			Inventario
+		</label>
+		<div class="controls">
+			<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
 		</div>
-	</div> <!-- fin content-module-heading -->
-
-	<div class="msg-alerta cf ac">
-		<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 	</div>
 
-	<div class="content-module-main">
-		<?php echo form_open_multipart('analisis/sube_stock'); ?>
-		<?php echo form_hidden('formulario','upload'); ?>
-		<table>
-			<thead>
-				<tr>
-					<th>id</th>
-					<th>Nombre</th>
-					<th>Seleccionar archivo</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><?php echo $inventario_id; ?></td>
-					<td><?php echo $inventario_nombre; ?></td>
-					<td>
-						<span style="color: red; font-weight: bold">ADVERTENCIA</span><br>
-						<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
-							"<?php echo $inventario_nombre?>"</span>
-						<br><br>
-						<?php echo form_upload('upload_file','','size=60'); ?>
-						<br><br>
-						Password de administrador <?php echo form_password('password',''); ?>
-						<br><br>
-						<?php echo $upload_error; ?>
-						<?php echo $msj_error; ?>
-						<div id="progreso_carga">
-							<div id="barra"><div id="barra_progreso"></div></div>
-							<div id="status_progreso">Cargando registros OK <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
-						</div>
-					</td>
-				</tr>
+	<div class="control-group">
+		<label class="control-label">
+			Archivo
+		</label>
+		<div class="controls">
+			<div>
+				<span style="color: red; font-weight: bold">ADVERTENCIA</span><br>
+				<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
+					"<?php echo $inventario_nombre?>"</span>
+			</div>
+			<?php echo form_upload('upload_file','','class="input-large"'); ?>
+		</div>
+	</div>
 
-				<tr>
-					<td colspan="4">
-						<?php echo form_submit('submit', 'Subir archivo', ' class="button b-active round ic-ok fr" id="btn_guardar"'); ?>
-					</td>
-				</tr>
+	<div class="control-group">
+		<label class="control-label">
+			Clave Administrador
+		</label>
+		<div class="controls">
+			<?php echo form_password('password'); ?>
+		</div>
+	</div>
 
-				<tr>
-					<td colspan="4">
-<pre>
+	<div class="control-group">
+		<label class="control-label">
+			Progreso
+		</label>
+		<div class="controls">
+			<?php echo $upload_error; ?>
+			<?php echo $msj_error; ?>
+			<div id="progreso_carga">
+				<div id="barra"><div id="barra_progreso"></div></div>
+				<div id="status_progreso">Cargando registros OK <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
+				<i class="icon-upload icon-white"></i>
+				Subir archivo
+			</button>
+		</div>
+	</div>
+
+	<?php echo form_close(); ?>
+	</div>
+
+	<div class="span8 offset2">
+		<pre>
 Formato del archivo:
 	Archivo de texto
 	Extension .txt
@@ -68,42 +87,31 @@ Formato del archivo:
 			Unidad de medida
 			Stock SAP
 			Hoja
-</pre>
-					</td>
-				</tr>
+		</pre>
+	</div>
 
-		</tbody>
-		</table>
-		<?php echo form_close(); ?>
+</div>
 
-	</div> <!-- fin content-module-main -->
-
-	<div class="content-module-footer cf">
-	</div> <!-- fin content-module-footer -->
-
-	<form id="frm_aux">
-		<input type="hidden" name="id" id="id_id" value="">
-		<input type="hidden" name="id_inv" id="id_id_inv" value="">
-		<input type="hidden" name="hoja" id="id_hoja" value="">
-		<input type="hidden" name="aud" id="id_aud" value="">
-		<input type="hidden" name="dig" id="id_dig" value="">
-		<input type="hidden" name="ubic" id="id_ubic" value="">
-		<input type="hidden" name="hu" id="id_hu" value="">
-		<input type="hidden" name="cat" id="id_cat" value="">
-		<input type="hidden" name="desc" id="id_desc" value="">
-		<input type="hidden" name="lote" id="id_lote" value="">
-		<input type="hidden" name="cen" id="id_cen" value="">
-		<input type="hidden" name="alm" id="id_alm" value="">
-		<input type="hidden" name="um" id="id_um" value="">
-		<input type="hidden" name="ssap" id="id_ssap" value="">
-		<input type="hidden" name="sfis" id="id_sfis" value="">
-		<input type="hidden" name="obs" id="id_obs" value="">
-		<input type="hidden" name="fec" id="id_fec" value="">
-		<input type="hidden" name="nvo" id="id_nvo" value="">
-	</form>
-
-</div> <!-- fin content-module -->
-
+<form id="frm_aux">
+	<input type="hidden" name="id" id="id_id" value="">
+	<input type="hidden" name="id_inv" id="id_id_inv" value="">
+	<input type="hidden" name="hoja" id="id_hoja" value="">
+	<input type="hidden" name="aud" id="id_aud" value="">
+	<input type="hidden" name="dig" id="id_dig" value="">
+	<input type="hidden" name="ubic" id="id_ubic" value="">
+	<input type="hidden" name="hu" id="id_hu" value="">
+	<input type="hidden" name="cat" id="id_cat" value="">
+	<input type="hidden" name="desc" id="id_desc" value="">
+	<input type="hidden" name="lote" id="id_lote" value="">
+	<input type="hidden" name="cen" id="id_cen" value="">
+	<input type="hidden" name="alm" id="id_alm" value="">
+	<input type="hidden" name="um" id="id_um" value="">
+	<input type="hidden" name="ssap" id="id_ssap" value="">
+	<input type="hidden" name="sfis" id="id_sfis" value="">
+	<input type="hidden" name="obs" id="id_obs" value="">
+	<input type="hidden" name="fec" id="id_fec" value="">
+	<input type="hidden" name="nvo" id="id_nvo" value="">
+</form>
 
 <script type="text/javascript">
 $(document).ready(function() {

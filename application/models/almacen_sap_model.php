@@ -34,7 +34,8 @@ class Almacen_sap_model extends CI_Model {
 		//$arr_combo[''] = 'Seleccionar almacenes ...';
 
 		$this->db->order_by('centro, cod_almacen');
-		$arr_result = $this->db->get_where('bd_logistica..cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
+		//$arr_result = $this->db->get_where('bd_logistica..cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
+		$arr_result = $this->db->get_where('cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -51,7 +52,8 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo[''] = 'Seleccionar tipo almacen ...';
 
 		$this->db->order_by('tipo');
-		$arr_result = $this->db->get_where('bd_logistica..cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
+		//$arr_result = $this->db->get_where('bd_logistica..cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
+		$arr_result = $this->db->get_where('cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
 
 		foreach($arr_result as $reg)
 		{

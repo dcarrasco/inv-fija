@@ -43,7 +43,6 @@ class Analisis_series extends CI_Controller {
 		}
 
 		$datos['titulo_modulo'] = 'Consulta información series';
-		$datos['menu_app'] = $this->acl_model->menu_app();
 
 		$this->form_validation->set_rules('series', 'Series', '');
 		$this->form_validation->set_rules('show_mov', 'Series', '');
@@ -70,7 +69,6 @@ class Analisis_series extends CI_Controller {
 			);
 
 		$datos['titulo_modulo'] = 'Consulta información series';
-		$datos['menu_app'] = $this->acl_model->menu_app();
 
 		$this->load->view('app_header', $datos);
 		$this->load->view('stock_sap/analisis_series_trafico_view', $datos);

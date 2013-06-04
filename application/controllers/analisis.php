@@ -65,7 +65,6 @@ class Analisis extends CI_Controller {
 					'pag'                   => $pag,
 					'links_paginas'         => $links_paginas,
 					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
-					'menu_app'              => $this->acl_model->menu_app(),
 				);
 
 			$this->_render_view('ajustes', $data);
@@ -249,10 +248,10 @@ class Analisis extends CI_Controller {
 
 	private function _menu_ajustes($arr_menu, $op_menu)
 	{
-		$menu = '<ul>';
+		$menu = '<ul class="nav nav-tabs">';
 		foreach($arr_menu as $key => $val)
 		{
-			$selected = ($key == $op_menu) ? ' class="selected"' : '';
+			$selected = ($key == $op_menu) ? ' class="active"' : '';
 			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
 		}
 		$menu .= '</ul>';
@@ -270,7 +269,6 @@ class Analisis extends CI_Controller {
 			);
 
 		$data['titulo_modulo'] = 'Ajustes de inventario: ' . $this->nombre_inventario;
-		$data['menu_app'] = $this->acl_model->menu_app();
 		$data['menu_ajustes'] = $this->_menu_ajustes($arr_menu, $vista);
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/' . $vista, $data);

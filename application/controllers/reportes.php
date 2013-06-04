@@ -257,7 +257,6 @@ class Reportes extends CI_Controller {
 				'combo_inventarios' => $this->inventario_model->get_combo_inventarios(),
 				'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
 				'id_inventario'     => $id_inventario,
-				'menu_app'          => $this->acl_model->menu_app(),
 			);
 
 		$this->load->view('app_header', $data);

@@ -22,14 +22,19 @@
 
 <div class="row-fluid">
 	<div class="span5">
-		<h3><?php echo $titulo_modulo; ?></h3>
+		<h3><?php echo $this->app_common->titulo_modulo(); ?></h3>
 	</div>
 
 	<div class="span7">
 		<div class="navbar pull-right">
 			<div class="navbar-inner">
-				<?php echo $menu_app; ?>
+				<?php echo $this->app_common->menu_app(); ?>
 			</div>
 		</div>
 	</div>
-</div> <!-- fin app-heading -->
+</div>
+
+<div class="row-fluid">
+	<?php //echo $menu_configuracion; ?>
+</div>
+

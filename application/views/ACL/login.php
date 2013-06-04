@@ -3,71 +3,75 @@
 <head>
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/estilo.css" /	>
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
+	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" /	>
+
+	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
+	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
 </head>
 <body>
 
-<div class="content-module">
+<div class="container-fluid">
+<div class="row-fluid">
 
-	<div class="content-module-heading cf">
-		<div class="cf">
-			<h2 class="fl">Ingreso Digitaci&oacute;n Inventario Fija</h2>
+	<div class="span6 offset3">
+		<div>
+			<h2>Inventario Fija</h2>
 		</div>
-		<div class="msg-alerta cf ac">
+		<div>
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 		</div>
-	</div> <!-- fin content-module-heading -->
 
-	<div class="content-module-main">
-		<div class="ac">
-		<div class="login al">
-			<?php echo form_open('login', 'id="frm_login"'); ?>
-			<p></p>
-			<div>
-				<label for="usr">Nombre de Usuario</label>
-				<?php echo form_input('usr', set_value('usr'),'maxlength="45" size="40" tabindex="1" autofocus class="round"'); ?>
-				<div><?php echo form_error('usr'); ?></div>
+		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
+			<legend>
+				Login
+			</legend>
+
+			<div class="control-group">
+
+				<label class="control-label" for="usr">Usuario</label>
+				<div class="controls">
+					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="input-large" tabindex="1" autofocus'); ?>
+					<div><?php echo form_error('usr'); ?></div>
+				</div>
 			</div>
 			<p></p>
-			<div>
-				<label for="pwd">
-					<div class="fl">Clave</div>
-					<div class="fr"><?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?></div>
+			<p></p>
+			<div class="control-group">
+				<label class="control-label" for="pwd">
+					Clave
 				</label>
-
-				<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="round"'); ?>
-				<div><?php echo form_error('pwd'); ?></div>
+				<div class="controls">
+					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="round"'); ?>
+					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
+					<div><?php echo form_error('pwd'); ?></div>
 			</div>
 			<p></p>
-			<div class="ar">
-				<?php echo form_submit('btn_submit','Ingresar', 'class="button b-active round ic-login"'); ?>
+			<div class="control-group">
+				<div class="controls">
+					<button type="submit" name="btn_submit" class="btn btn-primary">
+						Ingresar
+						<i class="icon-play icon-white"></i>
+					</button>
+				</div>
 			</div>
-			<p></p>
-			<?php echo form_close(); ?>
-		</div>
+		<?php echo form_close(); ?>
 	</div>
-	</div> <!-- fin content-module-main -->
+</div>
 
-	<?php echo form_open('login/cambio_password', 'id="frm_cambio_password"') ?>
-	<?php echo form_hidden('usr',''); ?>
-	<?php echo form_close(); ?>
-
-	<div class="content-module-footer cf">
-	</div> <!-- fin content-module-footer -->
-
-</div> <!-- fin content-module -->
+<?php echo form_open('login/cambio_password', 'id="frm_cambio_password"') ?>
+<?php echo form_hidden('usr',''); ?>
+<?php echo form_close(); ?>
 
 <script type="text/javascript">
-$(document).ready(function () {
+	$(document).ready(function () {
 
-$('#lnk_cambio_password').click(function(e) {
-	e.preventDefault();
-	$('#frm_cambio_password input[name="usr"]').val($('#frm_login input[name="usr"]').val());
-	$('#frm_cambio_password').submit();
-});
+		$('#lnk_cambio_password').click(function(e) {
+			e.preventDefault();
+			$('#frm_cambio_password input[name="usr"]').val($('#frm_login input[name="usr"]').val());
+			$('#frm_cambio_password').submit();
+		});
 
-});
+	});
 </script>
 
 </body>

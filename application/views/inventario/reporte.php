@@ -1,133 +1,142 @@
-<div class="content-module">
+<?php echo form_open('','id="frm_param" class="form-search"'); ?>
+<div class="row-fluid">
+	<ul class="nav nav-tabs">
+		<li <?php echo ($nombre_reporte=='hoja' || $nombre_reporte=='detalle_hoja') ? 'class="active"' : '' ?>>
+			<?php echo anchor('/reportes/listado/hoja','Hoja')?>
+		</li>
+		<li <?php echo ($nombre_reporte=='material' || $nombre_reporte=='detalle_material') ? 'class="active"' : '' ?>>
+			<?php echo anchor('/reportes/listado/material','Material')?>
+		</li>
+		<li <?php echo ($nombre_reporte=='material_faltante') ? 'class="active"' : '' ?>>
+			<?php echo anchor('/reportes/listado/material_faltante/','Faltante-Sobrante')?>
+		</li>
+		<li <?php echo ($nombre_reporte=='ubicacion') ? 'class="active"' : '' ?>>
+			<?php echo anchor('/reportes/listado/ubicacion/','Ubicacion')?>
+		</li>
+		<li <?php echo ($nombre_reporte=='tipos_ubicacion') ? 'class="active"' : '' ?>>
+			<?php echo anchor('/reportes/listado/tipos_ubicacion/','Tipos Ubicacion')?>
+		</li>
+	</ul>
+</div>
 
-	<div class="content-module-heading cf">
-		<?php echo form_open('','id="frm_param"'); ?>
-		<div class="fl">
-			<ul>
-				<li <?php echo ($nombre_reporte=='hoja' || $nombre_reporte=='detalle_hoja') ? 'class="selected"' : '' ?>>
-					<?php echo anchor('/reportes/listado/hoja','Hoja')?>
-				</li>
-				<li <?php echo ($nombre_reporte=='material' || $nombre_reporte=='detalle_material') ? 'class="selected"' : '' ?>>
-					<?php echo anchor('/reportes/listado/material','Material')?>
-				</li>
-				<li <?php echo ($nombre_reporte=='material_faltante') ? 'class="selected"' : '' ?>>
-					<?php echo anchor('/reportes/listado/material_faltante/','Faltante-Sobrante')?>
-				</li>
-				<li <?php echo ($nombre_reporte=='ubicacion') ? 'class="selected"' : '' ?>>
-					<?php echo anchor('/reportes/listado/ubicacion/','Ubicacion')?>
-				</li>
-				<li <?php echo ($nombre_reporte=='tipos_ubicacion') ? 'class="selected"' : '' ?>>
-					<?php echo anchor('/reportes/listado/tipos_ubicacion/','Tipos Ubicacion')?>
-				</li>
-			</ul>
-		</div>
+<div>
+	<label class="checkbox inline">
+		<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"'); ?>
+		Ocultar registros sin diferencias
+	</label>
+	<label class="checkbox inline">
+		<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', false), 'id="incl_ajustes"'); ?>
+		Incluir ajustes de inventario
+	</label>
+	<label class="checkbox inline">
+		<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', false), 'id="incl_familias"'); ?>
+		Incluir familias de productos
+	</label>
+</div>
 
-		<div class="fr">
-		<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"') ?> Ocultar registros sin diferencias<br>
-		<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', false), 'id="incl_ajustes"') ?> Incluir ajustes de inventario <br>
-		<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', false), 'id="incl_familias"') ?> Incluir familias de productos <br>
-		</div>
+<div>
+	<div class="input-append span6">
+		<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="span3 search-query" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
+		<button type="submit" class="btn">Filtrar</button>
+	</div>
+</div>
 
-		<div class="fr" style="padding-right: 30px;">
-			Filtrar Descripcion: <?php echo form_input('filtrar_material', set_value('filtrar_material'),'id="filtrar_material" onKeyPress="return event.keyCode!=13"'); ?>
-		</div>
-
-		<div class="fr" style="padding-right: 30px;">
-			Inventario: <?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
-		</div>
+<div>
+	Inventario:
+	<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
+</div>
 
 
-		<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-		<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
-		<?php echo form_close(); ?>
-	</div> <!-- fin content-module-heading -->
+<?php echo form_hidden('order_by', set_value('order_by','')); ?>
+<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+<?php echo form_close(); ?>
 
 
-	<div class="content-module-main">
-		<?php $totales    = array(); ?>
-		<?php $subtotales = array(); ?>
-		<?php $subtot_ant = array(); ?>
-		<table class="reporte">
-			<thead>
+<div>
+	<?php $totales    = array(); ?>
+	<?php $subtotales = array(); ?>
+	<?php $subtot_ant = array(); ?>
+	<table class="table table-bordered table-striped table-hover table-condensed">
+		<thead>
+			<tr>
+				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
+					<th <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
+						<?php echo anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
+						<?php echo $arr_img_orden[$campo]; ?>
+						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] = 0; }?>
+						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] = 0; }?>
+					</th>
+				<?php endforeach; ?>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ($datos_hoja as $reg): ?>
 				<tr>
-					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-						<th <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-							<?php echo anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
-							<?php echo $arr_img_orden[$campo]; ?>
-							<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] = 0; }?>
-							<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] = 0; }?>
-						</th>
-					<?php endforeach; ?>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ($datos_hoja as $reg): ?>
-					<tr>
-					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-						<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
+				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
+					<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
 
-							<?php if (!array_key_exists($campo, $subtot_ant)) $subtot_ant[$campo] = ''; ?>
-							<?php if ($reg[$campo] != $subtot_ant[$campo]): ?>
-								<?php if ($subtot_ant[$campo] != ''): ?>
-									<?php foreach ($arr_campos as $c => $arr_c): ?>
-										<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-										<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
-										</td>
-									<?php endforeach; ?>
-									</tr>
-									<tr>
-										<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
-									</tr>
-									<tr>
-								<?php endif; ?>
-								<?php $subtot_ant[$campo] = $reg[$campo]; ?>
+						<?php if (!array_key_exists($campo, $subtot_ant)) $subtot_ant[$campo] = ''; ?>
+						<?php if ($reg[$campo] != $subtot_ant[$campo]): ?>
+							<?php if ($subtot_ant[$campo] != ''): ?>
 								<?php foreach ($arr_campos as $c => $arr_c): ?>
-									<?php $subtotales[$c] = 0; ?>
+									<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+									<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
+									</td>
 								<?php endforeach; ?>
-								<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">
-									<?php echo ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : ''; ?>
-								</td>
-								</tr><tr>
+								</tr>
+								<tr>
+									<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+								</tr>
+								<tr>
 							<?php endif; ?>
+							<?php $subtot_ant[$campo] = $reg[$campo]; ?>
+							<?php foreach ($arr_campos as $c => $arr_c): ?>
+								<?php $subtotales[$c] = 0; ?>
+							<?php endforeach; ?>
+							<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">
+								<?php echo ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : ''; ?>
+							</td>
+							</tr><tr>
 						<?php endif; ?>
-						<td <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-							<?php echo ($arr_param_campo['tipo'] == 'texto')  ? $reg[$campo] : ''; ?>
-							<?php echo ($arr_param_campo['tipo'] == 'link')   ? anchor($arr_param_campo['href'] . $reg[$campo], $reg[$campo]) : ''; ?>
-							<?php echo ($arr_param_campo['tipo'] == 'numero') ? number_format($reg[$campo],0,',','.') : ''; ?>
-							<?php echo ($arr_param_campo['tipo'] == 'valor')  ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
-							<?php echo ($arr_param_campo['tipo'] == 'valor_pmp') ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
-							<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] += $reg[$campo]; }?>
-							<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] += $reg[$campo]; }?>
+					<?php endif; ?>
+					<td <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
+						<?php echo ($arr_param_campo['tipo'] == 'texto')  ? $reg[$campo] : ''; ?>
+						<?php echo ($arr_param_campo['tipo'] == 'link')   ? anchor($arr_param_campo['href'] . $reg[$campo], $reg[$campo]) : ''; ?>
+						<?php echo ($arr_param_campo['tipo'] == 'numero') ? number_format($reg[$campo],0,',','.') : ''; ?>
+						<?php echo ($arr_param_campo['tipo'] == 'valor')  ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
+						<?php echo ($arr_param_campo['tipo'] == 'valor_pmp') ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
+						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] += $reg[$campo]; }?>
+						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] += $reg[$campo]; }?>
+					</td>
+				<?php endforeach; ?>
+				</tr>
+			<?php endforeach; ?>
+
+			<!-- ultima linea de subtotales -->
+			<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
+				<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
+					<?php foreach ($arr_campos as $c => $arr_c): ?>
+						<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+						<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
 						</td>
 					<?php endforeach; ?>
 					</tr>
-				<?php endforeach; ?>
+					<tr>
+						<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+					</tr>
+				<?php endif; ?>
+			<?php endforeach; ?>
 
-				<!-- ultima linea de subtotales -->
+			<tr> <!-- totales -->
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-					<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
-						<?php foreach ($arr_campos as $c => $arr_c): ?>
-							<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-							<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
-							</td>
-						<?php endforeach; ?>
-						</tr>
-						<tr>
-							<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
-						</tr>
-					<?php endif; ?>
+					<td <?php echo ($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
+						<?php echo ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') ? '<strong>' . number_format($totales[$campo],0,',','.') . '</strong>' : ''; ?>
+					</td>
 				<?php endforeach; ?>
-
-				<tr> <!-- totales -->
-					<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-						<td <?php echo ($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
-							<?php echo ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') ? '<strong>' . number_format($totales[$campo],0,',','.') . '</strong>' : ''; ?>
-						</td>
-					<?php endforeach; ?>
-				</tr>
-			</tbody>
-		</table>
-	</div> <!-- fin content-module-main -->
+			</tr>
+		</tbody>
+	</table>
+</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">
 	</div> <!-- fin content-module-footer -->

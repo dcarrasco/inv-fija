@@ -25,10 +25,10 @@ class Stock_sap extends CI_Controller {
 
 	private function _menu_configuracion($op_menu)
 	{
-		$menu = '<ul>';
+		$menu = '<ul class="nav nav-tabs">';
 		foreach($this->arr_menu as $key => $val)
 		{
-			$selected = ($key == $op_menu) ? ' class="selected"' : '';
+			$selected = ($key == $op_menu) ? ' class="active"' : '';
 			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
 		}
 		$menu .= '</ul>';
@@ -38,7 +38,6 @@ class Stock_sap extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Consulta stock SAP';
-		$data['menu_app'] = $this->acl_model->menu_app();
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
@@ -221,7 +220,6 @@ class Stock_sap extends CI_Controller {
 					);
 
 		$data['titulo_modulo'] = 'Consulta stock SAP';
-		$data['menu_app'] = $this->acl_model->menu_app();
 
 		if ($this->input->post('excel'))
 		{
@@ -316,7 +314,6 @@ class Stock_sap extends CI_Controller {
 					);
 
 		$data['titulo_modulo'] = 'Consulta stock SAP';
-		$data['menu_app'] = $this->acl_model->menu_app();
 
 		if ($this->input->post('excel'))
 		{
@@ -359,7 +356,6 @@ class Stock_sap extends CI_Controller {
 						);
 
 			$data['titulo_modulo'] = 'Edita Grupos';
-			$data['menu_app'] = $this->acl_model->menu_app();
 
 			$this->load->view('app_header', $data);
 			$this->load->view('stock_sap/edita_grupos', $data);
@@ -398,7 +394,6 @@ class Stock_sap extends CI_Controller {
 					);
 
 		$data['titulo_modulo'] = 'Lista Almacenes';
-		$data['menu_app'] = $this->acl_model->menu_app();
 
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/lista_grupos', $data);
@@ -417,7 +412,6 @@ class Stock_sap extends CI_Controller {
 					);
 
 		$data['titulo_modulo'] = 'Lista Almacenes';
-		$data['menu_app'] = $this->acl_model->menu_app();
 
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/lista_almacenes', $data);
@@ -465,7 +459,6 @@ class Stock_sap extends CI_Controller {
 						);
 
 			$data['titulo_modulo'] = 'Edita Almacenes';
-			$data['menu_app'] = $this->acl_model->menu_app();
 
 			$this->load->view('app_header', $data);
 			$this->load->view('stock_sap/edita_almacenes', $data);

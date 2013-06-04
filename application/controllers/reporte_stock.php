@@ -111,7 +111,6 @@ class Reporte_stock extends CI_Controller {
 				'fecha_reporte'   => $this->reportestock_model->get_fecha_reporte(),
 				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm(),
 				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
-				'menu_app'        => $this->acl_model->menu_app(),
 			);
 
 		$this->load->view('app_header', $data);

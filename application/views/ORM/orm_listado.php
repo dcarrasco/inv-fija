@@ -25,7 +25,7 @@
 	<?php echo form_close(''); ?>
 </div>
 
-<div class="content-module-main">
+<div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
 	<table class="table table-bordered table-striped table-hover table-condensed">
@@ -45,7 +45,7 @@
 					<?php endforeach; ?>
 					<td>
 						<div class="text-center">
-							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn">
+							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn btn-mini">
 								<i class="icon-edit"></i>
 							</a>
 						</div>
@@ -59,8 +59,5 @@
 			<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
 		</div>
 	</div> <!-- fin content-module-main -->
-
-	<div class="content-module-footer cf">
-	</div> <!-- fin content-module-footer -->
 
 </div> <!-- fin content-module -->

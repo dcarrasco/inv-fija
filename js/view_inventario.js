@@ -12,7 +12,7 @@ $(document).ready(function() {
 
 	$('#btn_mostrar_agregar').click(function (event) {
 		event.preventDefault();
-		$('#agr_material').html('<option value="">Seleccionar material...</option>');
+		$('#agr_material').html('<option value="">Buscar y seleccionar material...</option>');
 		$('form#frm_agregar input[name="id"]').val('0');
 		$('form#frm_agregar input[name="ubicacion"]').val('');
 		$('form#frm_agregar input[name="hu"]').val('');
@@ -24,9 +24,8 @@ $(document).ready(function() {
 		$('form#frm_agregar input[name="stock_fisico"]').val('');
 		$('form#frm_agregar input[name="observacion"]').val('');
 
-		$('div.content-module-main-agregar').toggle();
+		$('div#frm_agregar').toggle();
 		$('#btn_guardar').toggle();
-		$('form#frm_agregar a#btn_agregar').html('Agregar material');
 	});
 
 	$('#btn_buscar').click(function (event) {
@@ -80,7 +79,6 @@ $(document).ready(function() {
 		$('form#frm_agregar select[name="almacen"]').val($('form#frm_inventario input[name="almacen_' + id + '"]').val());
 		$('form#frm_agregar input[name="stock_fisico"]').val($('form#frm_inventario input[name="stock_fisico_' + id + '"]').val());
 		$('form#frm_agregar input[name="observacion"]').val($('form#frm_inventario textarea[name="observacion_' + id + '"]').val());
-		$('form#frm_agregar a#btn_agregar').html('Guardar material');
 	});
 
 	function actualizaMateriales(filtro) {

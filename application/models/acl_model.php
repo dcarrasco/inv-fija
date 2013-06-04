@@ -39,49 +39,6 @@ class Acl_model extends CI_Model {
 	}
 
 
-	/**
-	 * Devuelve el menu de las aplicaciones del sistema
-	 * @return string    Texto con el menu (<ul>) de las aplicaciones
-	 */
-	public function menu_app()
-	{
-		if (!$this->input->cookie('movistar_menu_app'))
-		{
-			$arr_modulos = $this->get_menu_usuario($this->input->cookie('movistar_usr'));
-			$this->input->set_cookie(array(
-				'name'   => 'movistar_menu_app',
-				'value'  => json_encode($arr_modulos),
-				'expire' => '0'
-				));
-		}
-		else
-		{
-			$arr_modulos = json_decode($this->input->cookie('movistar_menu_app'), TRUE);
-		}
-
-		$app_ant = '';
-		$menu = '<ul class="nav">';
-		foreach ($arr_modulos as $modulo)
-		{
-			if ($modulo['app'] != $app_ant)
-			{
-				if ($app_ant != '')
-				{
-					$menu .= '</ul></li>';
-				}
-				$menu .= '<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $modulo['app_icono'] . '"></i>&nbsp;' . $modulo['app'] . '<b class="caret"></b></a>';
-				$menu .= '<ul class="dropdown-menu">';
-			}
-			$menu .= '<li><a href="' . site_url($modulo['url']) . '"><i class="' . $modulo['modulo_icono'] . '"></i>&nbsp;' . $modulo['modulo'] . '</a>';
-			$app_ant = $modulo['app'];
-		}
-		$menu .= '</ul></li>';
-		$menu .= '<li><a href="' . site_url('login') . '"><i class="icon-off"></i>&nbsp;Logout</a>';
-		$menu .= '</ul>';
-
-		return $menu;
-	}
-
 
 	/**
 	 * Devuelve el id del usuario, dado el nombre de usuario
