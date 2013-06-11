@@ -58,7 +58,7 @@
 		<div style="clear: both;"></div>
 	</div> <!-- fin content-header -->
 	<div id="res_movimientos" class="cuerpo-movimientos mostrar-ocultar">
-		<table>
+		<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 		<?php foreach($hist as $serie_hist): ?>
 			<tr>
 				<th>serie</th>

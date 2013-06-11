@@ -26,15 +26,10 @@
 	</div>
 
 	<div class="span7">
-		<div class="navbar pull-right">
-			<div class="navbar-inner">
+		<div class="navbar">
+			<div class="navbar-inner pull-right">
 				<?php echo $this->app_common->menu_app(); ?>
 			</div>
 		</div>
 	</div>
 </div>
-
-<div class="row-fluid">
-	<?php //echo $menu_configuracion; ?>
-</div>
-

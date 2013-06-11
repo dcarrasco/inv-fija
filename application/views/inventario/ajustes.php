@@ -65,9 +65,29 @@
 					<td class="ac">
 						<?php echo number_format($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste,0,',','.'); ?>
 					</td>
+					<td>
+						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
+							<button class="btn btn-warning">
+								<i class="icon-question-sign icon-white"></i>
+								Sobrante
+							</button>
+						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
+							<button class="btn btn-danger">
+								<i class="icon-remove icon-white"></i>
+								Faltante
+							</button>
+						<?php else: ?>
+							<button class="btn btn-success">
+								<i class="icon-ok icon-white"></i>
+								OK
+							</button>
+						<?php endif; ?>
+					</td>
+					<!--
 					<td class="ac" style="<?php echo (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0) ? 'background-color: yellow; color: black' : ((($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0) ? 'background-color: red; color: white' : 'background-color: green; color: white'); ?>">
 						<strong><?php echo (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0) ? 'Sobrante' : ((($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0) ? 'Faltante' : 'OK'); ?></strong>
 					</td>
+					-->
 					<td class="al">
 						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="input-medium" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
 					</td>
@@ -93,6 +113,12 @@
 				<td class="ar"><strong><?php echo number_format($sum_fisico - $sum_sap + $sum_ajuste,0,',','.'); ?></strong></td>
 				<td></td>
 				<td></td>
+				<td>
+					<a href="#" class="btn btn-primary">
+						<i class="icon-ok-sign icon-white"></i>
+						Guardar ajustes
+					</a>
+				</td>
 			</tr>
 
 			<?php if ($links_paginas != ''):?>
@@ -107,10 +133,6 @@
 </div><!-- fin content-module-main-principal -->
 
 <div>
-	<a href="#" class="btn btn-primary">
-		<i class="icon-ok-sign icon-white"></i>
-		Guardar ajustes
-	</a>
 </div> <!-- fin content-module-footer -->
 
 

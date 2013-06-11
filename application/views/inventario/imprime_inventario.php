@@ -7,7 +7,7 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span8 offset2">
+	<div class="span8 offset2 well">
 		<?php echo form_open('','class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','imprime'); ?>
 
@@ -16,7 +16,9 @@
 				Inventario
 			</label>
 			<div class="controls">
-				<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
+				<span class="input-xlarge uneditable-input">
+					<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
+				</span>
 			</div>
 		</div>
 

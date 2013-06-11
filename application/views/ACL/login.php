@@ -13,7 +13,7 @@
 <div class="container-fluid">
 <div class="row-fluid">
 
-	<div class="span6 offset3">
+	<div class="span6 offset3 well">
 		<div>
 			<h2>Inventario Fija</h2>
 		</div>

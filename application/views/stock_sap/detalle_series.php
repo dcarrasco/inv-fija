@@ -8,7 +8,7 @@
 	</div> <!-- fin content-module-heading -->
 
 	<div class="content-module-main">
-		<table class="reporte" style="white-space: nowrap;">
+		<table class="table table-bordered table-striped table-hover table-condensed">
 			<tr>
 				<th>n</th>
 				<th>fecha stock</th>

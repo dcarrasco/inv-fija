@@ -1,33 +1,35 @@
 <div class="row-fluid">
-	<div class="span6">
-		<?php echo form_open('/inventario/ingreso', 'id="frm_buscar"'); ?>
-		<?php echo form_hidden('formulario','buscar'); ?>
+	<div class="span7">
 		<div>
+			<?php echo form_open('/inventario/ingreso', 'id="frm_buscar" class="form-inline"'); ?>
+			<?php echo form_hidden('formulario','buscar'); ?>
+
 			Hoja
-			<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="input-mini">
-			<a href="#" class="btn" id="btn_buscar">
-				<i class="icon-search"></i>
-				Buscar
-			</a>
+			<div class="input-append">
+				<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="input-mini">
+				<a href="#" class="btn" id="btn_buscar">
+					<i class="icon-search"></i>
+				</a>
+			</div>
+
 			<a href="<?php echo $link_hoja_ant; ?>" class="btn" id="btn_hoja_ant">
 				<i class="icon-chevron-left"></i>
 				Hoja Prev
 			</a>
+
 			<a href="<?php echo $link_hoja_sig; ?>" class="btn" id="btn_hoja_sig">
-				<i class="icon-chevron-right"></i>
 				Hoja Sig
+				<i class="icon-chevron-right"></i>
 			</a>
-		</div>
-		<div>
+
 			Auditor
 			<?php echo $nuevo_detalle_inventario->print_form_field('auditor'); ?>
 			<?php echo form_error('auditor');?>
-		</div>
-		<div>
+
 			<?php echo form_error('hoja');?>
+			<?php echo form_close(); ?>
 
 		</div>
-		<?php echo form_close(); ?>
 	</div>
 
 	<div class="span3">
@@ -35,7 +37,7 @@
 		Auditor:<?php echo $nombre_auditor; ?>
 	</div>
 
-	<div class="span3 text-right">
+	<div class="span2 text-right">
 		<a href="#" id="btn_mostrar_agregar" class="btn">
 			<i class="icon-plus-sign"></i>
 			Nuevo material...
@@ -48,7 +50,7 @@
 </div>
 
 <div class="row-fluid">
-<div class="span8 offset2" style="display: none;" id="frm_agregar">
+<div class="span8 offset2 well" style="display: none;" id="frm_agregar">
 	<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id=frm_agregar')?>
 	<?php echo form_hidden('formulario','agregar'); ?>
 	<?php echo form_hidden('accion','agregar'); ?>
@@ -87,7 +89,7 @@
 						<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="input-small" id="agr_filtrar"'); ?>
 						<span class="add-on"><i class="icon-search"></i></span>
 					</div>
-					<?php echo form_dropdown('catalogo', array('' => 'Buscar y seleccionar material...'), '', 'class="input-xlarge" id="agr_material"'); ?>
+					<?php echo form_dropdown('catalogo', array('' => 'Buscar y seleccionar material...'), '', 'class="input-large" id="agr_material"'); ?>
 					<?php echo form_error('catalogo'); ?>
 				</div>
 				<div class="span2">
@@ -146,14 +148,21 @@
 				</div>
 			</div>
 
+			<div class="pull-left">
+				<a href="#" class="btn btn-danger" id="btn_borrar">
+					<i class="icon-trash icon-white"></i>
+					Borrar
+				</a>
+			</div>
+
 			<div class="pull-right">
 				<a href="#" class="btn btn-primary" id="btn_agregar">
 					<i class="icon-plus-sign icon-white"></i>
 					Agregar material
 				</a>
-				<a href="#" class="btn" id="btn_borrar">
-					<i class="icon-trash"></i>
-					Borrar
+				<a href="#" class="btn" id="btn_cancelar">
+					<i class="icon-ban-circle"></i>
+					Cancelar
 				</a>
 			</div>
 
@@ -243,7 +252,14 @@
 				<td></td>
 				<td class="ar"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
 				<td class="ac"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
-				<td></td>
+				<td>
+					<div class="text-center">
+						<a href="#" class="btn btn-primary" id="btn_guardar">
+							<i class="icon-ok icon-white"></i>
+							Guardar hoja
+						</a>
+					</div>
+				</td>
 			</tr>
 		</tbody>
 	</table>
@@ -251,10 +267,6 @@
 </div><!-- fin content-module-main-principal -->
 
 <div>
-	<a href="#" class="btn btn-primary" id="btn_guardar">
-		<i class="icon-ok icon-white"></i>
-		Guardar hoja
-	</a>
 </div> <!-- fin content-module-footer -->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>js/view_inventario.js"></script>

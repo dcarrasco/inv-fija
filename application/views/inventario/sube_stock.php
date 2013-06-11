@@ -7,70 +7,68 @@
 </div>
 
 <div class="row-fluid">
-	<div class="span8 offset2">
-	<?php echo form_open_multipart('analisis/sube_stock', 'class="form-horizontal"'); ?>
-	<?php echo form_hidden('formulario','upload'); ?>
+	<div class="span8 offset2 well">
+		<?php echo form_open_multipart('analisis/sube_stock', 'class="form-horizontal"'); ?>
+		<?php echo form_hidden('formulario','upload'); ?>
 
-	<div class="control-group">
-		<label class="control-label">
-			Inventario
-		</label>
-		<div class="controls">
-			<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label">
-			Archivo
-		</label>
-		<div class="controls">
-			<div>
-				<span style="color: red; font-weight: bold">ADVERTENCIA</span><br>
-				<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
-					"<?php echo $inventario_nombre?>"</span>
-			</div>
-			<?php echo form_upload('upload_file','','class="input-large"'); ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label">
-			Clave Administrador
-		</label>
-		<div class="controls">
-			<?php echo form_password('password'); ?>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<label class="control-label">
-			Progreso
-		</label>
-		<div class="controls">
-			<?php echo $upload_error; ?>
-			<?php echo $msj_error; ?>
-			<div id="progreso_carga">
-				<div id="barra"><div id="barra_progreso"></div></div>
-				<div id="status_progreso">Cargando registros OK <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
+		<div class="control-group">
+			<label class="control-label">
+				Inventario
+			</label>
+			<div class="controls">
+				<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
 			</div>
 		</div>
-	</div>
 
-	<div class="control-group">
-		<div class="controls">
-			<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
-				<i class="icon-upload icon-white"></i>
-				Subir archivo
-			</button>
+		<div class="control-group">
+			<label class="control-label">
+				Archivo
+			</label>
+			<div class="controls">
+				<div>
+					<span style="color: red; font-weight: bold">ADVERTENCIA</span><br>
+					<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
+						"<?php echo $inventario_nombre?>"</span>
+				</div>
+				<?php echo form_upload('upload_file','','class="input-large"'); ?>
+			</div>
 		</div>
-	</div>
 
-	<?php echo form_close(); ?>
-	</div>
+		<div class="control-group">
+			<label class="control-label">
+				Clave Administrador
+			</label>
+			<div class="controls">
+				<?php echo form_password('password'); ?>
+			</div>
+		</div>
 
-	<div class="span8 offset2">
-		<pre>
+		<div class="control-group">
+			<label class="control-label">
+				Progreso
+			</label>
+			<div class="controls">
+				<?php echo $upload_error; ?>
+				<?php echo $msj_error; ?>
+				<div id="progreso_carga">
+					<div id="barra"><div id="barra_progreso"></div></div>
+					<div id="status_progreso">Cargando registros OK <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
+				</div>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
+					<i class="icon-upload icon-white"></i>
+					Subir archivo
+				</button>
+			</div>
+		</div>
+
+		<div class="control-group">
+			<div class="controls">
+				<pre>
 Formato del archivo:
 	Archivo de texto
 	Extension .txt
@@ -87,9 +85,11 @@ Formato del archivo:
 			Unidad de medida
 			Stock SAP
 			Hoja
-		</pre>
+				</pre>
+			</div>
+		</div>
+		<?php echo form_close(); ?>
 	</div>
-
 </div>
 
 <form id="frm_aux">
