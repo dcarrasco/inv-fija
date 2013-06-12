@@ -27,25 +27,27 @@
 			</legend>
 
 			<div class="control-group">
-
 				<label class="control-label" for="usr">Usuario</label>
 				<div class="controls">
-					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="input-large" tabindex="1" autofocus'); ?>
+					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="input" tabindex="1" autofocus'); ?>
 					<div><?php echo form_error('usr'); ?></div>
 				</div>
 			</div>
-			<p></p>
-			<p></p>
+
 			<div class="control-group">
 				<label class="control-label" for="pwd">
 					Clave
 				</label>
 				<div class="controls">
-					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="round"'); ?>
-					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
+					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="input"'); ?>
 					<div><?php echo form_error('pwd'); ?></div>
 			</div>
-			<p></p>
+
+			<div class="control-group">
+				<div class="controls offset6">
+					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
+			</div>
+			<hr>
 			<div class="control-group">
 				<div class="controls">
 					<button type="submit" name="btn_submit" class="btn btn-primary">

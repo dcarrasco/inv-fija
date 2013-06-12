@@ -33,11 +33,26 @@
 	</div>
 
 	<div class="span3">
-		Digitador: <?php echo $nombre_digitador; ?><br>
-		Auditor:<?php echo $nombre_auditor; ?>
+		<div class="row">
+			<div class="span4">
+				<strong>Digitador</strong>
+			</div>
+			<div class="span8">
+				<?php echo $nombre_digitador; ?><br>
+			</div>
+		</div>
+		<div class="row">
+			<div class="span4">
+				<strong>Auditor</strong>
+			</div>
+			<div class="span8">
+				<?php echo $nombre_auditor; ?>
+			</div>
+		</div>
 	</div>
 
 	<div class="span2 text-right">
+		<p></p>
 		<a href="#" id="btn_mostrar_agregar" class="btn">
 			<i class="icon-plus-sign"></i>
 			Nuevo material...
@@ -50,133 +65,133 @@
 </div>
 
 <div class="row-fluid">
-<div class="span8 offset2 well" style="display: none;" id="frm_agregar">
-	<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id=frm_agregar')?>
-	<?php echo form_hidden('formulario','agregar'); ?>
-	<?php echo form_hidden('accion','agregar'); ?>
-	<?php echo form_hidden('hoja', $hoja); ?>
-	<?php echo form_hidden('auditor', $id_auditor); ?>
-	<?php echo form_hidden('id', ''); ?>
-		<fieldset>
-			<legend>Ingreso datos inventario</legend>
+	<div class="span8 offset2 well" style="display: none;" id="frm_agregar">
+		<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id=frm_agregar')?>
+		<?php echo form_hidden('formulario','agregar'); ?>
+		<?php echo form_hidden('accion','agregar'); ?>
+		<?php echo form_hidden('hoja', $hoja); ?>
+		<?php echo form_hidden('auditor', $id_auditor); ?>
+		<?php echo form_hidden('id', ''); ?>
+			<fieldset>
+				<legend>Ingreso datos inventario</legend>
 
-			<div class="row-fluid">
-				<div class="span6">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('ubicacion')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
-					<?php echo form_error('ubicacion'); ?>
-				</div>
-				<div class="span6">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('hu')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('hu'); ?>
-					<?php echo form_error('hu'); ?>
-				</div>
-			</div>
-
-			<div class="row-fluid">
-				<div class="span6">
-					<label class="control-label">
-						Material
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('catalogo')) ? '[*]' : ''; ?>
-					</label>
-					<div class="input-append">
-						<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="input-small" id="agr_filtrar"'); ?>
-						<span class="add-on"><i class="icon-search"></i></span>
+				<div class="row-fluid">
+					<div class="span6">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('ubicacion')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
+						<?php echo form_error('ubicacion'); ?>
 					</div>
-					<?php echo form_dropdown('catalogo', array('' => 'Buscar y seleccionar material...'), '', 'class="input-large" id="agr_material"'); ?>
-					<?php echo form_error('catalogo'); ?>
+					<div class="span6">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('hu')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('hu'); ?>
+						<?php echo form_error('hu'); ?>
+					</div>
 				</div>
-				<div class="span2">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('lote')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('lote'); ?>
-					<?php echo form_error('lote'); ?>
-				</div>
-				<div class="span4">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('um'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('um')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('um'); ?>
-					<?php echo form_error('um'); ?>
-				</div>
-			</div>
 
-			<div class="row-fluid">
-				<div class="span4">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('centro')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('centro'); ?>
-					<?php echo form_error('centro'); ?>
+				<div class="row-fluid">
+					<div class="span6">
+						<label class="control-label">
+							Material
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('catalogo')) ? '[*]' : ''; ?>
+						</label>
+						<div class="input-append">
+							<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="input-small" id="agr_filtrar"'); ?>
+							<span class="add-on"><i class="icon-search"></i></span>
+						</div>
+						<?php echo form_dropdown('catalogo', array('' => 'Buscar y seleccionar material...'), '', 'class="input-large" id="agr_material"'); ?>
+						<?php echo form_error('catalogo'); ?>
+					</div>
+					<div class="span2">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('lote')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('lote'); ?>
+						<?php echo form_error('lote'); ?>
+					</div>
+					<div class="span4">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('um'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('um')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('um'); ?>
+						<?php echo form_error('um'); ?>
+					</div>
 				</div>
-				<div class="span4">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('almacen')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('almacen'); ?>
-					<?php echo form_error('almacen'); ?>
+
+				<div class="row-fluid">
+					<div class="span4">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('centro')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('centro'); ?>
+						<?php echo form_error('centro'); ?>
+					</div>
+					<div class="span4">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('almacen')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('almacen'); ?>
+						<?php echo form_error('almacen'); ?>
+					</div>
 				</div>
-			</div>
 
-			<div class="row-fluid">
-				<div class="span4">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('stock_fisico')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico'); ?>
-					<?php echo form_error('stock_fisico'); ?>
+				<div class="row-fluid">
+					<div class="span4">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('stock_fisico')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico'); ?>
+						<?php echo form_error('stock_fisico'); ?>
+					</div>
+					<div class="span4">
+						<label class="control-label">
+							<?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?>
+							<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('observacion')) ? '[*]' : ''; ?>
+						</label>
+						<?php echo $nuevo_detalle_inventario->print_form_field('observacion'); ?>
+						<?php echo form_error('observacion'); ?>
+					</div>
 				</div>
-				<div class="span4">
-					<label class="control-label">
-						<?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?>
-						<?php echo ($nuevo_detalle_inventario->get_es_obligatorio_field('observacion')) ? '[*]' : ''; ?>
-					</label>
-					<?php echo $nuevo_detalle_inventario->print_form_field('observacion'); ?>
-					<?php echo form_error('observacion'); ?>
+
+				<div class="pull-left">
+					<a href="#" class="btn btn-danger" id="btn_borrar">
+						<i class="icon-trash icon-white"></i>
+						Borrar
+					</a>
 				</div>
-			</div>
 
-			<div class="pull-left">
-				<a href="#" class="btn btn-danger" id="btn_borrar">
-					<i class="icon-trash icon-white"></i>
-					Borrar
-				</a>
-			</div>
+				<div class="pull-right">
+					<a href="#" class="btn btn-primary" id="btn_agregar">
+						<i class="icon-plus-sign icon-white"></i>
+						Agregar material
+					</a>
+					<a href="#" class="btn" id="btn_cancelar">
+						<i class="icon-ban-circle"></i>
+						Cancelar
+					</a>
+				</div>
 
-			<div class="pull-right">
-				<a href="#" class="btn btn-primary" id="btn_agregar">
-					<i class="icon-plus-sign icon-white"></i>
-					Agregar material
-				</a>
-				<a href="#" class="btn" id="btn_cancelar">
-					<i class="icon-ban-circle"></i>
-					Cancelar
-				</a>
-			</div>
+				<div class="control-group">
+				</div>
 
-			<div class="control-group">
-			</div>
-
-			<div class="control-group">
-			</div>
-	<?php echo form_close(); ?>
-</div> <!-- fin content-module-main-agregar -->
+				<div class="control-group">
+				</div>
+		<?php echo form_close(); ?>
+	</div> <!-- fin content-module-main-agregar -->
 </div>
 
 <div>
-<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>
 	<?php echo form_hidden('auditor', $id_auditor); ?>
@@ -263,7 +278,7 @@
 			</tr>
 		</tbody>
 	</table>
-<?php echo form_close(); ?>
+	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 
 <div>

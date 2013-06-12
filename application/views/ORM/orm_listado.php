@@ -28,7 +28,7 @@
 <div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
-	<table class="table table-bordered table-striped table-hover table-condensed">
+	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>
