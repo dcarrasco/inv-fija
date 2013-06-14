@@ -33,9 +33,12 @@
 </div>
 <?php echo form_close(); ?>
 
-<div class="msg-alerta cf ac">
-	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
-</div>
+<?php if ($msg_alerta != ''): ?>
+	<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<?php echo $msg_alerta; ?>
+	</div>
+<?php endif; ?>
 
 <div class="row-fluid">
 	<div class="span8 offset2 well" style="display: none;" id="frm_agregar">

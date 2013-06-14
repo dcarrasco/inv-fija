@@ -1033,7 +1033,7 @@ class ORM_Field {
 		}
 		else if (!empty($this->choices))
 		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="' . $form_class . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="input-xlarge"';
 			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'char')

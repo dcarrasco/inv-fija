@@ -5,7 +5,7 @@ class config_stock extends CI_Controller {
 	private $arr_menu = array(
 				'almacen_sap'        => array('url' => '/config_stock/listado/almacen_sap', 'texto' => 'Almacenes SAP'),
 				'tipoalmacen_sap'    => array('url' => '/config_stock/listado/tipoalmacen_sap', 'texto' => 'Tipo Almacenes SAP'),
-				'proveedor  '        => array('url' => '/config_stock/listado/proveedor', 'texto' => 'Proveedores'),
+				'proveedor'          => array('url' => '/config_stock/listado/proveedor', 'texto' => 'Proveedores'),
 			);
 
 	public function __construct()
@@ -24,11 +24,10 @@ class config_stock extends CI_Controller {
 
 	private function _menu_configuracion($modelo)
 	{
-
-		$menu = '<ul>';
+		$menu = '<ul class="nav nav-tabs">';
 		foreach($this->arr_menu as $key => $val)
 		{
-			$selected = ($key == $modelo) ? ' class="selected"' : '';
+			$selected = ($key == $modelo) ? ' class="active"' : '';
 			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
 		}
 		$menu .= '</ul>';
