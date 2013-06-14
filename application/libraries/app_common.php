@@ -69,11 +69,12 @@ class App_common {
 			$app_ant = $modulo['app'];
 		}
 
-		$menu = '<ul class="nav">';
+		$menu = '<ul class="nav pull-right">';
 		foreach($arr_apps as $apps)
 		{
 			$app_selected = ($app_sel == $apps['app']) ? ' active' : '';
 			$menu .= '<li class="dropdown' . $app_selected . '"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $apps['app_icono'] . '"></i> ' . $apps['app'] . '<b class="caret"></b></a>';
+
 			$menu .= '<ul class="dropdown-menu">';
 			foreach ($arr_mods[$apps['app']] as $mods)
 			{

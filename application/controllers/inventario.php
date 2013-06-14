@@ -18,7 +18,7 @@ class Inventario extends CI_Controller {
 	}
 
 
-	public function ingreso($hoja = 0, $auditor = 0)
+	public function ingreso($hoja = 0)
 	{
 		if ($hoja == 0 OR $hoja == "" or $hoja == NULL)
 		{
@@ -28,7 +28,6 @@ class Inventario extends CI_Controller {
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
 		$nuevo_detalle_inventario->hoja = $hoja;
-		$nuevo_detalle_inventario->auditor = $auditor;
 
 		// recupera el inventario activo
 		$inv_activo = new Inv_activo;
@@ -37,7 +36,11 @@ class Inventario extends CI_Controller {
 
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
+
 		//dbg($detalle_inventario);
+
+		$auditor = $detalle_inventario->get_id_auditor();
+		$nuevo_detalle_inventario->auditor = $auditor;
 
 		$nombre_inventario = $inv_activo->nombre;
 		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
@@ -96,8 +99,8 @@ class Inventario extends CI_Controller {
 					'link_config'        => 'config',
 					'link_reporte'       => 'reportes',
 					'link_inventario'    => 'inventario',
-					'link_hoja_ant'      => base_url('inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . $auditor . '/' . time()),
-					'link_hoja_sig'      => base_url('inventario/ingreso/' . ($hoja + 1) . '/' . $auditor . '/' . time()),
+					'link_hoja_ant'      => base_url('inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+					'link_hoja_sig'      => base_url('inventario/ingreso/' . ($hoja + 1) . '/' . time()),
 					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				);
 
@@ -137,30 +140,30 @@ class Inventario extends CI_Controller {
 					$nuevo_material->find_id($this->input->post('catalogo'));
 
 					$nuevo_detalle_inventario->get_from_array(array(
-														'id'            => $this->input->post('id'),
-														'id_inventario' => $this->id_inventario,
-														'hoja'          => $hoja,
-														'digitador'     => $id_usuario_login,
-														'auditor'       => set_value('auditor'),
-														'ubicacion'     => $this->input->post('ubicacion'),
-														'hu'            => $this->input->post('hu'),
-														'catalogo'      => $this->input->post('catalogo'),
-														'descripcion'   => $nuevo_material->descripcion,
-														'lote'          => $this->input->post('lote'),
-														'centro'        => $this->input->post('centro'),
-														'almacen'       => $this->input->post('almacen'),
-														'um'            => $this->input->post('um'),
-														'stock_sap'     => 0,
-														'stock_fisico'  => $this->input->post('stock_fisico'),
-														'observacion'   => $this->input->post('observacion'),
-														'fecha_modificacion' => date('Ymd H:i:s'),
-														'reg_nuevo'     => 'S',
+													'id'            => $this->input->post('id'),
+													'id_inventario' => $this->id_inventario,
+													'hoja'          => $hoja,
+													'digitador'     => $id_usuario_login,
+													'auditor'       => set_value('auditor'),
+													'ubicacion'     => $this->input->post('ubicacion'),
+													'hu'            => $this->input->post('hu'),
+													'catalogo'      => $this->input->post('catalogo'),
+													'descripcion'   => $nuevo_material->descripcion,
+													'lote'          => $this->input->post('lote'),
+													'centro'        => $this->input->post('centro'),
+													'almacen'       => $this->input->post('almacen'),
+													'um'            => $this->input->post('um'),
+													'stock_sap'     => 0,
+													'stock_fisico'  => $this->input->post('stock_fisico'),
+													'observacion'   => $this->input->post('observacion'),
+													'fecha_modificacion' => date('Ymd H:i:s'),
+													'reg_nuevo'     => 'S',
 												));
 					$nuevo_detalle_inventario->grabar();
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
-			redirect('inventario/ingreso/' . $this->input->post('hoja') . '/' . $this->input->post('auditor') . '/' . time());
+			redirect('inventario/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
 	}

@@ -229,7 +229,6 @@ class ORM_Model {
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE)
 	{
-
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->model_fields[$campo]->get_relation();
 		if (array_key_exists('conditions', $arr_relation))
@@ -308,6 +307,17 @@ class ORM_Model {
 		return $this->model_fields[$campo]->get_es_obligatorio();
 	}
 
+
+	public function get_marca_obligatorio_field($campo = '')
+	{
+		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-error"><strong>*</strong></span>' : '';
+	}
+
+
+	public function get_mostrar_lista($campo = '')
+	{
+		return $this->model_fields[$campo]->get_mostrar_lista();
+	}
 
 	/**
 	 * Crea links de paginación para desplegar un listado del modelo
@@ -896,6 +906,7 @@ class ORM_Field {
 	private $label            = '';
 	private $texto_ayuda      = '';
 	private $default          = '';
+	private $mostrar_lista    = true;
 
 	private $tipo             = 'char';
 	private $largo            = 10;
@@ -988,6 +999,7 @@ class ORM_Field {
 
 	public function get_nombre_bd()        { return $this->nombre_bd; }
 
+	public function get_mostrar_lista()    { return $this->mostrar_lista; }
 	public function get_es_id()            { return $this->es_id; }
 	public function get_es_unico()         { return $this->es_unico; }
 	public function get_es_obligatorio()   { return $this->es_obligatorio; }
@@ -1008,7 +1020,6 @@ class ORM_Field {
 	{
 		$form       = '';
 		$id_prefix  = 'id_';
-		$form_class = '';
 
 		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
@@ -1017,7 +1028,7 @@ class ORM_Field {
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = '<span class="uneditable-input">' . $valor_field . '</span>';
+			$form = '<span class="uneditable-input input-xlarge">' . $valor_field . '</span>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 		}
 		else if (!empty($this->choices))
@@ -1036,57 +1047,31 @@ class ORM_Field {
 									'id'        => $id_prefix . $this->nombre,
 									'cols'      => '50',
 									'rows'      => '5',
-									'class'     => $form_class,
+									'class'     => 'input-xlarge',
 								);
 				$form = form_textarea($arr_param);
 			}
 			else
 			{
-				if ($this->largo > 40)
-				{
-					$class_largo = ' input-xxlarge';
-				}
-				else if ($this->largo > 10)
-				{
-					$class_largo = ' input-large';
-				}
-				else
-				{
-					$class_largo = ' input-mini';
-				}
-
 				$arr_param = array(
 									'name'      => $this->nombre,
 									'value'     => $valor_field,
 									'maxlength' => $this->largo,
 									'id'        => $id_prefix . $this->nombre,
-									'class'     => $form_class . $class_largo,
+									'class'     => 'input-xlarge',
 								);
 				$form = form_input($arr_param);
 			}
 		}
 		else if ($this->tipo == 'password')
 		{
-			if ($this->largo > 40)
-			{
-				$class_largo = ' input-xxlarge';
-			}
-			else if ($this->largo > 10)
-			{
-				$class_largo = ' input-large';
-			}
-			else
-			{
-				$class_largo = ' input-mini';
-			}
-
 			$arr_param = array(
 								'name'      => $this->nombre,
 								'value'     => $valor_field,
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => $form_class,
+								'class'     => 'input-xlarge',
 							);
 			$form = form_password($arr_param);
 		}
@@ -1098,7 +1083,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => $form_class,
+								'class'     => 'input-xlarge',
 							);
 			$form = form_input($arr_param);
 		}
@@ -1110,7 +1095,7 @@ class ORM_Field {
 								'maxlength' => $this->largo + $this->decimales + 1,
 								'size'      => $this->largo + $this->decimales + 1,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => $form_class,
+								'class'     => 'input-xlarge',
 							);
 			$form = form_input($arr_param);
 		}
@@ -1122,7 +1107,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => $form_class,
+								'class'     => 'input-xlarge',
 							);
 			$form = form_input($arr_param);
 		}
@@ -1139,7 +1124,7 @@ class ORM_Field {
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="' . $form_class . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="input-xlarge"';
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 		}
@@ -1147,7 +1132,7 @@ class ORM_Field {
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="' . $form_class . '"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="input-xlarge"';
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);

@@ -17,7 +17,7 @@
 			<div class="control-group">
 				<label class="control-label">
 					<?php echo ucfirst($modelo->get_label_field($campo)); ?>
-					<?php echo ($modelo->get_es_obligatorio_field($campo)) ? '<span class="text-error"><strong>*</strong></span>' : ''; ?>
+					<?php echo $modelo->get_marca_obligatorio_field($campo); ?>
 
 				</label>
 

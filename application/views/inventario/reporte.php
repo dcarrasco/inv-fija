@@ -19,7 +19,7 @@
 	</ul>
 </div>
 
-<div>
+<div class="row-fluid">
 	<label class="checkbox inline">
 		<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"'); ?>
 		Ocultar registros sin diferencias
@@ -34,16 +34,16 @@
 	</label>
 </div>
 
-<div>
+<div class="row-fluid">
 	<div class="input-append span6">
 		<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="span3 search-query" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
 		<button type="submit" class="btn">Filtrar</button>
 	</div>
-</div>
 
-<div>
-	Inventario:
-	<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
+	<div class="span6">
+		Inventario:
+		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
+	</div>
 </div>
 
 

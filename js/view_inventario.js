@@ -1,12 +1,7 @@
 $(document).ready(function() {
 
-	var alto_div_fijo = $('div.content-module-heading').height() + $('div.content-module-footer').height() + 70;
-	var alto_div = $(window).height() - alto_div_fijo;
-	$('div.content-module-main-principal').css({'overflow': 'auto'});
-	$('div.content-module-main-principal').height(alto_div);
-
-	if ($('div.content-module-main-agregar div.error').length > 0) {
-		$('div.content-module-main-agregar').toggle();
+	if ($('#frm_agregar p.text-error').length > 0) {
+		$('#frm_agregar').toggle();
 		$('#btn_guardar').toggle();
 	}
 
@@ -35,13 +30,19 @@ $(document).ready(function() {
 
 	$('#btn_guardar').click(function (event) {
 		event.preventDefault();
-		$('form#frm_inventario input[name="auditor"]').val($('form#frm_buscar select[name="auditor"]').val());
+		$('form#frm_inventario input[name="auditor"]').val($('#id_auditor').val());
 		$('form#frm_inventario').submit();
 	});
 
 	$('#btn_agregar').click(function (event) {
 		event.preventDefault();
 		$('form#frm_agregar').submit();
+	});
+
+	$('#btn_cancelar').click(function (event) {
+		event.preventDefault();
+		$('div#frm_agregar').toggle();
+		$('#btn_guardar').toggle();
 	});
 
 	$('#btn_borrar').click(function (event) {
@@ -79,6 +80,7 @@ $(document).ready(function() {
 		$('form#frm_agregar select[name="almacen"]').val($('form#frm_inventario input[name="almacen_' + id + '"]').val());
 		$('form#frm_agregar input[name="stock_fisico"]').val($('form#frm_inventario input[name="stock_fisico_' + id + '"]').val());
 		$('form#frm_agregar input[name="observacion"]').val($('form#frm_inventario textarea[name="observacion_' + id + '"]').val());
+		$('body').scrollTop(0);
 	});
 
 	function actualizaMateriales(filtro) {

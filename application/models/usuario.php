@@ -51,6 +51,7 @@ class Usuario extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 40,
 								'texto_ayuda'    => 'Password para el ingreso al sistema. Maximo 40 caracteres.',
+								'mostrar_lista'  => false,
 							),
 						'correo' => array(
 								'label'          => 'Correo',

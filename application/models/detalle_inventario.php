@@ -171,6 +171,21 @@ class Detalle_inventario extends ORM_Model {
 		}
 	}
 
+
+	public function get_id_auditor()
+	{
+		if(count($this->get_model_all()) > 0)
+		{
+			$all = $this->get_model_all();
+			return $all[0]->auditor;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+
 	public function get_nombre_digitador()
 	{
 		if(count($this->get_model_all()) > 0)

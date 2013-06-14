@@ -18,18 +18,14 @@
 
 <body>
 
+<!-- DIV principal de la aplicacion -->
 <div class="container-fluid">
 
-<div class="row-fluid">
-	<div class="span5">
-		<h3><?php echo $this->app_common->titulo_modulo(); ?></h3>
-	</div>
-
-	<div class="span7">
-		<div class="navbar">
-			<div class="navbar-inner pull-right">
-				<?php echo $this->app_common->menu_app(); ?>
-			</div>
-		</div>
+<div class="navbar">
+	<div class="navbar-inner">
+		<a class="brand" href="#">
+			<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
+		</a>
+		<?php echo $this->app_common->menu_app(); ?>
 	</div>
 </div>

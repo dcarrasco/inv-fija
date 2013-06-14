@@ -24,7 +24,7 @@
 	</div>
 	<?php echo form_close(''); ?>
 </div>
-
+<hr />
 <div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
@@ -32,7 +32,9 @@
 		<thead>
 			<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>
-					<th><?php echo ucfirst($modelo->get_label_field($campo)); ?></th>
+					<?php if ($modelo->get_mostrar_lista($campo)): ?>
+						<th><?php echo ucfirst($modelo->get_label_field($campo)); ?></th>
+					<?php endif; ?>
 				<?php endforeach; ?>
 				<th><div class="text-center">Editar</div></th>
 			</tr>
@@ -41,7 +43,9 @@
 			<?php foreach ($modelo->get_model_all() as $o): ?>
 				<tr>
 					<?php foreach ($o as $campo => $valor): ?>
-						<td><?php echo $o->get_valor_field($campo); ?></td>
+						<?php if ($o->get_mostrar_lista($campo)): ?>
+							<td><?php echo $o->get_valor_field($campo); ?></td>
+						<?php endif; ?>
 					<?php endforeach; ?>
 					<td>
 						<div class="text-center">

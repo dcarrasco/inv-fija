@@ -41,15 +41,17 @@
 				<div class="controls">
 					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="input"'); ?>
 					<div><?php echo form_error('pwd'); ?></div>
+				</div>
 			</div>
 
 			<div class="control-group">
 				<div class="controls offset6">
 					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
+				</div>
 			</div>
 			<hr>
 			<div class="control-group">
-				<div class="controls">
+				<div class="controls offset7">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						Ingresar
 						<i class="icon-play icon-white"></i>
