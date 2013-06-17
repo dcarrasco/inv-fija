@@ -23,19 +23,6 @@ class Acl extends CI_Controller {
 	}
 
 
-	private function _menu_configuracion($modelo)
-	{
-		$menu = '<ul class="nav nav-tabs">';
-		foreach($this->arr_menu as $key => $val)
-		{
-			$selected = ($key == $modelo) ? ' class="active"' : '';
-			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
-		}
-		$menu .= '</ul>';
-		return $menu;
-	}
-
-
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Configuración Control de Acceso';
@@ -55,7 +42,7 @@ class Acl extends CI_Controller {
 		//dbg($modelo);
 
 		$data = array(
-				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
+				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'             => $modelo,
 				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'acl/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
@@ -76,7 +63,7 @@ class Acl extends CI_Controller {
 		if (!$modelo->valida_form())
 		{
 			$data = array(
-				'menu_configuracion' => $this->_menu_configuracion($nombre_modelo),
+				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
 				);

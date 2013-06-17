@@ -1,23 +1,4 @@
 <?php echo form_open('','id="frm_param" class="form-search"'); ?>
-<div class="row-fluid">
-	<ul class="nav nav-tabs">
-		<li <?php echo ($nombre_reporte=='hoja' || $nombre_reporte=='detalle_hoja') ? 'class="active"' : '' ?>>
-			<?php echo anchor('/reportes/listado/hoja','Hoja')?>
-		</li>
-		<li <?php echo ($nombre_reporte=='material' || $nombre_reporte=='detalle_material') ? 'class="active"' : '' ?>>
-			<?php echo anchor('/reportes/listado/material','Material')?>
-		</li>
-		<li <?php echo ($nombre_reporte=='material_faltante') ? 'class="active"' : '' ?>>
-			<?php echo anchor('/reportes/listado/material_faltante/','Faltante-Sobrante')?>
-		</li>
-		<li <?php echo ($nombre_reporte=='ubicacion') ? 'class="active"' : '' ?>>
-			<?php echo anchor('/reportes/listado/ubicacion/','Ubicacion')?>
-		</li>
-		<li <?php echo ($nombre_reporte=='tipos_ubicacion') ? 'class="active"' : '' ?>>
-			<?php echo anchor('/reportes/listado/tipos_ubicacion/','Tipos Ubicacion')?>
-		</li>
-	</ul>
-</div>
 
 <div class="row-fluid">
 	<label class="checkbox inline">

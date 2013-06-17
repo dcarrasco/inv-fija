@@ -1,15 +1,4 @@
 <div class="row-fluid">
-	<?php echo $menu_configuracion; ?>
-</div>
-
-<?php if ($msg_alerta != ''): ?>
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<?php echo $msg_alerta; ?>
-	</div>
-<?php endif; ?>
-
-<div class="row-fluid">
 	<div class="span8 offset2 well">
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal"'); ?>
 

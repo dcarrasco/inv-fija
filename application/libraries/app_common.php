@@ -40,7 +40,7 @@ class App_common {
 	}
 
 	/**
-	 * Devuelve el menu de las aplicaciones del sistema
+	 * Devuelve arreglo con el menu de las aplicaciones del sistema
 	 * @return string    Texto con el menu (<ul>) de las aplicaciones
 	 */
 	public function menu_app()
@@ -49,44 +49,31 @@ class App_common {
 
 		$arr_apps = array();
 		$arr_mods = array();
-		$app_sel  = '';
-
 		$app_ant = '';
+		$app_sel = '';
+
 		foreach($arr_modulos as $modulo)
 		{
-			if ($modulo['app'] != $app_ant)
+			if ($modulo['app'] != $app_ant and $app_ant != '')
 			{
-				array_push($arr_apps, array('app' => $modulo['app'], 'app_icono' => $modulo['app_icono']));
-				$arr_mods[$modulo['app']] = array();
+				array_push($arr_apps, array('selected' => $app_sel, 'icono' => $modulo_ant['app_icono'], 'app' => $modulo_ant['app'], 'modulos' => $arr_mods));
+				$arr_mods = array();
+				$app_sel = '';
 			}
-			array_push($arr_mods[$modulo['app']], $modulo);
 
 			if ($this->uri->segment(1) == $modulo['url'])
 			{
-				$app_sel = $modulo['app'];
+				$app_sel = 'active';
 			}
+
+			array_push($arr_mods, array('url' => $modulo['url'], 'icono' => $modulo['modulo_icono'], 'modulo' => $modulo['modulo']));
 
 			$app_ant = $modulo['app'];
+			$modulo_ant = $modulo;
 		}
+		array_push($arr_apps, array('selected' => $app_sel, 'icono' => $modulo_ant['app_icono'], 'app' => $modulo_ant['app'], 'modulos' => $arr_mods));
 
-		$menu = '<ul class="nav pull-right">';
-		foreach($arr_apps as $apps)
-		{
-			$app_selected = ($app_sel == $apps['app']) ? ' active' : '';
-			$menu .= '<li class="dropdown' . $app_selected . '"><a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="' . $apps['app_icono'] . '"></i> ' . $apps['app'] . '<b class="caret"></b></a>';
-
-			$menu .= '<ul class="dropdown-menu">';
-			foreach ($arr_mods[$apps['app']] as $mods)
-			{
-				$menu .= '<li><a href="' . site_url($mods['url']) . '"><i class="' . $mods['modulo_icono'] . '"></i> ' . $mods['modulo'] . '</a></li>';
-
-			}
-			$menu .= '</ul></li>';
-		}
-		$menu .= '<li><a href="' . site_url('login') . '"><i class="icon-off"></i> Logout</a>';
-		$menu .= "</ul>";
-
-		return $menu;
+		return $arr_apps;
 	}
 
 

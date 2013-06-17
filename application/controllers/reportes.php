@@ -4,6 +4,14 @@ class Reportes extends CI_Controller {
 
 	private $id_inventario = 0;
 
+	private $arr_menu = array(
+				'hoja'              => array('url' => '/reportes/listado/hoja', 'texto' => 'Hoja'),
+				'material'          => array('url' => '/reportes/listado/material', 'texto' => 'Material'),
+				'material_faltante' => array('url' => '/reportes/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
+				'ubicacion'         => array('url' => '/reportes/listado/ubicacion' , 'texto' => 'Ubicacion'),
+				'tipos_ubicacion'        => array('url' => '/reportes/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
+			);
+
 
 	public function __construct()
 	{
@@ -245,6 +253,7 @@ class Reportes extends CI_Controller {
 		}
 
 		$data = array(
+				'menu_modulo'     => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
 				'datos_hoja'      => $datos_hoja,
 				'tipo_reporte'    => $view,
 				'nombre_reporte'  => $tipo,

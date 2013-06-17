@@ -26,6 +26,52 @@
 		<a class="brand" href="#">
 			<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
 		</a>
-		<?php echo $this->app_common->menu_app(); ?>
+
+		<ul class="nav pull-right">
+			<?php foreach($this->app_common->menu_app() as $app_item): ?>
+				<li class="dropdown <?php echo $app_item['selected']; ?>">
+					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+						<i class="<?php echo $app_item['icono']; ?>"></i>
+						<?php echo $app_item['app']; ?>
+						<b class="caret"></b>
+					</a>
+					<ul class="dropdown-menu">
+						<?php foreach($app_item['modulos'] as $modulo_item): ?>
+							<li>
+								<a href="<?php echo site_url($modulo_item['url']); ?>">
+									<i class="<?php echo $modulo_item['icono']; ?>"></i>
+									<?php echo $modulo_item['modulo']; ?>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</li>
+			<?php endforeach; ?>
+			<li>
+				<a href="<?php echo site_url('login'); ?>">
+					<i class="icon-off"></i>
+					Logout
+				</a>
+			</li>
+		</ul>
 	</div>
 </div>
+
+<?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
+	<div class="alert">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<?php echo $msg_alerta; ?>
+	</div>
+<?php endif; ?>
+
+<?php if (isset($menu_modulo)): ?>
+<div class="row-fluid">
+	<ul class="nav nav-tabs">
+		<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
+			<li class="<?php echo ($modulo == $menu_modulo['mod_selected']) ? 'active' : ''; ?>">
+				<?php echo anchor($val['url'], $val['texto']); ?>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+</div>
+<?php endif; ?>

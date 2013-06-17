@@ -1,15 +1,4 @@
 <div class="row-fluid">
-	<?php echo $menu_configuracion; ?>
-</div>
-
-<?php if ($msg_alerta != ''): ?>
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<?php echo $msg_alerta; ?>
-	</div>
-<?php endif; ?>
-
-<div class="row-fluid">
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="input-append span6">
 		<?php echo form_input('filtro',set_value('filtro', $filtro), 'class="span3 search-query" maxlength="30" placeholder="Texto a filtrar..."'); ?>
