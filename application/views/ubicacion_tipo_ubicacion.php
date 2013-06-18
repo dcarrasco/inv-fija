@@ -1,64 +1,59 @@
-<div class="content-module">
-
-	<div class="content-module-heading cf">
-		<div class="fl">
-			<?php echo $menu_configuracion; ?>
-		</div>
-
-		<div class="fr">
-			<a href="#" class="button b-active round ic-agregar fl" id="btn_mostrar_agregar">Nuevo tipo de ubicacion ...</a>
-		</div>
-
-	</div> <!-- fin content-module-heading -->
-
-	<div class="msg-alerta ac">
-		<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
+<div class="row-fluid">
+	<div class="text-right">
+		<a href="#" class="btn" id="btn_mostrar_agregar">
+			<i class="icon-plus-sign"></i>
+			Agregar ubicacion
+		</a>
 	</div>
+</div>
 
-	<div class="content-module-main-agregar" style="display: none;">
+<div class="row-fluid">
+	<div class="span8 offset2 well" id="form_agregar" style="display: none;">
 		<?php echo form_open('','id=frm_agregar')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
-		<table>
-			<thead>
-				<tr>
-					<th class="ac">Tipo de Inventario</th>
-					<th class="ac">Ubicacion</th>
-					<th class="ac">Tipo de Ubicacion</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tr>
-				<td class="ac">
-					<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario')); ?>
-					<?php echo form_error('agr-tipo_inventario'); ?>
-				</td>
-				<td class="ac">
-					<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="20"'); ?>
-					<?php echo form_error('agr-ubicacion'); ?>
-				</td>
-				<td class="ac">
-					<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion')); ?>
-					<?php echo form_error('agr-tipo_ubicacion'); ?>
-				</td>
-				<td class="ac">
-					<a href="#" class="button b-active round ic-agregar fl" id="btn_agregar">Agregar</a>
-				</td>
-			</tr>
-		</table>
+
+		<div class="row-fluid">
+			<div class="span4">
+				Tipo de Inventario
+				<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario')); ?>
+				<?php echo form_error('agr-tipo_inventario'); ?>
+			</div>
+			<div class="span4">
+				Ubicacion
+				<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15"'); ?>
+				<?php echo form_error('agr-ubicacion'); ?>
+			</div>
+			<div class="span4">
+				Tipo de Ubicacion
+				<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion')); ?>
+				<?php echo form_error('agr-tipo_ubicacion'); ?>
+			</div>
+		</div>
+
+		<div class="row-fluid">
+			<div class="pull-right">
+				<a href="#" class="btn btn-primary" id="btn_agregar">
+					<i class="icon-ok icon-white"></i>
+					Agregar
+				</a>
+			</div>
+		</div>
 		<?php echo form_close(); ?>
 	</div> <!-- fin content-module-main-agregar -->
+</div>
 
-	<div class="content-module-main">
+<div class="row-fluid">
+	<div class="">
 		<?php echo form_open('', 'id="frm_usuarios"'); ?>
 		<?php echo form_hidden('formulario','editar'); ?>
-		<table>
+		<table class="table table-hover table-condensed">
 			<thead>
 				<tr>
 					<th>id</th>
 					<th>Tipo de Inventario</th>
 					<th>Tipo de Ubicacion</th>
 					<th>Ubicacion</th>
-					<th class="ac">Borrar</th>
+					<th>Borrar</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -66,37 +61,38 @@
 				<tr>
 					<td><?php echo $reg['id']; ?></td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario'])); ?>
+						<?php echo form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="input-xlarge"'); ?>
 						<?php echo form_error($reg['id'].'-tipo_inventario'); ?>
 					</td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion'])); ?>
+						<?php echo form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="input-xlarge"'); ?>
 						<?php echo form_error($reg['id'].'-tipo_ubicacion'); ?>
 					</td>
 					<td>
-						<?php echo form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" size="45"'); ?>
+						<?php echo form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="input-xlarge"'); ?>
 						<?php echo form_error($reg['id'].'-ubicacion'); ?>
 					</td>
-					<td class="ac">
-						<a href="#" class="button_micro b-active round boton-borrar" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
-							<img src="<?php echo base_url(); ?>img/ic_delete.png" />
+					<td>
+						<a href="#" class="btn b-active" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
+							<i class="icon-trash"></i>
 						</a>
 					</td>
 				</tr>
 				<?php endforeach; ?>
-
-				<?php if ($links_paginas != ''):?>
-				<tr>
-					<td colspan="5"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
-				</tr>
-			<?php endif; ?>
 			</tbody>
 		</table>
 		<?php echo form_close(); ?>
+
+		<div class="pagination pagination-centered">
+			<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
+		</div>
 	</div> <!-- fin content-module-main -->
 
-	<div class="content-module-footer cf">
-		<a href="#" class="button b-active round ic-ok fr" id="btn_guardar">Guardar</a>
+	<div class="pull-right">
+		<a href="#" class="btn btn-primary" id="btn_guardar">
+			<i class="icon-ok icon-white"></i>
+			Guardar
+		</a>
 	</div> <!-- fin content-module-footer -->
 
 	<?php echo form_open('','id="frm_borrar"'); ?>
@@ -115,7 +111,7 @@
 
 		$('#btn_mostrar_agregar').click(function (event) {
 			event.preventDefault();
-			$('div.content-module-main-agregar').toggle();
+			$('div#form_agregar').toggle();
 		});
 
 		$('#btn_guardar').click(function (event) {

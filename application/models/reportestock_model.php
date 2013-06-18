@@ -75,7 +75,7 @@ class Reportestock_model extends CI_Model {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_permanencia($orden_campo = 'tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(),
+	public function get_reporte_permanencia($orden_campo = 't.tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(),
 										$incl_almacen = '0', $incl_lote = '0', $incl_estado = '0', $incl_modelos = '0')
 	{
 
@@ -92,7 +92,7 @@ class Reportestock_model extends CI_Model {
 		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=p.centro and ta.cod_almacen=p.cod_almacen', 'left');
 		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
 		$this->db->group_by('t.tipo');
-		$this->db->order_by('t.tipo');
+		$this->db->order_by($orden_campo, $orden_tipo);
 
 		if (count($tipo_alm) > 0)
 		{

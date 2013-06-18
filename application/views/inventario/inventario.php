@@ -1,9 +1,22 @@
 <?php echo form_open('/inventario/ingreso', 'id="frm_buscar" class="form-inline"'); ?>
+<?php echo form_hidden('formulario','buscar'); ?>
 <div class="row-fluid">
-	<?php echo form_hidden('formulario','buscar'); ?>
+	<div class="span2">
+		<strong>Inventario</strong>
+	</div>
+	<div class="span4">
+		<strong>Hoja</strong>
+	</div>
+	<div class="span4">
+		<strong>Auditor</strong>
+	</div>
+</div>
+<div class="row-fluid">
+	<div class="span2">
+		<?php echo $nombre_inventario; ?>
+	</div>
 
 	<div class="span4">
-		Hoja
 		<div class="input-append">
 			<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="input-mini">
 			<a href="#" class="btn" id="btn_buscar">
@@ -19,8 +32,8 @@
 		<?php echo form_error('hoja');?>
 	</div>
 
-	<div class="span5">
-		Auditor
+	<div class="span4">
+
 		<?php echo $nuevo_detalle_inventario->print_form_field('auditor'); ?>
 		<?php echo form_error('auditor');?>
 	</div>

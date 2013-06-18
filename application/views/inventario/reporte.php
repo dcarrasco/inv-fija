@@ -163,7 +163,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('div.content-module-main th a').click(function (event) {
+	$('table th a').click(function (event) {
 		event.preventDefault();
 		$('form input[name="order_by"]').val($(this).attr('order_by'));
 		$('form input[name="order_sort"]').val($(this).attr('order_sort'));

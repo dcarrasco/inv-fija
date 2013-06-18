@@ -20,12 +20,6 @@
 		<hr />
 		<div class="control-group">
 			<div class="controls">
-				<div class="pull-left">
-					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
-						<i class="icon-trash icon-white"></i>
-						Borrar
-					</button>
-				</div>
 				<div class="pull-right">
 					<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
 						<i class="icon-ok icon-white"></i>
@@ -34,6 +28,12 @@
 					<button type="submit" class="btn" name="cancelar" value="cancelar">
 						<i class="icon-ban-circle"></i>
 						Cancelar
+					</button>
+				</div>
+				<div class="pull-left">
+					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
+						<i class="icon-trash icon-white"></i>
+						Borrar
 					</button>
 				</div>
 			</div>

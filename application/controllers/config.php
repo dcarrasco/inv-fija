@@ -2,23 +2,7 @@
 
 class Config extends CI_Controller {
 
-	public function __construct()
-	{
-		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
-		$this->acl_model->autentica('config2');
-
-	}
-
-
-	public function index() {
-		$this->usuarios();
-	}
-
-
-	private function menu_configuracion($opcion)
-	{
-		$arr_menu = array(
+	private $arr_menu = array(
 				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
 				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
 				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
@@ -33,19 +17,22 @@ class Config extends CI_Controller {
 				//'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
 				//'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
 				//'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
-				'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
+				//'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
 			);
 
-		$menu = '<ul>';
-		foreach($arr_menu as $key => $val)
-		{
-			$selected = ($key == $opcion) ? ' class="selected"' : '';
-			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
-		}
-		$menu .= '</ul>';
-		return $menu;
+
+	public function __construct()
+	{
+		parent::__construct();
+		//$this->output->enable_profiler(TRUE);
+		$this->acl_model->autentica('config2');
+
 	}
 
+
+	public function index() {
+		$this->usuarios();
+	}
 
 
 	public function act_precio_materiales()
@@ -76,10 +63,27 @@ class Config extends CI_Controller {
 									'base_url'    => site_url('config/ubicacion_tipo_ubicacion'),
 									'uri_segment' => 3,
 									'num_links'   => 5,
+
+									'full_tag_open'   => '<ul>',
+									'flil_tag_close'  => '</ul>',
+
+									'first_tag_open'  => '<li>',
+									'first_tag_close' => '</li>',
+									'last_tag_open'   => '<li>',
+									'last_tag_close'  => '</li>',
+									'next_tag_open'   => '<li>',
+									'next_tag_close'  => '</li>',
+									'prev_tag_open'   => '<li>',
+									'prev_tag_close'  => '</li>',
+									'cur_tag_open'    => '<li class="active"><a href="#">',
+									'cur_tag_close'   => '</a></li>',
+									'num_tag_open'    => '<li>',
+									'num_tag_close'   => '</li>',
+
 									'first_link'  => 'Primero',
 									'last_link'   => 'Ultimo',
-									'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
-									'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+									'prev_link'   => '&laquo;',
+									'next_link'   => '&raquo;',
 								);
 		$this->pagination->initialize($config_pagination);
 
@@ -127,7 +131,7 @@ class Config extends CI_Controller {
 
 
 			$data = array(
-					'menu_configuracion' => $this->menu_configuracion('ubicaciones'),
+					'menu_modulo'            => array('menu' => $this->arr_menu, 'mod_selected' => 'ubicaciones'),
 					'datos_hoja'             => $datos_hoja,
 					'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
 					'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,

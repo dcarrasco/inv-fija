@@ -2,6 +2,11 @@
 
 class Reporte_stock extends CI_Controller {
 
+	private $arr_menu = array(
+				'permanencia'        => array('url' => '/reporte_stock/listado/permanencia', 'texto' => 'Permanencia'),
+			);
+
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -99,6 +104,7 @@ class Reporte_stock extends CI_Controller {
 		}
 
 		$data = array(
+				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
 				'datos_hoja'      => $datos_hoja,
 				'tipo_reporte'    => $view,
 				'nombre_reporte'  => $tipo,
