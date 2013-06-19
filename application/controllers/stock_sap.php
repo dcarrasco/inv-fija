@@ -98,7 +98,7 @@ class Stock_sap extends CI_Controller {
 		$serie_v_otros = '[]';
 		$str_eje_x = '[]';
 		$str_label_series = '[]';
-		if (count($stock) > 0)
+		if ($tipo_op == 'MOVIL' and count($stock) > 0)
 		{
 			$graph_q_equipos = array();
 			$graph_q_simcard = array();
