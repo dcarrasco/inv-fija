@@ -87,6 +87,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
 					<?php if (!$oculta_stock_sap): ?>
 						<td></td>
 						<td></td>
