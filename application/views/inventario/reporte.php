@@ -1,37 +1,36 @@
-<?php echo form_open('','id="frm_param" class="form-search"'); ?>
-
 <div class="row-fluid">
-	<label class="checkbox inline">
-		<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"'); ?>
-		Ocultar registros sin diferencias
-	</label>
-	<label class="checkbox inline">
-		<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', false), 'id="incl_ajustes"'); ?>
-		Incluir ajustes de inventario
-	</label>
-	<label class="checkbox inline">
-		<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', false), 'id="incl_familias"'); ?>
-		Incluir familias de productos
-	</label>
-</div>
-
-<div class="row-fluid">
-	<div class="input-append span6">
-		<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="span3 search-query" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
-		<button type="submit" class="btn">Filtrar</button>
+	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
+	<div class="span4">
+		<div class="input-append">
+			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="span10" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
+			<button type="submit" class="btn"><i class="icon-search"></i></button>
+		</div>
 	</div>
 
-	<div class="span6">
+	<div class="span4">
+		<div class="checkbox">
+			<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"'); ?>
+			Ocultar registros sin diferencias
+		</div>
+		<div class="checkbox">
+			<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', false), 'id="incl_ajustes"'); ?>
+			Incluir ajustes de inventario
+		</div>
+		<div class="checkbox">
+			<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', false), 'id="incl_familias"'); ?>
+			Incluir familias de productos
+		</div>
+	</div>
+
+	<div class="span4">
 		Inventario:
 		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
+
 	</div>
+	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
+	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?php echo form_close(); ?>
 </div>
-
-
-<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
-<?php echo form_close(); ?>
-
 
 <div>
 	<?php $totales    = array(); ?>
@@ -148,7 +147,7 @@ $(document).ready(function() {
 
 		var a_buscar = $('#filtrar_material').val().toUpperCase();
 		if (a_buscar != '') {
-			$('div.content-module-main tr').each(function() {
+			$('table tr').each(function() {
 				var nodo_texto = $(this).children('td:eq(1)');
 				if (nodo_texto.size() > 0) {
 					if (nodo_texto.html().toUpperCase().indexOf(a_buscar) == -1) {

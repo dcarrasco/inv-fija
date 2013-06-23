@@ -252,6 +252,9 @@ class Reportes extends CI_Controller {
 											'ic_up_circle.png' : 'ic_down_circle.png') . '" />': '';
 		}
 
+		$tipo = ($tipo == 'detalle_hoja') ? 'hoja' : $tipo;
+		$tipo = ($tipo == 'detalle_material') ? 'material' : $tipo;
+
 		$data = array(
 				'menu_modulo'     => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
 				'datos_hoja'      => $datos_hoja,

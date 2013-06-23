@@ -114,16 +114,16 @@ primary key(id)
 			$this->db->select_sum('(stock_fisico - stock_sap)' , 'sum_stock_diff');
 		}
 
-		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
 		if ($incl_ajustes == '1')
 		{
-			$this->db->select_sum('(stock_ajuste*c.pmp)' , 'sum_valor_ajuste');
-			$this->db->select_sum('((stock_fisico - stock_sap + stock_ajuste)*c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
+			$this->db->select_sum('((stock_fisico - stock_sap + stock_ajuste) * c.pmp)' , 'sum_valor_diff');
 		}
 		else
 		{
-			$this->db->select_sum('((stock_fisico-stock_sap)*c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
 		}
 
 		$this->db->select_max('fecha_modificacion' , 'fecha');
@@ -170,16 +170,16 @@ primary key(id)
 		{
 			$this->db->select('fija_detalle_inventario.stock_fisico - fija_detalle_inventario.stock_sap as stock_diff');
 		}
-		$this->db->select('fija_detalle_inventario.stock_sap*c.pmp as valor_sap');
-		$this->db->select('fija_detalle_inventario.stock_fisico*c.pmp as valor_fisico');
-		$this->db->select('fija_detalle_inventario.stock_ajuste*c.pmp as valor_ajuste');
+		$this->db->select('fija_detalle_inventario.stock_sap * c.pmp as valor_sap');
+		$this->db->select('fija_detalle_inventario.stock_fisico * c.pmp as valor_fisico');
+		$this->db->select('fija_detalle_inventario.stock_ajuste * c.pmp as valor_ajuste');
 		if ($incl_ajustes == '1')
 		{
-			$this->db->select('((fija_detalle_inventario.stock_fisico - fija_detalle_inventario.stock_sap + fija_detalle_inventario.stock_ajuste)*c.pmp) as valor_diff');
+			$this->db->select('((fija_detalle_inventario.stock_fisico - fija_detalle_inventario.stock_sap + fija_detalle_inventario.stock_ajuste) * c.pmp) as valor_diff');
 		}
 		else
 		{
-			$this->db->select('((fija_detalle_inventario.stock_fisico - fija_detalle_inventario.stock_sap)*c.pmp) as valor_diff');
+			$this->db->select('((fija_detalle_inventario.stock_fisico - fija_detalle_inventario.stock_sap) * c.pmp) as valor_diff');
 		}
 
 		$this->db->from('fija_detalle_inventario');
@@ -235,19 +235,19 @@ primary key(id)
 		{
 			$this->db->select_sum('stock_fisico - stock_sap' , 'sum_stock_dif');
 		}
-		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
 		if ($incl_ajustes == '1')
 		{
-			$this->db->select_sum('(stock_ajuste*c.pmp)' , 'sum_valor_ajuste');
+			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
 		}
 		if ($incl_ajustes == '1')
 		{
-			$this->db->select_sum('(stock_fisico*c.pmp - stock_sap*c.pmp + stock_ajuste*pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp + stock_ajuste * pmp)' , 'sum_valor_diff');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_fisico*c.pmp - stock_sap*c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp)' , 'sum_valor_diff');
 		}
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
@@ -293,21 +293,21 @@ primary key(id)
 		$this->db->select_sum('stock_sap', 'q_sap');
 		if ($incl_ajustes == '1')
 		{
-			$this->db->select('(SUM(stock_sap) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_faltante');
-			$this->db->select('(0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_coincidente');
-			$this->db->select('(SUM((stock_fisico+stock_ajuste)) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_sobrante');
-			$this->db->select('c.pmp*(SUM(stock_sap) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_faltante');
-			$this->db->select('c.pmp*(0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_coincidente');
-			$this->db->select('c.pmp*(SUM((stock_fisico+stock_ajuste)) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_sobrante');
+			$this->db->select('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_faltante');
+			$this->db->select('(0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_coincidente');
+			$this->db->select('(SUM((stock_fisico+stock_ajuste)) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_sobrante');
+			$this->db->select('c.pmp * (SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_faltante');
+			$this->db->select('c.pmp * (0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_coincidente');
+			$this->db->select('c.pmp * (SUM((stock_fisico+stock_ajuste)) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as v_sobrante');
 		}
 		else
 		{
-			$this->db->select('(SUM(stock_sap) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_faltante');
-			$this->db->select('(0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_coincidente');
-			$this->db->select('(SUM(stock_fisico) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_sobrante');
-			$this->db->select('c.pmp*(SUM(stock_sap) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_faltante');
-			$this->db->select('c.pmp*(0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_coincidente');
-			$this->db->select('c.pmp*(SUM(stock_fisico) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_sobrante');
+			$this->db->select('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_faltante');
+			$this->db->select('(0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_coincidente');
+			$this->db->select('(SUM(stock_fisico) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as q_sobrante');
+			$this->db->select('c.pmp * (SUM(stock_sap) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_faltante');
+			$this->db->select('c.pmp * (0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_coincidente');
+			$this->db->select('c.pmp * (SUM(stock_fisico) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_sobrante');
 		}
 		$this->db->from('fija_detalle_inventario as i');
 		$this->db->join('fija_catalogo as c', "c.catalogo = i.catalogo", 'left');
@@ -317,13 +317,13 @@ primary key(id)
 		{
 			if ($incl_ajustes == '1')
 			{
-				$this->db->having('(SUM(stock_sap) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
-				$this->db->or_having('(SUM((stock_fisico+stock_ajuste)) - 0.5*(SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
+				$this->db->having('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
+				$this->db->or_having('(SUM((stock_fisico+stock_ajuste)) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
 			}
 			else
 			{
-				$this->db->having('(SUM(stock_sap) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) <> 0');
-				$this->db->or_having('(SUM(stock_fisico) - 0.5*(SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) <> 0');
+				$this->db->having('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) <> 0');
+				$this->db->or_having('(SUM(stock_fisico) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) <> 0');
 			}
 		}
 		$this->db->group_by('i.catalogo, i.descripcion, i.um, c.pmp');
@@ -349,29 +349,29 @@ primary key(id)
 		$this->db->select('stock_fisico as stock_fisico');
 		$this->db->select('stock_sap as stock_sap');
 		$this->db->select('stock_ajuste as stock_ajuste');
-		$this->db->select('stock_fisico*c.pmp as valor_fisico');
-		$this->db->select('stock_sap*c.pmp as valor_sap');
-		$this->db->select('stock_ajuste*c.pmp as valor_ajuste');
+		$this->db->select('stock_fisico * c.pmp as valor_fisico');
+		$this->db->select('stock_sap * c.pmp as valor_sap');
+		$this->db->select('stock_ajuste * c.pmp as valor_ajuste');
 		if ($incl_ajustes == '1')
 		{
 			$this->db->select('(stock_fisico - stock_sap + stock_ajuste) as stock_diff');
-			$this->db->select('(stock_fisico - stock_sap + stock_ajuste)*c.pmp as valor_diff');
-			$this->db->select('(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
-			$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
+			$this->db->select('(stock_fisico - stock_sap + stock_ajuste) * c.pmp as valor_diff');
+			$this->db->select('(stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
+			$this->db->select('(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
 		}
 		else
 		{
 			$this->db->select('(stock_fisico - stock_sap) as stock_diff');
-			$this->db->select('(stock_fisico - stock_sap)*c.pmp as valor_diff');
-			$this->db->select('(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
-			$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
+			$this->db->select('(stock_fisico - stock_sap) * c.pmp as valor_diff');
+			$this->db->select('(stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
+			$this->db->select('(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
 		}
-		$this->db->select('(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
-		$this->db->select('(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
-		$this->db->select('(stock_fisico - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_sobrante');
-		$this->db->select('pmp*(stock_sap - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_faltante');
-		$this->db->select('pmp*(0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_coincidente');
-		$this->db->select('pmp*(stock_fisico - 0.5*((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_sobrante');
+		$this->db->select('(stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante');
+		$this->db->select('(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente');
+		$this->db->select('(stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_sobrante');
+		$this->db->select('pmp * (stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_faltante');
+		$this->db->select('pmp * (0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_coincidente');
+		$this->db->select('pmp * (stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_sobrante');
 		$this->db->from('fija_detalle_inventario as i');
 		$this->db->join('fija_catalogo as c', "c.catalogo = i.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
@@ -409,9 +409,9 @@ primary key(id)
 		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
 		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
 		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
-		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
-		$this->db->select_sum('((stock_fisico-stock_sap)*c.pmp)' , 'sum_valor_diff');
+		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
 		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
@@ -449,16 +449,16 @@ primary key(id)
 		}
 
 		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
-		$this->db->select_sum('(stock_sap*c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico*c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
 		if ($incl_ajustes == '0')
 		{
-			$this->db->select_sum('((stock_fisico-stock_sap)*c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_ajuste*c.pmp)' , 'sum_valor_ajuste');
-			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste)*c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
+			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste) * c.pmp)' , 'sum_valor_diff');
 		}
 
 		$this->db->select_max('fecha_modificacion' , 'fecha');

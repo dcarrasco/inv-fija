@@ -1,17 +1,7 @@
 <div>
-	<?php echo $menu_ajustes; ?>
-</div>
 
-<div>
 	<?php echo anchor('analisis/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time() ,(($ocultar_regularizadas == 0) ? 'Ocultar' : 'Mostrar') . ' lineas regularizadas') ?>
 </div>
-
-<?php if ($msg_alerta != ''): ?>
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<?php echo $msg_alerta; ?>
-	</div>
-<?php endif; ?>
 
 <div>
 	<?php echo form_open('analisis/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
@@ -123,21 +113,14 @@
 					</a>
 				</td>
 			</tr>
-
-			<?php if ($links_paginas != ''):?>
-				<tr>
-					<td colspan="15"><div class="paginacion ac"><?php echo $links_paginas; ?></div></td>
-				</tr>
-			<?php endif; ?>
-
 		</tbody>
 	</table>
-<?php echo form_close(); ?>
+	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 
-<div>
-</div> <!-- fin content-module-footer -->
-
+<div class="pagination pagination-centered">
+	<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
+</div>
 
 <script type="text/javascript">
 	$(document).ready(function() {

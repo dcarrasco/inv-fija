@@ -236,20 +236,37 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$this->db->where('stock_fisico - stock_sap <> 0');
 		}
-		$per_page = 30;
+		$per_page = 10;
 		$this->db->limit($per_page, $pag);
 
 		$this->load->library('pagination');
 		$cfg_pagination = array(
 					'uri_segment' => 4,
 					'num_links'   => 5,
+
+					'full_tag_open'   => '<ul>',
+					'flil_tag_close'  => '</ul>',
+
+					'first_tag_open'  => '<li>',
+					'first_tag_close' => '</li>',
+					'last_tag_open'   => '<li>',
+					'last_tag_close'  => '</li>',
+					'next_tag_open'   => '<li>',
+					'next_tag_close'  => '</li>',
+					'prev_tag_open'   => '<li>',
+					'prev_tag_close'  => '</li>',
+					'cur_tag_open'    => '<li class="active"><a href="#">',
+					'cur_tag_close'   => '</a></li>',
+					'num_tag_open'    => '<li>',
+					'num_tag_close'   => '</li>',
+
 					'per_page'    => $per_page,
 					'total_rows'  => $total_rows,
 					'base_url'    => site_url('analisis/ajustes/' . $ocultar_regularizadas . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
-					'next_link'   => '<img src="'. base_url() . 'img/ic_right.png" />',
-					'prev_link'   => '<img src="'. base_url() . 'img/ic_left.png" />',
+					'prev_link'   => '&laquo;',
+					'next_link'   => '&raquo;',
 				);
 		$this->pagination->initialize($cfg_pagination);
 

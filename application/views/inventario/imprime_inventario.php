@@ -1,7 +1,3 @@
-<div class="fl">
-	<?php echo $menu_ajustes; ?>
-</div>
-
 <div class="msg-alerta cf ac">
 	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 </div>

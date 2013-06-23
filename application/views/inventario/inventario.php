@@ -46,13 +46,6 @@
 </div>
 <?php echo form_close(); ?>
 
-<?php if ($msg_alerta != ''): ?>
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<?php echo $msg_alerta; ?>
-	</div>
-<?php endif; ?>
-
 <div class="row-fluid">
 	<div class="span8 offset2 well" style="display: none;" id="frm_agregar">
 		<?php echo form_open("inventario/ingreso/$hoja/".time(), 'id=frm_agregar')?>

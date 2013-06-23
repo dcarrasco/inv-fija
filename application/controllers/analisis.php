@@ -5,6 +5,13 @@ class Analisis extends CI_Controller {
 	private $id_inventario = 0;
 	private $nombre_inventario = '';
 
+	private $arr_menu = array(
+				'ajustes'            => array('url' => 'analisis/ajustes', 'texto' => 'Ajustes de inventario'),
+				'sube_stock'         => array('url' => 'analisis/sube_stock', 'texto' => 'Subir Stock'),
+				'imprime_inventario' => array('url' => 'analisis/imprime_inventario', 'texto' => 'Imprimir Hojas'),
+			);
+
+
 
 	public function __construct()
 	{
@@ -34,7 +41,7 @@ class Analisis extends CI_Controller {
 	 * @param  integer $ocultar_regularizadas Oculta los regustros que están modificados
 	 * @return nada
 	 */
-	public function ajustes($ocultar_regularizadas = 0, $pag = 0)
+	public function ajustes($ocultar_regularizadas = 0, $pag = 1)
 	{
 
 		// recupera el detalle de registros con diferencias
@@ -246,30 +253,9 @@ class Analisis extends CI_Controller {
 	}
 
 
-	private function _menu_ajustes($arr_menu, $op_menu)
-	{
-		$menu = '<ul class="nav nav-tabs">';
-		foreach($arr_menu as $key => $val)
-		{
-			$selected = ($key == $op_menu) ? ' class="active"' : '';
-			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
-		}
-		$menu .= '</ul>';
-		return $menu;
-	}
-
-
 	private function _render_view($vista = '', $data = array())
 	{
-
-		$arr_menu = array(
-				'ajustes'            => array('url' => 'analisis/ajustes', 'texto' => 'Ajustes de inventario'),
-				'sube_stock'         => array('url' => 'analisis/sube_stock', 'texto' => 'Subir Stock'),
-				'imprime_inventario' => array('url' => 'analisis/imprime_inventario', 'texto' => 'Imprimir Hojas'),
-			);
-
-		$data['titulo_modulo'] = 'Ajustes de inventario: ' . $this->nombre_inventario;
-		$data['menu_ajustes'] = $this->_menu_ajustes($arr_menu, $vista);
+		$data['menu_modulo'] = array('menu' => $this->arr_menu, 'mod_selected' => $vista);
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/' . $vista, $data);
 		$this->load->view('app_footer', $data);

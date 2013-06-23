@@ -2,7 +2,7 @@
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="input-append span6">
 		<?php echo form_input('filtro',set_value('filtro', $filtro), 'class="span3 search-query" maxlength="30" placeholder="Texto a filtrar..."'); ?>
-		<button type="submit" class="btn">Filtrar</button>
+		<button type="submit" class="btn"><i class="icon-search"></i></button>
 	</div>
 
 	<div class="span6 text-right">
@@ -48,9 +48,7 @@
 		</tbody>
 	</table>
 
-		<div class="pagination pagination-centered">
-			<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
-		</div>
-	</div> <!-- fin content-module-main -->
-
-</div> <!-- fin content-module -->
+	<div class="pagination pagination-centered">
+		<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
+	</div>
+</div> <!-- fin content-module-main -->
