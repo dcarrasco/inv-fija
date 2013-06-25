@@ -23,7 +23,7 @@
 		<thead>
 			<tr>
 				<th class="ac">ubic</th>
-				<th class="ac">hu</th>
+				<!-- <th class="ac">hu</th> -->
 				<th class="ac">material</th>
 				<th class="ac" style="width: 30%">descripcion</th>
 				<th class="ac">lote</th>
@@ -52,7 +52,7 @@
 				<?php $lin += 1; ?>
 				<tr>
 					<td class="ac"><?php echo $detalle->ubicacion; ?></td>
-					<td class="ac"><?php echo $detalle->hu; ?></td>
+					<!-- <td class="ac"><?php //echo $detalle->hu; ?></td> -->
 					<td class="ac"><?php echo $detalle->catalogo; ?></td>
 					<td><?php echo $detalle->descripcion; ?></td>
 					<td class="ac"><?php echo $detalle->lote; ?></td>

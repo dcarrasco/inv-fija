@@ -143,22 +143,22 @@ class Inv_activo extends ORM_Model {
 		{
 			$arr_datos = explode("\t", $arr_linea[0]);
 
-			if (count($arr_datos) == 10)
+			if (count($arr_datos) == 9) // igual a 10 en caso de tener HU
 			{
 				$ubicacion   = trim(str_replace("'", '"', $arr_datos[0]));
-				$hu          = trim(str_replace("'", '"', $arr_datos[1]));
-				$catalogo    = trim(str_replace("'", '"', $arr_datos[2]));
-				$descripcion = trim(str_replace("'", '"', $arr_datos[3]));
-				$lote        = trim(str_replace("'", '"', $arr_datos[4]));
-				$centro      = trim(str_replace("'", '"', $arr_datos[5]));
-				$almacen     = trim(str_replace("'", '"', $arr_datos[6]));
-				$um          = trim(str_replace("'", '"', $arr_datos[7]));
-				$stock_sap   = trim($arr_datos[8]);
-				$hoja        = trim($arr_datos[9]);
+				//$hu          = trim(str_replace("'", '"', $arr_datos[1]));
+				$catalogo    = trim(str_replace("'", '"', $arr_datos[1]));
+				$descripcion = trim(str_replace("'", '"', $arr_datos[2]));
+				$lote        = trim(str_replace("'", '"', $arr_datos[3]));
+				$centro      = trim(str_replace("'", '"', $arr_datos[4]));
+				$almacen     = trim(str_replace("'", '"', $arr_datos[5]));
+				$um          = trim(str_replace("'", '"', $arr_datos[6]));
+				$stock_sap   = trim($arr_datos[7]);
+				$hoja        = trim($arr_datos[8]);
 
 				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO' or $centro    == 'CENTRO' or
 					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'     or $um        == 'UM'     or
-					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA'     or $hu        == 'HU')
+					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA') // or $hu        == 'HU'
 				{
 					// cabecera del archivo, no se hace nada
 					return 'no_procesar';
@@ -174,7 +174,7 @@ class Inv_activo extends ORM_Model {
 							'0,' .
 							'0,' .
 							'\'' . $ubicacion    . '\',' .
-							'\'' . $hu           . '\',' .
+							// '\'' . $hu           . '\',' .
 							'\'' . $catalogo     . '\',' .
 							'\'' . $descripcion  . '\',' .
 							'\'' . $lote         . '\',' .

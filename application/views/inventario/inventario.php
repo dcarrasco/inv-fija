@@ -66,14 +66,16 @@
 						<?php echo $nuevo_detalle_inventario->print_form_field('ubicacion'); ?>
 						<?php echo form_error('ubicacion'); ?>
 					</div>
+					<!--  20130624 DCR: ELIMINA CAMPO HU
 					<div class="span6">
 						<label class="control-label">
-							<?php echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
-							<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('hu'); ?>
+							<?php //echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
+							<?php //echo $nuevo_detalle_inventario->get_marca_obligatorio_field('hu'); ?>
 						</label>
-						<?php echo $nuevo_detalle_inventario->print_form_field('hu'); ?>
-						<?php echo form_error('hu'); ?>
+						<?php //echo nuevo_detalle_inventario->print_form_field('hu'); ?>
+						<?php //echo form_error('hu'); ?>
 					</div>
+					-->
 				</div>
 
 				<div class="row-fluid">
@@ -185,7 +187,7 @@
 		<thead>
 			<tr>
 				<th>ubicacion</th>
-				<th>HU</th>
+				<!-- <th>HU</th> -->
 				<th>material</th>
 				<th>descripcion</th>
 				<th>lote</th>
@@ -210,7 +212,7 @@
 								<i class="icon-edit"></i>
 							</a>
 							<?php echo form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>
-							<?php echo form_hidden('hu_'          . $linea_det->id, $linea_det->hu); ?>
+							<?php //echo form_hidden('hu_'          . $linea_det->id, $linea_det->hu); ?>
 							<?php echo form_hidden('catalogo_'    . $linea_det->id, $linea_det->catalogo); ?>
 							<?php echo form_hidden('descripcion_' . $linea_det->id, $linea_det->descripcion); ?>
 							<?php echo form_hidden('lote_'        . $linea_det->id, $linea_det->lote); ?>
@@ -219,7 +221,7 @@
 							<?php echo form_hidden('um_'          . $linea_det->id, $linea_det->um); ?>
 						<?php endif; ?>
 					</td>
-					<td><?php echo $linea_det->hu; ?></td>
+					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
 					<td><?php echo $linea_det->catalogo; ?></td>
 					<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
 					<td><?php echo $linea_det->get_valor_field('lote'); ?></td>
@@ -243,7 +245,7 @@
 			<tr>
 				<td colspan="2">
 				</td>
-				<td></td>
+				<!-- <td></td> -->
 				<td></td>
 				<td></td>
 				<td></td>

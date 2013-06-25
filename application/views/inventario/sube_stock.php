@@ -12,19 +12,21 @@
 				Inventario
 			</label>
 			<div class="controls">
-				<?php echo $inventario_id . ' - ' . $inventario_nombre; ?>
+				<span class="input-xlarge uneditable-input"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></span>
 			</div>
 		</div>
 
+		<?php if (!$show_script_carga): ?>
 		<div class="control-group">
 			<label class="control-label">
 				Archivo
 			</label>
 			<div class="controls">
-				<div>
-					<span style="color: red; font-weight: bold">ADVERTENCIA</span><br>
-					<span style="color: red";>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
-						"<?php echo $inventario_nombre?>"</span>
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<p><strong>ADVERTENCIA</strong></p>
+					<p>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
+					"<?php echo $inventario_nombre?>"</span></p>
 				</div>
 				<?php echo form_upload('upload_file','','class="input-large"'); ?>
 			</div>
@@ -38,7 +40,9 @@
 				<?php echo form_password('password'); ?>
 			</div>
 		</div>
+		<?php endif; ?>
 
+		<?php if ($show_script_carga): ?>
 		<div class="control-group">
 			<label class="control-label">
 				Progreso
@@ -47,18 +51,29 @@
 				<?php echo $upload_error; ?>
 				<?php echo $msj_error; ?>
 				<div id="progreso_carga">
-					<div id="barra"><div id="barra_progreso"></div></div>
-					<div id="status_progreso">Cargando registros OK <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
+					<div class="progress">
+						<div class="bar" style="width: 0%;"></div>
+					</div>
+					<div id="status_progreso1">Registros cargados OK: <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
+					<div id="status_progreso2">Registros con error: <span id="reg_error">0</span></div>
 				</div>
 			</div>
 		</div>
+		<?php endif; ?>
 
 		<div class="control-group">
 			<div class="controls">
+				<?php if ($show_script_carga): ?>
+					<button class="btn btn-primary" id="ejecuta_carga">
+						<i class="icon-play icon-white"></i>
+						Ejecutar carga
+					</button>
+				<?php else: ?>
 				<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
 					<i class="icon-upload icon-white"></i>
 					Subir archivo
 				</button>
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -72,7 +87,7 @@ Formato del archivo:
 
 	Campos
 			Ubicacion
-			HU
+			[HU - eliminada]
 			Catalogo
 			Descripcion catalogo
 			Lote
@@ -95,7 +110,7 @@ Formato del archivo:
 	<input type="hidden" name="aud" id="id_aud" value="">
 	<input type="hidden" name="dig" id="id_dig" value="">
 	<input type="hidden" name="ubic" id="id_ubic" value="">
-	<input type="hidden" name="hu" id="id_hu" value="">
+	<!-- <input type="hidden" name="hu" id="id_hu" value=""> -->
 	<input type="hidden" name="cat" id="id_cat" value="">
 	<input type="hidden" name="desc" id="id_desc" value="">
 	<input type="hidden" name="lote" id="id_lote" value="">
@@ -110,28 +125,23 @@ Formato del archivo:
 </form>
 
 <script type="text/javascript">
-$(document).ready(function() {
-	$('#barra_progreso').css('height', '30px');
-	$('#barra_progreso').css('width', '0px');
-	$('#barra_progreso').css('background-color', '#236ab3');
+	var arr_datos = [];
+	var arr_ok    = [];
+	var arr_error = [];
+	var curr = 0;
+	var cerr = 0;
+	var cant = 0;
+	var cproc = 0;
 
-	$('#barra').css('border', '1px solid black');
-	$('#barra').css('height', '30px');
-	$('#barra').css('width', '400px');
-});
-
-	var regs_procesados = 0;
-
-	function proc_linea_carga(count, id, id_inv, hoja, aud, dig, ubic, hu, cat, desc, lote, cen, alm, um, ssap, sfis, obs, fec, nvo) {
-		var total_regs = <?php echo ($regs_OK); ?>;
-		var total_carac = 40;
+	// hu entre ubic y cat
+	function proc_linea_carga(count, id, id_inv, hoja, aud, dig, ubic, cat, desc, lote, cen, alm, um, ssap, sfis, obs, fec, nvo) {
 		$('#id_id').val(id);
 		$('#id_id_inv').val(id_inv);
 		$('#id_hoja').val(hoja);
 		$('#id_aud').val(aud);
 		$('#id_dig').val(dig);
 		$('#id_ubic').val(ubic);
-		$('#id_hu').val(hu);
+		//$('#id_hu').val(hu);
 		$('#id_cat').val(cat);
 		$('#id_desc').val(desc);
 		$('#id_lote').val(lote);
@@ -144,30 +154,71 @@ $(document).ready(function() {
 		$('#id_fec').val(fec);
 		$('#id_nvo').val(nvo);
 
-		$.ajax({
-			type:  "POST",
-			url:   js_base_url + "analisis/inserta_linea_archivo",
-			async: false,
-			data:  $('#frm_aux').serialize(),
-			success: function(datos) {
-				regs_procesados += 1;
-				var pixeles_progreso = parseInt(400 * regs_procesados/total_regs);
-				$('#barra_progreso').css('width', pixeles_progreso + 'px');
-				//$('#barra_progreso').text('['+Array(carac_progreso).join('*') + Array(total_carac - carac_progreso).join('-')+']');
-				$('#reg_actual').text(regs_procesados);
-				if (regs_procesados >= total_regs) {
-					$('#status_progreso').html('Carga finalizada (' + total_regs + ' registros cargados)');
-				}
-				//alert( "Se guardaron los datos: " + datos);
+		arr_datos.push($('#frm_aux').serialize());
+	}
+
+	function procesa_carga() {
+		var sdata;
+		cerr = 0;
+		$('#reg_error').text(cerr);
+
+		while (arr_datos.length > 0) {
+			sdata = arr_datos.shift();
+			cproc += 1;
+			if (cproc == 1) {
+				$('#ejecuta_carga').hide();
 			}
-		});
+			$.ajax({
+				type:  "POST",
+				url:   js_base_url + "analisis/inserta_linea_archivo",
+				async: true,
+				data:  sdata,
+				success: function(datos) {
+					curr += 1;
+					var progreso = parseInt(100 * curr / cant) + '%';
+					$('div.bar').css('width',progreso);
+					$('#reg_actual').text(curr);
+
+					if (curr >= cant) {
+						$('#status_progreso1').html('Carga finalizada (' + curr + ' registros cargados)');
+					}
+				},
+				error: function() {
+					cerr += 1;
+					arr_error.push(sdata);
+					$('#reg_error').text(cerr);
+				},
+				complete: function() {
+					cproc -= 1;
+					if (cproc == 0) {
+						$('#ejecuta_carga').show();
+					}
+				},
+			});
+		}
+		arr_datos = arr_error;
 	}
 </script>
 
 
 <script type="text/javascript">
 $(document).ready(function() {
-<?php echo $script_carga; ?>
+
+	$('#ejecuta_carga').click(function (event) {
+		event.preventDefault();
+		$('div.bar').css('width', '0%');
+		ejecuta_carga();
+	})
+
+	function ejecuta_carga() {
+		while (arr_datos.length > 0) {
+			procesa_carga();
+		}
+	};
+
+	<?php echo $script_carga; ?>
+	cant = arr_datos.length
+
 //$('#barra_progreso').text('Proceso finalizado.');
 });
 </script>

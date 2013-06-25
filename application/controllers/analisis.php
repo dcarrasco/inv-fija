@@ -110,6 +110,7 @@ class Analisis extends CI_Controller {
 		$regs_OK      = 0;
 		$regs_error   = 0;
 		$msj_error    = '';
+		$show_script_carga = false;
 
 		if ($this->input->post('formulario') == 'upload')
 		{
@@ -140,6 +141,7 @@ class Analisis extends CI_Controller {
 					$res_procesa_archivo = $inv_activo->cargar_datos_archivo($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
+					$show_script_carga = true;
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
 					$regs_error   = $res_procesa_archivo['regs_error'];
 					$msj_error    = ($regs_error > 0) ? '<br><div class="error round">' . $res_procesa_archivo['msj_termino'] . '</div>' : '';
@@ -152,6 +154,7 @@ class Analisis extends CI_Controller {
 				'inventario_nombre' => $this->nombre_inventario,
 				'upload_error'      => $upload_error,
 				'script_carga'      => $script_carga,
+				'show_script_carga' => $show_script_carga,
 				'regs_OK'           => $regs_OK,
 				'regs_error'        => $regs_error,
 				'msj_error'         => $msj_error,

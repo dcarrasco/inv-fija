@@ -16,7 +16,7 @@
 				<th>centro</th>
 				<th>almacen</th>
 				<th>ubicacion</th>
-				<th>hu</th>
+				<!-- <th>hu</th> -->
 				<th>hoja</th>
 				<th>UM</th>
 				<th>cant sap</th>
@@ -46,7 +46,7 @@
 					<td><?php echo $detalle->centro; ?></td>
 					<td><?php echo $detalle->almacen; ?></td>
 					<td><?php echo $detalle->ubicacion; ?></td>
-					<td><?php echo $detalle->hu; ?></td>
+					<!-- <td><?php //echo $detalle->hu; ?></td> -->
 					<td><?php echo $detalle->hoja; ?></td>
 					<td><?php echo $detalle->um; ?></td>
 					<td><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
@@ -94,7 +94,7 @@
 			<tr>
 				<td></td>
 				<td></td>
-				<td></td>
+				<!-- <td></td> -->
 				<td></td>
 				<td></td>
 				<td></td>
