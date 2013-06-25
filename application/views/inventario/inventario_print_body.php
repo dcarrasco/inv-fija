@@ -98,7 +98,7 @@
 			<!-- totales -->
 			<?php if (!$oculta_stock_sap): ?>
 				<tr>
-					<td colspan="8" class="no-border"></td>
+					<td colspan="7" class="no-border"></td>
 					<td class="ac"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
 					<td colspan="4" class="no-border"></td>
 				</tr>
