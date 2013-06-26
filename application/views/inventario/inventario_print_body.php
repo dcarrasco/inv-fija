@@ -49,12 +49,15 @@
 			<?php $sum_sap = 0; ?>
 			<?php $lin = 0; ?>
 			<?php foreach ($datos_hoja as $detalle): ?>
+				<?php $catalogo_rel = $detalle->get_relation_object('catalogo'); ?>
 				<?php $lin += 1; ?>
 				<tr>
 					<td class="ac"><?php echo $detalle->ubicacion; ?></td>
 					<!-- <td class="ac"><?php //echo $detalle->hu; ?></td> -->
 					<td class="ac"><?php echo $detalle->catalogo; ?></td>
-					<td><?php echo $detalle->descripcion; ?></td>
+					<td>
+						<?php echo $detalle->descripcion; ?>
+					</td>
 					<td class="ac"><?php echo $detalle->lote; ?></td>
 					<td class="ac"><?php echo $detalle->centro; ?></td>
 					<td class="ac"><?php echo $detalle->almacen; ?></td>
@@ -64,14 +67,22 @@
 						<td class="ac"><?php echo number_format($detalle->stock_sap, 0, ',', '.'); ?></td>
 					<?php endif; ?>
 
+					<!-- cantidad física -->
 					<td></td>
 
 					<?php if (!$oculta_stock_sap): ?>
+						<!-- FRENTE -->
 						<td></td>
+						<!-- ATRAS -->
 						<td></td>
 					<?php endif; ?>
 
-					<td></td>
+					<!-- OBSERVACION -->
+					<td>
+						<?php if ($catalogo_rel->es_seriado): ?>
+							<strong>[** MATERIAL SERIADO **]</strong>
+						<?php endif; ?>
+					</td>
 				</tr>
 				<?php $sum_sap += (int) $detalle->stock_sap; ?>
 			<?php endforeach; ?>
@@ -108,7 +119,7 @@
 				<?php if (!$oculta_stock_sap): ?>
 					<td class="no-border"></td>
 				<?php endif; ?>
-				<td colspan="9" class="ar no-border">TOTAL HOJA: _____________</td>
+				<td colspan="8" class="ar no-border">TOTAL HOJA: _____________</td>
 				<td colspan="3" class="no-border"></td>
 			</tr>
 

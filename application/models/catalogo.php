@@ -38,6 +38,13 @@ class Catalogo extends ORM_Model {
 								'es_obligatorio' => TRUE,
 								'es_unico'       => FALSE
 							),
+						'es_seriado' => array(
+								'label'          => 'Material seriado',
+								'tipo'           =>  'boolean',
+								'texto_ayuda'    => 'Indica se el material esta seriado dentro del sistema.',
+								'es_obligatorio' => true,
+								'default'        => 0
+							),
 						),
 					);
 		parent::__construct($cfg);

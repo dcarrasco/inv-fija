@@ -117,6 +117,14 @@ class ORM_Model {
 	public function get_model_all()          { return $this->model_all; }
 	public function set_model_all($model_all = array()) {$this->model_all = $model_all;}
 
+	public function get_relation_object($campo = '')
+	{
+		$model_fields = $this->model_fields;
+		$relation = $model_fields[$campo]->get_relation();
+		return ($relation['data']);
+	}
+
+
 
 	/**
 	 * determina y fija el campo id del modelo
