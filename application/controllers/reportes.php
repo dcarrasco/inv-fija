@@ -9,7 +9,7 @@ class Reportes extends CI_Controller {
 				'material'          => array('url' => '/reportes/listado/material', 'texto' => 'Material'),
 				'material_faltante' => array('url' => '/reportes/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
 				'ubicacion'         => array('url' => '/reportes/listado/ubicacion' , 'texto' => 'Ubicacion'),
-				'tipos_ubicacion'        => array('url' => '/reportes/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
+				'tipos_ubicacion'   => array('url' => '/reportes/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
 			);
 
 
@@ -71,21 +71,21 @@ class Reportes extends CI_Controller {
 			$arr_campos['auditor']          = array('titulo' => 'Auditor',      'class' => '',   'tipo' => 'texto');
 			$arr_campos['digitador']        = array('titulo' => 'Digitador',    'class' => '',   'tipo' => 'texto');
 
-			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'ac', 'tipo' => 'numero');
+				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
 			}
-			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
+			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
 
-			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'ac', 'tipo' => 'valor');
+				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
-			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center bold', 'tipo' => 'valor');
 		}
 		elseif ($tipo == 'detalle_hoja')
 		{
@@ -99,20 +99,20 @@ class Reportes extends CI_Controller {
 			$arr_campos['lote']          = array('titulo' => 'lote',        'class' => '',   'tipo' => 'texto');
 			$arr_campos['centro']        = array('titulo' => 'centro',      'class' => '',   'tipo' => 'texto');
 			$arr_campos['almacen']       = array('titulo' => 'almacen',     'class' => '',   'tipo' => 'texto');
-			$arr_campos['stock_sap']     = array('titulo' => 'Cant SAP',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['stock_fisico']  = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['stock_sap']     = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['stock_fisico']  = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'ac', 'tipo' => 'numero');
+				$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
 			}
-			$arr_campos['stock_diff']    = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
-			$arr_campos['valor_sap']     = array('titulo' => 'Valor SAP',     'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['valor_fisico']  = array('titulo' => 'Valor Fisico',  'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['stock_diff']    = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
+			$arr_campos['valor_sap']     = array('titulo' => 'Valor SAP',     'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['valor_fisico']  = array('titulo' => 'Valor Fisico',  'class' => 'text-center', 'tipo' => 'valor');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'ac', 'tipo' => 'valor');
+				$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
-			$arr_campos['valor_diff']    = array('titulo' => 'Valor Dif',     'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['valor_diff']    = array('titulo' => 'Valor Dif',     'class' => 'text-center bold', 'tipo' => 'valor');
 		}
 		elseif ($tipo == 'material')
 		{
@@ -129,23 +129,23 @@ class Reportes extends CI_Controller {
 			$arr_campos['catalogo']         = array('titulo' => 'Catalogo', 'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_material/');
 			$arr_campos['descripcion']      = array('titulo' => 'Descripcion',  'class' => '',   'tipo' => 'texto');
 			$arr_campos['um']               = array('titulo' => 'UM',           'class' => '',   'tipo' => 'texto');
-			$arr_campos['pmp']              = array('titulo' => 'PMP',          'class' => 'ac', 'tipo' => 'valor_pmp');
+			$arr_campos['pmp']              = array('titulo' => 'PMP',          'class' => 'text-center', 'tipo' => 'valor_pmp');
 
-			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'ac', 'tipo' => 'numero');
+				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
 			}
-			$arr_campos['sum_stock_dif']    = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
+			$arr_campos['sum_stock_dif']    = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
 
-			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'ac', 'tipo' => 'valor');
+				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
-			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center bold', 'tipo' => 'valor');
 		}
 		elseif ($tipo == 'material_faltante')
 		{
@@ -156,12 +156,12 @@ class Reportes extends CI_Controller {
 			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_material/');
 			$arr_campos['descripcion']      = array('titulo' => 'Descripcion',  'class' => '',   'tipo' => 'texto');
 			$arr_campos['um']               = array('titulo' => 'UM',           'class' => '',   'tipo' => 'texto');
-			$arr_campos['q_faltante']       = array('titulo' => 'Cant Faltante',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['q_coincidente']    = array('titulo' => 'Cant Coincidente',  'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['q_sobrante']       = array('titulo' => 'Cant Sobrante',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['v_faltante']       = array('titulo' => 'Valor Faltante',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['v_coincidente']    = array('titulo' => 'Valor Coincidente', 'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['v_sobrante']       = array('titulo' => 'Valor Sobrante',    'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['q_faltante']       = array('titulo' => 'Cant Faltante',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['q_coincidente']    = array('titulo' => 'Cant Coincidente',  'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['q_sobrante']       = array('titulo' => 'Cant Sobrante',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['v_faltante']       = array('titulo' => 'Valor Faltante',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['v_coincidente']    = array('titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['v_sobrante']       = array('titulo' => 'Valor Sobrante',    'class' => 'text-center', 'tipo' => 'valor');
 		}
 		elseif ($tipo == 'detalle_material')
 		{
@@ -175,28 +175,28 @@ class Reportes extends CI_Controller {
 			$arr_campos['hoja']          = array('titulo' => 'Hoja',        'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_hoja/');
 			$arr_campos['lote']          = array('titulo' => 'lote',        'class' => '',   'tipo' => 'texto');
 
-			$arr_campos['stock_sap']     = array('titulo' => 'Cant SAP',    'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['stock_fisico']  = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['stock_sap']     = array('titulo' => 'Cant SAP',    'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['stock_fisico']  = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'ac', 'tipo' => 'numero');
+				$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
 			}
-			$arr_campos['stock_diff']    = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
+			$arr_campos['stock_diff']    = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
 
-			$arr_campos['valor_sap']     = array('titulo' => 'Valor SAP',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['valor_fisico']  = array('titulo' => 'Valor Fisico', 'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['valor_sap']     = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['valor_fisico']  = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'ac', 'tipo' => 'valor');
+				$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
-			$arr_campos['valor_diff']    = array('titulo' => 'Valor Dif',    'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['valor_diff']    = array('titulo' => 'Valor Dif',    'class' => 'text-center bold', 'tipo' => 'valor');
 			/*
-			$arr_campos['q_faltante']    = array('titulo' => 'Cant Faltante',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['q_coincidente'] = array('titulo' => 'Cant Coincidente',  'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['q_sobrante']    = array('titulo' => 'Cant Sobrante',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['v_faltante']    = array('titulo' => 'Valor Faltante',    'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['v_coincidente'] = array('titulo' => 'Valor Coincidente', 'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['v_sobrante']    = array('titulo' => 'Valor Sobrante',    'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['q_faltante']    = array('titulo' => 'Cant Faltante',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['q_coincidente'] = array('titulo' => 'Cant Coincidente',  'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['q_sobrante']    = array('titulo' => 'Cant Sobrante',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['v_faltante']    = array('titulo' => 'Valor Faltante',    'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['v_coincidente'] = array('titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['v_sobrante']    = array('titulo' => 'Valor Sobrante',    'class' => 'text-center', 'tipo' => 'numero');
 			*/
 		}
 		elseif ($tipo == 'ubicacion')
@@ -206,12 +206,12 @@ class Reportes extends CI_Controller {
 
 			$arr_campos = array();
 			$arr_campos['ubicacion']        = array('titulo' => 'Ubicacion',    'class' => '',   'tipo' => 'texto');
-			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
-			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
+			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center bold', 'tipo' => 'valor');
 		}
 		elseif ($tipo == 'tipos_ubicacion')
 		{
@@ -221,21 +221,21 @@ class Reportes extends CI_Controller {
 			$arr_campos = array();
 			$arr_campos['tipo_ubicacion']   = array('titulo' => 'Tipo Ubicacion', 'class' => '',   'tipo' => 'subtotal');
 			$arr_campos['ubicacion']        = array('titulo' => 'Ubicacion',      'class' => '',   'tipo' => 'texto');
-			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'ac', 'tipo' => 'numero');
-			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'ac', 'tipo' => 'numero');
+			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'ac', 'tipo' => 'numero');
+				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
 			}
-			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'ac bold', 'tipo' => 'numero');
+			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'text-center bold', 'tipo' => 'numero');
 
-			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'ac', 'tipo' => 'valor');
-			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'ac', 'tipo' => 'valor');
+			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
 			if ($incl_ajustes == '1')
 			{
-				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'ac', 'tipo' => 'valor');
+				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
-			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'ac bold', 'tipo' => 'valor');
+			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center bold', 'tipo' => 'valor');
 		}
 
 		$arr_link_campos = array();
