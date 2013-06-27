@@ -90,7 +90,7 @@
 			<?php for($i=$lin; $i<20; $i++): ?>
 				<tr>
 					<td>&nbsp;</td>
-					<td></td>
+					<!-- <td></td> // HU -->
 					<td></td>
 					<td></td>
 					<td></td>
