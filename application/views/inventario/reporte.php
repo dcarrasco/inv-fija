@@ -67,7 +67,7 @@
 							<?php if ($subtot_ant[$campo] != ''): ?>
 								<?php foreach ($arr_campos as $c => $arr_c): ?>
 									<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-									<?php echo in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$campo], $arr_param_campo) : ''; ?>
+									<?php echo in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$c], $arr_c) : ''; ?>
 									</td>
 								<?php endforeach; ?>
 								</tr>
@@ -110,7 +110,7 @@
 					<td><span class="muted"><?php echo ++$n_linea; ?></span></td>
 					<?php foreach ($arr_campos as $c => $arr_c): ?>
 						<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-						<?php echo in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$campo], $arr_param_campo) : ''; ?>
+						<?php echo in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$c], $arr_c) : ''; ?>
 						</td>
 					<?php endforeach; ?>
 					</tr>
