@@ -123,10 +123,10 @@ class App_common {
 			case 'valor_pmp':
 				return '$ ' . number_format($valor, 0,',' , '.'); break;
 			case 'numero_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
 				break;
 			case 'valor_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . '$ ' . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . '$ ' . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
 				break;
 			default:
 				return $valor;
