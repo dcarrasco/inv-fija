@@ -36,6 +36,7 @@
 	<?php $totales    = array(); ?>
 	<?php $subtotales = array(); ?>
 	<?php $subtot_ant = array(); ?>
+	<?php $arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif'); ?>
 	<table class="table table-bordered table-striped table-hover table-condensed">
 		<thead>
 			<tr>
@@ -43,8 +44,8 @@
 					<th <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
 						<?php echo anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
 						<?php echo $arr_img_orden[$campo]; ?>
-						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] = 0; }?>
-						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] = 0; }?>
+						<?php if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) { $totales[$campo] = 0; }?>
+						<?php if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) { $subtotales[$campo] = 0; }?>
 					</th>
 				<?php endforeach; ?>
 			</tr>
@@ -60,7 +61,7 @@
 							<?php if ($subtot_ant[$campo] != ''): ?>
 								<?php foreach ($arr_campos as $c => $arr_c): ?>
 									<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-									<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
+									<?php echo in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$campo], $arr_param_campo) : ''; ?>
 									</td>
 								<?php endforeach; ?>
 								</tr>
@@ -80,13 +81,9 @@
 						<?php endif; ?>
 					<?php endif; ?>
 					<td <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-						<?php echo ($arr_param_campo['tipo'] == 'texto')  ? $reg[$campo] : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] == 'link')   ? anchor($arr_param_campo['href'] . $reg[$campo], $reg[$campo]) : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] == 'numero') ? number_format($reg[$campo],0,',','.') : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] == 'valor')  ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] == 'valor_pmp') ? '$ ' . number_format($reg[$campo],0,',','.') : ''; ?>
-						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] += $reg[$campo]; }?>
-						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] += $reg[$campo]; }?>
+						<?php echo $this->app_common->formato_reporte($reg[$campo], $arr_param_campo); ?>
+						<?php if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) { $totales[$campo] += $reg[$campo]; }?>
+						<?php if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) { $subtotales[$campo] += $reg[$campo]; }?>
 					</td>
 				<?php endforeach; ?>
 				</tr>
@@ -97,7 +94,7 @@
 				<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
 					<?php foreach ($arr_campos as $c => $arr_c): ?>
 						<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-						<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . number_format($subtotales[$c],0,',','.') . '</strong>' : ''; ?>
+						<?php echo in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$campo], $arr_param_campo) : ''; ?>
 						</td>
 					<?php endforeach; ?>
 					</tr>
@@ -110,7 +107,7 @@
 			<tr> <!-- totales -->
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 					<td <?php echo ($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
-						<?php echo ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') ? '<strong>' . number_format($totales[$campo],0,',','.') . '</strong>' : ''; ?>
+						<?php echo in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($totales[$campo], $arr_param_campo) : ''; ?>
 					</td>
 				<?php endforeach; ?>
 			</tr>
