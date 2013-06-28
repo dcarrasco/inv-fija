@@ -135,6 +135,18 @@ primary key(id)
 		$this->db->group_by('fija_detalle_inventario.hoja, d.nombre, a.nombre');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
+		if ($elim_sin_dif == '1')
+		{
+			if ($incl_ajustes == '1')
+			{
+				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0');
+			}
+			else
+			{
+				$this->db->where('(stock_fisico - stock_sap) <> 0');
+			}
+		}
+
 		return $this->db->get()->result_array();
 	}
 
@@ -403,21 +415,57 @@ primary key(id)
 	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC')
+	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('fija_detalle_inventario.ubicacion');
+
 		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
 		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
-		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
+		if ($incl_ajustes == '1')
+		{
+			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
+		}
+		if ($incl_ajustes == '1')
+		{
+			$this->db->select_sum('stock_fisico - stock_sap + stock_ajuste' , 'sum_stock_dif');
+		}
+		else
+		{
+			$this->db->select_sum('stock_fisico - stock_sap' , 'sum_stock_dif');
+		}
+
 		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
 		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
-		$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
+		if ($incl_ajustes == '1')
+		{
+			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
+		}
+		if ($incl_ajustes == '1')
+		{
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp + stock_ajuste * pmp)' , 'sum_valor_dif');
+		}
+		else
+		{
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp)' , 'sum_valor_dif');
+		}
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
 		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('fija_detalle_inventario.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
+
+		if ($elim_sin_dif == '1')
+		{
+			if ($incl_ajustes == '1')
+			{
+				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0');
+			}
+			else
+			{
+				$this->db->where('(stock_fisico - stock_sap) <> 0');
+			}
+		}
 
 		return $this->db->get()->result_array();
 	}
@@ -473,6 +521,17 @@ primary key(id)
 		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
+		if ($elim_sin_dif == '1')
+		{
+			if ($incl_ajustes == '1')
+			{
+				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0');
+			}
+			else
+			{
+				$this->db->where('(stock_fisico - stock_sap) <> 0');
+			}
+		}
 		return $this->db->get()->result_array();
 	}
 

@@ -202,16 +202,26 @@ class Reportes extends CI_Controller {
 		elseif ($tipo == 'ubicacion')
 		{
 			$orden_campo = ($orden_campo == '') ? 'ubicacion' : $orden_campo;
-			$datos_hoja = $this->inventario_model->get_reporte_ubicacion($id_inventario, $orden_campo, $orden_tipo);
+			$datos_hoja = $this->inventario_model->get_reporte_ubicacion($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
 
 			$arr_campos = array();
 			$arr_campos['ubicacion']        = array('titulo' => 'Ubicacion',    'class' => '',   'tipo' => 'texto');
+
 			$arr_campos['sum_stock_sap']    = array('titulo' => 'Cant SAP',     'class' => 'text-center', 'tipo' => 'numero');
 			$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico',  'class' => 'text-center', 'tipo' => 'numero');
-			$arr_campos['sum_stock_diff']   = array('titulo' => 'Cant Dif',     'class' => 'text-center', 'tipo' => 'numero_dif');
+			if ($incl_ajustes == '1')
+			{
+				$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste',  'class' => 'text-center', 'tipo' => 'numero');
+			}
+			$arr_campos['sum_stock_dif']   = array('titulo' => 'Cant Dif',     'class' => 'text-center', 'tipo' => 'numero_dif');
+
 			$arr_campos['sum_valor_sap']    = array('titulo' => 'Valor SAP',    'class' => 'text-center', 'tipo' => 'valor');
 			$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
-			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center', 'tipo' => 'valor_dif');
+			if ($incl_ajustes == '1')
+			{
+				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
+			}
+			$arr_campos['sum_valor_dif']   = array('titulo' => 'Valor Dif',    'class' => 'text-center', 'tipo' => 'valor_dif');
 		}
 		elseif ($tipo == 'tipos_ubicacion')
 		{
