@@ -33,6 +33,7 @@
 </div>
 
 <div>
+	<?php $n_linea    = 0; ?>
 	<?php $totales    = array(); ?>
 	<?php $subtotales = array(); ?>
 	<?php $subtot_ant = array(); ?>
@@ -40,6 +41,7 @@
 	<table class="table table-bordered table-striped table-hover table-condensed">
 		<thead>
 			<tr>
+				<th></th>
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 					<th <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
 						<?php echo anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
@@ -53,10 +55,14 @@
 		<tbody>
 			<?php foreach ($datos_hoja as $reg): ?>
 				<tr>
+				<td><span class="muted"><?php echo ++$n_linea; ?></span> </td>
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-					<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
 
+					<?php // Si el primer campo es un subtotal, inserta título del campo ?>
+					<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
 						<?php if (!array_key_exists($campo, $subtot_ant)) $subtot_ant[$campo] = ''; ?>
+
+						<?php // Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales ?>
 						<?php if ($reg[$campo] != $subtot_ant[$campo]): ?>
 							<?php if ($subtot_ant[$campo] != ''): ?>
 								<?php foreach ($arr_campos as $c => $arr_c): ?>
@@ -66,18 +72,27 @@
 								<?php endforeach; ?>
 								</tr>
 								<tr>
+									<td><span class="muted"><?php echo ++$n_linea; ?></span></td>
 									<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
 								</tr>
 								<tr>
 							<?php endif; ?>
+
+							<?php if ($subtot_ant[$campo] != ''): ?>
+								<td><span class="muted"><?php echo ++$n_linea; ?></span></td>
+							<?php endif; ?>
+
 							<?php $subtot_ant[$campo] = $reg[$campo]; ?>
 							<?php foreach ($arr_campos as $c => $arr_c): ?>
 								<?php $subtotales[$c] = 0; ?>
 							<?php endforeach; ?>
+
 							<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">
 								<?php echo ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : ''; ?>
 							</td>
-							</tr><tr>
+							</tr>
+							<tr>
+								<td><span class="muted"><?php echo ++$n_linea; ?></span></td>
 						<?php endif; ?>
 					<?php endif; ?>
 					<td <?php echo ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
@@ -92,6 +107,7 @@
 			<!-- ultima linea de subtotales -->
 			<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 				<?php if ($arr_param_campo['tipo'] == 'subtotal'): ?>
+					<td><span class="muted"><?php echo ++$n_linea; ?></span></td>
 					<?php foreach ($arr_campos as $c => $arr_c): ?>
 						<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
 						<?php echo in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($subtotales[$campo], $arr_param_campo) : ''; ?>
@@ -99,12 +115,16 @@
 					<?php endforeach; ?>
 					</tr>
 					<tr>
-						<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+						<td colspan="<?php echo count($arr_campos) + 1; ?>" class="subtotal">&nbsp;</td>
 					</tr>
 				<?php endif; ?>
 			<?php endforeach; ?>
 
 			<tr> <!-- totales -->
+
+				<!-- numero de linea -->
+				<td></td>
+
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 					<td <?php echo ($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
 						<?php echo in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->app_common->formato_reporte($totales[$campo], $arr_param_campo) : ''; ?>
@@ -177,8 +197,8 @@ $(document).ready(function() {
 
 	$('td.subtotal[colspan]').parent().each(function(i) {
 		if ($(this).size() == 1) {
-			if ($(this).children().html() != '&nbsp;') {
-				$(this).children(':first').html('<span>[-]</span>' + $(this).children(':first').html());
+			if ($(this).children(':eq(1)').html() != '&nbsp;') {
+				$(this).children(':eq(1)').html('<span>[-]</span>' + $(this).children(':eq(1)').html());
 				$(this).addClass('tr_subtotal_' + i);
 				$(this).children().addClass('tr_subtotal');
 			}

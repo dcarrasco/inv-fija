@@ -164,7 +164,8 @@ primary key(id)
 	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC',
 												$hoja = 0, $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$this->db->select('fija_detalle_inventario.ubicacion');
+		//$this->db->select('fija_detalle_inventario.ubicacion');
+		$this->db->select("case when reg_nuevo='S' THEN ubicacion + ' [*]' ELSE ubicacion END as ubicacion", FALSE);
 		$this->db->select('fija_detalle_inventario.catalogo');
 		$this->db->select('fija_detalle_inventario.descripcion');
 		$this->db->select('fija_detalle_inventario.lote');
