@@ -46,8 +46,16 @@
 */
 
 $active_group = 'default';
-//$active_group = 'dcr';
-$active_group = 'mac';
+
+if (ENVIRONMENT == 'development')
+{
+	$active_group = 'dcr';
+}
+if (ENVIRONMENT == 'development-mac')
+{
+	$active_group = 'mac';
+}
+
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
