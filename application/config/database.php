@@ -47,7 +47,7 @@
 
 $active_group = 'default';
 //$active_group = 'dcr';
-//$active_group = 'mac';
+$active_group = 'mac';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';

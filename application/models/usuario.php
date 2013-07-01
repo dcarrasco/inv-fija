@@ -64,8 +64,8 @@ class Usuario extends ORM_Model {
 								'relation'       => array(
 										'model'         => 'rol',
 										'join_table'    => 'acl_usuario_rol',
-										'id_one_table'  => 'id_usuario',
-										'id_many_table' => 'id_rol'
+										'id_one_table'  => array('id_usuario'),
+										'id_many_table' => array('id_rol'),
 									),
 								'texto_ayuda'    => 'Roles asociados al usuario.',
 							),

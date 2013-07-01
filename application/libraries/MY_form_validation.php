@@ -30,6 +30,7 @@ class MY_Form_validation extends CI_Form_validation {
 
 		$query = $CI->db->select()->from($table)->where($column, $value)->limit(1)->get();
 
+		// POR ARREGLAR: en duro $query->row->id
 		if ($query->row() && $query->row()->id != $current_id)
 		{
 			return FALSE;
