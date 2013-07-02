@@ -20,6 +20,7 @@ class ORM_Model {
 	private $model_page_results  = 10;
 	private $model_fields        = array();
 	private $model_all           = array();
+	private $separador_campos    = '~';
 
 	/**
 	 * Constructor
@@ -153,7 +154,7 @@ class ORM_Model {
 		{
 			array_push($arr_id, $this->{$campo});
 		}
-		return implode('~', $arr_id);
+		return implode($this->separador_campos, $arr_id);
 	}
 
 
@@ -474,18 +475,12 @@ class ORM_Model {
 	public function find_id($id = 0)
 	{
 		$arr_condiciones = array();
-		if (!is_array($this->model_campo_id))
+		$arr_val_id = explode($this->separador_campos, $id);
+		foreach($this->model_campo_id as $i => $campo_id)
 		{
-			$arr_condiciones[$this->model_campo_id] = $id;
+			$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
 		}
-		else
-		{
-			$arr_val_id = explode('~', $id);
-			foreach($this->model_campo_id as $i => $campo_id)
-			{
-				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
-			}
-		}
+
 		$this->find('first', array('conditions' => $arr_condiciones));
 	}
 
@@ -501,15 +496,15 @@ class ORM_Model {
 		{
 			if($obj_campo->get_tipo() == 'has_one')
 			{
-				$arr_rel = $obj_campo->get_relation();
+				// recupera las propiedades de la relacion
+				$arr_props_relation = $obj_campo->get_relation();
 
-				$class = $arr_rel['model'];
-				$obj = new $class();
-				$obj->find_id($this->$nombre_campo, FALSE);
-				$arr_rel['data'] = $obj;
+				$class_relacionado = $arr_props_relation['model'];
+				$model_relacionado = new $class_relacionado();
+				$model_relacionado->find_id($this->$nombre_campo, FALSE);
 
-				$this->model_fields[$nombre_campo]->set_relation($arr_rel);
-
+				$arr_props_relation['data'] = $model_relacionado;
+				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->model_got_relations = TRUE;
 			}
 			else if ($obj_campo->get_tipo() == 'has_many')
@@ -524,35 +519,49 @@ class ORM_Model {
 				{
 					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
 				}
+
 				// recupera la llave del modelo en tabla de la relacion (n:m)
-				$rs = $this->db->select($arr_props_relation['id_many_table'])->get_where($arr_props_relation['join_table'], $arr_where)->result_array();
+				$rs = $this->db->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)->get_where($arr_props_relation['join_table'], $arr_where)->result_array();
 
 				$class_relacionado = $arr_props_relation['model'];
 				$model_relacionado = new $class_relacionado();
 
 				// genera arreglo de condiciones de busqueda
-				$arr_condiciones = array();
+				$arr_where = array();
 				foreach($rs as $reg)
 				{
-					$arr_keys = $model_relacionado->get_model_campo_id();
-					$subarr_condiciones = array();
-					foreach($reg as $val_key)
-					{
-						$subarr_condiciones[array_shift($arr_keys)] = $val_key;
-					}
-					array_push($arr_condiciones, $subarr_condiciones);
+					array_push($arr_where, array_pop($reg));
 				}
+				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
+
 				$arr_props_relation['data'] = $model_relacionado;
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
-				$this->$nombre_campo = $arr_rs;
-
+				$this->$nombre_campo = $arr_where;
 				$this->model_got_relations = TRUE;
 			}
 		}
 	}
 
+	/**
+	 * Devuelve campos select de una lista para ser consulados como un solo
+	 * campo de la base de datos
+	 * @param  array  $arr_campos Arreglo con el listado de campos
+	 * @return string             Listado de campos unidos por la BD
+	 */
+	private function _junta_campos_select($arr_campos = array())
+	{
+		if (count($arr_campos) == 1)
+		{
+			return array_pop($arr_campos);
+		}
+		else
+		{	// CONCAT_WS es especifico para MYSQL
+			$lista_campos = implode(',', $arr_campos);
+			return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
+		}
+	}
 
 	/**
 	 * Puebla los campos del modelo con los valores de un arreglo
@@ -756,7 +765,7 @@ class ORM_Model {
 						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
 					}
 
-					$arr_many_valores = explode('~', $valor_campo);
+					$arr_many_valores = explode($this->separador_campos, $valor_campo);
 					foreach($rel['id_many_table'] as $id_many)
 					{
 						$arr_values[$id_many] = array_shift($arr_many_valores);
