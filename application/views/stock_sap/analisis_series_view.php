@@ -104,41 +104,39 @@
 					<tr>
 						<th>serie</th>
 						<th>fecha entrada doc</th>
-						<th>Fecha</th>
 						<th>alm</th>
 						<th>des_alm</th>
 						<th>rec</th>
 						<th>des_rec</th>
 						<th>cmv</th>
 						<th>desc cmv</th>
-						<th>num doc</th>
-						<th>pos</th>
+						<!-- <th>num doc</th> -->
+						<!-- <th>pos</th>     -->
 						<th>material</th>
 						<th>desc material</th>
 						<th>lote</th>
-						<th>cantidad</th>
+						<!-- <th>cantidad</th>  -->
 						<th>usuario</th>
 						<th>nom_usuario</th>
 					</tr>
 				<?php foreach($serie_hist as $reg_hist): ?>
 					<tr>
-						<td><?php echo $reg_hist['serie'] ?></td>
-						<td><?php echo $reg_hist['fecha_entrada_doc'] ?></td>
-						<td><?php echo $reg_hist['fec'] ?></td>
-						<td><?php echo $reg_hist['alm'] ?></td>
-						<td><?php echo $reg_hist['des_alm'] ?></td>
-						<td><?php echo $reg_hist['rec'] ?></td>
-						<td><?php echo $reg_hist['des_rec'] ?></td>
-						<td><?php echo $reg_hist['cmv'] ?></td>
-						<td><?php echo $reg_hist['des_cmv'] ?></td>
-						<td><?php echo $reg_hist['n_doc'] ?></td>
-						<td><?php echo $reg_hist['pos'] ?></td>
-						<td><?php echo $reg_hist['codigo_sap'] ?></td>
-						<td><?php echo $reg_hist['texto_breve_material'] ?></td>
-						<td><?php echo $reg_hist['lote'] ?></td>
-						<td><?php echo $reg_hist['cantidad'] ?></td>
-						<td><?php echo $reg_hist['usuario'] ?></td>
-						<td><?php echo $reg_hist['nom_usuario'] ?></td>
+						<td><small><?php echo $reg_hist['serie'] ?></small></td>
+						<td><small><?php echo $reg_hist['fecha_entrada_doc'] ?></small></td>
+						<td><small><?php echo $reg_hist['alm'] ?></small></td>
+						<td><small><?php echo $reg_hist['des_alm'] ?></small></td>
+						<td><small><?php echo $reg_hist['rec'] ?></small></td>
+						<td><small><?php echo $reg_hist['des_rec'] ?></small></td>
+						<td><small><?php echo $reg_hist['cmv'] ?></small></td>
+						<td><small><?php echo $reg_hist['des_cmv'] ?></small></td>
+						<!-- <td><?php //echo $reg_hist['n_doc'] ?></td> -->
+						<!-- <td><?php //echo $reg_hist['pos'] ?></td>   -->
+						<td><small><?php echo $reg_hist['codigo_sap'] ?></small></td>
+						<td><small><?php echo $reg_hist['texto_breve_material'] ?></small></td>
+						<td><small><?php echo $reg_hist['lote'] ?></small></td>
+						<!-- <td><?php //echo $reg_hist['cantidad'] ?></td>  -->
+						<td><small><?php echo $reg_hist['usuario'] ?></small></td>
+						<td><small><?php echo $reg_hist['nom_usuario'] ?></small></td>
 					</tr>
 				<?php endforeach; ?>
 				<?php endforeach; ?>
@@ -182,22 +180,22 @@
 				<?php foreach($desp as $serie_desp): ?>
 				<?php foreach($serie_desp as $reg_desp): ?>
 					<tr>
-						<td><?php echo $reg_desp['serie'] ?></td>
-						<td><?php echo $reg_desp['cod_sap'] ?></td>
-						<td><?php echo $reg_desp['texto_breve_material'] ?></td>
-						<td><?php echo $reg_desp['lote'] ?></td>
-						<td><?php echo $reg_desp['operador'] ?></td>
-						<td><?php echo $reg_desp['fecha_desp'] ?></td>
-						<td><?php echo $reg_desp['cmv'] ?></td>
-						<td><?php echo $reg_desp['alm'] ?></td>
-						<td><?php echo $reg_desp['rec'] ?></td>
-						<td><?php echo $reg_desp['des_bodega'] ?></td>
-						<td><?php echo $reg_desp['rut'] ?></td>
-						<td><?php echo $reg_desp['tipo_servicio'] ?></td>
-						<td><?php echo $reg_desp['icc'] ?></td>
-						<td><?php echo $reg_desp['abonado'] ?></td>
-						<td><?php echo $reg_desp['n_doc'] ?></td>
-						<td><?php echo $reg_desp['referencia'] ?></td>
+						<td><small><?php echo $reg_desp['serie'] ?></small></td>
+						<td><small><?php echo $reg_desp['cod_sap'] ?></small></td>
+						<td><small><?php echo $reg_desp['texto_breve_material'] ?></small></td>
+						<td><small><?php echo $reg_desp['lote'] ?></small></td>
+						<td><small><?php echo $reg_desp['operador'] ?></small></td>
+						<td><small><?php echo $reg_desp['fecha_desp'] ?></small></td>
+						<td><small><?php echo $reg_desp['cmv'] ?></small></td>
+						<td><small><?php echo $reg_desp['alm'] ?></small></td>
+						<td><small><?php echo $reg_desp['rec'] ?></small></td>
+						<td><small><?php echo $reg_desp['des_bodega'] ?></small></td>
+						<td><small><?php echo $reg_desp['rut'] ?></small></td>
+						<td><small><?php echo $reg_desp['tipo_servicio'] ?></small></td>
+						<td><small><?php echo $reg_desp['icc'] ?></small></td>
+						<td><small><?php echo $reg_desp['abonado'] ?></small></td>
+						<td><small><?php echo $reg_desp['n_doc'] ?></small></td>
+						<td><small><?php echo $reg_desp['referencia'] ?></small></td>
 					</tr>
 				<?php endforeach; ?>
 				<?php endforeach; ?>
@@ -238,19 +236,19 @@
 				<?php foreach($stock as $serie_stock): ?>
 				<?php foreach($serie_stock as $reg_stock): ?>
 					<tr>
-						<td><?php echo $reg_stock['fecha'] ?></td>
-						<td><?php echo $reg_stock['serie'] ?></td>
-						<td><?php echo $reg_stock['material'] ?></td>
-						<td><?php echo $reg_stock['des_articulo'] ?></td>
-						<td><?php echo $reg_stock['centro'] ?></td>
-						<td><?php echo $reg_stock['almacen'] ?></td>
-						<td><?php echo $reg_stock['des_almacen'] ?></td>
-						<td><?php echo $reg_stock['lote'] ?></td>
-						<td><?php echo $reg_stock['status_sistema'] ?></td>
-						<td><?php echo $reg_stock['estado_stock'] ?></td>
-						<td><?php echo $reg_stock['modif_el'] ?></td>
-						<td><?php echo $reg_stock['modificado_por'] ?></td>
-						<td><?php echo $reg_stock['nom_usuario'] ?></td>
+						<td><small><?php echo $reg_stock['fecha'] ?></small></td>
+						<td><small><?php echo $reg_stock['serie'] ?></small></td>
+						<td><small><?php echo $reg_stock['material'] ?></small></td>
+						<td><small><?php echo $reg_stock['des_articulo'] ?></small></td>
+						<td><small><?php echo $reg_stock['centro'] ?></small></td>
+						<td><small><?php echo $reg_stock['almacen'] ?></small></td>
+						<td><small><?php echo $reg_stock['des_almacen'] ?></small></td>
+						<td><small><?php echo $reg_stock['lote'] ?></small></td>
+						<td><small><?php echo $reg_stock['status_sistema'] ?></small></td>
+						<td><small><?php echo $reg_stock['estado_stock'] ?></small></td>
+						<td><small><?php echo $reg_stock['modif_el'] ?></small></td>
+						<td><small><?php echo $reg_stock['modificado_por'] ?></small></td>
+						<td><small><?php echo $reg_stock['nom_usuario'] ?></small></td>
 					</tr>
 				<?php endforeach; ?>
 				<?php endforeach; ?>
@@ -292,20 +290,20 @@
 				<?php foreach($stock_scl as $serie_stock): ?>
 				<?php foreach($serie_stock as $reg_stock_scl): ?>
 					<tr>
-						<td><?php echo $reg_stock_scl['FECHA'] ?></td>
-						<td><?php echo $reg_stock_scl['SERIE_SAP'] ?></td>
-						<td><?php echo $reg_stock_scl['COD_BODEGA'] ?></td>
-						<td><?php echo $reg_stock_scl['des_bodega'] ?></td>
-						<td><?php echo $reg_stock_scl['TIP_BODEGA'] ?></td>
-						<td><?php echo $reg_stock_scl['des_tipbodega'] ?></td>
-						<td><?php echo $reg_stock_scl['COD_ARTICULO'] ?></td>
-						<td><?php echo $reg_stock_scl['des_articulo'] ?></td>
-						<td><?php echo $reg_stock_scl['TIP_STOCK'] ?></td>
-						<td><?php echo $reg_stock_scl['desc_stock'] ?></td>
-						<td><?php echo $reg_stock_scl['COD_USO'] ?></td>
-						<td><?php echo $reg_stock_scl['desc_uso'] ?></td>
-						<td><?php echo $reg_stock_scl['COD_ESTADO'] ?></td>
-						<td><?php echo $reg_stock_scl['des_estado'] ?></td>
+						<td><small><?php echo $reg_stock_scl['FECHA'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['SERIE_SAP'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['COD_BODEGA'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['des_bodega'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['TIP_BODEGA'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['des_tipbodega'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['COD_ARTICULO'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['des_articulo'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['TIP_STOCK'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['desc_stock'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['COD_USO'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['desc_uso'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['COD_ESTADO'] ?></small></td>
+						<td><small><?php echo $reg_stock_scl['des_estado'] ?></small></td>
 					</tr>
 				<?php endforeach; ?>
 				<?php endforeach; ?>
@@ -347,20 +345,20 @@
 					</th>
 				<?php foreach($serie_trafico as $reg_trafico): ?>
 					<tr>
-						<td><?php echo $reg_trafico['ano'] ?></td>
-						<td><?php echo $reg_trafico['mes'] ?></td>
-						<td><?php echo $reg_trafico['imei'] ?></td>
-						<td><?php echo $reg_trafico['celular'] ?></td>
-						<td><?php echo $reg_trafico['seg_entrada'] ?></td>
-						<td><?php echo $reg_trafico['seg_salida'] ?></td>
-						<td><?php echo $reg_trafico['tipo'] ?></td>
-						<td><?php echo $reg_trafico['cod_cliente'] ?></td>
-						<td><?php echo $reg_trafico['num_ident'] ?></td>
-						<td><?php echo $reg_trafico['nom_cliente'] . " " . $reg_trafico['ape1_cliente'] . " " . $reg_trafico['ape2_cliente']?></td>
-						<td><?php echo $reg_trafico['cod_situacion'] ?></td>
-						<td><?php echo $reg_trafico['fecha_alta'] ?></td>
-						<td><?php echo $reg_trafico['fecha_baja'] ?></td>
-						<td><?php echo $reg_trafico['des_causabaja'] ?></td>
+						<td><small><?php echo $reg_trafico['ano'] ?></small></td>
+						<td><small><?php echo $reg_trafico['mes'] ?></small></td>
+						<td><small><?php echo $reg_trafico['imei'] ?></small></td>
+						<td><small><?php echo $reg_trafico['celular'] ?></small></td>
+						<td><small><?php echo $reg_trafico['seg_entrada'] ?></small></td>
+						<td><small><?php echo $reg_trafico['seg_salida'] ?></small></td>
+						<td><small><?php echo $reg_trafico['tipo'] ?></small></td>
+						<td><small><?php echo $reg_trafico['cod_cliente'] ?></small></td>
+						<td><small><?php echo $reg_trafico['num_ident'] ?></small></td>
+						<td><small><?php echo $reg_trafico['nom_cliente'] . " " . $reg_trafico['ape1_cliente'] . " " . $reg_trafico['ape2_cliente']?></small></td>
+						<td><small><?php echo $reg_trafico['cod_situacion'] ?></small></td>
+						<td><small><?php echo $reg_trafico['fecha_alta'] ?></small></td>
+						<td><small><?php echo $reg_trafico['fecha_baja'] ?></small></td>
+						<td><small><?php echo $reg_trafico['des_causabaja'] ?></small></td>
 					</tr>
 				<?php endforeach; ?>
 				<?php endforeach; ?>
