@@ -236,7 +236,7 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$this->db->where('stock_fisico - stock_sap <> 0');
 		}
-		$per_page = 10;
+		$per_page = 50;
 		$this->db->limit($per_page, $pag);
 
 		$this->load->library('pagination');

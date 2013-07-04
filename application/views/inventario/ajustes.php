@@ -19,11 +19,11 @@
 				<!-- <th>hu</th> -->
 				<th>hoja</th>
 				<th>UM</th>
-				<th>cant sap</th>
-				<th>cant fisica</th>
-				<th>cant ajuste</th>
-				<th>dif</th>
-				<th>tipo dif</th>
+				<th class="text-center">cant sap</th>
+				<th class="text-center">cant fisica</th>
+				<th class="text-center">cant ajuste</th>
+				<th class="text-center">dif</th>
+				<th class="text-center">tipo dif</th>
 				<th>observacion ajuste</th>
 			</tr>
 		</thead>
@@ -49,28 +49,28 @@
 					<!-- <td><?php //echo $detalle->hu; ?></td> -->
 					<td><?php echo $detalle->hoja; ?></td>
 					<td><?php echo $detalle->um; ?></td>
-					<td><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
-					<td><?php echo number_format($detalle->stock_fisico,0,',','.'); ?></td>
+					<td class="text-center"><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
+					<td class="text-center"><?php echo number_format($detalle->stock_fisico,0,',','.'); ?></td>
 					<td>
 						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="input-mini" size="5" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
 					</td>
-					<td>
+					<td class="text-center">
 						<?php echo number_format($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste,0,',','.'); ?>
 					</td>
-					<td>
+					<td class="text-center">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
-							<button class="btn btn-warning" style="white-space: nowrap;">
+							<button class="btn btn-small btn-warning" style="white-space: nowrap;">
 								<i class="icon-question-sign icon-white"></i>
 								Sobrante
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
-							<button class="btn btn-danger" style="white-space: nowrap;">
+							<button class="btn btn-small btn-danger" style="white-space: nowrap;">
 								<i class="icon-remove icon-white"></i>
 								Faltante
 							</button>
 						<?php else: ?>
-							<button class="btn btn-success" style="white-space: nowrap;">
+							<button class="btn btn-small btn-success" style="white-space: nowrap;">
 								<i class="icon-ok icon-white"></i>
 								OK
 							</button>
@@ -101,10 +101,10 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
-				<td><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
-				<td><strong><?php echo number_format($sum_ajuste,0,',','.'); ?></strong></td>
-				<td><strong><?php echo number_format($sum_fisico - $sum_sap + $sum_ajuste,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_ajuste,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_fisico - $sum_sap + $sum_ajuste,0,',','.'); ?></strong></td>
 				<td></td>
 				<td>
 					<a href="#" class="btn btn-primary" id="btn_guardar">
