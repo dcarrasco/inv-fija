@@ -537,7 +537,37 @@ primary key(id)
 	}
 
 
+	public function get_reporte_ajustes($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $elim_sin_dif = '0')
+	{
+		$this->db->select('catalogo');
+		$this->db->select('descripcion');
+		$this->db->select('lote');
+		$this->db->select('centro');
+		$this->db->select('almacen');
+		$this->db->select('ubicacion');
+		$this->db->select('hoja');
+		$this->db->select('um');
+		$this->db->select('stock_sap');
+		$this->db->select('stock_fisico');
+		$this->db->select('stock_ajuste');
+		$this->db->select('stock_fisico - stock_sap + stock_ajuste as stock_dif', FALSE);
+		$this->db->select('CASE WHEN (stock_fisico - stock_sap + stock_ajuste) > 0 THEN \'SOBRANTE\' WHEN (stock_fisico - stock_sap + stock_ajuste) < 0 THEN \'FALTANTE\' WHEN (stock_fisico - stock_sap + stock_ajuste) = 0 THEN \'OK\' END as tipo', FALSE);
+		$this->db->select('glosa_ajuste');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($elim_sin_dif == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_fisico - stock_sap <> 0');
+		}
 
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		//$this->db->order_by($orden_campo . ' ' . $orden_tipo);
+
+		return $this->db->get('fija_detalle_inventario')->result_array();
+	}
 
 
 

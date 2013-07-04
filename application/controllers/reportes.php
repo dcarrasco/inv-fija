@@ -10,6 +10,7 @@ class Reportes extends CI_Controller {
 				'material_faltante' => array('url' => '/reportes/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
 				'ubicacion'         => array('url' => '/reportes/listado/ubicacion' , 'texto' => 'Ubicacion'),
 				'tipos_ubicacion'   => array('url' => '/reportes/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
+				'ajustes'           => array('url' => '/reportes/listado/ajustes', 'texto' => 'Ajustes'),
 			);
 
 
@@ -246,6 +247,28 @@ class Reportes extends CI_Controller {
 				$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste',  'class' => 'text-center', 'tipo' => 'valor');
 			}
 			$arr_campos['sum_valor_diff']   = array('titulo' => 'Valor Dif',    'class' => 'text-center', 'tipo' => 'valor_dif');
+		}
+		elseif ($tipo == 'ajustes')
+		{
+			$orden_campo = ($orden_campo == '') ? 'tipo_ubicacion' : $orden_campo;
+			$datos_hoja = $this->inventario_model->get_reporte_ajustes($id_inventario, $orden_campo, $orden_tipo, $elim_sin_dif);
+
+			$arr_campos = array();
+			$arr_campos['catalogo']     = array('titulo' => 'Material', 'class' => '',   'tipo' => 'text');
+			$arr_campos['descripcion']  = array('titulo' => 'Desc Material', 'class' => '',   'tipo' => 'text');
+			$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '',   'tipo' => 'text');
+			$arr_campos['centro']       = array('titulo' => 'Centro', 'class' => '',   'tipo' => 'text');
+			$arr_campos['almacen']      = array('titulo' => 'Almacen', 'class' => '',   'tipo' => 'text');
+			$arr_campos['ubicacion']    = array('titulo' => 'Ubicacion', 'class' => '',   'tipo' => 'text');
+			$arr_campos['hoja']         = array('titulo' => 'Hoja', 'class' => '',   'tipo' => 'text');
+			$arr_campos['um']           = array('titulo' => 'UM', 'class' => '',   'tipo' => 'text');
+			$arr_campos['stock_sap']    = array('titulo' => 'Stock SAP', 'class' => 'text-center',   'tipo' => 'numero');
+			$arr_campos['stock_fisico'] = array('titulo' => 'Stock Fisico', 'class' => 'text-center',   'tipo' => 'numero');
+			$arr_campos['stock_ajuste'] = array('titulo' => 'Stock Ajuste', 'class' => 'text-center',   'tipo' => 'numero');
+			$arr_campos['stock_dif']    = array('titulo' => 'Stock Dif', 'class' => 'text-center',   'tipo' => 'numero');
+			$arr_campos['tipo']         = array('titulo' => 'Tipo Dif', 'class' => 'text-center',   'tipo' => 'texto');
+			$arr_campos['glosa_ajuste'] = array('titulo' => 'Observacion', 'class' => '',   'tipo' => 'texto');
+
 		}
 
 		$arr_link_campos = array();

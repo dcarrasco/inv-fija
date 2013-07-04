@@ -214,6 +214,7 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
 	{
+		//determina la cantidad de registros
 		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
 		$this->db->where('id_inventario', $id_inventario);
 		if ($ocultar_regularizadas == 1)
@@ -226,6 +227,7 @@ class Detalle_inventario extends ORM_Model {
 		}
 		$total_rows = count($this->db->get('fija_detalle_inventario')->result_array());
 
+		// recupera el detalle de registros
 		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
 		$this->db->where('id_inventario', $id_inventario);
 		if ($ocultar_regularizadas == 1)
@@ -236,8 +238,17 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$this->db->where('stock_fisico - stock_sap <> 0');
 		}
+
 		$per_page = 50;
-		$this->db->limit($per_page, $pag);
+		if ($pag > 0)
+		{
+			$this->db->limit($per_page, $pag);
+		}
+		else
+		{
+			$this->db->limit($per_page);
+		}
+		$rs = $this->db->get('fija_detalle_inventario')->result_array();
 
 		$this->load->library('pagination');
 		$cfg_pagination = array(
@@ -270,7 +281,6 @@ class Detalle_inventario extends ORM_Model {
 				);
 		$this->pagination->initialize($cfg_pagination);
 
-		$rs = $this->db->get('fija_detalle_inventario')->result_array();
 		$model_all = array();
 		foreach($rs as $reg)
 		{
