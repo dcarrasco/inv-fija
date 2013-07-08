@@ -15,11 +15,12 @@ class ORM_Model {
 	private $model_label         = '';
 	private $model_label_plural  = '';
 	private $model_order_by      = '';
-	private $model_campo_id      = '';
+	private $model_campo_id      = array();
 	private $model_got_relations = false;
 	private $model_page_results  = 10;
 	private $model_fields        = array();
 	private $model_all           = array();
+	private $separador_campos    = '~';
 
 	/**
 	 * Constructor
@@ -133,6 +134,7 @@ class ORM_Model {
 	private function _determina_campo_id()
 	{
 		$arr_key = array();
+
 		foreach ($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
@@ -141,36 +143,18 @@ class ORM_Model {
 			}
 		}
 
-		if (count($arr_key) == 0)
-		{
-			return '';
-		}
-		else if (count($arr_key) == 1)
-		{
-			return $arr_key[0];
-		}
-		else
-		{
-			return $arr_key;
-		}
+		return $arr_key;
 	}
 
 
 	public function get_model_id()
 	{
-		if (!is_array($this->model_campo_id))
+		$arr_id = array();
+		foreach ($this->model_campo_id as $campo)
 		{
-			return $this->{$this->model_campo_id};
+			array_push($arr_id, $this->{$campo});
 		}
-		else
-		{
-			$arr_id = array();
-			foreach ($this->model_campo_id as $campo)
-			{
-				array_push($arr_id, $this->{$campo});
-			}
-			return implode('~', $arr_id);
-		}
+		return implode($this->separador_campos, $arr_id);
 	}
 
 
@@ -213,7 +197,7 @@ class ORM_Model {
 		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
 		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
-		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . $this->{$this->model_campo_id} . ']' : '';
+		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . $this->get_model_id() . ']' : '';
 
 		if ($field->get_tipo() == 'has_many')
 		{
@@ -393,14 +377,20 @@ class ORM_Model {
 	 */
 	public function find($tipo = 'first', $param = array(), $recupera_relation = TRUE)
 	{
-
 		if (array_key_exists('conditions', $param))
 		{
 			foreach ($param['conditions'] as $campo => $valor)
 			{
 				if (is_array($valor))
 				{
-					(count($valor) == 0) ? $this->db->where($campo, '') : $this->db->where_in($campo, $valor);
+					if (count($valor) == 0)
+					{
+						$this->db->where($campo . '=', '');
+					}
+					else
+					{
+						$this->db->where_in($campo, $valor);
+					}
 				}
 				else
 				{
@@ -461,7 +451,6 @@ class ORM_Model {
 
 				array_push($this->model_all, $o);
 			}
-
 			return $rs;
 		}
 		else if ($tipo == 'count')
@@ -493,18 +482,12 @@ class ORM_Model {
 	public function find_id($id = 0)
 	{
 		$arr_condiciones = array();
-		if (!is_array($this->model_campo_id))
+		$arr_val_id = explode($this->separador_campos, $id);
+		foreach($this->model_campo_id as $i => $campo_id)
 		{
-			$arr_condiciones[$this->model_campo_id] = $id;
+			$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
 		}
-		else
-		{
-			$arr_val_id = explode('~', $id);
-			foreach($this->model_campo_id as $i => $campo_id)
-			{
-				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
-			}
-		}
+
 		$this->find('first', array('conditions' => $arr_condiciones));
 	}
 
@@ -516,65 +499,86 @@ class ORM_Model {
 	 */
 	private function _recuperar_relation_fields()
 	{
-		foreach($this->model_fields as $campo => $metadata)
+		foreach($this->model_fields as $nombre_campo => $obj_campo)
 		{
-			if($metadata->get_tipo() == 'has_one')
+			if($obj_campo->get_tipo() == 'has_one')
 			{
-				$arr_rel = $metadata->get_relation();
+				// recupera las propiedades de la relacion
+				$arr_props_relation = $obj_campo->get_relation();
 
-				$class = $arr_rel['model'];
-				$obj = new $class();
-				$obj->find_id($this->$campo, FALSE);
-				$arr_rel['data'] = $obj;
+				$class_relacionado = $arr_props_relation['model'];
+				$model_relacionado = new $class_relacionado();
+				$model_relacionado->find_id($this->$nombre_campo, FALSE);
 
-				$this->model_fields[$campo]->set_relation($arr_rel);
-
+				$arr_props_relation['data'] = $model_relacionado;
+				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->model_got_relations = TRUE;
 			}
-			else if ($metadata->get_tipo() == 'has_many')
+			else if ($obj_campo->get_tipo() == 'has_many')
 			{
-				$arr_rel = $metadata->get_relation();
+				// recupera las propiedades de la relacion
+				$arr_props_relation = $obj_campo->get_relation();
 
-				$arr_rs = array();
+				// genera arreglo where con la llave del modelo
 				$arr_where = array();
-				if (!is_array($this->model_campo_id))
+				$arr_id_one_table = $arr_props_relation['id_one_table'];
+				foreach ($this->model_campo_id as $campo_id)
 				{
-					$arr_where[$arr_rel['id_one_table']] = $this->get_model_id();
-				}
-				else
-				{
-					foreach ($this->model_campo_id as $i => $campo_key)
-					{
-						$arr_where[$arr_rel['id_one_table'][$i]] = $this->$campo_key;
-					}
-				}
-				$rs = $this->db->select($arr_rel['id_many_table'])->get_where($arr_rel['join_table'], $arr_where)->result_array();
-				foreach($rs as $val)
-				{
-					if (!is_array($arr_rel['id_many_table']))
-					{
-						array_push($arr_rs, $val[$arr_rel['id_many_table']]);
-					}
-					else
-					{
-						array_push($arr_rs, implode('~', $val));
-					}
+					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
 				}
 
-				$class = $arr_rel['model'];
-				$obj = new $class();
+				// recupera la llave del modelo en tabla de la relacion (n:m)
+				$rs = $this->db->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)->get_where($arr_props_relation['join_table'], $arr_where)->result_array();
 
-				$obj->find('all', array('conditions' => array(is_array($obj->get_model_campo_id()) ? implode("+'~'+", $obj->get_model_campo_id()) : $obj->get_model_campo_id() => $arr_rs)), FALSE);
+				$class_relacionado = $arr_props_relation['model'];
+				$model_relacionado = new $class_relacionado();
 
-				$arr_rel['data'] = $obj;
-				$this->model_fields[$campo]->set_relation($arr_rel);
-				$this->$campo = $arr_rs;
+				// genera arreglo de condiciones de busqueda
+				$arr_where = array();
+				foreach($rs as $reg)
+				{
+					array_push($arr_where, array_pop($reg));
+				}
+				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
 
+				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
+
+				$arr_props_relation['data'] = $model_relacionado;
+				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
+				$this->$nombre_campo = $arr_where;
 				$this->model_got_relations = TRUE;
 			}
 		}
 	}
 
+	/**
+	 * Devuelve campos select de una lista para ser consulados como un solo
+	 * campo de la base de datos
+	 * @param  array  $arr_campos Arreglo con el listado de campos
+	 * @return string             Listado de campos unidos por la BD
+	 */
+	private function _junta_campos_select($arr_campos = array())
+	{
+		if (count($arr_campos) == 1)
+		{
+			return array_pop($arr_campos);
+		}
+		else
+		{
+			if (ENVIRONMENT == 'development-mac')
+			{
+				// CONCAT_WS es especifico para MYSQL
+				$lista_campos = implode(',', $arr_campos);
+				return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
+
+			}
+			else
+			{
+				$lista_campos = implode(' + \'' . $this->separador_campos . '\' + ', $arr_campos);
+				return $lista_campos;
+			}
+		}
+	}
 
 	/**
 	 * Puebla los campos del modelo con los valores de un arreglo
@@ -751,6 +755,8 @@ class ORM_Model {
 			$this->db->update($this->model_tabla, $data_update);
 		}
 
+		// Revisa todos los campos en busqueda de relaciones has_many,
+		// para actualizar la tabla relacionada
 		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'has_many')
@@ -758,19 +764,10 @@ class ORM_Model {
 				$rel = $campo->get_relation();
 
 				$arr_where_delete = array();
-				if (is_array($rel['id_one_table']))
+				$data_where_tmp = $data_where;
+				foreach($rel['id_one_table'] as $id_one_table_key)
 				{
-					foreach($rel['id_one_table'] as $id_one_table_key)
-					{
-						$arr_where_delete[$id_one_table_key] = $data_where[$id_one_table_key];
-					}
-				}
-				else
-				{
-					foreach($data_where as $k => $v)
-					{
-						$arr_where_delete[$rel['id_one_table']] = $v;
-					}
+					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 				$this->db->delete($rel['join_table'], $arr_where_delete);
 
@@ -779,35 +776,16 @@ class ORM_Model {
 				{
 					$arr_values = array();
 
-
-					if (is_array($rel['id_one_table']))
+					$data_where_tmp = $data_where;
+					foreach($rel['id_one_table'] as $id_one_table_key)
 					{
-						foreach($rel['id_one_table'] as $id_one_table_key)
-						{
-							$arr_values[$id_one_table_key] = $data_where[$id_one_table_key];
-						}
-					}
-					else
-					{
-						foreach($data_where as $k => $v)
-						{
-							$arr_values[$rel['id_one_table']] = $v;
-						}
+						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
 					}
 
-
-					if (is_array($rel['id_many_table']))
+					$arr_many_valores = explode($this->separador_campos, $valor_campo);
+					foreach($rel['id_many_table'] as $id_many)
 					{
-						$arr_many_valores = explode('~', $valor_campo);
-						$i = 0;
-						foreach($rel['id_many_table'] as $id_many)
-						{
-							$arr_values[$id_many] = $arr_many_valores[$i++];
-						}
-					}
-					else
-					{
-						$arr_values[$rel['id_many_table']] = $valor_campo;
+						$arr_values[$id_many] = array_shift($arr_many_valores);
 					}
 
 					$this->db->insert($rel['join_table'], $arr_values);
@@ -838,10 +816,13 @@ class ORM_Model {
 			if ($campo->get_tipo() == 'has_many')
 			{
 				$rel = $campo->get_relation();
-				foreach($data_where as $key => $val_key)
+				$arr_where_delete = array();
+				$data_where_tmp = $data_where;
+				foreach($rel['id_one_table'] as $id_one_table_key)
 				{
-					$this->db->delete($rel['join_table'], array($rel['id_one_table'] => $val_key));
+					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
+				$this->db->delete($rel['join_table'], $arr_where_delete);
 			}
 		}
 	}

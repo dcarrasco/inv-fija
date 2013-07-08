@@ -32,6 +32,7 @@ if (defined('ENVIRONMENT'))
 {
 	switch (ENVIRONMENT)
 	{
+		case 'development-mac':
 		case 'development':
 			error_reporting(E_ALL);
 		break;

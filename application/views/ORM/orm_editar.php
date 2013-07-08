@@ -7,16 +7,18 @@
 				<label class="control-label">
 					<?php echo ucfirst($modelo->get_label_field($campo)); ?>
 					<?php echo $modelo->get_marca_obligatorio_field($campo); ?>
-
 				</label>
 
 				<div class="controls">
 					<?php echo $modelo->print_form_field($campo); ?>
-					<span class="help-block"><?php echo $modelo->get_texto_ayuda_field($campo); ?></span>
+					<span class="help-block">
+						<em><small><?php echo $modelo->get_texto_ayuda_field($campo); ?></small></em>
+					</span>
 					<?php echo form_error($campo); ?>
 				</div>
 			</div>
 		<?php endforeach; ?>
+
 		<hr />
 		<div class="control-group">
 			<div class="controls">
