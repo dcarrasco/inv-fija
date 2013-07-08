@@ -6,8 +6,8 @@ class Almacen_sap extends ORM_Model {
 	{
 		$cfg = array(
 				'modelo' => array(
-						//'model_tabla'        => 'bd_logistica..cp_almacenes',
-						'model_tabla'        => 'cp_almacenes',
+						'model_tabla'        => 'bd_logistica..cp_almacenes',
+						//'model_tabla'        => 'cp_almacenes',
 						'model_label'        => 'Almacen',
 						'model_label_plural' => 'Almacenes',
 						'model_order_by'     => 'centro, cod_almacen',
@@ -62,8 +62,8 @@ class Almacen_sap extends ORM_Model {
 								'tipo'           => 'has_many',
 								'relation'       => array(
 										'model'         => 'tipoalmacen_sap',
-										//'join_table'    => 'bd_logistica..cp_tipos_almacenes',
-										'join_table'    => 'cp_tipos_almacenes',
+										'join_table'    => 'bd_logistica..cp_tipos_almacenes',
+										//'join_table'    => 'cp_tipos_almacenes',
 										'id_one_table'  => array('centro','cod_almacen'),
 										'id_many_table' => array('id_tipo'),
 									),

@@ -383,7 +383,14 @@ class ORM_Model {
 			{
 				if (is_array($valor))
 				{
-					(count($valor) == 0) ? $this->db->where($campo, '') : $this->db->where_in($campo, $valor);
+					if (count($valor) == 0)
+					{
+						$this->db->where($campo . '=', '');
+					}
+					else
+					{
+						$this->db->where_in($campo, $valor);
+					}
 				}
 				else
 				{
@@ -557,9 +564,19 @@ class ORM_Model {
 			return array_pop($arr_campos);
 		}
 		else
-		{	// CONCAT_WS es especifico para MYSQL
-			$lista_campos = implode(',', $arr_campos);
-			return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
+		{
+			if (ENVIRONMENT == 'development-mac')
+			{
+				// CONCAT_WS es especifico para MYSQL
+				$lista_campos = implode(',', $arr_campos);
+				return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
+
+			}
+			else
+			{
+				$lista_campos = implode(' + \'' . $this->separador_campos . '\' + ', $arr_campos);
+				return $lista_campos;
+			}
 		}
 	}
 
