@@ -18,7 +18,7 @@ class Detalle_inventario extends ORM_Model {
 						'id_inventario' => array(
 								'tipo'           => 'has_one',
 								'relation'       => array(
-										'model' => 'inv_activo',
+										'model' => 'inventario',
 									),
 							),
 						'hoja' => array(

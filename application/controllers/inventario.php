@@ -34,9 +34,9 @@ class Inventario extends CI_Controller {
 		$nuevo_detalle_inventario->hoja = $hoja;
 
 		// recupera el inventario activo
-		$inv_activo = new Inv_activo;
-		$this->id_inventario = $inv_activo->get_id_inventario_activo();
-		$inv_activo->find_id($this->id_inventario);
+		$inventario = new Inventario;
+		$this->id_inventario = $inventario->get_id_inventario_activo();
+		$inventario->find_id($this->id_inventario);
 
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
@@ -46,7 +46,7 @@ class Inventario extends CI_Controller {
 		$auditor = $detalle_inventario->get_id_auditor();
 		$nuevo_detalle_inventario->auditor = $auditor;
 
-		$nombre_inventario = $inv_activo->nombre;
+		$nombre_inventario = $inventario->nombre;
 		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
 

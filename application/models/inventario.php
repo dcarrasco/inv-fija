@@ -1,12 +1,12 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Inv_activo extends ORM_Model {
+class Inventario extends ORM_Model {
 
 	public function __construct()
 	{
 		$cfg = array(
 				'modelo' => array(
-						'model_tabla'        => 'fija_inventario2',
+						'model_tabla'        => 'fija_inventarios',
 						'model_label'        => 'Inventario',
 						'model_label_plural' => 'Inventarios',
 						'model_order_by'     => 'nombre',
@@ -213,5 +213,5 @@ class Inv_activo extends ORM_Model {
 
 }
 
-/* End of file inv_activo.php */
-/* Location: ./application/models/inv_activo.php */
+/* End of file inventario.php */
+/* Location: ./application/models/inventario.php */

@@ -55,7 +55,7 @@ primary key(id)
 	public function get_id_inventario_activo()
 	{
 		$this->db->where('activo', 1);
-		$row = $this->db->get('fija_inventario2')->row_array();
+		$row = $this->db->get('fija_inventarios')->row_array();
 
 		return ($row['id']);
 	}
@@ -69,7 +69,7 @@ primary key(id)
 	{
 		$arr_inv = array();
 		$this->db->order_by('nombre ASC');
-		$arr_rs = $this->db->get('fija_inventario2')->result_array();
+		$arr_rs = $this->db->get('fija_inventarios')->result_array();
 		$arr_inv[''] = 'Seleccione inventario activo...';
 		foreach($arr_rs as $val)
 		{
@@ -512,7 +512,7 @@ primary key(id)
 
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario d');
-		$this->db->join('fija_inventario2 i', 'd.id_inventario=i.id', 'left');
+		$this->db->join('fija_inventarios i', 'd.id_inventario=i.id', 'left');
 		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = d.ubicacion', 'left');
 		$this->db->join('fija_tipo_ubicacion t', 't.id=ut.id_tipo_ubicacion', 'left');
 		$this->db->join('fija_catalogos as c', "c.catalogo = d.catalogo", 'left');
@@ -623,7 +623,7 @@ primary key(id)
 	public function get_nombre_inventario($id_inventario = 0)
 	{
 		$this->db->where('id', $id_inventario);
-		$row = $this->db->get('fija_inventario2')->row_array();
+		$row = $this->db->get('fija_inventarios')->row_array();
 
 		return ($row['nombre']);
 	}
@@ -705,7 +705,7 @@ primary key(id)
 
 	public function total_inventarios_activos()
 	{
-		return $this->db->count_all('fija_inventario2');
+		return $this->db->count_all('fija_inventarios');
 	}
 
 
@@ -713,7 +713,7 @@ primary key(id)
 	public function get_inventarios_activos($limit = 0, $offset = 0)
 	{
 		$this->db->order_by('nombre ASC');
-		return $this->db->get('fija_inventario2', $limit, $offset)->result_array();
+		return $this->db->get('fija_inventarios', $limit, $offset)->result_array();
 	}
 
 
@@ -760,7 +760,7 @@ primary key(id)
 
 	public function borrar_inventario_activo($id_inventario = 0)
 	{
-		$this->db->delete('fija_inventario2', array('id' => $id_inventario));
+		$this->db->delete('fija_inventarios', array('id' => $id_inventario));
 	}
 
 	public function get_cant_registros_inventario($id_inventario = 0)
@@ -784,13 +784,13 @@ primary key(id)
 	{
 		if ($id == 0)
 		{
-			$this->db->insert('fija_inventario2', array('nombre' => $nombre, 'tipo_inventario' => $tipo, 'activo' => (int) $activo ));
+			$this->db->insert('fija_inventarios', array('nombre' => $nombre, 'tipo_inventario' => $tipo, 'activo' => (int) $activo ));
 
 		}
 		else
 		{
 			$this->db->where('id', $id);
-			$this->db->update('fija_inventario2', array('nombre' => $nombre, 'tipo_inventario' => $tipo, 'activo' => (int) $activo ));
+			$this->db->update('fija_inventarios', array('nombre' => $nombre, 'tipo_inventario' => $tipo, 'activo' => (int) $activo ));
 		}
 	}
 

@@ -7,7 +7,7 @@ class Config extends CI_Controller {
 				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
 				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
 				'tipo_inventario' => array('url' => '/config2/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
-				'inv_activo'     => array('url' => '/config2/listado/inv_activo', 'texto' => 'Inventario Activo'),
+				'inventario'     => array('url' => '/config2/listado/inventario', 'texto' => 'Inventarios'),
 				//'detalle_inventario' => array('url' => '/config2/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
 				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
 				'ubicaciones'    => array('url' => '/config/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),

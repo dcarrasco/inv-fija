@@ -19,7 +19,7 @@ class Analisis extends CI_Controller {
 		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('analisis');
 
-		$inventario_activo = new Inv_activo;
+		$inventario_activo = new Inventario;
 		$this->id_inventario = $inventario_activo->get_id_inventario_activo();
 		$inventario_activo->find_id($this->id_inventario);
 
@@ -135,10 +135,10 @@ class Analisis extends CI_Controller {
 					$upload_data = $this->upload->data();
 					$archivo_cargado = $upload_data['full_path'];
 
-					$inv_activo = new Inv_activo;
-					$inv_activo->find_id($this->id_inventario);
-					$inv_activo->borrar_detalle_inventario();
-					$res_procesa_archivo = $inv_activo->cargar_datos_archivo($archivo_cargado);
+					$inventario = new Inventario;
+					$inventario->find_id($this->id_inventario);
+					$inventario->borrar_detalle_inventario();
+					$res_procesa_archivo = $inventario->cargar_datos_archivo($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
 					$show_script_carga = true;
@@ -198,8 +198,8 @@ class Analisis extends CI_Controller {
 
 	public function imprime_inventario($id_inventario = 0)
 	{
-		$inv_activo = new Inv_activo;
-		$inv_activo->find_id($this->id_inventario);
+		$inventario = new Inventario;
+		$inventario->find_id($this->id_inventario);
 
 		$this->form_validation->set_rules('pag_desde', 'Pagina Desde', 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('pag_hasta', 'Pagina Hasta', 'trim|required|greater_than[0]');
@@ -213,7 +213,7 @@ class Analisis extends CI_Controller {
 			$data = array(
 					'inventario_id'     => $this->id_inventario,
 					'inventario_nombre' => $this->nombre_inventario,
-					'max_hoja'          => $inv_activo->get_max_hoja_inventario(),
+					'max_hoja'          => $inventario->get_max_hoja_inventario(),
 					'link_config'       => 'config',
 					'link_reporte'      => 'reportes',
 					'link_inventario'   => 'inventario',
