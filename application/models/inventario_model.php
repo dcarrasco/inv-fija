@@ -265,8 +265,8 @@ primary key(id)
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
 		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
-		$this->db->join('fija_catalogo_familias as f', "f.codigo = substring(fija_detalle_inventario.catalogo,1,5) and f.tipo='FAM'", 'left');
-		$this->db->join('fija_catalogo_familias as sf', "sf.codigo = substring(fija_detalle_inventario.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
+		$this->db->join('fija_familias as f', "f.codigo = substring(fija_detalle_inventario.catalogo,1,5) and f.tipo='FAM'", 'left');
+		$this->db->join('fija_familias as sf', "sf.codigo = substring(fija_detalle_inventario.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
 
 		$this->db->where('id_inventario', $id_inventario);
 

@@ -6,7 +6,7 @@ class Familia extends ORM_Model {
 	{
 		$cfg = array(
 				'modelo' => array(
-						'model_tabla'        => 'fija_catalogo_familias',
+						'model_tabla'        => 'fija_familias',
 						'model_label'        => 'Familia',
 						'model_label_plural' => 'Familias',
 						'model_order_by'     => 'codigo',
