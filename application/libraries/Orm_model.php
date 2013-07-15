@@ -385,7 +385,7 @@ class ORM_Model {
 				{
 					if (count($valor) == 0)
 					{
-						$this->db->where($campo . '=', '', FALSE);
+						$this->db->where($campo . '=', '');
 					}
 					else
 					{
@@ -482,12 +482,24 @@ class ORM_Model {
 	public function find_id($id = 0)
 	{
 		$arr_condiciones = array();
-		$arr_val_id = explode($this->separador_campos, $id);
-		foreach($this->model_campo_id as $i => $campo_id)
-		{
-			$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
-		}
 
+		if (count($this->model_campo_id) == 1)
+		{
+			foreach($this->model_campo_id as $campo_id)
+			{
+				$arr_condiciones[$campo_id] = $id;
+			}
+		}
+		else
+		{
+			$arr_val_id = explode($this->separador_campos, $id);
+			foreach($this->model_campo_id as $i => $campo_id)
+			{
+				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
+			}
+
+
+		}
 		$this->find('first', array('conditions' => $arr_condiciones));
 	}
 

@@ -8,8 +8,12 @@ class Inventario extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('inventario');
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 
 

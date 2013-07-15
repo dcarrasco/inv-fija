@@ -130,7 +130,7 @@ primary key(id)
 		$this->db->from('fija_detalle_inventario');
 		$this->db->join('fija_usuarios as d', "d.id = fija_detalle_inventario.digitador", 'left');
 		$this->db->join('fija_auditores as a', "a.id = fija_detalle_inventario.auditor", 'left');
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('fija_detalle_inventario.hoja, d.nombre, a.nombre');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
@@ -196,7 +196,7 @@ primary key(id)
 		}
 
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 
 		$this->db->where('fija_detalle_inventario.id_inventario', $id_inventario);
 		$this->db->where('fija_detalle_inventario.hoja', $hoja);
@@ -264,7 +264,7 @@ primary key(id)
 		}
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->join('fija_catalogo_familias as f', "f.codigo = substring(fija_detalle_inventario.catalogo,1,5) and f.tipo='FAM'", 'left');
 		$this->db->join('fija_catalogo_familias as sf', "sf.codigo = substring(fija_detalle_inventario.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
 
@@ -323,7 +323,7 @@ primary key(id)
 			$this->db->select('c.pmp * (SUM(stock_fisico) - 0.5 * (SUM(stock_sap + stock_fisico) - ABS(SUM(stock_sap - stock_fisico)))) as v_sobrante');
 		}
 		$this->db->from('fija_detalle_inventario as i');
-		$this->db->join('fija_catalogo as c', "c.catalogo = i.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = i.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 
 		if ($elim_sin_dif == '1')
@@ -386,7 +386,7 @@ primary key(id)
 		$this->db->select('pmp * (0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_coincidente');
 		$this->db->select('pmp * (stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_sobrante');
 		$this->db->from('fija_detalle_inventario as i');
-		$this->db->join('fija_catalogo as c', "c.catalogo = i.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = i.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->where('i.catalogo', $catalogo);
 
@@ -451,7 +451,7 @@ primary key(id)
 		}
 		$this->db->select_max('fecha_modificacion' , 'fecha');
 		$this->db->from('fija_detalle_inventario');
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('fija_detalle_inventario.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
@@ -515,7 +515,7 @@ primary key(id)
 		$this->db->join('fija_inventario2 i', 'd.id_inventario=i.id', 'left');
 		$this->db->join('fija_ubicacion_tipo_ubicacion as ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = d.ubicacion', 'left');
 		$this->db->join('fija_tipo_ubicacion t', 't.id=ut.id_tipo_ubicacion', 'left');
-		$this->db->join('fija_catalogo as c', "c.catalogo = d.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = d.catalogo", 'left');
 		$this->db->where('d.id_inventario', $id_inventario);
 
 		$this->db->group_by('t.tipo_ubicacion');
@@ -802,7 +802,7 @@ primary key(id)
 		$this->db->from('fija_detalle_inventario');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->where('hoja', $hoja);
-		$this->db->join('fija_catalogo as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
+		$this->db->join('fija_catalogos as c', "c.catalogo = fija_detalle_inventario.catalogo", 'left');
 		$this->db->order_by('ubicacion ASC, catalogo ASC, lote ASC');
 
 		return $this->db->get()->result_array();

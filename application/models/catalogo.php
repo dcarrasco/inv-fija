@@ -6,7 +6,7 @@ class Catalogo extends ORM_Model {
 	{
 		$cfg = array(
 				'modelo' => array(
-						'model_tabla'        => 'fija_catalogo',
+						'model_tabla'        => 'fija_catalogos',
 						'model_label'        => 'Catalogo',
 						'model_label_plural' => 'Catalogos',
 						'model_order_by'     => 'catalogo',
@@ -64,7 +64,7 @@ class Catalogo extends ORM_Model {
 		$this->db->order_by('catalogo')->like('descripcion', $filtro);
 		$this->db->like('descripcion', $filtro);
 		$this->db->or_like('catalogo', $filtro);
-		$arr_result = $this->db->get('fija_catalogo')->result_array();
+		$arr_result = $this->db->get($this->get_model_tabla())->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -78,7 +78,7 @@ class Catalogo extends ORM_Model {
 
 	public function get_descripcion($catalogo = '')
 	{
-		$row = $this->db->get_where('fija_catalogo', array('catalogo' => $catalogo))->row_array();
+		$row = $this->db->get_where($this->get_model_tabla(), array('catalogo' => $catalogo))->row_array();
 		return ($row['descripcion']);
 	}
 
@@ -92,7 +92,7 @@ class Catalogo extends ORM_Model {
 		{
 			$this->db->like('descripcion', $filtro);
 		}
-		return $this->db->get('fija_catalogo', $limit, $offset)->result_array();
+		return $this->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
 	}
 
 
@@ -104,7 +104,7 @@ class Catalogo extends ORM_Model {
 			$this->db->like('descripcion', $filtro);
 		}
 
-		return $this->db->get('fija_catalogo')->num_rows();
+		return $this->db->get($this->get_model_tabla())->num_rows();
 	}
 
 
@@ -120,7 +120,7 @@ class Catalogo extends ORM_Model {
 
 		// actualiza precios nulos --> 0
 		$this->db->where('pmp is null');
-		$this->db->update('fija_catalogo', array(
+		$this->db->update($this->model_tabla, array(
 												'pmp' => 0,
 						));
 
@@ -140,10 +140,10 @@ class Catalogo extends ORM_Model {
 		$this->db->get();
 
 		//actualiza los precios
-		$this->db->query('update fija_catalogo set fija_catalogo.pmp=s.pmp from tmp0001 as s where catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS');
+		$this->db->query('update ' . $this->get_model_tabla() . ' set fija_catalogos.pmp=s.pmp from tmp0001 as s where catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS');
 
 		// cuenta los precios actualizados
-		$cant_regs = $this->db->from('fija_catalogo')->join('tmp0001', 'fija_catalogo.catalogo collate Latin1_General_CI_AS = tmp0001.material collate Latin1_General_CI_AS')->count_all_results();
+		$cant_regs = $this->db->from($this->model_tabla)->join('tmp0001', 'fija_catalogos.catalogo collate Latin1_General_CI_AS = tmp0001.material collate Latin1_General_CI_AS')->count_all_results();
 
 		// borra tabla temporal con ultimos precios
 		if ($this->db->table_exists('tmp0001'))
