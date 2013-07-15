@@ -157,7 +157,7 @@ class Detalle_inventario extends ORM_Model {
 
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		$this->find('all', array('conditions' => array('id_inventario'=>$id_inventario, 'hoja'=>$hoja)));
+		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
 	}
 
 	public function get_nombre_auditor()

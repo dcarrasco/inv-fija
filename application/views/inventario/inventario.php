@@ -1,4 +1,4 @@
-<?php echo form_open('/inventario/ingreso', 'id="frm_buscar" class="form-inline"'); ?>
+<?php echo form_open('/c_inventario/ingreso', 'id="frm_buscar" class="form-inline"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
 <div class="row-fluid">
 	<div class="span2">
@@ -48,7 +48,7 @@
 
 <div class="row-fluid">
 	<div class="span8 offset2 well" style="display: none;" id="frm_agregar">
-		<?php echo form_open("inventario/ingreso/$hoja/".time(), 'id=frm_agregar')?>
+		<?php echo form_open("c_inventario/ingreso/$hoja/".time(), 'id=frm_agregar')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
 		<?php echo form_hidden('accion','agregar'); ?>
 		<?php echo form_hidden('hoja', $hoja); ?>
@@ -177,7 +177,7 @@
 </div>
 
 <div>
-	<?php echo form_open("inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open("c_inventario/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>
 	<?php echo form_hidden('auditor', $id_auditor); ?>

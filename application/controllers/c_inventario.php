@@ -103,8 +103,8 @@ class C_inventario extends CI_Controller {
 					'link_config'        => 'config',
 					'link_reporte'       => 'reportes',
 					'link_inventario'    => 'inventario',
-					'link_hoja_ant'      => base_url('inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
-					'link_hoja_sig'      => base_url('inventario/ingreso/' . ($hoja + 1) . '/' . time()),
+					'link_hoja_ant'      => base_url('c_inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+					'link_hoja_sig'      => base_url('c_inventario/ingreso/' . ($hoja + 1) . '/' . time()),
 					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				);
 
@@ -199,4 +199,4 @@ class C_inventario extends CI_Controller {
 }
 
 /* End of file inventario.php */
-/* Location: ./application/controllers/inventario.php */
+/* Location: ./application/controllers/c_inventario.php */
