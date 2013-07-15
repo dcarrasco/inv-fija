@@ -385,7 +385,7 @@ class ORM_Model {
 				{
 					if (count($valor) == 0)
 					{
-						$this->db->where($campo . '=', '');
+						$this->db->where($campo . '=', '', FALSE);
 					}
 					else
 					{
@@ -659,7 +659,15 @@ class ORM_Model {
 			}
 			else
 			{
-				$this->$nombre = $this->input->post($nombre);
+				$tipo_campo = $metadata->get_tipo();
+				if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
+				{
+					$this->$nombre = (int) $this->input->post($nombre);
+				}
+				else
+				{
+					$this->$nombre = $this->input->post($nombre);
+				}
 			}
 		}
 	}
