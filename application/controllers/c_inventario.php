@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Inventario extends CI_Controller {
+class C_inventario extends CI_Controller {
 
 	private $id_inventario = 0;
 
