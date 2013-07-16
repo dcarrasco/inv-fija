@@ -487,7 +487,15 @@ class ORM_Model {
 		{
 			foreach($this->model_campo_id as $campo_id)
 			{
-				$arr_condiciones[$campo_id] = $id;
+				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
+				if ($tipo_id == 'id' OR $tipo_id == 'integer')
+				{
+					$arr_condiciones[$campo_id] = (int) $id;
+				}
+				else
+				{
+					$arr_condiciones[$campo_id] = $id;
+				}
 			}
 		}
 		else

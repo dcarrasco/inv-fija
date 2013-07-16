@@ -167,7 +167,7 @@ class C_inventario extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
-			redirect('inventario/ingreso/' . $this->input->post('hoja') . '/' . time());
+			redirect('c_inventario/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
 	}
