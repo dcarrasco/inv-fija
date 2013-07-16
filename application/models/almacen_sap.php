@@ -18,23 +18,23 @@ class Almacen_sap extends ORM_Model {
 								'tipo'           => 'char',
 								'largo'          => 10,
 								'texto_ayuda'    => 'Codigo SAP del centro. Maximo 10 caracteres.',
-								'es_id'          => true,
-								'es_obligatorio' => true,
+								'es_id'          => TRUE,
+								'es_obligatorio' => TRUE,
 							),
 						'cod_almacen' => array(
 								'label'          => 'Almacen',
 								'tipo'           => 'char',
 								'largo'          => 10,
 								'texto_ayuda'    => 'Codigo SAP del almacen. Maximo 10 caracteres.',
-								'es_id'          => true,
-								'es_obligatorio' => true,
+								'es_id'          => TRUE,
+								'es_obligatorio' => TRUE,
 							),
 						'des_almacen' => array(
 								'label'          => 'Descripcion Almacen',
 								'tipo'           => 'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Descripcion del almacen. Maximo 50 caracteres.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'uso_almacen' => array(
 								'label'          => 'Uso Almacen',
@@ -56,7 +56,7 @@ class Almacen_sap extends ORM_Model {
 								'choices'        => array(
 									'MOVIL' => 'Operación Móvil',
 									'FIJA'  => 'Operación Fija'),
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'tipos' => array(
 								'tipo'           => 'has_many',

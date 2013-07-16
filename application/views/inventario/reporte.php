@@ -9,15 +9,15 @@
 
 	<div class="span4">
 		<div class="checkbox">
-			<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', false), 'id="elim_sin_dif"'); ?>
+			<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
 			Ocultar registros sin diferencias
 		</div>
 		<div class="checkbox">
-			<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', false), 'id="incl_ajustes"'); ?>
+			<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
 			Incluir ajustes de inventario
 		</div>
 		<div class="checkbox">
-			<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', false), 'id="incl_familias"'); ?>
+			<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
 			Incluir familias de productos
 		</div>
 	</div>

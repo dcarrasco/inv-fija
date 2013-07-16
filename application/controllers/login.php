@@ -89,7 +89,7 @@ class Login extends CI_Controller {
 							'usr'        => $usr,
 							'nombre_usuario' => $this->acl_model->get_nombre_usuario($usr),
 							'tiene_clave'    => $this->acl_model->tiene_clave($usr),
-							'ocultar_password' => (($this->input->post('usr')) ? true : false),
+							'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
 						);
 			$this->load->view('ACL/cambio_password', $data);
 		}
@@ -106,7 +106,7 @@ class Login extends CI_Controller {
 				$data = array(
 					'msg_alerta' => $res[1],
 					'usr'        => $usr,
-					'ocultar_password' => (($this->input->post('usr')) ? true : false),
+					'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
 					'tiene_clave'    => $this->acl_model->tiene_clave($usr),
 				);
 				$this->load->view('ACL/cambio_password', $data);

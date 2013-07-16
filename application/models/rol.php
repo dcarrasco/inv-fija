@@ -27,8 +27,8 @@ class Rol extends ORM_Model {
 								'tipo'           => 'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Nombre del rol. Maximo 50 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'descripcion' => array(
 								'label'          => 'Descripcion del rol',

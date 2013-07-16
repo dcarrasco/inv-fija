@@ -110,7 +110,7 @@ class Analisis extends CI_Controller {
 		$regs_OK      = 0;
 		$regs_error   = 0;
 		$msj_error    = '';
-		$show_script_carga = false;
+		$show_script_carga = FALSE;
 
 		if ($this->input->post('formulario') == 'upload')
 		{
@@ -122,7 +122,7 @@ class Analisis extends CI_Controller {
 					'allowed_types' => 'txt|cvs',
 					'max_size'      => '2000',
 					'file_name'     => 'sube_stock.txt',
-					'overwrite'     => true,
+					'overwrite'     => TRUE,
 					);
 				$this->load->library('upload', $upload_config);
 
@@ -141,7 +141,7 @@ class Analisis extends CI_Controller {
 					$res_procesa_archivo = $inventario->cargar_datos_archivo($archivo_cargado);
 
 					$script_carga = $res_procesa_archivo['script'];
-					$show_script_carga = true;
+					$show_script_carga = TRUE;
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
 					$regs_error   = $res_procesa_archivo['regs_error'];
 					$msj_error    = ($regs_error > 0) ? '<br><div class="error round">' . $res_procesa_archivo['msj_termino'] . '</div>' : '';

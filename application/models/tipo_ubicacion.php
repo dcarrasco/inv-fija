@@ -21,15 +21,15 @@ class Tipo_ubicacion extends ORM_Model {
 										'model' => 'tipo_inventario'
 									),
 								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'tipo_ubicacion' => array(
 								'label'          => 'Tipo de ubicacion',
 								'tipo'           =>  'char',
 								'largo'          => 30,
 								'texto_ayuda'    => 'Maximo 30 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						),
 					);

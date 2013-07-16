@@ -18,17 +18,17 @@ class Tipoalmacen_sap extends ORM_Model {
 								'tipo'             => 'int',
 								'largo'            => 10,
 								'texto_ayuda'      => '',
-								'es_id'            => true,
-								'es_obligatorio'   => true,
-								'es_unico'         => true,
-								'es_autoincrement' => true,
+								'es_id'            => TRUE,
+								'es_obligatorio'   => TRUE,
+								'es_unico'         => TRUE,
+								'es_autoincrement' => TRUE,
 							),
 						'tipo' => array(
 								'label'          => 'Tipo de Almacen',
 								'tipo'           => 'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Tipo del almacen. Maximo 50 caracteres.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'tipo_op' => array(
 								'label'          => 'Tipo operación',
@@ -38,7 +38,7 @@ class Tipoalmacen_sap extends ORM_Model {
 								'choices'        => array(
 									'MOVIL' => 'Operación Móvil',
 									'FIJA'  => 'Operación Fija'),
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'almacenes' => array(
 								'tipo'           => 'has_many',

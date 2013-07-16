@@ -16,7 +16,7 @@ class ORM_Model {
 	private $model_label_plural  = '';
 	private $model_order_by      = '';
 	private $model_campo_id      = array();
-	private $model_got_relations = false;
+	private $model_got_relations = FALSE;
 	private $model_page_results  = 10;
 	private $model_fields        = array();
 	private $model_all           = array();
@@ -88,7 +88,7 @@ class ORM_Model {
 			$prop['tabla_bd'] = $this->model_tabla;
 			$oField = new ORM_Field($campo, $prop);
 			$this->model_fields[$campo] = $oField;
-			$this->$campo = null;
+			$this->$campo = NULL;
 		}
 	}
 
@@ -385,7 +385,7 @@ class ORM_Model {
 				{
 					if (count($valor) == 0)
 					{
-						$this->db->where($campo . '=', '');
+						$this->db->where($campo, NULL);
 					}
 					else
 					{
@@ -479,7 +479,7 @@ class ORM_Model {
 
 	}
 
-	public function find_id($id = 0)
+	public function find_id($id = 0, $recupera_relation = TRUE)
 	{
 		$arr_condiciones = array();
 
@@ -500,7 +500,7 @@ class ORM_Model {
 
 
 		}
-		$this->find('first', array('conditions' => $arr_condiciones));
+		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
 
 
@@ -915,7 +915,7 @@ class ORM_Field {
 	private $label            = '';
 	private $texto_ayuda      = '';
 	private $default          = '';
-	private $mostrar_lista    = true;
+	private $mostrar_lista    = TRUE;
 
 	private $tipo             = 'char';
 	private $largo            = 10;
@@ -1123,10 +1123,10 @@ class ORM_Field {
 		else if ($this->tipo == 'boolean')
 		{
 			$form = '<label class="radio inline">';
-			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? true : false) . 'Si';
+			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
 			$form .= '</label>';
 			$form .= '<label class="radio inline">';
-			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? false : true) . 'No';
+			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
 			$form .= '</label>';
 		}
 		else if ($this->tipo == 'has_one')

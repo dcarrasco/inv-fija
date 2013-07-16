@@ -48,19 +48,19 @@
 						</div>
 						<div>
 							<div class="checkbox">
-								<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', false), 'id="incl_almacen"') ?>
+								<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
 								Mostrar almacenes
 							</div>
 							<div class="checkbox">
-								<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', false), 'id="incl_estado"') ?>
+								<?php echo form_checkbox('incl_estado', '1',set_checkbox('incl_estado','1', FALSE), 'id="incl_estado"') ?>
 								Mostrar estado SAP
 							</div>
 							<div class="checkbox">
-								<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', false), 'id="incl_lote"') ?>
+								<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
 								Mostrar lotes
 							</div>
 							<div class="checkbox">
-								<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', false), 'id="incl_modelos"') ?>
+								<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
 								Mostrar modelos equipos
 							</div>
 						</div>

@@ -24,8 +24,8 @@ class Modulo extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Nombre del módulo. Maximo 50 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'descripcion' => array(
 								'tipo'           =>  'char',
@@ -36,7 +36,7 @@ class Modulo extends ORM_Model {
 								'label'          => 'Orden del módulo',
 								'tipo'           =>  'int',
 								'texto_ayuda'    => 'Orden del modulo en el menu.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'url' => array(
 								'label'          => 'Direccion del módulo',
@@ -54,8 +54,8 @@ class Modulo extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 20,
 								'texto_ayuda'    => 'Llave del módulo. Maximo 20 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						),
 			);

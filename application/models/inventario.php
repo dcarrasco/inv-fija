@@ -20,14 +20,14 @@ class Inventario extends ORM_Model {
 								'tipo'           => 'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Maximo 50 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'activo' => array(
 								'label'          => 'Activo',
 								'tipo'           =>  'boolean',
 								'texto_ayuda'    => 'Indica se el inventario esta activo dentro del sistema.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'tipo_inventario' => array(
 								'tipo'           =>  'has_one',
@@ -35,7 +35,7 @@ class Inventario extends ORM_Model {
 										'model' => 'tipo_inventario'
 									),
 								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						),
 					);

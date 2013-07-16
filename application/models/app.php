@@ -20,22 +20,22 @@ class App extends ORM_Model {
 						'tipo'           => 'char',
 						'largo'          => 50,
 						'texto_ayuda'    => 'Nombre de la aplicación. Maximo 50 caracteres.',
-						'es_obligatorio' => true,
-						'es_unico'       => true
+						'es_obligatorio' => TRUE,
+						'es_unico'       => TRUE
 					),
 				'descripcion' => array(
 						'label'          => 'Descripcion de la Aplicacion',
 						'tipo'           =>  'char',
 						'largo'          => 50,
 						'texto_ayuda'    => 'Breve descripcion de la aplicacion. Maximo 50 caracteres.',
-						'es_obligatorio' => true,
+						'es_obligatorio' => TRUE,
 					),
 				'orden' => array(
 						'label'          => 'Orden de la Aplicacion',
 						'tipo'           =>  'int',
 						'texto_ayuda'    => 'Orden de la aplicacion en el menu.',
-						'es_obligatorio' => true,
-						'es_unico'       => true
+						'es_obligatorio' => TRUE,
+						'es_unico'       => TRUE
 					),
 				'url' => array(
 						'label'          => 'Direccion de la Aplicacion',

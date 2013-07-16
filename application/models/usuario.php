@@ -20,8 +20,8 @@ class Usuario extends ORM_Model {
 								'tipo'           => 'char',
 								'largo'          => 45,
 								'texto_ayuda'    => 'Nombre del usuario. Maximo 45 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 /*
 						'tipo' => array(
@@ -29,29 +29,29 @@ class Usuario extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Maximo 50 caracteres.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
  */
 						'activo' => array(
 								'label'          => 'Activo',
 								'tipo'           =>  'boolean',
 								'texto_ayuda'    => 'Indica se el usuario esta activo dentro del sistema.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 							),
 						'usr' => array(
 								'label'          => 'Username',
 								'tipo'           =>  'char',
 								'largo'          => 30,
 								'texto_ayuda'    => 'Username para el ingreso al sistema. Maximo 30 caracteres.',
-								'es_obligatorio' => true,
-								'es_unico'       => true
+								'es_obligatorio' => TRUE,
+								'es_unico'       => TRUE
 							),
 						'pwd' => array(
 								'label'          => 'Password',
 								'tipo'           =>  'char',
 								'largo'          => 40,
 								'texto_ayuda'    => 'Password para el ingreso al sistema. Maximo 40 caracteres.',
-								'mostrar_lista'  => false,
+								'mostrar_lista'  => FALSE,
 							),
 						'correo' => array(
 								'label'          => 'Correo',

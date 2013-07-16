@@ -5,14 +5,14 @@
  *
  * @category	Controller
  * @author		dcr
- * @link		
+ * @link
  */
 class MY_Model extends CI_Model {
 
 	protected $nombre          = '';
 	protected $tabla_bd        = '';
 	protected $label           = '';
-	protected $order_by        = ''; 
+	protected $order_by        = '';
 	protected $lineas_pagina   = 15;
 	protected $metadata        = array();
 	protected $result_array    = array();
@@ -23,7 +23,7 @@ class MY_Model extends CI_Model {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	function __construct() 
+	function __construct()
 	{
 		parent::__construct();
 		$this->load->dbforge();
@@ -40,11 +40,11 @@ class MY_Model extends CI_Model {
 			$this->label = $this->nombre;
 		}
 	}
-	
+
 
 	public function def_campos($param = array())
 	{
-		foreach ($param as $nom_campo => $def_campo) 
+		foreach ($param as $nom_campo => $def_campo)
 		{
 			$oField = new ORM_Field(array_merge($def_campo, array('nombre' => $nom_campo)));
 			$this->metadata[$nom_campo] = $oField;
@@ -61,7 +61,7 @@ class MY_Model extends CI_Model {
 		$this->order_by = $order_by;
 	}
 
-	public function get_nombre()  
+	public function get_nombre()
 	{
 		return $this->nombre;
 	}
@@ -71,27 +71,27 @@ class MY_Model extends CI_Model {
 		return $this->get_tabla_bd;
 	}
 
-	public function get_verbose_name()  
+	public function get_verbose_name()
 	{
 		return $this->verbose_name;
 	}
 
-	public function get_verbose_name_plural()  
+	public function get_verbose_name_plural()
 	{
 		return $this->verbose_name_plural;
 	}
 
-	public function get_max_results()  
+	public function get_max_results()
 	{
 		return $this->max_results;
 	}
 
-	public function get_campos_metadata()  
+	public function get_campos_metadata()
 	{
 		return $this->campos_metadata;
 	}
 
-	public function get_result_array()  
+	public function get_result_array()
 	{
 		return $this->result_array;
 	}
@@ -127,15 +127,15 @@ class MY_Model extends CI_Model {
 			$this->db->order_by($this->order_by);
 		}
 
-		if ($pag == -1) 
+		if ($pag == -1)
 		{
 			return $this->db->get($this->tabla_bd)->result();
 		}
-		else 
+		else
 		{
 			return $this->db->get($this->tabla_bd, $this->lineas_pagina, $pag)->result();
 		}
-		
+
 	}
 
 
@@ -156,7 +156,7 @@ class MY_Model extends CI_Model {
 
 	public function rs_to_object($rs)
 	{
-		foreach ($rs as $key => $value) 
+		foreach ($rs as $key => $value)
 		{
 			$this->$key = $value;
 		}
@@ -185,7 +185,7 @@ class MY_Model extends CI_Model {
 		$i = 0;
 		foreach($this->campos_metadata as $nombre => $campo)
 		{
-			if ($i == 0) 
+			if ($i == 0)
 			{
 				$this->db->like($nombre, $filtro, 'both');
 			}
@@ -213,7 +213,7 @@ class MY_Model extends CI_Model {
 	}
 
 
-	public function recuperar($id = '') 
+	public function recuperar($id = '')
 	{
 		if ($id != '')
 		{
@@ -226,7 +226,7 @@ class MY_Model extends CI_Model {
 	}
 
 
-	public function recuperar_post() 
+	public function recuperar_post()
 	{
 		foreach($this->campos_metadata as $nombre => $metadata)
 		{
@@ -248,7 +248,7 @@ class MY_Model extends CI_Model {
 	}
 
 
-	function recuperar_all_count($filtro = '_') 
+	function recuperar_all_count($filtro = '_')
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
@@ -271,14 +271,14 @@ class MY_Model extends CI_Model {
 	{
 		$data_update  = array();
 		$data_where   = array();
-		$id_en_insert = true;
-		$es_insert    = false;
+		$id_en_insert = TRUE;
+		$es_insert    = FALSE;
 
 		foreach($this->campos_metadata as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincremet())
 			{
-				$id_en_insert = false;
+				$id_en_insert = FALSE;
 			}
 
 			if ($campo->get_es_id())
@@ -295,7 +295,7 @@ class MY_Model extends CI_Model {
 		{
 			foreach($data_where as $key => $val)
 			{
-				$es_insert = ($val == '') ? true : false;
+				$es_insert = ($val == '') ? TRUE : FALSE;
 			}
 		}
 		else
@@ -335,7 +335,7 @@ class MY_Model extends CI_Model {
 
 		$this->db->delete($this->tabla_bd, $data_where);
 	}
-	
+
 
 
 
@@ -375,7 +375,7 @@ class MY_Model extends CI_Model {
 	// ========================================================================
 	// ========================================================================
 
-	public function exec_form_validation() 
+	public function exec_form_validation()
 	{
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
@@ -390,7 +390,7 @@ class MY_Model extends CI_Model {
 	public function create_formfields()
 	{
 		$arr_formfield = array();
-		foreach ($this->metadata as $campo => $def_campo) 
+		foreach ($this->metadata as $campo => $def_campo)
 		{
 			$arr_formfield[$campo] = array(
 				'label' => $def_campo->get_label(),
@@ -463,7 +463,7 @@ class MY_Model extends CI_Model {
 				{
 					$this->dbforge->add_field($campo->get_nombre());
 				}
-				else 
+				else
 				{
 					$this->dbforge->add_field(array($campo->get_nombre() => $campo->get_bd_attrib()));
 				}
@@ -474,8 +474,8 @@ class MY_Model extends CI_Model {
 		}
 	}
 
-	
-	
+
+
 
 }
 
@@ -498,13 +498,13 @@ class ORM_Field2 {
 	protected $decimal_places = 2;
 	protected $enum_array     = array();
 	protected $rel            = array();
-	
-	protected $es_id            = false;
-	protected $es_obligatorio   = false;
-	protected $es_unico         = false;
-	protected $es_autoincrement = false;
-	
-	
+
+	protected $es_id            = FALSE;
+	protected $es_obligatorio   = FALSE;
+	protected $es_unico         = FALSE;
+	protected $es_autoincrement = FALSE;
+
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -532,12 +532,12 @@ class ORM_Field2 {
 			$this->campo_bd = $this->nombre;
 		}
 
-		if ($this->label == '') 
+		if ($this->label == '')
 		{
 			$this->label = $this->nombre;
 		}
 
-		if ($this->tipo == 'int' and $this->default == '') 
+		if ($this->tipo == 'int' and $this->default == '')
 		{
 			$this->default = 0;
 		}
@@ -546,9 +546,9 @@ class ORM_Field2 {
 		{
 			$this->tipo  = 'id';
 			$this->largo = 10;
-			$this->es_id = true;
-			$this->es_autoincrement = true;
-			$this->es_obligatorio   = true;
+			$this->es_id = TRUE;
+			$this->es_autoincrement = TRUE;
+			$this->es_obligatorio   = TRUE;
 		}
 	}
 
@@ -618,8 +618,8 @@ class ORM_Field2 {
 		}
 		else if ($this->tipo == 'boolean')
 		{
-			$form  = form_radio($this->nombre, 1, ($valor_field==1) ? true : false) . 'Si &nbsp; &nbsp; &nbsp; &nbsp;';
-			$form .= form_radio($this->nombre, 0, ($valor_field==1) ? false : true) . 'No';
+			$form  = form_radio($this->nombre, 1, ($valor_field==1) ? TRUE : FALSE) . 'Si &nbsp; &nbsp; &nbsp; &nbsp;';
+			$form .= form_radio($this->nombre, 0, ($valor_field==1) ? FALSE : TRUE) . 'No';
 		}
 		else if ($this->tipo == 'id')
 		{
@@ -673,13 +673,13 @@ class ORM_Field2 {
 	public function get_form_validation()
 	{
 		$regla = 'trim';
-		$regla .= ($this->es_obligatorio == true and $this->es_autoincrement == false) ? '|required' : '';
+		$regla .= ($this->es_obligatorio == TRUE and $this->es_autoincrement == FALSE) ? '|required' : '';
 		return $regla;
 	}
 
 	function get_bd_attrib()
 	{
-		if ($this->tipo == 'id') 
+		if ($this->tipo == 'id')
 		{
 			return array(
 							'type'           => 'INT',
@@ -688,7 +688,7 @@ class ORM_Field2 {
 							'null'           => $this->es_obligatorio,
 						);
 		}
-		else if ($this->tipo == 'char') 
+		else if ($this->tipo == 'char')
 		{
 			return array(
 							'type'       => 'VARCHAR',
@@ -697,7 +697,7 @@ class ORM_Field2 {
 							'null'       => $this->es_obligatorio,
 						);
 		}
-		else if ($this->tipo == 'text') 
+		else if ($this->tipo == 'text')
 		{
 			return array(
 							'type'       => 'TEXT',
@@ -706,7 +706,7 @@ class ORM_Field2 {
 							'null'       => $this->es_obligatorio,
 						);
 		}
-		else if ($this->tipo == 'integer') 
+		else if ($this->tipo == 'integer')
 		{
 			return array(
 								'type'       => 'INT',
@@ -715,14 +715,14 @@ class ORM_Field2 {
 								'null'       => $this->es_obligatorio,
 							);
 		}
-		else if ($this->tipo == 'boolean') 
+		else if ($this->tipo == 'boolean')
 		{
 			return array(
 								'type'       => 'BIT',
 								'null'       => $this->es_obligatorio,
 							);
 		}
-		else if ($this->tipo == 'datetime') 
+		else if ($this->tipo == 'datetime')
 		{
 			$bd_attrib = array(
 								'type'       => 'DATETIME',

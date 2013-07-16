@@ -30,11 +30,11 @@ class Acl_model extends CI_Model {
 				'value'  => json_encode($this->get_modulos_usuario($usr)),
 				'expire' => '0'
 				));
-			return true;
+			return TRUE;
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -180,11 +180,11 @@ class Acl_model extends CI_Model {
 		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
 		if (count($arr_rs) > 0)
 		{
-			return ((is_null($arr_rs['pwd']) OR $arr_rs['pwd'] == ' ' OR $arr_rs['pwd'] == '') ? false : true);
+			return ((is_null($arr_rs['pwd']) OR $arr_rs['pwd'] == ' ' OR $arr_rs['pwd'] == '') ? FALSE : TRUE);
 		}
 		else
 		{
-			return false;
+			return FALSE;
 		}
 	}
 
@@ -197,7 +197,7 @@ class Acl_model extends CI_Model {
 	public function existe_usuario($usr = '')
 	{
 		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
-		return (($regs > 0) ? true : false);
+		return (($regs > 0) ? TRUE : FALSE);
 	}
 
 
@@ -214,18 +214,18 @@ class Acl_model extends CI_Model {
 		if (!$this->tiene_clave($usr))
 		{
 			$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
-			return array(true);
+			return array(TRUE);
 		}
 		else
 		{
 			if($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
 			{
 				$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
-				return array(true);
+				return array(TRUE);
 			}
 			else
 			{
-				return array(false, 'Clave anterior incorrecta');
+				return array(FALSE, 'Clave anterior incorrecta');
 			}
 		}
 	}

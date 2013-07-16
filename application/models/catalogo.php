@@ -42,7 +42,7 @@ class Catalogo extends ORM_Model {
 								'label'          => 'Material seriado',
 								'tipo'           =>  'boolean',
 								'texto_ayuda'    => 'Indica se el material esta seriado dentro del sistema.',
-								'es_obligatorio' => true,
+								'es_obligatorio' => TRUE,
 								'default'        => 0
 							),
 						),
@@ -125,7 +125,7 @@ class Catalogo extends ORM_Model {
 						));
 
 		// selecciona maxima fecha del stock_sap_fija
-		$arr_max_fecha = $this->db->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', false)->get('bd_logistica..bd_stock_sap_fija')->row();
+		$arr_max_fecha = $this->db->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)->get('bd_logistica..bd_stock_sap_fija')->row();
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
@@ -133,7 +133,7 @@ class Catalogo extends ORM_Model {
 		{
 			$this->dbforge->drop_table('tmp0001');
 		}
-		$this->db->select('material, max(valor/cantidad) as pmp into tmp0001', false);
+		$this->db->select('material, max(valor/cantidad) as pmp into tmp0001', FALSE);
 		$this->db->from('bd_logistica..bd_stock_sap_fija');
 		$this->db->where('fecha_stock', $max_fecha);
 		$this->db->group_by('material');
