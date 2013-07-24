@@ -385,7 +385,7 @@ class ORM_Model {
 				{
 					if (count($valor) == 0)
 					{
-						$this->db->where($campo, NULL);
+						$this->db->where($campo.'=', 'NULL', FALSE);
 					}
 					else
 					{
