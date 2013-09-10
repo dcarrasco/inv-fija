@@ -11,7 +11,7 @@
 			<thead>
 				<tr>
 				<?php foreach($reg as $key => $val): ?>
-					<th <?php echo (in_array($key, $campos_sumables) ? 'class="ar"' : '')?>><?php echo str_replace('_', ' ', $key); ?></th>
+					<th <?php echo (in_array($key, $campos_sumables) ? 'class="text-right"' : '')?>><?php echo str_replace('_', ' ', $key); ?></th>
 					<?php array_push($campos, $key); ?>
 				<?php endforeach; ?>
 				</tr>
@@ -26,7 +26,7 @@
 		<tr>
 			<?php foreach($reg as $key => $val): ?>
 				<?php if (in_array($key, $campos_sumables)): ?>
-					<td class="ar">
+					<td class="text-right">
 						<?php echo anchor('stock_sap/detalle_series/' .
 												(array_key_exists('centro', $reg) ? $reg['centro'] : '_') . '/' .
 												(array_key_exists('cod_almacen', $reg) ? $reg['cod_almacen'] : '_') . '/' .
@@ -52,7 +52,7 @@
 		<tr>
 			<?php foreach($campos as $val): ?>
 				<?php if (in_array($val, $campos_sumables)): ?>
-					<th class="ar">
+					<th class="text-right">
 							<?php if (in_array($val, $campos_montos)): ?> $ <?php endif; ?>
 							<?php echo number_format($totales[$val],0,',','.'); ?>
 					</th>

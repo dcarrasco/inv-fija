@@ -15,8 +15,12 @@ class Stock_sap extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('stock_sap');
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 
 	public function index() {
