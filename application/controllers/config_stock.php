@@ -6,6 +6,7 @@ class config_stock extends CI_Controller {
 				'almacen_sap'        => array('url' => '/config_stock/listado/almacen_sap', 'texto' => 'Almacenes SAP'),
 				'tipoalmacen_sap'    => array('url' => '/config_stock/listado/tipoalmacen_sap', 'texto' => 'Tipo Almacenes SAP'),
 				'proveedor'          => array('url' => '/config_stock/listado/proveedor', 'texto' => 'Proveedores'),
+				'almacenes_no_ingresados' => array('url' => '/config_stock/almacenes_no_ingresados', 'texto' => 'Almacenes no ingresados'),
 			);
 
 	public function __construct()
@@ -86,6 +87,20 @@ class config_stock extends CI_Controller {
 
 	}
 
+
+
+	public function almacenes_no_ingresados()
+	{
+		$almacen = new Almacen_sap;
+			$data = array(
+				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => 'almacenes_no_ingresados'),
+				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+				'almacenes'          => $almacen->almacenes_no_ingresados(),
+
+				);
+		$this->_render_view('stock_sap/almacenes_no_ingresados', $data);
+
+	}
 }
 
 /* End of file config_stock.php */

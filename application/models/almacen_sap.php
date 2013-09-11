@@ -79,6 +79,20 @@ class Almacen_sap extends ORM_Model {
 		return (string)$this->centro . '-' . $this->cod_almacen . ' ' .$this->des_almacen;
 	}
 
+
+	public function almacenes_no_ingresados()
+	{
+		$this->db->distinct();
+		$this->db->select('s.centro, s.cod_bodega');
+		$this->db->from('bd_logistica..stock_scl s');
+		$this->db->join('bd_logistica..cp_almacenes a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left');
+		$this->db->where('fecha_Stock in (select max(fecha_stock) from bd_logistica..stock_scl)');
+		$this->db->where('a.cod_almacen is null');
+		$this->db->order_by('s.centro');
+		$this->db->order_by('s.cod_bodega');
+		return $this->db->get()->result_array();
+	}
+
 }
 
 /* End of file almacen.php */
