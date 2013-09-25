@@ -21,7 +21,7 @@ class Analisis_series_model extends CI_Model {
 
 			if ($serie != "") {
 				$this->db->limit(100);
-				$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.*, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
+				$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.nom_usuario, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
 				$this->db->from('bd_logistica..mov_hist');
 				$this->db->join('bd_logistica..cp_cmv', 'mov_hist.cmv=cp_cmv.cmv', 'left');
 				$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro in ('CL03', 'CL15') and mov_hist.alm=alm1.cod_almacen", 'left');
@@ -73,7 +73,7 @@ class Analisis_series_model extends CI_Model {
 				$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.*, cp_usuarios.*, al_articulos.*');
 				$this->db->from('bd_logistica..bd_stock_sap');
 				$this->db->join('bd_logistica..al_articulos', 'bd_stock_sap.material = al_articulos.cod_articulo', 'left');
-				$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen', 'left');
+				$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen and bd_stock_sap.centro=cp_almacenes.centro', 'left');
 				$this->db->join('bd_logistica..cp_usuarios', 'bd_stock_sap.modificado_por=cp_usuarios.usuario', 'left');
 				$this->db->where(array('serie' => $serie));
 				array_push($result, $this->db->get()->result_array());				}

@@ -98,7 +98,7 @@
 		</div>
 
 		<div class="accordion-body collapse in" id="tabla_movimientos">
-			<div class="accordion-inner">
+			<div class="accordion-inner" style="overflow: auto">
 				<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 				<?php foreach($hist as $serie_hist): ?>
 					<tr>
@@ -157,7 +157,7 @@
 		</div>
 
 		<div class="accordion-body collapse in" id="tabla_despachos">
-			<div class="accordion-inner">
+			<div class="accordion-inner" style="overflow: auto">
 				<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 					<tr>
 						<th>serie</th>
@@ -216,7 +216,7 @@
 		</div>
 
 		<div class="accordion-body collapse in" id="tabla_stock_sap">
-			<div class="accordion-inner">
+			<div class="accordion-inner" style="overflow: auto">
 				<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 					<tr>
 						<th>fecha stock</th>
@@ -269,7 +269,7 @@
 		</div>
 
 		<div class="accordion-body collapse in" id="tabla_stock_scl">
-			<div class="accordion-inner">
+			<div class="accordion-inner" style="overflow: auto">
 				<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 					<tr>
 						<th>fecha stock</th>
@@ -324,7 +324,7 @@
 		</div>
 
 		<div class="accordion-body collapse in" id="tabla_trafico">
-			<div class="accordion-inner">
+			<div class="accordion-inner" style="overflow: auto">
 				<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
 				<?php foreach($trafico as $serie_trafico): ?>
 					<tr>
