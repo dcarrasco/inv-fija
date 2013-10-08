@@ -64,9 +64,17 @@ class stock_sap_model extends CI_Model {
 		// tipos de articulos
 		if (in_array('tipo_articulo', $mostrar))
 		{
-			$this->db->select('s.tipo_articulo');
-			$this->db->group_by('s.tipo_articulo');
-			$this->db->order_by('tipo_articulo');
+			if (in_array('material', $mostrar))
+			{
+				$this->db->select("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END as tipo_articulo", FALSE);
+				$this->db->group_by("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", FALSE);
+			}
+			else
+			{
+				$this->db->select('s.tipo_articulo');
+				$this->db->group_by('s.tipo_articulo');
+				$this->db->order_by('tipo_articulo');				
+			}
 		}
 
 		// materiales
@@ -99,8 +107,17 @@ class stock_sap_model extends CI_Model {
 			$this->db->select_sum('s.V_TT','VAL_TT');
 			$this->db->select_sum('s.V_OT','VAL_OT');
 		}
-		$this->db->select_sum('s.cant','total');
-		$this->db->select_sum('s.monto','monto');
+		
+		if (in_array('material', $mostrar))
+		{
+			$this->db->select_sum('s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros','total');
+			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp','monto');
+		}
+		else
+		{
+			$this->db->select_sum('s.cant','total');
+			$this->db->select_sum('s.monto','monto');
+		}
 
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
@@ -108,7 +125,17 @@ class stock_sap_model extends CI_Model {
 			$this->db->from($this->bd_logistica . 'cp_tiposalm t');
 			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 'ta.id_tipo = t.id_tipo');
 			$this->db->join($this->bd_logistica . 'cp_almacenes a',        'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
-			$this->db->join($this->bd_logistica . 'stock_scl_res01 s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+			if (in_array('material', $mostrar))
+			{
+				$this->db->join($this->bd_logistica . 'stock_scl s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+				$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
+
+			}
+			else
+			{
+				$this->db->join($this->bd_logistica . 'stock_scl_res01 s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+
+			}				
 		}
 		else
 		{
