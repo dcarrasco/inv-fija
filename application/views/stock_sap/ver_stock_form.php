@@ -19,7 +19,7 @@
 							<i class="icon-list-alt icon-white"></i>
 							Reporte
 						</button>
-						<button type="submit" name="excel" class="btn">
+						<button type="submit" name="excel" value="excel" class="btn">
 							<i class="icon-file"></i>
 							Exportar a Excel...
 						</button>
