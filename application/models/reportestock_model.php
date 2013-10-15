@@ -59,6 +59,23 @@ class Reportestock_model extends CI_Model {
 
 
 
+	public function combo_tipo_alm_consumo()
+	{
+		$this->db->distinct();
+		$this->db->select('t.id_tipo, t.tipo');
+		$this->db->from('bd_logistica..cp_tipos_almacenes ta');
+		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->like('t.tipo', '(CONSUMO)');
+		$this->db->order_by('t.tipo');
+		$arr_rs = $this->db->get()->result_array();
+
+		$arr_combo = array();
+		foreach($arr_rs as $reg)
+		{
+			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
+		}
+		return $arr_combo;
+	}
 
 
 
@@ -140,6 +157,103 @@ class Reportestock_model extends CI_Model {
 			return $this->db->get()->result_array();
 	}
 
+
+
+	/**
+	 * Devuelve reporte por hojas
+	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
+	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
+	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
+	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
+	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
+	 * @return array                  arreglo con el detalle del reporte
+	 */
+	public function get_reporte_perm_consumo($orden_campo = 't.tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(), $incl_almacen = '0', $incl_lote = '0', $incl_estado = '0', $incl_modelos = '0')
+	{
+
+		$this->db->select('t.tipo');
+		$this->db->select('count(case when s.dias <= 30                 then 1 else null end) as m030');
+		$this->db->select('count(case when s.dias > 30 and s.dias<= 60  then 1 else null end) as m060');
+		$this->db->select('count(case when s.dias > 60 and s.dias<= 90  then 1 else null end) as m090');
+		$this->db->select('count(case when s.dias > 90 and s.dias<= 180 then 1 else null end) as m180');
+		$this->db->select('count(case when s.dias > 180 then 1 else null end) as mas180');
+		$this->db->select('count(1) as \'total\'');
+		$this->db->from('bd_logistica..perm_series_consumo_fija s');
+		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
+		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->group_by('t.tipo');
+		$this->db->order_by($orden_campo, $orden_tipo);
+
+		if (count($tipo_alm) > 0)
+		{
+			$this->db->where_in('t.id_tipo', $tipo_alm);
+		}
+		else
+		{
+			$this->db->where('t.id_tipo', -1);
+		}
+
+		if ($incl_almacen == '1')
+		{
+			$this->db->select('s.centro, s.almacen, a.des_almacen');
+			$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
+			$this->db->group_by('s.centro, s.almacen, a.des_almacen');
+			$this->db->order_by('s.centro, s.almacen, a.des_almacen');
+		}
+
+		if ($incl_lote == '1')
+		{
+			$this->db->select('s.lote');
+			$this->db->group_by('s.lote');
+			$this->db->order_by('s.lote');
+		}
+
+		if ($incl_modelos == '1')
+		{
+			$this->db->select('s.material');
+			$this->db->select('s.des_material');
+			$this->db->group_by('s.material');
+			$this->db->group_by('s.des_material');
+			$this->db->order_by('s.material');
+		}
+
+		return $this->db->get()->result_array();
+	}
+
+	public function get_detalle_series_consumo($tipo_alm = array())
+	{
+		$this->db->select('t.tipo');
+		$this->db->select('s.centro');
+		$this->db->select('s.almacen');
+		$this->db->select('s.des_almacen');
+		$this->db->select('s.material');
+		$this->db->select('s.des_material');
+		$this->db->select('s.lote');
+		$this->db->select('s.dias');
+		$this->db->select('s.serie');
+
+		$this->db->from('bd_logistica..perm_series_consumo_fija s');
+		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
+		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
+		$this->db->order_by('t.tipo');
+		$this->db->order_by('s.centro');
+		$this->db->order_by('s.almacen');
+		$this->db->order_by('s.material');
+		$this->db->order_by('s.dias');
+
+		if (count($tipo_alm) > 0)
+		{
+			$this->db->where_in('t.id_tipo', $tipo_alm);
+		}
+		else
+		{
+			$this->db->where('t.id_tipo', -1);
+		}
+
+		return $this->db->get()->result_array();
+
+	}
 
 
 
