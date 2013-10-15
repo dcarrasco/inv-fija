@@ -24,8 +24,8 @@ class Analisis_series_model extends CI_Model {
 				$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.nom_usuario, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
 				$this->db->from('bd_logistica..mov_hist');
 				$this->db->join('bd_logistica..cp_cmv', 'mov_hist.cmv=cp_cmv.cmv', 'left');
-				$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro in ('CL03', 'CL15') and mov_hist.alm=alm1.cod_almacen", 'left');
-				$this->db->join('bd_logistica..cp_almacenes as alm2', "alm2.centro in ('CL03', 'CL15') and mov_hist.rec=alm2.cod_almacen", 'left');
+				$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro=mov_hist.ce and mov_hist.alm=alm1.cod_almacen", 'left');
+				$this->db->join('bd_logistica..cp_almacenes as alm2', "alm2.centro=mov_hist.ce and mov_hist.rec=alm2.cod_almacen", 'left');
 				$this->db->join('bd_logistica..cp_usuarios', 'mov_hist.usuario=cp_usuarios.usuario', 'left');
 				$this->db->order_by('fecha','asc');
 				$this->db->order_by('fec_entrada_doc','asc');

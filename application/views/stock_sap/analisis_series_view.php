@@ -104,6 +104,7 @@
 					<tr>
 						<th>serie</th>
 						<th>fecha entrada doc</th>
+						<th>cen</th>
 						<th>alm</th>
 						<th>des_alm</th>
 						<th>rec</th>
@@ -123,6 +124,7 @@
 					<tr>
 						<td><small><?php echo $reg_hist['serie'] ?></small></td>
 						<td><small><?php echo $reg_hist['fecha_entrada_doc'] ?></small></td>
+						<td><small><?php echo $reg_hist['ce'] ?></small></td>
 						<td><small><?php echo $reg_hist['alm'] ?></small></td>
 						<td><small><?php echo $reg_hist['des_alm'] ?></small></td>
 						<td><small><?php echo $reg_hist['rec'] ?></small></td>
