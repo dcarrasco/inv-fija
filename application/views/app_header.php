@@ -56,7 +56,7 @@
 </nav>
 
 <?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
-<div class="alert">
+<div class="alert alert-warning">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<?php echo $msg_alerta; ?>
 </div>
