@@ -2,8 +2,8 @@
 	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 </div>
 
-<div class="row-fluid">
-	<div class="span8 offset2 well">
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open_multipart('analisis/sube_stock', 'class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 
@@ -26,7 +26,7 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<p><strong>ADVERTENCIA</strong></p>
 					<p>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
-					"<?php echo $inventario_nombre?>"</span></p>
+					"<?php echo $inventario_nombre?>"</p>
 				</div>
 				<?php echo form_upload('upload_file','','class="input-large"'); ?>
 			</div>
@@ -65,12 +65,12 @@
 			<div class="controls">
 				<?php if ($show_script_carga): ?>
 					<button class="btn btn-primary" id="ejecuta_carga">
-						<i class="icon-play icon-white"></i>
+						<i class="glyphicon glyphicon-play icon-white"></i>
 						Ejecutar carga
 					</button>
 				<?php else: ?>
 				<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
-					<i class="icon-upload icon-white"></i>
+					<i class="glyphicon glyphicon-upload icon-white"></i>
 					Subir archivo
 				</button>
 				<?php endif; ?>

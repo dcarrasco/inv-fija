@@ -1,13 +1,13 @@
-<div class="row-fluid">
+<div class="row">
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
-	<div class="span4">
+	<div class="col-md-4">
 		<div class="input-append">
-			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="span10" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
-			<button type="submit" class="btn"><i class="icon-search"></i></button>
+			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="col-md-10" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
+			<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
 		</div>
 	</div>
 
-	<div class="span4">
+	<div class="col-md-4">
 		<div class="checkbox">
 			<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
 			Ocultar registros sin diferencias
@@ -22,7 +22,7 @@
 		</div>
 	</div>
 
-	<div class="span4">
+	<div class="col-md-4">
 		Inventario:
 		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
 

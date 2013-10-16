@@ -52,7 +52,7 @@
 					<td class="text-center"><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
 					<td class="text-center"><?php echo number_format($detalle->stock_fisico,0,',','.'); ?></td>
 					<td>
-						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="input-mini" size="5" tabindex="' . $tab_index . '"'); ?>
+						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="input-sm" size="5" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
 					</td>
 					<td class="text-center">
@@ -60,18 +60,18 @@
 					</td>
 					<td class="text-center">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
-							<button class="btn btn-small btn-warning" style="white-space: nowrap;">
-								<i class="icon-question-sign icon-white"></i>
+							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
+								<i class="glyphicon glyphicon-question-sign icon-white"></i>
 								Sobrante
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
-							<button class="btn btn-small btn-danger" style="white-space: nowrap;">
-								<i class="icon-remove icon-white"></i>
+							<button class="btn btn-default btn-sm btn-danger" style="white-space: nowrap;">
+								<i class="glyphicon glyphicon-remove icon-white"></i>
 								Faltante
 							</button>
 						<?php else: ?>
-							<button class="btn btn-small btn-success" style="white-space: nowrap;">
-								<i class="icon-ok icon-white"></i>
+							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
+								<i class="glyphicon glyphicon-ok icon-white"></i>
 								OK
 							</button>
 						<?php endif; ?>
@@ -108,7 +108,7 @@
 				<td></td>
 				<td>
 					<a href="#" class="btn btn-primary" id="btn_guardar">
-						<i class="icon-ok-sign icon-white"></i>
+						<i class="glyphicon glyphicon-ok-sign icon-white"></i>
 						Guardar ajustes
 					</a>
 				</td>

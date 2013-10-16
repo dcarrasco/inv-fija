@@ -1,39 +1,39 @@
-<div class="row-fluid">
+<div class="row">
 	<div class="text-right">
-		<a href="#" class="btn" id="btn_mostrar_agregar">
-			<i class="icon-plus-sign"></i>
+		<a href="#" class="btn btn-default" id="btn_mostrar_agregar">
+			<i class="glyphicon glyphicon-plus-sign"></i>
 			Agregar ubicacion
 		</a>
 	</div>
 </div>
 
-<div class="row-fluid">
-	<div class="span8 offset2 well" id="form_agregar" style="display: none;">
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 well" id="form_agregar" style="display: none;">
 		<?php echo form_open('','id=frm_agregar')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
 
-		<div class="row-fluid">
-			<div class="span4">
+		<div class="row">
+			<div class="col-md-4">
 				Tipo de Inventario
 				<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario')); ?>
 				<?php echo form_error('agr-tipo_inventario'); ?>
 			</div>
-			<div class="span4">
+			<div class="col-md-4">
 				Ubicacion
 				<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15"'); ?>
 				<?php echo form_error('agr-ubicacion'); ?>
 			</div>
-			<div class="span4">
+			<div class="col-md-4">
 				Tipo de Ubicacion
 				<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion')); ?>
 				<?php echo form_error('agr-tipo_ubicacion'); ?>
 			</div>
 		</div>
 
-		<div class="row-fluid">
+		<div class="row">
 			<div class="pull-right">
 				<a href="#" class="btn btn-primary" id="btn_agregar">
-					<i class="icon-ok icon-white"></i>
+					<i class="glyphicon glyphicon-ok icon-white"></i>
 					Agregar
 				</a>
 			</div>
@@ -42,7 +42,7 @@
 	</div> <!-- fin content-module-main-agregar -->
 </div>
 
-<div class="row-fluid">
+<div class="row">
 	<div class="">
 		<?php echo form_open('', 'id="frm_usuarios"'); ?>
 		<?php echo form_hidden('formulario','editar'); ?>
@@ -74,7 +74,7 @@
 					</td>
 					<td>
 						<a href="#" class="btn b-active" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
-							<i class="icon-trash"></i>
+							<i class="glyphicon glyphicon-trash"></i>
 						</a>
 					</td>
 				</tr>
@@ -90,7 +90,7 @@
 
 	<div class="pull-right">
 		<a href="#" class="btn btn-primary" id="btn_guardar">
-			<i class="icon-ok icon-white"></i>
+			<i class="glyphicon glyphicon-ok icon-white"></i>
 			Guardar
 		</a>
 	</div> <!-- fin content-module-footer -->

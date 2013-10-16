@@ -122,8 +122,8 @@ class Reportes_trazabilidad extends CI_Controller {
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
 
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
-											'<i class="' . (($orden_tipo == 'ASC') ?
-											'icon-circle-arrow-up' : 'icon-circle-arrow-down') . '"></i>': '';
+											'<i class="glyphicon ' . (($orden_tipo == 'ASC') ?
+											'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . '"></i>': '';
 		}
 
 		$data = array(

@@ -19,42 +19,40 @@
 <body>
 
 <!-- DIV principal de la aplicacion -->
-<div class="container-fluid">
+<div class="container">
 
-<div class="navbar">
-	<div class="navbar-inner">
-		<a class="brand" href="#">
-			<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
-		</a>
+<div class="navbar navbar-default">
+	<a class="navbar-brand" href="#">
+		<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
+	</a>
 
-		<ul class="nav pull-right">
-			<?php foreach($this->app_common->menu_app() as $app_item): ?>
-				<li class="dropdown <?php echo $app_item['selected']; ?>">
-					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<i class="<?php echo $app_item['icono']; ?>"></i>
-						<?php echo $app_item['app']; ?>
-						<b class="caret"></b>
-					</a>
-					<ul class="dropdown-menu">
-						<?php foreach($app_item['modulos'] as $modulo_item): ?>
-							<li>
-								<a href="<?php echo site_url($modulo_item['url']); ?>">
-									<i class="<?php echo $modulo_item['icono']; ?>"></i>
-									<?php echo $modulo_item['modulo']; ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</li>
-			<?php endforeach; ?>
-			<li>
-				<a href="<?php echo site_url('login'); ?>">
-					<i class="icon-off"></i>
-					Logout
+	<ul class="nav navbar-nav pull-right">
+		<?php foreach($this->app_common->menu_app() as $app_item): ?>
+			<li class="dropdown <?php echo $app_item['selected']; ?>">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<i class="<?php echo $app_item['icono']; ?>"></i>
+					<?php echo $app_item['app']; ?>
+					<b class="caret"></b>
 				</a>
+				<ul class="dropdown-menu">
+					<?php foreach($app_item['modulos'] as $modulo_item): ?>
+						<li>
+							<a href="<?php echo site_url($modulo_item['url']); ?>">
+								<i class="<?php echo $modulo_item['icono']; ?>"></i>
+								<?php echo $modulo_item['modulo']; ?>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
 			</li>
-		</ul>
-	</div>
+		<?php endforeach; ?>
+		<li>
+			<a href="<?php echo site_url('login'); ?>">
+				<i class="glyphicon glyphicon-off"></i>
+				Logout
+			</a>
+		</li>
+	</ul>
 </div>
 
 <?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
@@ -65,7 +63,7 @@
 <?php endif; ?>
 
 <?php if (isset($menu_modulo)): ?>
-<div class="row-fluid">
+<div class="row">
 	<ul class="nav nav-tabs">
 		<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
 			<li class="<?php echo ($modulo == $menu_modulo['mod_selected']) ? 'active' : ''; ?>">

@@ -2,20 +2,20 @@
 	<div class="accordion-group">
 		<?php echo form_open('','id="frm_param"'); ?>
 		<div class="accordion-heading">
-			<div class="row-fluid">
-				<div class="span4">
+			<div class="row">
+				<div class="col-md-4">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						Parametros consulta
 					</a>
 
 				</div>
-				<div class="span4">
+				<div class="col-md-4">
 					Fecha reporte: <?php echo $fecha_reporte; ?>
 				</div>
-				<div class="span4">
+				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" class="btn btn-primary">
-							<i class="icon-list-alt icon-white"></i>
+							<i class="glyphicon glyphicon-list-alt icon-white"></i>
 							Reporte
 						</button>
 					</div>
@@ -25,8 +25,8 @@
 
 		<div class="accordion-body collapse in" id="form_param">
 			<div class="accordion-inner">
-				<div class="row-fluid">
-					<div class="span3">
+				<div class="row">
+					<div class="col-md-3">
 						<div>
 							<strong>Seleccionar Almacenes</strong>
 						</div>
@@ -34,7 +34,7 @@
 							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="input-xlarge"'); ?>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="col-md-3">
 						<div>
 							<strong>Seleccionar Estados</strong>
 						</div>
@@ -42,7 +42,7 @@
 							<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="input-xlarge"'); ?>
 						</div>
 					</div>
-					<div class="span3">
+					<div class="col-md-3">
 						<div>
 							<strong>Detalle</strong>
 						</div>

@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<div class="container-fluid">
-<div class="row-fluid">
+<div class="container">
+<div class="row">
 
-	<div class="span6 offset3 well">
+	<div class="col-md-6 col-md-offset-3 well">
 		<div>
 			<h2>Inventario Fija</h2>
 		</div>
@@ -26,35 +26,35 @@
 				Login
 			</legend>
 
-			<div class="control-group">
+			<div class="control-group col-md-6 col-md-offset-3">
 				<label class="control-label" for="usr">Usuario</label>
 				<div class="controls">
-					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="input" tabindex="1" autofocus'); ?>
+					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
 					<div><?php echo form_error('usr'); ?></div>
 				</div>
 			</div>
 
-			<div class="control-group">
+			<div class="control-group col-md-6 col-md-offset-3">
 				<label class="control-label" for="pwd">
 					Clave
 				</label>
 				<div class="controls">
-					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="input"'); ?>
+					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control"'); ?>
 					<div><?php echo form_error('pwd'); ?></div>
 				</div>
 			</div>
 
-			<div class="control-group">
-				<div class="controls offset6">
+			<div class="control-group col-md-6 col-md-offset-3">
+				<div class="controls col-md-offset-6">
 					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 			<hr>
-			<div class="control-group">
-				<div class="controls offset7">
+			<div class="control-group col-md-6 col-md-offset-3">
+				<div class="controls col-md-offset-7">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						Ingresar
-						<i class="icon-play icon-white"></i>
+						<i class="glyphicon glyphicon-play icon-white"></i>
 					</button>
 				</div>
 			</div>

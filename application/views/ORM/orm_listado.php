@@ -1,13 +1,19 @@
-<div class="row-fluid">
+<div class="row">
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
-	<div class="input-append span6">
-		<?php echo form_input('filtro',set_value('filtro', $filtro), 'class="span3 search-query" maxlength="30" placeholder="Texto a filtrar..."'); ?>
-		<button type="submit" class="btn"><i class="icon-search"></i></button>
+	<div class="col-md-3">
+		<div class="input-group input-group-sm">
+			<?php echo form_input('filtro',set_value('filtro', $filtro), 'class="form-control" maxlength="30" placeholder="Texto a filtrar..."'); ?>
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-default">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</span>
+		</div>
 	</div>
 
-	<div class="span6 text-right">
-		<a href="<?php echo $url_editar; ?>" class="btn" id="btn_mostrar_agregar">
-			<i class="icon-plus-sign"></i>
+	<div class="col-md-9 text-right">
+		<a href="<?php echo $url_editar; ?>" class="btn btn-default" id="btn_mostrar_agregar">
+			<i class="glyphicon glyphicon-plus-sign"></i>
 			Agregar <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
@@ -38,8 +44,8 @@
 					<?php endforeach; ?>
 					<td>
 						<div class="text-center">
-							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn btn-mini">
-								<i class="icon-edit"></i>
+							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn  btn-default btn-xs">
+								<i class="glyphicon glyphicon-edit"></i>
 							</a>
 						</div>
 					</td>

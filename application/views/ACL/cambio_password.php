@@ -10,10 +10,10 @@
 </head>
 <body>
 
-<div class="container-fluid">
+<div class="container">
 
-<div class="row-fluid">
-	<div class="span6 offset3 well">
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 well">
 		<div>
 			<h2>Inventario fija</h2>
 		</div>
@@ -34,7 +34,7 @@
 			<div class="control-group">
 				<label class="control-label" for="usr">Nombre de usuario</label>
 				<div class="controls">
-					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="input-large"'); ?>
+					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('usr'); ?></div>
 				</div>
 			</div>
@@ -46,7 +46,7 @@
 					<div class="control-group">
 						<label class="control-label" for="usr">Clave anterior</label>
 						<div class="controls">
-							<?php echo form_password('pwd_old', '','maxlength="45" class="input-large"'); ?>
+							<?php echo form_password('pwd_old', '','maxlength="45" class="form-control"'); ?>
 							<div><?php echo form_error('pwd_old'); ?></div>
 						</div>
 					</div>
@@ -56,7 +56,7 @@
 				<div class="control-group">
 					<label class="control-label" for="usr">Clave nueva</label>
 					<div class="controls">
-						<?php echo form_password('pwd_new1', '','maxlength="45" class="input-large"'); ?>
+						<?php echo form_password('pwd_new1', '','maxlength="45" class="form-control"'); ?>
 						<div><?php echo form_error('pwd_new1'); ?></div>
 					</div>
 				</div>
@@ -65,7 +65,7 @@
 				<div class="control-group">
 					<label class="control-label" for="usr">Reingrese clave nueva</label>
 					<div class="controls">
-						<?php echo form_password('pwd_new2', '','maxlength="45" class="input-large"'); ?>
+						<?php echo form_password('pwd_new2', '','maxlength="45" class="form-control"'); ?>
 						<div><?php echo form_error('pwd_new2'); ?></div>
 					</div>
 				</div>
@@ -76,7 +76,7 @@
 			<div class="control-group">
 				<div class="controls">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
-						<i class="icon-lock icon-white"></i>
+						<i class="glyphicon glyphicon-lock icon-white"></i>
 						Cambiar clave
 					</button>
 				</div>

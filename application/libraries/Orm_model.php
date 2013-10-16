@@ -1045,12 +1045,12 @@ class ORM_Field {
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = '<span class="uneditable-input input-xlarge">' . $valor_field . '</span>';
+			$form = '<span class="uneditable-input form-control">' . $valor_field . '</span>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 		}
 		else if (!empty($this->choices))
 		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="input-xlarge"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
 			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 		else if ($this->tipo == 'char')
@@ -1064,7 +1064,7 @@ class ORM_Field {
 									'id'        => $id_prefix . $this->nombre,
 									'cols'      => '50',
 									'rows'      => '5',
-									'class'     => 'input-xlarge',
+									'class'     => 'form-control',
 								);
 				$form = form_textarea($arr_param);
 			}
@@ -1075,7 +1075,7 @@ class ORM_Field {
 									'value'     => $valor_field,
 									'maxlength' => $this->largo,
 									'id'        => $id_prefix . $this->nombre,
-									'class'     => 'input-xlarge',
+									'class'     => 'form-control',
 								);
 				$form = form_input($arr_param);
 			}
@@ -1088,7 +1088,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'input-xlarge',
+								'class'     => 'form-control',
 							);
 			$form = form_password($arr_param);
 		}
@@ -1100,7 +1100,7 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'input-xlarge',
+								'class'     => 'form-control',
 							);
 			$form = form_input($arr_param);
 		}
@@ -1112,7 +1112,7 @@ class ORM_Field {
 								'maxlength' => $this->largo + $this->decimales + 1,
 								'size'      => $this->largo + $this->decimales + 1,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'input-xlarge',
+								'class'     => 'form-control',
 							);
 			$form = form_input($arr_param);
 		}
@@ -1124,16 +1124,16 @@ class ORM_Field {
 								'maxlength' => $this->largo,
 								'size'      => $this->largo,
 								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'input-xlarge',
+								'class'     => 'form-control',
 							);
 			$form = form_input($arr_param);
 		}
 		else if ($this->tipo == 'boolean')
 		{
-			$form = '<label class="radio inline">';
+			$form = '<label class="radio-inline">';
 			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
 			$form .= '</label>';
-			$form .= '<label class="radio inline">';
+			$form .= '<label class="radio-inline">';
 			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
 			$form .= '</label>';
 		}
@@ -1141,7 +1141,7 @@ class ORM_Field {
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="input-xlarge"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 		}
@@ -1149,7 +1149,7 @@ class ORM_Field {
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="input-xlarge"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control"';
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);

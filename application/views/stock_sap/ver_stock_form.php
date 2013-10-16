@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row">
 	<?php echo $menu_configuracion; ?>
 </div>
 
@@ -7,20 +7,20 @@
 	<div class="accordion-group">
 
 		<div class="accordion-heading">
-			<div class="row-fluid">
-				<div class="span8">
+			<div class="row">
+				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						Parametros consulta
 					</a>
 				</div>
-				<div class="span4">
+				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
-							<i class="icon-list-alt icon-white"></i>
+							<i class="glyphicon glyphicon-list-alt icon-white"></i>
 							Reporte
 						</button>
-						<button type="submit" name="excel" value="excel" class="btn">
-							<i class="icon-file"></i>
+						<button type="submit" name="excel" value="excel" class="btn btn-default">
+							<i class="glyphicon glyphicon-file"></i>
 							Exportar a Excel...
 						</button>
 					</div>
@@ -30,8 +30,8 @@
 
 		<div class="accordion-body collapse in" id="form_param">
 			<div class="accordion-inner">
-				<div class="row-fluid">
-					<div class="span4">
+				<div class="row">
+					<div class="col-md-4">
 						<div>
 							<strong>Seleccionar Fechas</strong>
 						</div>
@@ -54,7 +54,7 @@
 						</div>
 					</div>
 
-					<div class="span4">
+					<div class="col-md-4">
 						<div>
 							<strong>Seleccionar Almacenes</strong>
 						</div>
@@ -80,7 +80,7 @@
 						</div>
 					</div>
 
-					<div class="span4">
+					<div class="col-md-4">
 						<div>
 							<strong>Seleccionar Detalle Materiales</strong>
 						</div>

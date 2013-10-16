@@ -71,8 +71,8 @@
 			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">Ver grafico</a>
 		</div>
 		<div class="accordion-body collapse" id="panel_graficos">
-			<div class="row-fluid">
-				<div class="span4">
+			<div class="row">
+				<div class="col-md-4">
 					<div>
 						<strong>Mostrar tipo de material</strong>
 					</div>
@@ -104,7 +104,7 @@
 						</label>
 					</div>
 				</div>
-				<div class="span8">
+				<div class="col-md-8">
 					<div style="width:600px; margin-left:auto; margin-right:auto;">
 						<div id="chart" class="jqplot-target" style="width: 100%; height: 450px;"></div>
 					</div>

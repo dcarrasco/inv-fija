@@ -1,4 +1,4 @@
-<div class="row-fluid">
+<div class="row">
 	<?php //echo $menu_configuracion; ?>
 </div>
 
@@ -7,20 +7,20 @@
 	<div class="accordion-group">
 
 		<div class="accordion-heading">
-			<div class="row-fluid">
-				<div class="span8">
+			<div class="row">
+				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						Parametros consulta
 					</a>
 				</div>
-				<div class="span4">
+				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-							<i class="icon-list-alt icon-white"></i>
+							<i class="glyphicon glyphicon-list-alt icon-white"></i>
 							Consultar
 						</button>
-						<button name="excel" class="btn" id="boton-reset">
-							<i class="icon-refresh"></i>
+						<button name="excel" class="btn btn-default" id="boton-reset">
+							<i class="glyphicon glyphicon-refresh"></i>
 							Limpiar
 						</button>
 					</div>
@@ -30,8 +30,8 @@
 
 		<div class="accordion-body collapse in" id="form_param">
 			<div class="accordion-inner">
-				<div class="row-fluid">
-					<div class="span4">
+				<div class="row">
+					<div class="col-md-4">
 						<div>
 							<strong>Series</strong>
 						</div>
@@ -46,7 +46,7 @@
 						</div>
 					</div>
 
-					<div class="span4">
+					<div class="col-md-4">
 						<div>
 							<strong>Reportes</strong>
 						</div>
@@ -90,7 +90,7 @@
 	<?php if (set_value('show_mov')): ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="row-fluid">
+			<div class="row">
 				<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
 					Movimientos
 				</a>
@@ -151,7 +151,7 @@
 	<?php if (set_value('show_despachos')): ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="row-fluid">
+			<div class="row">
 				<a href="#tabla_despachos" class="accordion-toggle" data-toggle="collapse">
 					Despachos
 				</a>
@@ -210,7 +210,7 @@
 	<?php if (set_value('show_stock_sap')): ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="row-fluid">
+			<div class="row">
 				<a href="#tabla_stock_sap" class="accordion-toggle" data-toggle="collapse">
 					Stock SAP
 				</a>
@@ -263,7 +263,7 @@
 	<?php if (set_value('show_stock_scl')): ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="row-fluid">
+			<div class="row">
 				<a href="#tabla_stock_scl" class="accordion-toggle" data-toggle="collapse">
 					Stock SCL
 				</a>
@@ -318,7 +318,7 @@
 	<?php if (set_value('show_trafico')): ?>
 	<div class="accordion-group">
 		<div class="accordion-heading">
-			<div class="row-fluid">
+			<div class="row">
 				<a href="#tabla_trafico" class="accordion-toggle" data-toggle="collapse">
 					Trafico
 				</a>

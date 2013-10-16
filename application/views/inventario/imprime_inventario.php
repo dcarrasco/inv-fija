@@ -2,8 +2,8 @@
 	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 </div>
 
-<div class="row-fluid">
-	<div class="span8 offset2 well">
+<div class="row">
+	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('','class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','imprime'); ?>
 
@@ -23,7 +23,7 @@
 				Pagina desde
 			</label>
 			<div class="controls">
-				<?php echo form_input('pag_desde', set_value('pag_desde',1), 'class="input-mini"  maxlength="5"'); ?>
+				<?php echo form_input('pag_desde', set_value('pag_desde',1), 'class="input-sm"  maxlength="5"'); ?>
 				<?php echo form_error('pag_desde'); ?>
 			</div>
 		</div>
@@ -33,7 +33,7 @@
 				Pagina hasta
 			</label>
 			<div class="controls">
-				<?php echo form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="input-mini"  maxlength="5"'); ?>
+				<?php echo form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="input-sm"  maxlength="5"'); ?>
 				<?php echo form_error('pag_hasta'); ?>
 			</div>
 		</div>
@@ -53,7 +53,7 @@
 		<div class="control-group">
 			<div class="controls">
 				<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir">
-					<i class="icon-print icon-white"></i>
+					<i class="glyphicon glyphicon-print icon-white"></i>
 					Imprimir
 				</button>
 			</div>
