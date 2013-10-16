@@ -158,14 +158,14 @@
 
 				<div class="pull-left">
 					<a href="#" class="btn btn-danger" id="btn_borrar">
-						<i class="glyphicon glyphicon-trash icon-white"></i>
+						<i class="glyphicon glyphicon-trash"></i>
 						Borrar
 					</a>
 				</div>
 
 				<div class="pull-right">
 					<a href="#" class="btn btn-primary" id="btn_agregar">
-						<i class="glyphicon glyphicon-plus-sign icon-white"></i>
+						<i class="glyphicon glyphicon-plus-sign"></i>
 						Agregar material
 					</a>
 					<a href="#" class="btn btn-default" id="btn_cancelar">
@@ -263,7 +263,7 @@
 				<td>
 					<div class="text-center">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
-							<i class="glyphicon glyphicon-ok icon-white"></i>
+							<i class="glyphicon glyphicon-ok"></i>
 							Guardar hoja
 						</a>
 					</div>

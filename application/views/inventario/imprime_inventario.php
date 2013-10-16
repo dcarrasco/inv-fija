@@ -63,7 +63,7 @@
 		<div class="control-group">
 			<div class="controls pull-right">
 				<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir">
-					<i class="glyphicon glyphicon-print icon-white"></i>
+					<i class="glyphicon glyphicon-print"></i>
 					Imprimir
 				</button>
 			</div>

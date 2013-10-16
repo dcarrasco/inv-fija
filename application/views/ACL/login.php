@@ -45,16 +45,20 @@
 			</div>
 
 			<div class="control-group col-md-6 col-md-offset-3">
-				<div class="controls col-md-offset-6">
+				<div class="pull-right">
 					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
-			<hr>
+
 			<div class="control-group col-md-6 col-md-offset-3">
-				<div class="controls col-md-offset-7">
+				<hr>
+			</div>
+			
+			<div class="control-group col-md-6 col-md-offset-3">
+				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						Ingresar
-						<i class="glyphicon glyphicon-play icon-white"></i>
+						<i class="glyphicon glyphicon-play"></i>
 					</button>
 				</div>
 			</div>

@@ -33,7 +33,7 @@
 		<div class="row">
 			<div class="pull-right">
 				<a href="#" class="btn btn-primary" id="btn_agregar">
-					<i class="glyphicon glyphicon-ok icon-white"></i>
+					<i class="glyphicon glyphicon-ok"></i>
 					Agregar
 				</a>
 			</div>
@@ -90,7 +90,7 @@
 
 	<div class="pull-right">
 		<a href="#" class="btn btn-primary" id="btn_guardar">
-			<i class="glyphicon glyphicon-ok icon-white"></i>
+			<i class="glyphicon glyphicon-ok"></i>
 			Guardar
 		</a>
 	</div> <!-- fin content-module-footer -->

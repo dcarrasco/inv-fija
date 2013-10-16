@@ -12,7 +12,7 @@
 				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" class="btn btn-primary">
-							<i class="glyphicon glyphicon-list-alt icon-white"></i>
+							<i class="glyphicon glyphicon-list-alt"></i>
 							Reporte
 						</button>
 					</div>

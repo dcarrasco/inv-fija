@@ -73,10 +73,10 @@
 
 			<?php endif; ?>
 
-			<div class="control-group">
+			<div class="control-group pull-right">
 				<div class="controls">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
-						<i class="glyphicon glyphicon-lock icon-white"></i>
+						<i class="glyphicon glyphicon-lock"></i>
 						Cambiar clave
 					</button>
 				</div>
