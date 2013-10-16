@@ -54,7 +54,7 @@
 		</tbody>
 	</table>
 
-	<div class="pagination pagination-centered">
+	<div class="text-center">
 		<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
 	</div>
 </div> <!-- fin content-module-main -->

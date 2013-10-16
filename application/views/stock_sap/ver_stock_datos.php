@@ -66,26 +66,26 @@
 
 
 <div class="accordion">
-	<div class="accordion-group">
-		<div class="accordion-heading">
+	<div class="panel panel-default">
+		<div class="panel-heading">
 			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">Ver grafico</a>
 		</div>
-		<div class="accordion-body collapse" id="panel_graficos">
+		<div class="panel-body collapse" id="panel_graficos">
 			<div class="row">
 				<div class="col-md-4">
 					<div>
 						<strong>Mostrar tipo de material</strong>
 					</div>
 					<div>
-						<label class="checkbox inline">
+						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo','equipos'), 'id="sel_graph_tipo_equipos"'); ?>
 							Equipos
 						</label>
-						<label class="checkbox inline">
+						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo','simcard'), 'id="sel_graph_tipo_simcard"'); ?>
 							Simcard
 						</label>
-						<label class="checkbox inline">
+						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo','otros'), 'id="sel_graph_tipo_otros"'); ?>
 							Otros
 						</label>
@@ -94,11 +94,11 @@
 						<strong>Mostrar tipo de dato</strong>
 					</div>
 					<div>
-						<label class="checkbox inline">
+						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?>
 							Cantidad
 						</label>
-						<label class="checkbox inline">
+						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?>
 							Monto
 						</label>

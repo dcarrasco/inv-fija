@@ -7,7 +7,7 @@
 	<div class="col-md-3">
 		<strong>Hoja</strong>
 	</div>
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<strong>Auditor</strong>
 	</div>
 </div>
@@ -34,15 +34,17 @@
 		<?php echo form_error('hoja');?>
 	</div>
 
-	<div class="col-md-4">
+	<div class="col-md-3">
 		<?php echo $nuevo_detalle_inventario->print_form_field('auditor'); ?>
 		<?php echo form_error('auditor');?>
 	</div>
 
-	<div class="pull-right">
-		<a href="#" id="btn_mostrar_agregar" class="btn btn-default">
-			<i class="glyphicon glyphicon-plus-sign"></i> Nuevo material...
-		</a>
+	<div class="col-md-3">
+		<div class="pull-right">
+			<a href="#" id="btn_mostrar_agregar" class="btn btn-default">
+				<i class="glyphicon glyphicon-plus-sign"></i> Nuevo material...
+			</a>
+		</div>
 	</div>
 </div>
 <?php echo form_close(); ?>
@@ -166,7 +168,7 @@
 						<i class="glyphicon glyphicon-plus-sign icon-white"></i>
 						Agregar material
 					</a>
-					<a href="#" class="btn btn-deafault" id="btn_cancelar">
+					<a href="#" class="btn btn-default" id="btn_cancelar">
 						<i class="glyphicon glyphicon-ban-circle"></i>
 						Cancelar
 					</a>
@@ -233,8 +235,8 @@
 					<td><?php echo $linea_det->get_valor_field('centro'); ?></td>
 					<td><?php echo $linea_det->get_valor_field('almacen'); ?></td>
 					<td><?php echo $linea_det->um; ?></td>
-					<td><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
-					<td>
+					<td class="text-center"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
+					<td class="text-center">
 						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
@@ -256,8 +258,8 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
-				<td><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
 				<td>
 					<div class="text-center">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
@@ -271,8 +273,5 @@
 	</table>
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
-
-<div>
-</div> <!-- fin content-module-footer -->
 
 <script type="text/javascript" src="<?php echo base_url(); ?>js/view_inventario.js"></script>

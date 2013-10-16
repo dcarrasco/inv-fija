@@ -4,9 +4,9 @@
 
 <?php echo form_open(); ?>
 <div class="accordion">
-	<div class="accordion-group">
+	<div class="panel panel-default">
 
-		<div class="accordion-heading">
+		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
@@ -28,7 +28,7 @@
 			</div>
 		</div>
 
-		<div class="accordion-body collapse in" id="form_param">
+		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
 					<div class="col-md-4">
@@ -36,20 +36,23 @@
 							<strong>Seleccionar Fechas</strong>
 						</div>
 						<div>
-							<div class="radio">
+							<div class="radio-inline">
 								<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
 								Seleccionar ultimo dia mes
 							</div>
-							<div class="radio">
+						</div>
+						<div>
+							<div class="radio-inline">
 								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
 								Seleccionar todas las fechas
 							</div>
-
+						</div>
+						<div>
 							<div id="show_fecha_ultimodia">
-								<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="input-large"'); ?>
+								<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
 							</div>
 							<div id="show_fecha_todas">
-								<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="input-large"'); ?>
+								<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="form-control"'); ?>
 							</div>
 						</div>
 					</div>
@@ -59,15 +62,19 @@
 							<strong>Seleccionar detalle materiales</strong>
 						</div>
 						<div>
-							<div class="checkbox">
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
 								Desplegar detalle tipos stock <br/>
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
 								Desplegar detalle materiales <br/>
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
 								Desplegar detalle lotes <br/>
 							</div>

@@ -21,7 +21,7 @@
 <!-- DIV principal de la aplicacion -->
 <div class="container">
 
-<div class="navbar navbar-default">
+<nav class="navbar navbar-default">
 	<a class="navbar-brand" href="#">
 		<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
 	</a>
@@ -53,23 +53,21 @@
 			</a>
 		</li>
 	</ul>
-</div>
+</nav>
 
 <?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
-	<div class="alert">
-		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<?php echo $msg_alerta; ?>
-	</div>
+<div class="alert">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<?php echo $msg_alerta; ?>
+</div>
 <?php endif; ?>
 
 <?php if (isset($menu_modulo)): ?>
-<div class="row">
-	<ul class="nav nav-tabs">
-		<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
-			<li class="<?php echo ($modulo == $menu_modulo['mod_selected']) ? 'active' : ''; ?>">
-				<?php echo anchor($val['url'], $val['texto']); ?>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-</div>
+<ul class="nav nav-tabs">
+	<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
+		<li class="<?php echo ($modulo == $menu_modulo['mod_selected']) ? 'active' : ''; ?>">
+			<?php echo anchor($val['url'], $val['texto']); ?>
+		</li>
+	<?php endforeach; ?>
+</ul>
 <?php endif; ?>

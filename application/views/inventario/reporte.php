@@ -1,30 +1,38 @@
 <div class="row">
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
-	<div class="col-md-4">
-		<div class="input-append">
-			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="col-md-10" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
-			<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+	<div class="col-md-3">
+		<div class="input-group input-group-sm">
+			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
+			<span class="input-group-btn">
+				<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+			</span>
 		</div>
 	</div>
 
-	<div class="col-md-4">
-		<div class="checkbox">
-			<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
-			Ocultar registros sin diferencias
+	<div class="col-md-4 col-md-offset-1">
+		<div>
+			<div class="checkbox-inline">
+				<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
+				Ocultar registros sin diferencias
+			</div>
 		</div>
-		<div class="checkbox">
-			<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
-			Incluir ajustes de inventario
+		<div>
+			<div class="checkbox-inline">
+				<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
+				Incluir ajustes de inventario
+			</div>
 		</div>
-		<div class="checkbox">
-			<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
-			Incluir familias de productos
+		<div>
+			<div class="checkbox-inline">
+				<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
+				Incluir familias de productos
+			</div>
 		</div>
 	</div>
 
 	<div class="col-md-4">
 		Inventario:
-		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo"'); ?>
+		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 
 	</div>
 	<?php echo form_hidden('order_by', set_value('order_by','')); ?>

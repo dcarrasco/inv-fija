@@ -27,3 +27,10 @@ Modulo que permite controlar el acceso a las funciones de esta aplicacion a trav
 
 * Configuración ACL. Permite ingresar/modificar/eliminar datos a los maestros que soportan el control de acceso.
 
+## Requerimientos y especificaciones
+
+* PHP 5.3.x
+* SQL Server / MySQL
+* JQuery 1.7.1
+* Bootstrap 3.0.0
+* JqPlot 1.0.8

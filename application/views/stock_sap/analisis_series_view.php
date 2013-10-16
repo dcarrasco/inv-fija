@@ -3,75 +3,85 @@
 </div>
 
 <?php echo form_open('','id="frm_ppal"'); ?>
-<div class="accordion">
-	<div class="accordion-group">
-
-		<div class="accordion-heading">
-			<div class="row">
-				<div class="col-md-8">
-					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						Parametros consulta
-					</a>
-				</div>
-				<div class="col-md-4">
-					<div class="pull-right">
-						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-							<i class="glyphicon glyphicon-list-alt icon-white"></i>
-							Consultar
-						</button>
-						<button name="excel" class="btn btn-default" id="boton-reset">
-							<i class="glyphicon glyphicon-refresh"></i>
-							Limpiar
-						</button>
-					</div>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<div class="row">
+			<div class="col-md-8">
+				<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
+					Parametros consulta
+				</a>
+			</div>
+			<div class="col-md-4">
+				<div class="pull-right">
+					<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
+						<i class="glyphicon glyphicon-list-alt icon-white"></i>
+						Consultar
+					</button>
+					<button name="excel" class="btn btn-default" id="boton-reset">
+						<i class="glyphicon glyphicon-refresh"></i>
+						Limpiar
+					</button>
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<div class="accordion-body collapse in" id="form_param">
-			<div class="accordion-inner">
-				<div class="row">
-					<div class="col-md-4">
-						<div>
-							<strong>Series</strong>
-						</div>
-						<div>
-							<?php echo form_textarea(array(
-									'id' => 'series',
-									'name' => 'series',
-									'rows' => '10',
-									'cols' => '30',
-									'value' => set_value('series')
-								)); ?>
-						</div>
+	<div class="panel-body collapse in" id="form_param">
+		<div class="accordion-inner">
+			<div class="row">
+				<div class="col-md-4">
+					<div>
+						<strong>Series</strong>
 					</div>
+					<div>
+						<?php echo form_textarea(array(
+								'id' => 'series',
+								'name' => 'series',
+								'rows' => '10',
+								'cols' => '30',
+								'value' => set_value('series'),
+								'class' => 'form-control',
+							)); ?>
+					</div>
+				</div>
 
-					<div class="col-md-4">
+				<div class="col-md-4">
+					<div>
+						<strong>Reportes</strong>
+					</div>
+					<div>
 						<div>
-							<strong>Reportes</strong>
-						</div>
-						<div>
-							<div class="checkbox">
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('show_mov', 'show', set_value('show_mov'))?>
 								Mostrar movimientos
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
 								Filtrar ultimo movimiento
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos'))?>
 								Mostrar despachos
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap'))?>
 								Mostrar stock SAP
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl'))?>
 								Mostrar stock SCL
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?>
 								Mostrar trafico
 								(ver <?php echo anchor('analisis_series/trafico_por_mes','detalle trafico'); ?>)

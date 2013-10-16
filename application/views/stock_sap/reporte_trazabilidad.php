@@ -1,15 +1,15 @@
 <div class="accordion">
-	<div class="accordion-group">
-		<?php echo form_open('','id="frm_param"'); ?>
-		<div class="accordion-heading">
+	<?php echo form_open('','id="frm_param"'); ?>
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						Parametros consulta
 					</a>
-
 				</div>
-				<div class="col-md-8">
+				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" class="btn btn-primary">
 							<i class="glyphicon glyphicon-list-alt icon-white"></i>
@@ -20,31 +20,35 @@
 			</div>
 		</div>
 
-		<div class="accordion-body collapse in" id="form_param">
+		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div>
 							<strong>Seleccionar Almacenes</strong>
 						</div>
 						<div>
-							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="input-xlarge"'); ?>
+							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
-					<div class="col-md-3">
+					<div class="col-md-4">
 						<div>
 							<strong>Detalle</strong>
 						</div>
 						<div>
-							<div class="checkbox">
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('incl_almacen', '1',set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
 								Mostrar almacenes
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('incl_modelos', '1',set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
 								Mostrar materiales
 							</div>
-							<div class="checkbox">
+						</div>
+						<div>
+							<div class="checkbox-inline">
 								<?php echo form_checkbox('incl_lote', '1',set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
 								Mostrar lotes
 							</div>
@@ -53,11 +57,10 @@
 				</div>
 			</div>
 		</div>
-
-		<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-		<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
-		<?php echo form_close(); ?>
 	</div>
+	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
+	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?php echo form_close(); ?>
 </div>
 
 <div class="content-module-main">
