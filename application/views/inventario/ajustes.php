@@ -52,7 +52,7 @@
 					<td class="text-center"><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
 					<td class="text-center"><?php echo number_format($detalle->stock_fisico,0,',','.'); ?></td>
 					<td>
-						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="input-sm" size="5" tabindex="' . $tab_index . '"'); ?>
+						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control" size="5" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
 					</td>
 					<td class="text-center">
@@ -82,7 +82,7 @@
 					</td>
 					-->
 					<td>
-						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="input-medium" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
+						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="form-control" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $detalle->stock_sap; $sum_fisico += $detalle->stock_fisico; $sum_ajuste += $detalle->stock_ajuste?>
