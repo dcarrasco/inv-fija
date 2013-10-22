@@ -70,7 +70,7 @@ class Analisis_series_model extends CI_Model {
 
 			if ($serie != "") {
 				$this->db->limit(100);
-				$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.*, cp_usuarios.*, al_articulos.*');
+				$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.des_almacen, cp_usuarios.*, al_articulos.*');
 				$this->db->from('bd_logistica..bd_stock_sap');
 				$this->db->join('bd_logistica..al_articulos', 'bd_stock_sap.material = al_articulos.cod_articulo', 'left');
 				$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen and bd_stock_sap.centro=cp_almacenes.centro', 'left');
