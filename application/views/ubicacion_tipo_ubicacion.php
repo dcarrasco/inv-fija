@@ -8,24 +8,24 @@
 </div>
 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2 well" id="form_agregar" style="display: none;">
+	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="display: none;">
 		<?php echo form_open('','id=frm_agregar')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
 
 		<div class="row">
 			<div class="col-md-4">
 				Tipo de Inventario
-				<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario')); ?>
+				<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario'), 'class="form-control"'); ?>
 				<?php echo form_error('agr-tipo_inventario'); ?>
 			</div>
 			<div class="col-md-4">
 				Ubicacion
-				<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15"'); ?>
+				<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15" class="form-control"'); ?>
 				<?php echo form_error('agr-ubicacion'); ?>
 			</div>
 			<div class="col-md-4">
 				Tipo de Ubicacion
-				<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion')); ?>
+				<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion'), 'class="form-control"'); ?>
 				<?php echo form_error('agr-tipo_ubicacion'); ?>
 			</div>
 		</div>
@@ -61,19 +61,19 @@
 				<tr>
 					<td><?php echo $reg['id']; ?></td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="input-xlarge"'); ?>
+						<?php echo form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control"'); ?>
 						<?php echo form_error($reg['id'].'-tipo_inventario'); ?>
 					</td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="input-xlarge"'); ?>
+						<?php echo form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control"'); ?>
 						<?php echo form_error($reg['id'].'-tipo_ubicacion'); ?>
 					</td>
 					<td>
-						<?php echo form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="input-xlarge"'); ?>
+						<?php echo form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control"'); ?>
 						<?php echo form_error($reg['id'].'-ubicacion'); ?>
 					</td>
 					<td>
-						<a href="#" class="btn b-active" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
+						<a href="#" class="btn btn-default" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
 							<i class="glyphicon glyphicon-trash"></i>
 						</a>
 					</td>
@@ -83,7 +83,7 @@
 		</table>
 		<?php echo form_close(); ?>
 
-		<div class="pagination pagination-centered">
+		<div class="text-center">
 			<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
 		</div>
 	</div> <!-- fin content-module-main -->
@@ -135,7 +135,7 @@
 
 		$('form#frm_agregar select[name="agr-tipo_inventario"]').change(function() {
 
-			var url_json_ubic = js_base_url + 'config/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
+			var url_json_ubic = js_base_url + 'config2/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_ubic, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {
@@ -144,7 +144,7 @@
 				$('select[name="agr-ubicacion[]"]').empty().append(items.join(''));
 			});
 
-			var url_json_tipo = js_base_url + 'config/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
+			var url_json_tipo = js_base_url + 'config2/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_tipo, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {
