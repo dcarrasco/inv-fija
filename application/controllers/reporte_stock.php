@@ -79,14 +79,14 @@ class Reporte_stock extends CI_Controller {
 			{
 				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
-			$arr_campos['m120'] = array('titulo' => '000-120',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['m150'] = array('titulo' => '121-150',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['m180'] = array('titulo' => '151-180',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['m360'] = array('titulo' => '181-360',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['m540'] = array('titulo' => '361-500',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['m720'] = array('titulo' => '501-720',     'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['mas720']    = array('titulo' => '+720',        'class' => 'ac',  'tipo' => 'numero');
-			$arr_campos['total']   = array('titulo' => 'Total',       'class' => 'ac bold',  'tipo' => 'numero');
+			$arr_campos['m120'] = array('titulo' => '000-120',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m150'] = array('titulo' => '121-150',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m180'] = array('titulo' => '151-180',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m360'] = array('titulo' => '181-360',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m540'] = array('titulo' => '361-500',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m720'] = array('titulo' => '501-720',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['mas720']    = array('titulo' => '+720',        'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['total']   = array('titulo' => 'Total',       'class' => 'text-center bold',  'tipo' => 'numero');
 		}
 
 		$arr_link_campos = array();
