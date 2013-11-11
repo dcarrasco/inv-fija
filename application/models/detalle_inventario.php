@@ -255,7 +255,7 @@ class Detalle_inventario extends ORM_Model {
 					'uri_segment' => 4,
 					'num_links'   => 5,
 
-					'full_tag_open'   => '<ul>',
+					'full_tag_open'   => '<ul class="pagination">',
 					'flil_tag_close'  => '</ul>',
 
 					'first_tag_open'  => '<li>',

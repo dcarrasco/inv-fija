@@ -118,7 +118,7 @@
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 
-<div class="pagination pagination-centered">
+<div class="text-center">
 	<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
 </div>
 
