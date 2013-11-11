@@ -64,7 +64,7 @@ class App_common {
 		{
 			if($mods['url'] == $this->uri->segment(1))
 			{
-				return $mods['modulo'];
+				return '<span class="' . $mods['modulo_icono'] . ' "></span> ' . $mods['modulo'];
 			}
 		}
 
