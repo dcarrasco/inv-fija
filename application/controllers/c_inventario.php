@@ -38,8 +38,10 @@ class C_inventario extends CI_Controller {
 		$this->id_inventario = $inventario->get_id_inventario_activo();
 		$inventario->find_id($this->id_inventario);
 
+		$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
+		$this->benchmark->mark('detalle_inventario_end');
 
 		//dbg($detalle_inventario);
 

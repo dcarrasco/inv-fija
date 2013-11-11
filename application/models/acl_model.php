@@ -7,6 +7,7 @@ class Acl_model extends CI_Model {
 	{
 		parent::__construct();
 		$this->load->helper('cookie');
+		$this->load->library('encrypt');
 	}
 
 
@@ -23,13 +24,7 @@ class Acl_model extends CI_Model {
 		{
 			// crea cookie con la sesion del usuario
 			$this->_set_session_cookies($usr);
-
-			// crea cookie con los modulos del usuario
-			$this->input->set_cookie(array(
-				'name'   => 'movistar_menu',
-				'value'  => json_encode($this->get_modulos_usuario($usr)),
-				'expire' => '0'
-				));
+			$this->_set_menu_cookies($usr);
 			return TRUE;
 		}
 		else
@@ -47,9 +42,36 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_id_usr($usr = '')
 	{
-		$user = ($usr == '') ? $this->input->cookie('movistar_usr') : $usr;
+		$user = ($usr == '') ? $this->get_user() : $usr;
 		$rs = $this->db->get_where('fija_usuarios', array('usr' => $user))->row_array();
 		return (is_array($rs) ? $rs['id'] : '');
+	}
+
+
+	/**
+	 * Devuelve el usuario (leido desde cookie)
+	 * @param  none
+	 * @return string Usuario
+	 */
+	public function get_user()
+	{
+		return $this->encrypt->decode($this->input->cookie('user'));
+	}
+
+
+	/**
+	 * Devuelve el menu del usuario desde la cookie. Si no existe cookie, la crea
+	 * @param  none
+	 * @return string Menu del usuario en formato JSON
+	 */
+	public function get_user_menu()
+	{
+		if (!$this->input->cookie('menu_app'))
+		{
+			$this->_set_menu_cookies($this->get_user());
+		}
+
+		return json_decode($this->encrypt->decode($this->input->cookie('menu_app')), TRUE);
 	}
 
 
@@ -58,7 +80,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usr Usuario
 	 * @return array       Arreglo con los módulos del usuario
 	 */
-	public function get_modulos_usuario($usr = '')
+	public function get_llaves_modulos($usr = '')
 	{
 		$this->db->distinct();
 		$this->db->select('llave_modulo');
@@ -92,7 +114,7 @@ class Acl_model extends CI_Model {
 		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
 		$this->db->join('acl_modulo m',       'm.id          = rm.id_modulo');
 		$this->db->join('acl_app a',          'a.id          = m.id_app');
-		$this->db->where('usr', $usr);
+		$this->db->where('usr', (string)$usr);
 		$this->db->order_by('a.orden, m.orden');
 		return $this->db->get()->result_array();
 	}
@@ -105,9 +127,29 @@ class Acl_model extends CI_Model {
 	private function _set_session_cookies($usr = '')
 	{
 		$this->input->set_cookie(array(
-			'name'   => 'movistar_usr',
-			'value'  => $usr,
-			'expire' => '1200'
+			'name'   => 'user',
+			'value'  => $this->encrypt->encode($usr),
+			'expire' => '1200',
+			));
+	}
+
+
+	/**
+	 * Crea las cookies de menu para un usuario
+	 * @param string $usr Usuario
+	 */
+	private function _set_menu_cookies($usr)
+	{
+		$this->input->set_cookie(array(
+			'name'   => 'modulos',
+			'value'  => $this->encrypt->encode(json_encode($this->get_llaves_modulos($usr))),
+			'expire' => '0'
+			));
+
+		$this->input->set_cookie(array(
+			'name'   => 'menu_app',
+			'value'  => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
+			'expire' => '0'
 			));
 	}
 
@@ -118,9 +160,9 @@ class Acl_model extends CI_Model {
 	 */
 	public function delete_session_cookies()
 	{
-		delete_cookie('movistar_usr');
-		delete_cookie('movistar_menu');
-		delete_cookie('movistar_menu_app');
+		delete_cookie('user');
+		delete_cookie('modulos');
+		delete_cookie('menu_app');
 	}
 
 
@@ -131,13 +173,13 @@ class Acl_model extends CI_Model {
 	 */
 	public function autentica($mod = '')
 	{
-		if (!$this->input->cookie('movistar_usr') or !$this->input->cookie('movistar_menu'))
+		if (!$this->input->cookie('user') or !$this->input->cookie('modulos'))
 		{
 			redirect('login');
 		}
 		else
 		{
-			$arr_modulos = json_decode($this->input->cookie('movistar_menu'));
+			$arr_modulos = json_decode($this->encrypt->decode($this->input->cookie('modulos')));
 			if (!in_array($mod, $arr_modulos))
 			{
 				redirect('login');
@@ -145,7 +187,7 @@ class Acl_model extends CI_Model {
 			else
 			{
 				// renueva la cookie de usuario (por timeout)
-				$this->_set_session_cookies($this->input->cookie('movistar_usr'));
+				$this->_set_session_cookies($this->get_user());
 			}
 		}
 	}

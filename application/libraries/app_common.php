@@ -17,27 +17,6 @@ class App_common {
 	}
 
 
-	private function _get_arr_modulos()
-	{
-		$arr_modulos = array();
-
-		if (!$this->input->cookie('movistar_menu_app'))
-		{
-			$arr_modulos = $this->acl_model->get_menu_usuario($this->input->cookie('movistar_usr'));
-			$this->input->set_cookie(array(
-				'name'   => 'movistar_menu_app',
-				'value'  => json_encode($arr_modulos),
-				'expire' => '0'
-				));
-		}
-		else
-		{
-			$arr_modulos = json_decode($this->input->cookie('movistar_menu_app'), TRUE);
-		}
-
-		return $arr_modulos;
-
-	}
 
 	/**
 	 * Devuelve arreglo con el menu de las aplicaciones del sistema
@@ -45,7 +24,7 @@ class App_common {
 	 */
 	public function menu_app()
 	{
-		$arr_modulos = $this->_get_arr_modulos();
+		$arr_modulos = $this->acl_model->get_user_menu();
 
 		$arr_apps = array();
 		$arr_mods = array();
@@ -79,7 +58,7 @@ class App_common {
 
 	public function titulo_modulo()
 	{
-		$arr_modulos = $this->_get_arr_modulos();
+		$arr_modulos = $this->acl_model->get_user_menu();
 
 		foreach ($arr_modulos as $mods)
 		{

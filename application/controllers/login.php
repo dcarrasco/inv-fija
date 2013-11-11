@@ -33,17 +33,19 @@ class Login extends CI_Controller {
 		}
 		else
 		{
+			$usr = set_value('usr');
+			$pwd = set_value('pwd');
 			// si el usuario existe
-			if ($this->acl_model->existe_usuario(set_value('usr')))
+			if ($this->acl_model->existe_usuario($usr))
 			{
 				// si el usuario no tiene fijada una clave, lo obligamos a fijarla
-				if (!$this->acl_model->tiene_clave(set_value('usr')))
+				if (!$this->acl_model->tiene_clave($usr))
 				{
-					redirect('login/cambio_password/' . set_value('usr'));
+					redirect('login/cambio_password/' . $usr);
 				}
 				else
 				{
-					$login_ok = $this->acl_model->login(set_value('usr'), set_value('pwd'));
+					$login_ok = $this->acl_model->login($usr, $pwd);
 					if (!$login_ok)
 					{
 						$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
@@ -51,7 +53,7 @@ class Login extends CI_Controller {
 					}
 					else
 					{
-						$arr_menu = $this->acl_model->get_menu_usuario(set_value('usr'));
+						$arr_menu = $this->acl_model->get_menu_usuario($usr);
 						redirect($arr_menu[0]['url']);
 					}
 				}
