@@ -9,14 +9,6 @@
 						Parametros consulta
 					</a>
 				</div>
-				<div class="col-md-4">
-					<div class="pull-right">
-						<button type="submit" class="btn btn-primary">
-							<i class="glyphicon glyphicon-list-alt"></i>
-							Reporte
-						</button>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -31,6 +23,7 @@
 							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
+
 					<div class="col-md-4">
 						<div>
 							<strong>Detalle</strong>
@@ -54,6 +47,16 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="col-md-4">
+						<div class="pull-right">
+							<button type="submit" class="btn btn-primary">
+								<i class="glyphicon glyphicon-list-alt"></i>
+								Reporte
+							</button>
+						</div>
+					</div>
+
 				</div>
 			</div>
 		</div>

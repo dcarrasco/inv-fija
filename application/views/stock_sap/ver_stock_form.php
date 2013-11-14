@@ -11,18 +11,6 @@
 						Parametros consulta
 					</a>
 				</div>
-				<div class="col-md-4">
-					<div class="pull-right">
-						<button type="submit" name="submit" class="btn btn-primary">
-							<i class="glyphicon glyphicon-list-alt"></i>
-							Reporte
-						</button>
-						<button type="submit" name="excel" value="excel" class="btn btn-default">
-							<i class="glyphicon glyphicon-file"></i>
-							Exportar a Excel...
-						</button>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -115,23 +103,40 @@
 							</div>
 						</div>
 
-							<?php if($tipo_op == 'MOVIL'): ?>
-							<div>
-								<div class="checkbox-inline">
-									<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?>
-									Equipos
-								</div>
-								<div class="checkbox-inline">
-									<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?>
-									Simcard
-								</div>
-								<div class="checkbox-inline">
-									<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?>
-									Otros
-								</div>
+						<?php if($tipo_op == 'MOVIL'): ?>
+						<div>
+							<div class="checkbox-inline">
+								<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?>
+								Equipos
 							</div>
-							<?php endif; ?>
+							<div class="checkbox-inline">
+								<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?>
+								Simcard
+							</div>
+							<div class="checkbox-inline">
+								<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?>
+								Otros
+							</div>
+						</div>
+						<?php endif; ?>
+
+						<hr/>
+						<div class="pull-right">
+							<button type="submit" name="submit" class="btn btn-primary">
+								<i class="glyphicon glyphicon-list-alt"></i>
+								Reporte
+							</button>
+							<button type="submit" name="excel" value="excel" class="btn btn-default">
+								<i class="glyphicon glyphicon-file"></i>
+								Exportar a Excel...
+							</button>
+						</div>
+					
+
 					</div>
+				
+
+
 				</div>
 			</div>
 		</div>

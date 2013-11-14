@@ -5,25 +5,9 @@
 <?php echo form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<div class="col-md-8">
-				<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-					Parametros consulta
-				</a>
-			</div>
-			<div class="col-md-4">
-				<div class="pull-right">
-					<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-						<i class="glyphicon glyphicon-list-alt"></i>
-						Consultar
-					</button>
-					<button name="excel" class="btn btn-default" id="boton-reset">
-						<i class="glyphicon glyphicon-refresh"></i>
-						Limpiar
-					</button>
-				</div>
-			</div>
-		</div>
+		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
+			Parametros consulta
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="form_param">
@@ -89,6 +73,20 @@
 						</div>
 					</div>
 				</div>
+
+				<div class="col-md-4">
+					<div class="pull-right">
+						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
+							<i class="glyphicon glyphicon-list-alt"></i>
+							Consultar
+						</button>
+						<button name="excel" class="btn btn-default" id="boton-reset">
+							<i class="glyphicon glyphicon-refresh"></i>
+							Limpiar
+						</button>
+					</div>
+				</div>
+
 			</div>
 		</div>
 	</div>
@@ -99,11 +97,9 @@
 <?php if (set_value('show_mov')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
-				Movimientos
-			</a>
-		</div>
+		<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
+			Movimientos
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="tabla_movimientos">
@@ -160,11 +156,9 @@
 <?php if (set_value('show_despachos')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<a href="#tabla_despachos" class="accordion-toggle" data-toggle="collapse">
-				Despachos
-			</a>
-		</div>
+		<a href="#tabla_despachos" class="accordion-toggle" data-toggle="collapse">
+			Despachos
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="tabla_despachos">
@@ -219,11 +213,9 @@
 <?php if (set_value('show_stock_sap')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<a href="#tabla_stock_sap" class="accordion-toggle" data-toggle="collapse">
-				Stock SAP
-			</a>
-		</div>
+		<a href="#tabla_stock_sap" class="accordion-toggle" data-toggle="collapse">
+			Stock SAP
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="tabla_stock_sap">
@@ -272,11 +264,9 @@
 <?php if (set_value('show_stock_scl')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<a href="#tabla_stock_scl" class="accordion-toggle" data-toggle="collapse">
-				Stock SCL
-			</a>
-		</div>
+		<a href="#tabla_stock_scl" class="accordion-toggle" data-toggle="collapse">
+			Stock SCL
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="tabla_stock_scl">
@@ -327,11 +317,9 @@
 <?php if (set_value('show_trafico')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
-		<div class="row">
-			<a href="#tabla_trafico" class="accordion-toggle" data-toggle="collapse">
-				Trafico
-			</a>
-		</div>
+		<a href="#tabla_trafico" class="accordion-toggle" data-toggle="collapse">
+			Trafico
+		</a>
 	</div>
 
 	<div class="panel-body collapse in" id="tabla_trafico">
