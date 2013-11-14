@@ -197,7 +197,7 @@ class ORM_Model {
 		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
 		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
-		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . $this->get_model_id() . ']' : '';
+		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']' : '';
 
 		if ($field->get_tipo() == 'has_many')
 		{

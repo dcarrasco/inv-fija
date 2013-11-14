@@ -24,14 +24,14 @@ class MY_Form_validation extends CI_Form_validation {
 	{
 		$CI =& get_instance();
 
-		$CI->form_validation->set_message('edit_unique', 'The value %s is already in use.');
+		$CI->form_validation->set_message('edit_unique', 'El valor %s ya está en uso.');
 
-		list($table, $column, $current_id) = explode('.', $params);
+		list($table, $column, $id_field, $current_id) = explode('.', $params);
 
 		$query = $CI->db->select()->from($table)->where($column, $value)->limit(1)->get();
 
 		// POR ARREGLAR: en duro $query->row->id
-		if ($query->row() && $query->row()->id != $current_id)
+		if ($query->row() && $query->row()->{$id_field} != $current_id)
 		{
 			return FALSE;
 		}
