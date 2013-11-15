@@ -22,15 +22,14 @@ class ORM_Model {
 	private $model_all           = array();
 	private $separador_campos    = '~';
 
+
 	/**
 	 * Constructor
 	 *
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	function __construct($param = array()) {
-
-		//parent::__construct();
+	public function __construct($param = array()) {
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
@@ -53,11 +52,13 @@ class ORM_Model {
 
 	}
 
+
 	public function __get($key)
 	{
 		$CI =& get_instance();
 		return $CI->$key;
 	}
+
 
 	/**
 	 * Configura las propiedades del modelo
@@ -99,24 +100,65 @@ class ORM_Model {
 	// SETTERS Y GETTERS
 	// =======================================================================
 
-	public function get_model_nombre()       { return $this->model_nombre; }
+	public function get_model_nombre()
+	{
+		return $this->model_nombre;
+	}
 
-	public function get_model_tabla()        { return $this->model_tabla; }
 
-	public function get_model_label()        { return $this->model_label; }
+	public function get_model_tabla()
+	{
+		return $this->model_tabla;
+	}
 
-	public function get_model_label_plural() { return $this->model_label_plural; }
 
-	public function get_model_campo_id()     { return $this->model_campo_id; }
+	public function get_model_label()
+	{
+		return $this->model_label;
+	}
 
-	public function get_model_page_results() { return $this->model_page_results; }
 
-	public function get_model_fields()       { return $this->model_fields; }
+	public function get_model_label_plural()
+	{
+		return $this->model_label_plural;
+	}
 
-	public function get_campos_listado()     { return $this->campos_listado; }
 
-	public function get_model_all()          { return $this->model_all; }
-	public function set_model_all($model_all = array()) {$this->model_all = $model_all;}
+	public function get_model_campo_id()
+	{
+		return $this->model_campo_id;
+	}
+
+
+	public function get_model_page_results()
+	{
+		return $this->model_page_results;
+	}
+
+
+	public function get_model_fields()
+	{
+		return $this->model_fields;
+	}
+
+
+	public function get_campos_listado()
+	{
+		return $this->campos_listado;
+	}
+
+
+	public function get_model_all()
+	{
+		return $this->model_all;
+	}
+
+
+	public function set_model_all($model_all = array())
+	{
+		$this->model_all = $model_all;
+	}
+
 
 	public function get_relation_object($campo = '')
 	{
@@ -182,7 +224,6 @@ class ORM_Model {
 
 		return $this->form_validation->run();
 	}
-
 
 
 	/**
@@ -311,6 +352,7 @@ class ORM_Model {
 		return $this->model_fields[$campo]->get_mostrar_lista();
 	}
 
+
 	/**
 	 * Crea links de paginación para desplegar un listado del modelo
 	 * @param  string $filtro Filtro de los valores del modelo
@@ -399,7 +441,7 @@ class ORM_Model {
 			}
 		}
 
-		if(array_key_exists('filtro', $param))
+		if (array_key_exists('filtro', $param))
 		{
 			if ($param['filtro'] != '_' AND $param['filtro'] != '')
 			{
@@ -479,6 +521,7 @@ class ORM_Model {
 
 	}
 
+
 	public function find_id($id = 0, $recupera_relation = TRUE)
 	{
 		$arr_condiciones = array();
@@ -505,12 +548,10 @@ class ORM_Model {
 			{
 				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
 			}
-
-
 		}
+
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
-
 
 
 	/**
@@ -542,6 +583,7 @@ class ORM_Model {
 				// genera arreglo where con la llave del modelo
 				$arr_where = array();
 				$arr_id_one_table = $arr_props_relation['id_one_table'];
+
 				foreach ($this->model_campo_id as $campo_id)
 				{
 					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
@@ -555,10 +597,12 @@ class ORM_Model {
 
 				// genera arreglo de condiciones de busqueda
 				$arr_where = array();
+
 				foreach($rs as $reg)
 				{
 					array_push($arr_where, array_pop($reg));
 				}
+
 				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
@@ -570,6 +614,7 @@ class ORM_Model {
 			}
 		}
 	}
+
 
 	/**
 	 * Devuelve campos select de una lista para ser consulados como un solo
@@ -590,7 +635,6 @@ class ORM_Model {
 				// CONCAT_WS es especifico para MYSQL
 				$lista_campos = implode(',', $arr_campos);
 				return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
-
 			}
 			else
 			{
@@ -599,6 +643,7 @@ class ORM_Model {
 			}
 		}
 	}
+
 
 	/**
 	 * Puebla los campos del modelo con los valores de un arreglo
@@ -897,6 +942,7 @@ class ORM_Model {
 		}
 	}
 
+
 	public function ___recuperar_choices($filtro = '_')
 	{
 		$this->recuperar_all($filtro, -1);
@@ -917,6 +963,7 @@ class ORM_Model {
 // **********************************************************************************************************
 
 class ORM_Field {
+
 	private $nombre           = '';
 	private $tabla_bd         = '';
 	private $nombre_bd        = '';
@@ -989,14 +1036,14 @@ class ORM_Field {
 			$this->es_unico         = TRUE;
 			$this->es_autoincrement = TRUE;
 		}
-
-
 	}
 
 
+	public function get_tipo()
+	{
+		return $this->tipo;
+	}
 
-
-	public function get_tipo()            { return $this->tipo; }
 
 	public function get_label()
 	{
@@ -1014,17 +1061,60 @@ class ORM_Field {
 		}
 	}
 
-	public function get_nombre_bd()        { return $this->nombre_bd; }
 
-	public function get_mostrar_lista()    { return $this->mostrar_lista; }
-	public function get_es_id()            { return $this->es_id; }
-	public function get_es_unico()         { return $this->es_unico; }
-	public function get_es_obligatorio()   { return $this->es_obligatorio; }
-	public function get_es_autoincrement() { return $this->es_autoincrement; }
-	public function get_texto_ayuda()      { return $this->texto_ayuda; }
+	public function get_nombre_bd()
+	{
+		return $this->nombre_bd;
+	}
 
-	public function get_relation()         { return $this->relation; }
-	public function set_relation($arr)     { $this->relation = $arr; }
+
+	public function get_mostrar_lista()
+	{
+		return $this->mostrar_lista;
+	}
+
+
+	public function get_es_id()
+	{
+		return $this->es_id;
+	}
+
+
+	public function get_es_unico()
+	{
+		return $this->es_unico;
+	}
+
+
+	public function get_es_obligatorio()
+	{
+		return $this->es_obligatorio;
+	}
+
+
+	public function get_es_autoincrement()
+	{
+		return $this->es_autoincrement;
+	}
+
+
+	public function get_texto_ayuda()
+	{
+		return $this->texto_ayuda;
+	}
+
+
+	public function get_relation()
+	{
+		return $this->relation;
+	}
+
+
+	public function set_relation($arr)
+	{
+		$this->relation = $arr;
+	}
+
 
 	// --------------------------------------------------------------------
 

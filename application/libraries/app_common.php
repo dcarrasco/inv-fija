@@ -35,7 +35,12 @@ class App_common {
 		{
 			if ($modulo['app'] != $app_ant and $app_ant != '')
 			{
-				array_push($arr_apps, array('selected' => $app_sel, 'icono' => $modulo_ant['app_icono'], 'app' => $modulo_ant['app'], 'modulos' => $arr_mods));
+				array_push($arr_apps, array(
+											'selected' => $app_sel,
+											'icono'    => $modulo_ant['app_icono'],
+											'app'      => $modulo_ant['app'],
+											'modulos'  => $arr_mods
+										));
 				$arr_mods = array();
 				$app_sel = '';
 			}
@@ -45,12 +50,21 @@ class App_common {
 				$app_sel = 'active';
 			}
 
-			array_push($arr_mods, array('url' => $modulo['url'], 'icono' => $modulo['modulo_icono'], 'modulo' => $modulo['modulo']));
+			array_push($arr_mods, array(
+									'url'    => $modulo['url'],
+									'icono'  => $modulo['modulo_icono'],
+									'modulo' => $modulo['modulo']
+									));
 
 			$app_ant = $modulo['app'];
 			$modulo_ant = $modulo;
 		}
-		array_push($arr_apps, array('selected' => $app_sel, 'icono' => $modulo_ant['app_icono'], 'app' => $modulo_ant['app'], 'modulos' => $arr_mods));
+		array_push($arr_apps, array(
+									'selected' => $app_sel,
+									'icono'    => $modulo_ant['app_icono'],
+									'app'      => $modulo_ant['app'],
+									'modulos'  => $arr_mods
+								));
 
 		return $arr_apps;
 	}
@@ -72,7 +86,6 @@ class App_common {
 
 	public function menu_modulo($op_selected = '', $menu = array())
 	{
-
 		$menu = '<ul class="nav nav-tabs">';
 		foreach($menu as $key => $val)
 		{
@@ -98,9 +111,11 @@ class App_common {
 				return number_format($valor,0,',','.');
 				break;
 			case 'valor':
-				return '$ ' . number_format($valor, 0, ',' ,'.'); break;
+				return '$ ' . number_format($valor, 0, ',' ,'.');
+				break;
 			case 'valor_pmp':
-				return '$ ' . number_format($valor, 0,',' , '.'); break;
+				return '$ ' . number_format($valor, 0,',' , '.');
+				break;
 			case 'numero_dif':
 				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
 				break;
