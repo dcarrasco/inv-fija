@@ -9,8 +9,23 @@
  */
 class ORM_Model {
 
+	/*
+	 * Nombre del modelo
+	 *
+	 * @var  string
+	 */
 	private $model_nombre        = '';
+	/*
+	 * Clase del modelo
+	 *
+	 * @var  string
+	 */
 	private $model_class         = '';
+	/*
+	 * Clase del modelo
+	 *
+	 * @var  string
+	 */
 	private $model_tabla         = '';
 	private $model_label         = '';
 	private $model_label_plural  = '';
@@ -53,6 +68,16 @@ class ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * __get
+	 *
+	 * Permite acceder a las clases de CI de forma directa
+	 *
+	 * @param	string
+	 * @access private
+	 */
 	public function __get($key)
 	{
 		$CI =& get_instance();
@@ -62,6 +87,7 @@ class ORM_Model {
 
 	/**
 	 * Configura las propiedades del modelo
+	 *
 	 * @param  array $cfg arreglo con la configuración del modelo
 	 * @return nada
 	 */
