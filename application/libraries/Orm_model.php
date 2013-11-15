@@ -1034,6 +1034,8 @@ class ORM_Model {
 		}
 	}
 
+}
+
 
 
 
