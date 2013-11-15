@@ -1423,6 +1423,7 @@ class ORM_Field {
 
 	/**
 	 * Devuelve el valor, formateado de acuerdo al tipo del campo
+	 *
 	 * @param  [type] $valor Valor a desplegar
 	 * @return string        Valor formateado
 	 */
@@ -1459,6 +1460,7 @@ class ORM_Field {
 
 	/**
 	 * Devuelve los atributos para construir el campo en la base de datos
+	 *
 	 * @return array Configuración del campo para construirlo en la base de datos
 	 */
 	public function get_bd_attrib()
