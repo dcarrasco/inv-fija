@@ -9,32 +9,77 @@
  */
 class ORM_Model {
 
-	/*
+	/**
 	 * Nombre del modelo
 	 *
 	 * @var  string
 	 */
 	private $model_nombre        = '';
-	/*
+	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
 	private $model_class         = '';
-	/*
-	 * Clase del modelo
+	/**
+	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
 	private $model_tabla         = '';
+	/**
+	 * Nombre (etiqueta) del modelo
+	 *
+	 * @var string
+	 */
 	private $model_label         = '';
+	/**
+	 * Nombre (etiqueta) del modelo (plural)
+	 *
+	 * @var string
+	 */
 	private $model_label_plural  = '';
+	/**
+	 * Campos para ordenar el modelo cuando se recupera de la BD
+	 *
+	 * @var string
+	 */
 	private $model_order_by      = '';
+	/**
+	 * Campos que conforman la llave (id) del modelo
+	 *
+	 * @var array
+	 */
 	private $model_campo_id      = array();
+	/**
+	 * Indicador si se recuperaron los datos de las relaciones
+	 *
+	 * @var boolean
+	 */
 	private $model_got_relations = FALSE;
+	/**
+	 * Cantidad de registros por pagina
+	 *
+	 * @var integer
+	 */
 	private $model_page_results  = 10;
+	/**
+	 * Arreglo con los campos del modelo
+	 *
+	 * @var array
+	 */
 	private $model_fields        = array();
+	/**
+	 * Arreglo de registros recuperados de la BD
+	 *
+	 * @var array
+	 */
 	private $model_all           = array();
+	/**
+	 * Caracter separador de los campos cuando la llave tiene más de un campo
+	 *
+	 * @var string
+	 */
 	private $separador_campos    = '~';
 
 
@@ -64,9 +109,7 @@ class ORM_Model {
 
 		$this->model_campo_id = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
-
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -84,6 +127,7 @@ class ORM_Model {
 		return $CI->$key;
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Configura las propiedades del modelo
@@ -102,6 +146,7 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Configura las propiedades de los campos del modelo
@@ -190,10 +235,10 @@ class ORM_Model {
 	{
 		$model_fields = $this->model_fields;
 		$relation = $model_fields[$campo]->get_relation();
-		return ($relation['data']);
+		return $relation['data'];
 	}
 
-
+	// --------------------------------------------------------------------
 
 	/**
 	 * determina y fija el campo id del modelo
@@ -214,7 +259,13 @@ class ORM_Model {
 		return $arr_key;
 	}
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera el valor del id del modelo
+	 *
+	 * @return string 
+	 */
 	public function get_model_id()
 	{
 		$arr_id = array();
@@ -225,7 +276,7 @@ class ORM_Model {
 		return implode($this->separador_campos, $arr_id);
 	}
 
-
+	// --------------------------------------------------------------------
 
 	// =======================================================================
 	// FUNCIONES DE FORMULARIOS
@@ -233,6 +284,7 @@ class ORM_Model {
 
 	/**
 	 * Ejecuta la validacion de los campos de formulario del modelo
+	 *
 	 * @return boolean Indica si el formulario fue validad OK o no
 	 */
 	public function valida_form()
@@ -251,9 +303,11 @@ class ORM_Model {
 		return $this->form_validation->run();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Genera la regla de validación para un campo, de acuerdo a la definición del campo
+	 *
 	 * @param string $campo Nombre del campo
 	 */
 	public function set_validation_rules_field($campo = '')
@@ -274,16 +328,20 @@ class ORM_Model {
 		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function get_relation_fields()
 	{
 		$this->_recuperar_relation_fields();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el formulario para el despliegue de un campo del modelo
-	 * @param  string $campo Nombre del campo
+	 *
+	 * @param  string  $campo          Nombre del campo
+	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @return string        Elemento de formulario
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE)
@@ -308,10 +366,12 @@ class ORM_Model {
 		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos);
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el texto label de un campo del modelo
-	 * @param  string $campo Nombre del campo
+	 *
+	 * @param  string $campo Nombre del campo 
 	 * @return string        Label del campo
 	 */
 	public function get_label_field($campo = '')
@@ -325,9 +385,11 @@ class ORM_Model {
 		return $this->model_fields[$campo]->get_label();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el texto de ayuda de un campo del modelo
+	 *
 	 * @param  string $campo Nombre del campo
 	 * @return string        Texto de ayuda del campo
 	 */
@@ -336,9 +398,11 @@ class ORM_Model {
 		return $this->model_fields[$campo]->get_texto_ayuda();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el valor de un campo del modelo
+	 *
 	 * @param  string  $campo     Nombre del campo
 	 * @param  boolean $formatted Indica si se devuelve el valor formateado o no (ej. id de relaciones)
 	 * @return string             Texto con el valor del campo
@@ -355,9 +419,11 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve la propiedad es_obligatorio de un campo del modelo
+	 *
 	 * @param  string $campo Nombre del campo
 	 * @return boolean       Indicador si el campo es obligatorio
 	 */
@@ -366,21 +432,37 @@ class ORM_Model {
 		return $this->model_fields[$campo]->get_es_obligatorio();
 	}
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve marca de campo obligatorio (*), si el campo así lo es
+	 *
+	 * @param  string $campo Nombre del campo
+	 * @return string Texto html con la marca del campo
+	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
 		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-error"><strong>*</strong></span>' : '';
 	}
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve indicador si el campo se mostrará o no en listaoo
+	 *
+	 * @param string $campo Nombre del campo
+	 * @return boolean Indicador mostrar o no en la lista
+	 */
 	public function get_mostrar_lista($campo = '')
 	{
 		return $this->model_fields[$campo]->get_mostrar_lista();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Crea links de paginación para desplegar un listado del modelo
+	 *
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
 	 */
@@ -422,7 +504,7 @@ class ORM_Model {
 		return $this->pagination->create_links();
 	}
 
-
+	// --------------------------------------------------------------------
 
 	// =======================================================================
 	// FUNCIONES PUBLICAS DE CONSULTA EN BD
@@ -430,6 +512,7 @@ class ORM_Model {
 
 	/**
 	 * Recupera registros de la base de datos
+	 *
 	 * @param  string  $tipo              Indica el tipo de consulta
 	 *                                    * all    todos los registros
 	 *                                    * first  primer registro
@@ -519,12 +602,14 @@ class ORM_Model {
 
 				array_push($this->model_all, $o);
 			}
+
 			return $rs;
 		}
 		else if ($tipo == 'count')
 		{
 			$this->db->select('count(*) as cant');
 			$rs = $this->db->get($this->model_tabla)->row_array();
+
 			return $rs['cant'];
 		}
 		else if ($tipo == 'list')
@@ -542,13 +627,22 @@ class ORM_Model {
 				$o->get_from_array($reg);
 				$arr_list[$o->get_model_id()] = $o->__toString();
 			}
+
 			return $arr_list;
 		}
 
 	}
 
+	// --------------------------------------------------------------------
 
-	public function find_id($id = 0, $recupera_relation = TRUE)
+	/**
+	 * Recupera registros por el ID
+	 *
+	 * @param string $id Identificador del registro a recuperar
+	 * @param boolean $recupera_relation Indica si se recuperará la información de relación
+	 * @return 
+	 */
+	public function find_id($id = '', $recupera_relation = TRUE)
 	{
 		$arr_condiciones = array();
 
@@ -579,9 +673,11 @@ class ORM_Model {
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera los mdelos dependientes (de las relaciones has_one y has_many)
+	 *
 	 * @return nada
 	 */
 	private function _recuperar_relation_fields()
@@ -641,10 +737,12 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve campos select de una lista para ser consulados como un solo
 	 * campo de la base de datos
+	 *
 	 * @param  array  $arr_campos Arreglo con el listado de campos
 	 * @return string             Listado de campos unidos por la BD
 	 */
@@ -670,9 +768,11 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Puebla los campos del modelo con los valores de un arreglo
+	 *
 	 * @param  array  $rs Arreglo con los valores
 	 * @return nada
 	 */
@@ -697,8 +797,7 @@ class ORM_Model {
 		}
 	}
 
-
-
+	// --------------------------------------------------------------------
 
 	// =======================================================================
 	// FUNCIONES PRIVADAS DE CONSULTA EN BD
@@ -706,6 +805,7 @@ class ORM_Model {
 
 	/**
 	 * Agrega un filtro para seleccionar elementos del modelo
+	 *
 	 * @param  string $filtro Filtro para seleccionar elementos
 	 * @return nada
 	 */
@@ -729,9 +829,11 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Puebla los campos del modelo con los valores del post
+	 *
 	 * @return nada
 	 */
 	public function recuperar_post()
@@ -763,9 +865,11 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve la cantidad de elementos del modelo, dado un filtro
+	 *
 	 * @param  string $filtro Filtro de los elementos del modelo
 	 * @return int            Cantidad de elementos
 	 */
@@ -785,6 +889,7 @@ class ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
 	// =======================================================================
 	// Funciones de interaccion modelo <--> base de datos
@@ -792,6 +897,7 @@ class ORM_Model {
 
 	/**
 	 * Graba el modelo en la base de datos (inserta o modifica, dependiendo si el modelo ya existe)
+	 *
 	 * @return nada
 	 */
 	public function grabar()
@@ -893,9 +999,11 @@ class ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Elimina el modelo de la base de datos
+	 *
 	 * @return nada
 	 */
 	public function borrar()
@@ -928,59 +1036,6 @@ class ORM_Model {
 
 
 
-	// ----------------------------------------------------------------------------------------------------
-	// ----------------------------------------------------------------------------------------------------
-
-
-	function valida_tabla_creada()
-	{
-		if (!$this->db->table_exists($this->tabla_bd))
-		{
-			foreach ($this->model_metadata as $campo)
-			{
-				if ($campo->get_nombre() == 'id')
-				{
-					$this->dbforge->add_field($campo->get_nombre());
-				}
-				else
-				{
-					$this->dbforge->add_field(array($campo->get_nombre() => $campo->get_bd_attrib()));
-				}
-			}
-
-			$this->dbforge->drop_table($this->tabla_bd);
-			$this->dbforge->create_table($this->tabla_bd);
-		}
-	}
-
-
-	public function ___result_to_array($arr)
-	{
-		foreach($arr as $e)
-		{
-			$nom_clase = get_class($this);
-			$o = new $nom_clase();
-			foreach($e as $key => $value)
-			{
-				$o->$key = $value;
-			}
-			$this->result_array[] = $o;
-		}
-	}
-
-
-	public function ___recuperar_choices($filtro = '_')
-	{
-		$this->recuperar_all($filtro, -1);
-		foreach ($this->result_array as $key => $value)
-		{
-			$arr_choices[$value->fields[$value->id_field]->value] = $value->to_string();
-		}
-		return $arr_choices;
-	}
-
-
-}
 
 
 // **********************************************************************************************************
@@ -988,25 +1043,111 @@ class ORM_Model {
 // **********************************************************************************************************
 // **********************************************************************************************************
 
+/**
+ * Clase que modela un campo
+ *
+ *
+ * @category	Controller
+ * @author		dcr
+ * @link
+ */
 class ORM_Field {
 
-	private $nombre           = '';
-	private $tabla_bd         = '';
-	private $nombre_bd        = '';
-	private $label            = '';
-	private $texto_ayuda      = '';
-	private $default          = '';
-	private $mostrar_lista    = TRUE;
-
-	private $tipo             = 'char';
-	private $largo            = 10;
-	private $decimales        = 2;
-	private $choices          = array();
-	private $relation         = array();
-
-	private $es_id            = FALSE;
-	private $es_obligatorio   = FALSE;
-	private $es_unico         = FALSE;
+	/**
+	 * Nombre del campo
+	 *
+	 * @var  string
+	 */
+	private $nombre = '';
+	/**
+	 * Nombre del tabla del campo
+	 *
+	 * @var  string
+	 */
+	private $tabla_bd = '';
+	/**
+	 * Nombre del campo en la tabla
+	 *
+	 * @var  string
+	 */
+	private $nombre_bd = '';
+	/**
+	 * Nombre del campo (etiqueta)
+	 *
+	 * @var  string
+	 */
+	private $label = '';
+	/**
+	 * Texto de ayuda del campo
+	 *
+	 * @var  string
+	 */
+	private $texto_ayuda = '';
+	/**
+	 * Valor por defecto del campo
+	 *
+	 * @var  string
+	 */
+	private $default = '';
+	/**
+	 * Indica si el campo se muestra en la listado
+	 *
+	 * @var  boolean
+	 */
+	private $mostrar_lista = TRUE;
+	/**
+	 * Tipo del campo
+	 *
+	 * @var  string
+	 */
+	private $tipo = 'char';
+	/**
+	 * Largo del campo
+	 *
+	 * @var  string
+	 */
+	private $largo = 10;
+	/**
+	 * Cantidad de decimales del campo
+	 *
+	 * @var  string
+	 */
+	private $decimales = 2;
+	/**
+	 * Lista de los valores válidos para el campo
+	 *
+	 * @var  array
+	 */
+	private $choices = array();
+	/**
+	 * Arreglo con los datos de la relación
+	 *
+	 * @var  array
+	 */
+	private $relation = array();
+	/**
+	 * Indica si el campo es ID
+	 *
+	 * @var  boolean
+	 */
+	private $es_id = FALSE;
+	/**
+	 * Indica si el campo es obligatorio
+	 *
+	 * @var  boolean
+	 */
+	private $es_obligatorio = FALSE;
+	/**
+	 * Indica si el valor del campo debe ser único
+	 *
+	 * @var  boolean
+	 */
+	private $es_unico = FALSE;
+	/**
+	 * Indica si el campo es auto-incremental
+	 *
+	 * @var  boolean
+	 */
 	private $es_autoincrement = FALSE;
 
 
@@ -1146,7 +1287,9 @@ class ORM_Field {
 
 	/**
 	 * Genera el elemento de formulario para el campo
+	 *
 	 * @param  string $valor Valor a desplegar en el elemento de formulario
+	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @return string        Elemento de formulario
 	 */
 	public function form_field($valor = '', $filtra_activos = FALSE)
