@@ -129,6 +129,157 @@ class App_common {
 
 	}
 
+
+	public function reporte($arr_campos = array(), $arr_datos = array())
+	{
+		$tabla = array();
+
+		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
+
+		$n_linea    = 0; 
+		$totales    = array(); 
+		$subtotales = array(); 
+		$subtot_ant = array(); 
+		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif'); 
+
+				
+		array_push($tabla, '<thead>');
+		array_push($tabla, '<tr>');
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			array_push($tabla, '<th ' . ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"');
+			//array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])));
+			//array_push($tabla, $arr_img_orden[$campo]);
+			array_push($tabla, '</th>');
+
+			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
+			{ 
+				$totales[$campo] = 0; 
+			}
+			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
+			{ 
+				$subtotales[$campo] = 0; 
+			}
+		}
+		array_push($tabla, '</tr>');
+		array_push($tabla, '</thead>');
+
+		array_push($tabla, '<tbody>');
+		foreach ($arr_datos as $reg)
+		{
+			array_push($tabla, '<tr>');
+			array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
+
+			foreach ($arr_campos as $campo => $arr_param_campo)
+			{
+				// Si el primer campo es un subtotal, inserta título del campo
+				if ($arr_param_campo['tipo'] == 'subtotal')
+				{
+					if (!array_key_exists($campo, $subtot_ant)) 
+					{
+						$subtot_ant[$campo] = '';
+					}
+
+					// Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales 
+					if ($reg[$campo] != $subtot_ant[$campo])
+					{
+						if ($subtot_ant[$campo] != '')
+						{
+							foreach ($arr_campos as $c => $arr_c)
+							{
+								array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') - '>');
+								array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
+								array_push($tabla, '</td>');
+							}
+							
+							array_push($tabla, '</tr>');
+							array_push($tabla, '<tr>');
+							array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
+							array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">&nbsp;</td>');
+							array_push($tabla, '</tr>');
+							array_push($tabla, '<tr>');
+						}
+						
+						if ($subtot_ant[$campo] != '')
+						{
+							array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+						}
+								
+						$subtot_ant[$campo] = $reg[$campo];
+						foreach ($arr_campos as $c => $arr_c)
+						{
+							$subtotales[$c] = 0;
+						}
+							
+						array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">');
+						array_push($tabla, ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : '');
+						array_push($tabla, '</td>');
+						array_push($tabla, '</tr>');
+						array_push($tabla, '<tr>');
+						array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+
+					}
+				}
+
+				array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
+				array_push($tabla, $this->formato_reporte($reg[$campo], $arr_param_campo));
+				array_push($tabla, '</td>');
+				
+				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
+				{ 
+					$totales[$campo] += $reg[$campo]; 
+				}
+				
+				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
+				{ 
+					$subtotales[$campo] += $reg[$campo]; 
+				}
+			}
+
+			array_push($tabla, '</tr>');	
+		}
+
+		//ultima linea de subtotales
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			if ($arr_param_campo['tipo'] == 'subtotal')
+			{
+				array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+				foreach ($arr_campos as $c => $arr_c)
+				{
+					array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : ''); 
+					array_push($tabla, '</td>');
+				}
+						
+				array_push($tabla, '</tr>');
+				array_push($tabla, '<tr>');
+				array_push($tabla, '<td colspan="' . count($arr_campos) + 1 . '" class="subtotal">&nbsp;</td>');
+				array_push($tabla, '</tr>');
+			}
+		}
+		
+		// totales
+		array_push($tabla, '<tr>');
+		array_push($tabla, '<td></td>');
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"') . '>');
+			array_push($tabla, in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($totales[$campo], $arr_param_campo) : '');
+			array_push($tabla, '</td>');
+		}
+		array_push($tabla, '</tr>');
+
+		array_push($tabla, '</tbody>');
+		array_push($tabla, '</table>');
+
+		return implode('', $tabla);
+	}
+
+	
+	
+
+
 }
 
 
