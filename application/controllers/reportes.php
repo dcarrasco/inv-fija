@@ -303,7 +303,7 @@ class Reportes extends CI_Controller {
 				'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
 				'id_inventario'     => $id_inventario,
 			);
-echo $this->app_common->reporte($arr_campos, $datos_hoja);
+		//echo $this->app_common->reporte($arr_campos, $datos_hoja);
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/reporte', $data);
 		$this->load->view('app_footer', $data);
