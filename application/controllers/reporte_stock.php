@@ -11,7 +11,11 @@ class Reporte_stock extends CI_Controller {
 	{
 		parent::__construct();
 		$this->acl_model->autentica('odk9@i2_23');
-		//$this->output->enable_profiler(TRUE);
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 
 
@@ -33,9 +37,10 @@ class Reporte_stock extends CI_Controller {
 		// define reglas para usar set_value
 		$this->form_validation->set_rules('tipo_alm');
 		$this->form_validation->set_rules('estado_sap');
+		$this->form_validation->set_rules('tipo_mat');
+		$this->form_validation->set_rules('tipo_op', '', 'trim');
 		$this->form_validation->set_rules('incl_almacen', '', 'trim');
 		$this->form_validation->set_rules('incl_lote', '', 'trim');
-		$this->form_validation->set_rules('incl_estado', '', 'trim');
 		$this->form_validation->set_rules('incl_modelos', '', 'trim');
 		$this->form_validation->set_rules('order_by', '', 'trim');
 		$this->form_validation->set_rules('order_sort', '', 'trim');
@@ -45,9 +50,10 @@ class Reporte_stock extends CI_Controller {
 		$orden_tipo    = set_value('order_sort');
 		$tipo_alm      = $this->input->post('tipo_alm');
 		$estado_sap    = $this->input->post('estado_sap');
+		$tipo_mat      = $this->input->post('tipo_mat');
+		$tipo_op       = set_value('tipo_op', 'MOVIL');
 		$incl_almacen  = set_value('incl_almacen');
 		$incl_lote     = set_value('incl_lote');
-		$incl_estado   = set_value('incl_estado');
 		$incl_modelos  = set_value('incl_modelos');
 
 		$new_orden_tipo  = ($orden_tipo == 'ASC') ? 'DESC' : 'ASC';
@@ -56,7 +62,7 @@ class Reporte_stock extends CI_Controller {
 		if ($tipo == 'permanencia')
 		{
 			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
-			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $incl_almacen, $incl_lote, $incl_estado, $incl_modelos);
+			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $tipo_mat, $incl_almacen, $incl_lote, $incl_modelos);
 
 			$arr_campos = array();
 
@@ -64,29 +70,35 @@ class Reporte_stock extends CI_Controller {
 			if ($incl_almacen == '1')
 			{
 				$arr_campos['centro']    = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
-				$arr_campos['cod_almacen']    = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['almacen']    = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
 				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
-			if ($incl_estado == '1')
+			if (count($estado_sap) > 0 and is_array($estado_sap))
 			{
-				$arr_campos['estado_sap']    = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_stock']    = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
 			}
 			if ($incl_lote == '1')
 			{
 				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
 			}
+			if (count($tipo_mat) > 0 and is_array($tipo_mat))
+			{
+				$arr_campos['tipo_material']    = array('titulo' => 'Tipo Material','class' => '',   'tipo' => 'texto');
+			}
 			if ($incl_modelos == '1')
 			{
 				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
-			$arr_campos['m120'] = array('titulo' => '000-120',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m030'] = array('titulo' => '000-030',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m060'] = array('titulo' => '031-060',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m090'] = array('titulo' => '061-090',     'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m120'] = array('titulo' => '091-120',     'class' => 'text-center',  'tipo' => 'numero');
 			$arr_campos['m150'] = array('titulo' => '121-150',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m180'] = array('titulo' => '151-180',     'class' => 'text-center',  'tipo' => 'numero');
 			$arr_campos['m360'] = array('titulo' => '181-360',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m540'] = array('titulo' => '361-500',     'class' => 'text-center',  'tipo' => 'numero');
 			$arr_campos['m720'] = array('titulo' => '501-720',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['mas720']    = array('titulo' => '+720',        'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['total']   = array('titulo' => 'Total',       'class' => 'text-center bold',  'tipo' => 'numero');
+			$arr_campos['mas720'] = array('titulo' => '+720',        'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['otro']   = array('titulo' => 'otro',        'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['total']  = array('titulo' => 'Total',       'class' => 'text-center bold',  'tipo' => 'numero');
 		}
 
 		$arr_link_campos = array();
@@ -105,18 +117,21 @@ class Reporte_stock extends CI_Controller {
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'datos_hoja'      => $datos_hoja,
+				//'arr_campos'      => $arr_campos,
+				//'datos_hoja'      => $datos_hoja,
+				//'arr_link_campos' => $arr_link_campos,
+				//'arr_link_sort'   => $arr_link_sort,
+				//'arr_img_orden'   => $arr_img_orden,
+				'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
 				'tipo_reporte'    => $view,
 				'nombre_reporte'  => $tipo,
 				'filtro_dif'      => '',
 				'arr_campos'      => $arr_campos,
-				'arr_link_campos' => $arr_link_campos,
-				'arr_link_sort'   => $arr_link_sort,
-				'arr_img_orden'   => $arr_img_orden,
 				'titulo_modulo'   => 'Reportes Stock',
 				'fecha_reporte'   => $this->reportestock_model->get_fecha_reporte(),
-				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm(),
+				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm($tipo_op),
 				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
+				'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 			);
 
 		$this->load->view('app_header', $data);

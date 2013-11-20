@@ -17,10 +17,13 @@ class Reportes extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('reportes');
-
 		$this->load->model('inventario_model');
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 	}
 
 
@@ -290,20 +293,21 @@ class Reportes extends CI_Controller {
 
 		$data = array(
 				'menu_modulo'     => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'datos_hoja'      => $datos_hoja,
+				//'arr_campos'      => $arr_campos,
+				//'datos_hoja'      => $datos_hoja,
+				//'arr_link_campos' => $arr_link_campos,
+				//'arr_link_sort'   => $arr_link_sort,
+				//'arr_img_orden'   => $arr_img_orden,
+				'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
 				'tipo_reporte'    => $view,
 				'nombre_reporte'  => $tipo,
 				'filtro_dif'      => '',
-				'arr_campos'      => $arr_campos,
-				'arr_link_campos' => $arr_link_campos,
-				'arr_link_sort'   => $arr_link_sort,
-				'arr_img_orden'   => $arr_img_orden,
 				'titulo_modulo'   => 'Reportes',
 				'combo_inventarios' => $this->inventario_model->get_combo_inventarios(),
 				'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
 				'id_inventario'     => $id_inventario,
 			);
-		//echo $this->app_common->reporte($arr_campos, $datos_hoja);
+
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/reporte', $data);
 		$this->load->view('app_footer', $data);

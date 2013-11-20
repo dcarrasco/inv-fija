@@ -117,10 +117,10 @@ class App_common {
 				return '$ ' . number_format($valor, 0, ',' , '.');
 				break;
 			case 'numero_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
 				break;
 			case 'valor_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . '$ ' . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . '$ ' . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
 				break;
 			default:
 				return $valor;
@@ -130,34 +130,30 @@ class App_common {
 	}
 
 
-	public function reporte($arr_campos = array(), $arr_datos = array())
+	public function reporte($arr_campos = array(), $arr_datos = array(), $arr_link_campos = array(), $arr_link_sort = array(), $arr_img_orden = array())
 	{
 		$tabla = array();
-
-		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
 
 		$n_linea    = 0; 
 		$totales    = array(); 
 		$subtotales = array(); 
 		$subtot_ant = array(); 
 		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif'); 
-
 				
+		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
 		array_push($tabla, '<thead>');
 		array_push($tabla, '<tr>');
+		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
-			array_push($tabla, '<th ' . ($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"');
-			//array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])));
-			//array_push($tabla, $arr_img_orden[$campo]);
+			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
+			array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])));
+			array_push($tabla, $arr_img_orden[$campo]);
 			array_push($tabla, '</th>');
 
 			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
 			{ 
 				$totales[$campo] = 0; 
-			}
-			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
-			{ 
 				$subtotales[$campo] = 0; 
 			}
 		}
@@ -202,7 +198,7 @@ class App_common {
 						
 						if ($subtot_ant[$campo] != '')
 						{
-							array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+							array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
 						}
 								
 						$subtot_ant[$campo] = $reg[$campo];
@@ -216,7 +212,7 @@ class App_common {
 						array_push($tabla, '</td>');
 						array_push($tabla, '</tr>');
 						array_push($tabla, '<tr>');
-						array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+						array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
 
 					}
 				}
@@ -244,10 +240,10 @@ class App_common {
 		{
 			if ($arr_param_campo['tipo'] == 'subtotal')
 			{
-				array_push($tabla, '<td><span class="muted"><?php echo ++$n_linea; ?></span></td>');
+				array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
 				foreach ($arr_campos as $c => $arr_c)
 				{
-					array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+					array_push($tabla, 'xx <td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
 					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : ''); 
 					array_push($tabla, '</td>');
 				}
@@ -273,7 +269,7 @@ class App_common {
 		array_push($tabla, '</tbody>');
 		array_push($tabla, '</table>');
 
-		return implode('', $tabla);
+		return (implode('', $tabla));
 	}
 
 	
