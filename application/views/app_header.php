@@ -23,7 +23,7 @@
 
 <nav class="navbar navbar-default">
 	<a class="navbar-brand" href="#">
-		<strong>Inventario fija</strong> :: <?php echo $this->app_common->titulo_modulo(); ?>
+		<strong><?php echo $this->app_common->titulo_modulo(); ?></strong>
 	</a>
 
 	<ul class="nav navbar-nav pull-right">

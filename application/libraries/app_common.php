@@ -78,7 +78,7 @@ class App_common {
 		{
 			if($mods['url'] == $this->uri->segment(1))
 			{
-				return '<span class="' . $mods['modulo_icono'] . ' "></span> ' . $mods['modulo'];
+				return '<span class="' . $mods['modulo_icono'] . ' "></span>&nbsp;&nbsp;' . $mods['modulo'];
 			}
 		}
 
@@ -108,13 +108,13 @@ class App_common {
 				return anchor($arr_param_campo['href'] . $valor, $valor);
 				break;
 			case 'numero':
-				return number_format($valor,0,',','.');
+				return number_format($valor, 0, ',', '.');
 				break;
 			case 'valor':
-				return '$ ' . number_format($valor, 0, ',' ,'.');
+				return '$ ' . number_format($valor, 0, ',', '.');
 				break;
 			case 'valor_pmp':
-				return '$ ' . number_format($valor, 0,',' , '.');
+				return '$ ' . number_format($valor, 0, ',' , '.');
 				break;
 			case 'numero_dif':
 				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-important">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');

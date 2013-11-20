@@ -497,8 +497,8 @@ class ORM_Model {
 					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
-					'prev_link'   => '&laquo;',
-					'next_link'   => '&raquo;',
+					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
+					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 				);
 		$this->pagination->initialize($cfg_pagination);
 		return $this->pagination->create_links();
