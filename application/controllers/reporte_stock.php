@@ -75,7 +75,7 @@ class Reporte_stock extends CI_Controller {
 			}
 			if (count($estado_sap) > 0 and is_array($estado_sap))
 			{
-				$arr_campos['estado_stock']    = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_sap']    = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
 			}
 			if ($incl_lote == '1')
 			{
@@ -89,16 +89,16 @@ class Reporte_stock extends CI_Controller {
 			{
 				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
-			$arr_campos['m030'] = array('titulo' => '000-030',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m060'] = array('titulo' => '031-060',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m090'] = array('titulo' => '061-090',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m120'] = array('titulo' => '091-120',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m150'] = array('titulo' => '121-150',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m360'] = array('titulo' => '181-360',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m720'] = array('titulo' => '501-720',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['mas720'] = array('titulo' => '+720',        'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['otro']   = array('titulo' => 'otro',        'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['total']  = array('titulo' => 'Total',       'class' => 'text-center bold',  'tipo' => 'numero');
+			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m150'] = array('titulo' => '121-150', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m360'] = array('titulo' => '151-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 		}
 
 		$arr_link_campos = array();
@@ -139,6 +139,28 @@ class Reporte_stock extends CI_Controller {
 		$this->load->view('app_footer', $data);
 
 		//echo "<pre>"; var_dump($data); echo "</pre>";
+	}
+
+	public function detalle()
+	{
+
+		$this->load->model('reportestock_model');
+
+		$data = array(
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => 'permanencia'),
+			'menu_configuracion' => '',
+			'detalle_series'     => $this->reportestock_model->get_detalle_series($this->input->get('id_tipo'), $this->input->get('centro'), $this->input->get('almacen'), $this->input->get('estado_stock'), $this->input->get('lote'), $this->input->get('material'), $this->input->get('tipo_material'), $this->input->get('permanencia')),
+			'titulo_modulo'   => 'Reportes Stock',
+		);
+
+		$this->load->view('app_header', $data);
+		$this->load->view('stock_sap/detalle_series', $data);
+		$this->load->view('app_footer', $data);
+
+		$this->load->model('reportestock_model');
+		
+
+
 	}
 
 }

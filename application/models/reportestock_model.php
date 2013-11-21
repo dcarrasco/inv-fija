@@ -105,7 +105,7 @@ class Reportestock_model extends CI_Model {
 										$tipo_mat = array(), $incl_almacen = '0', $incl_lote = '0', $incl_modelos = '0')
 	{
 
-		$this->db->select('t.tipo');
+		$this->db->select('t.tipo, t.id_tipo');
 		$this->db->select('sum(m030) as m030');
 		$this->db->select('sum(m060) as m060');
 		$this->db->select('sum(m090) as m090');
@@ -119,7 +119,7 @@ class Reportestock_model extends CI_Model {
 		$this->db->from('bd_logistica..cp_permanencia as p');
 		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left');
 		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
-		$this->db->group_by('t.tipo');
+		$this->db->group_by('t.tipo, t.id_tipo');
 		$this->db->order_by($orden_campo, $orden_tipo);
 
 		if (count($tipo_alm) > 0)
@@ -134,7 +134,7 @@ class Reportestock_model extends CI_Model {
 		if (count($estado_sap) > 0 and is_array($estado_sap))
 		{
 			$this->db->where_in('p.estado_stock', $estado_sap);
-			$this->db->select('case p.estado_stock when \'01\' then \'01 Libre util\' when \'02\' then \'02 Control Calidad\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_stock end as estado_stock');
+			$this->db->select('case p.estado_stock when \'01\' then \'01 Libre util\' when \'02\' then \'02 Control Calidad\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_stock end as estado_sap, p.estado_stock');
 			$this->db->group_by('p.estado_stock');
 			$this->db->order_by('p.estado_stock');
 		}
@@ -163,8 +163,12 @@ class Reportestock_model extends CI_Model {
 
 		if ($incl_modelos == '1')
 		{
-			$this->db->select('substring(p.material, 6, 2) + \' \' + substring(p.material, 8, 5) as modelo');
-			$this->db->group_by('substring(p.material, 6, 2) + \' \' + substring(p.material, 8, 5)');
+
+			$this->db->select('p.material');
+			$this->db->group_by('p.material');
+
+			$this->db->select('p.material + \' \' + p.des_material as modelo');
+			$this->db->group_by('p.material + \' \' + p.des_material');
 			$this->db->order_by('modelo');
 		}
 
@@ -233,35 +237,122 @@ class Reportestock_model extends CI_Model {
 		return $this->db->get()->result_array();
 	}
 
-	public function get_detalle_series_consumo($tipo_alm = array())
+	public function get_detalle_series($tipo_alm = '', $centro = '', $almacen = '', $estado_stock = '', $lote = '', $material = '', $tipo_material = '', $permanencia = '')
 	{
 		$this->db->select('t.tipo');
+		$this->db->select('s.fecha_stock');
 		$this->db->select('s.centro');
 		$this->db->select('s.almacen');
-		$this->db->select('s.des_almacen');
+		$this->db->select('a.des_almacen');
 		$this->db->select('s.material');
 		$this->db->select('s.des_material');
 		$this->db->select('s.lote');
-		$this->db->select('s.dias');
+		$this->db->select('s.estado_stock');
+		$this->db->select('s.modificado_el');
 		$this->db->select('s.serie');
+		$this->db->select('0 as pmp');
+		$this->db->select('s.modificado_el as fecha_modificacion');
+		$this->db->select('s.modificado_por');
+		$this->db->select('u.nom_usuario');
 
-		$this->db->from('bd_logistica..perm_series_consumo_fija s');
+		$this->db->from('bd_logistica..bd_stock_sap s');
 		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
 		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
 		$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
+		$this->db->join('bd_logistica..cp_usuarios u', 'u.usuario=s.modificado_por', 'left');
 		$this->db->order_by('t.tipo');
 		$this->db->order_by('s.centro');
 		$this->db->order_by('s.almacen');
 		$this->db->order_by('s.material');
-		$this->db->order_by('s.dias');
 
-		if (count($tipo_alm) > 0)
+		if ($tipo_alm != '')
 		{
-			$this->db->where_in('t.id_tipo', $tipo_alm);
+			$this->db->where('t.id_tipo', $tipo_alm);
 		}
-		else
+		
+		if ($centro != '')
 		{
-			$this->db->where('t.id_tipo', -1);
+			$this->db->where('s.centro', $centro);
+		}
+
+		if ($almacen != '')
+		{
+			$this->db->where('s.almacen', $almacen);
+		}
+
+		if ($estado_stock != '')
+		{
+			$this->db->where('s.estado_stock', $estado_stock);
+		}
+
+		if ($lote != '')
+		{
+			$this->db->where('s.lote', $lote);
+		}
+
+		if ($material != '')
+		{
+			$this->db->where('s.material', $material);
+		}
+
+		if ($tipo_material == 'EQUIPO')
+		{
+			$this->db->where_in('substring(s.material,1,2)', array('TM', 'TC', 'TO', 'PK', 'PO'));
+			$this->db->where('substring(s.material,1,8) <>', 'PKGCLOTK');
+		}
+		elseif ($tipo_material == 'SIMCARD')
+		{
+			$this->db->where('(substring(s.material,1,2) = \'TS\' OR substring(s.material,1,8)=\'PKGCLOTK\')');
+		}
+		elseif ($tipo_material == 'FIJA')
+		{
+			$this->db->where('substring(s.material,1,3)', '103');
+		}
+
+		if ($permanencia == 'm030')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 30);
+		}
+		elseif ($permanencia == 'm060')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 31);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 60);
+		}
+		elseif ($permanencia == 'm090')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 61);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 90);
+		}
+		elseif ($permanencia == 'm120')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 91);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 120);
+		}
+		elseif ($permanencia == 'm150')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 121);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 150);
+		}
+		elseif ($permanencia == 'm360')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 151);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 360);
+		}
+		elseif ($permanencia == 'm720')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 361);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 720);
+		}
+		elseif ($permanencia == 'mas720')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 721);
+		}
+		elseif ($permanencia == 'otro')
+		{
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) IS NULL');
+		}
+		elseif ($permanencia == 'total')
+		{
 		}
 
 		return $this->db->get()->result_array();

@@ -97,7 +97,7 @@ class App_common {
 	}
 
 
-	public function formato_reporte($valor = '', $arr_param_campo = array())
+	public function formato_reporte($valor = '', $arr_param_campo = array(), $reg = array(), $campo = '')
 	{
 		switch ($arr_param_campo['tipo'])
 		{
@@ -106,6 +106,27 @@ class App_common {
 				break;
 			case 'link':
 				return anchor($arr_param_campo['href'] . $valor, $valor);
+				break;
+			case 'link_detalle_series':
+				$id_tipo        = (array_key_exists('id_tipo', $reg)) ? $reg['id_tipo'] : '';
+				$centro         = (array_key_exists('centro', $reg)) ? $reg['centro'] : '';
+				$almacen        = (array_key_exists('almacen', $reg)) ? $reg['almacen'] : '';
+				$lote           = (array_key_exists('lote', $reg)) ? $reg['lote'] : '';
+				$estado_stock   = (array_key_exists('estado_stock', $reg)) ? $reg['estado_stock'] : '';
+				$material       = (array_key_exists('material', $reg)) ? $reg['material'] : '';
+				$tipo_material  = (array_key_exists('tipo_material', $reg)) ? $reg['tipo_material']: '';
+				$permanencia    = $campo;
+
+				$href_param  = '?id_tipo=' . $id_tipo;
+				$href_param .= '&centro=' . $centro;
+				$href_param .= '&almacen=' . $almacen;
+				$href_param .= '&lote=' . $lote;
+				$href_param .= '&estado_stock=' . $estado_stock;
+				$href_param .= '&material=' . $material;
+				$href_param .= '&tipo_material=' . $tipo_material;
+				$href_param .= '&permanencia=' . $permanencia;
+
+				return anchor($arr_param_campo['href'] . $href_param, number_format($valor, 0, ',', '.'));
 				break;
 			case 'numero':
 				return number_format($valor, 0, ',', '.');
@@ -138,7 +159,7 @@ class App_common {
 		$totales    = array(); 
 		$subtotales = array(); 
 		$subtot_ant = array(); 
-		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif'); 
+		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series'); 
 				
 		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
 		array_push($tabla, '<thead>');
@@ -218,7 +239,7 @@ class App_common {
 				}
 
 				array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
-				array_push($tabla, $this->formato_reporte($reg[$campo], $arr_param_campo));
+				array_push($tabla, $this->formato_reporte($reg[$campo], $arr_param_campo, $reg, $campo));
 				array_push($tabla, '</td>');
 				
 				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
