@@ -93,8 +93,8 @@ class Reporte_stock extends CI_Controller {
 			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m150'] = array('titulo' => '121-150', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m360'] = array('titulo' => '151-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
 			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');

@@ -110,7 +110,7 @@ class Reportestock_model extends CI_Model {
 		$this->db->select('sum(m060) as m060');
 		$this->db->select('sum(m090) as m090');
 		$this->db->select('sum(m120) as m120');
-		$this->db->select('sum(m150) as m150');
+		$this->db->select('sum(m180) as m180');
 		$this->db->select('sum(m360) as m360');
 		$this->db->select('sum(m720) as m720');
 		$this->db->select('sum(mas720) as mas720');
@@ -328,14 +328,14 @@ class Reportestock_model extends CI_Model {
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 91);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 120);
 		}
-		elseif ($permanencia == 'm150')
+		elseif ($permanencia == 'm180')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 121);
-			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 150);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 180);
 		}
 		elseif ($permanencia == 'm360')
 		{
-			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 151);
+			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 181);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 360);
 		}
 		elseif ($permanencia == 'm720')
