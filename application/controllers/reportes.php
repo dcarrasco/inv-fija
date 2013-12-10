@@ -284,8 +284,9 @@ class Reportes extends CI_Controller {
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
 
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
-											'<img src="' . base_url() . 'img/' . (($orden_tipo == 'ASC') ?
-											'ic_up_circle.png' : 'ic_down_circle.png') . '" />': '';
+											' <span class="text-muted glyphicon ' . 
+											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . 
+											'" ></span>': '';
 		}
 
 		$tipo = ($tipo == 'detalle_hoja') ? 'hoja' : $tipo;
