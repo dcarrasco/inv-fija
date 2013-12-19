@@ -173,12 +173,12 @@ Formato del archivo:
 		arr_datos = arr_error;
 	}
 
-	function procesa_carga_linea(datos) {
+	function procesa_carga_linea(datos_linea) {
 		$.ajax({
 			type:  "POST",
 			url:   js_base_url + "analisis/inserta_linea_archivo",
 			async: true,
-			data:  datos,
+			data:  datos_linea,
 			success: function(datos) {
 				curr += 1;
 				var progreso = parseInt(100 * curr / cant) + '%';
@@ -191,7 +191,7 @@ Formato del archivo:
 			},
 			error: function() {
 				cerr += 1;
-				arr_error.push(data);
+				arr_error.push(datos_linea);
 				$('#reg_error').text(cerr);
 			},
 			complete: function() {
