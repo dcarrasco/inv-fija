@@ -185,7 +185,7 @@ Formato del archivo:
 				},
 				error: function() {
 					cerr += 1;
-					arr_error.push(sdata);
+					arr_error.push(data);
 					$('#reg_error').text(cerr);
 				},
 				complete: function() {
