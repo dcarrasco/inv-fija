@@ -168,35 +168,39 @@ Formato del archivo:
 			if (cproc == 1) {
 				$('#ejecuta_carga').hide();
 			}
-			$.ajax({
-				type:  "POST",
-				url:   js_base_url + "analisis/inserta_linea_archivo",
-				async: true,
-				data:  sdata,
-				success: function(datos) {
-					curr += 1;
-					var progreso = parseInt(100 * curr / cant) + '%';
-					$('div.bar').css('width',progreso);
-					$('#reg_actual').text(curr);
-
-					if (curr >= cant) {
-						$('#status_progreso1').html('Carga finalizada (' + curr + ' registros cargados)');
-					}
-				},
-				error: function() {
-					cerr += 1;
-					arr_error.push(data);
-					$('#reg_error').text(cerr);
-				},
-				complete: function() {
-					cproc -= 1;
-					if (cproc == 0) {
-						$('#ejecuta_carga').show();
-					}
-				},
-			});
+			procesa_carga_linea(sdata);
 		}
 		arr_datos = arr_error;
+	}
+
+	function procesa_carga_linea(datos) {
+		$.ajax({
+			type:  "POST",
+			url:   js_base_url + "analisis/inserta_linea_archivo",
+			async: true,
+			data:  datos,
+			success: function(datos) {
+				curr += 1;
+				var progreso = parseInt(100 * curr / cant) + '%';
+				$('div.bar').css('width',progreso);
+				$('#reg_actual').text(curr);
+
+				if (curr >= cant) {
+					$('#status_progreso1').html('Carga finalizada (' + curr + ' registros cargados)');
+				}
+			},
+			error: function() {
+				cerr += 1;
+				arr_error.push(data);
+				$('#reg_error').text(cerr);
+			},
+			complete: function() {
+				cproc -= 1;
+				if (cproc == 0) {
+					$('#ejecuta_carga').show();
+				}
+			},
+		});
 	}
 </script>
 
