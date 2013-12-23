@@ -242,7 +242,7 @@ class ORM_Model {
 
 	/**
 	 * determina y fija el campo id del modelo
-	 * @return string nombre del campo id
+	 * @return arreglo con nombre de los campos marcados como id
 	 */
 	private function _determina_campo_id()
 	{
@@ -949,8 +949,11 @@ class ORM_Model {
 			else
 			{
 				$this->db->insert($this->model_tabla, $data_update);
-				$data_where[$this->model_campo_id] = $this->db->insert_id();
-				$this->{$this->model_campo_id} = $this->db->insert_id();
+				foreach($this->model_campo_id as $campo_id)
+				{
+					$data_where[$campo_id] = $this->db->insert_id();
+					$this->{$campo_id} = $this->db->insert_id();
+				}
 			}
 		}
 		// REGISTRO EXISTENTE
