@@ -61,17 +61,17 @@
 					<td class="text-center">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
 							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
-								<i class="glyphicon glyphicon-question-sign"></i>
+								<span class="glyphicon glyphicon-question-sign"></span>
 								Sobrante
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
 							<button class="btn btn-default btn-sm btn-danger" style="white-space: nowrap;">
-								<i class="glyphicon glyphicon-remove"></i>
+								<span class="glyphicon glyphicon-remove"></span>
 								Faltante
 							</button>
 						<?php else: ?>
 							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
-								<i class="glyphicon glyphicon-ok"></i>
+								<span class="glyphicon glyphicon-ok"></span>
 								OK
 							</button>
 						<?php endif; ?>
@@ -108,7 +108,7 @@
 				<td></td>
 				<td>
 					<a href="#" class="btn btn-primary" id="btn_guardar">
-						<i class="glyphicon glyphicon-ok-sign"></i>
+						<span class="glyphicon glyphicon-ok-sign"></span>
 						Guardar ajustes
 					</a>
 				</td>

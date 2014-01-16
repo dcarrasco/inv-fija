@@ -53,12 +53,12 @@
 			<div class="control-group col-md-6 col-md-offset-3">
 				<hr>
 			</div>
-			
+
 			<div class="control-group col-md-6 col-md-offset-3">
 				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						Ingresar
-						<i class="glyphicon glyphicon-play"></i>
+						<span class="glyphicon glyphicon-play"></span>
 					</button>
 				</div>
 			</div>
