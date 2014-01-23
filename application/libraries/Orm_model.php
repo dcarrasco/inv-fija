@@ -264,7 +264,7 @@ class ORM_Model {
 	/**
 	 * Recupera el valor del id del modelo
 	 *
-	 * @return string 
+	 * @return string
 	 */
 	public function get_model_id()
 	{
@@ -371,7 +371,7 @@ class ORM_Model {
 	/**
 	 * Devuelve el texto label de un campo del modelo
 	 *
-	 * @param  string $campo Nombre del campo 
+	 * @param  string $campo Nombre del campo
 	 * @return string        Label del campo
 	 */
 	public function get_label_field($campo = '')
@@ -442,7 +442,7 @@ class ORM_Model {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-error"><strong>*</strong></span>' : '';
+		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger"><strong>*</strong></span>' : '';
 	}
 
 	// --------------------------------------------------------------------
@@ -640,7 +640,7 @@ class ORM_Model {
 	 *
 	 * @param string $id Identificador del registro a recuperar
 	 * @param boolean $recupera_relation Indica si se recuperará la información de relación
-	 * @return 
+	 * @return
 	 */
 	public function find_id($id = '', $recupera_relation = TRUE)
 	{

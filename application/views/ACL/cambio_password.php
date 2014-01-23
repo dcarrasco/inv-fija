@@ -7,6 +7,9 @@
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+	<style>
+		body {margin-top: 40px;}
+	</style>
 </head>
 <body>
 
@@ -15,14 +18,11 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3 well">
 		<div>
-			<h2>Inventario fija</h2>
+			<h2>Cambio de clave</h2>
 		</div>
 
 
 		<?php echo form_open('login/cambio_password/' . $usr, 'id="frm_login" class="form-horizontal"'); ?>
-			<legend>
-				Cambio de clave
-			</legend>
 
 			<?php if ($msg_alerta != ''): ?>
 				<div class="alert">
@@ -31,7 +31,7 @@
 				</div>
 			<?php endif; ?>
 
-			<div class="control-group">
+			<div class="control-group col-md-8 col-md-offset-2">
 				<label class="control-label" for="usr">Nombre de usuario</label>
 				<div class="controls">
 					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control"'); ?>
@@ -43,7 +43,7 @@
 			<?php if ($ocultar_password): ?>
 
 				<?php if ($tiene_clave): ?>
-					<div class="control-group">
+					<div class="control-group col-md-8 col-md-offset-2">
 						<label class="control-label" for="usr">Clave anterior</label>
 						<div class="controls">
 							<?php echo form_password('pwd_old', '','maxlength="45" class="form-control"'); ?>
@@ -53,7 +53,7 @@
 					<p></p>
 				<?php endif; ?>
 
-				<div class="control-group">
+				<div class="control-group col-md-8 col-md-offset-2">
 					<label class="control-label" for="usr">Clave nueva</label>
 					<div class="controls">
 						<?php echo form_password('pwd_new1', '','maxlength="45" class="form-control"'); ?>
@@ -62,7 +62,7 @@
 				</div>
 				<p></p>
 
-				<div class="control-group">
+				<div class="control-group col-md-8 col-md-offset-2">
 					<label class="control-label" for="usr">Reingrese clave nueva</label>
 					<div class="controls">
 						<?php echo form_password('pwd_new2', '','maxlength="45" class="form-control"'); ?>

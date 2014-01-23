@@ -58,6 +58,7 @@ class Usuario extends ORM_Model {
 								'tipo'           =>  'char',
 								'largo'          => 40,
 								'texto_ayuda'    => 'Correo del usuario. Maximo 40 caracteres.',
+								'mostrar_lista'  => FALSE,
 							),
 						'rol' => array(
 								'tipo'           => 'has_many',
