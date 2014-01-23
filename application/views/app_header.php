@@ -4,7 +4,9 @@
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
 
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" /	>
+	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
+
+	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
@@ -70,4 +72,5 @@
 		</li>
 	<?php endforeach; ?>
 </ul>
+<br />
 <?php endif; ?>
