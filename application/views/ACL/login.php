@@ -7,7 +7,7 @@
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-	<style>
+	<style type="text/css">
 		body {margin-top: 40px;}
 	</style>
 </head>

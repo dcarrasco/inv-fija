@@ -7,15 +7,15 @@
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-	<style>
+	<style type="text/css">
 		body {margin-top: 40px;}
 	</style>
 </head>
 <body>
 
 <div class="container">
-
 <div class="row">
+
 	<div class="col-md-6 col-md-offset-3 well">
 		<div>
 			<h2>Cambio de clave</h2>
