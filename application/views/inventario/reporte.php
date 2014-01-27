@@ -4,7 +4,7 @@
 		<div class="input-group input-group-sm">
 			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
 			<span class="input-group-btn">
-				<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i></button>
+				<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
 			</span>
 		</div>
 	</div>

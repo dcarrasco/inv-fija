@@ -24,17 +24,17 @@
 			<div class="controls">
 				<div class="pull-right">
 					<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
-						<i class="glyphicon glyphicon-ok"></i>
+						<span class="glyphicon glyphicon-ok"></span>
 						Guardar
 					</button>
 					<button type="submit" class="btn btn-default" name="cancelar" value="cancelar">
-						<i class="glyphicon glyphicon-ban-circle"></i>
+						<span class="glyphicon glyphicon-ban-circle"></span>
 						Cancelar
 					</button>
 				</div>
 				<div class="pull-left">
 					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
-						<i class="glyphicon glyphicon-trash"></i>
+						<span class="glyphicon glyphicon-trash"></span>
 						Borrar
 					</button>
 				</div>

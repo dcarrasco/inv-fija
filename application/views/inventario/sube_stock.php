@@ -65,12 +65,12 @@
 			<div class="controls">
 				<?php if ($show_script_carga): ?>
 					<button class="btn btn-primary" id="ejecuta_carga">
-						<i class="glyphicon glyphicon-play"></i>
+						<span class="glyphicon glyphicon-play"></span>
 						Ejecutar carga
 					</button>
 				<?php else: ?>
 				<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
-					<i class="glyphicon glyphicon-upload"></i>
+					<span class="glyphicon glyphicon-upload"></span>
 					Subir archivo
 				</button>
 				<?php endif; ?>

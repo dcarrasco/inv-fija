@@ -76,7 +76,7 @@
 			<div class="control-group pull-right">
 				<div class="controls">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
-						<i class="glyphicon glyphicon-lock"></i>
+						<span class="glyphicon glyphicon-lock"></span>
 						Cambiar clave
 					</button>
 				</div>

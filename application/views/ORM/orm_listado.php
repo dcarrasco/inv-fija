@@ -13,13 +13,12 @@
 
 	<div class="col-md-9 text-right">
 		<a href="<?php echo $url_editar; ?>" class="btn btn-default" id="btn_mostrar_agregar">
-			<i class="glyphicon glyphicon-plus-sign"></i>
+			<span class="glyphicon glyphicon-plus-sign"></span>
 			Agregar <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
 	<?php echo form_close(''); ?>
 </div>
-<hr />
 <div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
@@ -45,7 +44,7 @@
 					<td>
 						<div class="text-center">
 							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn  btn-default btn-xs">
-								<i class="glyphicon glyphicon-edit"></i>
+								<span class="glyphicon glyphicon-edit"></span>
 							</a>
 						</div>
 					</td>

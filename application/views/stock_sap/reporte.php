@@ -76,7 +76,7 @@
 
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
-								<i class="glyphicon glyphicon-list-alt"></i>
+								<span class="glyphicon glyphicon-list-alt"></span>
 								Reporte
 							</button>
 						</div>

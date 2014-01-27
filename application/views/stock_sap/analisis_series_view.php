@@ -77,11 +77,11 @@
 				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-							<i class="glyphicon glyphicon-list-alt"></i>
+							<span class="glyphicon glyphicon-list-alt"></span>
 							Consultar
 						</button>
 						<button name="excel" class="btn btn-default" id="boton-reset">
-							<i class="glyphicon glyphicon-refresh"></i>
+							<span class="glyphicon glyphicon-refresh"></span>
 							Limpiar
 						</button>
 					</div>

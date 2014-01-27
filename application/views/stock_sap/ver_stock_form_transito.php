@@ -16,11 +16,11 @@
 				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
-							<i class="glyphicon glyphicon-list-alt"></i>
+							<span class="glyphicon glyphicon-list-alt"></span>
 							Reporte
 						</button>
 						<button type="submit" name="excel" class="btn btn-default">
-							<i class="glyphicon glyphicon-file"></i>
+							<span class="glyphicon glyphicon-file"></span>
 							Exportar a Excel...
 						</button>
 					</div>

@@ -21,13 +21,13 @@
 			<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="form-control input-sm">
 			<span class="input-group-btn">
 				<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
-					<i class="glyphicon glyphicon-search"></i>
+					<span class="glyphicon glyphicon-search"></span>
 				</a>
 				<a href="<?php echo $link_hoja_ant; ?>" class="btn btn-default btn-sm" id="btn_hoja_ant">
-					<i class="glyphicon glyphicon-chevron-left"></i> Ant
+					<span class="glyphicon glyphicon-chevron-left"></span> Ant
 				</a>
 				<a href="<?php echo $link_hoja_sig; ?>" class="btn btn-default btn-sm" id="btn_hoja_sig">
-					Sig	<i class="glyphicon glyphicon-chevron-right"></i>
+					Sig	<span class="glyphicon glyphicon-chevron-right"></span>
 				</a>
 			</span>
 		</div>
@@ -42,7 +42,7 @@
 	<div class="col-md-3">
 		<div class="pull-right">
 			<a href="#" id="btn_mostrar_agregar" class="btn btn-default">
-				<i class="glyphicon glyphicon-plus-sign"></i> Nuevo material...
+				<span class="glyphicon glyphicon-plus-sign"></span> Nuevo material...
 			</a>
 		</div>
 	</div>
@@ -91,7 +91,7 @@
 					<div class="col-md-4">
 						<div class="input-group">
 							<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control input-sm" id="agr_filtrar"'); ?>
-							<span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
+							<span class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>
 						</div>
 					</div>
 					<div class="col-md-8">
@@ -158,18 +158,18 @@
 
 				<div class="pull-left">
 					<a href="#" class="btn btn-danger" id="btn_borrar">
-						<i class="glyphicon glyphicon-trash"></i>
+						<span class="glyphicon glyphicon-trash"></span>
 						Borrar
 					</a>
 				</div>
 
 				<div class="pull-right">
 					<a href="#" class="btn btn-primary" id="btn_agregar">
-						<i class="glyphicon glyphicon-plus-sign"></i>
+						<span class="glyphicon glyphicon-plus-sign"></span>
 						Agregar material
 					</a>
 					<a href="#" class="btn btn-default" id="btn_cancelar">
-						<i class="glyphicon glyphicon-ban-circle"></i>
+						<span class="glyphicon glyphicon-ban-circle"></span>
 						Cancelar
 					</a>
 				</div>
@@ -216,7 +216,7 @@
 
 						<?php if ($linea_det->reg_nuevo == 'S'):?>
 							<a href="#" class="btn btn-default btn-xs" id="btn_editar_id_<?php echo $linea_det->id; ?>">
-								<i class="glyphicon glyphicon-edit"></i>
+								<span class="glyphicon glyphicon-edit"></span>
 							</a>
 							<?php echo form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>
 							<?php //echo form_hidden('hu_'          . $linea_det->id, $linea_det->hu); ?>
@@ -263,7 +263,7 @@
 				<td>
 					<div class="text-center">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
-							<i class="glyphicon glyphicon-ok"></i>
+							<span class="glyphicon glyphicon-ok"></span>
 							Guardar hoja
 						</a>
 					</div>
