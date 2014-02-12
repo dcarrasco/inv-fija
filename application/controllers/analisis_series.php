@@ -9,7 +9,7 @@ class Analisis_series extends CI_Controller {
 
 		if (ENVIRONMENT != 'production')
 		{
-			$this->output->enable_profiler(TRUE);
+			//$this->output->enable_profiler(TRUE);
 		}
 	}
 
@@ -82,7 +82,10 @@ class Analisis_series extends CI_Controller {
 	public function ajax_trafico_mes($serie = '', $meses = '')
 	{
 		$this->load->model('analisis_series_model');
-		echo json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses));
+		$data = array(
+				'datos' => json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses)),
+			);
+		$this->load->view('stock_sap/ajax_trafico_view', $data);
 	}
 }
 

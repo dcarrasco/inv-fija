@@ -20,19 +20,23 @@
 								'name' => 'series',
 								'rows' => '10',
 								'cols' => '30',
-								'value' => set_value('series')
+								'value' => set_value('series'),
+								'class' => 'form-control',
 							)); ?>
 					</th>
 					<th>
 						Meses: <br />
-						<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="10"'); ?> <br />
+						<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?> <br />
 
 					</th>
 				</tr>
 			</table>
 			<br />
-			<?php echo form_submit('btn_submit','Consulta', 'id="boton-submit" class="button b-active round ic-ok"') ?>
-			<?php echo anchor('analisis_series','Volver...', 'id="boton-reset" class="button b-active round ic-reset"'); ?>
+			<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
+				<span class="glyphicon glyphicon-list-alt"></span>
+				Consultar
+			</button>
+			<?php echo anchor('analisis_series','Volver...', 'id="boton-reset" class="btn"'); ?>
 			<?php echo form_close(); ?>
 		</div>
 
@@ -47,7 +51,7 @@
 		</div> <!-- fin content-header -->
 
 		<div id="res_movimientos" class="cuerpo-movimientos mostrar-ocultar">
-		<table>
+		<table class="table table-hover table-condensed">
 			<tr>
 				<th>Serie IMEI</th>
 				<th>celular</th>
@@ -98,7 +102,7 @@
 					str_meses += arr_meses[i];
 				}
 				$('#res_movimientos').empty();
-				str_tabla = '<table><tr>';
+				str_tabla = '<table class="table table-hover table-condensed"><tr>';
 				str_tabla += '<th>Serie IMEI</th><th>celular</th><th>Tipo</th><th>RUT</th><th>Nombre</th><th>cod situacion</th>';
 				str_tabla += '<th>Fecha Alta</th><th>Fecha Baja</th>';
 				for (var j=0; j<arr_meses.length; j++)
@@ -114,7 +118,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('<?php echo base_url(); ?>/analisis_series/ajax_trafico_mes/' + serie + '/' + str_meses, function(data) {
+						$.getJSON('<?php echo base_url(); ?>analisis_series/ajax_trafico_mes/' + serie + '/' + str_meses, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';
