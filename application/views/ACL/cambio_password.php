@@ -3,6 +3,9 @@
 <head>
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
+
+	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
+
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" /	>
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
