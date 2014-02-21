@@ -18,45 +18,42 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-3">
-						<div>
-							<strong>Seleccionar Almacenes</strong>
+					<div class="col-md-4">
+
+						<strong>Almacenes</strong>
+
+						<div class="pull-right">
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"') ?>
+								Movil
+							</div>
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"') ?>
+								Fija
+							</div>
 						</div>
-						<div class="radio-inline">
-							<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"') ?>
-							Movil
-						</div>
-						<div class="radio-inline">
-							<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"') ?>
-							Fija
-						</div>
+
 						<div>
 							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-3">
-						<div>
-							<strong>Seleccionar Estado Stock</strong>
-						</div>
+						<strong>Estados Stock</strong>
 						<div>
 							<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-3">
-						<div>
-							<strong>Seleccionar Tipos Material</strong>
-						</div>
+					<div class="col-md-2">
+						<strong>Tipos Material</strong>
 						<div>
 							<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-3">
-						<div>
-							<strong>Detalle</strong>
-						</div>
+						<strong>Detalle</strong>
 						<div>
 							<div class="checkbox">
 								<?php echo form_checkbox('incl_almacen', '1', set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
