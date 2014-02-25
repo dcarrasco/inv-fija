@@ -2,6 +2,7 @@
 	<?php //echo $menu_configuracion; ?>
 </div>
 
+<?php echo form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
@@ -64,6 +65,7 @@
 		</div>
 	</div>
 </div>
+<?php echo form_close(); ?>
 
 
 <div class="panel panel-default">
@@ -109,7 +111,7 @@
 	</div>
 </div>
 
-<?php echo form_open('analisis_series/historia'); ?>
+<?php echo form_open('analisis_series/historia', array('id' => 'frmHistoria')); ?>
 <?php echo form_hidden('series'); ?>
 <?php echo form_hidden('show_mov', 'show'); ?>
 <?php echo form_close(); ?>
@@ -122,7 +124,7 @@
 		$('span.serie').click(function (event) {
 			var serie = $(this).text();
 			$('input[name="series"]').val(serie);
-			$('form').submit();
+			$('#frmHistoria').submit();
 		});
 
 		if ($("#series").val() != "")
