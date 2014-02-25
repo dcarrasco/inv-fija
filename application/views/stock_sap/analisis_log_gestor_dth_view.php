@@ -2,7 +2,6 @@
 	<?php //echo $menu_configuracion; ?>
 </div>
 
-<?php echo form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
@@ -65,7 +64,6 @@
 		</div>
 	</div>
 </div>
-<?php echo form_close(); ?>
 
 
 <div class="panel panel-default">
@@ -95,7 +93,7 @@
 				<tr>
 					<td><small><?php echo $reg_log['id_log_deco_tarjeta'] ?></small></td>
 					<td><small><?php echo $reg_log['fecha_log'] ?></small></td>
-					<td><small><?php echo $reg_log['serie_deco'] ?></small></td>
+					<td><small><span class="serie"><?php echo $reg_log['serie_deco'] ?></span></small></td>
 					<td><small><?php echo $reg_log['serie_tarjeta'] ?></small></td>
 					<td><small><?php echo $reg_log['peticion'] ?></small></td>
 					<td><small><?php echo $reg_log['estado'] ?></small></td>
@@ -111,10 +109,22 @@
 	</div>
 </div>
 
-
+<?php echo form_open('analisis_series/historia'); ?>
+<?php echo form_hidden('series'); ?>
+<?php echo form_hidden('show_mov', 'show'); ?>
+<?php echo form_close(); ?>
 
 <script type="text/javascript">
-	$(document).ready(function() {
+	$(document).ready(function () {
+
+	    $('span.serie').css('cursor', 'pointer');
+
+		$('span.serie').click(function (event) {
+			var serie = $(this).text();
+			$('input[name="series"]').val(serie);
+			$('form').submit();
+		});
+
 		if ($("#series").val() != "")
 		{
 			$("div.cuerpo-formulario").hide();
@@ -125,18 +135,19 @@
 			//event.preventDefault();
 			$("#series").val("");
 			$("#series").focus();
-		})
+		});
 
 		$("table tr").hover(function() {
 			$(this).addClass("highlight");
 		}, function() {
 			$(this).removeClass("highlight");
-		})
+		});
 
 		$("div.content-header").click(function() {
 			$(this).next("div.mostrar-ocultar").slideToggle("fast");
 			$(this).children("span.mostrar-ocultar").toggle();
-		})
+		});
 
 	});
+
 </script>
