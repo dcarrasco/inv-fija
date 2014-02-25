@@ -29,24 +29,32 @@ class Log_gestor_model extends CI_Model {
 
 			if ($serie != "")
 			{
-				$this->db->limit(1000);
-				$this->db->from('bd_logistica..bd_dth_log_decotarjeta');
-				$this->db->order_by('serie_deco, id_log_deco_tarjeta');
-
+				$s_query = 'SELECT id_log_deco_tarjeta, fecha_log, estado, peticion, tipo_operacion_cas, telefono, rut, serie_deco, serie_tarjeta, max(nombre) nombre ';
+				$s_query .= 'FROM (';
+				$s_query .= "SELECT L.ID_LOG_DECO_TARJETA, L.FECHA_LOG, L.ESTADO, L.PETICION, L.TIPO_OPERACION_CAS, L.AREA+'-'+L.TELEFONO AS TELEFONO, L.RUT+'-'+L.RUT_DV AS RUT, L.SERIE_DECO, L.SERIE_TARJETA, C.NOM_CLIENTE+' '+C.APE1_CLIENTE+' '+APE2_CLIENTE AS NOMBRE ";
+				$s_query .= 'FROM BD_LOGISTICA..BD_DTH_LOG_DECOTARJETA L ';
+				$s_query .= "LEFT JOIN BD_CONTROLES..TRAFICO_CLIENTES C ON C.NUM_IDENT = L.RUT+'-'+L.RUT_DV ";
 
 				if ($tipo_serie == 'serie_deco')
 				{
-					$this->db->where(array('serie_deco' => $serie));
+					$s_query .= "WHERE SERIE_DECO = '" .$serie . "' ";
 				}
 				else
 				{
-					$this->db->where(array('rut' => $serie));
+					$s_query .= "WHERE RUT = '" .$serie . "' ";
 				}
 
+				$s_query .= ') T1 ';
+				$s_query .= 'GROUP BY ID_LOG_DECO_TARJETA, FECHA_LOG, ESTADO, PETICION, TIPO_OPERACION_CAS, TELEFONO, RUT, SERIE_DECO, SERIE_TARJETA ';
+				$s_query .= 'ORDER BY SERIE_DECO, ID_LOG_DECO_TARJETA';
+
+				$query = $this->db->query($s_query);
+
+				// en caso de $ult_mov, filtra los movimientos que no sean los últimos
 				$res_array = array();
 				if ($ult_mov)
 				{
-					$tmp_array = $this->db->get()->result_array();
+					$tmp_array = $query->result_array();
 					$deco_ant = '';
 					foreach($tmp_array as $reg)
 					{
@@ -60,9 +68,19 @@ class Log_gestor_model extends CI_Model {
 				}
 				else
 				{
-					$res_array = $this->db->get()->result_array();
+					$res_array = $query->result_array();
 				}
-				array_push($result, $res_array);
+
+
+				// repasa las series de los decos, calculando los DV de c/u de ellas
+				$res_array2 = array();
+				foreach($res_array as $reg)
+				{
+					$reg['serie_deco'] = $reg['serie_deco'] . $this->dv_serie_deco($reg['serie_deco']);
+					array_push($res_array2, $reg);
+				}
+
+				array_push($result, $res_array2);
 			}
 		}
 

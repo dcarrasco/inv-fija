@@ -89,18 +89,20 @@
 					<th>tipo operacion cas</th>
 					<th>telefono</th>
 					<th>RUT</th>
+					<th>Nombre cliente</th>
 				</tr>
 			<?php foreach($log_serie as $reg_log): ?>
 				<tr>
 					<td><small><?php echo $reg_log['id_log_deco_tarjeta'] ?></small></td>
 					<td><small><?php echo $reg_log['fecha_log'] ?></small></td>
-					<td><small><?php echo $reg_log['serie_deco'] . $this->log_gestor_model->dv_serie_deco($reg_log['serie_deco']) ?></small></td>
+					<td><small><?php echo $reg_log['serie_deco'] ?></small></td>
 					<td><small><?php echo $reg_log['serie_tarjeta'] ?></small></td>
 					<td><small><?php echo $reg_log['peticion'] ?></small></td>
 					<td><small><?php echo $reg_log['estado'] ?></small></td>
 					<td><small><?php echo $reg_log['tipo_operacion_cas'] ?></small></td>
-					<td><small><?php echo $reg_log['area'] . '-' . $reg_log['telefono']?></small></td>
-					<td><small><?php echo $reg_log['rut'] . '-' . $reg_log['rut_dv'] ?></small></td>
+					<td><small><?php echo $reg_log['telefono']?></small></td>
+					<td><small><?php echo $reg_log['rut'] ?></small></td>
+					<td><small><?php echo $reg_log['nombre'] ?></small></td>
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>
