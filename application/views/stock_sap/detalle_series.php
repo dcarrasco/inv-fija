@@ -16,6 +16,7 @@
 				<th>almacen</th>
 				<th>desc almacen</th>
 				<th>material</th>
+				<th>desc material</th>
 				<th>lote</th>
 				<th>serie</th>
 				<th>estado stock</th>
@@ -34,6 +35,7 @@
 					<td><?php echo $reg['almacen']; ?></td>
 					<td><?php echo $reg['des_almacen']; ?></td>
 					<td><?php echo $reg['material']; ?></td>
+					<td><?php echo $reg['des_material']; ?></td>
 					<td><?php echo $reg['lote']; ?></td>
 					<td><span class="serie"><?php echo $reg['serie']; ?></span></td>
 					<td><?php echo $reg['estado_stock']; ?></td>
