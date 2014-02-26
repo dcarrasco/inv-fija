@@ -30,7 +30,7 @@ class Analisis_gestor_dth extends CI_Controller {
 		$this->form_validation->run();
 
 		$datos['log'] = $this->log_gestor_model->get_log($this->input->post('series'), $this->input->post('set_serie'), $this->input->post('ult_mov') == 'show');
-		
+
 		$datos['titulo_modulo'] = 'Consulta información series';
 
 
