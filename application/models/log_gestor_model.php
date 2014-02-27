@@ -8,8 +8,9 @@ class Log_gestor_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function get_log($series = string, $tipo_serie = 'serie_deco', $ult_mov = FALSE)
+	public function get_log($series = string, $tipo_serie = 'serie_deco', $tipo_reporte = 'log', $filtro_cas = "'ALTA', 'BAJA'", $ult_mov = FALSE)
 	{
+
 		$result = array();
 		$arr_series = explode("\n", $series);
 		foreach ($arr_series as $serie)
@@ -32,7 +33,16 @@ class Log_gestor_model extends CI_Model {
 				$s_query = 'SELECT id_log_deco_tarjeta, fecha_log, estado, peticion, tipo_operacion_cas, telefono, rut, serie_deco, serie_tarjeta, max(nombre) nombre ';
 				$s_query .= 'FROM (';
 				$s_query .= "SELECT L.ID_LOG_DECO_TARJETA, L.FECHA_LOG, L.ESTADO, L.PETICION, L.TIPO_OPERACION_CAS, L.AREA+'-'+L.TELEFONO AS TELEFONO, L.RUT+'-'+L.RUT_DV AS RUT, L.SERIE_DECO, L.SERIE_TARJETA, C.NOM_CLIENTE+' '+C.APE1_CLIENTE+' '+APE2_CLIENTE AS NOMBRE ";
-				$s_query .= 'FROM BD_LOGISTICA..BD_DTH_LOG_DECOTARJETA L ';
+
+				if ($tipo_reporte == 'log')
+				{
+					$s_query .= 'FROM BD_LOGISTICA..BD_DTH_LOG_DECOTARJETA L ';
+				}
+				else
+				{
+					$s_query .= 'FROM BD_LOGISTICA..BD_DTH_ULT_LOG L ';
+				}
+
 				$s_query .= "LEFT JOIN BD_CONTROLES..TRAFICO_CLIENTES C ON C.NUM_IDENT = L.RUT+'-'+L.RUT_DV ";
 
 				if ($tipo_serie == 'serie_deco')
@@ -43,6 +53,8 @@ class Log_gestor_model extends CI_Model {
 				{
 					$s_query .= "WHERE RUT = '" .$serie . "' ";
 				}
+
+				$s_query .= 'AND TIPO_OPERACION_CAS IN ( ' . $filtro_cas . ') ';
 
 				$s_query .= ') T1 ';
 				$s_query .= 'GROUP BY ID_LOG_DECO_TARJETA, FECHA_LOG, ESTADO, PETICION, TIPO_OPERACION_CAS, TELEFONO, RUT, SERIE_DECO, SERIE_TARJETA ';
@@ -65,6 +77,7 @@ class Log_gestor_model extends CI_Model {
 						$reg_ant = $reg;
 						$deco_ant = $reg['serie_deco'];
 					}
+					array_push($res_array, $reg_ant);
 				}
 				else
 				{

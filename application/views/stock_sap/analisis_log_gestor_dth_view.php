@@ -41,9 +41,32 @@
 						<strong>Reportes</strong>
 					</div>
 					<div>
+						<div class="radio-inline">
+							<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
+							Log completo
+						</div>
+						<div class="radio-inline">
+							<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
+							Ultimo deco
+						</div>
+					</div>
+					<div>
 						<div class="checkbox">
 							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
 							Filtrar ultimo movimiento
+						</div>
+					</div>
+					<div>
+						<div>
+							Tipo Operacion CAS
+						</div>
+						<div class="checkbox-inline">
+							<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+							Alta
+						</div>
+						<div class="checkbox-inline">
+							<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+							Baja
 						</div>
 					</div>
 				</div>

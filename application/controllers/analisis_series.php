@@ -54,7 +54,7 @@ class Analisis_series extends CI_Controller {
 		if ($this->input->post('show_gdth') == 'show')
 		{
 			$this->load->model('log_gestor_model');
-			$datos['log_gdth'] = $this->log_gestor_model->get_log($this->input->post('series'), 'serie_deco', FALSE);
+			$datos['log_gdth'] = $this->log_gestor_model->get_log($this->input->post('series'), 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE);
 		}
 
 		$datos['titulo_modulo'] = 'Consulta información series';

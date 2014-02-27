@@ -26,10 +26,24 @@ class Analisis_gestor_dth extends CI_Controller {
 
 		$this->form_validation->set_rules('series', 'Series', '');
 		$this->form_validation->set_rules('set_serie', 'Series', '');
+		$this->form_validation->set_rules('tipo_reporte', 'Series', '');
 		$this->form_validation->set_rules('ult_mov', 'Series', '');
+		$this->form_validation->set_rules('tipo_op_alta', 'Series', '');
+		$this->form_validation->set_rules('tipo_op_baja', 'Series', '');
 		$this->form_validation->run();
 
-		$datos['log'] = $this->log_gestor_model->get_log($this->input->post('series'), $this->input->post('set_serie'), $this->input->post('ult_mov') == 'show');
+		$arr_filtro_cas = array();
+		if ($this->input->post('tipo_op_alta') == 'alta')
+		{
+			array_push($arr_filtro_cas, "'ALTA'");
+		}
+		if ($this->input->post('tipo_op_baja') == 'baja')
+		{
+			array_push($arr_filtro_cas, "'BAJA'");
+		}
+
+
+		$datos['log'] = $this->log_gestor_model->get_log($this->input->post('series'), $this->input->post('set_serie'), $this->input->post('tipo_reporte'), implode(', ', $arr_filtro_cas), $this->input->post('ult_mov') == 'show');
 
 		$datos['titulo_modulo'] = 'Consulta información series';
 
@@ -39,32 +53,8 @@ class Analisis_gestor_dth extends CI_Controller {
 		$this->load->view('app_footer', $datos);
 	}
 
-	public function trafico_por_mes()
-	{
-		$this->load->model('analisis_series_model');
-		$this->load->model('acl_model');
 
-		$datos = array(
-				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
-				'datos_trafico' => $this->analisis_series_model->get_trafico_mes($this->input->post('series'), $this->input->post('meses')),
-			);
-
-		$datos['titulo_modulo'] = 'Consulta información series';
-
-		$this->load->view('app_header', $datos);
-		$this->load->view('stock_sap/analisis_series_trafico_view', $datos);
-		$this->load->view('app_footer', $datos);
-	}
-
-	public function ajax_trafico_mes($serie = '', $meses = '')
-	{
-		$this->load->model('analisis_series_model');
-		$data = array(
-				'datos' => json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses)),
-			);
-		$this->load->view('stock_sap/ajax_trafico_view', $data);
-	}
 }
 
-/* End of file analisis_series.php */
-/* Location: ./application/controllers/analisis_series.php */
+/* End of file analisis_gestor_dth.php */
+/* Location: ./application/controllers/analisis_gestor_dth.php */
