@@ -95,6 +95,12 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
+	$('input[name="tipo_op"]').change(function (event) {
+		$('#frm_param').submit();
+	});
+
+
+
 	$('#filtrar_material').keyup(function (event) {
 		$('tr.not_found').show();
 		$('tr.not_found').removeClass('not_found');
