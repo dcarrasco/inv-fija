@@ -57,8 +57,12 @@ class config2 extends CI_Controller {
 		$modelo = new Entity\Catalogo;
 		dbg($modelo);
 
-		$list = $em->find('Entity\Catalogo', '10300000004');
+		dbg($em->getClassMetadata('Entity\Catalogo'));
+
+		$list = $em->getRepository('Entity\Catalogo')->findAll();
 		dbg($list);
+
+
 
 		die();
 		// ============================================

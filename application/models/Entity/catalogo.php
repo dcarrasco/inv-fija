@@ -16,7 +16,7 @@ class Catalogo  {
 	protected $catalogo;
 
 	/**
-	 * @Column(type="string", length=50)
+	 * @Column(type="string", length=50, options={"comment" = "Descripcion del material"})
 	 */
 	protected $descripcion;
 
