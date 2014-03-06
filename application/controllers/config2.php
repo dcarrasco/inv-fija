@@ -29,6 +29,8 @@ class config2 extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->load->library('doctrine');
 	}
 
 	public function index()
@@ -49,6 +51,20 @@ class config2 extends CI_Controller {
 
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
+		$em = $this->doctrine->em;
+		//dbg($em);
+
+		$modelo = new Entity\Catalogo;
+		dbg($modelo);
+
+		$list = $em->find('Entity\Catalogo', '10300000004');
+		dbg($list);
+
+		die();
+		// ============================================
+
+
+
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
 		$modelo = new $nombre_modelo;

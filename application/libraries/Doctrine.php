@@ -17,14 +17,14 @@ class Doctrine {
 		require APPPATH . 'config/database.php';
 
 		$connection_options = array(
-			'driver'        => 'pdo_mysql',
-			'user'          => $db['default']['username'],
-			'password'      => $db['default']['password'],
-			'host'          => $db['default']['hostname'],
-			'dbname'        => $db['default']['database'],
-			'charset'       => $db['default']['char_set'],
+			'driver'        => 'pdo_sqlsrv',
+			'user'          => $db['dcr']['username'],
+			'password'      => $db['dcr']['password'],
+			'host'          => $db['dcr']['hostname'],
+			'dbname'        => $db['dcr']['database'],
+			'charset'       => $db['dcr']['char_set'],
 			'driverOptions' => array(
-					'charset'   => $db['default']['char_set'],
+					'charset'   => $db['dcr']['char_set'],
 				),
 			);
 
