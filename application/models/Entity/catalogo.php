@@ -7,7 +7,7 @@ namespace Entity;
  * @Entity
  * @Table(name="fija_catalogos")
  */
-class Catalogo  {
+class Catalogo extends ModeloORM {
 
 	/**
 	 * @Id
@@ -30,6 +30,37 @@ class Catalogo  {
 	 */
 	protected $es_seriado;
 
+
+	public function get_order_by()
+	{
+		return array('catalogo' => 'ASC');
+	}
+
+
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function get_catalogo()
+	{
+		return $this->catalogo;
+	}
+
+	public function get_descripcion()
+	{
+		return $this->descripcion;
+	}
+
+	public function get_pmp()
+	{
+		return $this->pmp;
+	}
+
+	public function get_es_seriado()
+	{
+		return $this->es_seriado;
+	}
 
 }
 

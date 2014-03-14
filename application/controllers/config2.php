@@ -36,7 +36,8 @@ class config2 extends CI_Controller {
 	public function index()
 	{
 		$arr_keys = array_keys($this->arr_menu);
-		$this->listado($arr_keys[0]);
+		//$this->listado($arr_keys[0]);
+		$this->listado('Catalogo');
 	}
 
 
@@ -52,34 +53,39 @@ class config2 extends CI_Controller {
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
 		$em = $this->doctrine->em;
-		//dbg($em);
 
-		$modelo = new Entity\Catalogo;
-		dbg($modelo);
+		$clase_modelo = 'Entity\\' . $nombre_modelo;
+		$modelo_metadata = $em->getClassMetadata($clase_modelo);
+		$modelo = new $clase_modelo;
 
-		dbg($em->getClassMetadata('Entity\Catalogo'));
+//$mm = $em->getClassMetadata($clase_modelo);
+dbg($em->getRepository($clase_modelo));
+//$mm = $em->getRepository($clase_modelo)->findBy(array(), $modelo->get_order_by(),10,$pag);
+//die();
 
-		$list = $em->getRepository('Entity\Catalogo')->findAll();
-		dbg($list);
-
-
-
-		die();
+		//$dql = 'SELECT m FROM Entity\\' . $nombre_modelo . ' m';
+		//$query = $em->createQuery($dql)->setFirstResult($pag)->setMaxResults(10);
+		//$paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query, $fetchJoinCollection = FALSE);
+		//$c = count($paginator);
 		// ============================================
 
 
 
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
-		$modelo = new $nombre_modelo;
-		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
+		//$modelo = new $nombre_modelo;
+		//$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
 
 		//dbg($modelo);
 
+		$this->load->library('pagination');
+		$mm = $em->getRepository($clase_modelo)->findBy(array(), $modelo->get_order_by(),10,$pag);
+
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'config2/listado'),
+				'modelo'             => $mm,
+				'modelo_metadata'    => $modelo_metadata,
+				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'config2/listado', count($em->getRepository($clase_modelo)->findAll()), 10, $nombre_modelo, $this),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
 				'url_filtro'         => site_url('config2/listado/' . $nombre_modelo . '/'),

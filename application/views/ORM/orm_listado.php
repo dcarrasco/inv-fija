@@ -14,7 +14,7 @@
 	<div class="col-md-9 text-right">
 		<a href="<?php echo $url_editar; ?>" class="btn btn-default" id="btn_mostrar_agregar">
 			<span class="glyphicon glyphicon-plus-sign"></span>
-			Agregar <?php echo strtolower($modelo->get_model_label()); ?>
+			Agregar <?php //echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
 	<?php echo form_close(''); ?>
@@ -25,18 +25,18 @@
 	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
-				<?php foreach ($modelo as $campo => $valor): ?>
-					<?php if ($modelo->get_mostrar_lista($campo)): ?>
-						<th><?php echo ucfirst($modelo->get_label_field($campo)); ?></th>
+				<?php foreach ($modelo_metadata->fieldMappings as $campo => $valor): ?>
+					<?php if (TRUE || $modelo->get_mostrar_lista($campo)): ?>
+						<th><?php echo ucfirst($campo); ?></th>
 					<?php endif; ?>
 				<?php endforeach; ?>
 				<th><div class="text-center">Editar</div></th>
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($modelo->get_model_all() as $o): ?>
+			<?php foreach ($modelo as $o): ?>
 				<tr>
-					<?php foreach ($o as $campo => $valor): ?>
+					<?php foreach ($modelo_metadata->fieldMappings as $campo => $field): ?>
 						<?php if ($o->get_mostrar_lista($campo)): ?>
 							<td><?php echo $o->get_valor_field($campo); ?></td>
 						<?php endif; ?>
