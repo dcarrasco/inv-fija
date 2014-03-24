@@ -199,9 +199,8 @@ class MY_Model {
 
 		}
 
-
 		$this->key = $this->_determina_campo_id();
-		//$this->_recuperar_relation_fields();
+		$this->_recuperar_relation_fields();
 
 	}
 
@@ -329,20 +328,20 @@ class MY_Model {
 	 */
 	public function set_validation_rules_field($campo = '')
 	{
-		$field = $this->field_info[$campo];
+		$info_campo = $this->field_info[$campo];
 
 		$reglas = 'trim';
-		$reglas .= ($this->field_info[$campo]['es_obligatorio'] and !$this->field_info[$campo]['es_autoincrement']) ? '|required' : '';
-		$reglas .= ($this->field_info[$campo]['tipo'] == 'INT')  ? '|integer' : '';
-		$reglas .= ($this->field_info[$campo]['tipo'] == 'REAL') ? '|numeric' : '';
-		$reglas .= ($this->field_info[$campo]['es_unico'] AND !$this->field_info[$campo]['es_id']) ? '|edit_unique['. $this->tabla_bd . '.' . $this->field_info[$campo]['campo_bd'] . '.' . implode($this->separador_campos, $this->get_key()) . '.' . $this->get_model_id() . ']' : '';
+		$reglas .= ($info_campo['es_obligatorio'] and !$info_campo['es_autoincrement']) ? '|required' : '';
+		$reglas .= ($info_campo['tipo'] == 'INT')  ? '|integer' : '';
+		$reglas .= ($info_campo['tipo'] == 'REAL') ? '|numeric' : '';
+		$reglas .= ($info_campo['es_unico'] AND !$info_campo['es_id']) ? '|edit_unique['. $this->tabla_bd . '.' . $info_campo['campo_bd'] . '.' . implode($this->separador_campos, $this->get_key()) . '.' . $this->get_model_id() . ']' : '';
 
-		if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
+		if ($info_campo['tipo'] == 'HAS_MANY')
 		{
 			$reglas = '';
 		}
 
-		$this->form_validation->set_rules($campo, ucfirst($this->field_info[$campo]['label']), $reglas);
+		$this->form_validation->set_rules($campo, ucfirst($info_campo['label']), $reglas);
 	}
 
 	// --------------------------------------------------------------------
@@ -628,26 +627,27 @@ class MY_Model {
 	 */
 	private function _recuperar_relation_fields()
 	{
-		foreach($this->field_info as $campo => $obj_campo)
+		foreach($this->field_info as $campo => $metadata)
 		{
 			if($this->campo_get_tipo($campo) == 'HAS_ONE')
 			{
 				// recupera las propiedades de la relacion
-				$arr_props_relation = $obj_campo->get_relation();
+				$arr_props_relation = $metadata['relation'];
 
 				$class_relacionado = $arr_props_relation['model'];
 				$this->load->model($class_relacionado);
+
 				$model_relacionado = new $class_relacionado();
-				$model_relacionado->find_id($this->$campo, FALSE);
+				$model_relacionado->find_id($this->valores[$campo], FALSE);
 
 				$arr_props_relation['data'] = $model_relacionado;
-				$this->field_info[$campo]->set_relation($arr_props_relation);
+				$this->field_info[$campo]['relation'] = $arr_props_relation;
 				$this->model_got_relations = TRUE;
 			}
 			else if ($this->campo_get_tipo($campo) == 'HAS_MANY')
 			{
 				// recupera las propiedades de la relacion
-				$arr_props_relation = $obj_campo->get_relation();
+				$arr_props_relation = $metadata['relation'];
 
 				// genera arreglo where con la llave del modelo
 				$arr_where = array();
@@ -759,17 +759,17 @@ class MY_Model {
 	private function _put_filtro($filtro = '')
 	{
 		$i = 0;
-		foreach($this->field_info as $nombre => $campo)
+		foreach($this->field_info as $campo => $metadata)
 		{
-			if ($campo->get_tipo() == 'char')
+			if ($this->campo_get_tipo($campo) == 'CHAR')
 			{
 				if ($i == 0)
 				{
-					$this->db->like($nombre, $filtro, 'both');
+					$this->db->like($campo, $filtro, 'both');
 				}
 				else
 				{
-					$this->db->or_like($nombre, $filtro, 'both');
+					$this->db->or_like($campo, $filtro, 'both');
 				}
 				$i++;
 			}
@@ -1017,11 +1017,11 @@ class MY_Model {
 	{
 		if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
 		{
-			return $this->relation['data']->get_label();
+			return $this->field_info[$campo]['relation']['data']->get_label();
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
-			return $this->relation['data']->get_label_plural();
+			return $this->field_info[$campo]['relation']['data']->get_label_plural();
 		}
 		else
 		{
@@ -1064,7 +1064,7 @@ class MY_Model {
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
 		{
-			return $this->relation['data']->__toString();
+			return $this->field_info[$campo]['relation']['data']->__toString();
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
@@ -1232,18 +1232,18 @@ class MY_Model {
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
 		{
-			$nombre_rel_modelo = $this->relation['model'];
+			$nombre_rel_modelo = $this->field_info[$campo]['relation']['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '" class="form-control"';
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$dropdown_conditions = (array_key_exists('conditions', $this->field_info[$campo]['relation'])) ? array('conditions' => $this->field_info[$campo]['relation']['conditions']) : array();
 			$form = form_dropdown($this->field_info[$campo]['nombre'], $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
-			$nombre_rel_modelo = $this->relation['model'];
+			$nombre_rel_modelo = $this->field_info[$campo]['relation']['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '" size="7" class="form-control"';
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$dropdown_conditions = (array_key_exists('conditions', $this->field_info[$campo]['relation'])) ? array('conditions' => $this->field_info[$campo]['relation']['conditions']) : array();
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 			$opciones = ($this->input->post($this->field_info[$campo]['nombre']) != '') ? $this->input->post($this->field_info[$campo]['nombre']) : $valor_field;

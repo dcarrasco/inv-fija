@@ -34,7 +34,7 @@ class Auditor_model extends MY_Model {
 
 	public function __toString()
 	{
-		return $this->nombre;
+		return $this->valores['nombre'];
 	}
 
 

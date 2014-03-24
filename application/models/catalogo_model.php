@@ -1,58 +1,55 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Catalogo extends MY_Model {
+class Catalogo_model extends MY_Model {
+	protected $tabla_bd     = 'fija_catalogos';
+	protected $label        = 'Catalogo';
+	protected $label_plural = 'Catalogos';
+	protected $orden        = 'catalogo';
+
+	protected $field_info = array(
+		'catalogo' => array(
+			'label'          => 'Catalogo',
+			'tipo'           => 'CHAR',
+			'largo'          => 20,
+			'texto_ayuda'    => 'Código del catálogo. Máximo 20 caracteres',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		),
+		'descripcion' => array(
+			'label'          => 'Descripcion del material',
+			'tipo'           =>  'CHAR',
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripción del material. Máximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			//'es_unico'       => TRUE
+		),
+		'pmp' => array(
+			'label'          => 'Precio Medio Ponderado (PMP)',
+			'tipo'           =>  'REAL',
+			'largo'          => 10,
+			'decimales'      => 2,
+			'texto_ayuda'    => 'Valor PMP del material',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => FALSE
+		),
+		'es_seriado' => array(
+			'label'          => 'Material seriado',
+			'tipo'           =>  'BOOLEAN',
+			'texto_ayuda'    => 'Indica se el material esta seriado dentro del sistema.',
+			'es_obligatorio' => TRUE,
+			'default'        => 0
+		),
+	);
 
 	public function __construct()
 	{
-		$cfg = array(
-				'modelo' => array(
-						'model_tabla'        => 'fija_catalogos',
-						'model_label'        => 'Catalogo',
-						'model_label_plural' => 'Catalogos',
-						'model_order_by'     => 'catalogo',
-					),
-				'campos' => array(
-						'catalogo' => array(
-								'label'          => 'Catalogo',
-								'tipo'           => 'char',
-								'largo'          => 20,
-								'texto_ayuda'    => 'Código del catálogo. Máximo 20 caracteres',
-								'es_id'          => TRUE,
-								'es_obligatorio' => TRUE,
-								'es_unico'       => TRUE
-							),
-						'descripcion' => array(
-								'label'          => 'Descripcion del material',
-								'tipo'           =>  'char',
-								'largo'          => 50,
-								'texto_ayuda'    => 'Descripción del material. Máximo 50 caracteres.',
-								'es_obligatorio' => TRUE,
-								//'es_unico'       => TRUE
-							),
-						'pmp' => array(
-								'label'          => 'Precio Medio Ponderado (PMP)',
-								'tipo'           =>  'real',
-								'largo'          => 10,
-								'decimales'      => 2,
-								'texto_ayuda'    => 'Valor PMP del material',
-								'es_obligatorio' => TRUE,
-								'es_unico'       => FALSE
-							),
-						'es_seriado' => array(
-								'label'          => 'Material seriado',
-								'tipo'           =>  'boolean',
-								'texto_ayuda'    => 'Indica se el material esta seriado dentro del sistema.',
-								'es_obligatorio' => TRUE,
-								'default'        => 0
-							),
-						),
-					);
-		parent::__construct($cfg);
+		parent::__construct();
 	}
 
 	public function __toString()
 	{
-		return $this->descripcion;
+		return $this->valores['descripcion'];
 	}
 
 	public function get_combo_catalogo($filtro = '')
@@ -157,5 +154,5 @@ class Catalogo extends MY_Model {
 
 }
 
-/* End of file catalogo.php */
-/* Location: ./application/models/catalogo.php */
+/* End of file catalogo_model.php */
+/* Location: ./application/models/catalogo_model.php */
