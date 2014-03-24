@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Auditor extends ORM_Model {
+class Auditor extends MY_Model {
 
 	public function __construct()
 	{

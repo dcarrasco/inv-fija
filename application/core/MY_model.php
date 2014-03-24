@@ -7,80 +7,92 @@
  * @author		dcr
  * @link
  */
-class __ORM_Model {
+class MY_Model {
 
 	/**
 	 * Nombre del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_nombre        = '';
+	private $model_nombre = '';
+
 	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_class         = '';
+	private $model_class = '';
+
 	/**
 	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
-	private $model_tabla         = '';
+	private $model_tabla = '';
+
 	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
 	 */
-	private $model_label         = '';
+	private $model_label = '';
+
 	/**
 	 * Nombre (etiqueta) del modelo (plural)
 	 *
 	 * @var string
 	 */
-	private $model_label_plural  = '';
+	private $model_label_plural = '';
+
 	/**
 	 * Campos para ordenar el modelo cuando se recupera de la BD
 	 *
 	 * @var string
 	 */
-	private $model_order_by      = '';
+	private $model_order_by = '';
+
 	/**
 	 * Campos que conforman la llave (id) del modelo
 	 *
 	 * @var array
 	 */
-	private $model_campo_id      = array();
+	private $model_campo_id = array();
+
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
 	 *
 	 * @var boolean
 	 */
 	private $model_got_relations = FALSE;
+
 	/**
 	 * Cantidad de registros por pagina
 	 *
 	 * @var integer
 	 */
-	private $model_page_results  = 10;
+	private $model_page_results = 10;
+
 	/**
 	 * Arreglo con los campos del modelo
 	 *
 	 * @var array
 	 */
-	private $model_fields        = array();
-	/**
-	 * Arreglo de registros recuperados de la BD
-	 *
-	 * @var array
-	 */
-	private $model_all           = array();
+	private $model_fields = array();
+
 	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
 	 */
-	private $separador_campos    = '~';
+	private $separador_campos = '~';
+
+	/**
+	 * Arreglo de registros recuperados de la BD
+	 *
+	 * @var array
+	 */
+	private $model_all = array();
+
 
 
 	/**
@@ -690,6 +702,7 @@ class __ORM_Model {
 				$arr_props_relation = $obj_campo->get_relation();
 
 				$class_relacionado = $arr_props_relation['model'];
+				$this->load->model($class_relacionado);
 				$model_relacionado = new $class_relacionado();
 				$model_relacionado->find_id($this->$nombre_campo, FALSE);
 
@@ -1048,15 +1061,7 @@ class __ORM_Model {
 // **********************************************************************************************************
 // **********************************************************************************************************
 
-/**
- * Clase que modela un campo
- *
- *
- * @category	Controller
- * @author		dcr
- * @link
- */
-class __ORM_Field {
+class ORM_Field {
 
 	/**
 	 * Nombre del campo

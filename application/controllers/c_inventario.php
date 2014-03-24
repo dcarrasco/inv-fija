@@ -29,6 +29,8 @@ class C_inventario extends CI_Controller {
 			$hoja = 1;
 		}
 
+
+		$this->load->model('detalle_inventario');
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
 		$nuevo_detalle_inventario->hoja = $hoja;

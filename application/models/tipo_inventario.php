@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tipo_inventario extends ORM_Model {
+class Tipo_inventario extends MY_Model {
 
 	public function __construct()
 	{

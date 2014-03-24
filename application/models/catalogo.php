@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Catalogo extends ORM_Model {
+class Catalogo extends MY_Model {
 
 	public function __construct()
 	{

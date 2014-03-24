@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Centro extends ORM_Model {
+class Centro extends MY_Model {
 
 	public function __construct()
 	{

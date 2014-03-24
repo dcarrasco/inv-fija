@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Unidad_medida extends ORM_Model {
+class Unidad_medida extends MY_Model {
 
 	public function __construct()
 	{

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tipoalmacen_sap extends ORM_Model {
+class Tipoalmacen_sap extends MY_Model {
 
 	public function __construct()
 	{

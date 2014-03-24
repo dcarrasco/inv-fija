@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Proveedor extends ORM_Model {
+class Proveedor extends MY_Model {
 
 	public function __construct()
 	{

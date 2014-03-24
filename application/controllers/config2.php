@@ -51,15 +51,18 @@ class config2 extends CI_Controller {
 	{
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
-		$modelo = new $nombre_modelo;
-		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
+		// $modelo = new $nombre_modelo;
+		$this->load->model($nombre_modelo);
 
-		//dbg($modelo);
+		$this->$nombre_modelo->find('all', array('filtro' => $filtro, 'limit' => $this->$nombre_modelo->get_model_page_results(), 'offset' => $pag));
+
+		dbg($this);
+		//die();
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'config2/listado'),
+				'modelo'             => $this->$nombre_modelo,
+				'links_paginas'      => $this->$nombre_modelo->crea_links_paginas($filtro, 'config2/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
 				'url_filtro'         => site_url('config2/listado/' . $nombre_modelo . '/'),

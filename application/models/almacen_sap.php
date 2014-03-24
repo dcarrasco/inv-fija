@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Almacen_sap extends ORM_Model {
+class Almacen_sap extends MY_Model {
 
 	public function __construct()
 	{

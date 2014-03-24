@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Familia extends ORM_Model {
+class Familia extends MY_Model {
 
 	public function __construct()
 	{

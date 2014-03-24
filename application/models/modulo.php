@@ -1,6 +1,6 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+MY_Model<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Modulo extends ORM_Model {
+class Modulo extends MY_Model {
 
 	public function __construct()
 	{

@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class App extends ORM_Model {
+class App extends MY_Model {
 
 	public function __construct()
 	{

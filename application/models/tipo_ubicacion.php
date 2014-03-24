@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Tipo_ubicacion extends ORM_Model {
+class Tipo_ubicacion extends MY_Model {
 
 	public function __construct()
 	{
