@@ -42,6 +42,8 @@ class Catalogo extends ModeloORM {
 		parent::__construct();
 	}
 
+/*
+
 	public function get_catalogo()
 	{
 		return $this->catalogo;
@@ -61,6 +63,8 @@ class Catalogo extends ModeloORM {
 	{
 		return $this->es_seriado;
 	}
+
+*/
 
 }
 

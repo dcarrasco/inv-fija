@@ -2,17 +2,17 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal"'); ?>
 
-		<?php foreach ($modelo as $campo => $valor): ?>
+		<?php foreach ($modelo_metadata->fieldMappings as $campo => $valor): ?>
 			<div class="control-group">
 				<label class="control-label">
-					<?php echo ucfirst($modelo->get_label_field($campo)); ?>
-					<?php echo $modelo->get_marca_obligatorio_field($campo); ?>
+					<?php echo ucfirst($campo); ?>
+					<?php //echo $modelo->get_marca_obligatorio_field($campo); ?>
 				</label>
 
 				<div class="controls">
-					<?php echo $modelo->print_form_field($campo); ?>
+					<?php echo $modelo->get_valor_field($campo); ?>
 					<span class="help-block">
-						<em><small><?php echo $modelo->get_texto_ayuda_field($campo); ?></small></em>
+						<em><small><?php //echo $modelo->get_texto_ayuda_field($campo); ?></small></em>
 					</span>
 					<?php echo form_error($campo); ?>
 				</div>

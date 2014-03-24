@@ -36,7 +36,7 @@ require_once __DIR__.'/../ManyToMany.php';
 require_once __DIR__.'/../ElementCollection.php';
 require_once __DIR__.'/../Table.php';
 require_once __DIR__.'/../UniqueConstraint.php';
-require_once __DIR__.'/../Index.php';
+//require_once __DIR__.'/../Index.php';
 require_once __DIR__.'/../JoinTable.php';
 require_once __DIR__.'/../SequenceGenerator.php';
 require_once __DIR__.'/../ChangeTrackingPolicy.php';

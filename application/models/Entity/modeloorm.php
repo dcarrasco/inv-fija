@@ -9,10 +9,19 @@ class ModeloORM {
 	{
 	}
 
+
+	public function __get($name)
+	{
+		if (property_exists($this, $name))
+		{
+			return $this->name;
+		}
+	}
+
 	public function get_valor_field($campo = '')
 	{
 		$get_campo = 'get_' . $campo;
-		return $this->$get_campo();
+		return $this->$campo;
 	}
 
 	public function get_mostrar_lista($campo = '')
@@ -21,9 +30,14 @@ class ModeloORM {
 	}
 
 
-	public function get_model_id()
+	public function get_model_id($modelo_metadata)
 	{
-
+		$arr_id = array();
+		foreach ($modelo_metadata->getIdentifier() as $campo)
+		{
+			array_push($arr_id, $this->$campo);
+		}
+		return implode('-', $arr_id);
 	}
 
 

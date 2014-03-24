@@ -43,7 +43,7 @@
 					<?php endforeach; ?>
 					<td>
 						<div class="text-center">
-							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn  btn-default btn-xs">
+							<a href="<?php echo $url_editar . '/' . $o->get_model_id($modelo_metadata); ?>" class="btn  btn-default btn-xs">
 								<span class="glyphicon glyphicon-edit"></span>
 							</a>
 						</div>

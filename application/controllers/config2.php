@@ -58,25 +58,13 @@ class config2 extends CI_Controller {
 		$modelo_metadata = $em->getClassMetadata($clase_modelo);
 		$modelo = new $clase_modelo;
 
-//$mm = $em->getClassMetadata($clase_modelo);
-dbg($em->getRepository($clase_modelo));
-//$mm = $em->getRepository($clase_modelo)->findBy(array(), $modelo->get_order_by(),10,$pag);
-//die();
+		$mm = $em->getClassMetadata($clase_modelo);
 
-		//$dql = 'SELECT m FROM Entity\\' . $nombre_modelo . ' m';
-		//$query = $em->createQuery($dql)->setFirstResult($pag)->setMaxResults(10);
-		//$paginator = new Doctrine\ORM\Tools\Pagination\Paginator($query, $fetchJoinCollection = FALSE);
-		//$c = count($paginator);
-		// ============================================
-
-
+		$mms = get_class_methods($mm);
+		//asort($mms);
+		//dbg($mms);
 
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
-
-		//$modelo = new $nombre_modelo;
-		//$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
-
-		//dbg($modelo);
 
 		$this->load->library('pagination');
 		$mm = $em->getRepository($clase_modelo)->findBy(array(), $modelo->get_order_by(),10,$pag);
@@ -98,15 +86,19 @@ dbg($em->getRepository($clase_modelo));
 
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
-		$modelo = new $nombre_modelo($id);
-		$modelo->find_id($id);
+		$em = $this->doctrine->em;
 
-		if (!$modelo->valida_form())
+		$clase_modelo = 'Entity\\' . $nombre_modelo;
+		$modelo_metadata = $em->getClassMetadata($clase_modelo);
+		$modelo = $em->find($clase_modelo, $id);
+
+		if (TRUE || !$modelo->valida_form())
 		{
 			$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
+				'modelo_metadata'    => $modelo_metadata,
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}
