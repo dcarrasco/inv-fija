@@ -14,84 +14,113 @@ class MY_Model {
 	 *
 	 * @var  string
 	 */
-	private $model_nombre = '';
+	protected $nombre = '';
 
 	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_class = '';
+	protected $clase = '';
 
 	/**
 	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
-	private $model_tabla = '';
+	protected $tabla_bd = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
 	 */
-	private $model_label = '';
+	protected $label = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo (plural)
 	 *
 	 * @var string
 	 */
-	private $model_label_plural = '';
+	protected $label_plural = '';
 
 	/**
 	 * Campos para ordenar el modelo cuando se recupera de la BD
 	 *
 	 * @var string
 	 */
-	private $model_order_by = '';
+	protected $orden = '';
 
 	/**
 	 * Campos que conforman la llave (id) del modelo
 	 *
 	 * @var array
 	 */
-	private $model_campo_id = array();
+	protected $key = array();
 
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
 	 *
 	 * @var boolean
 	 */
-	private $model_got_relations = FALSE;
+	protected $model_got_relations = FALSE;
 
 	/**
 	 * Cantidad de registros por pagina
 	 *
 	 * @var integer
 	 */
-	private $model_page_results = 10;
+	protected $page_results = 10;
 
 	/**
 	 * Arreglo con los campos del modelo
 	 *
 	 * @var array
 	 */
-	private $model_fields = array();
+	protected $field_info = array();
+
+	/**
+	 * Arreglo con los valores por defecto de un campo
+	 */
+	private $field_default = array(
+								'nombre'             => '',
+								'tabla_bd'           => '',
+								'campo_bd'           => '',
+								'label'              => '',
+								'texto_ayuda'        => '',
+								'default'            => '',
+								'mostrar_en_listado' => TRUE,
+								'tipo'               => 'CHAR',
+								'largo'              => 10,
+								'decimales'          => 2,
+								'choices'            => array(),
+								'relation'           => array(),
+								'es_id'              => FALSE,
+								'es_obligatorio'     => FALSE,
+								'es_unico'           => FALSE,
+								'es_autoincrement'   => FALSE,
+							);
 
 	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
 	 */
-	private $separador_campos = '~';
+	protected $separador_campos = '~';
+
+	/**
+	 * Arreglo de valores del objeto
+	 *
+	 * @var array
+	 */
+	protected $valores = array();
 
 	/**
 	 * Arreglo de registros recuperados de la BD
 	 *
 	 * @var array
 	 */
-	private $model_all = array();
+	protected $model_all = array();
 
 
 
@@ -101,26 +130,79 @@ class MY_Model {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	public function __construct($param = array()) {
+	public function __construct($param = array())
+	{
+		$this->clase  = ($this->clase == '') ? get_class($this): $this->clase;
+		$this->nombre = ($this->nombre == '') ? ((strpos($this->clase, '_') === FALSE ) ? strtolower($this->clase) : strtolower(substr($this->clase, 0, strpos($this->clase, '_')))) : $this->nombre;
+		$this->tabla_bd  = ($this->tabla_bd == '') ? $this->nombre : $this->tabla_bd;
+		$this->label  = ($this->label == '') ? ucfirst($this->nombre) : $this->label;
+		$this->label_plural = ($this->label_plural == '') ? $this->label . 's' : $this->label_plural;
 
-		$this->model_class  = get_class($this);
-		$this->model_nombre = strtolower($this->model_class);
-		$this->model_tabla  = $this->model_nombre;
-		$this->model_label  = $this->model_nombre;
-		$this->model_label_plural = $this->model_label . 's';
-
-		if (array_key_exists('modelo', $param))
+		// completa la información de los campos
+		foreach ($this->field_info as $campo => $metadata)
 		{
-			$this->_config_modelo($param['modelo']);
+
+			$this->valores[$campo] = null;
+
+			foreach ($this->field_default as $attr => $valor)
+			{
+				if (!array_key_exists($attr, $metadata))
+				{
+					$this->field_info[$campo][$attr] = $valor;
+				}
+			}
+
+			if ($this->field_info[$campo]['nombre'] == '')
+			{
+				$this->field_info[$campo]['nombre'] = $campo;
+			}
+
+			if ($this->field_info[$campo]['campo_bd'] == '')
+			{
+				$this->field_info[$campo]['campo_bd'] = $campo;
+			}
+
+			if ($this->field_info[$campo]['label'] == '')
+			{
+				$this->field_info[$campo]['label'] = $campo;
+			}
+
+			if ($this->field_info[$campo]['tabla_bd'] == '')
+			{
+				$this->field_info[$campo]['tabla_bd'] = $this->tabla_bd;
+			}
+
+			if ($this->field_info[$campo]['tipo'] == 'INT' and $this->field_info[$campo]['default'] == '')
+			{
+				$this->field_info[$campo]['default'] = 0;
+			}
+
+			if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
+			{
+				$this->field_info[$campo]['es_obligatorio'] = TRUE;
+			}
+
+			if ($this->field_info[$campo]['tipo'] == 'DATETIME')
+			{
+				$this->field_info[$campo]['largo'] = 20;
+			}
+
+			if ($this->field_info[$campo]['nombre'] == 'id')
+			{
+				$this->field_info[$campo]['tipo']             = 'ID';
+				$this->field_info[$campo]['largo']            = 10;
+				$this->field_info[$campo]['es_id']            = TRUE;
+				$this->field_info[$campo]['es_obligatorio']   = TRUE;
+				$this->field_info[$campo]['es_unico']         = TRUE;
+				$this->field_info[$campo]['es_autoincrement'] = TRUE;
+			}
+
 		}
 
-		if (array_key_exists('campos', $param))
-		{
-			$this->_config_campos($param['campos']);
-		}
 
-		$this->model_campo_id = $this->_determina_campo_id();
+		$this->key = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
+
 	}
 
 	// --------------------------------------------------------------------
@@ -141,100 +223,21 @@ class MY_Model {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Configura las propiedades del modelo
-	 *
-	 * @param  array $cfg arreglo con la configuración del modelo
-	 * @return nada
-	 */
-	private function _config_modelo($cfg = array())
-	{
-		foreach($cfg as $key => $val)
-		{
-			if (isset($key))
-			{
-				$this->$key = $val;
-			}
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Configura las propiedades de los campos del modelo
-	 * @param  array $cfg arreglo con la configuración de los campos del modelo
-	 * @return nada
-	 */
-	private function _config_campos($cfg = array())
-	{
-		foreach ($cfg as $campo => $prop)
-		{
-			$prop['tabla_bd'] = $this->model_tabla;
-			$oField = new ORM_Field($campo, $prop);
-			$this->model_fields[$campo] = $oField;
-			$this->$campo = NULL;
-		}
-	}
-
-
 
 
 	// =======================================================================
 	// SETTERS Y GETTERS
 	// =======================================================================
-
-	public function get_model_nombre()
-	{
-		return $this->model_nombre;
-	}
-
-
-	public function get_model_tabla()
-	{
-		return $this->model_tabla;
-	}
-
-
-	public function get_model_label()
-	{
-		return $this->model_label;
-	}
-
-
-	public function get_model_label_plural()
-	{
-		return $this->model_label_plural;
-	}
-
-
-	public function get_model_campo_id()
-	{
-		return $this->model_campo_id;
-	}
-
-
-	public function get_model_page_results()
-	{
-		return $this->model_page_results;
-	}
-
-
-	public function get_model_fields()
-	{
-		return $this->model_fields;
-	}
-
-
-	public function get_campos_listado()
-	{
-		return $this->campos_listado;
-	}
-
-
-	public function get_model_all()
-	{
-		return $this->model_all;
-	}
+	public function get_nombre()         { return $this->nombre; }
+	public function get_tabla_bd()       { return $this->tabla_bd; }
+	public function get_label()          { return $this->label; }
+	public function get_label_plural()   { return $this->label_plural; }
+	public function get_key()            { return $this->key; }
+	public function get_page_results()   { return $this->page_results; }
+	public function get_field_info()     { return $this->field_info; }
+	public function get_campos_listado() { return $this->campos_listado; }
+	public function get_valores()        { return $this->valores; }
+	public function get_model_all()      { return $this->model_all; }
 
 
 	public function set_model_all($model_all = array())
@@ -245,10 +248,12 @@ class MY_Model {
 
 	public function get_relation_object($campo = '')
 	{
-		$model_fields = $this->model_fields;
-		$relation = $model_fields[$campo]->get_relation();
+		$field_info = $this->field_info;
+		$relation = $field_info[$campo]->get_relation();
 		return $relation['data'];
 	}
+
+
 
 	// --------------------------------------------------------------------
 
@@ -260,11 +265,11 @@ class MY_Model {
 	{
 		$arr_key = array();
 
-		foreach ($this->model_fields as $key => $metadata)
+		foreach ($this->field_info as $campo => $metadata)
 		{
-			if ($metadata->get_es_id())
+			if ($this->campo_es_id($campo))
 			{
-				array_push($arr_key, $key);
+				array_push($arr_key, $campo);
 			}
 		}
 
@@ -281,9 +286,9 @@ class MY_Model {
 	public function get_model_id()
 	{
 		$arr_id = array();
-		foreach ($this->model_campo_id as $campo)
+		foreach ($this->key as $campo)
 		{
-			array_push($arr_id, $this->{$campo});
+			array_push($arr_id, $this->valores[$campo]);
 		}
 		return implode($this->separador_campos, $arr_id);
 	}
@@ -301,7 +306,7 @@ class MY_Model {
 	 */
 	public function valida_form()
 	{
-		foreach ($this->model_fields as $campo => $metadata)
+		foreach ($this->field_info as $campo => $metadata)
 		{
 			$this->set_validation_rules_field($campo);
 		}
@@ -324,20 +329,20 @@ class MY_Model {
 	 */
 	public function set_validation_rules_field($campo = '')
 	{
-		$field = $this->model_fields[$campo];
+		$field = $this->field_info[$campo];
 
 		$reglas = 'trim';
-		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
-		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
-		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
-		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']' : '';
+		$reglas .= ($this->field_info[$campo]['es_obligatorio'] and !$this->field_info[$campo]['es_autoincrement']) ? '|required' : '';
+		$reglas .= ($this->field_info[$campo]['tipo'] == 'INT')  ? '|integer' : '';
+		$reglas .= ($this->field_info[$campo]['tipo'] == 'REAL') ? '|numeric' : '';
+		$reglas .= ($this->field_info[$campo]['es_unico'] AND !$this->field_info[$campo]['es_id']) ? '|edit_unique['. $this->tabla_bd . '.' . $this->field_info[$campo]['campo_bd'] . '.' . implode($this->separador_campos, $this->get_key()) . '.' . $this->get_model_id() . ']' : '';
 
-		if ($field->get_tipo() == 'has_many')
+		if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
 			$reglas = '';
 		}
 
-		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
+		$this->form_validation->set_rules($campo, ucfirst($this->field_info[$campo]['label']), $reglas);
 	}
 
 	// --------------------------------------------------------------------
@@ -349,35 +354,6 @@ class MY_Model {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Devuelve el formulario para el despliegue de un campo del modelo
-	 *
-	 * @param  string  $campo          Nombre del campo
-	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
-	 * @return string        Elemento de formulario
-	 */
-	public function print_form_field($campo = '', $filtra_activos = FALSE)
-	{
-		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
-		$arr_relation = $this->model_fields[$campo]->get_relation();
-		if (array_key_exists('conditions', $arr_relation))
-		{
-			foreach($arr_relation['conditions'] as $cond_key => $cond_value)
-			{
-				// si encontramos un valor que comience por @filed_value,
-				// se reemplaza por el valor del campo en el objeto
-				if (strpos($cond_value, '@field_value') === 0)
-				{
-					$arr_field_value = explode(':', $cond_value);
-					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
-				}
-			}
-			$this->model_fields[$campo]->set_relation($arr_relation);
-		}
-
-		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos);
-	}
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -388,48 +364,19 @@ class MY_Model {
 	 */
 	public function get_label_field($campo = '')
 	{
-		$tipo = $this->model_fields[$campo]->get_tipo();
+		$tipo = $this->field_info[$campo]->get_tipo();
 		if(($tipo == 'has_one' or $tipo == 'has_many') and !($this->model_got_relations))
 		{
 			$this->_recuperar_relation_fields();
 
 		}
-		return $this->model_fields[$campo]->get_label();
+		return $this->field_info[$campo]->get_label();
 	}
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Devuelve el texto de ayuda de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return string        Texto de ayuda del campo
-	 */
-	public function get_texto_ayuda_field($campo = '')
-	{
-		return $this->model_fields[$campo]->get_texto_ayuda();
-	}
-
 	// --------------------------------------------------------------------
 
-	/**
-	 * Devuelve el valor de un campo del modelo
-	 *
-	 * @param  string  $campo     Nombre del campo
-	 * @param  boolean $formatted Indica si se devuelve el valor formateado o no (ej. id de relaciones)
-	 * @return string             Texto con el valor del campo
-	 */
-	public function get_valor_field($campo = '', $formatted = TRUE)
-	{
-		if (!$formatted)
-		{
-			return ($this->$campo);
-		}
-		else
-		{
-			return ($this->model_fields[$campo]->get_formatted_value($this->$campo));
-		}
-	}
 
 	// --------------------------------------------------------------------
 
@@ -441,7 +388,7 @@ class MY_Model {
 	 */
 	public function get_es_obligatorio_field($campo = '')
 	{
-		return $this->model_fields[$campo]->get_es_obligatorio();
+		return $this->field_info[$campo]->get_es_obligatorio();
 	}
 
 	// --------------------------------------------------------------------
@@ -454,20 +401,7 @@ class MY_Model {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger"><strong>*</strong></span>' : '';
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve indicador si el campo se mostrará o no en listaoo
-	 *
-	 * @param string $campo Nombre del campo
-	 * @return boolean Indicador mostrar o no en la lista
-	 */
-	public function get_mostrar_lista($campo = '')
-	{
-		return $this->model_fields[$campo]->get_mostrar_lista();
+		return ($this->field_info[$campo]['es_obligatorio']) ? '<span class="text-danger"><strong>*</strong></span>' : '';
 	}
 
 	// --------------------------------------------------------------------
@@ -504,11 +438,11 @@ class MY_Model {
 					'num_tag_close'   => '</li>',
 
 
-					'per_page'    => $this->model_page_results,
+					'per_page'    => $this->page_results,
 					'total_rows'  => $total_rows,
-					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
+					'base_url'    => site_url($url . '/' . $this->clase . '/' . $filtro . '/'),
 					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->page_results + 1) . ')',
 					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 				);
@@ -584,7 +518,7 @@ class MY_Model {
 
 		if ($tipo == 'first')
 		{
-			$rs = $this->db->get($this->model_tabla)->row_array();
+			$rs = $this->db->get($this->tabla_bd)->row_array();
 			$this->get_from_array($rs);
 
 			if ($recupera_relation)
@@ -596,15 +530,15 @@ class MY_Model {
 		}
 		else if ($tipo == 'all')
 		{
-			if ($this->model_order_by != '')
+			if ($this->orden != '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->db->order_by($this->orden);
 			}
-			$rs = $this->db->get($this->model_tabla)->result_array();
+			$rs = $this->db->get($this->tabla_bd)->result_array();
 
 			foreach($rs as $reg)
 			{
-				$o = new $this->model_class();
+				$o = new $this->clase();
 				$o->get_from_array($reg);
 
 				if ($recupera_relation)
@@ -620,22 +554,22 @@ class MY_Model {
 		else if ($tipo == 'count')
 		{
 			$this->db->select('count(*) as cant');
-			$rs = $this->db->get($this->model_tabla)->row_array();
+			$rs = $this->db->get($this->tabla_bd)->row_array();
 
 			return $rs['cant'];
 		}
 		else if ($tipo == 'list')
 		{
 			$arr_list = array();
-			if ($this->model_order_by != '')
+			if ($this->orden != '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->db->order_by($this->orden);
 			}
-			$rs = $this->db->get($this->model_tabla)->result_array();
+			$rs = $this->db->get($this->tabla_bd)->result_array();
 
 			foreach($rs as $reg)
 			{
-				$o = new $this->model_class();
+				$o = new $this->clase();
 				$o->get_from_array($reg);
 				$arr_list[$o->get_model_id()] = $o->__toString();
 			}
@@ -658,12 +592,12 @@ class MY_Model {
 	{
 		$arr_condiciones = array();
 
-		if (count($this->model_campo_id) == 1)
+		if (count($this->key) == 1)
 		{
-			foreach($this->model_campo_id as $campo_id)
+			foreach($this->key as $campo_id)
 			{
-				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
-				if ($tipo_id == 'id' OR $tipo_id == 'integer')
+				$tipo_id = $this->field_info[$campo_id]['tipo'];
+				if ($tipo_id == 'ID' OR $tipo_id == 'INTEGER')
 				{
 					$arr_condiciones[$campo_id] = (int) $id;
 				}
@@ -676,7 +610,7 @@ class MY_Model {
 		else
 		{
 			$arr_val_id = explode($this->separador_campos, $id);
-			foreach($this->model_campo_id as $i => $campo_id)
+			foreach($this->key as $i => $campo_id)
 			{
 				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
 			}
@@ -694,9 +628,9 @@ class MY_Model {
 	 */
 	private function _recuperar_relation_fields()
 	{
-		foreach($this->model_fields as $nombre_campo => $obj_campo)
+		foreach($this->field_info as $campo => $obj_campo)
 		{
-			if($obj_campo->get_tipo() == 'has_one')
+			if($this->campo_get_tipo($campo) == 'HAS_ONE')
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -704,13 +638,13 @@ class MY_Model {
 				$class_relacionado = $arr_props_relation['model'];
 				$this->load->model($class_relacionado);
 				$model_relacionado = new $class_relacionado();
-				$model_relacionado->find_id($this->$nombre_campo, FALSE);
+				$model_relacionado->find_id($this->$campo, FALSE);
 
 				$arr_props_relation['data'] = $model_relacionado;
-				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
+				$this->field_info[$campo]->set_relation($arr_props_relation);
 				$this->model_got_relations = TRUE;
 			}
-			else if ($obj_campo->get_tipo() == 'has_many')
+			else if ($this->campo_get_tipo($campo) == 'HAS_MANY')
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -719,7 +653,7 @@ class MY_Model {
 				$arr_where = array();
 				$arr_id_one_table = $arr_props_relation['id_one_table'];
 
-				foreach ($this->model_campo_id as $campo_id)
+				foreach ($this->key as $campo_id)
 				{
 					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
 				}
@@ -738,12 +672,12 @@ class MY_Model {
 					array_push($arr_where, array_pop($reg));
 				}
 
-				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
+				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_key()) => $arr_where);
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 
 				$arr_props_relation['data'] = $model_relacionado;
-				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
+				$this->field_info[$campo]->set_relation($arr_props_relation);
 				$this->$nombre_campo = $arr_where;
 				$this->model_got_relations = TRUE;
 			}
@@ -791,20 +725,20 @@ class MY_Model {
 	 */
 	public function get_from_array($rs = array())
 	{
-		foreach($this->model_fields as $nombre => $metadata)
+		foreach($this->field_info as $campo => $metadata)
 		{
-			if (array_key_exists($nombre, $rs))
+			if (array_key_exists($campo, $rs))
 			{
-				if ($metadata->get_tipo() == 'datetime')
+				if ($this->campo_get_tipo($campo) == 'DATETIME')
 				{
-					if ($rs[$nombre] != '')
+					if ($rs[$campo] != '')
 					{
-						$this->$nombre = date('Ymd H:i:s', strtotime($rs[$nombre]));
+						$this->$campo = date('Ymd H:i:s', strtotime($rs[$campo]));
 					}
 				}
 				else
 				{
-					$this->$nombre = $rs[$nombre];
+					$this->valores[$campo] = $rs[$campo];
 				}
 			}
 		}
@@ -825,7 +759,7 @@ class MY_Model {
 	private function _put_filtro($filtro = '')
 	{
 		$i = 0;
-		foreach($this->model_fields as $nombre => $campo)
+		foreach($this->field_info as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'char')
 			{
@@ -851,7 +785,7 @@ class MY_Model {
 	 */
 	public function recuperar_post()
 	{
-		foreach($this->model_fields as $nombre => $metadata)
+		foreach($this->field_info as $nombre => $metadata)
 		{
 			// si el valor del post es un arreglo, transforma los valores a llaves del arreglo
 			if (is_array($this->input->post($nombre)))
@@ -865,8 +799,8 @@ class MY_Model {
 			}
 			else
 			{
-				$tipo_campo = $metadata->get_tipo();
-				if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
+				$tipo_campo = $metadata['tipo'];
+				if ($tipo_campo == 'ID' OR $tipo_campo == 'BOOLEAN' OR $tipo_campo == 'INTEGER')
 				{
 					$this->$nombre = (int) $this->input->post($nombre);
 				}
@@ -892,12 +826,12 @@ class MY_Model {
 		{
 			$this->db->select('count(*) as cant');
 			$this->_put_filtro($filtro);
-			$rs = $this->db->get($this->model_tabla)->row();
+			$rs = $this->db->get($this->tabla_bd)->row();
 			return $rs->cant;
 		}
 		else
 		{
-			return $this->db->count_all($this->model_tabla);
+			return $this->db->count_all($this->tabla_bd);
 		}
 	}
 
@@ -920,7 +854,7 @@ class MY_Model {
 		$es_auto_id   = FALSE;
 		$es_insert    = FALSE;
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach($this->field_info as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincrement())
 			{
@@ -949,7 +883,7 @@ class MY_Model {
 		}
 		else
 		{
-			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
+			$es_insert = ($this->db->get_where($this->tabla_bd, $data_where)->num_rows() == 0);
 		}
 
 		// NUEVO REGISTRO
@@ -957,12 +891,12 @@ class MY_Model {
 		{
 			if (!$es_auto_id)
 			{
-				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
+				$this->db->insert($this->tabla_bd, array_merge($data_where, $data_update));
 			}
 			else
 			{
-				$this->db->insert($this->model_tabla, $data_update);
-				foreach($this->model_campo_id as $campo_id)
+				$this->db->insert($this->tabla_bd, $data_update);
+				foreach($this->key as $campo_id)
 				{
 					$data_where[$campo_id] = $this->db->insert_id();
 					$this->{$campo_id} = $this->db->insert_id();
@@ -973,12 +907,12 @@ class MY_Model {
 		else
 		{
 			$this->db->where($data_where);
-			$this->db->update($this->model_tabla, $data_update);
+			$this->db->update($this->tabla_bd, $data_update);
 		}
 
 		// Revisa todos los campos en busqueda de relaciones has_many,
 		// para actualizar la tabla relacionada
-		foreach($this->model_fields as $nombre => $campo)
+		foreach($this->field_info as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'has_many')
 			{
@@ -1025,16 +959,16 @@ class MY_Model {
 	public function borrar()
 	{
 		$data_where = array();
-		foreach($this->model_fields as $nombre => $campo)
+		foreach($this->field_info as $nombre => $campo)
 		{
 			if ($campo->get_es_id())
 			{
 				$data_where[$nombre] = $this->$nombre;
 			}
 		}
-		$this->db->delete($this->model_tabla, $data_where);
+		$this->db->delete($this->tabla_bd, $data_where);
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach($this->field_info as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'has_many')
 			{
@@ -1050,7 +984,294 @@ class MY_Model {
 		}
 	}
 
+// **********************************************************************************************************
+// **********************************************************************************************************
+// **********************************************************************************************************
+// **********************************************************************************************************
+
+	public function campo_es_id($campo = '')
+	{
+		return (boolean) $this->field_info[$campo]['es_id'];
+	}
+
+
+	public function campo_get_tipo($campo = '')
+	{
+		return strtoupper($this->field_info[$campo]['tipo']);
+	}
+
+
+	public function campo_get_mostrar_en_lista($campo = '')
+	{
+		return (boolean) $this->field_info[$campo]['mostrar_en_listado'];
+	}
+
+	public function campo_get_es_obligatorio($campo = '')
+	{
+		return (boolean) $this->field_info[$campo]['es_obligatorio'];
+	}
+
+
+
+	public function campo_get_label($campo = '')
+	{
+		if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
+		{
+			return $this->relation['data']->get_label();
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
+		{
+			return $this->relation['data']->get_label_plural();
+		}
+		else
+		{
+			return $this->field_info[$campo]['label'];
+		}
+	}
+
+
+	/**
+	 * Devuelve el valor de un campo del modelo
+	 *
+	 * @param  string  $campo     Nombre del campo
+	 * @param  boolean $formatted Indica si se devuelve el valor formateado o no (ej. id de relaciones)
+	 * @return string             Texto con el valor del campo
+	 */
+	public function campo_get_valor_field($campo = '', $formatted = TRUE)
+	{
+		if (!$formatted)
+		{
+			return ($this->valores[$campo]);
+		}
+		else
+		{
+			return ($this->campo_get_formatted_value($campo, $this->valores[$campo]));
+		}
+	}
+
+
+	/**
+	 * Devuelve el valor, formateado de acuerdo al tipo del campo
+	 *
+	 * @param  string $campo Campo a desplegar
+	 * @return string        Valor formateado
+	 */
+	public function campo_get_formatted_value($campo = '')
+	{
+		if ($this->field_info[$campo]['tipo'] == 'BOOLEAN')
+		{
+			return ($this->valores[$campo] == 1) ? 'SI' : 'NO';
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
+		{
+			return $this->relation['data']->__toString();
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
+		{
+			$campo = '<ul class="formatted_has_many">';
+			foreach ($this->relation['data']->get_model_all() as $obj)
+			{
+				$campo .= '<li>' . $obj . '</li>';
+			}
+			$campo .= '</ul>';
+			return $campo;
+		}
+		else if (count($this->field_info[$campo]['choices']) > 0)
+		{
+			return $this->field_info[$campo]['choices'][$this->valores[$campo]];
+		}
+		else
+		{
+			return $this->valores[$campo];
+		}
+	}
+
+
+	/**
+	 * Devuelve el formulario para el despliegue de un campo del modelo
+	 *
+	 * @param  string  $campo          Nombre del campo
+	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
+	 * @return string        Elemento de formulario
+	 */
+	public function campo_print_form($campo = '', $filtra_activos = FALSE)
+	{
+		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
+		$arr_relation = $this->field_info[$campo]['relation'];
+		if (array_key_exists('conditions', $arr_relation))
+		{
+			foreach($arr_relation['conditions'] as $cond_key => $cond_value)
+			{
+				// si encontramos un valor que comience por @filed_value,
+				// se reemplaza por el valor del campo en el objeto
+				if (strpos($cond_value, '@field_value') === 0)
+				{
+					$arr_field_value = explode(':', $cond_value);
+					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
+				}
+			}
+			$this->field_info[$campo]->set_relation($arr_relation);
+		}
+
+		return $this->campo_form($campo, $this->valores[$campo], $filtra_activos);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera el elemento de formulario para el campo
+	 *
+	 * @param  string $campo Campo a desplegar en el elemento de formulario
+	 * @param  string $valor Valor a desplegar en el elemento de formulario
+	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
+	 * @return string        Elemento de formulario
+	 */
+	public function campo_form($campo = '', $valor = '', $filtra_activos = FALSE)
+	{
+		$form       = '';
+		$id_prefix  = 'id_';
+
+		$valor_field = ($valor === '' and $this->field_info[$campo]['default'] != '') ? $this->field_info[$campo]['default'] : $valor;
+		$valor_field = set_value($this->field_info[$campo]['nombre'], $valor_field);
+
+		if ($this->field_info[$campo]['tipo'] == 'ID' OR ($this->field_info[$campo]['es_id'] AND $valor_field != '') OR ($this->field_info[$campo]['es_id'] AND $this->field_info[$campo]['es_autoincrement']))
+		{
+			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '"';
+
+			$form = '<span class="uneditable-input form-control">' . $valor_field . '</span>';
+			$form .= form_hidden($this->field_info[$campo]['nombre'], $valor_field, $param_adic);
+		}
+		else if (!empty($this->field_info[$campo]['choices']))
+		{
+			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '" class="form-control"';
+			$form = form_dropdown($this->field_info[$campo]['nombre'], $this->field_info[$campo]['choices'], $valor_field, $param_adic);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'CHAR')
+		{
+			if ($this->field_info[$campo]['largo'] >= 100)
+			{
+				$arr_param = array(
+									'name'      => $this->field_info[$campo]['nombre'],
+									'value'     => $valor_field,
+									'maxlength' => $this->field_info[$campo]['largo'],
+									'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+									'cols'      => '50',
+									'rows'      => '5',
+									'class'     => 'form-control',
+								);
+				$form = form_textarea($arr_param);
+			}
+			else
+			{
+				$arr_param = array(
+									'name'      => $this->field_info[$campo]['nombre'],
+									'value'     => $valor_field,
+									'maxlength' => $this->field_info[$campo]['largo'],
+									'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+									'class'     => 'form-control',
+								);
+				$form = form_input($arr_param);
+			}
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'PASSWORD')
+		{
+			$arr_param = array(
+								'name'      => $this->field_info[$campo]['nombre'],
+								'value'     => $valor_field,
+								'maxlength' => $this->field_info[$campo]['largo'],
+								'size'      => $this->field_info[$campo]['largo'],
+								'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+								'class'     => 'form-control',
+							);
+			$form = form_password($arr_param);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'INT')
+		{
+			$arr_param = array(
+								'name'      => $this->field_info[$campo]['nombre'],
+								'value'     => $valor_field,
+								'maxlength' => $this->field_info[$campo]['largo'],
+								'size'      => $this->field_info[$campo]['largo'],
+								'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+								'class'     => 'form-control',
+							);
+			$form = form_input($arr_param);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'REAL')
+		{
+			$arr_param = array(
+								'name'      => $this->field_info[$campo]['nombre'],
+								'value'     => $valor_field,
+								'maxlength' => $this->field_info[$campo]['largo'],
+								'size'      => $this->field_info[$campo]['largo'] + $this->field_info[$campo]['decimales'] + 1,
+								'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+								'class'     => 'form-control',
+							);
+			$form = form_input($arr_param);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'DATETIME')
+		{
+			$arr_param = array(
+								'name'      => $this->field_info[$campo]['nombre'],
+								'value'     => $valor_field,
+								'maxlength' => $this->field_info[$campo]['largo'],
+								'size'      => $this->field_info[$campo]['largo'],
+								'id'        => $id_prefix . $this->field_info[$campo]['nombre'],
+								'class'     => 'form-control',
+							);
+			$form = form_input($arr_param);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'BOOLEAN')
+		{
+			$form = '<label class="radio-inline">';
+			$form .= form_radio($this->field_info[$campo]['nombre'], 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
+			$form .= '</label>';
+			$form .= '<label class="radio-inline">';
+			$form .= form_radio($this->field_info[$campo]['nombre'], 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
+			$form .= '</label>';
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
+		{
+			$nombre_rel_modelo = $this->relation['model'];
+			$modelo_rel = new $nombre_rel_modelo();
+			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '" class="form-control"';
+			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$form = form_dropdown($this->field_info[$campo]['nombre'], $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+		}
+		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
+		{
+			$nombre_rel_modelo = $this->relation['model'];
+			$modelo_rel = new $nombre_rel_modelo();
+			$param_adic = ' id="' . $id_prefix . $this->field_info[$campo]['nombre'] . '" size="7" class="form-control"';
+			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
+			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			$opciones = ($this->input->post($this->field_info[$campo]['nombre']) != '') ? $this->input->post($this->field_info[$campo]['nombre']) : $valor_field;
+			$form = form_multiselect($this->field_info[$campo]['nombre'].'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $opciones, $param_adic);
+		}
+
+		return $form;
+	}
+
+
+	/**
+	 * Devuelve el texto de ayuda de un campo del modelo
+	 *
+	 * @param  string $campo Nombre del campo
+	 * @return string        Texto de ayuda del campo
+	 */
+	public function campo_get_texto_ayuda($campo = '')
+	{
+		return $this->field_info[$campo]['texto_ayuda'];
+	}
+
+
+
+
 }
+
+
+
 
 
 
@@ -1063,103 +1284,6 @@ class MY_Model {
 
 class ORM_Field {
 
-	/**
-	 * Nombre del campo
-	 *
-	 * @var  string
-	 */
-	private $nombre = '';
-	/**
-	 * Nombre del tabla del campo
-	 *
-	 * @var  string
-	 */
-	private $tabla_bd = '';
-	/**
-	 * Nombre del campo en la tabla
-	 *
-	 * @var  string
-	 */
-	private $nombre_bd = '';
-	/**
-	 * Nombre del campo (etiqueta)
-	 *
-	 * @var  string
-	 */
-	private $label = '';
-	/**
-	 * Texto de ayuda del campo
-	 *
-	 * @var  string
-	 */
-	private $texto_ayuda = '';
-	/**
-	 * Valor por defecto del campo
-	 *
-	 * @var  string
-	 */
-	private $default = '';
-	/**
-	 * Indica si el campo se muestra en la listado
-	 *
-	 * @var  boolean
-	 */
-	private $mostrar_lista = TRUE;
-	/**
-	 * Tipo del campo
-	 *
-	 * @var  string
-	 */
-	private $tipo = 'char';
-	/**
-	 * Largo del campo
-	 *
-	 * @var  string
-	 */
-	private $largo = 10;
-	/**
-	 * Cantidad de decimales del campo
-	 *
-	 * @var  string
-	 */
-	private $decimales = 2;
-	/**
-	 * Lista de los valores válidos para el campo
-	 *
-	 * @var  array
-	 */
-	private $choices = array();
-	/**
-	 * Arreglo con los datos de la relación
-	 *
-	 * @var  array
-	 */
-	private $relation = array();
-	/**
-	 * Indica si el campo es ID
-	 *
-	 * @var  boolean
-	 */
-	private $es_id = FALSE;
-	/**
-	 * Indica si el campo es obligatorio
-	 *
-	 * @var  boolean
-	 */
-	private $es_obligatorio = FALSE;
-	/**
-	 * Indica si el valor del campo debe ser único
-	 *
-	 * @var  boolean
-	 */
-	private $es_unico = FALSE;
-	/**
-	 * Indica si el campo es auto-incremental
-	 *
-	 * @var  boolean
-	 */
-	private $es_autoincrement = FALSE;
-
 
 	// --------------------------------------------------------------------
 
@@ -1171,49 +1295,6 @@ class ORM_Field {
 	 * @return  void
 	 * @author  dcr
 	 **/
-	function __construct($nombre = '', $param = array()) {
-
-		$this->nombre    = $nombre;
-		$this->nombre_bd = $nombre;
-		$this->label     = $nombre;
-
-		if (is_array($param))
-		{
-			foreach($param as $key => $val)
-			{
-				if (isset($key))
-				{
-					$this->$key = $val;
-				}
-			}
-		}
-
-		if ($this->tipo == 'int' and $this->default == '')
-		{
-			$this->default = 0;
-		}
-
-		if ($this->tipo == 'has_one')
-		{
-			$this->es_obligatorio = TRUE;
-		}
-
-		if ($this->tipo == 'datetime')
-		{
-			$this->largo = 20;
-		}
-
-		if ($nombre == 'id')
-		{
-			$this->tipo  = 'id';
-			$this->largo = 10;
-
-			$this->es_id            = TRUE;
-			$this->es_obligatorio   = TRUE;
-			$this->es_unico         = TRUE;
-			$this->es_autoincrement = TRUE;
-		}
-	}
 
 
 	public function get_tipo()
@@ -1222,26 +1303,10 @@ class ORM_Field {
 	}
 
 
-	public function get_label()
-	{
-		if ($this->tipo == 'has_one')
-		{
-			return $this->relation['data']->get_model_label();
-		}
-		else if ($this->tipo == 'has_many')
-		{
-			return $this->relation['data']->get_model_label_plural();
-		}
-		else
-		{
-			return $this->label;
-		}
-	}
 
-
-	public function get_nombre_bd()
+	public function get_campo_bd()
 	{
-		return $this->nombre_bd;
+		return $this->campo_bd;
 	}
 
 
@@ -1251,22 +1316,11 @@ class ORM_Field {
 	}
 
 
-	public function get_es_id()
-	{
-		return $this->es_id;
-	}
-
-
 	public function get_es_unico()
 	{
 		return $this->es_unico;
 	}
 
-
-	public function get_es_obligatorio()
-	{
-		return $this->es_obligatorio;
-	}
 
 
 	public function get_es_autoincrement()
@@ -1293,179 +1347,8 @@ class ORM_Field {
 	}
 
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera el elemento de formulario para el campo
-	 *
-	 * @param  string $valor Valor a desplegar en el elemento de formulario
-	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
-	 * @return string        Elemento de formulario
-	 */
-	public function form_field($valor = '', $filtra_activos = FALSE)
-	{
-		$form       = '';
-		$id_prefix  = 'id_';
-
-		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
-		$valor_field = set_value($this->nombre, $valor_field);
-
-		if ($this->tipo == 'id' OR ($this->es_id AND $valor_field != '') OR ($this->es_id AND $this->es_autoincrement))
-		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
-
-			$form = '<span class="uneditable-input form-control">' . $valor_field . '</span>';
-			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
-		}
-		else if (!empty($this->choices))
-		{
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
-			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
-		}
-		else if ($this->tipo == 'char')
-		{
-			if ($this->largo >= 100)
-			{
-				$arr_param = array(
-									'name'      => $this->nombre,
-									'value'     => $valor_field,
-									'maxlength' => $this->largo,
-									'id'        => $id_prefix . $this->nombre,
-									'cols'      => '50',
-									'rows'      => '5',
-									'class'     => 'form-control',
-								);
-				$form = form_textarea($arr_param);
-			}
-			else
-			{
-				$arr_param = array(
-									'name'      => $this->nombre,
-									'value'     => $valor_field,
-									'maxlength' => $this->largo,
-									'id'        => $id_prefix . $this->nombre,
-									'class'     => 'form-control',
-								);
-				$form = form_input($arr_param);
-			}
-		}
-		else if ($this->tipo == 'password')
-		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_password($arr_param);
-		}
-		else if ($this->tipo == 'int')
-		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
-		}
-		else if ($this->tipo == 'real')
-		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo + $this->decimales + 1,
-								'size'      => $this->largo + $this->decimales + 1,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
-		}
-		else if ($this->tipo == 'datetime')
-		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
-		}
-		else if ($this->tipo == 'boolean')
-		{
-			$form = '<label class="radio-inline">';
-			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
-			$form .= '</label>';
-			$form .= '<label class="radio-inline">';
-			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
-			$form .= '</label>';
-		}
-		else if ($this->tipo == 'has_one')
-		{
-			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
-			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-		}
-		else if ($this->tipo == 'has_many')
-		{
-			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo();
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control"';
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
-			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
-			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$CI =& get_instance();
-			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
-			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $opciones, $param_adic);
-		}
-
-		return $form;
-	}
 
 
-	/**
-	 * Devuelve el valor, formateado de acuerdo al tipo del campo
-	 *
-	 * @param  [type] $valor Valor a desplegar
-	 * @return string        Valor formateado
-	 */
-	public function get_formatted_value($valor)
-	{
-		if ($this->tipo == 'boolean')
-		{
-			return ($valor == 1) ? 'SI' : 'NO';
-		}
-		else if ($this->tipo == 'has_one')
-		{
-			return $this->relation['data']->__toString();
-		}
-		else if ($this->tipo == 'has_many')
-		{
-			$campo = '<ul class="formatted_has_many">';
-			foreach ($this->relation['data']->get_model_all() as $obj)
-			{
-				$campo .= '<li>' . $obj . '</li>';
-			}
-			$campo .= '</ul>';
-			return $campo;
-		}
-		else if (count($this->choices) > 0)
-		{
-			return $this->choices[$valor];
-		}
-		else
-		{
-			return $valor;
-		}
-	}
 
 
 	/**

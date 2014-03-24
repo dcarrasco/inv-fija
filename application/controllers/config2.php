@@ -3,7 +3,7 @@
 class config2 extends CI_Controller {
 
 	private $arr_menu = array(
-				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
+				'auditor_model'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
 				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
 				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
 				'tipo_inventario' => array('url' => '/config2/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
@@ -54,10 +54,13 @@ class config2 extends CI_Controller {
 		// $modelo = new $nombre_modelo;
 		$this->load->model($nombre_modelo);
 
-		$this->$nombre_modelo->find('all', array('filtro' => $filtro, 'limit' => $this->$nombre_modelo->get_model_page_results(), 'offset' => $pag));
-
-		dbg($this);
+		//dbg($nombre_modelo);
+		//dbg(get_object_vars($this));
+		//dbg(get_object_vars($this->auditor));
+		//dbg($this->{$nombre_modelo});
 		//die();
+
+		$this->$nombre_modelo->find('all', array('filtro' => $filtro, 'limit' => $this->$nombre_modelo->get_page_results(), 'offset' => $pag));
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
@@ -75,21 +78,22 @@ class config2 extends CI_Controller {
 
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
-		$modelo = new $nombre_modelo($id);
-		$modelo->find_id($id);
 
-		if (!$modelo->valida_form())
+		$this->load->model($nombre_modelo);
+		$this->$nombre_modelo->find_id($id);
+
+		if (!$this->$nombre_modelo->valida_form())
 		{
 			$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
-				'modelo'             => $modelo,
+				'modelo'             => $this->$nombre_modelo,
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}
 		else
 		{
-			$modelo->recuperar_post();
+			$this->$nombre_modelo->recuperar_post();
 			if ($this->input->post('grabar'))
 			{
 				$modelo->grabar();
