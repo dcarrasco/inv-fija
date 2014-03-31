@@ -1,15 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Analisis extends CI_Controller {
+class Inventario_analisis extends CI_Controller {
 
 	private $id_inventario = 0;
 	private $nombre_inventario = '';
-
-	private $arr_menu = array(
-				'ajustes'            => array('url' => 'analisis/ajustes', 'texto' => 'Ajustes de inventario'),
-				'sube_stock'         => array('url' => 'analisis/sube_stock', 'texto' => 'Subir Stock'),
-				'imprime_inventario' => array('url' => 'analisis/imprime_inventario', 'texto' => 'Imprimir Hojas'),
-			);
+	private $arr_menu = array();
 
 
 
@@ -18,6 +13,12 @@ class Analisis extends CI_Controller {
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('analisis');
+
+		$this->arr_menu = array(
+			'ajustes'            => array('url' => $this->uri->segment(1) . '/ajustes', 'texto' => 'Ajustes de inventario'),
+			'sube_stock'         => array('url' => $this->uri->segment(1) . '/sube_stock', 'texto' => 'Subir Stock'),
+			'imprime_inventario' => array('url' => $this->uri->segment(1) . '/imprime_inventario', 'texto' => 'Imprimir Hojas'),
+		);
 
 		$inventario_activo = new Inventario;
 		$this->id_inventario = $inventario_activo->get_id_inventario_activo();
@@ -96,7 +97,7 @@ class Analisis extends CI_Controller {
 				}
 				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente' : ''));
 			}
-			redirect('analisis/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
+			redirect($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
 		}
 
 	}
@@ -225,7 +226,7 @@ class Analisis extends CI_Controller {
 		else
 		{
 			$oculta_stock_sap = (set_value('oculta_stock_sap') == 'oculta_stock_sap') ? 1 : 0;
-			redirect("analisis/imprime_hojas/" . set_value('pag_desde') . '/' . set_value('pag_hasta') . '/' . $oculta_stock_sap . '/' . time());
+			redirect($this->uri->segment(1) . "/imprime_hojas/" . set_value('pag_desde') . '/' . set_value('pag_hasta') . '/' . $oculta_stock_sap . '/' . time());
 		}
 
 	}
@@ -268,5 +269,5 @@ class Analisis extends CI_Controller {
 
 }
 
-/* End of file analisis.php */
-/* Location: ./application/controllers/inventario.php */
+/* End of file inventario_analisis.php */
+/* Location: ./application/controllers/inventario_analisis.php */

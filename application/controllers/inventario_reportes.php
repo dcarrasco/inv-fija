@@ -1,17 +1,10 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Reportes extends CI_Controller {
+class Inventario_reportes extends CI_Controller {
 
 	private $id_inventario = 0;
 
-	private $arr_menu = array(
-				'hoja'              => array('url' => '/reportes/listado/hoja', 'texto' => 'Hoja'),
-				'material'          => array('url' => '/reportes/listado/material', 'texto' => 'Material'),
-				'material_faltante' => array('url' => '/reportes/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
-				'ubicacion'         => array('url' => '/reportes/listado/ubicacion' , 'texto' => 'Ubicacion'),
-				'tipos_ubicacion'   => array('url' => '/reportes/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
-				'ajustes'           => array('url' => '/reportes/listado/ajustes', 'texto' => 'Ajustes'),
-			);
+	private $arr_menu = array();
 
 
 	public function __construct()
@@ -24,6 +17,15 @@ class Reportes extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->arr_menu = array(
+			'hoja'              => array('url' => $this->uri->segment(1) . '/listado/hoja', 'texto' => 'Hoja'),
+			'material'          => array('url' => $this->uri->segment(1) . '/listado/material', 'texto' => 'Material'),
+			'material_faltante' => array('url' => $this->uri->segment(1) . '/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
+			'ubicacion'         => array('url' => $this->uri->segment(1) . '/listado/ubicacion' , 'texto' => 'Ubicacion'),
+			'tipos_ubicacion'   => array('url' => $this->uri->segment(1) . '/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
+			'ajustes'           => array('url' => $this->uri->segment(1) . '/listado/ajustes', 'texto' => 'Ajustes'),
+		);
 	}
 
 
@@ -284,8 +286,8 @@ class Reportes extends CI_Controller {
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
 
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
-											' <span class="text-muted glyphicon ' . 
-											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . 
+											' <span class="text-muted glyphicon ' .
+											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 											'" ></span>': '';
 		}
 
@@ -313,10 +315,9 @@ class Reportes extends CI_Controller {
 		$this->load->view('inventario/reporte', $data);
 		$this->load->view('app_footer', $data);
 
-		//echo "<pre>"; var_dump($data); echo "</pre>";
 	}
 
 }
 
-/* End of file reportes.php */
-/* Location: ./application/controllers/reportes.php */
+/* End of file inventario_reportes.php */
+/* Location: ./application/controllers/inventario_reportes.php */

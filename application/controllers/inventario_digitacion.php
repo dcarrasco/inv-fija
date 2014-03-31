@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class C_inventario extends CI_Controller {
+class Inventario_digitacion extends CI_Controller {
 
 	private $id_inventario = 0;
 
@@ -12,15 +12,17 @@ class C_inventario extends CI_Controller {
 
 		if (ENVIRONMENT != 'production')
 		{
-			$this->output->enable_profiler(TRUE);
+			//$this->output->enable_profiler(TRUE);
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	public function index() {
 		$this->ingreso();
 	}
 
+	// --------------------------------------------------------------------
 
 	public function ingreso($hoja = 0)
 	{
@@ -38,12 +40,10 @@ class C_inventario extends CI_Controller {
 		$this->id_inventario = $inventario->get_id_inventario_activo();
 		$inventario->find_id($this->id_inventario);
 
-		$this->benchmark->mark('detalle_inventario_start');
+		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
-		$this->benchmark->mark('detalle_inventario_end');
-
-		//dbg($detalle_inventario);
+		//$this->benchmark->mark('detalle_inventario_end');
 
 		$auditor = $detalle_inventario->get_id_auditor();
 		$nuevo_detalle_inventario->auditor = $auditor;
@@ -105,8 +105,8 @@ class C_inventario extends CI_Controller {
 					'link_config'        => 'config',
 					'link_reporte'       => 'reportes',
 					'link_inventario'    => 'inventario',
-					'link_hoja_ant'      => base_url('c_inventario/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
-					'link_hoja_sig'      => base_url('c_inventario/ingreso/' . ($hoja + 1) . '/' . time()),
+					'link_hoja_ant'      => base_url($this->uri->segment(1) . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+					'link_hoja_sig'      => base_url($this->uri->segment(1) . '/ingreso/' . ($hoja + 1) . '/' . time()),
 					'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				);
 
@@ -124,7 +124,6 @@ class C_inventario extends CI_Controller {
 					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
 					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
 					$linea_detalle->fecha_modificacion = date('Ymd H:i:s');
-					//dbg($linea_detalle);
 					$linea_detalle->grabar();
 					$cant_modif += 1;
 				}
@@ -169,10 +168,12 @@ class C_inventario extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
-			redirect('c_inventario/ingreso/' . $this->input->post('hoja') . '/' . time());
+			redirect($this->uri->segment(1) . '/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
 	}
+
+	// --------------------------------------------------------------------
 
 	public function ajax_act_agr_materiales($filtro = '')
 	{
@@ -187,6 +188,7 @@ class C_inventario extends CI_Controller {
 		echo($options);
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _render_view($vista = '', $data = array())
 	{
@@ -199,6 +201,5 @@ class C_inventario extends CI_Controller {
 
 
 }
-
-/* End of file inventario.php */
-/* Location: ./application/controllers/c_inventario.php */
+/* End of file inventario_digitacion.php */
+/* Location: ./application/controllers/inventario_digitacion.php */
