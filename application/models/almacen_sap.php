@@ -49,7 +49,7 @@ class Almacen_sap extends ORM_Model {
 								'texto_ayuda'    => 'Nombre del responsable del almacen. Maximo 50 caracteres.',
 							),
 						'tipo_op' => array(
-								'label'          => 'Tipo operación',
+								'label'          => 'Tipo operacion',
 								'tipo'           =>  'char',
 								'largo'          => 50,
 								'texto_ayuda'    => 'Seleccione el tipo de operación.',
