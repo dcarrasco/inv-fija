@@ -15,66 +15,77 @@ class ORM_Model {
 	 * @var  string
 	 */
 	private $model_nombre        = '';
+
 	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
 	private $model_class         = '';
+
 	/**
 	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
 	private $model_tabla         = '';
+
 	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
 	 */
 	private $model_label         = '';
+
 	/**
 	 * Nombre (etiqueta) del modelo (plural)
 	 *
 	 * @var string
 	 */
 	private $model_label_plural  = '';
+
 	/**
 	 * Campos para ordenar el modelo cuando se recupera de la BD
 	 *
 	 * @var string
 	 */
 	private $model_order_by      = '';
+
 	/**
 	 * Campos que conforman la llave (id) del modelo
 	 *
 	 * @var array
 	 */
 	private $model_campo_id      = array();
+
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
 	 *
 	 * @var boolean
 	 */
 	private $model_got_relations = FALSE;
+
 	/**
 	 * Cantidad de registros por pagina
 	 *
 	 * @var integer
 	 */
 	private $model_page_results  = 10;
+
 	/**
 	 * Arreglo con los campos del modelo
 	 *
 	 * @var array
 	 */
 	private $model_fields        = array();
+
 	/**
 	 * Arreglo de registros recuperados de la BD
 	 *
 	 * @var array
 	 */
 	private $model_all           = array();
+
 	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
@@ -293,6 +304,7 @@ class ORM_Model {
 		{
 			$this->set_validation_rules_field($campo);
 		}
+
 		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: ', '</strong></p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
@@ -348,6 +360,7 @@ class ORM_Model {
 	{
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->model_fields[$campo]->get_relation();
+
 		if (array_key_exists('conditions', $arr_relation))
 		{
 			foreach($arr_relation['conditions'] as $cond_key => $cond_value)
@@ -360,6 +373,7 @@ class ORM_Model {
 					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
 				}
 			}
+
 			$this->model_fields[$campo]->set_relation($arr_relation);
 		}
 
@@ -377,11 +391,13 @@ class ORM_Model {
 	public function get_label_field($campo = '')
 	{
 		$tipo = $this->model_fields[$campo]->get_tipo();
+
 		if(($tipo == 'has_one' or $tipo == 'has_many') and !($this->model_got_relations))
 		{
 			$this->_recuperar_relation_fields();
 
 		}
+
 		return $this->model_fields[$campo]->get_label();
 	}
 
@@ -500,7 +516,9 @@ class ORM_Model {
 					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 				);
+
 		$this->pagination->initialize($cfg_pagination);
+
 		return $this->pagination->create_links();
 	}
 
@@ -582,7 +600,8 @@ class ORM_Model {
 
 			return $rs;
 		}
-		else if ($tipo == 'all')
+
+		if ($tipo == 'all')
 		{
 			if ($this->model_order_by != '')
 			{
@@ -605,20 +624,24 @@ class ORM_Model {
 
 			return $rs;
 		}
-		else if ($tipo == 'count')
+
+		if ($tipo == 'count')
 		{
 			$this->db->select('count(*) as cant');
 			$rs = $this->db->get($this->model_tabla)->row_array();
 
 			return $rs['cant'];
 		}
-		else if ($tipo == 'list')
+
+		if ($tipo == 'list')
 		{
 			$arr_list = array();
+
 			if ($this->model_order_by != '')
 			{
 				$this->db->order_by($this->model_order_by);
 			}
+
 			$rs = $this->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
@@ -630,7 +653,6 @@ class ORM_Model {
 
 			return $arr_list;
 		}
-
 	}
 
 	// --------------------------------------------------------------------
@@ -651,6 +673,7 @@ class ORM_Model {
 			foreach($this->model_campo_id as $campo_id)
 			{
 				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
+
 				if ($tipo_id == 'id' OR $tipo_id == 'integer')
 				{
 					$arr_condiciones[$campo_id] = (int) $id;
@@ -664,6 +687,7 @@ class ORM_Model {
 		else
 		{
 			$arr_val_id = explode($this->separador_campos, $id);
+
 			foreach($this->model_campo_id as $i => $campo_id)
 			{
 				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
@@ -812,6 +836,7 @@ class ORM_Model {
 	private function _put_filtro($filtro = '')
 	{
 		$i = 0;
+
 		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'char')
@@ -844,15 +869,18 @@ class ORM_Model {
 			if (is_array($this->input->post($nombre)))
 			{
 				$arr = array();
+
 				foreach($this->input->post($nombre) as $key => $val)
 				{
 					$arr[$val] = $val;
 				}
+
 				$this->$nombre = $arr;
 			}
 			else
 			{
 				$tipo_campo = $metadata->get_tipo();
+
 				if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
 				{
 					$this->$nombre = (int) $this->input->post($nombre);
@@ -880,6 +908,7 @@ class ORM_Model {
 			$this->db->select('count(*) as cant');
 			$this->_put_filtro($filtro);
 			$rs = $this->db->get($this->model_tabla)->row();
+
 			return $rs->cant;
 		}
 		else
@@ -949,6 +978,7 @@ class ORM_Model {
 			else
 			{
 				$this->db->insert($this->model_tabla, $data_update);
+
 				foreach($this->model_campo_id as $campo_id)
 				{
 					$data_where[$campo_id] = $this->db->insert_id();
@@ -973,24 +1003,27 @@ class ORM_Model {
 
 				$arr_where_delete = array();
 				$data_where_tmp = $data_where;
+
 				foreach($rel['id_one_table'] as $id_one_table_key)
 				{
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
-				$this->db->delete($rel['join_table'], $arr_where_delete);
 
+				$this->db->delete($rel['join_table'], $arr_where_delete);
 
 				foreach($this->$nombre as $valor_campo)
 				{
 					$arr_values = array();
 
 					$data_where_tmp = $data_where;
+
 					foreach($rel['id_one_table'] as $id_one_table_key)
 					{
 						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
 					}
 
 					$arr_many_valores = explode($this->separador_campos, $valor_campo);
+
 					foreach($rel['id_many_table'] as $id_many)
 					{
 						$arr_values[$id_many] = array_shift($arr_many_valores);
@@ -1012,6 +1045,7 @@ class ORM_Model {
 	public function borrar()
 	{
 		$data_where = array();
+
 		foreach($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id())
@@ -1019,6 +1053,7 @@ class ORM_Model {
 				$data_where[$nombre] = $this->$nombre;
 			}
 		}
+
 		$this->db->delete($this->model_tabla, $data_where);
 
 		foreach($this->model_fields as $nombre => $campo)
@@ -1028,15 +1063,16 @@ class ORM_Model {
 				$rel = $campo->get_relation();
 				$arr_where_delete = array();
 				$data_where_tmp = $data_where;
+
 				foreach($rel['id_one_table'] as $id_one_table_key)
 				{
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
+
 				$this->db->delete($rel['join_table'], $arr_where_delete);
 			}
 		}
 	}
-
 }
 
 
@@ -1064,90 +1100,105 @@ class ORM_Field {
 	 * @var  string
 	 */
 	private $nombre = '';
+
 	/**
 	 * Nombre del tabla del campo
 	 *
 	 * @var  string
 	 */
 	private $tabla_bd = '';
+
 	/**
 	 * Nombre del campo en la tabla
 	 *
 	 * @var  string
 	 */
 	private $nombre_bd = '';
+
 	/**
 	 * Nombre del campo (etiqueta)
 	 *
 	 * @var  string
 	 */
 	private $label = '';
+
 	/**
 	 * Texto de ayuda del campo
 	 *
 	 * @var  string
 	 */
 	private $texto_ayuda = '';
+
 	/**
 	 * Valor por defecto del campo
 	 *
 	 * @var  string
 	 */
 	private $default = '';
+
 	/**
 	 * Indica si el campo se muestra en la listado
 	 *
 	 * @var  boolean
 	 */
 	private $mostrar_lista = TRUE;
+
 	/**
 	 * Tipo del campo
 	 *
 	 * @var  string
 	 */
 	private $tipo = 'char';
+
 	/**
 	 * Largo del campo
 	 *
 	 * @var  string
 	 */
 	private $largo = 10;
+
 	/**
 	 * Cantidad de decimales del campo
 	 *
 	 * @var  string
 	 */
 	private $decimales = 2;
+
 	/**
 	 * Lista de los valores válidos para el campo
 	 *
 	 * @var  array
 	 */
 	private $choices = array();
+
 	/**
 	 * Arreglo con los datos de la relación
 	 *
 	 * @var  array
 	 */
 	private $relation = array();
+
 	/**
 	 * Indica si el campo es ID
 	 *
 	 * @var  boolean
 	 */
 	private $es_id = FALSE;
+
 	/**
 	 * Indica si el campo es obligatorio
 	 *
 	 * @var  boolean
 	 */
 	private $es_obligatorio = FALSE;
+
 	/**
 	 * Indica si el valor del campo debe ser único
 	 *
 	 * @var  boolean
 	 */
 	private $es_unico = FALSE;
+
 	/**
 	 * Indica si el campo es auto-incremental
 	 *
@@ -1223,14 +1274,13 @@ class ORM_Field {
 		{
 			return $this->relation['data']->get_model_label();
 		}
-		else if ($this->tipo == 'has_many')
+
+		if ($this->tipo == 'has_many')
 		{
 			return $this->relation['data']->get_model_label_plural();
 		}
-		else
-		{
-			return $this->label;
-		}
+
+		return $this->label;
 	}
 
 
@@ -1299,100 +1349,61 @@ class ORM_Field {
 	 */
 	public function form_field($valor = '', $filtra_activos = FALSE)
 	{
-		$form       = '';
 		$id_prefix  = 'id_';
 
 		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
-		if ($this->tipo == 'id' OR ($this->es_id AND $valor_field != '') OR ($this->es_id AND $this->es_autoincrement))
+		$arr_param = array(
+			'name'      => $this->nombre,
+			'id'        => $id_prefix . $this->nombre,
+			'class'     => 'form-control',
+			'value'     => $valor_field,
+			'maxlength' => $this->largo,
+			'size'      => $this->largo,
+			);
+
+		if ($this->tipo == 'id'
+			OR ($this->es_id AND $valor_field != '')
+			OR ($this->es_id AND $this->es_autoincrement))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
 			$form = '<span class="uneditable-input form-control">' . $valor_field . '</span>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
+			return $form;
 		}
-		else if (!empty($this->choices))
+
+		if (!empty($this->choices))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
-			$form = form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
+			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
-		else if ($this->tipo == 'char')
+
+		if ($this->tipo == 'char' AND $this->largo >= 100)
 		{
-			if ($this->largo >= 100)
-			{
-				$arr_param = array(
-									'name'      => $this->nombre,
-									'value'     => $valor_field,
-									'maxlength' => $this->largo,
-									'id'        => $id_prefix . $this->nombre,
-									'cols'      => '50',
-									'rows'      => '5',
-									'class'     => 'form-control',
-								);
-				$form = form_textarea($arr_param);
-			}
-			else
-			{
-				$arr_param = array(
-									'name'      => $this->nombre,
-									'value'     => $valor_field,
-									'maxlength' => $this->largo,
-									'id'        => $id_prefix . $this->nombre,
-									'class'     => 'form-control',
-								);
-				$form = form_input($arr_param);
-			}
+			$arr_param['cols'] = '50';
+			$arr_param['rows'] = '5';
+			return form_textarea($arr_param);
 		}
-		else if ($this->tipo == 'password')
+
+		if ($this->tipo == 'char' OR $this->tipo == 'int' OR $this->tipo == 'datetime')
 		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_password($arr_param);
+			return form_input($arr_param);
 		}
-		else if ($this->tipo == 'int')
+
+		if ($this->tipo == 'password')
 		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
+			return form_password($arr_param);
 		}
-		else if ($this->tipo == 'real')
+
+		if ($this->tipo == 'real')
 		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo + $this->decimales + 1,
-								'size'      => $this->largo + $this->decimales + 1,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
+			$arr_param['size'] = $this->largo + $this->decimales + 1;
+			return form_input($arr_param);
 		}
-		else if ($this->tipo == 'datetime')
-		{
-			$arr_param = array(
-								'name'      => $this->nombre,
-								'value'     => $valor_field,
-								'maxlength' => $this->largo,
-								'size'      => $this->largo,
-								'id'        => $id_prefix . $this->nombre,
-								'class'     => 'form-control',
-							);
-			$form = form_input($arr_param);
-		}
-		else if ($this->tipo == 'boolean')
+
+		if ($this->tipo == 'boolean')
 		{
 			$form = '<label class="radio-inline">';
 			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
@@ -1400,29 +1411,38 @@ class ORM_Field {
 			$form .= '<label class="radio-inline">';
 			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
 			$form .= '</label>';
+			return $form;
 		}
-		else if ($this->tipo == 'has_one')
+
+		if ($this->tipo == 'has_one')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
+
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
+
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+
 			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			return $form;
 		}
-		else if ($this->tipo == 'has_many')
+
+		if ($this->tipo == 'has_many')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
+
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control"';
+
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 			$CI =& get_instance();
 			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
 			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $opciones, $param_adic);
+			return $form;
 		}
-
-		return $form;
 	}
 
 
@@ -1438,11 +1458,13 @@ class ORM_Field {
 		{
 			return ($valor == 1) ? 'SI' : 'NO';
 		}
-		else if ($this->tipo == 'has_one')
+
+		if ($this->tipo == 'has_one')
 		{
 			return $this->relation['data']->__toString();
 		}
-		else if ($this->tipo == 'has_many')
+
+		if ($this->tipo == 'has_many')
 		{
 			$campo = '<ul class="formatted_has_many">';
 			foreach ($this->relation['data']->get_model_all() as $obj)
@@ -1450,16 +1472,16 @@ class ORM_Field {
 				$campo .= '<li>' . $obj . '</li>';
 			}
 			$campo .= '</ul>';
+
 			return $campo;
 		}
-		else if (count($this->choices) > 0)
+
+		if (count($this->choices) > 0)
 		{
 			return $this->choices[$valor];
 		}
-		else
-		{
-			return $valor;
-		}
+
+		return $valor;
 	}
 
 
