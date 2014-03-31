@@ -7,7 +7,6 @@ class Acl extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('acl_config');
 
 		if (ENVIRONMENT != 'production')
