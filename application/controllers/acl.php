@@ -2,19 +2,29 @@
 
 class Acl extends CI_Controller {
 
-	private $arr_menu = array(
-				'usuario'        => array('url' => '/acl/listado/usuario', 'texto' => 'Usuarios'),
-				'app'            => array('url' => '/acl/listado/app', 'texto' => 'Aplicaciones'),
-				'rol'            => array('url' => '/acl/listado/rol', 'texto' => 'Roles'),
-				'modulo'         => array('url' => '/acl/listado/modulo', 'texto' => 'Modulos'),
-			);
+	private $arr_menu = array();
 
 	public function __construct()
 	{
 		parent::__construct();
 		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('acl_config');
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
+
+		$this->arr_menu = array(
+			'usuario'        => array('url' => $this->uri->segment(1) . '/listado/usuario', 'texto' => 'Usuarios'),
+			'app'            => array('url' => $this->uri->segment(1) . '/listado/app', 'texto' => 'Aplicaciones'),
+			'rol'            => array('url' => $this->uri->segment(1) . '/listado/rol', 'texto' => 'Roles'),
+			'modulo'         => array('url' => $this->uri->segment(1) . '/listado/modulo', 'texto' => 'Modulos'),
+		);
+
 	}
+
+	// --------------------------------------------------------------------
 
 	public function index()
 	{
@@ -22,6 +32,7 @@ class Acl extends CI_Controller {
 		$this->listado($arr_keys[0]);
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _render_view($vista = '', $data = array())
 	{
@@ -31,33 +42,32 @@ class Acl extends CI_Controller {
 		$this->load->view('app_footer', $data);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
-		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
-
 		$modelo = new $nombre_modelo;
-		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
 
-		//dbg($modelo);
+		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
+		$modelo->set_model_filtro($filtro);
+
+		$modelo->list_paginated($pag);
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'acl/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
-				'filtro'             => ($filtro == '_') ? '' : $filtro,
-				'url_filtro'         => site_url('acl/listado/' . $nombre_modelo . '/'),
-				'url_editar'         => site_url('acl/editar/' . $nombre_modelo . '/'),
-				'url_borrar'         => site_url('acl/borrar/' . $nombre_modelo . '/'),
+				'modelo'             => $modelo,
+				'url_filtro'         => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
+				'url_editar'         => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
 			);
 		$this->_render_view('ORM/orm_listado', $data);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
-		$modelo = new $nombre_modelo($id);
+		$modelo = new $nombre_modelo;
 		$modelo->find_id($id);
 
 		if (!$modelo->valida_form())
@@ -82,12 +92,12 @@ class Acl extends CI_Controller {
 				$modelo->borrar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo . ') borrado correctamente');
 			}
-			redirect('acl/listado/' . $nombre_modelo);
+			redirect($this->uri->segment(1) . '/listado/' . $nombre_modelo);
 		}
-
 	}
 
-}
 
+
+}
 /* End of file acl.php */
 /* Location: ./application/controllers/acl.php */
