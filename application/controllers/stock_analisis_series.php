@@ -24,7 +24,6 @@ class Stock_analisis_series extends CI_Controller {
 
 	public function historia()
 	{
-		//$this->output->enable_profiler(TRUE);
 
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
