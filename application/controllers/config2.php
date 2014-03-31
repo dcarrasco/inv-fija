@@ -1,24 +1,9 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class config2 extends CI_Controller {
+class Config2 extends CI_Controller {
 
-	private $arr_menu = array(
-				'auditor'        => array('url' => '/config2/listado/auditor', 'texto' => 'Auditores'),
-				'familia'        => array('url' => '/config2/listado/familia', 'texto' => 'Familias'),
-				'catalogo'       => array('url' => '/config2/listado/catalogo', 'texto' => 'Materiales'),
-				'tipo_inventario' => array('url' => '/config2/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
-				'inventario'     => array('url' => '/config2/listado/inventario', 'texto' => 'Inventarios'),
-				//'detalle_inventario' => array('url' => '/config2/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
-				'tipo_ubicacion' => array('url' => '/config2/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
-				'ubicaciones'    => array('url' => '/config2/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
-				'centro'         => array('url' => '/config2/listado/centro', 'texto' => 'Centros'),
-				'almacen'        => array('url' => '/config2/listado/almacen', 'texto' => 'Almacenes'),
-				'unidad_medida'  => array('url' => '/config2/listado/unidad_medida', 'texto' => 'Unidades de medida'),
-				//'app'            => array('url' => '/config2/listado/app', 'texto' => 'Aplicaciones'),
-				//'rol'            => array('url' => '/config2/listado/rol', 'texto' => 'Roles'),
-				//'modulo'         => array('url' => '/config2/listado/modulo', 'texto' => 'Modulos'),
-				//'usuario'        => array('url' => '/config2/listado/usuario', 'texto' => 'Usuarios'),
-			);
+	private $arr_menu = array();
+
 
 	public function __construct()
 	{
@@ -29,7 +14,27 @@ class config2 extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->arr_menu = array(
+			'auditor'         => array('url' => $this->uri->segment(1) . '/listado/auditor/', 'texto' => 'Auditores'),
+			'familia'         => array('url' => $this->uri->segment(1) . '/listado/familia', 'texto' => 'Familias'),
+			'catalogo'        => array('url' => $this->uri->segment(1) . '/listado/catalogo', 'texto' => 'Materiales'),
+			'tipo_inventario' => array('url' => $this->uri->segment(1) . '/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
+			'inventario'      => array('url' => $this->uri->segment(1) . '/listado/inventario', 'texto' => 'Inventarios'),
+			//'detalle_inventario' => array('url' => $this->uri->segment(1) . '/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
+			'tipo_ubicacion'  => array('url' => $this->uri->segment(1) . '/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
+			'ubicaciones'     => array('url' => $this->uri->segment(1) . '/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
+			'centro'          => array('url' => $this->uri->segment(1) . '/listado/centro', 'texto' => 'Centros'),
+			'almacen'         => array('url' => $this->uri->segment(1) . '/listado/almacen', 'texto' => 'Almacenes'),
+			'unidad_medida'   => array('url' => $this->uri->segment(1) . '/listado/unidad_medida', 'texto' => 'Unidades de medida'),
+			//'app'           => array('url' => $this->uri->segment(1) . '/listado/app', 'texto' => 'Aplicaciones'),
+			//'rol'           => array('url' => $this->uri->segment(1) . '/listado/rol', 'texto' => 'Roles'),
+			//'modulo'        => array('url' => $this->uri->segment(1) . '/listado/modulo', 'texto' => 'Modulos'),
+			//'usuario'       => array('url' => $this->uri->segment(1) . '/listado/usuario', 'texto' => 'Usuarios'),
+		);
 	}
+
+	// --------------------------------------------------------------------
 
 	public function index()
 	{
@@ -37,6 +42,7 @@ class config2 extends CI_Controller {
 		$this->listado($arr_keys[0]);
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _render_view($vista = '', $data = array())
 	{
@@ -46,33 +52,32 @@ class config2 extends CI_Controller {
 		$this->load->view('app_footer', $data);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
-		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
-
 		$modelo = new $nombre_modelo;
-		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
 
-		//dbg($modelo);
+		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
+		$modelo->set_model_filtro($filtro);
+
+		$modelo->list_paginated($pag);
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'config2/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
-				'filtro'             => ($filtro == '_') ? '' : $filtro,
-				'url_filtro'         => site_url('config2/listado/' . $nombre_modelo . '/'),
-				'url_editar'         => site_url('config2/editar/' . $nombre_modelo . '/'),
-				'url_borrar'         => site_url('config2/borrar/' . $nombre_modelo . '/'),
+				'modelo'             => $modelo,
+				'url_filtro'         => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
+				'url_editar'         => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
 			);
 		$this->_render_view('ORM/orm_listado', $data);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
-		$modelo = new $nombre_modelo($id);
+		$modelo = new $nombre_modelo;
 		$modelo->find_id($id);
 
 		if (!$modelo->valida_form())
@@ -97,12 +102,11 @@ class config2 extends CI_Controller {
 				$modelo->borrar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo . ') borrado correctamente');
 			}
-			redirect('config2/listado/' . $nombre_modelo);
+			redirect($this->uri->segment(1) . '/listado/' . $nombre_modelo);
 		}
 	}
 
-
-
+	// --------------------------------------------------------------------
 
 	/**
 	 * Asociacion de ubicaciones con el tipo de ubicacion
@@ -119,7 +123,7 @@ class config2 extends CI_Controller {
 		$config_pagination = array(
 									'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
 									'per_page'    => $limite_por_pagina,
-									'base_url'    => site_url('config2/ubicacion_tipo_ubicacion'),
+									'base_url'    => site_url($this->uri->segment(1) . '/ubicacion_tipo_ubicacion'),
 									'uri_segment' => 3,
 									'num_links'   => 5,
 
@@ -233,10 +237,11 @@ class config2 extends CI_Controller {
 				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
 				$this->session->set_flashdata('msg_alerta', 'Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
 			}
-			redirect('config2/ubicacion_tipo_ubicacion/' . $pag);
+			redirect($this->uri->segment(1) . '/ubicacion_tipo_ubicacion/' . $pag);
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve string JSON con las ubicaciones libres
@@ -249,6 +254,8 @@ class config2 extends CI_Controller {
 		$arr_ubic = $this->ubicacion_model->get_ubicaciones_libres($tipo_inventario);
 		echo (json_encode($arr_ubic));
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve string JSON con los tipos de ubicaciones

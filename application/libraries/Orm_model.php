@@ -73,6 +73,13 @@ class ORM_Model {
 	private $model_page_results  = 10;
 
 	/**
+	 * Filtro para buscar resultados
+	 *
+	 * @var string
+	 */
+	private $model_filtro = '';
+
+	/**
 	 * Arreglo con los campos del modelo
 	 *
 	 * @var array
@@ -221,6 +228,18 @@ class ORM_Model {
 	public function get_model_fields()
 	{
 		return $this->model_fields;
+	}
+
+
+	public function get_model_filtro()
+	{
+		return ($this->model_filtro == '_') ? '' : $this->model_filtro;
+	}
+
+
+	public function set_model_filtro($filtro = '')
+	{
+		$this->model_filtro = $filtro;
 	}
 
 
@@ -482,10 +501,10 @@ class ORM_Model {
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
 	 */
-	public function crea_links_paginas($filtro = '_', $url = '')
+	public function crea_links_paginas($url = '')
 	{
 		$this->load->library('pagination');
-		$total_rows = $this->find('count', array('filtro' => $filtro), FALSE);
+		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
 
 		$cfg_pagination = array(
 					'uri_segment' => 5,
@@ -510,7 +529,7 @@ class ORM_Model {
 
 					'per_page'    => $this->model_page_results,
 					'total_rows'  => $total_rows,
-					'base_url'    => site_url($url . '/' . $this->get_model_nombre() . '/' . $filtro . '/'),
+					'base_url'    => site_url($this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
@@ -695,6 +714,18 @@ class ORM_Model {
 		}
 
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera listado paginado
+	 *
+	 * @return nada
+	 */
+	public function list_paginated($offset = 0)
+	{
+		$this->find('all', array('filtro' => $this->model_filtro, 'limit' => $this->model_page_results, 'offset' => $offset));
 	}
 
 	// --------------------------------------------------------------------

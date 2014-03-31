@@ -2,7 +2,7 @@
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtro',set_value('filtro', $filtro), 'class="form-control" maxlength="30" placeholder="Texto a filtrar..."'); ?>
+			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" maxlength="30" placeholder="Texto a filtrar..."'); ?>
 			<span class="input-group-btn">
 				<button type="submit" class="btn btn-default">
 					<span class="glyphicon glyphicon-search"></span>
@@ -54,6 +54,6 @@
 	</table>
 
 	<div class="text-center">
-		<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
+		<?php echo $modelo->crea_links_paginas(); ?>
 	</div>
 </div> <!-- fin content-module-main -->
