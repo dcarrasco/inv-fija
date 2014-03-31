@@ -200,7 +200,7 @@ class MY_Model {
 		}
 
 		$this->key = $this->_determina_campo_id();
-		$this->_recuperar_relation_fields();
+		//$this->_recuperar_relation_fields();
 
 	}
 
@@ -655,18 +655,17 @@ class MY_Model {
 
 				foreach ($this->key as $campo_id)
 				{
-					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
+					$arr_where[array_shift($arr_id_one_table)] = $this->valores[$campo_id];
 				}
-
 				// recupera la llave del modelo en tabla de la relacion (n:m)
 				$rs = $this->db->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)->get_where($arr_props_relation['join_table'], $arr_where)->result_array();
 
 				$class_relacionado = $arr_props_relation['model'];
-				$model_relacionado = new $class_relacionado();
+				$this->load->model($class_relacionado);
+				$model_relacionado = new $class_relacionado;
 
 				// genera arreglo de condiciones de busqueda
 				$arr_where = array();
-
 				foreach($rs as $reg)
 				{
 					array_push($arr_where, array_pop($reg));
@@ -677,8 +676,8 @@ class MY_Model {
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 
 				$arr_props_relation['data'] = $model_relacionado;
-				$this->field_info[$campo]->set_relation($arr_props_relation);
-				$this->$nombre_campo = $arr_where;
+				$this->field_info[$campo]['relation'] = $arr_props_relation;
+				//$this->valores[$campo] = $arr_where;
 				$this->model_got_relations = TRUE;
 			}
 		}
@@ -1017,10 +1016,18 @@ class MY_Model {
 	{
 		if ($this->field_info[$campo]['tipo'] == 'HAS_ONE')
 		{
+			if (!array_key_exists('data', $this->field_info[$campo]['relation']))
+			{
+				$this->_recuperar_relation_fields();
+			}
 			return $this->field_info[$campo]['relation']['data']->get_label();
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
+			if (!array_key_exists('data', $this->field_info[$campo]['relation']))
+			{
+				$this->_recuperar_relation_fields();
+			}
 			return $this->field_info[$campo]['relation']['data']->get_label_plural();
 		}
 		else
@@ -1068,13 +1075,13 @@ class MY_Model {
 		}
 		else if ($this->field_info[$campo]['tipo'] == 'HAS_MANY')
 		{
-			$campo = '<ul class="formatted_has_many">';
-			foreach ($this->relation['data']->get_model_all() as $obj)
+			$print_campo = '<ul class="formatted_has_many">';
+			foreach ($this->field_info[$campo]['relation']['data']->get_model_all() as $obj)
 			{
-				$campo .= '<li>' . $obj . '</li>';
+				$print_campo .= '<li>' . (string) $obj . '</li>';
 			}
-			$campo .= '</ul>';
-			return $campo;
+			$print_campo .= '</ul>';
+			return $print_campo;
 		}
 		else if (count($this->field_info[$campo]['choices']) > 0)
 		{

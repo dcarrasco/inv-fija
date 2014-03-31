@@ -1,0 +1,301 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Detalle_inventario_model extends MY_Model {
+
+	protected $tabla        = 'fija_detalle_inventario';
+	protected $label        = 'Detalle inventario';
+	protected $label_plural = 'Detalles inventario';
+	protected $orden        = 'id';
+
+	protected $field_info = array(
+		'id' => array(
+			'tipo'   => 'ID',
+		),
+		'id_inventario' => array(
+			'tipo'           => 'HAS_ONE',
+			'relation'       => array(
+				'model' => 'inventario_model',
+			),
+		),
+		'hoja' => array(
+			'label'          => 'Hoja',
+			'tipo'           => 'INT',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Numero de la hoja usada en el inventario',
+			'es_obligatorio' => TRUE,
+		),
+		'ubicacion' => array(
+			'label'          => 'Ubicación del material',
+			'tipo'           =>  'CHAR',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Indica la posición del material en el almacén.',
+			'es_obligatorio' => TRUE,
+		),
+		'hu' => array(
+			'label'          => 'HU del material',
+			'tipo'           =>  'CHAR',
+			'largo'          => 20,
+			'texto_ayuda'    => 'Indica la HU del material en el almacén.',
+			'es_obligatorio' => TRUE,
+		),
+		'catalogo' => array(
+			'tipo'           => 'HAS_ONE',
+			'relation'       => array(
+				'model' => 'catalogo_model',
+			),
+			'texto_ayuda'    => 'Catálogo del material.',
+		),
+		'descripcion' => array(
+			'label'          => 'Descripcion del material',
+			'tipo'           =>  'CHAR',
+			'largo'          => 45,
+			'texto_ayuda'    => 'Maximo 45 caracteres.',
+			'es_obligatorio' => TRUE,
+		),
+		'lote' => array(
+			'label'          => 'Lote del material',
+			'tipo'           =>  'CHAR',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Lote del material.',
+			'es_obligatorio' => TRUE,
+		),
+		'centro' => array(
+			'tipo'           =>  'HAS_ONE',
+			'relation'       => array(
+				'model' => 'centro_model'
+			),
+		),
+		'almacen' => array(
+			'tipo'           =>  'HAS_ONE',
+			'relation'       => array(
+				'model' => 'almacen_model'
+			),
+		),
+		'um' => array(
+			'tipo'           =>  'HAS_ONE',
+			'relation'       => array(
+				'model' => 'unidad_medida_model'
+			),
+		),
+		'stock_sap' => array(
+			'label'          => 'Stock SAP del material',
+			'tipo'           =>  'INT',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Stock sistémico (SAP) del material.',
+			'es_obligatorio' => TRUE,
+		),
+		'stock_fisico' => array(
+			'label'          => 'Stock Fisico del material',
+			'tipo'           =>  'INT',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Stock físico (inventariado) del material.',
+			'es_obligatorio' => TRUE,
+		),
+		'digitador' => array(
+			'tipo'           => 'HAS_ONE',
+			'relation'       => array(
+				'model' => 'usuario_model',
+			),
+			'texto_ayuda'    => 'Digitador de la hoja.',
+		),
+		'auditor' => array(
+			'tipo'           => 'HAS_ONE',
+			'relation'       => array(
+				'model'      => 'auditor_model',
+				'conditions' => array('activo' => 1),
+			),
+			'texto_ayuda'    => 'Auditor de la hoja.',
+			),
+		'reg_nuevo' => array(
+			'label'          => 'Registro nuevo',
+			'tipo'           =>  'BOOLEAN',
+			'texto_ayuda'    => 'Indica si el registro es nuevo.',
+			'es_obligatorio' => TRUE,
+		),
+		'fecha_modificacion' => array(
+			'label'          => 'Fecha de modificacion',
+			'tipo'           =>  'DATETIME',
+			'texto_ayuda'    => 'Fecha de modificación del registro.',
+			'es_obligatorio' => TRUE,
+		),
+		'observacion' => array(
+			'label'          => 'Observacion de registro',
+			'tipo'           =>  'CHAR',
+			'largo'          => 200,
+			'texto_ayuda'    => 'Maximo 200 caracteres.',
+		),
+		'stock_ajuste' => array(
+			'label'          => 'Stock de ajuste del material',
+			'tipo'           =>  'INT',
+			'largo'          => 10,
+			'texto_ayuda'    => 'Maximo 100 caracteres.',
+		),
+		'glosa_ajuste' => array(
+			'label'          => 'Observacion del ajuste',
+			'tipo'           =>  'CHAR',
+			'largo'          => 100,
+			'texto_ayuda'    => 'Maximo 100 caracteres.',
+		),
+		'fecha_ajuste' => array(
+			'label'          => 'Fecha del ajuste',
+			'tipo'           =>  'DATETIME',
+			'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
+		),
+	);
+
+
+	public function __construct()
+	{
+		parent::__construct();
+	}
+
+	public function __toString()
+	{
+		return $this->valores['hoja'];
+	}
+
+	public function get_hoja($id_inventario = 0, $hoja = 0)
+	{
+		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
+	}
+
+	public function get_nombre_auditor()
+	{
+		if(count($this->get_model_all()) > 0)
+		{
+			$all = $this->get_model_all();
+			$all_fields = $all[0]->get_model_fields();
+			$rel = $all_fields['auditor']->get_relation();
+			return $rel['data']->nombre;
+		}
+	}
+
+
+	public function get_id_auditor()
+	{
+		if(count($this->get_model_all()) > 0)
+		{
+			$all = $this->get_model_all();
+			return $all[0]->auditor;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+
+	public function get_nombre_digitador()
+	{
+		if(count($this->get_model_all()) > 0)
+		{
+			$all = $this->get_model_all();
+			$all_fields = $all[0]->get_model_fields();
+			$rel = $all_fields['digitador']->get_relation();
+			return $rel['data']->nombre;
+		}
+		else if ($this->digitador != 0)
+		{
+			return $this->digitador;
+		}
+		else
+		{
+			return '[nombre digitador]';
+		}
+	}
+
+
+	/**
+	 * Recuoera las lineas de detalle del inventario para ajustar
+	 * @param  integer $id_inventario         ID del inventario a consultar
+	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
+	 * @return array                          Arreglo con el detalle de los registros
+	 */
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
+	{
+		//determina la cantidad de registros
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($ocultar_regularizadas == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_fisico - stock_sap <> 0');
+		}
+		$total_rows = count($this->db->get('fija_detalle_inventario')->result_array());
+
+		// recupera el detalle de registros
+		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
+		$this->db->where('id_inventario', $id_inventario);
+		if ($ocultar_regularizadas == 1)
+		{
+			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
+		}
+		else
+		{
+			$this->db->where('stock_fisico - stock_sap <> 0');
+		}
+
+		$per_page = 50;
+		if ($pag > 0)
+		{
+			$this->db->limit($per_page, $pag);
+		}
+		else
+		{
+			$this->db->limit($per_page);
+		}
+		$rs = $this->db->get('fija_detalle_inventario')->result_array();
+
+		$this->load->library('pagination');
+		$cfg_pagination = array(
+					'uri_segment' => 4,
+					'num_links'   => 5,
+
+					'full_tag_open'   => '<ul class="pagination">',
+					'flil_tag_close'  => '</ul>',
+
+					'first_tag_open'  => '<li>',
+					'first_tag_close' => '</li>',
+					'last_tag_open'   => '<li>',
+					'last_tag_close'  => '</li>',
+					'next_tag_open'   => '<li>',
+					'next_tag_close'  => '</li>',
+					'prev_tag_open'   => '<li>',
+					'prev_tag_close'  => '</li>',
+					'cur_tag_open'    => '<li class="active"><a href="#">',
+					'cur_tag_close'   => '</a></li>',
+					'num_tag_open'    => '<li>',
+					'num_tag_close'   => '</li>',
+
+					'per_page'    => $per_page,
+					'total_rows'  => $total_rows,
+					'base_url'    => site_url('analisis/ajustes/' . $ocultar_regularizadas . '/'),
+					'first_link'  => 'Primero',
+					'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
+					'prev_link'   => '&laquo;',
+					'next_link'   => '&raquo;',
+				);
+		$this->pagination->initialize($cfg_pagination);
+
+		$model_all = array();
+		foreach($rs as $reg)
+		{
+			$o = new Detalle_inventario();
+			$o->get_from_array($reg);
+			array_push($model_all, $o);
+		}
+		$this->set_model_all($model_all);
+
+		return $this->pagination->create_links();
+	}
+
+
+
+
+}
+
+/* End of file detalle_inventario_model.php */
+/* Location: ./application/models/detalle_inventario_model.php */

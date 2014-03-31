@@ -3,10 +3,10 @@
 class Acl extends CI_Controller {
 
 	private $arr_menu = array(
-				'usuario'        => array('url' => '/acl/listado/usuario', 'texto' => 'Usuarios'),
-				'app'            => array('url' => '/acl/listado/app', 'texto' => 'Aplicaciones'),
-				'rol'            => array('url' => '/acl/listado/rol', 'texto' => 'Roles'),
-				'modulo'         => array('url' => '/acl/listado/modulo', 'texto' => 'Modulos'),
+				'usuario_model'        => array('url' => '/acl/listado/usuario_model', 'texto' => 'Usuarios'),
+				'app_model'            => array('url' => '/acl/listado/app_model', 'texto' => 'Aplicaciones'),
+				'rol_model'            => array('url' => '/acl/listado/rol_model', 'texto' => 'Roles'),
+				'modulo_model'         => array('url' => '/acl/listado/modulo_model', 'texto' => 'Modulos'),
 			);
 
 	public function __construct()
@@ -36,15 +36,15 @@ class Acl extends CI_Controller {
 	{
 		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
 
-		$modelo = new $nombre_modelo;
-		$modelo->find('all', array('filtro' => $filtro, 'limit' => $modelo->get_model_page_results(), 'offset' => $pag));
+		$this->load->model($nombre_modelo);
+		$this->$nombre_modelo->find('all', array('filtro' => $filtro, 'limit' => $this->$nombre_modelo->get_page_results(), 'offset' => $pag));
 
 		//dbg($modelo);
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'             => $modelo,
-				'links_paginas'      => $modelo->crea_links_paginas($filtro, 'acl/listado'),
+				'modelo'             => $this->$nombre_modelo,
+				'links_paginas'      => $this->$nombre_modelo->crea_links_paginas($filtro, 'acl/listado'),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'filtro'             => ($filtro == '_') ? '' : $filtro,
 				'url_filtro'         => site_url('acl/listado/' . $nombre_modelo . '/'),

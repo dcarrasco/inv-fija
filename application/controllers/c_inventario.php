@@ -29,19 +29,18 @@ class C_inventario extends CI_Controller {
 			$hoja = 1;
 		}
 
-
-		$this->load->model('detalle_inventario');
-		$nuevo_detalle_inventario = new Detalle_inventario;
+		$this->load->model('detalle_inventario_model');
+		$nuevo_detalle_inventario = new Detalle_inventario_model;
 		$nuevo_detalle_inventario->get_relation_fields();
 		$nuevo_detalle_inventario->hoja = $hoja;
 
 		// recupera el inventario activo
-		$inventario = new Inventario;
-		$this->id_inventario = $inventario->get_id_inventario_activo();
-		$inventario->find_id($this->id_inventario);
+		$this->load->model('inventario_model');
+		$this->id_inventario = $this->inventario_model->get_id_inventario_activo();
+		$this->inventario_model->find_id($this->id_inventario);
 
 		$this->benchmark->mark('detalle_inventario_start');
-		$detalle_inventario = new Detalle_inventario;
+		$detalle_inventario = new Detalle_inventario_model;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
 		$this->benchmark->mark('detalle_inventario_end');
 
@@ -137,15 +136,15 @@ class C_inventario extends CI_Controller {
 			{
 				if ($this->input->post('accion') == 'borrar')
 				{
-					$nuevo_detalle_inventario = new Detalle_inventario;
+					$nuevo_detalle_inventario = new Detalle_inventario_model;
 					$nuevo_detalle_inventario->find_id($this->input->post('id'));
 					$nuevo_detalle_inventario->borrar();
 					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('id') . ') borrada correctamente en hoja '. $hoja);
 				}
 				else
 				{
-					$nuevo_material = new Catalogo;
-					$nuevo_material->find_id($this->input->post('catalogo'));
+					$this->load->model('Catalogo_model');
+					$this->catalogo_model->find_id($this->input->post('catalogo'));
 
 					$nuevo_detalle_inventario->get_from_array(array(
 													'id'            => $this->input->post('id'),
