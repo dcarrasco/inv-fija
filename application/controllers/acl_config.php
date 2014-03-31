@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Acl extends CI_Controller {
+class Acl_config extends CI_Controller {
 
 	private $arr_menu = array();
 
@@ -98,5 +98,5 @@ class Acl extends CI_Controller {
 
 
 }
-/* End of file acl.php */
-/* Location: ./application/controllers/acl.php */
+/* End of file acl_config.php */
+/* Location: ./application/controllers/acl_config.php */

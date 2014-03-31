@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Config2 extends CI_Controller {
+class Inventario_config extends CI_Controller {
 
 	private $arr_menu = array();
 
@@ -121,33 +121,33 @@ class Config2 extends CI_Controller {
 		$this->load->library('pagination');
 		$limite_por_pagina = 15;
 		$config_pagination = array(
-									'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
-									'per_page'    => $limite_por_pagina,
-									'base_url'    => site_url($this->uri->segment(1) . '/ubicacion_tipo_ubicacion'),
-									'uri_segment' => 3,
-									'num_links'   => 5,
+			'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
+			'per_page'    => $limite_por_pagina,
+			'base_url'    => site_url($this->uri->segment(1) . '/ubicacion_tipo_ubicacion'),
+			'uri_segment' => 3,
+			'num_links'   => 5,
 
-									'full_tag_open'   => '<ul class="pagination">',
-									'flil_tag_close'  => '</ul>',
+			'full_tag_open'   => '<ul class="pagination">',
+			'flil_tag_close'  => '</ul>',
 
-									'first_tag_open'  => '<li>',
-									'first_tag_close' => '</li>',
-									'last_tag_open'   => '<li>',
-									'last_tag_close'  => '</li>',
-									'next_tag_open'   => '<li>',
-									'next_tag_close'  => '</li>',
-									'prev_tag_open'   => '<li>',
-									'prev_tag_close'  => '</li>',
-									'cur_tag_open'    => '<li class="active"><a href="#">',
-									'cur_tag_close'   => '</a></li>',
-									'num_tag_open'    => '<li>',
-									'num_tag_close'   => '</li>',
+			'first_tag_open'  => '<li>',
+			'first_tag_close' => '</li>',
+			'last_tag_open'   => '<li>',
+			'last_tag_close'  => '</li>',
+			'next_tag_open'   => '<li>',
+			'next_tag_close'  => '</li>',
+			'prev_tag_open'   => '<li>',
+			'prev_tag_close'  => '</li>',
+			'cur_tag_open'    => '<li class="active"><a href="#">',
+			'cur_tag_close'   => '</a></li>',
+			'num_tag_open'    => '<li>',
+			'num_tag_close'   => '</li>',
 
-									'first_link'  => 'Primero',
-									'last_link'   => 'Ultimo',
-									'prev_link'   => '&laquo;',
-									'next_link'   => '&raquo;',
-								);
+			'first_link'  => 'Primero',
+			'last_link'   => 'Ultimo',
+			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
+			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+		);
 		$this->pagination->initialize($config_pagination);
 
 
@@ -271,5 +271,5 @@ class Config2 extends CI_Controller {
 
 }
 
-/* End of file config2.php */
-/* Location: ./application/controllers/config2.php */
+/* End of file inventario_config.php */
+/* Location: ./application/controllers/inventario_config.php */

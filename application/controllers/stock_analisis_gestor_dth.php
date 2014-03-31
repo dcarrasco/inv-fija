@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Analisis_gestor_dth extends CI_Controller {
+class Stock_analisis_gestor_dth extends CI_Controller {
 
 	public function __construct()
 	{
@@ -13,10 +13,14 @@ class Analisis_gestor_dth extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
 	public function index()
 	{
 		$this->log_gestor();
 	}
+
+	// --------------------------------------------------------------------
 
 	public function log_gestor()
 	{
@@ -54,7 +58,8 @@ class Analisis_gestor_dth extends CI_Controller {
 	}
 
 
-}
 
-/* End of file analisis_gestor_dth.php */
-/* Location: ./application/controllers/analisis_gestor_dth.php */
+
+}
+/* End of file stock_analisis_gestor_dth.php */
+/* Location: ./application/controllers/stock_analisis_gestor_dth.php */

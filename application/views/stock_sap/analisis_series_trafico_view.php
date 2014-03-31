@@ -36,7 +36,7 @@
 				<span class="glyphicon glyphicon-list-alt"></span>
 				Consultar
 			</button>
-			<?php echo anchor('analisis_series','Volver...', 'id="boton-reset" class="btn"'); ?>
+			<?php echo anchor($this->uri->segment(1),'Volver...', 'id="boton-reset" class="btn"'); ?>
 			<?php echo form_close(); ?>
 		</div>
 
@@ -118,7 +118,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('<?php echo base_url(); ?>analisis_series/ajax_trafico_mes/' + serie + '/' + str_meses, function(data) {
+						$.getJSON('<?php echo base_url(); ?>/<?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';

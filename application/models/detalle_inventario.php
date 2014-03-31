@@ -273,11 +273,11 @@ class Detalle_inventario extends ORM_Model {
 
 					'per_page'    => $per_page,
 					'total_rows'  => $total_rows,
-					'base_url'    => site_url('analisis/ajustes/' . $ocultar_regularizadas . '/'),
+					'base_url'    => site_url($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
-					'prev_link'   => '&laquo;',
-					'next_link'   => '&raquo;',
+					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
+					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 				);
 		$this->pagination->initialize($cfg_pagination);
 

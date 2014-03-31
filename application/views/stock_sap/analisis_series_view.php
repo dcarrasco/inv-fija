@@ -57,7 +57,7 @@
 						<div class="checkbox">
 							<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?>
 							Mostrar trafico
-							(ver <?php echo anchor('analisis_series/trafico_por_mes','detalle trafico'); ?>)
+							(ver <?php echo anchor($this->uri->segment(1) . '/trafico_por_mes','detalle trafico'); ?>)
 						</div>
 						<div class="checkbox">
 							<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth'))?>

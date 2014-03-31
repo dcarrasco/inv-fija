@@ -53,7 +53,7 @@
 
 	</div> <!-- fin content-module-footer -->
 
-<?php echo form_open('analisis_series/historia'); ?>
+<?php echo form_open($this->uri->segment(1) . '/historia'); ?>
 <?php echo form_hidden('series'); ?>
 <?php echo form_hidden('show_mov', 'show'); ?>
 <?php echo form_close(); ?>

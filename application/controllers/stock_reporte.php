@@ -1,10 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Reporte_stock extends CI_Controller {
+class Stock_reporte extends CI_Controller {
 
-	private $arr_menu = array(
-				'permanencia'        => array('url' => '/reporte_stock/listado/permanencia', 'texto' => 'Permanencia'),
-			);
+	private $arr_menu = array();
 
 
 	public function __construct()
@@ -16,13 +14,20 @@ class Reporte_stock extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->arr_menu = array(
+			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),
+		);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function index()
 	{
 		$this->listado('permanencia');
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * [listado description]
@@ -89,16 +94,16 @@ class Reporte_stock extends CI_Controller {
 			{
 				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
-			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
-			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold',  'tipo' => 'link_detalle_series', 'href' => 'reporte_stock/detalle');
+			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
 		}
 
 		$arr_link_campos = array();
@@ -111,18 +116,13 @@ class Reporte_stock extends CI_Controller {
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
 
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
-											' <span class="text-muted glyphicon ' . 
-											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . 
+											' <span class="text-muted glyphicon ' .
+											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 											'" ></span>': '';
 		}
 
 		$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				//'arr_campos'      => $arr_campos,
-				//'datos_hoja'      => $datos_hoja,
-				//'arr_link_campos' => $arr_link_campos,
-				//'arr_link_sort'   => $arr_link_sort,
-				//'arr_img_orden'   => $arr_img_orden,
 				'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
 				'tipo_reporte'    => $view,
 				'nombre_reporte'  => $tipo,
@@ -138,9 +138,9 @@ class Reporte_stock extends CI_Controller {
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/reporte', $data);
 		$this->load->view('app_footer', $data);
-
-		//echo "<pre>"; var_dump($data); echo "</pre>";
 	}
+
+	// --------------------------------------------------------------------
 
 	public function detalle()
 	{
@@ -159,12 +159,10 @@ class Reporte_stock extends CI_Controller {
 		$this->load->view('app_footer', $data);
 
 		$this->load->model('reportestock_model');
-		
-
-
 	}
+
 
 }
 
-/* End of file reportes.php */
-/* Location: ./application/controllers/reportes.php */
+/* End of file stock_reporte.php */
+/* Location: ./application/controllers/stock_reporte.php */

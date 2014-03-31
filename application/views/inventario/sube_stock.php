@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
-		<?php echo form_open_multipart('analisis/sube_stock', 'class="form-horizontal"'); ?>
+		<?php echo form_open_multipart($this->uri->segment(1) . '/sube_stock', 'class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 
 		<div class="control-group">
@@ -176,7 +176,7 @@ Formato del archivo:
 	function procesa_carga_linea(datos_linea) {
 		$.ajax({
 			type:  "POST",
-			url:   js_base_url + "analisis/inserta_linea_archivo",
+			url:   js_base_url + "inventario_analisis/inserta_linea_archivo",
 			async: true,
 			data:  datos_linea,
 			success: function(datos) {

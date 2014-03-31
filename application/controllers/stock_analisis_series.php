@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Analisis_series extends CI_Controller {
+class Stock_analisis_series extends CI_Controller {
 
 	public function __construct()
 	{
@@ -13,10 +13,14 @@ class Analisis_series extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
 	public function index()
 	{
 		$this->historia();
 	}
+
+	// --------------------------------------------------------------------
 
 	public function historia()
 	{
@@ -74,6 +78,8 @@ class Analisis_series extends CI_Controller {
 		$this->load->view('app_footer', $datos);
 	}
 
+	// --------------------------------------------------------------------
+
 	public function trafico_por_mes()
 	{
 		$this->load->model('analisis_series_model');
@@ -91,6 +97,8 @@ class Analisis_series extends CI_Controller {
 		$this->load->view('app_footer', $datos);
 	}
 
+	// --------------------------------------------------------------------
+
 	public function ajax_trafico_mes($serie = '', $meses = '')
 	{
 		$this->load->model('analisis_series_model');
@@ -99,7 +107,8 @@ class Analisis_series extends CI_Controller {
 			);
 		$this->load->view('stock_sap/ajax_trafico_view', $data);
 	}
-}
 
-/* End of file analisis_series.php */
-/* Location: ./application/controllers/analisis_series.php */
+
+}
+/* End of file stock_analisis_series.php */
+/* Location: ./application/controllers/stock_analisis_series.php */
