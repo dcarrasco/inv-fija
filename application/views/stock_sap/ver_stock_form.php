@@ -1,5 +1,3 @@
-<?php echo $menu_configuracion; ?>
-
 <?php echo form_open(); ?>
 <div class="accordion">
 	<div class="panel panel-default">

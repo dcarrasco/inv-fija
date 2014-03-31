@@ -71,21 +71,25 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 			$arr_campos = array();
 
 			$arr_campos['tipo']    = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+
 			if ($incl_almacen == '1')
 			{
 				$arr_campos['centro']    = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
 				$arr_campos['almacen']    = array('titulo' => 'CodAlm','class' => '',   'tipo' => 'texto');
 				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
+
 			if ($incl_estado == '1')
 			{
 				$arr_campos['estado_sap']    = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
 			}
+
 			if ($incl_modelos == '1')
 			{
 				$arr_campos['material']    = array('titulo' => 'CodMat','class' => '',   'tipo' => 'texto');
 				$arr_campos['des_material']    = array('titulo' => 'Material','class' => '',   'tipo' => 'texto');
 			}
+
 			if ($incl_lote == '1')
 			{
 				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
@@ -123,39 +127,34 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_link_campos[$campo] = $campo;
-
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
 											'<span class="glyphicon ' . (($orden_tipo == 'ASC') ?
 											'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . '"></span>': '';
 		}
 
 		$data = array(
-				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'datos_hoja'      => $datos_hoja,
-				'tipo_reporte'    => $view,
-				'nombre_reporte'  => $tipo,
-				'filtro_dif'      => '',
-				'arr_campos'      => $arr_campos,
-				'arr_link_campos' => $arr_link_campos,
-				'arr_link_sort'   => $arr_link_sort,
-				'arr_img_orden'   => $arr_img_orden,
-				'titulo_modulo'   => 'Reportes Trazabilidad',
-				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm_consumo(),
-				//'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
-			);
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
+			'datos_hoja'      => $datos_hoja,
+			'tipo_reporte'    => $view,
+			'nombre_reporte'  => $tipo,
+			'filtro_dif'      => '',
+			'arr_campos'      => $arr_campos,
+			'arr_link_campos' => $arr_link_campos,
+			'arr_link_sort'   => $arr_link_sort,
+			'arr_img_orden'   => $arr_img_orden,
+			'titulo_modulo'   => 'Reportes Trazabilidad',
+			'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm_consumo(),
+			//'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
+		);
 
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/reporte_trazabilidad', $data);
 		$this->load->view('app_footer', $data);
-
-		//echo "<pre>"; var_dump($data); echo "</pre>";
 	}
 
 
 
 }
-
 /* End of file stock_reportes_trazabilidad.php */
 /* Location: ./application/controllers/stock_reportes_trazabilidad.php */

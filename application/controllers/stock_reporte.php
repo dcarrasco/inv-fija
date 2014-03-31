@@ -72,28 +72,34 @@ class Stock_reporte extends CI_Controller {
 			$arr_campos = array();
 
 			$arr_campos['tipo']    = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+
 			if ($incl_almacen == '1')
 			{
 				$arr_campos['centro']    = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
 				$arr_campos['almacen']    = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
 				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
+
 			if (count($estado_sap) > 0 and is_array($estado_sap))
 			{
 				$arr_campos['estado_sap']    = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
 			}
+
 			if ($incl_lote == '1')
 			{
 				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
 			}
+
 			if (count($tipo_mat) > 0 and is_array($tipo_mat))
 			{
 				$arr_campos['tipo_material']    = array('titulo' => 'Tipo Material','class' => '',   'tipo' => 'texto');
 			}
+
 			if ($incl_modelos == '1')
 			{
 				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
+
 			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
 			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
 			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
@@ -112,9 +118,7 @@ class Stock_reporte extends CI_Controller {
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_link_campos[$campo] = $campo;
-
 			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-
 			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
 											' <span class="text-muted glyphicon ' .
 											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
@@ -122,15 +126,15 @@ class Stock_reporte extends CI_Controller {
 		}
 
 		$data = array(
-				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
-				'tipo_reporte'    => $view,
-				'nombre_reporte'  => $tipo,
-				'filtro_dif'      => '',
-				'arr_campos'      => $arr_campos,
-				'titulo_modulo'   => 'Reportes Stock',
-				'fecha_reporte'   => $this->reportestock_model->get_fecha_reporte(),
-				'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm($tipo_op),
+				'menu_modulo'    => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
+				'reporte'        => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
+				'tipo_reporte'   => $view,
+				'nombre_reporte' => $tipo,
+				'filtro_dif'     => '',
+				'arr_campos'     => $arr_campos,
+				'titulo_modulo'  => 'Reportes Stock',
+				'fecha_reporte'  => $this->reportestock_model->get_fecha_reporte(),
+				'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm($tipo_op),
 				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 				'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 			);
@@ -150,7 +154,16 @@ class Stock_reporte extends CI_Controller {
 		$data = array(
 			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => 'permanencia'),
 			'menu_configuracion' => '',
-			'detalle_series'     => $this->reportestock_model->get_detalle_series($this->input->get('id_tipo'), $this->input->get('centro'), $this->input->get('almacen'), $this->input->get('estado_stock'), $this->input->get('lote'), $this->input->get('material'), $this->input->get('tipo_material'), $this->input->get('permanencia')),
+			'detalle_series'     => $this->reportestock_model->get_detalle_series(
+										$this->input->get('id_tipo'),
+										$this->input->get('centro'),
+										$this->input->get('almacen'),
+										$this->input->get('estado_stock'),
+										$this->input->get('lote'),
+										$this->input->get('material'),
+										$this->input->get('tipo_material'),
+										$this->input->get('permanencia')
+									),
 			'titulo_modulo'   => 'Reportes Stock',
 		);
 
@@ -163,6 +176,5 @@ class Stock_reporte extends CI_Controller {
 
 
 }
-
 /* End of file stock_reporte.php */
 /* Location: ./application/controllers/stock_reporte.php */

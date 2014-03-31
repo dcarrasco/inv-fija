@@ -1,11 +1,4 @@
-
 <div class="content-module">
-
-	<div class="content-module-heading cf">
-		<div class="fl">
-			<?php echo $menu_configuracion; ?>
-		</div>
-	</div> <!-- fin content-module-heading -->
 
 	<div class="content-module-main">
 		<table class="table table-bordered table-striped table-hover table-condensed">

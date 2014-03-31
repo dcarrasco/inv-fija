@@ -11,8 +11,12 @@ class Inventario_analisis extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 		$this->acl_model->autentica('analisis');
+
+		if (ENVIRONMENT != 'production')
+		{
+			$this->output->enable_profiler(TRUE);
+		}
 
 		$this->arr_menu = array(
 			'ajustes'            => array('url' => $this->uri->segment(1) . '/ajustes', 'texto' => 'Ajustes de inventario'),
@@ -27,6 +31,7 @@ class Inventario_analisis extends CI_Controller {
 		$this->nombre_inventario = $inventario_activo->nombre;
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * accion por defecto del controlador
@@ -36,6 +41,7 @@ class Inventario_analisis extends CI_Controller {
 		$this->ajustes();
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Despliega la página de ajustes de inventarios
@@ -102,6 +108,7 @@ class Inventario_analisis extends CI_Controller {
 
 	}
 
+	// --------------------------------------------------------------------
 
 	public function sube_stock()
 	{
@@ -169,6 +176,7 @@ class Inventario_analisis extends CI_Controller {
 
 	}
 
+	// --------------------------------------------------------------------
 
 	public function inserta_linea_archivo()
 	{
@@ -195,7 +203,7 @@ class Inventario_analisis extends CI_Controller {
 		$detalle->grabar();
 	}
 
-
+	// --------------------------------------------------------------------
 
 	public function imprime_inventario($id_inventario = 0)
 	{
@@ -231,6 +239,7 @@ class Inventario_analisis extends CI_Controller {
 
 	}
 
+	// --------------------------------------------------------------------
 
 	public function imprime_hojas($hoja_desde = 1, $hoja_hasta = 1, $oculta_stock_sap = 0)
 	{
@@ -256,6 +265,7 @@ class Inventario_analisis extends CI_Controller {
 		$this->load->view('inventario/inventario_print_footer');
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _render_view($vista = '', $data = array())
 	{

@@ -2,15 +2,9 @@
 
 class Stock_sap extends CI_Controller {
 
-	private $arr_menu = array(
-				'stock_movil'     => array('url' => 'stock_sap/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),
-				'stock_fija'      => array('url' => 'stock_sap/mostrar_stock/FIJA', 'texto' => 'Stock Fija'),
-				'transito_fija'   => array('url' => 'stock_sap/transito/FIJA', 'texto' => 'Transito Fija'),
-				//'grupos_movil'    => array('url' => 'stock_sap/lista_grupos/MOVIL', 'texto' => 'Grupos Movil'),
-				//'grupos_fija'     => array('url' => 'stock_sap/lista_grupos/FIJA', 'texto' => 'Grupos Fija'),
-				//'almacenes_movil' => array('url' => 'stock_sap/lista_almacenes/MOVIL', 'texto' => 'Almacenes Movil'),
-				//'almacenes_fija'  => array('url' => 'stock_sap/lista_almacenes/FIJA', 'texto' => 'Almacenes Fija'),
-			);
+	private $arr_menu = array();
+
+	// --------------------------------------------------------------------
 
 	public function __construct()
 	{
@@ -21,23 +15,26 @@ class Stock_sap extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->arr_menu = array(
+			'stock_movil'     => array('url' => $this->uri->segment(1) . '/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),
+			'stock_fija'      => array('url' => $this->uri->segment(1) . '/mostrar_stock/FIJA', 'texto' => 'Stock Fija'),
+			'transito_fija'   => array('url' => $this->uri->segment(1) . '/transito/FIJA', 'texto' => 'Transito Fija'),
+			//'grupos_movil'    => array('url' => $this->uri->segment(1) . '/lista_grupos/MOVIL', 'texto' => 'Grupos Movil'),
+			//'grupos_fija'     => array('url' => $this->uri->segment(1) . '/lista_grupos/FIJA', 'texto' => 'Grupos Fija'),
+			//'almacenes_movil' => array('url' => $this->uri->segment(1) . '/lista_almacenes/MOVIL', 'texto' => 'Almacenes Movil'),
+			//'almacenes_fija'  => array('url' => $this->uri->segment(1) . '/lista_almacenes/FIJA', 'texto' => 'Almacenes Fija'),
+		);
 	}
 
-	public function index() {
+	// --------------------------------------------------------------------
+
+	public function index()
+	{
 		$this->mostrar_stock('MOVIL');
 	}
 
-	private function _menu_configuracion($op_menu)
-	{
-		$menu = '<ul class="nav nav-tabs">';
-		foreach($this->arr_menu as $key => $val)
-		{
-			$selected = ($key == $op_menu) ? ' class="active"' : '';
-			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
-		}
-		$menu .= '</ul>';
-		return $menu;
-	}
+	// --------------------------------------------------------------------
 
 	private function _render_view($vista = '', $data = array())
 	{
@@ -47,10 +44,10 @@ class Stock_sap extends CI_Controller {
 		$this->load->view('app_footer', $data);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function mostrar_stock($tipo_op = '')
 	{
-
 		$this->load->model('stock_sap_model');
 		$this->load->model('almacen_sap_model');
 
@@ -93,7 +90,6 @@ class Stock_sap extends CI_Controller {
 		}
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
-
 		$serie_q_equipos = '[]';
 		$serie_v_equipos = '[]';
 		$serie_q_simcard = '[]';
@@ -102,6 +98,7 @@ class Stock_sap extends CI_Controller {
 		$serie_v_otros = '[]';
 		$str_eje_x = '[]';
 		$str_label_series = '[]';
+
 		if ($tipo_op == 'MOVIL' and count($stock) > 0)
 		{
 			$graph_q_equipos = array();
@@ -195,33 +192,29 @@ class Stock_sap extends CI_Controller {
 			$str_label_series = '[' . implode(',', $arr_label_series) . ']';
 		}
 
-
-
 		$data = array(
-						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('stock_movil') : $this->_menu_configuracion('stock_fija'),
-						'stock'                  => $stock,
-						'combo_tipo_alm'         => $this->almacen_sap_model->get_combo_tiposalm($tipo_op),
-						'combo_almacenes'        => $this->almacen_sap_model->get_combo_almacenes($tipo_op),
-						'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-						'combo_fechas_todas'     => $combo_fechas['todas'],
-						'tipo_op'                => $tipo_op,
-						'arr_mostrar'            => $arr_mostrar,
-						'serie_q_equipos'        => $serie_q_equipos,
-						'serie_v_equipos'        => $serie_v_equipos,
-						'serie_q_simcard'        => $serie_q_simcard,
-						'serie_v_simcard'        => $serie_v_simcard,
-						'serie_q_otros'          => $serie_q_otros,
-  						'serie_v_otros'          => $serie_v_otros,
-  						'str_eje_x'              => $str_eje_x,
-						'str_label_series'       => $str_label_series,
-						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
-														|| in_array('material', $arr_mostrar)
-														|| in_array('lote', $arr_mostrar)
-														|| in_array('tipo_stock', $arr_mostrar)
-														)
-														&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
-														) ? TRUE : FALSE),
-					);
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'),
+			'stock'                  => $stock,
+			'combo_tipo_alm'         => $this->almacen_sap_model->get_combo_tiposalm($tipo_op),
+			'combo_almacenes'        => $this->almacen_sap_model->get_combo_almacenes($tipo_op),
+			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
+			'combo_fechas_todas'     => $combo_fechas['todas'],
+			'tipo_op'                => $tipo_op,
+			'arr_mostrar'            => $arr_mostrar,
+			'serie_q_equipos'        => $serie_q_equipos,
+			'serie_v_equipos'        => $serie_v_equipos,
+			'serie_q_simcard'        => $serie_q_simcard,
+			'serie_v_simcard'        => $serie_v_simcard,
+			'serie_q_otros'          => $serie_q_otros,
+				'serie_v_otros'          => $serie_v_otros,
+				'str_eje_x'              => $str_eje_x,
+			'str_label_series'       => $str_label_series,
+			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
+											|| in_array('lote', $arr_mostrar) || in_array('tipo_stock', $arr_mostrar)
+											)
+											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
+											) ? TRUE : FALSE),
+		);
 
 		$data['titulo_modulo'] = 'Consulta stock SAP';
 
@@ -239,6 +232,7 @@ class Stock_sap extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _arr_series_to_string($arr = array())
 	{
@@ -250,20 +244,22 @@ class Stock_sap extends CI_Controller {
 		return('[' . implode(',', $arr_temp) . ']');
 	}
 
+	// --------------------------------------------------------------------
 
 	public function detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
 		$this->load->model('stock_sap_model');
 
 		$data = array(
-						'detalle_series' => $this->stock_sap_model->get_detalle_series($centro, $almacen, $material, $lote),
-						'menu_configuracion'     => $this->_menu_configuracion(''),
-				);
+			'detalle_series' => $this->stock_sap_model->get_detalle_series($centro, $almacen, $material, $lote),
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ''),
+		);
 
 		$this->_render_view('stock_sap/detalle_series', $data);
 
 	}
 
+	// --------------------------------------------------------------------
 
 	public function transito($tipo_op = '')
 	{
@@ -302,20 +298,20 @@ class Stock_sap extends CI_Controller {
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
 		$data = array(
-						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('transito_movil') : $this->_menu_configuracion('transito_fija'),
-						'stock'                  => $stock,
-						'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-						'combo_fechas_todas'     => $combo_fechas['todas'],
-						'tipo_op'                => $tipo_op,
-						'arr_mostrar'            => $arr_mostrar,
-						'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
-														|| in_array('material', $arr_mostrar)
-														|| in_array('lote', $arr_mostrar)
-														|| in_array('tipo_stock', $arr_mostrar)
-														)
-														&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
-														) ? TRUE : FALSE),
-					);
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => 'transito_fija'),
+			'stock'                  => $stock,
+			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
+			'combo_fechas_todas'     => $combo_fechas['todas'],
+			'tipo_op'                => $tipo_op,
+			'arr_mostrar'            => $arr_mostrar,
+			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
+											|| in_array('material', $arr_mostrar)
+											|| in_array('lote', $arr_mostrar)
+											|| in_array('tipo_stock', $arr_mostrar)
+											)
+											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
+											) ? TRUE : FALSE),
+		);
 
 		$data['titulo_modulo'] = 'Consulta stock SAP';
 
@@ -335,150 +331,6 @@ class Stock_sap extends CI_Controller {
 
 
 
-	public function edita_grupos($tipo_op = '', $grupo = 0)
-	{
-
-		$this->load->model('almacen_sap_model');
-		$this->load->library('form_validation');
-
-		$this->form_validation->set_rules('tipo', 'Tipo de Almacen', 'required');
-
-		if ($this->form_validation->run() == FALSE)
-		{
-			$arr_nombre_tipoalm = $this->almacen_sap_model->get_tiposalm($tipo_op, $grupo);
-			$nombre_grupo = set_value('nombre_tipo', ($grupo == 0) ? '' : $arr_nombre_tipoalm['tipo']);
-
-			$arr_tipos_almacenes = $this->almacen_sap_model->get_tipos_almacenes($grupo);
-			$sel_almacenes = set_value('almacenes', $arr_tipos_almacenes);
-
-			$data = array(
-							'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('grupos_movil') : $this->_menu_configuracion('grupos_fija'),
-							'nombre_grupo'        => $nombre_grupo,
-							'combo_almacenes'     => $this->almacen_sap_model->get_combo_almacenes($tipo_op),
-							'sel_tipos_almacenes' => $sel_almacenes,
-							'grupo'               => $grupo,
-						);
-
-			$data['titulo_modulo'] = 'Edita Grupos';
-
-			$this->load->view('app_header', $data);
-			$this->load->view('stock_sap/edita_grupos', $data);
-			$this->load->view('app_footer', $data);
-
-		}
-		else
-		{
-
-			// modificar o insertar
-			if($this->input->post('btn_accion') != 'Borrar')
-			{
-				$this->almacen_sap_model->grabar_tiposalm($tipo_op, $grupo, $this->input->post('tipo'));
-				if ($grupo == 0)
-				{
-					$grupo = $this->db->insert_id();
-				}
-				$this->almacen_sap_model->grabar_tiposalmacenes($grupo, $this->input->post('almacenes'));
-			}
-			else
-			{
-				$this->almacen_sap_model->borrar_tiposalm($grupo);
-			}
-			redirect('stock_sap/lista_grupos/'.$tipo_op);
-		}
-	}
-
-	public function lista_grupos($tipo_op = '')
-	{
-		$this->load->model('almacen_sap_model');
-		$data = array(
-						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('grupos_movil') : $this->_menu_configuracion('grupos_fija'),
-						'tiposalm'          => $this->almacen_sap_model->get_tiposalm($tipo_op),
-						'detalle_almacenes' => $this->almacen_sap_model->get_detalle_almacenes(),
-						'tipo_op'           => $tipo_op,
-					);
-
-		$data['titulo_modulo'] = 'Lista Almacenes';
-
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/lista_grupos', $data);
-		$this->load->view('app_footer', $data);
-
-	}
-
-	public function lista_almacenes($tipo_op = '')
-	{
-		$this->load->model('almacen_sap_model');
-		$data = array(
-						'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('almacenes_movil') : $this->_menu_configuracion('almacenes_fija'),
-						'listado_almacenes' => $this->almacen_sap_model->get_almacenes($tipo_op),
-						'detalle_grupos'    => $this->almacen_sap_model->get_grupos_almacenes(),
-						'tipo_op'           => $tipo_op,
-					);
-
-		$data['titulo_modulo'] = 'Lista Almacenes';
-
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/lista_almacenes', $data);
-		$this->load->view('app_footer', $data);
-	}
-
-	public function edita_almacenes($tipo_op = '', $centro = '', $cod_alm = '')
-	{
-		$this->load->model('almacen_sap_model');
-		$this->load->library('form_validation');
-
-		$this->form_validation->set_rules('centro', 'Centro', 'required');
-		$this->form_validation->set_rules('cod_almacen', 'Codigo Almacen', 'required');
-		$this->form_validation->set_rules('des_almacen', 'Descripcion Almacen', 'required');
-		$this->form_validation->set_rules('uso_almacen', 'Uso Almacen', '');
-		$this->form_validation->set_rules('responsable', 'Responsable', '');
-
-		if ($centro != '' && $cod_alm != '')
-		{
-			$reg_alm = $this->almacen_sap_model->get_almacenes($tipo_op, $centro, $cod_alm);
-			$grupos  = $this->almacen_sap_model->get_grupos_almacenes($centro, $cod_alm);
-			$arr_grupos = array();
-			foreach ($grupos as $reg)
-			{
-				foreach($reg as $reg2)
-				{
-					array_push($arr_grupos, $reg2['id_tipo']);
-				}
-			}
-		}
-		$combo_grupos = $this->almacen_sap_model->get_combo_tiposalm($tipo_op);
-
-		if ($this->form_validation->run() == FALSE)
-		{
-			$data = array(
-							'menu_configuracion'     => ($tipo_op == 'MOVIL') ? $this->_menu_configuracion('almacenes_movil') : $this->_menu_configuracion('almacenes_fija'),
-							'data_centro'      => set_value('centro', ($centro == '') ? '' : $reg_alm['centro']),
-							'data_cod_alm'     => set_value('cod_almacen', ($cod_alm == '') ? '' : $reg_alm['cod_almacen']),
-							'data_des_alm'     => set_value('des_almacen', ($cod_alm == '') ? '' : $reg_alm['des_almacen']),
-							'data_uso_alm'     => set_value('uso_almacen', ($cod_alm == '') ? '' : $reg_alm['uso_almacen']),
-							'data_responsable' => set_value('responsable', ($cod_alm == '') ? '' : $reg_alm['responsable']),
-							'data_grupos'      => set_value('grupos', ($cod_alm == '') ? array() : $arr_grupos ),
-							'combo_grupos'     => $combo_grupos,
-							'tipo_op'          => $tipo_op,
-						);
-
-			$data['titulo_modulo'] = 'Edita Almacenes';
-
-			$this->load->view('app_header', $data);
-			$this->load->view('stock_sap/edita_almacenes', $data);
-			$this->load->view('app_footer', $data);
-		}
-		else
-		{
-			// modificar o insertar
-			$this->almacen_sap_model->grabar_almacenes(set_value('centro'), set_value('cod_almacen'), set_value('des_almacen'), set_value('uso_almacen'), set_value('responsable'), $this->input->post('grupos'), $tipo_op);
-			redirect('stock_sap/lista_almacenes/' . $tipo_op);
-		}
-	}
-
-
-
 }
-
 /* End of file stock_sap.php */
 /* Location: ./application/controllers/stock_sap.php */

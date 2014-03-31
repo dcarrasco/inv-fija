@@ -73,7 +73,7 @@ class stock_sap_model extends CI_Model {
 			{
 				$this->db->select('s.tipo_articulo');
 				$this->db->group_by('s.tipo_articulo');
-				$this->db->order_by('tipo_articulo');				
+				$this->db->order_by('tipo_articulo');
 			}
 		}
 
@@ -107,7 +107,7 @@ class stock_sap_model extends CI_Model {
 			$this->db->select_sum('s.V_TT','VAL_TT');
 			$this->db->select_sum('s.V_OT','VAL_OT');
 		}
-		
+
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select_sum('s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros','total');
@@ -135,7 +135,7 @@ class stock_sap_model extends CI_Model {
 			{
 				$this->db->join($this->bd_logistica . 'stock_scl_res01 s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 
-			}				
+			}
 		}
 		else
 		{
@@ -591,7 +591,7 @@ class stock_sap_model extends CI_Model {
 			if ($material != '' && $material != '_') $this->db->where('s.material', $material);
 			if ($lote     != '' && $lote     != '_') $this->db->where('s.lote', $lote);
 
-			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario, p.pmp');
+			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.des_material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario, p.pmp');
 
 			$this->db->from($this->bd_logistica . 'bd_stock_sap as s');
 			$this->db->join($this->bd_logistica . 'cp_almacenes as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
