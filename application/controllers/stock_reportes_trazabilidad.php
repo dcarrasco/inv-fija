@@ -1,11 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class Reportes_trazabilidad extends CI_Controller {
+class Stock_reportes_trazabilidad extends CI_Controller {
 
-	private $arr_menu = array(
-				'perm_consumo' => array('url' => '/reportes_trazabilidad/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
-				'det_consumo' => array('url' => '/reportes_trazabilidad/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
-			);
+	private $arr_menu = array();
 
 
 	public function __construct()
@@ -17,13 +14,21 @@ class Reportes_trazabilidad extends CI_Controller {
 		{
 			$this->output->enable_profiler(TRUE);
 		}
+
+		$this->arr_menu = array(
+			'perm_consumo' => array('url' => $this->uri->segment(1) . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
+			'det_consumo' => array('url' => $this->uri->segment(1) . '/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
+		);
 	}
 
+	// --------------------------------------------------------------------
 
 	public function index()
 	{
 		$this->listado('perm_consumo');
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * [listado description]
@@ -152,5 +157,5 @@ class Reportes_trazabilidad extends CI_Controller {
 
 }
 
-/* End of file reportes.php */
-/* Location: ./application/controllers/reportes_trazabilidad.php */
+/* End of file stock_reportes_trazabilidad.php */
+/* Location: ./application/controllers/stock_reportes_trazabilidad.php */

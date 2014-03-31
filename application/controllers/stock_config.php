@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class config_stock extends CI_Controller {
+class Stock_config extends CI_Controller {
 
 	private $arr_menu = array();
 
@@ -110,5 +110,5 @@ class config_stock extends CI_Controller {
 	}
 }
 
-/* End of file config_stock.php */
-/* Location: ./application/controllers/config_stock.php */
+/* End of file stock_config.php */
+/* Location: ./application/controllers/stock_config.php */
