@@ -73,7 +73,7 @@ class Inventario_reportes extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['hoja']             = array('titulo' => 'Hoja',         'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_hoja/');
+			$arr_campos['hoja']             = array('titulo' => 'Hoja',         'class' => '',   'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_hoja/');
 			$arr_campos['auditor']          = array('titulo' => 'Auditor',      'class' => '',   'tipo' => 'texto');
 			$arr_campos['digitador']        = array('titulo' => 'Digitador',    'class' => '',   'tipo' => 'texto');
 
@@ -100,7 +100,7 @@ class Inventario_reportes extends CI_Controller {
 
 			$arr_campos = array();
 			$arr_campos['ubicacion']     = array('titulo' => 'Ubicacion',   'class' => '',   'tipo' => 'texto');
-			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_material/');
+			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
 			$arr_campos['descripcion']   = array('titulo' => 'Descripcion', 'class' => '',   'tipo' => 'texto');
 			$arr_campos['lote']          = array('titulo' => 'lote',        'class' => '',   'tipo' => 'texto');
 			$arr_campos['centro']        = array('titulo' => 'centro',      'class' => '',   'tipo' => 'texto');
@@ -132,7 +132,7 @@ class Inventario_reportes extends CI_Controller {
 				$arr_campos['nombre_fam']       = array('titulo' => 'Familia', 'class' => '',   'tipo' => 'subtotal');
 			}
 
-			$arr_campos['catalogo']         = array('titulo' => 'Catalogo', 'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_material/');
+			$arr_campos['catalogo']         = array('titulo' => 'Catalogo', 'class' => '',   'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
 			$arr_campos['descripcion']      = array('titulo' => 'Descripcion',  'class' => '',   'tipo' => 'texto');
 			$arr_campos['um']               = array('titulo' => 'UM',           'class' => '',   'tipo' => 'texto');
 			$arr_campos['pmp']              = array('titulo' => 'PMP',          'class' => 'text-center', 'tipo' => 'valor_pmp');
@@ -159,7 +159,7 @@ class Inventario_reportes extends CI_Controller {
 			$datos_hoja = $this->inventario_model->get_reporte_material_faltante($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
 
 			$arr_campos = array();
-			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_material/');
+			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
 			$arr_campos['descripcion']      = array('titulo' => 'Descripcion',  'class' => '',   'tipo' => 'texto');
 			$arr_campos['um']               = array('titulo' => 'UM',           'class' => '',   'tipo' => 'texto');
 			$arr_campos['q_faltante']       = array('titulo' => 'Cant Faltante',     'class' => 'text-center', 'tipo' => 'numero');
@@ -178,7 +178,7 @@ class Inventario_reportes extends CI_Controller {
 			$arr_campos['catalogo']      = array('titulo' => 'Catalogo',    'class' => '',   'tipo' => 'texto');
 			$arr_campos['descripcion']   = array('titulo' => 'Descripcion', 'class' => '',   'tipo' => 'texto');
 			$arr_campos['ubicacion']     = array('titulo' => 'Ubicacion',   'class' => '',   'tipo' => 'texto');
-			$arr_campos['hoja']          = array('titulo' => 'Hoja',        'class' => '',   'tipo' => 'link', 'href' => 'reportes/listado/detalle_hoja/');
+			$arr_campos['hoja']          = array('titulo' => 'Hoja',        'class' => '',   'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_hoja/');
 			$arr_campos['lote']          = array('titulo' => 'lote',        'class' => '',   'tipo' => 'texto');
 
 			$arr_campos['stock_sap']     = array('titulo' => 'Cant SAP',    'class' => 'text-center', 'tipo' => 'numero');
