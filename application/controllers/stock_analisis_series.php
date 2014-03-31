@@ -15,6 +15,12 @@ class Stock_analisis_series extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->historia();
@@ -22,6 +28,12 @@ class Stock_analisis_series extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Permite desplegar la varios reportes asociados a una o varias series
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function historia()
 	{
 
@@ -79,6 +91,12 @@ class Stock_analisis_series extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega el tráfico por mes de un o varias series
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function trafico_por_mes()
 	{
 		$this->load->model('analisis_series_model');
@@ -98,6 +116,12 @@ class Stock_analisis_series extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve datos en formato json del trafico por mes de una o varias series
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function ajax_trafico_mes($serie = '', $meses = '')
 	{
 		$this->load->model('analisis_series_model');

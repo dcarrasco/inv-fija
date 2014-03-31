@@ -22,6 +22,12 @@ class Stock_reporte extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->listado('permanencia');
@@ -30,8 +36,9 @@ class Stock_reporte extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * [listado description]
-	 * @param  string $tipo   [description]
+	 * Permite desplegar reportes de stock SAP
+	 *
+	 * @param  string $tipo   Tipo del reporte
 	 * @param  string $param1 [description]
 	 * @return [type]
 	 */
@@ -146,6 +153,12 @@ class Stock_reporte extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega el detalle del stock
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function detalle()
 	{
 

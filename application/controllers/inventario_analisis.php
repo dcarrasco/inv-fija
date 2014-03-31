@@ -34,10 +34,13 @@ class Inventario_analisis extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * accion por defecto del controlador
-	 * @return [type]
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
 	 */
-	public function index() {
+	public function index()
+	{
 		$this->ajustes();
 	}
 
@@ -45,7 +48,9 @@ class Inventario_analisis extends CI_Controller {
 
 	/**
 	 * Despliega la página de ajustes de inventarios
+	 *
 	 * @param  integer $ocultar_regularizadas Oculta los regustros que están modificados
+	 * @param  integer $pag                   Página de ajustes a desplegar
 	 * @return nada
 	 */
 	public function ajustes($ocultar_regularizadas = 0, $pag = 0)
@@ -110,6 +115,12 @@ class Inventario_analisis extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Permite subir un archivo con el stock a cargar a un inventario
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function sube_stock()
 	{
 
@@ -178,6 +189,12 @@ class Inventario_analisis extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recibe linea de detalle de inventario por post, y lo graba
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function inserta_linea_archivo()
 	{
 		$detalle = new Detalle_inventario;
@@ -205,6 +222,12 @@ class Inventario_analisis extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Permite imprimir el detalle del inventario
+	 *
+	 * @param  integer $id_inventario Identificador del inventario a imprimir
+	 * @return none
+	 */
 	public function imprime_inventario($id_inventario = 0)
 	{
 		$inventario = new Inventario;
@@ -241,6 +264,14 @@ class Inventario_analisis extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera las hojas a imprimir
+	 *
+	 * @param  integer $hoja_desde       Hoja inicial a imprimir
+	 * @param  integer $hoja_hasta       Hoja final a imprimir
+	 * @param  integer $oculta_stock_sap Permite ocultar la columna con el stock de SAP
+	 * @return none
+	 */
 	public function imprime_hojas($hoja_desde = 1, $hoja_hasta = 1, $oculta_stock_sap = 0)
 	{
 		$hoja_desde = ($hoja_desde < 1) ? 1 : $hoja_desde;
@@ -267,6 +298,13 @@ class Inventario_analisis extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera las vistas para los métodos de este controlador
+	 *
+	 * @param  string $vista Nombre de la vista a desplegar
+	 * @param  array  $data  Arreglo con las variables a pasar a la vista
+	 * @return none
+	 */
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['menu_modulo'] = array('menu' => $this->arr_menu, 'mod_selected' => $vista);
@@ -278,6 +316,5 @@ class Inventario_analisis extends CI_Controller {
 
 
 }
-
 /* End of file inventario_analisis.php */
 /* Location: ./application/controllers/inventario_analisis.php */

@@ -23,6 +23,12 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->listado('perm_consumo');
@@ -31,8 +37,9 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * [listado description]
-	 * @param  string $tipo   [description]
+	 * Permite desplegar listados de trazabilidad de series
+	 *
+	 * @param  string $tipo   Tipo de reporte
 	 * @param  string $param1 [description]
 	 * @return [type]
 	 */

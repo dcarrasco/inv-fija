@@ -36,6 +36,12 @@ class Inventario_config extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$arr_keys = array_keys($this->arr_menu);
@@ -44,6 +50,13 @@ class Inventario_config extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera las vistas para los métodos de este controlador
+	 *
+	 * @param  string $vista Nombre de la vista a desplegar
+	 * @param  array  $data  Arreglo con las variables a pasar a la vista
+	 * @return none
+	 */
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Configuracion';
@@ -54,6 +67,14 @@ class Inventario_config extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega listado de los elementos de un modelo
+	 *
+	 * @param  string $nombre_modelo Modelo o entidad a desplegar
+	 * @param  string $filtro        Permite filtrar los registros a desplegar
+	 * @param  string $pag           Numero de la pagina a desplegar
+	 * @return none
+	 */
 	public function listado($nombre_modelo = '', $filtro = '_', $pag = 0)
 	{
 		$modelo = new $nombre_modelo;
@@ -75,6 +96,13 @@ class Inventario_config extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Edita un elementos de un modelo
+	 *
+	 * @param  string $nombre_modelo Modelo o entidad a desplegar
+	 * @param  string $id            Identificador del modelo
+	 * @return none
+	 */
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
 		$modelo = new $nombre_modelo;
@@ -110,6 +138,7 @@ class Inventario_config extends CI_Controller {
 
 	/**
 	 * Asociacion de ubicaciones con el tipo de ubicacion
+	 *
 	 * @param  integer $pag Numero de pagina a desplegar
 	 * @return nada
 	 */
@@ -245,6 +274,7 @@ class Inventario_config extends CI_Controller {
 
 	/**
 	 * Devuelve string JSON con las ubicaciones libres
+	 *
 	 * @param  string $tipo_inventario Tipo de inventario a buscar
 	 * @return JSON con las ubicaciones libres
 	 */
@@ -259,6 +289,7 @@ class Inventario_config extends CI_Controller {
 
 	/**
 	 * Devuelve string JSON con los tipos de ubicaciones
+	 *
 	 * @param  string $tipo_inventario Tipo de inventario a buscar
 	 * @return JSON con los tipos de ubicacion
 	 */
@@ -269,7 +300,8 @@ class Inventario_config extends CI_Controller {
 		echo (json_encode($arr_ubic));
 	}
 
-}
 
+
+}
 /* End of file inventario_config.php */
 /* Location: ./application/controllers/inventario_config.php */

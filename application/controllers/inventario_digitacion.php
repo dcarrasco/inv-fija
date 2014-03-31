@@ -18,6 +18,12 @@ class Inventario_digitacion extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->ingreso();
@@ -25,6 +31,12 @@ class Inventario_digitacion extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Permite digitar una hoja de detalle de inventario
+	 *
+	 * @param  integer $hoja Numero de la hoja a visualizar
+	 * @return none
+	 */
 	public function ingreso($hoja = 0)
 	{
 		if ($hoja == 0 OR $hoja == "" or $hoja == NULL)
@@ -177,6 +189,12 @@ class Inventario_digitacion extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega listado con materiales, en formato de formulario select
+	 *
+	 * @param  string $filtro Filtro de los materiales a desplegar
+	 * @return none
+	 */
 	public function ajax_act_agr_materiales($filtro = '')
 	{
 		$material = new catalogo;
@@ -192,6 +210,13 @@ class Inventario_digitacion extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera las vistas para los métodos de este controlador
+	 *
+	 * @param  string $vista Nombre de la vista a desplegar
+	 * @param  array  $data  Arreglo con las variables a pasar a la vista
+	 * @return none
+	 */
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Ingreso de Inventario ('.$data['nombre_inventario'].')';

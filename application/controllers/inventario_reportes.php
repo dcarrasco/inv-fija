@@ -30,6 +30,12 @@ class Inventario_reportes extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->listado('hoja');
@@ -38,10 +44,11 @@ class Inventario_reportes extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * [listado description]
-	 * @param  string $tipo   [description]
-	 * @param  string $param1 [description]
-	 * @return [type]
+	 * Genera los diferentes listados de reportes de inventario
+	 *
+	 * @param  string $tipo   Tipo de reporte
+	 * @param  string $param1 Parámetro variable
+	 * @return none
 	 */
 	public function listado($tipo = 'hoja', $param1 = '')
 	{

@@ -8,11 +8,27 @@ class Login extends CI_Controller {
 		//$this->output->enable_profiler(TRUE);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->login();
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega pagina para ingresar al sistema
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function login()
 	{
 		$this->load->model('acl_model');
@@ -66,6 +82,14 @@ class Login extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega pagina para cambiar la password de un usuario
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function cambio_password()
 	{
 		$this->load->model('acl_model');
@@ -116,6 +140,14 @@ class Login extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * PRUEBA ****** Enviar correo con nueva password
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function enviar_correo($usr = '')
 	{
 		$this->load->model('acl_model');
@@ -136,7 +168,8 @@ class Login extends CI_Controller {
 
 	}
 
-}
 
+
+}
 /* End of file login.php */
 /* Location: ./application/controllers/login.php */

@@ -15,6 +15,12 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->log_gestor();
@@ -22,6 +28,12 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega detalle del log del gestor DTH
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function log_gestor()
 	{
 

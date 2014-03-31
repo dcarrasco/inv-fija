@@ -29,6 +29,12 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 *
+	 * @param  none
+	 * @return none
+	 */
 	public function index()
 	{
 		$this->mostrar_stock('MOVIL');
@@ -36,6 +42,13 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera las vistas para los métodos de este controlador
+	 *
+	 * @param  string $vista Nombre de la vista a desplegar
+	 * @param  array  $data  Arreglo con las variables a pasar a la vista
+	 * @return none
+	 */
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Consulta stock SAP';
@@ -46,6 +59,12 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera reporte con el stock SAP
+	 *
+	 * @param  string $tipo_op Indica si el stock a desplegar es fijo o movil
+	 * @return none
+	 */
 	public function mostrar_stock($tipo_op = '')
 	{
 		$this->load->model('stock_sap_model');
@@ -234,6 +253,12 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve un string json con el valor de un arreglo (para usar en javascript)
+	 *
+	 * @param  array $arr Arreglo a convertir
+	 * @return string
+	 */
 	private function _arr_series_to_string($arr = array())
 	{
 		$arr_temp = array();
@@ -246,6 +271,15 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve el detalle de las series del stock
+	 *
+	 * @param  string $centro   Centro SAP de las series a desplegar
+	 * @param  string $almacen  Almacen SAP de las series a desplegar
+	 * @param  string $material Material SAP de las series a desplegar
+	 * @param  string $lote     Lote SAP de las series a desplegar
+	 * @return none
+	 */
 	public function detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
 		$this->load->model('stock_sap_model');
@@ -261,6 +295,12 @@ class Stock_sap extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve las series en transito
+	 *
+	 * @param  string $tipo_op Indica si el stock a desplegar es fijo o movil
+	 * @return none
+	 */
 	public function transito($tipo_op = '')
 	{
 		$this->load->model('stock_sap_model');
