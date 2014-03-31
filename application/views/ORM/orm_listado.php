@@ -27,10 +27,10 @@
 			<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>
 					<?php if ($modelo->get_mostrar_lista($campo)): ?>
-						<th><?php echo ucfirst($modelo->get_label_field($campo)); ?></th>
+						<th><?php echo strtolower($modelo->get_label_field($campo)); ?></th>
 					<?php endif; ?>
 				<?php endforeach; ?>
-				<th><div class="text-center">Editar</div></th>
+				<th><div class="text-center">editar</div></th>
 			</tr>
 		</thead>
 		<tbody>
