@@ -4,50 +4,50 @@
 
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
-		<?php echo form_open_multipart($this->uri->segment(1) . '/sube_stock', 'class="form-horizontal"'); ?>
+		<?php echo form_open_multipart($this->uri->segment(1) . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 
-		<div class="control-group">
-			<label class="control-label">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
 				Inventario
 			</label>
-			<div class="controls">
-				<span class="input-xlarge uneditable-input"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></span>
+			<div class="col-sm-9">
+				<span class="input-xlarge form-control uneditable-input"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></span>
 			</div>
 		</div>
 
 		<?php if (!$show_script_carga): ?>
-		<div class="control-group">
-			<label class="control-label">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
 				Archivo
 			</label>
-			<div class="controls">
+			<div class="controls col-sm-9">
 				<div class="alert alert-danger">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<p><strong>ADVERTENCIA</strong></p>
 					<p>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
 					"<?php echo $inventario_nombre?>"</p>
 				</div>
-				<?php echo form_upload('upload_file','','class="input-large"'); ?>
+				<?php echo form_upload('upload_file','','class="form-control"'); ?>
 			</div>
 		</div>
 
-		<div class="control-group">
-			<label class="control-label">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
 				Clave Administrador
 			</label>
-			<div class="controls">
-				<?php echo form_password('password'); ?>
+			<div class="col-sm-9">
+				<?php echo form_password('password', '', 'class="form-control"'); ?>
 			</div>
 		</div>
 		<?php endif; ?>
 
 		<?php if ($show_script_carga): ?>
-		<div class="control-group">
-			<label class="control-label">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
 				Progreso
 			</label>
-			<div class="controls">
+			<div class="col-sm-9">
 				<?php echo $upload_error; ?>
 				<?php echo $msj_error; ?>
 				<div id="progreso_carga">
@@ -61,8 +61,10 @@
 		</div>
 		<?php endif; ?>
 
-		<div class="control-group">
-			<div class="controls">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+			</label>
+			<div class="col-sm-9">
 				<?php if ($show_script_carga): ?>
 					<button class="btn btn-primary" id="ejecuta_carga">
 						<span class="glyphicon glyphicon-play"></span>
@@ -77,8 +79,10 @@
 			</div>
 		</div>
 
-		<div class="control-group">
-			<div class="controls">
+		<div class="form-group">
+			<label class="control-label col-sm-3">
+			</label>
+			<div class="col-sm-9">
 				<pre>
 Formato del archivo:
 	Archivo de texto

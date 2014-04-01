@@ -190,20 +190,20 @@
 	<?php echo form_hidden('auditor', $id_auditor); ?>
 	<?php //echo form_error('sel_digitador'); ?>
 	<?php //echo form_error('sel_auditor'); ?>
-	<table class="table table-bordered table-striped table-hover table-condensed">
+	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
-				<th>ubicacion</th>
+				<th class="text-center">ubicacion</th>
 				<!-- <th>HU</th> -->
-				<th>material</th>
+				<th class="text-center">material</th>
 				<th>descripcion</th>
-				<th>lote</th>
-				<th>centro</th>
-				<th>almacen</th>
-				<th>UM</th>
-				<th>cantidad sap</th>
-				<th>cantidad fisica</th>
-				<th>observacion</th>
+				<th class="text-center">lote</th>
+				<th class="text-center">centro</th>
+				<th class="text-center">almacen</th>
+				<th class="text-center">UM</th>
+				<th class="text-center">cantidad sap</th>
+				<th class="text-center">cantidad fisica</th>
+				<th class="text-center">observacion</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -211,7 +211,7 @@
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
 				<tr>
-					<td>
+					<td class="text-center">
 						<?php echo $linea_det->get_valor_field('ubicacion'); ?>
 
 						<?php if ($linea_det->reg_nuevo == 'S'):?>
@@ -229,18 +229,18 @@
 						<?php endif; ?>
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
-					<td><?php echo $linea_det->catalogo; ?></td>
+					<td class="text-center"><?php echo $linea_det->catalogo; ?></td>
 					<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
-					<td><?php echo $linea_det->get_valor_field('lote'); ?></td>
-					<td><?php echo $linea_det->get_valor_field('centro'); ?></td>
-					<td><?php echo $linea_det->get_valor_field('almacen'); ?></td>
-					<td><?php echo $linea_det->um; ?></td>
+					<td class="text-center"><?php echo $linea_det->get_valor_field('lote'); ?></td>
+					<td class="text-center"><?php echo $linea_det->get_valor_field('centro'); ?></td>
+					<td class="text-center"><?php echo $linea_det->get_valor_field('almacen'); ?></td>
+					<td class="text-center"><?php echo $linea_det->um; ?></td>
 					<td class="text-center"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
 					<td class="text-center">
 						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
-					<td>
+					<td class="text-center">
 						<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="input-sm form-control" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
 					</td>
 				</tr>
