@@ -3,7 +3,7 @@
 </div>
 
 <div class="row">
-	<div class="col-md-8 col-md-offset-2 well">
+	<div class="col-md-10 col-md-offset-1 well">
 		<?php echo form_open_multipart($this->uri->segment(1) . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 
@@ -12,7 +12,7 @@
 				Inventario
 			</label>
 			<div class="col-sm-9">
-				<span class="input-xlarge form-control uneditable-input"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></span>
+				<p class="form-control-static"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></p>
 			</div>
 		</div>
 
@@ -21,7 +21,7 @@
 			<label class="control-label col-sm-3">
 				Archivo
 			</label>
-			<div class="controls col-sm-9">
+			<div class="col-sm-9">
 				<div class="alert alert-danger">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<p><strong>ADVERTENCIA</strong></p>
@@ -36,7 +36,7 @@
 			<label class="control-label col-sm-3">
 				Clave Administrador
 			</label>
-			<div class="col-sm-9">
+			<div class="col-sm-4">
 				<?php echo form_password('password', '', 'class="form-control"'); ?>
 			</div>
 		</div>
@@ -71,7 +71,7 @@
 						Ejecutar carga
 					</button>
 				<?php else: ?>
-				<button type="submit" name="submit" class="btn btn-primary" id="btn_guardar">
+				<button type="submit" name="submit" class="btn btn-primary pull-right" id="btn_guardar">
 					<span class="glyphicon glyphicon-upload"></span>
 					Subir archivo
 				</button>
