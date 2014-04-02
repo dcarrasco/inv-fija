@@ -155,12 +155,12 @@ class App_common {
 	{
 		$tabla = array();
 
-		$n_linea    = 0; 
-		$totales    = array(); 
-		$subtotales = array(); 
-		$subtot_ant = array(); 
-		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series'); 
-				
+		$n_linea    = 0;
+		$totales    = array();
+		$subtotales = array();
+		$subtot_ant = array();
+		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
+
 		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
 		array_push($tabla, '<thead>');
 		array_push($tabla, '<tr>');
@@ -172,10 +172,10 @@ class App_common {
 			array_push($tabla, $arr_img_orden[$campo]);
 			array_push($tabla, '</th>');
 
-			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
-			{ 
-				$totales[$campo] = 0; 
-				$subtotales[$campo] = 0; 
+			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
+			{
+				$totales[$campo] = 0;
+				$subtotales[$campo] = 0;
 			}
 		}
 		array_push($tabla, '</tr>');
@@ -192,12 +192,12 @@ class App_common {
 				// Si el primer campo es un subtotal, inserta título del campo
 				if ($arr_param_campo['tipo'] == 'subtotal')
 				{
-					if (!array_key_exists($campo, $subtot_ant)) 
+					if (!array_key_exists($campo, $subtot_ant))
 					{
 						$subtot_ant[$campo] = '';
 					}
 
-					// Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales 
+					// Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales
 					if ($reg[$campo] != $subtot_ant[$campo])
 					{
 						if ($subtot_ant[$campo] != '')
@@ -208,7 +208,7 @@ class App_common {
 								array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
 								array_push($tabla, '</td>');
 							}
-							
+
 							array_push($tabla, '</tr>');
 							array_push($tabla, '<tr>');
 							array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
@@ -216,18 +216,18 @@ class App_common {
 							array_push($tabla, '</tr>');
 							array_push($tabla, '<tr>');
 						}
-						
+
 						if ($subtot_ant[$campo] != '')
 						{
 							array_push($tabla, '<td><span class="muted">' . ++$n_linea . '</span></td>');
 						}
-								
+
 						$subtot_ant[$campo] = $reg[$campo];
 						foreach ($arr_campos as $c => $arr_c)
 						{
 							$subtotales[$c] = 0;
 						}
-							
+
 						array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">');
 						array_push($tabla, ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : '');
 						array_push($tabla, '</td>');
@@ -241,19 +241,19 @@ class App_common {
 				array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
 				array_push($tabla, $this->formato_reporte($reg[$campo], $arr_param_campo, $reg, $campo));
 				array_push($tabla, '</td>');
-				
-				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
-				{ 
-					$totales[$campo] += $reg[$campo]; 
+
+				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
+				{
+					$totales[$campo] += $reg[$campo];
 				}
-				
-				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados)) 
-				{ 
-					$subtotales[$campo] += $reg[$campo]; 
+
+				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
+				{
+					$subtotales[$campo] += $reg[$campo];
 				}
 			}
 
-			array_push($tabla, '</tr>');	
+			array_push($tabla, '</tr>');
 		}
 
 		//ultima linea de subtotales
@@ -265,17 +265,17 @@ class App_common {
 				foreach ($arr_campos as $c => $arr_c)
 				{
 					array_push($tabla, 'xx <td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
-					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : ''); 
+					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
 					array_push($tabla, '</td>');
 				}
-						
+
 				array_push($tabla, '</tr>');
 				array_push($tabla, '<tr>');
 				array_push($tabla, '<td colspan="' . count($arr_campos) + 1 . '" class="subtotal">&nbsp;</td>');
 				array_push($tabla, '</tr>');
 			}
 		}
-		
+
 		// totales
 		array_push($tabla, '<tr>');
 		array_push($tabla, '<td></td>');
@@ -293,12 +293,11 @@ class App_common {
 		return (implode('', $tabla));
 	}
 
-	
-	
+
+
+
 
 
 }
-
-
 /* libraries app_common.php */
 /* Location: ./application/libraries/app_common.php */

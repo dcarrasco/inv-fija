@@ -477,7 +477,7 @@ class ORM_Model {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger"><strong>*</strong></span>' : '';
+		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger"><small><small><small><span class="glyphicon glyphicon-asterisk"></span></small></small></small></span>' : '';
 	}
 
 	// --------------------------------------------------------------------

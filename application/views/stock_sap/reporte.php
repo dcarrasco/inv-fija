@@ -1,26 +1,29 @@
-<div class="accordion">
-	<?php echo form_open('','id="frm_param"'); ?>
+<?php echo form_open('','id="frm_param"'); ?>
+<div class="accordion" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-6">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						Parametros consulta
 					</a>
-
 				</div>
-				<div class="col-md-4">
-					Fecha reporte: <?php echo $fecha_reporte; ?>
+
+				<div class="col-md-6">
+					<div class="pull-right">
+						Fecha reporte: <?php echo $fecha_reporte; ?>
+					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel-body collapse in" id="form_param">
-			<div class="accordion-inner">
-				<div class="row">
-					<div class="col-md-4">
+		<div class="panel-collapse collapse in" id="form_param">
+			<div class="panel-body">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Almacenes</label>
 
-						<strong>Almacenes</strong>
+						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 
 						<div class="pull-right">
 							<div class="radio-inline">
@@ -32,41 +35,39 @@
 								Fija
 							</div>
 						</div>
-
-						<div>
-							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
-						</div>
 					</div>
 
-					<div class="col-md-3">
-						<strong>Estados Stock</strong>
-						<div>
-							<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
-						</div>
-					</div>
+				</div>
 
-					<div class="col-md-2">
-						<strong>Tipos Material</strong>
-						<div>
-							<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
-						</div>
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Estados Stock</label>
+						<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
 					</div>
+				</div>
 
-					<div class="col-md-3">
-						<strong>Detalle</strong>
-						<div>
-							<div class="checkbox">
-								<?php echo form_checkbox('incl_almacen', '1', set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
-								Mostrar almacenes
-							</div>
-							<div class="checkbox">
-								<?php echo form_checkbox('incl_lote', '1', set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
-								Mostrar lotes
-							</div>
-							<div class="checkbox">
-								<?php echo form_checkbox('incl_modelos', '1', set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
-								Mostrar modelos equipos
-							</div>
+				<div class="col-md-2">
+					<div class="form-group">
+						<label>Tipos Material</label>
+						<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
+					</div>
+				</div>
+
+				<div class="col-md-3">
+					<div class="form-group">
+						<label>Detalle</label>
+
+						<div class="checkbox">
+							<?php echo form_checkbox('incl_almacen', '1', set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
+							Mostrar almacenes
+						</div>
+						<div class="checkbox">
+							<?php echo form_checkbox('incl_lote', '1', set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
+							Mostrar lotes
+						</div>
+						<div class="checkbox">
+							<?php echo form_checkbox('incl_modelos', '1', set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
+							Mostrar modelos equipos
 						</div>
 
 						<hr/>
@@ -77,6 +78,7 @@
 								Reporte
 							</button>
 						</div>
+
 					</div>
 
 				</div>
@@ -85,11 +87,11 @@
 
 		<?php echo form_hidden('order_by', set_value('order_by','')); ?>
 		<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
-		<?php echo form_close(); ?>
 	</div>
 </div>
+<?php echo form_close(); ?>
 
-<div class="content-module-main">
+<div>
 	<?php echo $reporte; ?>
 </div> <!-- fin content-module-main -->
 

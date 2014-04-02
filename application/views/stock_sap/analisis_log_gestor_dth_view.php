@@ -1,7 +1,3 @@
-<div class="row">
-	<?php //echo $menu_configuracion; ?>
-</div>
-
 <?php echo form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
@@ -14,7 +10,7 @@
 		<div class="accordion-inner">
 			<div class="row">
 				<div class="col-md-4">
-					<div>
+					<div class="form-group">
 						<div class="radio-inline">
 							<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
 							Serie Deco
@@ -23,8 +19,6 @@
 							<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
 							RUT Cliente
 						</div>
-					</div>
-					<div>
 						<?php echo form_textarea(array(
 								'id' => 'series',
 								'name' => 'series',
@@ -37,42 +31,42 @@
 				</div>
 
 				<div class="col-md-4">
-					<div>
-						<strong>Reportes</strong>
-					</div>
-					<div>
-						<div class="radio-inline">
-							<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
-							Log completo
+					<div class="form-group">
+						<label>Reportes</label>
+
+						<div>
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
+								Log completo
+							</div>
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
+								Ultimo deco
+							</div>
 						</div>
-						<div class="radio-inline">
-							<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
-							Ultimo deco
-						</div>
-					</div>
-					<div>
+
 						<div class="checkbox">
 							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
 							Filtrar ultimo movimiento
 						</div>
-					</div>
-					<div>
+
+						<label>Tipo Operacion CAS</label>
+
 						<div>
-							Tipo Operacion CAS
-						</div>
-						<div class="checkbox-inline">
-							<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
-							Alta
-						</div>
-						<div class="checkbox-inline">
-							<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
-							Baja
+							<div class="checkbox-inline">
+								<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+								Alta
+							</div>
+							<div class="checkbox-inline">
+								<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+								Baja
+							</div>
 						</div>
 					</div>
 				</div>
 
 				<div class="col-md-4">
-					<div class="pull-right">
+					<div class="form-group pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
 							<span class="glyphicon glyphicon-list-alt"></span>
 							Consultar

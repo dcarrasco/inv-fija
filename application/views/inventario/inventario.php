@@ -1,54 +1,53 @@
-<?php echo form_open($this->uri->segment(1) . '/ingreso', 'id="frm_buscar" class="form-inline"'); ?>
+<?php echo form_open($this->uri->segment(1) . '/ingreso', 'id="frm_buscar" role="form"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
 <div class="row">
-	<div class="col-md-3">
-		<strong>Inventario</strong>
-	</div>
-	<div class="col-md-3">
-		<strong>Hoja</strong>
-	</div>
-	<div class="col-md-3">
-		<strong>Auditor</strong>
-	</div>
-</div>
-<div class="row">
-	<div class="col-md-3">
-		<?php echo $nombre_inventario; ?>
-	</div>
 
 	<div class="col-md-3">
-		<div class="input-group">
-			<span class="input-group-btn">
-				<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
-					<span class="glyphicon glyphicon-search"></span>
-				</a>
-			</span>
-			<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="form-control input-sm">
-			<span class="input-group-btn">
-				<a href="<?php echo $link_hoja_ant; ?>" class="btn btn-default btn-sm" id="btn_hoja_ant">
-					<span class="glyphicon glyphicon-chevron-left"></span>
-				</a>
-				<a href="<?php echo $link_hoja_sig; ?>" class="btn btn-default btn-sm" id="btn_hoja_sig">
-						<span class="glyphicon glyphicon-chevron-right"></span>
-				</a>
-			</span>
+		<div class="form-group">
+			<label>Inventario</label>
+			<p class="form-control-static"><?php echo $nombre_inventario; ?></p>
 		</div>
-		<?php echo form_error('hoja');?>
 	</div>
 
 	<div class="col-md-3">
-		<?php echo $nuevo_detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'); ?>
-		<?php echo form_error('auditor');?>
+		<div class="form-group <?php echo form_has_error('hoja'); ?>">
+			<label>Hoja</label>
+			<div class="input-group">
+				<span class="input-group-btn">
+					<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
+						<span class="glyphicon glyphicon-search"></span>
+					</a>
+				</span>
+				<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="form-control input-sm">
+				<span class="input-group-btn">
+					<a href="<?php echo $link_hoja_ant; ?>" class="btn btn-default btn-sm" id="btn_hoja_ant">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+					</a>
+					<a href="<?php echo $link_hoja_sig; ?>" class="btn btn-default btn-sm" id="btn_hoja_sig">
+							<span class="glyphicon glyphicon-chevron-right"></span>
+					</a>
+				</span>
+			</div>
+			<?php echo form_error('hoja');?>
+		</div>
 	</div>
 
 	<div class="col-md-3">
-		<div class="pull-right">
-			<a href="#" id="btn_mostrar_agregar" class="btn btn-default">
+		<div class="form-group <?php echo form_has_error('auditor'); ?>">
+			<label>Auditor</label>
+			<?php echo $nuevo_detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'); ?>
+			<?php echo form_error('auditor');?>
+		</div>
+	</div>
+
+	<div class="col-md-3">
+		<div class="form-group">
+			<label></label>
+			<a href="#" id="btn_mostrar_agregar" class="btn btn-default pull-right">
 				<span class="glyphicon glyphicon-plus-sign"></span> Nuevo material...
 			</a>
 		</div>
 	</div>
-</div>
 <?php echo form_close(); ?>
 
 <div class="row">
@@ -64,13 +63,15 @@
 		<fieldset>
 		<legend>Ingreso datos inventario</legend>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('ubicacion'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('ubicacion'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('ubicacion'); ?>
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('ubicacion', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('ubicacion'); ?>
 			</div>
 		</div>
@@ -86,7 +87,7 @@
 		</div>
 		-->
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('catalogo'); ?>">
 			<label class="control-label col-sm-4">
 				Material
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('catalogo'); ?>
@@ -107,18 +108,20 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('lote'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('lote'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('lote'); ?>
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('lote', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('lote'); ?>
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('um'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('um'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('um'); ?>
@@ -129,7 +132,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('centro'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('centro'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('centro'); ?>
@@ -140,7 +143,7 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('almacen'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('almacen'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('almacen'); ?>
@@ -151,18 +154,20 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('stock_fisico'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('stock_fisico'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('stock_fisico', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('stock_fisico'); ?>
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('observacion'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('observacion'); ?>

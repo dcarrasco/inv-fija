@@ -97,7 +97,7 @@ class Inventario_digitacion extends CI_Controller {
 			$nuevo_detalle_inventario->set_validation_rules_field('stock_fisico');
 		}
 
-		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: ', '</strong></p>');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 		$this->form_validation->set_message('integer', 'El valor del campo %s debe ser numero entero');
 		$this->form_validation->set_message('greater_than', 'El valor del campo %s debe ser positivo');

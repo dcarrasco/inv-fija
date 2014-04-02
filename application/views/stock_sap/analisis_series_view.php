@@ -10,76 +10,71 @@
 		</a>
 	</div>
 
-	<div class="panel-body collapse in" id="form_param">
-		<div class="accordion-inner">
-			<div class="row">
-				<div class="col-md-4">
-					<div>
-						<strong>Series</strong>
-					</div>
-					<div>
-						<?php echo form_textarea(array(
-								'id' => 'series',
-								'name' => 'series',
-								'rows' => '10',
-								'cols' => '30',
-								'value' => set_value('series'),
-								'class' => 'form-control',
-							)); ?>
-					</div>
-				</div>
+	<div class="panel-collapse collapse in" id="form_param">
+		<div class="panel-body">
 
-				<div class="col-md-4">
-					<div>
-						<strong>Reportes</strong>
-					</div>
-					<div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_mov', 'show', set_value('show_mov'))?>
-							Mostrar movimientos
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
-							Filtrar ultimo movimiento
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos'))?>
-							Mostrar despachos
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap'))?>
-							Mostrar stock SAP
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl'))?>
-							Mostrar stock SCL
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?>
-							Mostrar trafico
-							(ver <?php echo anchor($this->uri->segment(1) . '/trafico_por_mes','detalle trafico'); ?>)
-						</div>
-						<div class="checkbox">
-							<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth'))?>
-							Mostrar gestor DTH
-						</div>
-					</div>
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Series</label>
+					<?php echo form_textarea(array(
+							'id' => 'series',
+							'name' => 'series',
+							'rows' => '10',
+							'cols' => '30',
+							'value' => set_value('series'),
+							'class' => 'form-control',
+						)); ?>
 				</div>
-
-				<div class="col-md-4">
-					<div class="pull-right">
-						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-							<span class="glyphicon glyphicon-list-alt"></span>
-							Consultar
-						</button>
-						<button name="excel" class="btn btn-default" id="boton-reset">
-							<span class="glyphicon glyphicon-refresh"></span>
-							Limpiar
-						</button>
-					</div>
-				</div>
-
 			</div>
+
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Reportes</label>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_mov', 'show', set_value('show_mov'))?>
+						Mostrar movimientos
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
+						Filtrar ultimo movimiento
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos'))?>
+						Mostrar despachos
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap'))?>
+						Mostrar stock SAP
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl'))?>
+						Mostrar stock SCL
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?>
+						Mostrar trafico
+						(ver <?php echo anchor($this->uri->segment(1) . '/trafico_por_mes','detalle trafico'); ?>)
+					</div>
+					<div class="checkbox">
+						<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth'))?>
+						Mostrar gestor DTH
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<div class="pull-right">
+					<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
+						<span class="glyphicon glyphicon-list-alt"></span>
+						Consultar
+					</button>
+					<button name="excel" class="btn btn-default" id="boton-reset">
+						<span class="glyphicon glyphicon-refresh"></span>
+						Limpiar
+					</button>
+				</div>
+			</div>
+
 		</div>
 	</div>
 </div>
