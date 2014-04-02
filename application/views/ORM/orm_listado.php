@@ -2,9 +2,9 @@
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" maxlength="30" placeholder="Texto a filtrar..."'); ?>
+			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="Texto a filtrar..."'); ?>
 			<span class="input-group-btn">
-				<button type="submit" class="btn btn-default">
+				<button type="submit" id="btn_filtro" class="btn btn-default">
 					<span class="glyphicon glyphicon-search"></span>
 				</button>
 			</span>
@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="col-md-9 text-right">
-		<a href="<?php echo $url_editar; ?>" class="btn btn-default" id="btn_mostrar_agregar">
+		<a href="<?php echo $url_editar; ?>" class="btn btn-primary" id="btn_mostrar_agregar">
 			<span class="glyphicon glyphicon-plus-sign"></span>
 			Agregar <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
@@ -22,7 +22,7 @@
 <div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
-	<table class="table table-hover table-condensed">
+	<table class="table table-hover table-condensed table-striped">
 		<thead>
 			<tr>
 				<?php foreach ($modelo as $campo => $valor): ?>
@@ -30,7 +30,7 @@
 						<th><?php echo strtolower($modelo->get_label_field($campo)); ?></th>
 					<?php endif; ?>
 				<?php endforeach; ?>
-				<th><div class="text-center">editar</div></th>
+				<th><div class="text-center"></div></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -43,8 +43,9 @@
 					<?php endforeach; ?>
 					<td>
 						<div class="text-center">
-							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="btn  btn-default btn-xs">
-								<span class="glyphicon glyphicon-edit"></span>
+							<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="">
+								<!-- <span class="glyphicon glyphicon-edit"></span> -->
+								editar
 							</a>
 						</div>
 					</td>
@@ -57,3 +58,13 @@
 		<?php echo $modelo->crea_links_paginas(); ?>
 	</div>
 </div> <!-- fin content-module-main -->
+
+<script>
+	$(document).ready(function() {
+		if ($('#filtro').val() != '') {
+			$('#filtro').css('background', '#D9EDF7');
+			$('#btn_filtro').removeClass('btn-default');
+			$('#btn_filtro').addClass('btn-primary');
+		}
+	});
+</script>

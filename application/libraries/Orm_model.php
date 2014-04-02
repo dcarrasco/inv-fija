@@ -324,7 +324,7 @@ class ORM_Model {
 			$this->set_validation_rules_field($campo);
 		}
 
-		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: ', '</strong></p>');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
 		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
 		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
@@ -375,7 +375,7 @@ class ORM_Model {
 	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @return string        Elemento de formulario
 	 */
-	public function print_form_field($campo = '', $filtra_activos = FALSE)
+	public function print_form_field($campo = '', $filtra_activos = FALSE, $param_adic = '')
 	{
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->model_fields[$campo]->get_relation();
@@ -396,7 +396,7 @@ class ORM_Model {
 			$this->model_fields[$campo]->set_relation($arr_relation);
 		}
 
-		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos);
+		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos, $param_adic);
 	}
 
 	// --------------------------------------------------------------------
@@ -1378,7 +1378,7 @@ class ORM_Field {
 	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @return string        Elemento de formulario
 	 */
-	public function form_field($valor = '', $filtra_activos = FALSE)
+	public function form_field($valor = '', $filtra_activos = FALSE, $param_adic = '')
 	{
 		$id_prefix  = 'id_';
 
@@ -1388,7 +1388,7 @@ class ORM_Field {
 		$arr_param = array(
 			'name'      => $this->nombre,
 			'id'        => $id_prefix . $this->nombre,
-			'class'     => 'form-control',
+			'class'     => 'form-control ' . $param_adic,
 			'value'     => $valor_field,
 			'maxlength' => $this->largo,
 			'size'      => $this->largo,
@@ -1400,7 +1400,7 @@ class ORM_Field {
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
 
-			$form = '<span class="uneditable-input form-control">' . $valor_field . '</span>';
+			$form = '<p class="form-control-static">' . $valor_field . '</p>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 			return $form;
 		}
@@ -1450,7 +1450,7 @@ class ORM_Field {
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control '. $param_adic . '"';
 
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 
@@ -1463,7 +1463,7 @@ class ORM_Field {
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 
-			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control"';
+			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control ' . $param_adic . '"';
 
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 
