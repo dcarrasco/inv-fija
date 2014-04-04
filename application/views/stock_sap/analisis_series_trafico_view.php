@@ -1,91 +1,83 @@
-<div class="content-module">
+<div class="panel-group" id="accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a href="#form_panel" class="accordion-toggle" data-toggle="collapse" data-parent="#accordion">
+				Parametros consulta
+			</a>
+		</div>
+		<div class="panel-collapse collapse in" id="form_panel">
+			<div class="panel-body">
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Series</label>
+					<?php echo form_textarea(array(
+							'id' => 'series',
+							'name' => 'series',
+							'rows' => '10',
+							'cols' => '30',
+							'value' => set_value('series'),
+							'class' => 'form-control',
+						)); ?>
+				</div>
+			</div>
 
-	<div class="content-module-heading cf">
+			<div class="col-md-4">
+				<div class="form-group">
+					<label>Meses</label>
+					<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
+				</div>
+			</div>
 
-		<div class="content-header formulario">
-			<h3>Consulta tráfico por IMEI</h3>
-			<span class="mostrar-ocultar">click para cerrar</span>
-			<span class="mostrar-ocultar" style="display:none;">click para expandir</span>
-			<div style="clear: both;"></div>
-		</div> <!-- fin content-header -->
-
-		<div id="area_formulario" class="cuerpo-formulario mostrar-ocultar">
-			<?php echo form_open(''); ?>
-			<table>
-				<tr>
-					<th>
-						Series: <br />
-						<?php echo form_textarea(array(
-								'id' => 'series',
-								'name' => 'series',
-								'rows' => '10',
-								'cols' => '30',
-								'value' => set_value('series'),
-								'class' => 'form-control',
-							)); ?>
-					</th>
-					<th>
-						Meses: <br />
-						<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?> <br />
-
-					</th>
-				</tr>
-			</table>
-			<br />
-			<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
-				<span class="glyphicon glyphicon-list-alt"></span>
-				Consultar
-			</button>
-			<?php echo anchor($this->uri->segment(1),'Volver...', 'id="boton-reset" class="btn"'); ?>
+			<div class="col-md-4">
+				<div class="form-group pull-right">
+					<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
+						<span class="glyphicon glyphicon-list-alt"></span>
+						Consultar
+					</button>
+					<a href="<?php echo $this->uri->segment(1); ?>" class="btn btn-default">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						Volver
+					</a>
+				</div>
+			</div>
 			<?php echo form_close(); ?>
+			</div>
 		</div>
+	</div>
+</div>
 
-	</div> <!-- fin content-module-heading -->
-
-	<div class="content-module-main">
-		<div class="content-header movimientos">
-			<h3>Detalle trafico</h3>
-			<span class="mostrar-ocultar">click para cerrar</span>
-			<span class="mostrar-ocultar" style="display:none;">click para expandir</span>
-			<div style="clear: both;"></div>
-		</div> <!-- fin content-header -->
-
-		<div id="res_movimientos" class="cuerpo-movimientos mostrar-ocultar">
-		<table class="table table-hover table-condensed">
-			<tr>
-				<th>Serie IMEI</th>
-				<th>celular</th>
-				<th>Tipo</th>
-				<th>RUT</th>
-				<th>Nombre</th>
-				<th>cod situacion</th>
-				<th>Fecha Alta</th>
-				<th>Fecha Baja</th>
-			</tr>
-		</table>
+<div class="panel-group" id="trafico">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<a href="#form_trafico" class="accordion-toggle" data-toggle="collapse" data-parent="#trafico">
+				Detalle trafico
+			</a>
 		</div>
-	</div>  <!-- fin content-module-main -->
-</div>  <!-- fin content-module -->
-
-<br />
-
-<!-- <pre><?php print_r($datos_trafico);?></pre> -->
-
+		<div class="panel-collapse collapse in" id="form_trafico">
+			<div class="panel-body">
+				<div id="res_movimientos" style="overflow: auto">
+					<table class="table table-hover table-condensed table-striped">
+						<thead>
+							<tr>
+								<th>Serie IMEI</th>
+								<th>celular</th>
+								<th>Tipo</th>
+								<th>RUT</th>
+								<th>Nombre</th>
+								<th>cod situacion</th>
+								<th>Fecha Alta</th>
+								<th>Fecha Baja</th>
+							</tr>
+						</thead>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 
 <script type="text/javascript">
 	$(document).ready(function() {
-		if ($("#param").val() != "")
-		{
-			$("div.cuerpo-formulario").hide();
-			$("div.formulario span").toggle();
-		}
-
-		$("#btn_limpiar").click(function() {
-			event.preventDefault;
-			$("#param").val("");
-			$("#param").focus();
-		})
-
 		$("#boton-submit").click(function(event) {
 			event.preventDefault();
 			var str_series = $('form textarea').val();
@@ -102,14 +94,14 @@
 					str_meses += arr_meses[i];
 				}
 				$('#res_movimientos').empty();
-				str_tabla = '<table class="table table-hover table-condensed"><tr>';
+				str_tabla = '<table class="table table-hover table-condensed table-striped"><thead><tr>';
 				str_tabla += '<th>Serie IMEI</th><th>celular</th><th>Tipo</th><th>RUT</th><th>Nombre</th><th>cod situacion</th>';
 				str_tabla += '<th>Fecha Alta</th><th>Fecha Baja</th>';
 				for (var j=0; j<arr_meses.length; j++)
 					{
 						str_tabla += '<th>' + arr_meses[j] + '</th>';
 					}
-				str_tabla += '</tr>';
+				str_tabla += '</tr></thead><tbody>';
 				$('#res_movimientos').append(str_tabla);
 
 				var arr_series = str_series.split('\n');
@@ -148,19 +140,10 @@
 						});
 					}
 				}
+				str_fin_tabla = '</tbody></table>';
+				$('#res_movimientos').append(str_fin_tabla);
 			}
 			//$("form").submit();
-		})
-
-		$("table tr").hover(function() {
-			$(this).addClass("highlight");
-		}, function() {
-			$(this).removeClass("highlight")
-		})
-
-		$("div.content-header").click(function() {
-			$(this).next("div.mostrar-ocultar").slideToggle("fast");
-			$(this).children("span.mostrar-ocultar").toggle();
 		})
 
 	});

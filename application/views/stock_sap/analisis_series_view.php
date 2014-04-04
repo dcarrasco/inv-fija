@@ -31,32 +31,32 @@
 				<div class="form-group">
 					<label>Reportes</label>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_mov', 'show', set_value('show_mov'))?>
+						<?php echo form_checkbox('show_mov', 'show', set_checkbox('show_mov', 'show', TRUE)); ?>
 						Mostrar movimientos
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
+						<?php echo form_checkbox('ult_mov', 'show', set_checkbox('ult_mov', 'show', FALSE)); ?>
 						Filtrar ultimo movimiento
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos'))?>
+						<?php echo form_checkbox('show_despachos', 'show', set_checkbox('show_despachos', 'show', FALSE)); ?>
 						Mostrar despachos
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap'))?>
+						<?php echo form_checkbox('show_stock_sap', 'show', set_checkbox('show_stock_sap', 'show', FALSE)); ?>
 						Mostrar stock SAP
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl'))?>
+						<?php echo form_checkbox('show_stock_scl', 'show', set_checkbox('show_stock_scl', 'show', FALSE)); ?>
 						Mostrar stock SCL
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico'))?>
+						<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
 						Mostrar trafico
 						(ver <?php echo anchor($this->uri->segment(1) . '/trafico_por_mes','detalle trafico'); ?>)
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth'))?>
+						<?php echo form_checkbox('show_gdth', 'show', set_checkbox('show_gdth', 'show', FALSE)); ?>
 						Mostrar gestor DTH
 					</div>
 				</div>
@@ -103,11 +103,12 @@
 					<th>des_rec</th>
 					<th>cmv</th>
 					<th>desc cmv</th>
-					<!-- <th>num doc</th> -->
 					<!-- <th>pos</th>     -->
 					<th>material</th>
 					<th>desc material</th>
 					<th>lote</th>
+					<th>num doc</th>
+					<th>referencia</th>
 					<!-- <th>cantidad</th>  -->
 					<th>usuario</th>
 					<th>nom_usuario</th>
@@ -123,11 +124,12 @@
 					<td><small><?php echo $reg_hist['des_rec'] ?></small></td>
 					<td><small><?php echo $reg_hist['cmv'] ?></small></td>
 					<td><small><?php echo $reg_hist['des_cmv'] ?></small></td>
-					<!-- <td><?php //echo $reg_hist['n_doc'] ?></td> -->
 					<!-- <td><?php //echo $reg_hist['pos'] ?></td>   -->
 					<td><small><?php echo $reg_hist['codigo_sap'] ?></small></td>
 					<td><small><?php echo $reg_hist['texto_breve_material'] ?></small></td>
 					<td><small><?php echo $reg_hist['lote'] ?></small></td>
+					<td><small><?php echo $reg_hist['n_doc'] ?><small></td>
+					<td><small><?php echo $reg_hist['referencia'] ?><small></td>
 					<!-- <td><?php //echo $reg_hist['cantidad'] ?></td>  -->
 					<td><small><?php echo $reg_hist['usuario'] ?></small></td>
 					<td><small><?php echo $reg_hist['nom_usuario'] ?></small></td>
@@ -405,25 +407,13 @@
 	$(document).ready(function() {
 		if ($("#series").val() != "")
 		{
-			$("div.cuerpo-formulario").hide();
-			$("div.formulario span").toggle();
+			//$("#form_param").collapse();
 		}
 
 		$("#boton-reset").click(function(event) {
 			//event.preventDefault();
 			$("#series").val("");
 			$("#series").focus();
-		})
-
-		$("table tr").hover(function() {
-			$(this).addClass("highlight");
-		}, function() {
-			$(this).removeClass("highlight");
-		})
-
-		$("div.content-header").click(function() {
-			$(this).next("div.mostrar-ocultar").slideToggle("fast");
-			$(this).children("span.mostrar-ocultar").toggle();
 		})
 
 	});
