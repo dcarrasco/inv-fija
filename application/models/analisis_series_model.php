@@ -144,11 +144,11 @@ class Analisis_series_model extends CI_Model {
 		$this->db->distinct();
 		$this->db->select('100*ano+mes as mes');
 		$this->db->from('bd_controles..trafico_dias_procesados');
-		$this->db->order_by('mes');
+		$this->db->order_by('mes desc');
 		$resultado = array();
 		foreach($this->db->get()->result_array() as $res)
 		{
-			$resultado[$res['mes']] = substr($res['mes'],0,4) . "/" . substr($res['mes'],4,2);
+			$resultado[$res['mes']] = substr($res['mes'],0,4) . "-" . substr($res['mes'],4,2);
 		}
 		return $resultado;
 	}
