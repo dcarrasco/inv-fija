@@ -52,7 +52,7 @@
 				<?php echo $msj_error; ?>
 				<div id="progreso_carga">
 					<div class="progress">
-						<div class="bar" style="width: 0%;"></div>
+						<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
 					</div>
 					<div id="status_progreso1">Registros cargados OK: <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
 					<div id="status_progreso2">Registros con error: <span id="reg_error">0</span></div>
@@ -66,7 +66,7 @@
 			</label>
 			<div class="col-sm-9">
 				<?php if ($show_script_carga): ?>
-					<button class="btn btn-primary" id="ejecuta_carga">
+					<button class="btn btn-primary pull-right" id="ejecuta_carga">
 						<span class="glyphicon glyphicon-play"></span>
 						Ejecutar carga
 					</button>
@@ -170,7 +170,7 @@ Formato del archivo:
 			sdata = arr_datos.shift();
 			cproc += 1;
 			if (cproc == 1) {
-				$('#ejecuta_carga').hide();
+				$('#ejecuta_carga').addClass('disabled');
 			}
 			procesa_carga_linea(sdata);
 		}
@@ -186,7 +186,8 @@ Formato del archivo:
 			success: function(datos) {
 				curr += 1;
 				var progreso = parseInt(100 * curr / cant) + '%';
-				$('div.bar').css('width',progreso);
+				$('div.progress-bar').css('width',progreso);
+				$('div.progress-bar').text(progreso);
 				$('#reg_actual').text(curr);
 
 				if (curr >= cant) {
@@ -201,7 +202,7 @@ Formato del archivo:
 			complete: function() {
 				cproc -= 1;
 				if (cproc == 0) {
-					$('#ejecuta_carga').show();
+					$('#ejecuta_carga').removeClass('disabled');
 				}
 			},
 		});
@@ -214,15 +215,15 @@ $(document).ready(function() {
 
 	$('#ejecuta_carga').click(function (event) {
 		event.preventDefault();
-		$('div.bar').css('width', '0%');
-		ejecuta_carga();
-	})
-
-	function ejecuta_carga() {
+		//$('div.progress-bar').css('width', '0%');
 		while (arr_datos.length > 0) {
 			procesa_carga();
 		}
-	};
+		if (arr_datos.length == 0)
+		{
+			$('#ejecuta_carga').addClass('disabled');
+		}
+	})
 
 	<?php echo $script_carga; ?>
 	cant = arr_datos.length

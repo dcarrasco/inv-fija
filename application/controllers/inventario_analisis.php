@@ -15,7 +15,7 @@ class Inventario_analisis extends CI_Controller {
 
 		if (ENVIRONMENT != 'production')
 		{
-			$this->output->enable_profiler(TRUE);
+			//$this->output->enable_profiler(TRUE);
 		}
 
 		$this->arr_menu = array(
