@@ -103,6 +103,7 @@ class Acl_config extends CI_Controller {
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
+				'link_cancelar'      => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo),
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}

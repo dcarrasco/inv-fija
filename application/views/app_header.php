@@ -3,6 +3,8 @@
 <head>
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
 
@@ -21,15 +23,17 @@
 <body>
 
 <!-- DIV principal de la aplicacion -->
-<div class="container">
 
-<nav class="navbar navbar-default">
-	<a class="navbar-brand" href="#">
-		<strong><?php echo $this->app_common->titulo_modulo(); ?></strong>
-	</a>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">
+				<strong><?php echo $this->app_common->titulo_modulo(); ?></strong>
+			</a>
+		</div>
 
-	<ul class="nav navbar-nav pull-right">
-		<?php foreach($this->app_common->menu_app() as $app_item): ?>
+		<ul class="nav navbar-nav pull-right">
+			<?php foreach($this->app_common->menu_app() as $app_item): ?>
 			<li class="dropdown <?php echo $app_item['selected']; ?>">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 					<i class="<?php echo $app_item['icono']; ?>"></i>
@@ -47,15 +51,18 @@
 					<?php endforeach; ?>
 				</ul>
 			</li>
-		<?php endforeach; ?>
-		<li>
-			<a href="<?php echo site_url('login'); ?>">
-				<span class="glyphicon glyphicon-off"></span>
-				Logout
-			</a>
-		</li>
-	</ul>
+			<?php endforeach; ?>
+			<li>
+				<a href="<?php echo site_url('login'); ?>">
+					<span class="glyphicon glyphicon-off"></span>
+					Logout
+				</a>
+			</li>
+		</ul>
+	</div>
 </nav>
+
+<div class="container">
 
 <?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
 <div class="alert alert-warning">

@@ -28,10 +28,10 @@
 						<span class="glyphicon glyphicon-ok"></span>
 						Guardar
 					</button>
-					<button type="submit" class="btn btn-default" name="cancelar" value="cancelar">
+					<a href="<?php echo $link_cancelar; ?>" class="btn btn-default">
 						<span class="glyphicon glyphicon-ban-circle"></span>
 						Cancelar
-					</button>
+					</a>
 				</div>
 
 				<div class="pull-left">
