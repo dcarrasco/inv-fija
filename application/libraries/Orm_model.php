@@ -477,7 +477,7 @@ class ORM_Model {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger"><small><small><small><span class="glyphicon glyphicon-asterisk"></span></small></small></small></span>' : '';
+		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger">*</span>' : '';
 	}
 
 	// --------------------------------------------------------------------
@@ -501,7 +501,7 @@ class ORM_Model {
 	 * @param  string $filtro Filtro de los valores del modelo
 	 * @return string         Links de paginación
 	 */
-	public function crea_links_paginas($url = '')
+	public function crea_links_paginas()
 	{
 		$this->load->library('pagination');
 		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
@@ -529,7 +529,7 @@ class ORM_Model {
 
 					'per_page'    => $this->model_page_results,
 					'total_rows'  => $total_rows,
-					'base_url'    => site_url($this->uri->segment(1) . '/' . $this->uri->segment(2) . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
+					'base_url'    => site_url($this->uri->segment(1) . '/' . ($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
 					'first_link'  => 'Primero',
 					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
