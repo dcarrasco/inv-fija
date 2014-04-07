@@ -42,7 +42,7 @@
 				</a>
 				<ul class="dropdown-menu">
 					<?php foreach($app_item['modulos'] as $modulo_item): ?>
-						<li>
+						<li <?php echo ($modulo_item['url'] == $this->uri->segment(1)) ? 'class="active"' : ''; ?>>
 							<a href="<?php echo site_url($modulo_item['url']); ?>">
 								<i class="<?php echo $modulo_item['icono']; ?>"></i>
 								<?php echo $modulo_item['modulo']; ?>
