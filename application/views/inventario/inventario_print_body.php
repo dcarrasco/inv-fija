@@ -80,7 +80,7 @@
 					<!-- OBSERVACION -->
 					<td>
 						<?php if ($catalogo_rel->es_seriado): ?>
-							<strong>[** MATERIAL SERIADO **]</strong>
+							<strong>[HU]</strong>
 						<?php endif; ?>
 					</td>
 				</tr>
