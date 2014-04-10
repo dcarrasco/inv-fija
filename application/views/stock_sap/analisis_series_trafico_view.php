@@ -7,40 +7,41 @@
 		</div>
 		<div class="panel-collapse collapse in" id="form_panel">
 			<div class="panel-body">
-			<div class="col-md-4">
-				<div class="form-group">
-					<label>Series</label>
-					<?php echo form_textarea(array(
-							'id' => 'series',
-							'name' => 'series',
-							'rows' => '10',
-							'cols' => '30',
-							'value' => set_value('series'),
-							'class' => 'form-control',
-						)); ?>
+				<?php echo form_open(''); ?>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Series</label>
+						<?php echo form_textarea(array(
+								'id' => 'series',
+								'name' => 'series',
+								'rows' => '10',
+								'cols' => '30',
+								'value' => set_value('series'),
+								'class' => 'form-control',
+							)); ?>
+					</div>
 				</div>
-			</div>
 
-			<div class="col-md-4">
-				<div class="form-group">
-					<label>Meses</label>
-					<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label>Meses</label>
+						<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
+					</div>
 				</div>
-			</div>
 
-			<div class="col-md-4">
-				<div class="form-group pull-right">
-					<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
-						<span class="glyphicon glyphicon-list-alt"></span>
-						Consultar
-					</button>
-					<a href="<?php echo $this->uri->segment(1); ?>" class="btn btn-default">
-						<span class="glyphicon glyphicon-chevron-left"></span>
-						Volver
-					</a>
+				<div class="col-md-4">
+					<div class="form-group pull-right">
+						<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
+							<span class="glyphicon glyphicon-list-alt"></span>
+							Consultar
+						</button>
+						<a href="<?php echo $this->uri->segment(1); ?>" class="btn btn-default">
+							<span class="glyphicon glyphicon-chevron-left"></span>
+							Volver
+						</a>
+					</div>
 				</div>
-			</div>
-			<?php echo form_close(); ?>
+				<?php echo form_close(); ?>
 			</div>
 		</div>
 	</div>
