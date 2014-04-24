@@ -171,15 +171,15 @@
 					<th>n_doc</th>
 					<th>referencia</th>
 				</tr>
-			<?php foreach($desp as $serie_desp): ?>
-			<?php foreach($serie_desp as $reg_desp): ?>
+			<?php if (count($desp) > 0) :?>
+			<?php foreach($desp as $reg_desp): ?>
 				<tr>
 					<td><small><?php echo $reg_desp['serie'] ?></small></td>
 					<td><small><?php echo $reg_desp['cod_sap'] ?></small></td>
 					<td><small><?php echo $reg_desp['texto_breve_material'] ?></small></td>
 					<td><small><?php echo $reg_desp['lote'] ?></small></td>
 					<td><small><?php echo $reg_desp['operador'] ?></small></td>
-					<td><small><?php echo $reg_desp['fecha_desp'] ?></small></td>
+					<td><small><?php echo $reg_desp['fecha_despacho'] ?></small></td>
 					<td><small><?php echo $reg_desp['cmv'] ?></small></td>
 					<td><small><?php echo $reg_desp['alm'] ?></small></td>
 					<td><small><?php echo $reg_desp['rec'] ?></small></td>
@@ -192,7 +192,7 @@
 					<td><small><?php echo $reg_desp['referencia'] ?></small></td>
 				</tr>
 			<?php endforeach; ?>
-			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>

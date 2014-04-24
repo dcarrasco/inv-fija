@@ -36,27 +36,26 @@ class Analisis_series_model extends CI_Model {
 		return $result;
 	}
 
+
 	function get_despacho($series = string)
 	{
 		$result = array();
-		$arr_series = explode("\n", $series);
-		foreach ($arr_series as $serie) {
-			$serie = trim($serie);
-			if (substr($serie,0,1) == '1')
-			{
-				$serie = '0' . $serie;
-			}
-
-			if ($serie != "") {
-				$this->db->limit(100);
-				$this->db->select('convert(varchar(20),fecha,120) as fecha_desp, *');
-				$this->db->from('bd_logistica..despachos_sap');
-				$this->db->where(array('serie' => $serie));
-				array_push($result, $this->db->get()->result_array());				}
+		$series = str_replace(" ", "", $series);
+		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
+		foreach ($arr_series as $k => $v)
+		{
+			$arr_series[$k] = preg_replace('/^01/', '1', $v);
 		}
 
-		return $result;
+		if (count($arr_series) > 0)
+		{
+				$this->db->select('convert(varchar(20),fecha,120) as fecha_despacho, *');
+				$this->db->from('bd_logistica..despachos_sap');
+				$this->db->where_in('n_serie', $arr_series);
+				return $this->db->get()->result_array();
+		}
 	}
+
 
 	function get_stock_sap($series = string) {
 		$result = array();
