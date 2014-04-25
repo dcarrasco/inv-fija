@@ -8,6 +8,20 @@ class Analisis_series_model extends CI_Model {
 		parent::__construct();
 	}
 
+
+	private function _series_list_to_array($series = string)
+	{
+		$arr_series = array();
+		$series = str_replace(" ", "", $series);
+		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
+		foreach ($arr_series as $k => $v)
+		{
+			$arr_series[$k] = preg_replace('/^01/', '1', $v);
+		}
+
+		return $arr_series;
+	}
+
 	function get_historia($series = string)
 	{
 		$result = array();
@@ -39,13 +53,7 @@ class Analisis_series_model extends CI_Model {
 
 	function get_despacho($series = string)
 	{
-		$result = array();
-		$series = str_replace(" ", "", $series);
-		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
-		foreach ($arr_series as $k => $v)
-		{
-			$arr_series[$k] = preg_replace('/^01/', '1', $v);
-		}
+		$arr_series = $this->_series_list_to_array($series);
 
 		if (count($arr_series) > 0)
 		{
