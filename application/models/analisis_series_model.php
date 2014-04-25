@@ -9,14 +9,25 @@ class Analisis_series_model extends CI_Model {
 	}
 
 
-	private function _series_list_to_array($series = string)
+	private function _series_list_to_array($series = string, $tipo = 'SAP')
 	{
 		$arr_series = array();
 		$series = str_replace(" ", "", $series);
 		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
 		foreach ($arr_series as $k => $v)
 		{
-			$arr_series[$k] = preg_replace('/^01/', '1', $v);
+			$serie_temp = $v;
+			// Modificaciones de formato SAP
+			if ($tipo == 'SAP')
+			{
+				$serie_temp = preg_replace('/^01/', '1', $serie_temp);
+				$arr_series[$k] = (strlen($serie_temp) == '19') ? substr($serie_temp, 1, 18) : $serie_temp;
+			}
+			// Modificaciones de formato SCL
+			else
+			{
+				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
+			}
 		}
 
 		return $arr_series;
@@ -27,22 +38,22 @@ class Analisis_series_model extends CI_Model {
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
-		foreach ($arr_series as $serie)
+		if (count($arr_series) > 0)
 		{
-			$this->db->limit(100);
+			$this->db->limit(3000);
 			$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.nom_usuario, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
 			$this->db->from('bd_logistica..mov_hist');
 			$this->db->join('bd_logistica..cp_cmv', 'mov_hist.cmv=cp_cmv.cmv', 'left');
 			$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro=mov_hist.ce and mov_hist.alm=alm1.cod_almacen", 'left');
 			$this->db->join('bd_logistica..cp_almacenes as alm2', "alm2.centro=mov_hist.ce and mov_hist.rec=alm2.cod_almacen", 'left');
 			$this->db->join('bd_logistica..cp_usuarios', 'mov_hist.usuario=cp_usuarios.usuario', 'left');
+			$this->db->order_by('serie','asc');
 			$this->db->order_by('fecha','asc');
 			$this->db->order_by('fec_entrada_doc','asc');
-			$this->db->where(array('serie' => $serie));
-			array_push($result, $this->db->get()->result_array());
-		}
+			$this->db->where_in('serie', $arr_series);
 
-		return $result;
+			return $this->db->get()->result_array();
+		}
 	}
 
 
@@ -52,10 +63,12 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-				$this->db->select('convert(varchar(20),fecha,120) as fecha_despacho, *');
-				$this->db->from('bd_logistica..despachos_sap');
-				$this->db->where_in('n_serie', $arr_series);
-				return $this->db->get()->result_array();
+			$this->db->limit(1000);
+			$this->db->select('convert(varchar(20),fecha,120) as fecha_despacho, *');
+			$this->db->from('bd_logistica..despachos_sap');
+			$this->db->where_in('n_serie', $arr_series);
+
+			return $this->db->get()->result_array();
 		}
 	}
 
@@ -65,28 +78,27 @@ class Analisis_series_model extends CI_Model {
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
-		foreach ($arr_series as $serie)
+		if (count($arr_series) > 0)
 		{
-			$this->db->limit(100);
+			$this->db->limit(1000);
 			$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.des_almacen, cp_usuarios.*, al_articulos.*');
 			$this->db->from('bd_logistica..bd_stock_sap');
 			$this->db->join('bd_logistica..al_articulos', 'bd_stock_sap.material = al_articulos.cod_articulo', 'left');
 			$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen and bd_stock_sap.centro=cp_almacenes.centro', 'left');
 			$this->db->join('bd_logistica..cp_usuarios', 'bd_stock_sap.modificado_por=cp_usuarios.usuario', 'left');
-			$this->db->where(array('serie' => $serie));
-			array_push($result, $this->db->get()->result_array());
-		}
+			$this->db->where_in('serie', $arr_series);
 
-		return $result;
+			return $this->db->get()->result_array();
+		}
 	}
 
 	function get_stock_scl($series = string) {
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
-		foreach ($arr_series as $serie)
+		if (count($arr_series) > 0)
 		{
-			$this->db->limit(100);
+			$this->db->limit(1000);
 			$this->db->select('bd_stock_scl.*, convert(varchar(20), FECHA_STOCK, 103) as FECHA, al_bodegas.*, al_tipos_bodegas.*, al_articulos.*, al_tipos_stock.*, al_usos.*, al_estados.*');
 			$this->db->from('bd_logistica..bd_stock_scl');
 			$this->db->join('bd_logistica..al_bodegas', 'cast(bd_stock_scl.cod_bodega as varchar(10)) = al_bodegas.cod_bodega', 'left');
@@ -95,8 +107,9 @@ class Analisis_series_model extends CI_Model {
 			$this->db->join('bd_logistica..al_tipos_stock', 'bd_stock_scl.tip_stock = al_tipos_stock.tipo_stock', 'left');
 			$this->db->join('bd_logistica..al_estados', 'bd_stock_scl.cod_estado = al_estados.cod_estado', 'left');
 			$this->db->join('bd_logistica..al_usos', 'bd_stock_scl.cod_uso = al_usos.cod_uso', 'left');
-			$this->db->where(array('serie_sap' => $serie));
-			array_push($result, $this->db->get()->result_array());
+			$this->db->where_in('serie_sap', $arr_series);
+
+			return $this->db->get()->result_array();
 		}
 
 		return $result;
@@ -105,32 +118,25 @@ class Analisis_series_model extends CI_Model {
 	public function get_trafico($series = "")
 	{
 		$result = array();
-		$arr_series = explode("\n", $series);
+		$arr_series = $this->_series_list_to_array($series, 'SCL');
+
 		foreach ($arr_series as $serie)
 		{
-			$serie = trim($serie);
-			if (substr($serie,0,1) == '1' and strlen($serie) == 14)
-			{
-				$serie = "0" . $serie;
-			}
+			$serie = substr($serie,0,14) . "0";
 
-			if ($serie != "")
-			{
-				$serie = substr($serie,0,14) . "0";
-
-				$row = $this->db->query('select distinct ano as ano, mes as mes from bd_controles.dbo.trafico_dias_procesados where ano*100+mes in (select max(ano*100+mes) from bd_controles.dbo.trafico_dias_procesados)')->row();
-				$ano = $row->ano;
-				$mes = $row->mes;
-				$this->db->select('t.*, a.*, c.*, b.*, convert(varchar(20), a.fec_alta, 103) as fecha_alta, convert(varchar(20), a.fec_baja, 103) as fecha_baja');
-				$this->db->from('bd_logistica..trafico_mes t');
-				$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
-				$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
-				$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
-				$this->db->where(array('ano' => $row->ano, 'mes' => $row->mes, 'imei'=> $serie));
-				$this->db->order_by('imei, fec_alta');
-				array_push($result, $this->db->get()->result_array());
-			}
+			$row = $this->db->query('select distinct ano as ano, mes as mes from bd_controles.dbo.trafico_dias_procesados where ano*100+mes in (select max(ano*100+mes) from bd_controles.dbo.trafico_dias_procesados)')->row();
+			$ano = $row->ano;
+			$mes = $row->mes;
+			$this->db->select('t.*, a.*, c.*, b.*, convert(varchar(20), a.fec_alta, 103) as fecha_alta, convert(varchar(20), a.fec_baja, 103) as fecha_baja');
+			$this->db->from('bd_logistica..trafico_mes t');
+			$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
+			$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
+			$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
+			$this->db->where(array('ano' => $row->ano, 'mes' => $row->mes, 'imei'=> $serie));
+			$this->db->order_by('imei, fec_alta');
+			array_push($result, $this->db->get()->result_array());
 		}
+
 		return $result;
 	}
 
@@ -151,33 +157,26 @@ class Analisis_series_model extends CI_Model {
 	public function get_trafico_mes($series = "", $meses = array())
 	{
 		$result = array();
-		$arr_series = explode("\n", $series);
+		$arr_series = $this->_series_list_to_array($series, 'SCL');
+
 		foreach ($arr_series as $serie)
 		{
-			$serie = trim($serie);
-			if (substr($serie,0,1) == '1' and strlen($serie) == 14)
-			{
-				$serie = "0" . $serie;
-			}
-			if ($serie != "")
-			{
-				$serie = substr($serie,0,14) . "0";
+			$serie = substr($serie,0,14) . "0";
 
-				foreach($meses as $mes)
+			foreach($meses as $mes)
+			{
+				$mes_ano = substr($mes,0,4);
+				$mes_mes = substr($mes,4,2);
+				$this->db->select('t.*, a.*, c.*, b.*, convert(varchar(20), a.fec_alta, 103) as fecha_alta, convert(varchar(20), a.fec_baja, 103) as fecha_baja');
+				$this->db->from('bd_logistica..trafico_mes t');
+				$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
+				$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
+				$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
+				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie, 'cod_situacion<>' => 'BAA'));
+				$this->db->order_by('imei, fec_alta');
+				foreach($this->db->get()->result_array() as $reg)
 				{
-					$mes_ano = substr($mes,0,4);
-					$mes_mes = substr($mes,4,2);
-					$this->db->select('t.*, a.*, c.*, b.*, convert(varchar(20), a.fec_alta, 103) as fecha_alta, convert(varchar(20), a.fec_baja, 103) as fecha_baja');
-					$this->db->from('bd_logistica..trafico_mes t');
-					$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
-					$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
-					$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
-					$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie, 'cod_situacion<>' => 'BAA'));
-					$this->db->order_by('imei, fec_alta');
-					foreach($this->db->get()->result_array() as $reg)
-					{
-						$result[$serie][$reg['celular']][$mes] = $reg;
-					}
+					$result[$serie][$reg['celular']][$mes] = $reg;
 				}
 			}
 		}

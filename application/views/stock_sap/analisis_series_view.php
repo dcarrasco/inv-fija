@@ -92,28 +92,31 @@
 	<div class="panel-body collapse in" id="tabla_movimientos">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
-			<?php foreach($hist as $serie_hist): ?>
-				<tr>
-					<th>serie</th>
-					<th>fecha entrada doc</th>
-					<th>cen</th>
-					<th>alm</th>
-					<th>des_alm</th>
-					<th>rec</th>
-					<th>des_rec</th>
-					<th>cmv</th>
-					<th>desc cmv</th>
-					<!-- <th>pos</th>     -->
-					<th>material</th>
-					<th>desc material</th>
-					<th>lote</th>
-					<th>num doc</th>
-					<th>referencia</th>
-					<!-- <th>cantidad</th>  -->
-					<th>usuario</th>
-					<th>nom_usuario</th>
-				</tr>
-			<?php foreach($serie_hist as $reg_hist): ?>
+				<?php $serie_hist_ant = ''; ?>
+				<?php if (count($hist) > 0) :?>
+				<?php foreach($hist as $reg_hist): ?>
+				<?php if ($reg_hist['serie'] != $serie_hist_ant): ?>
+					<tr>
+						<th>serie</th>
+						<th>fecha entrada doc</th>
+						<th>cen</th>
+						<th>alm</th>
+						<th>des_alm</th>
+						<th>rec</th>
+						<th>des_rec</th>
+						<th>cmv</th>
+						<th>desc cmv</th>
+						<!-- <th>pos</th>     -->
+						<th>material</th>
+						<th>desc material</th>
+						<th>lote</th>
+						<th>num doc</th>
+						<th>referencia</th>
+						<!-- <th>cantidad</th>  -->
+						<th>usuario</th>
+						<th>nom_usuario</th>
+					</tr>
+				<?php endif; ?>
 				<tr>
 					<td><small><?php echo $reg_hist['serie'] ?></small></td>
 					<td><small><?php echo $reg_hist['fecha_entrada_doc'] ?></small></td>
@@ -134,8 +137,9 @@
 					<td><small><?php echo $reg_hist['usuario'] ?></small></td>
 					<td><small><?php echo $reg_hist['nom_usuario'] ?></small></td>
 				</tr>
+			<?php $serie_hist_ant = $reg_hist['serie']; ?>
 			<?php endforeach; ?>
-			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>
@@ -225,8 +229,8 @@
 					<th>modificado por</th>
 					<th>nombre usuario</th>
 				</th>
-			<?php foreach($stock as $serie_stock): ?>
-			<?php foreach($serie_stock as $reg_stock): ?>
+			<?php if (count($stock) > 0) :?>
+			<?php foreach($stock as $reg_stock): ?>
 				<tr>
 					<td><small><?php echo $reg_stock['fecha'] ?></small></td>
 					<td><small><?php echo $reg_stock['serie'] ?></small></td>
@@ -243,7 +247,7 @@
 					<td><small><?php echo $reg_stock['nom_usuario'] ?></small></td>
 				</tr>
 			<?php endforeach; ?>
-			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>
@@ -277,8 +281,8 @@
 					<th>cod estado</th>
 					<th>des estado</th>
 				</th>
-			<?php foreach($stock_scl as $serie_stock): ?>
-			<?php foreach($serie_stock as $reg_stock_scl): ?>
+			<?php if (count($stock_scl) > 0) :?>
+			<?php foreach($stock_scl as $reg_stock_scl): ?>
 				<tr>
 					<td><small><?php echo $reg_stock_scl['FECHA'] ?></small></td>
 					<td><small><?php echo $reg_stock_scl['SERIE_SAP'] ?></small></td>
@@ -296,7 +300,7 @@
 					<td><small><?php echo $reg_stock_scl['des_estado'] ?></small></td>
 				</tr>
 			<?php endforeach; ?>
-			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>
