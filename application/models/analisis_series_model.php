@@ -25,26 +25,21 @@ class Analisis_series_model extends CI_Model {
 	function get_historia($series = string)
 	{
 		$result = array();
-		$arr_series = explode("\n", $series);
-		foreach ($arr_series as $serie) {
-			$serie = trim($serie);
-			if (substr($serie,0,2) == '01')
-			{
-			$serie = substr($serie, 1);
-			}
+		$arr_series = $this->_series_list_to_array($series);
 
-			if ($serie != "") {
-				$this->db->limit(100);
-				$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.nom_usuario, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
-				$this->db->from('bd_logistica..mov_hist');
-				$this->db->join('bd_logistica..cp_cmv', 'mov_hist.cmv=cp_cmv.cmv', 'left');
-				$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro=mov_hist.ce and mov_hist.alm=alm1.cod_almacen", 'left');
-				$this->db->join('bd_logistica..cp_almacenes as alm2', "alm2.centro=mov_hist.ce and mov_hist.rec=alm2.cod_almacen", 'left');
-				$this->db->join('bd_logistica..cp_usuarios', 'mov_hist.usuario=cp_usuarios.usuario', 'left');
-				$this->db->order_by('fecha','asc');
-				$this->db->order_by('fec_entrada_doc','asc');
-				$this->db->where(array('serie' => $serie));
-				array_push($result, $this->db->get()->result_array());				}
+		foreach ($arr_series as $serie)
+		{
+			$this->db->limit(100);
+			$this->db->select('mov_hist.*, alm1.des_almacen as des_alm, alm2.des_almacen as des_rec, cp_usuarios.nom_usuario, cp_cmv.*, convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc, convert(varchar(20),fecha,103) as fec');
+			$this->db->from('bd_logistica..mov_hist');
+			$this->db->join('bd_logistica..cp_cmv', 'mov_hist.cmv=cp_cmv.cmv', 'left');
+			$this->db->join('bd_logistica..cp_almacenes as alm1', "alm1.centro=mov_hist.ce and mov_hist.alm=alm1.cod_almacen", 'left');
+			$this->db->join('bd_logistica..cp_almacenes as alm2', "alm2.centro=mov_hist.ce and mov_hist.rec=alm2.cod_almacen", 'left');
+			$this->db->join('bd_logistica..cp_usuarios', 'mov_hist.usuario=cp_usuarios.usuario', 'left');
+			$this->db->order_by('fecha','asc');
+			$this->db->order_by('fec_entrada_doc','asc');
+			$this->db->where(array('serie' => $serie));
+			array_push($result, $this->db->get()->result_array());
 		}
 
 		return $result;
@@ -65,52 +60,45 @@ class Analisis_series_model extends CI_Model {
 	}
 
 
-	function get_stock_sap($series = string) {
+	function get_stock_sap($series = string)
+	{
 		$result = array();
-		$arr_series = explode("\n", $series);
-		foreach ($arr_series as $serie) {
-			$serie = trim($serie);
-			if (substr($serie,0,2) == '01')
-			{
-			$serie = substr($serie, 1);
-			}
+		$arr_series = $this->_series_list_to_array($series);
 
-			if ($serie != "") {
-				$this->db->limit(100);
-				$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.des_almacen, cp_usuarios.*, al_articulos.*');
-				$this->db->from('bd_logistica..bd_stock_sap');
-				$this->db->join('bd_logistica..al_articulos', 'bd_stock_sap.material = al_articulos.cod_articulo', 'left');
-				$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen and bd_stock_sap.centro=cp_almacenes.centro', 'left');
-				$this->db->join('bd_logistica..cp_usuarios', 'bd_stock_sap.modificado_por=cp_usuarios.usuario', 'left');
-				$this->db->where(array('serie' => $serie));
-				array_push($result, $this->db->get()->result_array());				}
+		foreach ($arr_series as $serie)
+		{
+			$this->db->limit(100);
+			$this->db->select('bd_stock_sap.*, convert(varchar(20), fecha_stock, 103) as fecha, convert(varchar(20), modificado_el, 103) as modif_el, cp_almacenes.des_almacen, cp_usuarios.*, al_articulos.*');
+			$this->db->from('bd_logistica..bd_stock_sap');
+			$this->db->join('bd_logistica..al_articulos', 'bd_stock_sap.material = al_articulos.cod_articulo', 'left');
+			$this->db->join('bd_logistica..cp_almacenes', 'bd_stock_sap.almacen=cp_almacenes.cod_almacen and bd_stock_sap.centro=cp_almacenes.centro', 'left');
+			$this->db->join('bd_logistica..cp_usuarios', 'bd_stock_sap.modificado_por=cp_usuarios.usuario', 'left');
+			$this->db->where(array('serie' => $serie));
+			array_push($result, $this->db->get()->result_array());
 		}
+
 		return $result;
 	}
 
 	function get_stock_scl($series = string) {
 		$result = array();
-		$arr_series = explode("\n", $series);
-		foreach ($arr_series as $serie) {
-			$serie = trim($serie);
-			if (substr($serie,0,2) == '01')
-			{
-			$serie = substr($serie, 1);
-			}
+		$arr_series = $this->_series_list_to_array($series);
 
-			if ($serie != "") {
-				$this->db->limit(100);
-				$this->db->select('bd_stock_scl.*, convert(varchar(20), FECHA_STOCK, 103) as FECHA, al_bodegas.*, al_tipos_bodegas.*, al_articulos.*, al_tipos_stock.*, al_usos.*, al_estados.*');
-				$this->db->from('bd_logistica..bd_stock_scl');
-				$this->db->join('bd_logistica..al_bodegas', 'cast(bd_stock_scl.cod_bodega as varchar(10)) = al_bodegas.cod_bodega', 'left');
-				$this->db->join('bd_logistica..al_tipos_bodegas', 'cast(bd_stock_scl.tip_bodega as varchar(10)) = al_tipos_bodegas.tip_bodega', 'left');
-				$this->db->join('bd_logistica..al_articulos', 'cast(bd_stock_scl.cod_articulo as varchar(10)) = al_articulos.cod_articulo', 'left');
-				$this->db->join('bd_logistica..al_tipos_stock', 'bd_stock_scl.tip_stock = al_tipos_stock.tipo_stock', 'left');
-				$this->db->join('bd_logistica..al_estados', 'bd_stock_scl.cod_estado = al_estados.cod_estado', 'left');
-				$this->db->join('bd_logistica..al_usos', 'bd_stock_scl.cod_uso = al_usos.cod_uso', 'left');
-				$this->db->where(array('serie_sap' => $serie));
-				array_push($result, $this->db->get()->result_array());				}
+		foreach ($arr_series as $serie)
+		{
+			$this->db->limit(100);
+			$this->db->select('bd_stock_scl.*, convert(varchar(20), FECHA_STOCK, 103) as FECHA, al_bodegas.*, al_tipos_bodegas.*, al_articulos.*, al_tipos_stock.*, al_usos.*, al_estados.*');
+			$this->db->from('bd_logistica..bd_stock_scl');
+			$this->db->join('bd_logistica..al_bodegas', 'cast(bd_stock_scl.cod_bodega as varchar(10)) = al_bodegas.cod_bodega', 'left');
+			$this->db->join('bd_logistica..al_tipos_bodegas', 'cast(bd_stock_scl.tip_bodega as varchar(10)) = al_tipos_bodegas.tip_bodega', 'left');
+			$this->db->join('bd_logistica..al_articulos', 'cast(bd_stock_scl.cod_articulo as varchar(10)) = al_articulos.cod_articulo', 'left');
+			$this->db->join('bd_logistica..al_tipos_stock', 'bd_stock_scl.tip_stock = al_tipos_stock.tipo_stock', 'left');
+			$this->db->join('bd_logistica..al_estados', 'bd_stock_scl.cod_estado = al_estados.cod_estado', 'left');
+			$this->db->join('bd_logistica..al_usos', 'bd_stock_scl.cod_uso = al_usos.cod_uso', 'left');
+			$this->db->where(array('serie_sap' => $serie));
+			array_push($result, $this->db->get()->result_array());
 		}
+
 		return $result;
 	}
 
