@@ -130,64 +130,83 @@ class Stock_sap extends CI_Controller {
 			$arr_eje_x = array();
 			$arr_label_series = array();
 
+			//dbg($stock);
 			foreach($stock as $reg)
 			{
 				// si seleccionamos mas de una fecha, entonces usamos la fecha en el eje_X
-				if (count($this->input->post('fecha_ultimodia'))>0)
+				if (count($this->input->post('fecha_ultimodia'))>1 OR count($this->input->post('fecha_todas'))>1)
 				{
 					$idx_eje_x = 'fecha_stock';
-					if (!in_array("'" . $reg[$idx_eje_x] . "'", $arr_eje_x))
-					{
-						array_push($arr_eje_x, "'" . $reg[$idx_eje_x] . "'");
-					}
-				}
+					$this->_array_push_unique($arr_eje_x, "'" . $reg[$idx_eje_x] . "'");
 
-				// si seleccionamos tipos de almacen, entonces usamos el tipo de almacen como las series
-				if ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
-				{
-					// si no se ha seleccionado la apertura por almacenes, usa el tipo de almacen
-					if (!$this->input->post('almacen'))
+					// si seleccionamos tipos de almacen, entonces usamos el tipo de almacen como las series
+					if ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
 					{
-						$idx_series = 'tipo_almacen';
-						$label_serie = '{label:\'' . $reg[$idx_series] . '\'}';
-						if (!in_array($label_serie, $arr_label_series))
+						// si seleccionamos desplegar almacenes, usamos también el almacén como parte de la serie
+						if ($this->input->post('almacen'))
 						{
-							array_push($arr_label_series, $label_serie);
-						}
-					}
-					// si se selecciono apertura por almacén
-					else
-					{
-						// si hay mas de un tipo de almacen seleccionado...
-						if ($this->input->post('almacen') and count($this->input->post('tipo_alm'))>1)
-						{
-							$idx_series = 'cod_almacen';
-							$label_serie = '{label:\'' . $reg['tipo_almacen'] . '/'. $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}';
-							if (!in_array($label_serie, $arr_label_series))
+							// si hay más de un tipo de almacén, componemos la serie con tipo_alm y almacen
+							if (count($this->input->post('tipo_alm')) > 1)
 							{
-								array_push($arr_label_series, $label_serie);
+								$idx_series = 'cod_almacen';
+								$this->_array_push_unique($arr_label_series, '{label:\'' . $reg['tipo_almacen'] . '/'. $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}');
+							}
+							// si hay solo un tipo de almacén, usamos sólo el codigo de almacen como la serie
+							else
+							{
+								$idx_series = 'cod_almacen';
+								$this->_array_push_unique($arr_label_series, '{label:\'' . $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}');
 							}
 						}
-						// si hay solo un tipo de almacen seleccionado...
+						// si no seleccionamos desplegar almacenes, usamos el tipo de almacén como la serie
 						else
 						{
-							$idx_series = 'cod_almacen';
-							$label_serie = '{label:\'' . $reg[$idx_series] . '-' . $reg['des_almacen'] . '\'}';
-							if (!in_array($label_serie, $arr_label_series))
-							{
-								array_push($arr_label_series, $label_serie);
-							}
+							$idx_series = 'tipo_almacen';
+							$this->_array_push_unique($arr_label_series, '{label:\'' . $reg[$idx_series] . '\'}');
 						}
 					}
+					else if ($this->input->post('sel_tiposalm') == 'sel_almacenes')
+					{
+						$idx_series = 'cod_almacen';
+						$this->_array_push_unique($arr_label_series, '{label:\'' . $reg['centro'] . '-' . $reg[$idx_series] . ' ' . $reg['des_almacen'] . '\'}');
+					}
 				}
-				// si seleccionamos solo almacenes...
+				// si seleccionamos sólo una fecha
 				else
 				{
-					$idx_series = 'cod_bodega';
-					$label_serie = '{label:\'' . $reg['centro'] . '-' . $reg[$idx_series] . ' ' . $reg['des_almacen'] . '\'}';
-					if (!in_array($label_serie, $arr_label_series))
+					$idx_series = 'fecha_stock';
+					$this->_array_push_unique($arr_label_series, '{label:\'' . $reg[$idx_series] . '\'}');
+
+					// si seleccionamos tipos de almacen, entonces usamos el tipo de almacen como las series
+					if ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
 					{
-						array_push($arr_label_series, $label_serie);
+						// si seleccionamos desplegar almacenes, usamos también el almacén como parte de la serie
+						if ($this->input->post('almacen'))
+						{
+							// si hay más de un tipo de almacén, componemos la serie con tipo_alm y almacen
+							if (count($this->input->post('tipo_alm')) > 1)
+							{
+								$idx_eje_x = 'cod_almacen';
+								$this->_array_push_unique($arr_eje_x, '\'' . $reg['tipo_almacen'] . '/'. $reg[$idx_eje_x] . '-' . $reg['des_almacen'] . '\'');
+							}
+							// si hay solo un tipo de almacén, usamos sólo el codigo de almacen como la serie
+							else
+							{
+								$idx_eje_x = 'cod_almacen';
+								$this->_array_push_unique($arr_eje_x, '\'' . $reg[$idx_eje_x] . '-' . $reg['des_almacen'] . '\'');
+							}
+						}
+						// si no seleccionamos desplegar almacenes, usamos el tipo de almacén para el eje x
+						else
+						{
+								$idx_eje_x = 'tipo_almacen';
+								$this->_array_push_unique($arr_eje_x, '\'' . $reg[$idx_eje_x] . '\'');
+						}
+					}
+					else if ($this->input->post('sel_tiposalm') == 'sel_almacenes')
+					{
+						$idx_eje_x = 'cod_almacen';
+						$this->_array_push_unique($arr_eje_x, '\'' . $reg[$idx_eje_x] . '-' . $reg['des_almacen'] . '\'');
 					}
 				}
 
@@ -250,6 +269,15 @@ class Stock_sap extends CI_Controller {
 			$this->load->view('app_footer', $data);
 		}
 	}
+
+	private function _array_push_unique(&$arr, $valor = '')
+	{
+		if (!in_array($valor, $arr))
+		{
+			array_push($arr, $valor);
+		}
+	}
+
 
 	// --------------------------------------------------------------------
 

@@ -56,7 +56,7 @@ class stock_sap_model extends CI_Model {
 		}
 		else
 		{
-			$this->db->select('a.centro, s.cod_bodega, a.des_almacen');
+			$this->db->select('a.centro, s.cod_bodega as cod_almacen, a.des_almacen');
 			$this->db->group_by('a.centro, s.cod_bodega, a.des_almacen');
 			$this->db->order_by('a.centro, s.cod_bodega, a.des_almacen');
 		}
@@ -125,15 +125,16 @@ class stock_sap_model extends CI_Model {
 			$this->db->from($this->bd_logistica . 'cp_tiposalm t');
 			$this->db->join($this->bd_logistica . 'cp_tipos_almacenes ta', 'ta.id_tipo = t.id_tipo');
 			$this->db->join($this->bd_logistica . 'cp_almacenes a',        'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+
 			if (in_array('material', $mostrar))
 			{
-				$this->db->join($this->bd_logistica . 'stock_scl s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+				$this->db->join($this->bd_logistica . 'stock_scl s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 				$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
 
 			}
 			else
 			{
-				$this->db->join($this->bd_logistica . 'stock_scl_res01 s',     's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
+				$this->db->join($this->bd_logistica . 'stock_scl_res01 s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 
 			}
 		}
