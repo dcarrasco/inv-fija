@@ -129,82 +129,94 @@ Formato del archivo:
 </form>
 
 <script type="text/javascript">
-	var arrDatos = [],
-		arrErrores = [],
-		curr = 0,
-		cant = 0,
-		cantErrores = 0,
-		cantProc = 0;
+	var subeStock = {
+		arrDatos    : [],
+		arrErrores  : [],
+		curr        : 0,
+		cant        : 0,
+		cantErrores : 0,
+		cantProc    : 0,
 
-	function proc_linea_carga(objLinea) {
-		$('#id_id').val(objLinea.id);
-		$('#id_id_inv').val(objLinea.id_inv);
-		$('#id_hoja').val(objLinea.hoja);
-		$('#id_aud').val(objLinea.aud);
-		$('#id_dig').val(objLinea.dig);
-		$('#id_ubic').val(objLinea.ubic);
-		//$('#id_hu').val(objLinea.hu);
-		$('#id_cat').val(objLinea.cat);
-		$('#id_desc').val(objLinea.desc);
-		$('#id_lote').val(objLinea.lote);
-		$('#id_cen').val(objLinea.cen);
-		$('#id_alm').val(objLinea.alm);
-		$('#id_um').val(objLinea.um);
-		$('#id_ssap').val(objLinea.ssap);
-		$('#id_sfis').val(objLinea.sfis);
-		$('#id_obs').val(objLinea.obs);
-		$('#id_fec').val(objLinea.fec);
-		$('#id_nvo').val(objLinea.nvo);
+		proc_linea_carga: function(objLinea) {
+			$('#id_id').val(objLinea.id);
+			$('#id_id_inv').val(objLinea.id_inv);
+			$('#id_hoja').val(objLinea.hoja);
+			$('#id_aud').val(objLinea.aud);
+			$('#id_dig').val(objLinea.dig);
+			$('#id_ubic').val(objLinea.ubic);
+			//$('#id_hu').val(objLinea.hu);
+			$('#id_cat').val(objLinea.cat);
+			$('#id_desc').val(objLinea.desc);
+			$('#id_lote').val(objLinea.lote);
+			$('#id_cen').val(objLinea.cen);
+			$('#id_alm').val(objLinea.alm);
+			$('#id_um').val(objLinea.um);
+			$('#id_ssap').val(objLinea.ssap);
+			$('#id_sfis').val(objLinea.sfis);
+			$('#id_obs').val(objLinea.obs);
+			$('#id_fec').val(objLinea.fec);
+			$('#id_nvo').val(objLinea.nvo);
+			this.arrDatos.push($('#frm_aux').serialize());
+		},
 
-		arrDatos.push($('#frm_aux').serialize());
-	}
+		procesa_carga: function() {
+			var sdata;
+			this.cantErrores = 0;
+			$('#reg_error').text(this.cantErrores);
 
-	function procesa_carga() {
-		var sdata,
-			cantErrores = 0;
-		$('#reg_error').text(cantErrores);
-
-		while (arrDatos.length > 0) {
-			sdata = arrDatos.shift();
-			cantProc += 1;
-			if (cantProc == 1) {
-				$('#ejecuta_carga').addClass('disabled');
+			while (this.arrDatos.length > 0) {
+				sdata = this.arrDatos.shift();
+				this.cantProc += 1;
+				if (this.cantProc == 1) {
+					$('#ejecuta_carga').addClass('disabled');
+				}
+				this.procesa_carga_linea(sdata);
 			}
-			procesa_carga_linea(sdata);
-		}
-		arrDatos = arrErrores;
+			this.arrDatos = this.arrErrores;
+		},
+
+		procesa_carga_linea: function(datosLinea) {
+			$.ajax({
+				type:  "POST",
+				url:   js_base_url + "inventario_analisis/inserta_linea_archivo",
+				async: true,
+				data:  datosLinea,
+				success: function(datos) {
+					subeStock.curr += 1;
+					var progreso = parseInt(100 * subeStock.curr / subeStock.cant) + '%';
+					$('div.progress-bar').css('width',progreso);
+					$('div.progress-bar').text(progreso);
+					$('#reg_actual').text(subeStock.curr);
+
+					if (subeStock.curr >= subeStock.cant) {
+						$('#status_progreso1').html('Carga finalizada (' + subeStock.curr + ' registros cargados)');
+					}
+				},
+				error: function() {
+					subeStock.cantErrores += 1;
+					subeStock.arrErrores.push(datosLinea);
+					$('#reg_error').text(subeStock.cantErrores);
+				},
+				complete: function() {
+					subeStock.cantProc -= 1;
+					if (subeStock.cantProc == 0) {
+						$('#ejecuta_carga').removeClass('disabled');
+					}
+				},
+			});
+		},
+
+		setCant: function() {
+			this.cant = this.arrDatos.length;
+		},
+
+		getCantDatos: function() {
+			return this.arrDatos.length;
+		},
 	}
 
-	function procesa_carga_linea(datos_linea) {
-		$.ajax({
-			type:  "POST",
-			url:   js_base_url + "inventario_analisis/inserta_linea_archivo",
-			async: true,
-			data:  datos_linea,
-			success: function(datos) {
-				curr += 1;
-				var progreso = parseInt(100 * curr / cant) + '%';
-				$('div.progress-bar').css('width',progreso);
-				$('div.progress-bar').text(progreso);
-				$('#reg_actual').text(curr);
 
-				if (curr >= cant) {
-					$('#status_progreso1').html('Carga finalizada (' + curr + ' registros cargados)');
-				}
-			},
-			error: function() {
-				cantErrores += 1;
-				arrErrores.push(datos_linea);
-				$('#reg_error').text(cantErrores);
-			},
-			complete: function() {
-				cantProc -= 1;
-				if (cantProc == 0) {
-					$('#ejecuta_carga').removeClass('disabled');
-				}
-			},
-		});
-	}
+
 </script>
 
 
@@ -213,18 +225,16 @@ $(document).ready(function() {
 
 	$('#ejecuta_carga').click(function (event) {
 		event.preventDefault();
-		//$('div.progress-bar').css('width', '0%');
-		while (arrDatos.length > 0) {
-			procesa_carga();
+		while (subeStock.getCantDatos() > 0) {
+			subeStock.procesa_carga();
 		}
-		if (arrDatos.length == 0)
-		{
+		if (subeStock.getCantDatos() == 0) {
 			$('#ejecuta_carga').addClass('disabled');
 		}
 	})
 
 	<?php echo $script_carga; ?>
-	cant = arrDatos.length;
+	subeStock.setCant();
 
 //$('#barra_progreso').text('Proceso finalizado.');
 });

@@ -113,7 +113,7 @@ class Inventario extends ORM_Model {
 					$count_OK += 1;
 					if ($resultado_procesa_linea != '')
 					{
-						$script_carga .= 'proc_linea_carga({count:' . $c . ',' . $resultado_procesa_linea . '});' . "\n";
+						$script_carga .= 'subeStock.proc_linea_carga({count:' . $c . ',' . $resultado_procesa_linea . '});' . "\n";
 					}
 				}
 			}
