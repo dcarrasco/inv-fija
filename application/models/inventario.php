@@ -113,7 +113,7 @@ class Inventario extends ORM_Model {
 					$count_OK += 1;
 					if ($resultado_procesa_linea != '')
 					{
-						$script_carga .= 'proc_linea_carga(' . $c . ',' . $resultado_procesa_linea . ');' . "\n";
+						$script_carga .= 'proc_linea_carga({count:' . $c . ',' . $resultado_procesa_linea . '});' . "\n";
 					}
 				}
 			}
@@ -168,24 +168,24 @@ class Inventario extends ORM_Model {
 					if (is_numeric($stock_sap) and is_numeric($hoja))
 					{
 						return (
-							'0,' .
-							$this->id . ',' .
-							$hoja                . ',' .
-							'0,' .
-							'0,' .
-							'\'' . $ubicacion    . '\',' .
-							// '\'' . $hu           . '\',' .
-							'\'' . $catalogo     . '\',' .
-							'\'' . $descripcion  . '\',' .
-							'\'' . $lote         . '\',' .
-							'\'' . $centro       . '\',' .
-							'\'' . $almacen      . '\',' .
-							'\'' . $um           . '\',' .
-							$stock_sap           . ',' .
-							'0,' .
-							'\'\',' .
-							'\'' . date('Ymd H:i:s') . '\',' .
-							'\'\''
+							'id:0' .
+							',id_inv:' . $this->id .
+							',hoja:'   . $hoja .
+							',aud:0'  .
+							',dig:0'  .
+							',ubic:\'' . $ubicacion    . '\'' .
+							// ',hu:\'' . $hu           . '\'' .
+							',cat:\''  . $catalogo     . '\'' .
+							',desc:\'' . $descripcion  . '\'' .
+							',lote:\'' . $lote         . '\'' .
+							',cen:\''  . $centro       . '\'' .
+							',alm:\''  . $almacen      . '\'' .
+							',um:\''   . $um           . '\'' .
+							',ssap:'   . $stock_sap           .
+							',sfis:0'  .
+							',obs:\'\'' .
+							',fec:\''  . date('Ymd H:i:s') . '\'' .
+							',nvo:\'\''
 							);
 
 					}

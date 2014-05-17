@@ -129,52 +129,50 @@ Formato del archivo:
 </form>
 
 <script type="text/javascript">
-	var arr_datos = [];
-	var arr_ok    = [];
-	var arr_error = [];
-	var curr = 0;
-	var cerr = 0;
-	var cant = 0;
-	var cproc = 0;
+	var arrDatos = [],
+		arrErrores = [],
+		curr = 0,
+		cant = 0,
+		cantErrores = 0,
+		cantProc = 0;
 
-	// hu entre ubic y cat
-	function proc_linea_carga(count, id, id_inv, hoja, aud, dig, ubic, cat, desc, lote, cen, alm, um, ssap, sfis, obs, fec, nvo) {
-		$('#id_id').val(id);
-		$('#id_id_inv').val(id_inv);
-		$('#id_hoja').val(hoja);
-		$('#id_aud').val(aud);
-		$('#id_dig').val(dig);
-		$('#id_ubic').val(ubic);
-		//$('#id_hu').val(hu);
-		$('#id_cat').val(cat);
-		$('#id_desc').val(desc);
-		$('#id_lote').val(lote);
-		$('#id_cen').val(cen);
-		$('#id_alm').val(alm);
-		$('#id_um').val(um);
-		$('#id_ssap').val(ssap);
-		$('#id_sfis').val(sfis);
-		$('#id_obs').val(obs);
-		$('#id_fec').val(fec);
-		$('#id_nvo').val(nvo);
+	function proc_linea_carga(objLinea) {
+		$('#id_id').val(objLinea.id);
+		$('#id_id_inv').val(objLinea.id_inv);
+		$('#id_hoja').val(objLinea.hoja);
+		$('#id_aud').val(objLinea.aud);
+		$('#id_dig').val(objLinea.dig);
+		$('#id_ubic').val(objLinea.ubic);
+		//$('#id_hu').val(objLinea.hu);
+		$('#id_cat').val(objLinea.cat);
+		$('#id_desc').val(objLinea.desc);
+		$('#id_lote').val(objLinea.lote);
+		$('#id_cen').val(objLinea.cen);
+		$('#id_alm').val(objLinea.alm);
+		$('#id_um').val(objLinea.um);
+		$('#id_ssap').val(objLinea.ssap);
+		$('#id_sfis').val(objLinea.sfis);
+		$('#id_obs').val(objLinea.obs);
+		$('#id_fec').val(objLinea.fec);
+		$('#id_nvo').val(objLinea.nvo);
 
-		arr_datos.push($('#frm_aux').serialize());
+		arrDatos.push($('#frm_aux').serialize());
 	}
 
 	function procesa_carga() {
-		var sdata;
-		cerr = 0;
-		$('#reg_error').text(cerr);
+		var sdata,
+			cantErrores = 0;
+		$('#reg_error').text(cantErrores);
 
-		while (arr_datos.length > 0) {
-			sdata = arr_datos.shift();
-			cproc += 1;
-			if (cproc == 1) {
+		while (arrDatos.length > 0) {
+			sdata = arrDatos.shift();
+			cantProc += 1;
+			if (cantProc == 1) {
 				$('#ejecuta_carga').addClass('disabled');
 			}
 			procesa_carga_linea(sdata);
 		}
-		arr_datos = arr_error;
+		arrDatos = arrErrores;
 	}
 
 	function procesa_carga_linea(datos_linea) {
@@ -195,13 +193,13 @@ Formato del archivo:
 				}
 			},
 			error: function() {
-				cerr += 1;
-				arr_error.push(datos_linea);
-				$('#reg_error').text(cerr);
+				cantErrores += 1;
+				arrErrores.push(datos_linea);
+				$('#reg_error').text(cantErrores);
 			},
 			complete: function() {
-				cproc -= 1;
-				if (cproc == 0) {
+				cantProc -= 1;
+				if (cantProc == 0) {
 					$('#ejecuta_carga').removeClass('disabled');
 				}
 			},
@@ -216,17 +214,17 @@ $(document).ready(function() {
 	$('#ejecuta_carga').click(function (event) {
 		event.preventDefault();
 		//$('div.progress-bar').css('width', '0%');
-		while (arr_datos.length > 0) {
+		while (arrDatos.length > 0) {
 			procesa_carga();
 		}
-		if (arr_datos.length == 0)
+		if (arrDatos.length == 0)
 		{
 			$('#ejecuta_carga').addClass('disabled');
 		}
 	})
 
 	<?php echo $script_carga; ?>
-	cant = arr_datos.length
+	cant = arrDatos.length;
 
 //$('#barra_progreso').text('Proceso finalizado.');
 });
