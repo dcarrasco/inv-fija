@@ -107,10 +107,10 @@
 				<td class="text-center"><strong><?php echo number_format($sum_fisico - $sum_sap + $sum_ajuste,0,',','.'); ?></strong></td>
 				<td></td>
 				<td>
-					<a href="#" class="btn btn-primary" id="btn_guardar">
+					<button type="submit" class="btn btn-primary">
 						<span class="glyphicon glyphicon-ok-sign"></span>
 						Guardar ajustes
-					</a>
+					</button>
 				</td>
 			</tr>
 		</tbody>
@@ -121,13 +121,3 @@
 <div class="text-center">
 	<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
 </div>
-
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('#btn_guardar').click(function(event) {
-			event.preventDefault();
-			$('form#frm_inventario').submit();
-		});
-
-	});
-</script>
