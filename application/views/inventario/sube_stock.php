@@ -107,27 +107,6 @@ Formato del archivo:
 	</div>
 </div>
 
-<form id="frm_aux">
-	<input type="hidden" name="id" id="id_id" value="">
-	<input type="hidden" name="id_inv" id="id_id_inv" value="">
-	<input type="hidden" name="hoja" id="id_hoja" value="">
-	<input type="hidden" name="aud" id="id_aud" value="">
-	<input type="hidden" name="dig" id="id_dig" value="">
-	<input type="hidden" name="ubic" id="id_ubic" value="">
-	<!-- <input type="hidden" name="hu" id="id_hu" value=""> -->
-	<input type="hidden" name="cat" id="id_cat" value="">
-	<input type="hidden" name="desc" id="id_desc" value="">
-	<input type="hidden" name="lote" id="id_lote" value="">
-	<input type="hidden" name="cen" id="id_cen" value="">
-	<input type="hidden" name="alm" id="id_alm" value="">
-	<input type="hidden" name="um" id="id_um" value="">
-	<input type="hidden" name="ssap" id="id_ssap" value="">
-	<input type="hidden" name="sfis" id="id_sfis" value="">
-	<input type="hidden" name="obs" id="id_obs" value="">
-	<input type="hidden" name="fec" id="id_fec" value="">
-	<input type="hidden" name="nvo" id="id_nvo" value="">
-</form>
-
 <script type="text/javascript">
 	var subeStock = {
 		arrDatos    : [],
@@ -138,68 +117,52 @@ Formato del archivo:
 		cantProc    : 0,
 
 		proc_linea_carga: function(objLinea) {
-			$('#id_id').val(objLinea.id);
-			$('#id_id_inv').val(objLinea.id_inv);
-			$('#id_hoja').val(objLinea.hoja);
-			$('#id_aud').val(objLinea.aud);
-			$('#id_dig').val(objLinea.dig);
-			$('#id_ubic').val(objLinea.ubic);
-			//$('#id_hu').val(objLinea.hu);
-			$('#id_cat').val(objLinea.cat);
-			$('#id_desc').val(objLinea.desc);
-			$('#id_lote').val(objLinea.lote);
-			$('#id_cen').val(objLinea.cen);
-			$('#id_alm').val(objLinea.alm);
-			$('#id_um').val(objLinea.um);
-			$('#id_ssap').val(objLinea.ssap);
-			$('#id_sfis').val(objLinea.sfis);
-			$('#id_obs').val(objLinea.obs);
-			$('#id_fec').val(objLinea.fec);
-			$('#id_nvo').val(objLinea.nvo);
-			this.arrDatos.push($('#frm_aux').serialize());
+			this.arrDatos.push(objLinea);
+			this.cant = this.arrDatos.length;
 		},
 
 		procesa_carga: function() {
-			var sdata;
+			var sData;
 			this.cantErrores = 0;
 			$('#reg_error').text(this.cantErrores);
 
 			while (this.arrDatos.length > 0) {
-				sdata = this.arrDatos.shift();
+				sData = this.arrDatos.shift();
 				this.cantProc += 1;
 				if (this.cantProc == 1) {
 					$('#ejecuta_carga').addClass('disabled');
 				}
-				this.procesa_carga_linea(sdata);
+				this.procesa_carga_linea(sData);
 			}
 			this.arrDatos = this.arrErrores;
 		},
 
 		procesa_carga_linea: function(datosLinea) {
+			var _this = this;
 			$.ajax({
 				type:  "POST",
 				url:   js_base_url + "inventario_analisis/inserta_linea_archivo",
 				async: true,
 				data:  datosLinea,
 				success: function(datos) {
-					subeStock.curr += 1;
-					var progreso = parseInt(100 * subeStock.curr / subeStock.cant) + '%';
+					_this.curr += 1;
+					var progreso = parseInt(100 * _this.curr / _this.cant) + '%';
 					$('div.progress-bar').css('width',progreso);
 					$('div.progress-bar').text(progreso);
-					$('#reg_actual').text(subeStock.curr);
+					$('#reg_actual').text(_this.curr);
 
-					if (subeStock.curr >= subeStock.cant) {
-						$('#status_progreso1').html('Carga finalizada (' + subeStock.curr + ' registros cargados)');
+					if (_this.curr >= _this.cant) {
+						$('#status_progreso1').html('Carga finalizada (' + _this.curr + ' registros cargados)');
 					}
 				},
 				error: function() {
-					subeStock.cantErrores += 1;
-					subeStock.arrErrores.push(datosLinea);
-					$('#reg_error').text(subeStock.cantErrores);
+					_this.cantErrores += 1;
+					_this.arrErrores.push(datosLinea);
+					$('#reg_error').text(_this.cantErrores);
 				},
 				complete: function() {
-					subeStock.cantProc -= 1;
-					if (subeStock.cantProc == 0) {
+					_this.cantProc -= 1;
+					if (_this.cantProc == 0) {
 						$('#ejecuta_carga').removeClass('disabled');
 					}
 				},
@@ -234,8 +197,6 @@ $(document).ready(function() {
 	})
 
 	<?php echo $script_carga; ?>
-	subeStock.setCant();
 
-//$('#barra_progreso').text('Proceso finalizado.');
 });
 </script>

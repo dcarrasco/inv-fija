@@ -215,8 +215,8 @@ class Inventario_analisis extends CI_Controller {
 		$detalle->reg_nuevo	         = $this->input->post('nvo');
 		$detalle->fecha_modificacion = $this->input->post('fec');
 		$detalle->observacion        = $this->input->post('obs');
-		$detalle->stock_ajuste       = 0;
-		$detalle->glosa_ajuste       = '';
+		$detalle->stock_ajuste       = $this->input->post('saju');
+		$detalle->glosa_ajuste       = $this->input->post('gaju');
 		$detalle->grabar();
 	}
 

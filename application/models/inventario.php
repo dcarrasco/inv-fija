@@ -156,9 +156,10 @@ class Inventario extends ORM_Model {
 				$stock_sap   = trim($arr_datos[7]);
 				$hoja        = trim($arr_datos[8]);
 
-				if ($ubicacion == 'UBICACION' or $catalogo == 'CATALOGO' or $centro    == 'CENTRO' or
-					$almacen   == 'ALMACEN'   or $lote     == 'LOTE'     or $um        == 'UM'     or
-					$stock_sap == 'STOCK_SAP' or $hoja     == 'HOJA') // or $hu        == 'HU'
+				if (strtoupper($ubicacion) == 'UBICACION' OR strtoupper($catalogo) == 'CATALOGO' OR
+					strtoupper($centro)    == 'CENTRO'    OR strtoupper($almacen)  == 'ALMACEN'  OR
+					strtoupper($lote)      == 'LOTE'      OR strtoupper($um)       == 'UM'       OR
+					strtoupper($stock_sap) == 'STOCK_SAP' OR strtoupper($hoja)     == 'HOJA') // OR $hu        == 'HU'
 				{
 					// cabecera del archivo, no se hace nada
 					return 'no_procesar';
@@ -185,7 +186,9 @@ class Inventario extends ORM_Model {
 							',sfis:0'  .
 							',obs:\'\'' .
 							',fec:\''  . date('Ymd H:i:s') . '\'' .
-							',nvo:\'\''
+							',nvo:\'\'' .
+							',saju:0'   .
+							',gaju:\'\''
 							);
 
 					}
