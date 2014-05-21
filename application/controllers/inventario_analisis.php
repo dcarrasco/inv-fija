@@ -198,25 +198,7 @@ class Inventario_analisis extends CI_Controller {
 	public function inserta_linea_archivo()
 	{
 		$detalle = new Detalle_inventario;
-		$detalle->id_inventario      = $this->input->post('id_inv');
-		$detalle->hoja               = $this->input->post('hoja');
-		$detalle->ubicacion          = $this->input->post('ubic');
-		$detalle->hu                 = $this->input->post('hu');
-		$detalle->catalogo           = $this->input->post('cat');
-		$detalle->descripcion        = $this->input->post('desc');
-		$detalle->lote               = $this->input->post('lote');
-		$detalle->centro             = $this->input->post('cen');
-		$detalle->almacen            = $this->input->post('alm');
-		$detalle->um                 = $this->input->post('um');
-		$detalle->stock_sap          = $this->input->post('ssap');
-		$detalle->stock_fisico       = $this->input->post('sfis');
-		$detalle->digitador          = $this->input->post('aud');
-		$detalle->auditor            = $this->input->post('dig');
-		$detalle->reg_nuevo	         = $this->input->post('nvo');
-		$detalle->fecha_modificacion = $this->input->post('fec');
-		$detalle->observacion        = $this->input->post('obs');
-		$detalle->stock_ajuste       = $this->input->post('saju');
-		$detalle->glosa_ajuste       = $this->input->post('gaju');
+		$detalle->recuperar_post();
 		$detalle->grabar();
 	}
 

@@ -170,25 +170,25 @@ class Inventario extends ORM_Model {
 					{
 						return (
 							'id:0' .
-							',id_inv:' . $this->id .
-							',hoja:'   . $hoja .
-							',aud:0'  .
-							',dig:0'  .
-							',ubic:\'' . $ubicacion    . '\'' .
-							// ',hu:\'' . $hu           . '\'' .
-							',cat:\''  . $catalogo     . '\'' .
-							',desc:\'' . $descripcion  . '\'' .
-							',lote:\'' . $lote         . '\'' .
-							',cen:\''  . $centro       . '\'' .
-							',alm:\''  . $almacen      . '\'' .
-							',um:\''   . $um           . '\'' .
-							',ssap:'   . $stock_sap           .
-							',sfis:0'  .
-							',obs:\'\'' .
-							',fec:\''  . date('Ymd H:i:s') . '\'' .
-							',nvo:\'\'' .
-							',saju:0'   .
-							',gaju:\'\''
+							',id_inventario:' . $this->id .
+							',hoja:'          . $hoja .
+							',ubicacion:\''   . $ubicacion    . '\'' .
+							',hu:\'\''        .
+							',catalogo:\''    . $catalogo     . '\'' .
+							',descripcion:\'' . $descripcion  . '\'' .
+							',lote:\''        . $lote         . '\'' .
+							',centro:\''      . $centro       . '\'' .
+							',almacen:\''     . $almacen      . '\'' .
+							',um:\''          . $um           . '\'' .
+							',stock_sap:'     . $stock_sap           .
+							',stock_fisico:0' .
+							',digitador:0'    .
+							',auditor:0'      .
+							',observacion:\'\'' .
+							',fecha_modificacion:\''  . date('Ymd H:i:s') . '\'' .
+							',reg_nuevo:\'\'' .
+							',stock_ajuste:0' .
+							',glosa_ajuste:\'\''
 							);
 
 					}
