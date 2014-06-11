@@ -66,15 +66,20 @@ $(document).ready(function() {
 	});
 
 	$('#filtrar_material').keyup(function (event) {
-		$('tr.not_found').show();
-		$('tr.not_found').removeClass('not_found');
-
 		var a_buscar = $('#filtrar_material').val().toUpperCase();
-		if (a_buscar != '') {
+		if (a_buscar.length > 2) {
+			$('tr.not_found').show();
+			$('tr.not_found').removeClass('not_found');
+
 			$('table tr').each(function() {
-				var nodo_texto = $(this).children('td:eq(1)');
-				if (nodo_texto.size() > 0) {
-					if (nodo_texto.html().toUpperCase().indexOf(a_buscar) == -1) {
+				console.log()
+				var nodo_texto1 = $(this).children('td:eq(1)'),
+					nodo_texto2 = $(this).children('td:eq(2)'),
+					nodo_texto;
+
+				if (nodo_texto1.size() > 0 || nodo_texto2.size() > 0) {
+					nodo_texto = nodo_texto1.html() + nodo_texto2.html();
+					if (nodo_texto.toUpperCase().indexOf(a_buscar) == -1) {
 						$(this).addClass('not_found');
 					}
 				}
