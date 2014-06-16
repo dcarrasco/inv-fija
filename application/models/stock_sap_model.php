@@ -154,13 +154,23 @@ class stock_sap_model extends CI_Model {
 			else
 			{
 				$this->db->join($this->bd_logistica . 'stock_scl_res01 s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
-
 			}
 		}
 		else
 		{
-			$this->db->from($this->bd_logistica . 'stock_scl_res01 s');
-			$this->db->join($this->bd_logistica . 'cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			if (in_array('material', $mostrar))
+			{
+				$this->db->from($this->bd_logistica . 'stock_scl s');
+				$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
+				$this->db->join($this->bd_logistica . 'cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			}
+			else
+			{
+				$this->db->from($this->bd_logistica . 'stock_scl_res01 s');
+				$this->db->join($this->bd_logistica . 'cp_almacenes a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
+			}
+
+
 		}
 
 
