@@ -61,6 +61,14 @@ class stock_sap_model extends CI_Model {
 			$this->db->order_by('a.centro, s.cod_bodega, a.des_almacen');
 		}
 
+		// lotes
+		if (in_array('lote', $mostrar))
+		{
+			$this->db->select('s.lote');
+			$this->db->group_by('s.lote');
+			$this->db->order_by('lote');
+		}
+
 		// tipos de articulos
 		if (in_array('tipo_articulo', $mostrar))
 		{
@@ -85,38 +93,49 @@ class stock_sap_model extends CI_Model {
 			$this->db->order_by('s.cod_articulo');
 		}
 
-		// lotes
-		if (in_array('lote', $mostrar))
-		{
-			$this->db->select('s.lote');
-			$this->db->group_by('s.lote');
-		}
 
 		// cantidades y tipos de stock
 		if (in_array('tipo_stock', $mostrar))
 		{
-			$this->db->select_sum('s.LU','LU');
-			$this->db->select_sum('s.BQ','BQ');
-			$this->db->select_sum('s.CC','CC');
-			$this->db->select_sum('s.TT','TT');
-			$this->db->select_sum('s.OT','OT');
+			if (in_array('material', $mostrar))
+			{
+				$this->db->select_sum('s.libre_utilizacion', 'LU');
+				$this->db->select_sum('s.bloqueado', 'BQ');
+				$this->db->select_sum('s.contro_calidad', 'CC');
+				$this->db->select_sum('s.transito_traslado', 'TT');
+				$this->db->select_sum('s.otros','OT');
 
-			$this->db->select_sum('s.V_LU','VAL_LU');
-			$this->db->select_sum('s.V_BQ','VAL_BQ');
-			$this->db->select_sum('s.V_CC','VAL_CC');
-			$this->db->select_sum('s.V_TT','VAL_TT');
-			$this->db->select_sum('s.V_OT','VAL_OT');
+				$this->db->select_sum('s.libre_utilizacion * p.pmp', 'VAL_LU');
+				$this->db->select_sum('s.bloqueado * p.pmp', 'VAL_BQ');
+				$this->db->select_sum('s.contro_calidad * p.pmp', 'VAL_CC');
+				$this->db->select_sum('s.transito_traslado * p.pmp', 'VAL_TT');
+				$this->db->select_sum('s.otros * p.pmp','VAL_OT');
+			}
+			else
+			{
+				$this->db->select_sum('s.LU','LU');
+				$this->db->select_sum('s.BQ','BQ');
+				$this->db->select_sum('s.CC','CC');
+				$this->db->select_sum('s.TT','TT');
+				$this->db->select_sum('s.OT','OT');
+
+				$this->db->select_sum('s.V_LU','VAL_LU');
+				$this->db->select_sum('s.V_BQ','VAL_BQ');
+				$this->db->select_sum('s.V_CC','VAL_CC');
+				$this->db->select_sum('s.V_TT','VAL_TT');
+				$this->db->select_sum('s.V_OT','VAL_OT');
+			}
 		}
 
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select_sum('s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros','total');
-			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp','monto');
+			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp','VAL_total');
 		}
 		else
 		{
 			$this->db->select_sum('s.cant','total');
-			$this->db->select_sum('s.monto','monto');
+			$this->db->select_sum('s.monto','VAL_total');
 		}
 
 		// tablas
@@ -194,11 +213,19 @@ class stock_sap_model extends CI_Model {
 				array_push($arr_filtro_tipo_stock, 'OTROS');
 			}
 
-			$this->db->where_in('s.tipo_articulo', $arr_filtro_tipo_stock);
+			if (in_array('material', $mostrar))
+			{
+				$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", $arr_filtro_tipo_stock);
+			}
+			else
+			{
+				$this->db->where_in('s.tipo_articulo', $arr_filtro_tipo_stock);
+			}
 		}
 
 		$arr_result = $this->db->get()->result_array();
 
+		//dbg($arr_result);
 
 		$arr_stock_tmp01 = array();
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
@@ -221,7 +248,7 @@ class stock_sap_model extends CI_Model {
 					{
 						$valor_total = $campo_val;
 					}
-					else if ($campo_key == 'monto')
+					else if ($campo_key == 'VAL_total')
 					{
 						$valor_monto = $campo_val;
 					}
@@ -385,7 +412,8 @@ class stock_sap_model extends CI_Model {
 			$this->db->group_by('s.estado');
 			$this->db->order_by('s.estado');
 		}
-		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE);
+
+		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
 
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')

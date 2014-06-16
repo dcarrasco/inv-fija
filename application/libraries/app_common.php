@@ -129,19 +129,19 @@ class App_common {
 				return anchor($arr_param_campo['href'] . $href_param, number_format($valor, 0, ',', '.'));
 				break;
 			case 'numero':
-				return number_format($valor, 0, ',', '.');
+				return fmt_cantidad($valor);
 				break;
 			case 'valor':
-				return '$ ' . number_format($valor, 0, ',', '.');
+				return fmt_monto($valor);
 				break;
 			case 'valor_pmp':
-				return '$ ' . number_format($valor, 0, ',' , '.');
+				return '$ ' . fmt_monto($valor);
 				break;
 			case 'numero_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_cantidad($valor) . (($valor != 0) ? '</span>' : '');
 				break;
 			case 'valor_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . '$ ' . (($valor > 0) ? '+' : '') . number_format($valor, 0, ',', '.') . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_monto($valor) . (($valor != 0) ? '</span>' : '');
 				break;
 			default:
 				return $valor;

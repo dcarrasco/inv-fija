@@ -99,9 +99,21 @@
 							</div>
 						</div>
 						<?php endif; ?>
-
 					</div>
 
+
+					<hr/>
+					<div class="form-group">
+						Mostrar
+						<div class="radio-inline">
+							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
+							cantidad
+						</div>
+						<div class="radio-inline">
+							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
+							monto
+						</div>
+					</div>
 
 					<hr/>
 					<div class="pull-right">

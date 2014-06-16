@@ -21,6 +21,38 @@ if ( ! function_exists('form_has_error'))
 }
 
 
+if ( ! function_exists('fmt_cantidad'))
+{
+	function fmt_cantidad($valor = 0, $decimales = 0)
+	{
+		return ($valor == 0) ? '' : number_format($valor, $decimales, ',', '.');
+	}
+}
+
+
+if ( ! function_exists('fmt_monto'))
+{
+	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$')
+	{
+		if ($monto == 0)
+		{
+			return '';
+		}
+		else
+		{
+			if (strtoupper($unidad) == 'UN')
+			{
+				return $signo_moneda . ' ' . number_format($monto, 0, ',', '.');
+			}
+			elseif (strtoupper($unidad) == 'MM')
+			{
+				return 'MM' . $signo_moneda . ' ' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
+			}
+		}
+	}
+}
+
+
 
 /* helpers varios_helper.php */
 /* Location: ./application/helpers/varios_helper.php */

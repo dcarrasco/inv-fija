@@ -43,6 +43,17 @@ $(document).ready(function () {
         $('div.mostrar-ocultar').parent().parent().next().toggle();
     });
 
+    $('input[name="mostrar_cant_monto"]').click(function (event) {
+        radio_selected = $('input[name="mostrar_cant_monto"]:checked');
+        if (radio_selected.val() == 'cantidad') {
+            $('table#stock td.text-right span').each(function() {$(this).text($(this).data('cantidad'))});
+            $('table#stock th.text-right span').each(function() {$(this).text($(this).data('cantidad'))});
+        } else {
+            $('table#stock td.text-right span').each(function() {$(this).text($(this).data('monto'))});
+            $('table#stock th.text-right span').each(function() {$(this).text($(this).data('monto'))});
+        }
+    });
+
 
     function jTabla(idTabla) {
         var tabla = {headers: [], datos: [], campos_sumables: [], campos_montos: []};
@@ -160,7 +171,7 @@ $(document).ready(function () {
         this.activa_subtotales_columnas = function () {
             $(idTabla + ' thead th input[name="sel_subtotal"]').click(function(event) {
                 var num_col_subtotal = $.inArray($(this).next().text(),tabla.headers);
-                
+
                 $(idTabla + ' tbody tr.subtotal').detach();
 
                 // si la columna ya estaba seleccionada, saca la marca del checkbox

@@ -49,14 +49,14 @@
 					<!-- <td><?php //echo $detalle->hu; ?></td> -->
 					<td><?php echo $detalle->hoja; ?></td>
 					<td><?php echo $detalle->um; ?></td>
-					<td class="text-center"><?php echo number_format($detalle->stock_sap,0,',','.'); ?></td>
-					<td class="text-center"><?php echo number_format($detalle->stock_fisico,0,',','.'); ?></td>
+					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
+					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_fisico); ?></td>
 					<td>
 						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm" size="5" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
 					</td>
 					<td class="text-center">
-						<?php echo number_format($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste,0,',','.'); ?>
+						<?php echo fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>
 					</td>
 					<td class="text-center">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
@@ -101,10 +101,10 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td class="text-center"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
-				<td class="text-center"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
-				<td class="text-center"><strong><?php echo number_format($sum_ajuste,0,',','.'); ?></strong></td>
-				<td class="text-center"><strong><?php echo number_format($sum_fisico - $sum_sap + $sum_ajuste,0,',','.'); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($sum_sap); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($sum_fisico); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($sum_ajuste); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($sum_fisico - $sum_sap + $sum_ajuste); ?></strong></td>
 				<td></td>
 				<td>
 					<button type="submit" class="btn btn-primary">

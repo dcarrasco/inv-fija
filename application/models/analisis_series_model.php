@@ -249,7 +249,7 @@ class Analisis_series_model extends CI_Model {
 										);
 				foreach($datos_cel as $mes => $trafico)
 				{
-					$result_final[$i][$mes] = number_format($trafico,1,'.',',');
+					$result_final[$i][$mes] = fmt_cantidad($trafico, 1);
 				}
 				$i += 1;
 			}
