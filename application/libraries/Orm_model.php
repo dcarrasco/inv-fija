@@ -142,6 +142,7 @@ class ORM_Model {
 	public function __get($key)
 	{
 		$CI =& get_instance();
+
 		return $CI->$key;
 	}
 
@@ -265,6 +266,7 @@ class ORM_Model {
 	{
 		$model_fields = $this->model_fields;
 		$relation = $model_fields[$campo]->get_relation();
+
 		return $relation['data'];
 	}
 
@@ -277,7 +279,6 @@ class ORM_Model {
 	private function _determina_campo_id()
 	{
 		$arr_key = array();
-
 		foreach ($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
@@ -303,6 +304,7 @@ class ORM_Model {
 		{
 			array_push($arr_id, $this->{$campo});
 		}
+
 		return implode($this->separador_campos, $arr_id);
 	}
 
@@ -392,7 +394,6 @@ class ORM_Model {
 					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
 				}
 			}
-
 			$this->model_fields[$campo]->set_relation($arr_relation);
 		}
 
@@ -411,10 +412,9 @@ class ORM_Model {
 	{
 		$tipo = $this->model_fields[$campo]->get_tipo();
 
-		if(($tipo == 'has_one' or $tipo == 'has_many') and !($this->model_got_relations))
+		if (($tipo == 'has_one' OR $tipo == 'has_many') AND !($this->model_got_relations))
 		{
 			$this->_recuperar_relation_fields();
-
 		}
 
 		return $this->model_fields[$campo]->get_label();
@@ -507,34 +507,31 @@ class ORM_Model {
 		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
 
 		$cfg_pagination = array(
-					'uri_segment' => 5,
-					'num_links'   => 5,
+			'uri_segment'     => 5,
+			'num_links'       => 5,
+			'full_tag_open'   => '<ul class="pagination">',
+			'flil_tag_close'  => '</ul>',
+			'first_tag_open'  => '<li>',
+			'first_tag_close' => '</li>',
+			'last_tag_open'   => '<li>',
+			'last_tag_close'  => '</li>',
+			'next_tag_open'   => '<li>',
+			'next_tag_close'  => '</li>',
+			'prev_tag_open'   => '<li>',
+			'prev_tag_close'  => '</li>',
+			'cur_tag_open'    => '<li class="active"><a href="#">',
+			'cur_tag_close'   => '</a></li>',
+			'num_tag_open'    => '<li>',
+			'num_tag_close'   => '</li>',
 
-					'full_tag_open'   => '<ul class="pagination">',
-					'flil_tag_close'  => '</ul>',
-
-					'first_tag_open'  => '<li>',
-					'first_tag_close' => '</li>',
-					'last_tag_open'   => '<li>',
-					'last_tag_close'  => '</li>',
-					'next_tag_open'   => '<li>',
-					'next_tag_close'  => '</li>',
-					'prev_tag_open'   => '<li>',
-					'prev_tag_close'  => '</li>',
-					'cur_tag_open'    => '<li class="active"><a href="#">',
-					'cur_tag_close'   => '</a></li>',
-					'num_tag_open'    => '<li>',
-					'num_tag_close'   => '</li>',
-
-
-					'per_page'    => $this->model_page_results,
-					'total_rows'  => $total_rows,
-					'base_url'    => site_url($this->uri->segment(1) . '/' . ($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
-					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
-					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
-				);
+			'per_page'    => $this->model_page_results,
+			'total_rows'  => $total_rows,
+			'base_url'    => site_url($this->uri->segment(1) . '/' . ($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
+			'first_link'  => 'Primero',
+			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
+			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+		);
 
 		$this->pagination->initialize($cfg_pagination);
 
@@ -725,7 +722,11 @@ class ORM_Model {
 	 */
 	public function list_paginated($offset = 0)
 	{
-		$this->find('all', array('filtro' => $this->model_filtro, 'limit' => $this->model_page_results, 'offset' => $offset));
+		$this->find('all', array(
+			'filtro' => $this->model_filtro,
+			'limit'  => $this->model_page_results,
+			'offset' => $offset
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -767,7 +768,10 @@ class ORM_Model {
 				}
 
 				// recupera la llave del modelo en tabla de la relacion (n:m)
-				$rs = $this->db->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)->get_where($arr_props_relation['join_table'], $arr_where)->result_array();
+				$rs = $this->db
+					->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)
+					->get_where($arr_props_relation['join_table'], $arr_where)
+					->result_array();
 
 				$class_relacionado = $arr_props_relation['model'];
 				$model_relacionado = new $class_relacionado();
@@ -813,11 +817,13 @@ class ORM_Model {
 			{
 				// CONCAT_WS es especifico para MYSQL
 				$lista_campos = implode(',', $arr_campos);
+
 				return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
 			}
 			else
 			{
 				$lista_campos = implode(' + \'' . $this->separador_campos . '\' + ', $arr_campos);
+
 				return $lista_campos;
 			}
 		}
@@ -1382,7 +1388,7 @@ class ORM_Field {
 	{
 		$id_prefix  = 'id_';
 
-		$valor_field = ($valor === '' and $this->default != '') ? $this->default : $valor;
+		$valor_field = ($valor === '' AND $this->default != '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
 		$arr_param = array(
@@ -1392,7 +1398,7 @@ class ORM_Field {
 			'value'     => $valor_field,
 			'maxlength' => $this->largo,
 			'size'      => $this->largo,
-			);
+		);
 
 		if ($this->tipo == 'id'
 			OR ($this->es_id AND $valor_field != '')
@@ -1402,12 +1408,14 @@ class ORM_Field {
 
 			$form = '<p class="form-control-static">' . $valor_field . '</p>';
 			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
+
 			return $form;
 		}
 
 		if (!empty($this->choices))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
+
 			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 
@@ -1415,6 +1423,7 @@ class ORM_Field {
 		{
 			$arr_param['cols'] = '50';
 			$arr_param['rows'] = '5';
+
 			return form_textarea($arr_param);
 		}
 
@@ -1431,17 +1440,20 @@ class ORM_Field {
 		if ($this->tipo == 'real')
 		{
 			$arr_param['size'] = $this->largo + $this->decimales + 1;
+
 			return form_input($arr_param);
 		}
 
 		if ($this->tipo == 'boolean')
 		{
-			$form = '<label class="radio-inline">';
-			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE) . 'Si';
+			$form = '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_1">';
+			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1") . 'Si';
 			$form .= '</label>';
-			$form .= '<label class="radio-inline">';
-			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE) . 'No';
+
+			$form .= '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_0">';
+			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0") . 'No';
 			$form .= '</label>';
+
 			return $form;
 		}
 
@@ -1454,7 +1466,13 @@ class ORM_Field {
 
 			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
 
-			$form = form_dropdown($this->nombre, $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			$form = form_dropdown(
+				$this->nombre,
+				$modelo_rel->find('list', $dropdown_conditions, FALSE),
+				$valor_field,
+				$param_adic
+			);
+
 			return $form;
 		}
 
@@ -1471,7 +1489,14 @@ class ORM_Field {
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
 			$CI =& get_instance();
 			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
-			$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $opciones, $param_adic);
+
+			$form = form_multiselect(
+				$this->nombre.'[]',
+				$modelo_rel->find('list', $dropdown_conditions, FALSE),
+				$opciones,
+				$param_adic
+			);
+
 			return $form;
 		}
 	}
