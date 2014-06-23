@@ -12,9 +12,9 @@
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/fix_bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
 
-	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
-	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.jqplot.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.jqplot.min.js"></script>
 
 	<script type="text/javascript">
 		js_base_url = '<?php echo ($this->config->item('index_page') == '') ? base_url() : base_url() . $this->config->item('index_page') . '/'; ?>';

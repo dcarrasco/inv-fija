@@ -1421,6 +1421,7 @@ class ORM_Field {
 
 		if ($this->tipo == 'char' AND $this->largo >= 100)
 		{
+			unset($arr_param['size']);
 			$arr_param['cols'] = '50';
 			$arr_param['rows'] = '5';
 

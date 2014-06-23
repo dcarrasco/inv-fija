@@ -48,10 +48,11 @@
 			</a>
 		</div>
 	</div>
+</div>
 <?php echo form_close(); ?>
 
 <div class="row">
-	<div class="col-md-10 col-md-offset-1 well" style="display: none;" id="frm_agregar">
+	<div class="col-md-10 col-md-offset-1 well" style="display: none;" id="formulario_agregar">
 
 		<?php echo form_open($this->uri->segment(1) . "/ingreso/$hoja/".time(), 'id="frm_agregar" class="form-horizontal" role="form"')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
@@ -264,7 +265,7 @@
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
 					<td class="text-center">
-						<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="input-sm form-control" max_length="100" tabindex="' . ($tab_index + 100) . '"'); ?>
+						<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="input-sm form-control" maxlength="100" tabindex="' . ($tab_index + 100) . '"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>

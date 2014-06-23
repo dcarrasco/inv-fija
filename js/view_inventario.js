@@ -1,25 +1,25 @@
 $(document).ready(function() {
 
-	if ($('#frm_agregar p.text-error').length > 0) {
-		$('#frm_agregar').toggle();
+	if ($('#formulario_agregar div.alert-danger').length > 0) {
+		$('#formulario_agregar').toggle();
 		$('#btn_guardar').toggle();
 	}
 
 	$('#btn_mostrar_agregar').click(function (event) {
 		event.preventDefault();
 		$('#agr_material').html('<option value="">Buscar y seleccionar material...</option>');
-		$('form#frm_agregar input[name="id"]').val('0');
-		$('form#frm_agregar input[name="ubicacion"]').val('');
-		$('form#frm_agregar input[name="hu"]').val('');
-		$('form#frm_agregar select[name="agr_material"]').val('');
-		$('form#frm_agregar input[name="lote"]').val('');
-		$('form#frm_agregar select[name="um"]').val('');
-		$('form#frm_agregar select[name="centro"]').val('');
-		$('form#frm_agregar select[name="almacen"]').val('');
-		$('form#frm_agregar input[name="stock_fisico"]').val('');
-		$('form#frm_agregar input[name="observacion"]').val('');
+		$('#frm_agregar input[name="id"]').val('0');
+		$('#frm_agregar input[name="ubicacion"]').val('');
+		$('#frm_agregar input[name="hu"]').val('');
+		$('#frm_agregar select[name="agr_material"]').val('');
+		$('#frm_agregar input[name="lote"]').val('');
+		$('#frm_agregar select[name="um"]').val('');
+		$('#frm_agregar select[name="centro"]').val('');
+		$('#frm_agregar select[name="almacen"]').val('');
+		$('#frm_agregar input[name="stock_fisico"]').val('');
+		$('#frm_agregar input[name="observacion"]').val('');
 
-		$('div#frm_agregar').toggle();
+		$('#formulario_agregar').toggle();
 		$('#btn_guardar').toggle();
 	});
 
@@ -36,19 +36,19 @@ $(document).ready(function() {
 
 	$('#btn_agregar').click(function (event) {
 		event.preventDefault();
-		$('form#frm_agregar').submit();
+		$('#frm_agregar').submit();
 	});
 
 	$('#btn_cancelar').click(function (event) {
 		event.preventDefault();
-		$('div#frm_agregar').toggle();
+		$('#formulario_agregar').toggle();
 		$('#btn_guardar').toggle();
 	});
 
 	$('#btn_borrar').click(function (event) {
 		event.preventDefault();
-		$('form#frm_agregar input[name="accion"]').val('borrar');
-		$('form#frm_agregar').submit();
+		$('#frm_agregar input[name="accion"]').val('borrar');
+		$('#frm_agregar').submit();
 	});
 
 	$('#agr_filtrar').bind('keypress', function (event) {
@@ -66,20 +66,20 @@ $(document).ready(function() {
 		event.preventDefault();
 		var id_elem = $(this).attr('id');
 		var id = id_elem.substr(14, id_elem.length);
-		$('#frm_agregar').toggle();
+		$('#formulario_agregar').toggle();
 		$('#btn_guardar').toggle();
 
 		$('#agr_material').html('<option value="' + $('form#frm_inventario input[name="catalogo_' + id + '"]').val() + '">' + $('form#frm_inventario input[name="descripcion_' + id + '"]').val()+ '</option>');
-		$('form#frm_agregar input[name="id"]').val(id);
-		$('form#frm_agregar input[name="ubicacion"]').val($('form#frm_inventario input[name="ubicacion_' + id + '"]').val());
-		$('form#frm_agregar input[name="hu"]').val($('form#frm_inventario input[name="hu_' + id + '"]').val());
-		$('form#frm_agregar select[name="agr_material"]').val($('form#frm_inventario input[name="catalogo_' + id + '"]').val());
-		$('form#frm_agregar input[name="lote"]').val($('form#frm_inventario input[name="lote_' + id + '"]').val());
-		$('form#frm_agregar select[name="um"]').val($('form#frm_inventario input[name="um_' + id + '"]').val());
-		$('form#frm_agregar select[name="centro"]').val($('form#frm_inventario input[name="centro_' + id + '"]').val());
-		$('form#frm_agregar select[name="almacen"]').val($('form#frm_inventario input[name="almacen_' + id + '"]').val());
-		$('form#frm_agregar input[name="stock_fisico"]').val($('form#frm_inventario input[name="stock_fisico_' + id + '"]').val());
-		$('form#frm_agregar input[name="observacion"]').val($('form#frm_inventario textarea[name="observacion_' + id + '"]').val());
+		$('#frm_agregar input[name="id"]').val(id);
+		$('#frm_agregar input[name="ubicacion"]').val($('form#frm_inventario input[name="ubicacion_' + id + '"]').val());
+		$('#frm_agregar input[name="hu"]').val($('form#frm_inventario input[name="hu_' + id + '"]').val());
+		$('#frm_agregar select[name="agr_material"]').val($('form#frm_inventario input[name="catalogo_' + id + '"]').val());
+		$('#frm_agregar input[name="lote"]').val($('form#frm_inventario input[name="lote_' + id + '"]').val());
+		$('#frm_agregar select[name="um"]').val($('form#frm_inventario input[name="um_' + id + '"]').val());
+		$('#frm_agregar select[name="centro"]').val($('form#frm_inventario input[name="centro_' + id + '"]').val());
+		$('#frm_agregar select[name="almacen"]').val($('form#frm_inventario input[name="almacen_' + id + '"]').val());
+		$('#frm_agregar input[name="stock_fisico"]').val($('form#frm_inventario input[name="stock_fisico_' + id + '"]').val());
+		$('#frm_agregar input[name="observacion"]').val($('form#frm_inventario textarea[name="observacion_' + id + '"]').val());
 		$('body').scrollTop(0);
 	});
 

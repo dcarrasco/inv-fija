@@ -19,6 +19,7 @@
 	</div>
 	<?php echo form_close(''); ?>
 </div>
+
 <div>
 	<?php echo form_open('', 'id="frm_editar"'); ?>
 	<?php echo form_hidden('formulario','editar'); ?>
@@ -51,11 +52,12 @@
 			<?php endforeach; ?>
 		</tbody>
 	</table>
+	<?php echo form_close(); ?>
 
 	<div class="text-center">
 		<?php echo $modelo->crea_links_paginas(); ?>
 	</div>
-</div> <!-- fin content-module-main -->
+</div>
 
 <script type="text/javascript">
 $(document).ready(function() {
