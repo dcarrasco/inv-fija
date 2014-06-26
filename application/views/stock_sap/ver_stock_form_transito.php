@@ -52,6 +52,18 @@
 							Desplegar detalle lotes <br/>
 						</div>
 					</div>
+					<hr/>
+					<div class="form-group">
+						Mostrar
+						<div class="radio-inline">
+							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
+							cantidad
+						</div>
+						<div class="radio-inline">
+							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
+							monto
+						</div>
+					</div>
 				</div>
 
 				<div class="col-md-4">

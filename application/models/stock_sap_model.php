@@ -149,7 +149,6 @@ class stock_sap_model extends CI_Model {
 			{
 				$this->db->join($this->bd_logistica . 'stock_scl s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 				$this->db->join($this->bd_planificacion . 'ca_stock_sap_04 p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
-
 			}
 			else
 			{
@@ -531,7 +530,7 @@ class stock_sap_model extends CI_Model {
 			$this->db->group_by('s.lote');
 		}
 
-		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE);
+		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
 
 		// tablas
 		$this->db->from($this->bd_logistica . 'bd_stock_sap_fija s');
