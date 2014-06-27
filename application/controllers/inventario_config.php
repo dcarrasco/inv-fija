@@ -2,6 +2,7 @@
 
 class Inventario_config extends CI_Controller {
 
+	public $llave_modulo = 'config2';
 	private $arr_menu = array();
 
 

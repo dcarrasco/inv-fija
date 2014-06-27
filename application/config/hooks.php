@@ -10,7 +10,12 @@
 |
 */
 
-
+$hook['pre_controller'] = array(
+	'class'    => 'myHooks',
+	'function' => 'pre_controller',
+	'filename' => 'my_hooks.php',
+	'filepath' => 'hooks',
+);
 
 /* End of file hooks.php */
 /* Location: ./application/config/hooks.php */
