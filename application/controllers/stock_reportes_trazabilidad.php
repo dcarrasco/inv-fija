@@ -2,18 +2,13 @@
 
 class Stock_reportes_trazabilidad extends CI_Controller {
 
+	public $llave_modulo = 'j*&on238=B';
 	private $arr_menu = array();
 
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('j*&on238=B');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'perm_consumo' => array('url' => $this->uri->segment(1) . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),

@@ -2,18 +2,13 @@
 
 class Stock_reporte extends CI_Controller {
 
+	public $llave_modulo = 'odk9@i2_23';
 	private $arr_menu = array();
 
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('odk9@i2_23');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),

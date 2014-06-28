@@ -2,6 +2,7 @@
 
 class Stock_sap extends CI_Controller {
 
+	public $llave_modulo = 'stock_sap';
 	private $arr_menu = array();
 
 	// --------------------------------------------------------------------
@@ -9,12 +10,6 @@ class Stock_sap extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('stock_sap');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'stock_movil'     => array('url' => $this->uri->segment(1) . '/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),

@@ -10,9 +10,9 @@
 |
 */
 
-$hook['pre_controller'] = array(
+$hook['post_controller_constructor'] = array(
 	'class'    => 'myHooks',
-	'function' => 'pre_controller',
+	'function' => 'acl_hook',
 	'filename' => 'my_hooks.php',
 	'filepath' => 'hooks',
 );

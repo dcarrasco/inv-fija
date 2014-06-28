@@ -9,12 +9,6 @@ class Inventario_config extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('config2');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'auditor'         => array('url' => $this->uri->segment(1) . '/listado/auditor/', 'texto' => 'Auditores'),

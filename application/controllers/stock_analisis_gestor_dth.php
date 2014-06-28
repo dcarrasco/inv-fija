@@ -2,15 +2,11 @@
 
 class Stock_analisis_gestor_dth extends CI_Controller {
 
+	public $llave_modulo = 'fhzcJJPL12$/!';
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('fhzcJJPL12$/!');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 	}
 
 	// --------------------------------------------------------------------

@@ -3,17 +3,12 @@
 class Inventario_digitacion extends CI_Controller {
 
 	private $id_inventario = 0;
+	public $llave_modulo = 'inventario';
 
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('inventario');
-
-		if (ENVIRONMENT != 'production')
-		{
-			//$this->output->enable_profiler(TRUE);
-		}
 	}
 
 	// --------------------------------------------------------------------

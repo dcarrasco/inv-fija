@@ -2,6 +2,7 @@
 
 class Inventario_analisis extends CI_Controller {
 
+	public $llave_modulo = 'analisis';
 	private $id_inventario = 0;
 	private $nombre_inventario = '';
 	private $arr_menu = array();
@@ -11,12 +12,6 @@ class Inventario_analisis extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('analisis');
-
-		if (ENVIRONMENT != 'production')
-		{
-			//$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'ajustes'            => array('url' => $this->uri->segment(1) . '/ajustes', 'texto' => 'Ajustes de inventario'),

@@ -2,15 +2,11 @@
 
 class Stock_analisis_series extends CI_Controller {
 
+	public $llave_modulo = 'analisis_series';
+
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('analisis_series');
-
-		if (ENVIRONMENT != 'production')
-		{
-			//$this->output->enable_profiler(TRUE);
-		}
 	}
 
 	// --------------------------------------------------------------------
