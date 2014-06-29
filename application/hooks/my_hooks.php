@@ -5,9 +5,9 @@ class myHooks {
 	public function acl_hook()
 	{
 		$CI_local =& get_instance();
-		$RTR =& load_class('Router', 'core');
-		$class = $RTR->fetch_class();
 		$CI_local->load->model('acl_model');
+		$class = $CI_local->router->fetch_class();
+
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $CI_local->llave_modulo : '';
 
 		if ($class != 'login')
@@ -20,6 +20,5 @@ class myHooks {
 			$CI_local->output->enable_profiler(TRUE);
 		}
 	}
-
 
 }
