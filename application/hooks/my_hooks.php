@@ -8,8 +8,7 @@ class myHooks {
 		$RTR =& load_class('Router', 'core');
 		$class = $RTR->fetch_class();
 		$CI_local->load->model('acl_model');
-		$e = new $class;
-		$llave_modulo = property_exists($class, 'llave_modulo') ? $e->llave_modulo : '';
+		$llave_modulo = property_exists($class, 'llave_modulo') ? $CI_local->llave_modulo : '';
 
 		if ($class != 'login')
 		{
