@@ -18,10 +18,10 @@
 </head>
 <body>
 
-<div class="container-fluid">
+<div class="container">
 <div class="row">
 
-	<div class="col-xs-12 col-md-6 col-md-offset-3 well">
+	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
 		<div>
 			<h2>Login</h2>
 		</div>
