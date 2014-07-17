@@ -16,10 +16,10 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container-fluid">
 <div class="row">
 
-	<div class="col-md-6 col-md-offset-3 well col-xs-12">
+	<div class="col-xs-12 col-md-6 col-md-offset-3 well">
 		<div>
 			<h2>Login</h2>
 		</div>
