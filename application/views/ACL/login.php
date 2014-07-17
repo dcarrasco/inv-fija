@@ -19,7 +19,7 @@
 <div class="container">
 <div class="row">
 
-	<div class="col-md-6 col-md-offset-3 well">
+	<div class="col-md-6 col-md-offset-3 well col-xs-12">
 		<div>
 			<h2>Login</h2>
 		</div>
@@ -29,7 +29,7 @@
 
 		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
 
-			<div class="control-group col-md-8 col-md-offset-2">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<label class="control-label" for="usr">Usuario</label>
 				<div class="controls">
 					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
@@ -37,7 +37,7 @@
 				</div>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<label class="control-label" for="pwd">
 					Clave
 				</label>
@@ -47,17 +47,17 @@
 				</div>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<hr>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						Ingresar
