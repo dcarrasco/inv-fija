@@ -2,6 +2,7 @@
 
 class Inventario_reportes extends CI_Controller {
 
+	public $llave_modulo = 'reportes';
 	private $id_inventario = 0;
 	private $arr_menu = array();
 
@@ -10,13 +11,7 @@ class Inventario_reportes extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('reportes');
 		$this->load->model('inventario_model');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'hoja'              => array('url' => $this->uri->segment(1) . '/listado/hoja', 'texto' => 'Hoja'),

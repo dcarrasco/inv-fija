@@ -49,8 +49,8 @@ class Login extends CI_Controller {
 		}
 		else
 		{
-			$usr = set_value('usr');
-			$pwd = set_value('pwd');
+			$usr = $this->input->post('usr');
+			$pwd = $this->input->post('pwd');
 			// si el usuario existe
 			if ($this->acl_model->existe_usuario($usr))
 			{

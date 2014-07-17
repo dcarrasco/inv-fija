@@ -2,17 +2,12 @@
 
 class Acl_config extends CI_Controller {
 
+	public $llave_modulo = 'acl_config';
 	private $arr_menu = array();
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('acl_config');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'usuario'        => array('url' => $this->uri->segment(1) . '/listado/usuario', 'texto' => 'Usuarios'),

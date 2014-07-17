@@ -2,17 +2,12 @@
 
 class Stock_config extends CI_Controller {
 
+	public $llave_modulo = 'config_stock';
 	private $arr_menu = array();
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->acl_model->autentica('config_stock');
-
-		if (ENVIRONMENT != 'production')
-		{
-			$this->output->enable_profiler(TRUE);
-		}
 
 		$this->arr_menu = array(
 			'almacen_sap'     => array('url' => $this->uri->segment(1) . '/listado/almacen_sap', 'texto' => 'Almacenes SAP'),
