@@ -4,7 +4,7 @@
 	<title>inventario fija</title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
 
@@ -37,7 +37,7 @@
 			<?php foreach($this->app_common->menu_app() as $app_item): ?>
 			<li class="dropdown <?php echo $app_item['selected']; ?>">
 				<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-					<i class="<?php echo $app_item['icono']; ?>"></i>
+					<span class="<?php echo $app_item['icono']; ?>"></span>
 					<?php echo $app_item['app']; ?>
 					<b class="caret"></b>
 				</a>
@@ -45,7 +45,7 @@
 					<?php foreach($app_item['modulos'] as $modulo_item): ?>
 						<li <?php echo ($modulo_item['url'] == $this->uri->segment(1)) ? 'class="active"' : ''; ?>>
 							<a href="<?php echo site_url($modulo_item['url']); ?>">
-								<i class="<?php echo $modulo_item['icono']; ?>"></i>
+								<span class="<?php echo $modulo_item['icono']; ?>"></span>
 								<?php echo $modulo_item['modulo']; ?>
 							</a>
 						</li>
