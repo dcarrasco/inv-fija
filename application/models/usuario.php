@@ -60,6 +60,27 @@ class Usuario extends ORM_Model {
 								'texto_ayuda'    => 'Correo del usuario. Maximo 40 caracteres.',
 								'mostrar_lista'  => FALSE,
 							),
+						'fecha_login' => array(
+								'label'          => 'Fecha ultimo login',
+								'tipo'           =>  'datetime',
+								'largo'          => 40,
+								'texto_ayuda'    => 'Fecha de la ultima entrada al sistema.',
+								'mostrar_lista'  => FALSE,
+							),
+						'ip_login' => array(
+								'label'          => 'Dirección IP',
+								'tipo'           =>  'char',
+								'largo'          => 30,
+								'texto_ayuda'    => 'Dirección IP de la ultima entrada al sistema.',
+								'mostrar_lista'  => FALSE,
+							),
+						'agente_login' => array(
+								'label'          => 'Agente',
+								'tipo'           =>  'char',
+								'largo'          => 200,
+								'texto_ayuda'    => 'Agente web de la ultima entrada al sistema.',
+								'mostrar_lista'  => FALSE,
+							),
 						'rol' => array(
 								'tipo'           => 'has_many',
 								'relation'       => array(
