@@ -10,7 +10,7 @@ class myHooks {
 
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $CI_local->llave_modulo : '';
 
-		if ($class != 'login')
+		if ($class != 'login' AND $class != 'migration')
 		{
 			$CI_local->acl_model->autentica($llave_modulo);
 		}

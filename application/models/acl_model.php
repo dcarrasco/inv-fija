@@ -22,6 +22,15 @@ class Acl_model extends CI_Model {
 		$this->delete_session_cookies();
 		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))->num_rows() > 0)
 		{
+			// escribe auditoria del login
+			$this->db->where('usr', $usr);
+			$this->db->update('fija_usuarios',
+				array(
+					'fecha_login' => date('Ymd H:i:s'),
+					'ip_login'    => $this->input->ip_address(),
+					'agent_login' => $this->input->user_agent(),
+				));
+
 			// crea cookie con la sesion del usuario
 			$this->_set_session_cookies($usr);
 			$this->_set_menu_cookies($usr);
