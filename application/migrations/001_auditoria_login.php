@@ -14,7 +14,7 @@ class Migration_auditoria_login extends CI_Migration {
 			array(
 				'fecha_login' => array('type' => 'DATETIME', 'null' => TRUE),
 				'ip_login'    => array('type' => 'VARCHAR', 'constraint' => '30', 'null' => TRUE),
-				'agent_login' => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => TRUE),
+				'agent_login' => array('type' => 'VARCHAR', 'constraint' => '200', 'null' => TRUE),
 			)
 		);
 
