@@ -1,7 +1,7 @@
 <div class="content-module">
 
 	<div class="content-module-main">
-		<table class="table table-bordered table-striped table-hover table-condensed">
+		<table class="table table-bordered table-striped table-hover table-condensed reporte">
 			<tr>
 				<th>n</th>
 				<th>fecha stock</th>

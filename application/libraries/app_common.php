@@ -161,7 +161,7 @@ class App_common {
 		$subtot_ant = array();
 		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
 
-		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed">');
+		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed reporte">');
 		array_push($tabla, '<thead>');
 		array_push($tabla, '<tr>');
 		array_push($tabla, '<th></th>');

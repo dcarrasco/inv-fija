@@ -91,7 +91,7 @@
 
 	<div class="panel-body collapse in" id="tabla_movimientos">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 				<?php $serie_hist_ant = ''; ?>
 				<?php if (count($hist) > 0) :?>
 				<?php foreach($hist as $reg_hist): ?>
@@ -156,7 +156,7 @@
 
 	<div class="panel-body collapse in" id="tabla_despachos">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 				<tr>
 					<th>serie</th>
 					<th>cod_sap</th>
@@ -213,7 +213,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_sap">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 				<tr>
 					<th>fecha stock</th>
 					<th>serie</th>
@@ -264,7 +264,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_scl">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 				<tr>
 					<th>fecha stock</th>
 					<th>serie</th>
@@ -317,7 +317,7 @@
 
 	<div class="panel-body collapse in" id="tabla_trafico">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 			<?php foreach($trafico as $serie_trafico): ?>
 				<tr>
 					<th>año</th>
@@ -371,7 +371,7 @@
 
 	<div class="panel-body collapse in" id="tabla_gdth">
 		<div class="accordion-inner" style="overflow: auto">
-			<table class="table table-bordered table-striped table-hover table-condensed" style="white-space:nowrap;">
+			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 			<?php foreach($log_gdth as $serie_gdth): ?>
 				<tr>
 					<th>id</th>

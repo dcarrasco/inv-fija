@@ -70,7 +70,7 @@
 	<?php $totales    = array(); ?>
 	<?php $subtotales = array(); ?>
 	<?php $subtot_ant = array(); ?>
-	<table class="table table-bordered table-striped table-hover table-condensed">
+	<table class="table table-bordered table-striped table-hover table-condensed reporte">
 		<thead>
 			<tr>
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>

@@ -7,7 +7,7 @@
 	<?php echo form_open($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
-	<table class="table table-bordered table-hover table-condensed">
+	<table class="table table-bordered table-hover table-condensed reporte">
 		<thead>
 			<tr>
 				<th>material</th>
