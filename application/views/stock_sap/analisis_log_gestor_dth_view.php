@@ -110,16 +110,16 @@
 				</tr>
 			<?php foreach($log_serie as $reg_log): ?>
 				<tr>
-					<td><small><?php echo $reg_log['id_log_deco_tarjeta'] ?></small></td>
-					<td><small><?php echo $reg_log['fecha_log'] ?></small></td>
-					<td><small><span class="serie"><?php echo $reg_log['serie_deco'] ?></span></small></td>
-					<td><small><?php echo $reg_log['serie_tarjeta'] ?></small></td>
-					<td><small><?php echo $reg_log['peticion'] ?></small></td>
-					<td><small><?php echo $reg_log['estado'] ?></small></td>
-					<td><small><?php echo $reg_log['tipo_operacion_cas'] ?></small></td>
-					<td><small><?php echo $reg_log['telefono']?></small></td>
-					<td><small><?php echo $reg_log['rut'] ?></small></td>
-					<td><small><?php echo $reg_log['nombre'] ?></small></td>
+					<td><?php echo $reg_log['id_log_deco_tarjeta'] ?></td>
+					<td><?php echo $reg_log['fecha_log'] ?></td>
+					<td><span class="serie"><?php echo $reg_log['serie_deco'] ?></span></td>
+					<td><?php echo $reg_log['serie_tarjeta'] ?></td>
+					<td><?php echo $reg_log['peticion'] ?></td>
+					<td><?php echo $reg_log['estado'] ?></td>
+					<td><?php echo $reg_log['tipo_operacion_cas'] ?></td>
+					<td><?php echo $reg_log['telefono']?></td>
+					<td><?php echo $reg_log['rut'] ?></td>
+					<td><?php echo $reg_log['nombre'] ?></td>
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>
