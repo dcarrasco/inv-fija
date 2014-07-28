@@ -4,6 +4,11 @@
 
 
 @media print {
+
+	html, body, input, select, option, form, .form-control, .btn {
+		font-size: 10px;
+	}
+
 	a[href]:after {
 		content: none;
 	}
