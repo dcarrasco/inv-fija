@@ -47,7 +47,7 @@
 											); ?>
 						<td class="text-right">
 							<a href="<?php echo $str_url; ?>">
-								<span data-cantidad="<?php echo fmt_cantidad($val); ?>" data-monto="<?php echo fmt_monto($reg['VAL_'.$key], 'MM'); ?>">
+								<span data-cantidad="<?php echo fmt_cantidad($val); ?>" data-monto="<?php echo fmt_monto($reg['VAL_'.$key]); ?>">
 									<?php echo fmt_cantidad($val); ?>
 								</span>
 							</a>
@@ -72,7 +72,7 @@
 			<?php foreach($campos as $val): ?>
 				<?php if (in_array($val, $campos_sumables)): ?>
 					<th class="text-right">
-						<span data-cantidad="<?php echo fmt_cantidad($totales[$val]); ?>" data-monto="<?php echo fmt_monto($totales['VAL_'.$val], 'MM'); ?>">
+						<span data-cantidad="<?php echo fmt_cantidad($totales[$val]); ?>" data-monto="<?php echo fmt_monto($totales['VAL_'.$val]); ?>">
 							<?php echo fmt_cantidad($totales[$val]); ?>
 						</span>
 					</th>
