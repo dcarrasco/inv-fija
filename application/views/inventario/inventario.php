@@ -168,6 +168,19 @@
 			</div>
 		</div>
 
+		<div class="form-group <?php echo form_has_error('hu'); ?>">
+			<label class="control-label col-sm-4">
+				<?php echo $nuevo_detalle_inventario->get_label_field('hu'); ?>
+				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('hu'); ?>
+			</label>
+			<div class="col-sm-3">
+				<?php echo $nuevo_detalle_inventario->print_form_field('hu', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
+				<?php echo form_error('hu'); ?>
+			</div>
+		</div>
+
 		<div class="form-group <?php echo form_has_error('observacion'); ?>">
 			<label class="control-label col-sm-4">
 				<?php echo $nuevo_detalle_inventario->get_label_field('observacion'); ?>
@@ -227,6 +240,7 @@
 				<th class="text-center">UM</th>
 				<th class="text-center">cantidad sap</th>
 				<th class="text-center">cantidad fisica</th>
+				<th class="text-center">HU</th>
 				<th class="text-center">observacion</th>
 			</tr>
 		</thead>
@@ -265,6 +279,10 @@
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
 					<td class="text-center">
+						<?php echo form_input('hu_' . $linea_det->id, set_value('hu_' . $linea_det->id, $linea_det->hu), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
+						<?php echo form_error('hu_' . $linea_det->id); ?>
+					</td>
+					<td class="text-center">
 						<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="input-sm form-control" maxlength="100" tabindex="' . ($tab_index + 100) . '"'); ?>
 					</td>
 				</tr>
@@ -284,6 +302,7 @@
 				<td></td>
 				<td class="text-center"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
 				<td class="text-center"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
+				<td></td>
 				<td>
 					<div class="text-center">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
