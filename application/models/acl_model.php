@@ -26,9 +26,9 @@ class Acl_model extends CI_Model {
 			$this->db->where('usr', $usr);
 			$this->db->update('fija_usuarios',
 				array(
-					'fecha_login' => date('Ymd H:i:s'),
-					'ip_login'    => $this->input->ip_address(),
-					'agent_login' => $this->input->user_agent(),
+					'fecha_login'  => date('Ymd H:i:s'),
+					'ip_login'     => $this->input->ip_address(),
+					'agente_login' => $this->input->user_agent(),
 				));
 
 			// crea cookie con la sesion del usuario

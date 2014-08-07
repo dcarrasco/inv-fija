@@ -42,7 +42,8 @@
 					<th class="ac">A</th>
 				<?php endif; ?>
 
-				<th  class="ac" style="width: 22%">observacion</th>
+				<th class="ac" style="width: 8%">HU</th>
+				<th class="ac" style="width: 18%">observacion</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -55,9 +56,7 @@
 					<td class="ac"><?php echo $detalle->ubicacion; ?></td>
 					<!-- <td class="ac"><?php //echo $detalle->hu; ?></td> -->
 					<td class="ac"><?php echo $detalle->catalogo; ?></td>
-					<td>
-						<?php echo $detalle->descripcion; ?>
-					</td>
+					<td><?php echo $detalle->descripcion; ?></td>
 					<td class="ac"><?php echo $detalle->lote; ?></td>
 					<td class="ac"><?php echo $detalle->centro; ?></td>
 					<td class="ac"><?php echo $detalle->almacen; ?></td>
@@ -76,6 +75,9 @@
 						<!-- ATRAS -->
 						<td></td>
 					<?php endif; ?>
+
+					<!-- HU -->
+					<td></td>
 
 					<!-- OBSERVACION -->
 					<td>

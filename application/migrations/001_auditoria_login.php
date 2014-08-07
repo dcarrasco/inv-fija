@@ -28,7 +28,7 @@ class Migration_auditoria_login extends CI_Migration {
 
 		$this->dbforge->drop_column('fija_usuarios', 'fecha_login');
 		$this->dbforge->drop_column('fija_usuarios', 'ip_login');
-		$this->dbforge->drop_column('fija_usuarios', 'agent_login');
+		$this->dbforge->drop_column('fija_usuarios', 'agente_login');
 
 		echo "OK<br/>";
 	}
