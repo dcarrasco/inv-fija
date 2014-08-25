@@ -122,7 +122,8 @@ class Analisis_series_model extends CI_Model {
 
 		foreach ($arr_series as $serie)
 		{
-			$serie = substr($serie,0,14) . "0";
+			$serie_orig = $serie;
+			$serie_cero = substr($serie,0,14) . "0";
 
 			$row = $this->db->query('select distinct ano as ano, mes as mes from bd_controles.dbo.trafico_dias_procesados where ano*100+mes in (select max(ano*100+mes) from bd_controles.dbo.trafico_dias_procesados)')->row();
 			$ano = $row->ano;
@@ -132,7 +133,9 @@ class Analisis_series_model extends CI_Model {
 			$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
 			$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
 			$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
-			$this->db->where(array('ano' => $row->ano, 'mes' => $row->mes, 'imei'=> $serie));
+			//$this->db->where(array('ano' => $row->ano, 'mes' => $row->mes, 'imei'=> $serie));
+			$this->db->where(array('ano' => $row->ano, 'mes' => $row->mes));
+			$this->db->where_in('imei', array($serie_orig, $serie_cero));
 			$this->db->order_by('imei, fec_alta');
 			array_push($result, $this->db->get()->result_array());
 		}
@@ -161,7 +164,8 @@ class Analisis_series_model extends CI_Model {
 
 		foreach ($arr_series as $serie)
 		{
-			$serie = substr($serie,0,14) . "0";
+			$serie_orig = $serie;
+			$serie_cero = substr($serie,0,14) . "0";
 
 			foreach($meses as $mes)
 			{
@@ -172,7 +176,9 @@ class Analisis_series_model extends CI_Model {
 				$this->db->join('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
 				$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
 				$this->db->join('bd_controles..trafico_causabaja b', 'a.cod_causabaja = b.cod_causabaja', 'left');
-				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie, 'cod_situacion<>' => 'BAA'));
+				//$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie, 'cod_situacion<>' => 'BAA'));
+				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'cod_situacion<>' => 'BAA'));
+				$this->db->where_in('imei', array($serie_orig, $serie_cero));
 				$this->db->order_by('imei, fec_alta');
 				foreach($this->db->get()->result_array() as $reg)
 				{
@@ -193,7 +199,9 @@ class Analisis_series_model extends CI_Model {
 		}
 		if ($serie != "")
 		{
-			$serie = substr($serie,0,14) . "0";
+			$serie_orig = $serie;
+			$serie_cero = substr($serie,0,14) . "0";
+
 			$meses = array();
 			$meses = explode("-", $str_meses);
 
@@ -204,7 +212,9 @@ class Analisis_series_model extends CI_Model {
 
 				// recupera datos de trafico
 				$this->db->from('bd_logistica..trafico_mes');
-				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie));
+				//$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie));
+				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes));
+				$this->db->where_in('imei', array($serie_orig, $serie_cero));
 				foreach($this->db->get()->result_array() as $reg)
 				{
 					$result[$series][$reg['celular']][$mes] = ($reg['seg_entrada']+$reg['seg_salida'])/60;
