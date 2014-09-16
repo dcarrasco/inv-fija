@@ -135,7 +135,7 @@ class App_common {
 				return fmt_monto($valor);
 				break;
 			case 'valor_pmp':
-				return '$ ' . fmt_monto($valor);
+				return fmt_monto($valor);
 				break;
 			case 'numero_dif':
 				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_cantidad($valor) . (($valor != 0) ? '</span>' : '');
