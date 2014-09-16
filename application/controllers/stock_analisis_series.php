@@ -123,10 +123,10 @@ class Stock_analisis_series extends CI_Controller {
 	public function ajax_trafico_mes($serie = '', $meses = '', $tipo = 'imei')
 	{
 		$this->load->model('analisis_series_model');
-		$data = array(
-				'datos' => json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses, $tipo)),
-			);
-		$this->load->view('stock_sap/ajax_trafico_view', $data);
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses, $tipo)));
 	}
 
 

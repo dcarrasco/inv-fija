@@ -138,11 +138,7 @@
 
 								for (var j=0; j<arr_meses.length; j++)
 								{
-									var valor_trafico = data[i][arr_meses[j]];
-									if (typeof valor_trafico === 'undefined')
-									{
-										valor_trafico = '';
-									}
+									var valor_trafico = (typeof data[i][arr_meses[j]] === 'undefined') ? '' : data[i][arr_meses[j]];
 									str_append += '<td>' + valor_trafico + '</td>';
 								}
 
