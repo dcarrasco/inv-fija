@@ -19,6 +19,14 @@
 								'value' => set_value('series'),
 								'class' => 'form-control',
 							)); ?>
+						<label class="radio-inline">
+							<?php echo form_radio('sel_tipo', 'imei', set_radio('sel_tipo', 'imei', TRUE)); ?>
+							IMEI
+						</label>
+						<label class="radio-inline">
+							<?php echo form_radio('sel_tipo', 'celular', set_radio('sel_tipo', 'celular')); ?>
+							Celular
+						</label>
 					</div>
 				</div>
 
@@ -81,8 +89,11 @@
 	$(document).ready(function() {
 		$("#boton-submit").click(function(event) {
 			event.preventDefault();
-			var str_series = $('form textarea').val();
-			var arr_meses  = $('form select').val();
+
+			var str_series = $('form textarea').val(),
+				arr_meses  = $('form select').val(),
+				str_tipo   = $('form input[type="radio"]:checked').val();
+
 			if ((str_series != '') && (arr_meses != null))
 			{
 				var str_meses  = ''
@@ -111,7 +122,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('<?php echo base_url(); ?>/<?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses, function(data) {
+						$.getJSON('<?php echo base_url(); ?>/<?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';

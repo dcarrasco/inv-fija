@@ -33,7 +33,35 @@ class Analisis_series_model extends CI_Model {
 		return $arr_series;
 	}
 
-	function get_historia($series = string)
+
+	private function _get_dv_imei($serie = '')
+	{
+		$serie15 = '';
+
+		if (strlen($serie) == 14 AND substr($serie, 0, 1) == '1')
+		{
+			$serie15 = '0' . $serie;
+		}
+
+		if (strlen($serie) == 15)
+		{
+			$serie15 = $serie;
+		}
+
+		$serie14 = substr($serie15, 0, 14);
+
+		$sum_dv = 0;
+		foreach(str_split($serie14) as $i => $n)
+		{
+			$sum_dv += ($i %2 !== 0) ? (($n*2>9)?$n*2-9:$n*2): $n;
+		}
+
+		return $serie14 . (10 - $sum_dv % 10);
+
+	}
+
+
+	public function get_historia($series = string)
 	{
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
@@ -57,7 +85,7 @@ class Analisis_series_model extends CI_Model {
 	}
 
 
-	function get_despacho($series = string)
+	public function get_despacho($series = string)
 	{
 		$arr_series = $this->_series_list_to_array($series);
 
@@ -73,7 +101,7 @@ class Analisis_series_model extends CI_Model {
 	}
 
 
-	function get_stock_sap($series = string)
+	public function get_stock_sap($series = string)
 	{
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
@@ -92,7 +120,7 @@ class Analisis_series_model extends CI_Model {
 		}
 	}
 
-	function get_stock_scl($series = string) {
+	public function get_stock_scl($series = string) {
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
@@ -189,7 +217,7 @@ class Analisis_series_model extends CI_Model {
 		return $result;
 	}
 
-	public function get_trafico_mes2($series = "", $str_meses = "")
+	public function get_trafico_mes2($series = "", $str_meses = "", $tipo = 'imei')
 	{
 		$result = array();
 		$serie = trim($series);
@@ -214,12 +242,21 @@ class Analisis_series_model extends CI_Model {
 				$this->db->from('bd_logistica..trafico_mes');
 				//$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie));
 				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes));
-				$this->db->where_in('imei', array($serie_orig, $serie_cero));
+
+				if ($tipo == 'imei')
+				{
+					$this->db->where_in('imei', array($serie_orig, $serie_cero));
+				}
+				else
+				{
+					$this->db->where_in('celular', array($serie_orig));
+				}
+
 				foreach($this->db->get()->result_array() as $reg)
 				{
-					$result[$series][$reg['celular']][$mes] = ($reg['seg_entrada']+$reg['seg_salida'])/60;
+					$result[$this->_get_dv_imei($reg['imei'])][$reg['celular']][$mes] = ($reg['seg_entrada']+$reg['seg_salida'])/60;
 				}
-				//print_r($result);
+				//dbg($result);
 			}
 		}
 
@@ -233,30 +270,21 @@ class Analisis_series_model extends CI_Model {
 		{
 			foreach($datos_imei as $cel => $datos_cel)
 			{
-				$arr_maxfecha = array();
 				$arr_datoscom = array();
 				$num_celular = (string) $cel;
-
-				$this->db->select('max(convert(varchar(20), fec_alta, 112)) as fec_alta')->where('num_celular', $num_celular);
-				$arr_maxfecha = $this->db->get('bd_controles..trafico_abocelamist')->row_array();
-
-				$this->db->select('a.tipo, a.num_celular, a.cod_situacion, convert(varchar(20), a.fec_alta, 103) as fecha_alta, convert(varchar(20), a.fec_baja, 103) as fecha_baja');
-				$this->db->select('c.num_ident, c.nom_cliente + \' \' + c.ape1_cliente + \' \' + c.ape2_cliente as nombre');
-				$this->db->from('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left');
-				$this->db->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left');
-				$this->db->where(array('a.num_celular' => $num_celular, 'a.fec_alta' => $arr_maxfecha['fec_alta']));
-				$arr_datoscom[$imei][$cel] = $this->db->get()->row_array();
+				$arr_datoscom[$imei][$cel] = $this->_get_datos_comerciales($imei, $num_celular);
 
 				$result_final[$i] = array(
-											'imei' => $series,
-											'celular' => $cel,
-											'rut'     => $arr_datoscom[$imei][$cel]['num_ident'],
-											'nombre'  => $arr_datoscom[$imei][$cel]['nombre'],
-											'cod_situacion' => $arr_datoscom[$imei][$cel]['cod_situacion'],
-											'fecha_alta'    => $arr_datoscom[$imei][$cel]['fecha_alta'],
-											'fecha_baja'    => $arr_datoscom[$imei][$cel]['fecha_baja'],
-											'tipo'          => $arr_datoscom[$imei][$cel]['tipo']
-										);
+					'imei'          => $imei,
+					'celular'       => $cel,
+					'rut'           => $arr_datoscom[$imei][$cel]['num_ident'],
+					'nombre'        => $arr_datoscom[$imei][$cel]['nombre'],
+					'cod_situacion' => $arr_datoscom[$imei][$cel]['cod_situacion'],
+					'fecha_alta'    => $arr_datoscom[$imei][$cel]['fecha_alta'],
+					'fecha_baja'    => $arr_datoscom[$imei][$cel]['fecha_baja'],
+					'tipo'          => $arr_datoscom[$imei][$cel]['tipo'],
+				);
+
 				foreach($datos_cel as $mes => $trafico)
 				{
 					$result_final[$i][$mes] = fmt_cantidad($trafico, 1);
@@ -267,6 +295,27 @@ class Analisis_series_model extends CI_Model {
 		}
 
 		return $result_final;
+	}
+
+	private function _get_datos_comerciales($imei = '', $celular = '')
+	{
+		$arr_maxfecha = array();
+		$arr_maxfecha = $this->db
+			->select('max(convert(varchar(20), fec_alta, 112)) as fec_alta')
+			->where('num_celular', $celular)
+			->get('bd_controles..trafico_abocelamist')
+			->row_array();
+
+		return $this->db
+			->select('a.tipo, a.num_celular, a.cod_situacion')
+			->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta')
+			->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja')
+			->select('c.num_ident')
+			->select('c.nom_cliente + \' \' + c.ape1_cliente + \' \' + c.ape2_cliente as nombre')
+			->from('bd_controles..trafico_abocelamist a', 't.celular = a.num_celular', 'left')
+			->join('bd_controles..trafico_clientes c', 'a.cod_cliente = c.cod_cliente', 'left')
+			->where(array('a.num_celular' => $celular, 'a.fec_alta' => $arr_maxfecha['fec_alta']))
+			->get()->row_array();
 	}
 
 

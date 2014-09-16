@@ -98,9 +98,11 @@ class Stock_analisis_series extends CI_Controller {
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
 
+		$tipo =set_value('sel_tipo');
+
 		$datos = array(
 				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
-				'datos_trafico' => $this->analisis_series_model->get_trafico_mes($this->input->post('series'), $this->input->post('meses')),
+				'datos_trafico' => $this->analisis_series_model->get_trafico_mes2($this->input->post('series'), $this->input->post('meses'), $tipo),
 			);
 
 		$datos['titulo_modulo'] = 'Consulta información series';
@@ -118,11 +120,11 @@ class Stock_analisis_series extends CI_Controller {
 	 * @param  none
 	 * @return none
 	 */
-	public function ajax_trafico_mes($serie = '', $meses = '')
+	public function ajax_trafico_mes($serie = '', $meses = '', $tipo = 'imei')
 	{
 		$this->load->model('analisis_series_model');
 		$data = array(
-				'datos' => json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses)),
+				'datos' => json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses, $tipo)),
 			);
 		$this->load->view('stock_sap/ajax_trafico_view', $data);
 	}
