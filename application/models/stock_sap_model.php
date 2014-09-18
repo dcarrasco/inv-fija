@@ -11,6 +11,8 @@ class stock_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function get_stock($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
 		if ($tipo_op == 'MOVIL')
@@ -23,6 +25,8 @@ class stock_sap_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function _get_stock_movil($mostrar = array(), $filtrar = array())
 	{
@@ -351,6 +355,8 @@ class stock_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function _get_stock_fijo($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
@@ -474,7 +480,7 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-
+	// --------------------------------------------------------------------
 
 	public function get_stock_transito($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
@@ -488,6 +494,8 @@ class stock_sap_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function _get_stock_transito_fijo($mostrar = array(), $filtrar = array())
 	{
@@ -559,11 +567,11 @@ class stock_sap_model extends CI_Model {
 		$arr_result = $this->db->get()->result_array();
 		//print_r($arr_result);
 
-
 		return $arr_result;
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_combo_fechas($tipo_op = '')
 	{
@@ -586,6 +594,9 @@ class stock_sap_model extends CI_Model {
 		return $arr_fecha;
 	}
 
+
+	// --------------------------------------------------------------------
+
 	private function _get_combo_fechas_movil()
 	{
 		$arr_result = array();
@@ -603,6 +614,9 @@ class stock_sap_model extends CI_Model {
 		return $arr_combo;
 	}
 
+
+	// --------------------------------------------------------------------
+
 	private function _get_combo_fechas_fija()
 	{
 		$arr_result = array();
@@ -619,6 +633,9 @@ class stock_sap_model extends CI_Model {
 
 		return $arr_combo;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
@@ -646,8 +663,6 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-
 }
-
 /* End of file stock_sap_model.php */
 /* Location: ./application/models/stock_sap_model.php */

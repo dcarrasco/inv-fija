@@ -942,16 +942,10 @@ class ORM_Model {
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
-			$this->db->select('count(*) as cant');
 			$this->_put_filtro($filtro);
-			$rs = $this->db->get($this->model_tabla)->row();
+		}
 
-			return $rs->cant;
-		}
-		else
-		{
-			return $this->db->count_all($this->model_tabla);
-		}
+		return $this->db->count_all_results($this->model_tabla);
 	}
 
 

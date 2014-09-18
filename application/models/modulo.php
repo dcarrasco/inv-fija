@@ -64,15 +64,14 @@ class Modulo extends ORM_Model {
 
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
-		//$fields = $this->get_model_fields();
-		//$relation = $fields['id_app']->get_relation();
-		//return $relation['data']->__toString() . ' > ' . $this->modulo;
 		return $this->modulo;
 	}
 
 }
-
 /* End of file modulo.php */
 /* Location: ./application/models/modulo.php */

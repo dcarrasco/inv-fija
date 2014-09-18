@@ -11,6 +11,8 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Loguea un usuario en el sistema
 	 * @param  string $usr usuario
@@ -20,20 +22,29 @@ class Acl_model extends CI_Model {
 	public function login($usr = '', $pwd = '')
 	{
 		$this->delete_session_cookies();
-		if ($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))->num_rows() > 0)
+
+		$usuario_valido = $this->db
+			->where(array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))
+			->get('fija_usuarios')
+			->num_rows() > 0;
+
+		if ($usuario_valido)
 		{
 			// escribe auditoria del login
-			$this->db->where('usr', $usr);
-			$this->db->update('fija_usuarios',
-				array(
-					'fecha_login'  => date('Ymd H:i:s'),
-					'ip_login'     => $this->input->ip_address(),
-					'agente_login' => $this->input->user_agent(),
-				));
+			$this->db
+				->where('usr', $usr)
+				->update('fija_usuarios',
+					array(
+						'fecha_login'  => date('Ymd H:i:s'),
+						'ip_login'     => $this->input->ip_address(),
+						'agente_login' => $this->input->user_agent(),
+					)
+				);
 
 			// crea cookie con la sesion del usuario
 			$this->_set_session_cookies($usr);
 			$this->_set_menu_cookies($usr);
+
 			return TRUE;
 		}
 		else
@@ -43,6 +54,7 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el id del usuario, dado el nombre de usuario
@@ -57,6 +69,8 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve el usuario (leido desde cookie)
 	 * @param  none
@@ -67,6 +81,8 @@ class Acl_model extends CI_Model {
 		return $this->encrypt->decode($this->input->cookie('user'));
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el menu del usuario desde la cookie. Si no existe cookie, la crea
@@ -84,6 +100,8 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve arreglo con todos los modulos para un usuario
 	 * @param  string $usr Usuario
@@ -91,23 +109,27 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_llaves_modulos($usr = '')
 	{
-		$this->db->distinct();
-		$this->db->select('llave_modulo');
-		$this->db->from('fija_usuarios u');
-		$this->db->join('acl_usuario_rol ur', 'ur.id_usuario = u.id');
-		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
-		$this->db->join('acl_modulo m',       'm.id          = rm.id_modulo');
-		$this->db->where('usr', $usr);
-		$arr_rs = $this->db->get()->result_array();
+		$arr_rs = $this->db->distinct()
+			->select('llave_modulo')
+			->from('fija_usuarios u')
+			->join('acl_usuario_rol ur', 'ur.id_usuario = u.id')
+			->join('acl_rol_modulo rm', 'rm.id_rol = ur.id_rol')
+			->join('acl_modulo m', 'm.id = rm.id_modulo')
+			->where('usr', $usr)
+			->get()
+			->result_array();
 
 		$arr_modulos = array();
 		foreach($arr_rs as $rs)
 		{
 			array_push($arr_modulos, $rs['llave_modulo']);
 		}
+
 		return $arr_modulos;
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el menu de módulos del usuario
@@ -116,18 +138,21 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_menu_usuario($usr = '')
 	{
-		$this->db->distinct();
-		$this->db->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden');
-		$this->db->from('fija_usuarios u');
-		$this->db->join('acl_usuario_rol ur', 'ur.id_usuario = u.id');
-		$this->db->join('acl_rol_modulo rm',  'rm.id_rol     = ur.id_rol');
-		$this->db->join('acl_modulo m',       'm.id          = rm.id_modulo');
-		$this->db->join('acl_app a',          'a.id          = m.id_app');
-		$this->db->where('usr', (string)$usr);
-		$this->db->order_by('a.orden, m.orden');
-		return $this->db->get()->result_array();
+		return $this->db->distinct()
+			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
+			->from('fija_usuarios u')
+			->join('acl_usuario_rol ur', 'ur.id_usuario = u.id')
+			->join('acl_rol_modulo rm', 'rm.id_rol = ur.id_rol')
+			->join('acl_modulo m', 'm.id = rm.id_modulo')
+			->join('acl_app a', 'a.id = m.id_app')
+			->where('usr', (string)$usr)
+			->order_by('a.orden, m.orden')
+			->get()
+			->result_array();
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Crea las cookies de login para un usuario
@@ -139,9 +164,11 @@ class Acl_model extends CI_Model {
 			'name'   => 'user',
 			'value'  => $this->encrypt->encode($usr),
 			'expire' => '1200',
-			));
+		));
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Crea las cookies de menu para un usuario
@@ -153,15 +180,17 @@ class Acl_model extends CI_Model {
 			'name'   => 'modulos',
 			'value'  => $this->encrypt->encode(json_encode($this->get_llaves_modulos($usr))),
 			'expire' => '0'
-			));
+		));
 
 		$this->input->set_cookie(array(
 			'name'   => 'menu_app',
 			'value'  => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
 			'expire' => '0'
-			));
+		));
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Borra las cookies de login
@@ -174,6 +203,8 @@ class Acl_model extends CI_Model {
 		delete_cookie('menu_app');
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Autentica el uso de un módulo de la aplicacion
@@ -189,6 +220,7 @@ class Acl_model extends CI_Model {
 		else
 		{
 			$arr_modulos = json_decode($this->encrypt->decode($this->input->cookie('modulos')));
+
 			if (!in_array($mod, $arr_modulos))
 			{
 				redirect('login');
@@ -202,6 +234,8 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve el nombre de un usuario
 	 * @param  string $usr Usuario
@@ -209,17 +243,15 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_nombre_usuario($usr = '')
 	{
-		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
-		if (count($arr_rs) > 0)
-		{
-			return $arr_rs['nombre'];
-		}
-		else
-		{
-			return '';
-		}
+		$arr_rs = $this->db
+			->get_where('fija_usuarios', array('usr' => $usr))
+			->row_array();
+
+		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Indica si un usuario tiene o no una clave
@@ -228,10 +260,13 @@ class Acl_model extends CI_Model {
 	 */
 	public function tiene_clave($usr = '')
 	{
-		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		$arr_rs = $this->db
+			->get_where('fija_usuarios', array('usr' => $usr))
+			->row_array();
+
 		if (count($arr_rs) > 0)
 		{
-			return ((is_null($arr_rs['pwd']) OR $arr_rs['pwd'] == ' ' OR $arr_rs['pwd'] == '') ? FALSE : TRUE);
+			return ((is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) == '') ? FALSE : TRUE);
 		}
 		else
 		{
@@ -239,6 +274,8 @@ class Acl_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Indica si un usuario existe o no en el sistema
@@ -248,9 +285,12 @@ class Acl_model extends CI_Model {
 	public function existe_usuario($usr = '')
 	{
 		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
+
 		return (($regs > 0) ? TRUE : FALSE);
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Cambia la clave de un usuario
@@ -261,17 +301,26 @@ class Acl_model extends CI_Model {
 	 */
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
 	{
-		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
+		$arr_rs = $this->db
+			->get_where('fija_usuarios', array('usr' => $usr))
+			->row_array();
+
 		if (!$this->tiene_clave($usr))
 		{
-			$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+			$this->db
+				->where('usr', $usr)
+				->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+
 			return array(TRUE);
 		}
 		else
 		{
 			if($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
 			{
-				$this->db->where('usr', $usr)->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+				$this->db
+					->where('usr', $usr)
+					->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+
 				return array(TRUE);
 			}
 			else
@@ -282,6 +331,8 @@ class Acl_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve el correo de un usuario
 	 * @param  string $usr Usuario
@@ -289,21 +340,14 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_correo($usr = '')
 	{
-		$arr_rs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->row_array();
-		if (count($arr_rs) > 0)
-		{
-			return $arr_rs['correo'];
-		}
-		else
-		{
-			return '';
-		}
+		$arr_rs = $this->db
+			->get_where('fija_usuarios', array('usr' => $usr))
+			->row_array();
+
+		return (count($arr_rs) > 0) ? $arr_rs['correo'] : '';
 	}
 
 
-
-
 }
-
 /* End of file acl_model.php */
 /* Location: ./application/models/acl_model.php */

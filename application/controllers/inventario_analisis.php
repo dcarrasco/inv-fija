@@ -26,6 +26,7 @@ class Inventario_analisis extends CI_Controller {
 		$this->nombre_inventario = $inventario_activo->nombre;
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -38,6 +39,7 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->ajustes();
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -60,7 +62,7 @@ class Inventario_analisis extends CI_Controller {
 			foreach($detalle_ajustes->get_model_all() as $detalle)
 			{
 				$this->form_validation->set_rules('stock_ajuste_' . $detalle->id, 'cantidad', 'trim|integer');
-				$this->form_validation->set_rules('observacion_'  . $detalle->id, 'observacion', 'trim');
+				$this->form_validation->set_rules('observacion_' . $detalle->id, 'observacion', 'trim');
 			}
 		}
 
@@ -74,12 +76,12 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-					'detalle_ajustes'       => $detalle_ajustes,
-					'ocultar_regularizadas' => $ocultar_regularizadas,
-					'pag'                   => $pag,
-					'links_paginas'         => $links_paginas,
-					'msg_alerta'            => $this->session->flashdata('msg_alerta'),
-				);
+				'detalle_ajustes'       => $detalle_ajustes,
+				'ocultar_regularizadas' => $ocultar_regularizadas,
+				'pag'                   => $pag,
+				'links_paginas'         => $links_paginas,
+				'msg_alerta'            => $this->session->flashdata('msg_alerta'),
+			);
 
 			$this->_render_view('ajustes', $data);
 		}
@@ -90,8 +92,8 @@ class Inventario_analisis extends CI_Controller {
 				$cant_modif = 0;
 				foreach($detalle_ajustes->get_model_all() as $detalle)
 				{
-					if (((int) set_value('stock_ajuste_' . $detalle->id)  != $detalle->stock_ajuste) or
-						(trim(set_value('observacion_' . $detalle->id))   != trim($detalle->glosa_ajuste)) )
+					if (((int) set_value('stock_ajuste_' . $detalle->id) != $detalle->stock_ajuste) OR
+						(trim(set_value('observacion_' . $detalle->id)) != trim($detalle->glosa_ajuste)) )
 					{
 						$detalle->stock_ajuste = (int) set_value('stock_ajuste_' . $detalle->id);
 						$detalle->glosa_ajuste = trim(set_value('observacion_' . $detalle->id));
@@ -103,6 +105,7 @@ class Inventario_analisis extends CI_Controller {
 				}
 				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente' : ''));
 			}
+
 			redirect($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
 		}
 
@@ -137,7 +140,7 @@ class Inventario_analisis extends CI_Controller {
 					'max_size'      => '2000',
 					'file_name'     => 'sube_stock.txt',
 					'overwrite'     => TRUE,
-					);
+				);
 				$this->load->library('upload', $upload_config);
 
 				if (! $this->upload->do_upload('upload_file'))
@@ -164,19 +167,19 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
-				'inventario_id'     => $this->id_inventario,
-				'inventario_nombre' => $this->nombre_inventario,
-				'upload_error'      => $upload_error,
-				'script_carga'      => $script_carga,
-				'show_script_carga' => $show_script_carga,
-				'regs_OK'           => $regs_OK,
-				'regs_error'        => $regs_error,
-				'msj_error'         => $msj_error,
-				'link_config'       => 'config',
-				'link_reporte'      => 'reportes',
-				'link_inventario'   => 'inventario',
-				'msg_alerta'        => $this->session->flashdata('msg_alerta'),
-			);
+			'inventario_id'     => $this->id_inventario,
+			'inventario_nombre' => $this->nombre_inventario,
+			'upload_error'      => $upload_error,
+			'script_carga'      => $script_carga,
+			'show_script_carga' => $show_script_carga,
+			'regs_OK'           => $regs_OK,
+			'regs_error'        => $regs_error,
+			'msj_error'         => $msj_error,
+			'link_config'       => 'config',
+			'link_reporte'      => 'reportes',
+			'link_inventario'   => 'inventario',
+			'msg_alerta'        => $this->session->flashdata('msg_alerta'),
+		);
 
 		$this->_render_view('sube_stock', $data);
 
@@ -220,20 +223,21 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-					'inventario_id'     => $this->id_inventario,
-					'inventario_nombre' => $this->nombre_inventario,
-					'max_hoja'          => $inventario->get_max_hoja_inventario(),
-					'link_config'       => 'config',
-					'link_reporte'      => 'reportes',
-					'link_inventario'   => 'inventario',
-					'msg_alerta'        => $this->session->flashdata('msg_alerta'),
-				);
+				'inventario_id'     => $this->id_inventario,
+				'inventario_nombre' => $this->nombre_inventario,
+				'max_hoja'          => $inventario->get_max_hoja_inventario(),
+				'link_config'       => 'config',
+				'link_reporte'      => 'reportes',
+				'link_inventario'   => 'inventario',
+				'msg_alerta'        => $this->session->flashdata('msg_alerta'),
+			);
 
 			$this->_render_view('imprime_inventario', $data);
 		}
 		else
 		{
 			$oculta_stock_sap = (set_value('oculta_stock_sap') == 'oculta_stock_sap') ? 1 : 0;
+
 			redirect($this->uri->segment(1) . "/imprime_hojas/" . set_value('pag_desde') . '/' . set_value('pag_hasta') . '/' . $oculta_stock_sap . '/' . time());
 		}
 
@@ -256,16 +260,17 @@ class Inventario_analisis extends CI_Controller {
 
 		$this->load->view('inventario/inventario_print_head');
 
-		for($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
+		for ($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
 			$detalle = new Detalle_inventario;
 			$detalle->find('all', array('conditions' => array('id_inventario' => $this->id_inventario, 'hoja' => $hoja)));
+
 			$data = array(
-					'datos_hoja'        => $detalle->get_model_all(),
-					'oculta_stock_sap'  => $oculta_stock_sap,
-					'hoja'              => $hoja,
-					'nombre_inventario' => $this->nombre_inventario,
-				);
+				'datos_hoja'        => $detalle->get_model_all(),
+				'oculta_stock_sap'  => $oculta_stock_sap,
+				'hoja'              => $hoja,
+				'nombre_inventario' => $this->nombre_inventario,
+			);
 
 			$this->load->view('inventario/inventario_print_body', $data);
 		}

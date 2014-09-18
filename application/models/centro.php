@@ -26,12 +26,14 @@ class Centro extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return (string)$this->centro;
 	}
 
 }
-
 /* End of file centro.php */
 /* Location: ./application/models/centro.php */

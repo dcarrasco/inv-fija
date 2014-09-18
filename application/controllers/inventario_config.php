@@ -29,6 +29,7 @@ class Inventario_config extends CI_Controller {
 		);
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -42,6 +43,7 @@ class Inventario_config extends CI_Controller {
 		$arr_keys = array_keys($this->arr_menu);
 		$this->listado($arr_keys[0]);
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -59,6 +61,7 @@ class Inventario_config extends CI_Controller {
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -80,14 +83,16 @@ class Inventario_config extends CI_Controller {
 		$modelo->list_paginated($pag);
 
 		$data = array(
-				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
-				'modelo'             => $modelo,
-				'url_filtro'         => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
-				'url_editar'         => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
-			);
+			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
+			'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+			'modelo'             => $modelo,
+			'url_filtro'         => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
+			'url_editar'         => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
+		);
+
 		$this->_render_view('ORM/orm_listado', $data);
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -110,7 +115,8 @@ class Inventario_config extends CI_Controller {
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
 				'link_cancelar'      => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo),
-				);
+			);
+
 			$this->_render_view('ORM/orm_editar', $data);
 		}
 		else
@@ -126,6 +132,7 @@ class Inventario_config extends CI_Controller {
 				$modelo->borrar();
 				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo . ') borrado correctamente');
 			}
+
 			redirect($this->uri->segment(1) . '/listado/' . $nombre_modelo);
 		}
 	}
@@ -175,7 +182,6 @@ class Inventario_config extends CI_Controller {
 		);
 		$this->pagination->initialize($config_pagination);
 
-
 		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pag);
 
 		if ($this->input->post('formulario')=='editar')
@@ -201,7 +207,6 @@ class Inventario_config extends CI_Controller {
 		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 
-
 		if ($this->form_validation->run() == FALSE)
 		{
 			$arr_combo_tipo_ubic = array();
@@ -217,15 +222,14 @@ class Inventario_config extends CI_Controller {
 				$arr_combo_tipo_ubic[$key] = $this->ubicacion_model->get_combo_tipos_ubicacion($key);
 			}
 
-
 			$data = array(
-					'menu_modulo'            => array('menu' => $this->arr_menu, 'mod_selected' => 'ubicaciones'),
-					'datos_hoja'             => $datos_hoja,
-					'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
-					'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
-					'msg_alerta'             => $this->session->flashdata('msg_alerta'),
-					'links_paginas'          => $this->pagination->create_links(),
-				);
+				'menu_modulo'            => array('menu' => $this->arr_menu, 'mod_selected' => 'ubicaciones'),
+				'datos_hoja'             => $datos_hoja,
+				'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
+				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
+				'msg_alerta'             => $this->session->flashdata('msg_alerta'),
+				'links_paginas'          => $this->pagination->create_links(),
+			);
 
 			$this->_render_view('ubicacion_tipo_ubicacion', $data);
 		}
@@ -262,6 +266,7 @@ class Inventario_config extends CI_Controller {
 				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
 				$this->session->set_flashdata('msg_alerta', 'Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
 			}
+
 			redirect($this->uri->segment(1) . '/ubicacion_tipo_ubicacion/' . $pag);
 		}
 	}

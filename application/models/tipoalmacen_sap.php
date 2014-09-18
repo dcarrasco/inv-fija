@@ -57,12 +57,14 @@ class Tipoalmacen_sap extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return (string)$this->tipo;
 	}
 
 }
-
 /* End of file almacen.php */
 /* Location: ./application/models/almacen.php */

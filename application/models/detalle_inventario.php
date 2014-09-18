@@ -150,33 +150,46 @@ class Detalle_inventario extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->hoja;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
 		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function get_nombre_auditor()
 	{
-		if(count($this->get_model_all()) > 0)
+		if (count($this->get_model_all()) > 0)
 		{
 			$all = $this->get_model_all();
 			$all_fields = $all[0]->get_model_fields();
 			$rel = $all_fields['auditor']->get_relation();
+
 			return $rel['data']->nombre;
 		}
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function get_id_auditor()
 	{
 		if(count($this->get_model_all()) > 0)
 		{
 			$all = $this->get_model_all();
+
 			return $all[0]->auditor;
 		}
 		else
@@ -186,6 +199,8 @@ class Detalle_inventario extends ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function get_nombre_digitador()
 	{
 		if(count($this->get_model_all()) > 0)
@@ -193,6 +208,7 @@ class Detalle_inventario extends ORM_Model {
 			$all = $this->get_model_all();
 			$all_fields = $all[0]->get_model_fields();
 			$rel = $all_fields['digitador']->get_relation();
+
 			return $rel['data']->nombre;
 		}
 		else if ($this->digitador != 0)
@@ -206,79 +222,71 @@ class Detalle_inventario extends ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recuoera las lineas de detalle del inventario para ajustar
 	 * @param  integer $id_inventario         ID del inventario a consultar
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
+	 * @param  integer $pag                   pagina a mostrar
 	 * @return array                          Arreglo con el detalle de los registros
 	 */
 	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
 	{
 		//determina la cantidad de registros
-		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
-		$this->db->where('id_inventario', $id_inventario);
-		if ($ocultar_regularizadas == 1)
-		{
-			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
-		}
-		else
-		{
-			$this->db->where('stock_fisico - stock_sap <> 0');
-		}
-		$total_rows = count($this->db->get('fija_detalle_inventario')->result_array());
+		$total_rows = $this->db
+			->where('id_inventario', $id_inventario)
+			->where(
+				($ocultar_regularizadas == 1) ?
+				'stock_fisico - stock_sap + stock_ajuste <> 0' :
+				'stock_fisico - stock_sap <> 0'
+			)
+			->count_all_results('fija_detalle_inventario');
 
 		// recupera el detalle de registros
-		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
-		$this->db->where('id_inventario', $id_inventario);
-		if ($ocultar_regularizadas == 1)
-		{
-			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0');
-		}
-		else
-		{
-			$this->db->where('stock_fisico - stock_sap <> 0');
-		}
-
 		$per_page = 50;
-		if ($pag > 0)
-		{
-			$this->db->limit($per_page, $pag);
-		}
-		else
-		{
-			$this->db->limit($per_page);
-		}
-		$rs = $this->db->get('fija_detalle_inventario')->result_array();
+
+		$rs = $this->db
+			->order_by('catalogo, lote, centro, almacen, ubicacion')
+			->where('id_inventario', $id_inventario)
+			->where(
+				($ocultar_regularizadas == 1) ?
+				'stock_fisico - stock_sap + stock_ajuste <> 0' :
+				'stock_fisico - stock_sap <> 0'
+			)
+			->limit($per_page, $pag)
+			->get('fija_detalle_inventario')
+			->result_array();
 
 		$this->load->library('pagination');
 		$cfg_pagination = array(
-					'uri_segment' => 4,
-					'num_links'   => 5,
+			'uri_segment' => 4,
+			'num_links'   => 5,
 
-					'full_tag_open'   => '<ul class="pagination">',
-					'flil_tag_close'  => '</ul>',
+			'full_tag_open'   => '<ul class="pagination">',
+			'flil_tag_close'  => '</ul>',
 
-					'first_tag_open'  => '<li>',
-					'first_tag_close' => '</li>',
-					'last_tag_open'   => '<li>',
-					'last_tag_close'  => '</li>',
-					'next_tag_open'   => '<li>',
-					'next_tag_close'  => '</li>',
-					'prev_tag_open'   => '<li>',
-					'prev_tag_close'  => '</li>',
-					'cur_tag_open'    => '<li class="active"><a href="#">',
-					'cur_tag_close'   => '</a></li>',
-					'num_tag_open'    => '<li>',
-					'num_tag_close'   => '</li>',
+			'first_tag_open'  => '<li>',
+			'first_tag_close' => '</li>',
+			'last_tag_open'   => '<li>',
+			'last_tag_close'  => '</li>',
+			'next_tag_open'   => '<li>',
+			'next_tag_close'  => '</li>',
+			'prev_tag_open'   => '<li>',
+			'prev_tag_close'  => '</li>',
+			'cur_tag_open'    => '<li class="active"><a href="#">',
+			'cur_tag_close'   => '</a></li>',
+			'num_tag_open'    => '<li>',
+			'num_tag_close'   => '</li>',
 
-					'per_page'    => $per_page,
-					'total_rows'  => $total_rows,
-					'base_url'    => site_url($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
-					'first_link'  => 'Primero',
-					'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
-					'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-					'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
-				);
+			'per_page'    => $per_page,
+			'total_rows'  => $total_rows,
+			'base_url'    => site_url($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
+			'first_link'  => 'Primero',
+			'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
+			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
+			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+		);
 		$this->pagination->initialize($cfg_pagination);
 
 		$model_all = array();
@@ -294,9 +302,6 @@ class Detalle_inventario extends ORM_Model {
 	}
 
 
-
-
 }
-
 /* End of file detalle_inventario.php */
 /* Location: ./application/models/detalle_inventario.php */

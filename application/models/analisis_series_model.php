@@ -49,6 +49,7 @@ class Analisis_series_model extends CI_Model {
 		return $arr_series;
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -82,6 +83,7 @@ class Analisis_series_model extends CI_Model {
 
 		return $serie14 . (10 - $sum_dv % 10);
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -119,6 +121,7 @@ class Analisis_series_model extends CI_Model {
 		}
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -142,6 +145,7 @@ class Analisis_series_model extends CI_Model {
 				->result_array();
 		}
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -173,6 +177,7 @@ class Analisis_series_model extends CI_Model {
 		}
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -203,6 +208,7 @@ class Analisis_series_model extends CI_Model {
 				->result_array();
 		}
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -243,6 +249,7 @@ class Analisis_series_model extends CI_Model {
 		return $result;
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -267,6 +274,7 @@ class Analisis_series_model extends CI_Model {
 		}
 		return $resultado;
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -309,6 +317,7 @@ class Analisis_series_model extends CI_Model {
 
 		return $result;
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -377,6 +386,7 @@ class Analisis_series_model extends CI_Model {
 		return $result_final;
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -408,9 +418,6 @@ class Analisis_series_model extends CI_Model {
 	}
 
 
-
-
 }
-
 /* End of file analisis_series_model.php */
 /* Location: ./application/models/analisis_series_model.php */

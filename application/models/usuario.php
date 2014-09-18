@@ -96,10 +96,16 @@ class Usuario extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->nombre;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function ___get_combo_usuarios($tipo = 'AUD')
 	{
@@ -123,6 +129,7 @@ class Usuario extends ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function ___get_usuarios($limit = 0, $offset = 0)
 	{
@@ -132,12 +139,14 @@ class Usuario extends ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function ___total_usuarios()
 	{
 		return $this->db->count_all('fija_usuarios');
 	}
 
+	// --------------------------------------------------------------------
 
 	public function ___get_cant_registros_usuario($id = 0)
 	{
@@ -148,6 +157,5 @@ class Usuario extends ORM_Model {
 
 
 }
-
 /* End of file usuario.php */
 /* Location: ./application/models/usuario.php */
