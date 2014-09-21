@@ -234,7 +234,7 @@ class Detalle_inventario extends ORM_Model {
 	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
 	{
 		//determina la cantidad de registros
-		$total_rows = $this->db
+		$total_rows = $this->CI->db
 			->where('id_inventario', $id_inventario)
 			->where(
 				($ocultar_regularizadas == 1) ?
@@ -246,7 +246,7 @@ class Detalle_inventario extends ORM_Model {
 		// recupera el detalle de registros
 		$per_page = 50;
 
-		$rs = $this->db
+		$rs = $this->CI->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
 			->where('id_inventario', $id_inventario)
 			->where(
@@ -258,7 +258,7 @@ class Detalle_inventario extends ORM_Model {
 			->get('fija_detalle_inventario')
 			->result_array();
 
-		$this->load->library('pagination');
+		$this->CI->load->library('pagination');
 		$cfg_pagination = array(
 			'uri_segment' => 4,
 			'num_links'   => 5,
@@ -281,13 +281,13 @@ class Detalle_inventario extends ORM_Model {
 
 			'per_page'    => $per_page,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
+			'base_url'    => site_url($this->CI->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
-		$this->pagination->initialize($cfg_pagination);
+		$this->CI->pagination->initialize($cfg_pagination);
 
 		$model_all = array();
 		foreach($rs as $reg)
@@ -298,7 +298,7 @@ class Detalle_inventario extends ORM_Model {
 		}
 		$this->set_model_all($model_all);
 
-		return $this->pagination->create_links();
+		return $this->CI->pagination->create_links();
 	}
 
 

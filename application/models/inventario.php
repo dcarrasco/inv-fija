@@ -59,7 +59,9 @@ class Inventario extends ORM_Model {
 
 		if ($this->activo)
 		{
-			$this->db->update($this->get_model_tabla(), array('activo' => 0), 'id<>' . $this->id);
+			$this->CI->db
+				->where('id <>', (int) $this->id)
+				->update($this->get_model_tabla(), array('activo' => 0));
 		}
 	}
 
@@ -78,12 +80,12 @@ class Inventario extends ORM_Model {
 
 	public function get_max_hoja_inventario()
 	{
-		$rs = $this->db
+		$rs = $this->CI->db
 			->select('max(hoja) as max_hoja')
 			->get_where('fija_detalle_inventario', array('id_inventario' => $this->id))
-			->row_array();
+			->row();
 
-		return ($rs['max_hoja']);
+		return ($rs->max_hoja);
 	}
 
 
@@ -91,7 +93,7 @@ class Inventario extends ORM_Model {
 
 	public function borrar_detalle_inventario()
 	{
-		$this->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
+		$this->CI->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
 	}
 
 

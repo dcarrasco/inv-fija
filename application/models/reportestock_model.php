@@ -8,6 +8,9 @@ class Reportestock_model extends CI_Model {
 		parent::__construct();
 	}
 
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve datos para poblar combobox de tipos de inventario
 	 * @return array Arreglo con los tipos de inventiaro
@@ -27,55 +30,69 @@ class Reportestock_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function combo_tipo_alm($tipo_op = '')
 	{
-		$this->db->distinct();
-		$this->db->select('t.id_tipo, t.tipo');
-		$this->db->from('bd_logistica..cp_tiposalm t');
-		$this->db->where('t.tipo_op', $tipo_op);
-		$this->db->order_by('t.tipo');
-		$arr_rs = $this->db->get()->result_array();
+		$arr_rs = $this->db
+			->distinct()
+			->select('t.id_tipo, t.tipo')
+			->from('bd_logistica..cp_tiposalm t')
+			->where('t.tipo_op', $tipo_op)
+			->order_by('t.tipo')
+			->get()
+			->result_array();
 
 		$arr_combo = array();
 		foreach($arr_rs as $reg)
 		{
 			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
 		}
+
 		return $arr_combo;
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function combo_estado_sap()
 	{
 		return array(
-				'01' => '01 Libre Utilizacion',
-				'02' => '02 Control de Calidad',
-				'03' => '03 Devolucion Cliente',
-				'06' => '06 Transito',
-				'07' => '07 Bloqueado',
-			);
+			'01' => '01 Libre Utilizacion',
+			'02' => '02 Control de Calidad',
+			'03' => '03 Devolucion Cliente',
+			'06' => '06 Transito',
+			'07' => '07 Bloqueado',
+		);
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function combo_tipo_alm_consumo()
 	{
-		$this->db->distinct();
-		$this->db->select('t.id_tipo, t.tipo');
-		$this->db->from('bd_logistica..cp_tipos_almacenes ta');
-		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
-		$this->db->like('t.tipo', '(CONSUMO)');
-		$this->db->order_by('t.tipo');
-		$arr_rs = $this->db->get()->result_array();
+		$arr_rs = $this->db
+			->distinct()
+			->select('t.id_tipo, t.tipo')
+			->from('bd_logistica..cp_tipos_almacenes ta')
+			->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left')
+			->like('t.tipo', '(CONSUMO)')
+			->order_by('t.tipo')
+			->get()
+			->result_array();
 
 		$arr_combo = array();
 		foreach($arr_rs as $reg)
 		{
 			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
 		}
+
 		return $arr_combo;
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function combo_tipo_mat()
 	{
@@ -101,8 +118,9 @@ class Reportestock_model extends CI_Model {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_permanencia($orden_campo = 't.tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(),
-										$tipo_mat = array(), $incl_almacen = '0', $incl_lote = '0', $incl_modelos = '0')
+	public function get_reporte_permanencia($orden_campo = 't.tipo', $orden_tipo = 'ASC',
+		$tipo_alm = array(), $estado_sap = array(),
+		$tipo_mat = array(), $incl_almacen = '0', $incl_lote = '0', $incl_modelos = '0')
 	{
 
 		$this->db->select('t.tipo, t.id_tipo');
@@ -269,7 +287,7 @@ class Reportestock_model extends CI_Model {
 		{
 			$this->db->where('t.id_tipo', $tipo_alm);
 		}
-		
+
 		if ($centro != '')
 		{
 			$this->db->where('s.centro', $centro);
