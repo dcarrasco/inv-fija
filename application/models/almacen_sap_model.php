@@ -12,23 +12,26 @@ class Almacen_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function get_combo_centros()
 	{
 		$arr_result = array();
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccionar centro ...';
 
-		$this->db->distinct()->select('centro')->order_by('centro');
-		$arr_result = $this->db->get($this->bd_logistica . 'cp_almacenes')->result_array();
+		$arr_result = $this->db
+			->distinct()
+			->select('centro as key, centro as value')
+			->order_by('centro')
+			->get($this->bd_logistica . 'cp_almacenes')
+			->result_array();
 
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['centro']] = $reg['centro'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function get_combo_almacenes($tipo_op = '')
 	{
@@ -36,16 +39,19 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo = array();
 		//$arr_combo[''] = 'Seleccionar almacenes ...';
 
-		$this->db->order_by('centro, cod_almacen');
-		$arr_result = $this->db->get_where($this->bd_logistica . 'cp_almacenes', array('tipo_op'=>$tipo_op))->result_array();
+		$arr_result = $this->db
+			->select('centro + \'-\' + cod_almacen as key')
+			->select('centro + \'-\' + cod_almacen + \' \' + des_almacen as value')
+			->order_by('centro, cod_almacen')
+			->where('tipo_op', $tipo_op)
+			->get($this->bd_logistica . 'cp_almacenes')
+			->result_array();
 
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['centro'] . '-' . $reg['cod_almacen']] = $reg['centro'] . ' - ' . $reg['cod_almacen'] . ' - ' . $reg['des_almacen'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_combo_tiposalm($tipo_op = '')
 	{
@@ -53,16 +59,18 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccionar tipo almacen ...';
 
-		$this->db->order_by('tipo');
-		$arr_result = $this->db->get_where($this->bd_logistica . 'cp_tiposalm', array('tipo_op' => $tipo_op))->result_array();
+		$arr_result = $this->db
+			->select('id_tipo as key, tipo as value')
+			->order_by('tipo')
+			->where('tipo_op', $tipo_op)
+			->get($this->bd_logistica . 'cp_tiposalm')
+			->result_array();
 
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_tiposalm($tipo_op = '', $grupo = 0)
 	{
@@ -77,6 +85,9 @@ class Almacen_sap_model extends CI_Model {
 
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function get_tipos_almacenes($grupo = 0)
 	{
 		$arr_result = array();
@@ -87,6 +98,9 @@ class Almacen_sap_model extends CI_Model {
 		}
 		return $arr_result;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_detalle_almacenes($grupo = 0)
 	{
@@ -110,6 +124,9 @@ class Almacen_sap_model extends CI_Model {
 		}
 		return $arr_result;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_grupos_almacenes($centro = '', $alm = '')
 	{
@@ -135,6 +152,8 @@ class Almacen_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function grabar_tiposalm($tipo_op = '', $id_tipo = 0, $tipoalm = '')
 	{
 		if ($id_tipo == 0)
@@ -147,6 +166,9 @@ class Almacen_sap_model extends CI_Model {
 			$this->db->update('bd_logistica..cp_tiposalm', array('tipo' => $tipoalm));
 		}
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function grabar_tiposalmacenes($id_tipo = 0, $arr_alm = array())
 	{
@@ -161,11 +183,17 @@ class Almacen_sap_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function borrar_tiposalm($id_tipo = 0)
 	{
 		$this->db->delete('bd_logistica..cp_tipos_almacenes', array('id_tipo' => $id_tipo));
 		$this->db->delete('bd_logistica..cp_tiposalm', array('id_tipo' => $id_tipo));
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_almacenes($tipo_op = '', $centro = '', $cod_alm = '')
 	{
@@ -179,6 +207,9 @@ class Almacen_sap_model extends CI_Model {
 			return $this->db->get_where('bd_logistica..cp_almacenes', array('centro'=>$centro, 'cod_almacen' => $cod_alm))->row_array();
 		}
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function grabar_almacenes($centro = '', $cod_almacen = '', $des_almacen = '', $uso_almacen = '', $responsable = '', $grupos = array(), $tipo_op)
 	{
@@ -203,6 +234,5 @@ class Almacen_sap_model extends CI_Model {
 
 
 }
-
 /* End of file almacen_sap_model.php */
 /* Location: ./application/models/almacen_sap_model.php */

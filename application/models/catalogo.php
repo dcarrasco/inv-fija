@@ -67,7 +67,7 @@ class Catalogo extends ORM_Model {
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccionar material ...';
 
-		$arr_result = $this->db
+		$arr_result = $this->CI->db
 			->order_by('catalogo')
 			->like('descripcion', $filtro)
 			->like('descripcion', $filtro)
@@ -88,7 +88,7 @@ class Catalogo extends ORM_Model {
 
 	public function get_descripcion($catalogo = '')
 	{
-		$row = $this->db
+		$row = $this->CI->db
 			->get_where($this->get_model_tabla(), array('catalogo' => $catalogo))
 			->row_array();
 
@@ -100,14 +100,14 @@ class Catalogo extends ORM_Model {
 
 	public function get_materiales($filtro = '_', $limit = 0, $offset = 0)
 	{
-		$this->db->order_by('catalogo ASC');
+		$this->CI->db->order_by('catalogo ASC');
 
 		if ($filtro != '_')
 		{
-			$this->db->like('descripcion', $filtro);
+			$this->CI->db->like('descripcion', $filtro);
 		}
 
-		return $this->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
+		return $this->CI->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
 	}
 
 
@@ -117,10 +117,10 @@ class Catalogo extends ORM_Model {
 	{
 		if ($filtro != '_')
 		{
-			$this->db->like('descripcion', $filtro);
+			$this->CI->db->like('descripcion', $filtro);
 		}
 
-		return $this->db->get($this->get_model_tabla())->num_rows();
+		return $this->CI->db->get($this->get_model_tabla())->num_rows();
 	}
 
 
@@ -128,7 +128,7 @@ class Catalogo extends ORM_Model {
 
 	public function get_cant_registros_catalogo($id = 0)
 	{
-		return $this->db->get_where('fija_detalle_inventario', array('catalogo' => $id))->num_rows();
+		return $this->CI->db->get_where('fija_detalle_inventario', array('catalogo' => $id))->num_rows();
 	}
 
 

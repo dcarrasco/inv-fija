@@ -87,7 +87,7 @@ class Almacen_sap extends ORM_Model {
 
 	public function almacenes_no_ingresados()
 	{
-		$alm_movil = $this->db->distinct()
+		$alm_movil = $this->CI->db->distinct()
 			->select('s.centro, s.cod_bodega')
 			->from('bd_logistica..stock_scl s')
 			->join('bd_logistica..cp_almacenes a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
@@ -98,7 +98,7 @@ class Almacen_sap extends ORM_Model {
 			->get()
 			->result_array();
 
-		$alm_fija = $this->db->distinct()
+		$alm_fija = $this->CI->db->distinct()
 			->select('s.centro, s.almacen as cod_bodega')
 			->from('bd_logistica..bd_stock_sap_fija s')
 			->join('bd_logistica..cp_almacenes a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')

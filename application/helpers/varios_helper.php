@@ -8,9 +8,30 @@ if ( ! function_exists('dbg'))
 		$dump = print_r($item, TRUE);
 		echo gettype($item) . ' : ' . $dump;
 		echo '</pre><hr>';
+		//var_dump($item);
 	}
 }
 
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('form_array_format'))
+{
+	function form_array_format($arr = array())
+	{
+		$arr_combo = array();
+
+		foreach($arr as $reg)
+		{
+			$arr_combo[$reg['key']] = $reg['value'];
+		}
+
+		return $arr_combo;
+	}
+}
+
+
+// --------------------------------------------------------------------
 
 if ( ! function_exists('form_has_error'))
 {
@@ -21,6 +42,8 @@ if ( ! function_exists('form_has_error'))
 }
 
 
+// --------------------------------------------------------------------
+
 if ( ! function_exists('fmt_cantidad'))
 {
 	function fmt_cantidad($valor = 0, $decimales = 0)
@@ -29,6 +52,8 @@ if ( ! function_exists('fmt_cantidad'))
 	}
 }
 
+
+// --------------------------------------------------------------------
 
 if ( ! function_exists('fmt_monto'))
 {
@@ -50,9 +75,7 @@ if ( ! function_exists('fmt_monto'))
 			}
 		}
 	}
+
 }
-
-
-
 /* helpers varios_helper.php */
 /* Location: ./application/helpers/varios_helper.php */
