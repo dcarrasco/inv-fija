@@ -23,7 +23,7 @@ if ( ! function_exists('form_array_format'))
 
 		foreach($arr as $reg)
 		{
-			$arr_combo[$reg['key']] = $reg['value'];
+			$arr_combo[$reg['llave']] = $reg['valor'];
 		}
 
 		return $arr_combo;

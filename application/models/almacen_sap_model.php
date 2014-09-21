@@ -22,7 +22,7 @@ class Almacen_sap_model extends CI_Model {
 
 		$arr_result = $this->db
 			->distinct()
-			->select('centro as key, centro as value')
+			->select('centro as llave, centro as valor')
 			->order_by('centro')
 			->get($this->bd_logistica . 'cp_almacenes')
 			->result_array();
@@ -40,8 +40,8 @@ class Almacen_sap_model extends CI_Model {
 		//$arr_combo[''] = 'Seleccionar almacenes ...';
 
 		$arr_result = $this->db
-			->select('centro + \'-\' + cod_almacen as key')
-			->select('centro + \'-\' + cod_almacen + \' \' + des_almacen as value')
+			->select('centro + \'-\' + cod_almacen as llave')
+			->select('centro + \'-\' + cod_almacen + \' \' + des_almacen as valor')
 			->order_by('centro, cod_almacen')
 			->where('tipo_op', $tipo_op)
 			->get($this->bd_logistica . 'cp_almacenes')
@@ -60,7 +60,7 @@ class Almacen_sap_model extends CI_Model {
 		$arr_combo[''] = 'Seleccionar tipo almacen ...';
 
 		$arr_result = $this->db
-			->select('id_tipo as key, tipo as value')
+			->select('id_tipo as llave, tipo as valor')
 			->order_by('tipo')
 			->where('tipo_op', $tipo_op)
 			->get($this->bd_logistica . 'cp_tiposalm')
