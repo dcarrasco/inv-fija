@@ -65,6 +65,25 @@ class Tipoalmacen_sap extends ORM_Model {
 		return (string)$this->tipo;
 	}
 
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_tiposalm($tipo_op = '')
+	{
+		$arr_result = array();
+		$arr_combo = array();
+
+		$arr_result = $this->CI->db
+			->select('id_tipo as llave, tipo as valor')
+			->order_by('tipo')
+			->where('tipo_op', $tipo_op)
+			->get($this->get_model_tabla())
+			->result_array();
+
+		return form_array_format($arr_result);
+	}
+
+
 }
 /* End of file almacen.php */
 /* Location: ./application/models/almacen.php */

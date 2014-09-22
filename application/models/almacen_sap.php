@@ -85,6 +85,25 @@ class Almacen_sap extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	public function get_combo_almacenes($tipo_op = '')
+	{
+		$arr_result = array();
+		$arr_combo = array();
+
+		$arr_result = $this->CI->db
+			->select('centro + \'-\' + cod_almacen as llave')
+			->select('centro + \'-\' + cod_almacen + \' \' + des_almacen as valor')
+			->order_by('centro, cod_almacen')
+			->where('tipo_op', $tipo_op)
+			->get($this->get_model_tabla())
+			->result_array();
+
+		return form_array_format($arr_result);
+	}
+
+
+	// --------------------------------------------------------------------
+
 	public function almacenes_no_ingresados()
 	{
 		$alm_movil = $this->CI->db->distinct()

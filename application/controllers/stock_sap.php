@@ -63,7 +63,9 @@ class Stock_sap extends CI_Controller {
 	public function mostrar_stock($tipo_op = '')
 	{
 		$this->load->model('stock_sap_model');
-		$this->load->model('almacen_sap_model');
+
+		$almacen_sap = new Almacen_sap;
+		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
 		foreach (array('almacen','material','lote','tipo_stock') as $val)
@@ -230,8 +232,8 @@ class Stock_sap extends CI_Controller {
 		$data = array(
 			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'),
 			'stock'                  => $stock,
-			'combo_tipo_alm'         => $this->almacen_sap_model->get_combo_tiposalm($tipo_op),
-			'combo_almacenes'        => $this->almacen_sap_model->get_combo_almacenes($tipo_op),
+			'combo_tipo_alm'         => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
+			'combo_almacenes'        => $almacen_sap->get_combo_almacenes($tipo_op),
 			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
 			'combo_fechas_todas'     => $combo_fechas['todas'],
 			'tipo_op'                => $tipo_op,
