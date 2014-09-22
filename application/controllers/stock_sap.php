@@ -331,7 +331,6 @@ class Stock_sap extends CI_Controller {
 	public function transito($tipo_op = '')
 	{
 		$this->load->model('stock_sap_model');
-		$this->load->model('almacen_sap_model');
 
 		$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
 		foreach (array('almacen','material','lote','tipo_stock') as $val)
