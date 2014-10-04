@@ -199,7 +199,7 @@ class Inventario extends ORM_Model {
 					if (is_numeric($stock_sap) and is_numeric($hoja))
 					{
 						return (
-							$this->security->get_csrf_token_name() . ':\'' . $this->security->get_csrf_hash() .'\'' .
+							$this->CI->security->get_csrf_token_name() . ':\'' . $this->CI->security->get_csrf_hash() .'\'' .
 							',id:0' .
 							',id_inventario:' . $this->id .
 							',hoja:'          . $hoja .
