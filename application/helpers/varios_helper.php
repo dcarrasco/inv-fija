@@ -4,11 +4,11 @@ if ( ! function_exists('dbg'))
 {
 	function dbg($item)
 	{
-		echo '<pre style="font-family: courier, font-size: 8px">';
-		$dump = print_r($item, TRUE);
-		echo gettype($item) . ' : ' . $dump;
-		echo '</pre><hr>';
-		//var_dump($item);
+		//echo '<pre style="font-family: courier, font-size: 8px">';
+		//$dump = print_r($item, TRUE);
+		//echo gettype($item) . ' : ' . $dump;
+		//echo '</pre><hr>';
+		var_dump($item);
 	}
 }
 
