@@ -60,7 +60,7 @@ $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'patripio';
-$db['default']['password'] = 'patripio';
+$db['default']['password'] = 'movistarsirio';
 $db['default']['database'] = 'BD_inventario';
 $db['default']['dbdriver'] = 'sqlsrv';
 $db['default']['dbprefix'] = '';
@@ -76,7 +76,7 @@ $db['default']['stricton'] = FALSE;
 
 $db['dcr']['hostname'] = 'tcp:127.0.0.1,1500';
 $db['dcr']['username'] = 'patripio';
-$db['dcr']['password'] = 'patripio';
+$db['dcr']['password'] = 'movistarsirio';
 $db['dcr']['database'] = 'BD_inventario';
 $db['dcr']['dbdriver'] = 'sqlsrv';
 $db['dcr']['dbprefix'] = '';
