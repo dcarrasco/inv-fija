@@ -7,56 +7,56 @@
  * @author		dcr
  * @link
  */
-class ORM_Model {
+class ORM_Model implements Iterator {
 
 	/**
 	 * Nombre del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_nombre        = '';
+	private $model_nombre = '';
 
 	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_class         = '';
+	private $model_class = '';
 
 	/**
 	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
-	private $model_tabla         = '';
+	private $model_tabla = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
 	 */
-	private $model_label         = '';
+	private $model_label = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo (plural)
 	 *
 	 * @var string
 	 */
-	private $model_label_plural  = '';
+	private $model_label_plural = '';
 
 	/**
 	 * Campos para ordenar el modelo cuando se recupera de la BD
 	 *
 	 * @var string
 	 */
-	private $model_order_by      = '';
+	private $model_order_by = '';
 
 	/**
 	 * Campos que conforman la llave (id) del modelo
 	 *
 	 * @var array
 	 */
-	private $model_campo_id      = array();
+	private $model_campo_id = array();
 
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
@@ -70,7 +70,7 @@ class ORM_Model {
 	 *
 	 * @var integer
 	 */
-	private $model_page_results  = 10;
+	private $model_page_results = 10;
 
 	/**
 	 * Filtro para buscar resultados
@@ -84,21 +84,35 @@ class ORM_Model {
 	 *
 	 * @var array
 	 */
-	private $model_fields        = array();
+	private $model_fields = array();
 
 	/**
 	 * Arreglo de registros recuperados de la BD
 	 *
 	 * @var array
 	 */
-	private $model_all           = array();
+	private $model_all = array();
+
+	/**
+	 * Arreglo de registros recuperados de la BD
+	 *
+	 * @var array
+	 */
+	private $fields_values = array();
 
 	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
 	 */
-	private $separador_campos    = '~';
+	private $separador_campos = '~';
+
+	/**
+	 * Instacia CI para llamar objetos globales
+	 *
+	 * @var object
+	 */
+	protected $CI;
 
 
 	/**
@@ -108,6 +122,8 @@ class ORM_Model {
 	 *
 	 **/
 	public function __construct($param = array()) {
+
+		$this->CI =& get_instance();
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
@@ -141,9 +157,35 @@ class ORM_Model {
 	 */
 	public function __get($key)
 	{
-		$CI =& get_instance();
+		return (array_key_exists($key, $this->fields_values)) ? $this->fields_values[$key] : NULL;
+	}
 
-		return $CI->$key;
+	// --------------------------------------------------------------------
+	// Iterator methods
+	// --------------------------------------------------------------------
+	public function rewind()
+	{
+		reset($this->fields_values);
+	}
+
+	public function current()
+	{
+		return current($this->fields_values);
+	}
+
+	public function key()
+	{
+		return key($this->fields_values);
+	}
+
+	public function next()
+	{
+		return next($this->fields_values);
+	}
+
+	public function valid()
+	{
+		return (key($this->fields_values) !== NULL AND key($this->fields_values) !== FALSE);
 	}
 
 	// --------------------------------------------------------------------
@@ -179,7 +221,7 @@ class ORM_Model {
 			$prop['tabla_bd'] = $this->model_tabla;
 			$oField = new ORM_Field($campo, $prop);
 			$this->model_fields[$campo] = $oField;
-			$this->$campo = NULL;
+			$this->fields_values[$campo] = NULL;
 		}
 	}
 
@@ -326,14 +368,14 @@ class ORM_Model {
 			$this->set_validation_rules_field($campo);
 		}
 
-		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para "%s"');
-		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
-		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
-		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
-		$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
+		$this->CI->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
+		$this->CI->form_validation->set_message('required', 'Ingrese un valor para "%s"');
+		$this->CI->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
+		$this->CI->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
+		$this->CI->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
+		$this->CI->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
 
-		return $this->form_validation->run();
+		return $this->CI->form_validation->run();
 	}
 
 	// --------------------------------------------------------------------
@@ -358,7 +400,7 @@ class ORM_Model {
 			$reglas = '';
 		}
 
-		$this->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
+		$this->CI->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
 	}
 
 	// --------------------------------------------------------------------
@@ -503,7 +545,7 @@ class ORM_Model {
 	 */
 	public function crea_links_paginas()
 	{
-		$this->load->library('pagination');
+		$this->CI->load->library('pagination');
 		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
 
 		$cfg_pagination = array(
@@ -526,16 +568,16 @@ class ORM_Model {
 
 			'per_page'    => $this->model_page_results,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->uri->segment(1) . '/' . ($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
+			'base_url'    => site_url($this->CI->uri->segment(1) . '/' . ($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
 
-		$this->pagination->initialize($cfg_pagination);
+		$this->CI->pagination->initialize($cfg_pagination);
 
-		return $this->pagination->create_links();
+		return $this->CI->pagination->create_links();
 	}
 
 	// --------------------------------------------------------------------
@@ -570,16 +612,16 @@ class ORM_Model {
 				{
 					if (count($valor) == 0)
 					{
-						$this->db->where($campo.'=', 'NULL', FALSE);
+						$this->CI->db->where($campo.'=', 'NULL', FALSE);
 					}
 					else
 					{
-						$this->db->where_in($campo, $valor);
+						$this->CI->db->where_in($campo, $valor);
 					}
 				}
 				else
 				{
-					$this->db->where($campo, $valor);
+					$this->CI->db->where($campo, $valor);
 				}
 			}
 		}
@@ -596,17 +638,17 @@ class ORM_Model {
 		{
 			if (array_key_exists('offset', $param))
 			{
-				$this->db->limit($param['limit'], $param['offset']);
+				$this->CI->db->limit($param['limit'], $param['offset']);
 			}
 			else
 			{
-				$this->db->limit($param['limit']);
+				$this->CI->db->limit($param['limit']);
 			}
 		}
 
 		if ($tipo == 'first')
 		{
-			$rs = $this->db->get($this->model_tabla)->row_array();
+			$rs = $this->CI->db->get($this->model_tabla)->row_array();
 			$this->get_from_array($rs);
 
 			if ($recupera_relation)
@@ -621,9 +663,9 @@ class ORM_Model {
 		{
 			if ($this->model_order_by != '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->CI->db->order_by($this->model_order_by);
 			}
-			$rs = $this->db->get($this->model_tabla)->result_array();
+			$rs = $this->CI->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
 			{
@@ -643,8 +685,8 @@ class ORM_Model {
 
 		if ($tipo == 'count')
 		{
-			$this->db->select('count(*) as cant');
-			$rs = $this->db->get($this->model_tabla)->row_array();
+			$this->CI->db->select('count(*) as cant');
+			$rs = $this->CI->db->get($this->model_tabla)->row_array();
 
 			return $rs['cant'];
 		}
@@ -655,16 +697,16 @@ class ORM_Model {
 
 			if ($this->model_order_by != '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->CI->db->order_by($this->model_order_by);
 			}
 
-			$rs = $this->db->get($this->model_tabla)->result_array();
+			$rs = $this->CI->db->get($this->model_tabla)->result_array();
 
 			foreach($rs as $reg)
 			{
 				$o = new $this->model_class();
 				$o->get_from_array($reg);
-				$arr_list[$o->get_model_id()] = $o->__toString();
+				$arr_list[$o->get_model_id()] = (string) $o;
 			}
 
 			return $arr_list;
@@ -768,7 +810,7 @@ class ORM_Model {
 				}
 
 				// recupera la llave del modelo en tabla de la relacion (n:m)
-				$rs = $this->db
+				$rs = $this->CI->db
 					->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)
 					->get_where($arr_props_relation['join_table'], $arr_where)
 					->result_array();
@@ -847,12 +889,12 @@ class ORM_Model {
 				{
 					if ($rs[$nombre] != '')
 					{
-						$this->$nombre = date('Ymd H:i:s', strtotime($rs[$nombre]));
+						$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($rs[$nombre]));
 					}
 				}
 				else
 				{
-					$this->$nombre = $rs[$nombre];
+					$this->fields_values[$nombre] = $rs[$nombre];
 				}
 			}
 		}
@@ -880,11 +922,11 @@ class ORM_Model {
 			{
 				if ($i == 0)
 				{
-					$this->db->like($nombre, $filtro, 'both');
+					$this->CI->db->like($nombre, $filtro, 'both');
 				}
 				else
 				{
-					$this->db->or_like($nombre, $filtro, 'both');
+					$this->CI->db->or_like($nombre, $filtro, 'both');
 				}
 				$i++;
 			}
@@ -903,11 +945,11 @@ class ORM_Model {
 		foreach($this->model_fields as $nombre => $metadata)
 		{
 			// si el valor del post es un arreglo, transforma los valores a llaves del arreglo
-			if (is_array($this->input->post($nombre)))
+			if (is_array($this->CI->input->post($nombre)))
 			{
 				$arr = array();
 
-				foreach($this->input->post($nombre) as $key => $val)
+				foreach($this->CI->input->post($nombre) as $key => $val)
 				{
 					$arr[$val] = $val;
 				}
@@ -920,11 +962,11 @@ class ORM_Model {
 
 				if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
 				{
-					$this->$nombre = (int) $this->input->post($nombre);
+					$this->$nombre = (int) $this->CI->input->post($nombre);
 				}
 				else
 				{
-					$this->$nombre = $this->input->post($nombre);
+					$this->$nombre = $this->CI->input->post($nombre);
 				}
 			}
 		}
@@ -942,16 +984,10 @@ class ORM_Model {
 	{
 		if ($filtro != '_' && $filtro != '')
 		{
-			$this->db->select('count(*) as cant');
 			$this->_put_filtro($filtro);
-			$rs = $this->db->get($this->model_tabla)->row();
+		}
 
-			return $rs->cant;
-		}
-		else
-		{
-			return $this->db->count_all($this->model_tabla);
-		}
+		return $this->CI->db->count_all_results($this->model_tabla);
 	}
 
 
@@ -1002,7 +1038,7 @@ class ORM_Model {
 		}
 		else
 		{
-			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
+			$es_insert = ($this->CI->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
 		}
 
 		// NUEVO REGISTRO
@@ -1010,24 +1046,24 @@ class ORM_Model {
 		{
 			if (!$es_auto_id)
 			{
-				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
+				$this->CI->db->insert($this->model_tabla, array_merge($data_where, $data_update));
 			}
 			else
 			{
-				$this->db->insert($this->model_tabla, $data_update);
+				$this->CI->db->insert($this->model_tabla, $data_update);
 
 				foreach($this->model_campo_id as $campo_id)
 				{
-					$data_where[$campo_id] = $this->db->insert_id();
-					$this->{$campo_id} = $this->db->insert_id();
+					$data_where[$campo_id] = $this->CI->db->insert_id();
+					$this->{$campo_id} = $this->CI->db->insert_id();
 				}
 			}
 		}
 		// REGISTRO EXISTENTE
 		else
 		{
-			$this->db->where($data_where);
-			$this->db->update($this->model_tabla, $data_update);
+			$this->CI->db->where($data_where);
+			$this->CI->db->update($this->model_tabla, $data_update);
 		}
 
 		// Revisa todos los campos en busqueda de relaciones has_many,
@@ -1046,7 +1082,7 @@ class ORM_Model {
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 
-				$this->db->delete($rel['join_table'], $arr_where_delete);
+				$this->CI->db->delete($rel['join_table'], $arr_where_delete);
 
 				foreach($this->$nombre as $valor_campo)
 				{
@@ -1066,7 +1102,7 @@ class ORM_Model {
 						$arr_values[$id_many] = array_shift($arr_many_valores);
 					}
 
-					$this->db->insert($rel['join_table'], $arr_values);
+					$this->CI->db->insert($rel['join_table'], $arr_values);
 				}
 			}
 		}
@@ -1091,7 +1127,7 @@ class ORM_Model {
 			}
 		}
 
-		$this->db->delete($this->model_tabla, $data_where);
+		$this->CI->db->delete($this->model_tabla, $data_where);
 
 		foreach($this->model_fields as $nombre => $campo)
 		{
@@ -1106,7 +1142,7 @@ class ORM_Model {
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 
-				$this->db->delete($rel['join_table'], $arr_where_delete);
+				$this->CI->db->delete($rel['join_table'], $arr_where_delete);
 			}
 		}
 	}

@@ -34,6 +34,9 @@ class Proveedor extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->des_proveedor;
@@ -41,6 +44,5 @@ class Proveedor extends ORM_Model {
 
 
 }
-
 /* End of file proveedor.php */
 /* Location: ./application/models/proveedor.php */

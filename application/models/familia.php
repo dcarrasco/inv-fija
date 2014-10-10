@@ -44,6 +44,9 @@ class Familia extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->nombre;
@@ -51,6 +54,5 @@ class Familia extends ORM_Model {
 
 
 }
-
 /* End of file familia.php */
 /* Location: ./application/models/familia.php */

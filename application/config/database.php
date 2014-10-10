@@ -59,12 +59,12 @@ if (ENVIRONMENT == 'development-mac')
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'patripio';
-$db['default']['password'] = 'patripio';
+$db['default']['username'] = 'invfija';
+$db['default']['password'] = 'fijainv2014!';
 $db['default']['database'] = 'BD_inventario';
 $db['default']['dbdriver'] = 'sqlsrv';
 $db['default']['dbprefix'] = '';
-$db['default']['pconnect'] = FALSE;
+$db['default']['pconnect'] = TRUE;
 $db['default']['db_debug'] = TRUE;
 $db['default']['cache_on'] = FALSE;
 $db['default']['cachedir'] = '';
@@ -75,12 +75,12 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['stricton'] = FALSE;
 
 $db['dcr']['hostname'] = 'tcp:127.0.0.1,1500';
-$db['dcr']['username'] = 'patripio';
-$db['dcr']['password'] = 'patripio';
+$db['dcr']['username'] = 'invfija';
+$db['dcr']['password'] = 'fijainv2014!';
 $db['dcr']['database'] = 'BD_inventario';
 $db['dcr']['dbdriver'] = 'sqlsrv';
 $db['dcr']['dbprefix'] = '';
-$db['dcr']['pconnect'] = FALSE;
+$db['dcr']['pconnect'] = TRUE;
 $db['dcr']['db_debug'] = TRUE;
 $db['dcr']['cache_on'] = FALSE;
 $db['dcr']['cachedir'] = '';

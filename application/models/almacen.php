@@ -26,6 +26,9 @@ class Almacen extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return (string)$this->almacen;

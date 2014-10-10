@@ -42,37 +42,62 @@ class Inventario extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->nombre;
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function grabar()
 	{
 		parent::grabar();
+
 		if ($this->activo)
 		{
-			$this->db->update($this->get_model_tabla(), array('activo' => 0), 'id<>' . $this->id);
+			$this->CI->db
+				->where('id <>', (int) $this->id)
+				->update($this->get_model_tabla(), array('activo' => 0));
 		}
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_id_inventario_activo()
 	{
 		$this->find('first', array('conditions' => array('activo' => 1)));
+
 		return (int) $this->get_model_id();
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function get_max_hoja_inventario()
 	{
-		$rs = $this->db->select('max(hoja) as max_hoja')->get_where('fija_detalle_inventario', array('id_inventario' => $this->id))->row_array();
-		return ($rs['max_hoja']);
+		$rs = $this->CI->db
+			->select('max(hoja) as max_hoja')
+			->get_where('fija_detalle_inventario', array('id_inventario' => $this->id))
+			->row();
+
+		return ($rs->max_hoja);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function borrar_detalle_inventario()
 	{
-		$this->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
+		$this->CI->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
 	}
 
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Carga a la BD los datos del archivo
@@ -92,6 +117,7 @@ class Inventario extends ORM_Model {
 
 		ini_set("auto_detect_line_endings", TRUE);
 		$fh = fopen($archivo, 'r');
+
 		if ($fh)
 		{
 			while ($linea = fgets($fh))
@@ -99,6 +125,7 @@ class Inventario extends ORM_Model {
 				$c += 1;
 				$num_linea += 1;
 				$resultado_procesa_linea = $this->_procesa_linea($linea);
+
 				if ($resultado_procesa_linea == 'no_procesar')
 				{
 					// no se procesa esta linea
@@ -121,6 +148,7 @@ class Inventario extends ORM_Model {
 		}
 
 		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')';
+
 		if ($count_error > 0)
 		{
 			$msj_termino .= '<br>Lineas con errores (';
@@ -132,13 +160,15 @@ class Inventario extends ORM_Model {
 		}
 
 		return array('script' => $script_carga, 'regs_OK' => $count_OK, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
-
 	}
 
+
+	// --------------------------------------------------------------------
 
 	private function _procesa_linea($linea = '')
 	{
 		$arr_linea = explode("\r", $linea);
+
 		if ($arr_linea[0] != '')
 		{
 			$arr_datos = explode("\t", $arr_linea[0]);
@@ -169,7 +199,7 @@ class Inventario extends ORM_Model {
 					if (is_numeric($stock_sap) and is_numeric($hoja))
 					{
 						return (
-							$this->security->get_csrf_token_name() . ':\'' . $this->security->get_csrf_hash() .'\'' .
+							$this->CI->security->get_csrf_token_name() . ':\'' . $this->CI->security->get_csrf_hash() .'\'' .
 							',id:0' .
 							',id_inventario:' . $this->id .
 							',hoja:'          . $hoja .
@@ -216,6 +246,5 @@ class Inventario extends ORM_Model {
 
 
 }
-
 /* End of file inventario.php */
 /* Location: ./application/models/inventario.php */

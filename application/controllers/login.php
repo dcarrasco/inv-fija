@@ -38,7 +38,6 @@ class Login extends CI_Controller {
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
-
 		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: </strong>', '</p>');
 		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
 
@@ -49,8 +48,9 @@ class Login extends CI_Controller {
 		}
 		else
 		{
-			$usr = $this->input->post('usr');
-			$pwd = $this->input->post('pwd');
+			$usr = set_value('usr');
+			$pwd = set_value('pwd');
+
 			// si el usuario existe
 			if ($this->acl_model->existe_usuario($usr))
 			{
@@ -61,8 +61,7 @@ class Login extends CI_Controller {
 				}
 				else
 				{
-					$login_ok = $this->acl_model->login($usr, $pwd);
-					if (!$login_ok)
+					if (!$this->acl_model->login($usr, $pwd))
 					{
 						$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
 						$this->load->view('ACL/login', $data);

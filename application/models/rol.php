@@ -52,12 +52,14 @@ class Rol extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return (string)$this->rol;
 	}
 
 }
-
 /* End of file rol.php */
 /* Location: ./application/models/rol.php */

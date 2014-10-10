@@ -179,6 +179,7 @@ class Inventario_digitacion extends CI_Controller {
 					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
 				}
 			}
+
 			redirect($this->uri->segment(1) . '/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
@@ -202,6 +203,7 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			$options .= '<option value="' . $key . '">' . $val . '</option>';
 		}
+
 		echo($options);
 	}
 

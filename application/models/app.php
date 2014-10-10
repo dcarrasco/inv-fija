@@ -54,12 +54,14 @@ class App extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->app;
 	}
 
 }
-
 /* End of file app.php */
 /* Location: ./application/models/app.php */

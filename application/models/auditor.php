@@ -35,6 +35,9 @@ class Auditor extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->nombre;
@@ -42,6 +45,5 @@ class Auditor extends ORM_Model {
 
 
 }
-
 /* End of file auditor.php */
 /* Location: ./application/models/auditor.php */

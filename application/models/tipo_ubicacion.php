@@ -36,6 +36,9 @@ class Tipo_ubicacion extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->tipo_ubicacion;
@@ -43,6 +46,5 @@ class Tipo_ubicacion extends ORM_Model {
 
 
 }
-
 /* End of file tipo_ubicacion.php */
 /* Location: ./application/models/tipo_ubicacion.php */

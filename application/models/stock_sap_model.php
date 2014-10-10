@@ -11,6 +11,8 @@ class stock_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function get_stock($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
 		if ($tipo_op == 'MOVIL')
@@ -23,6 +25,8 @@ class stock_sap_model extends CI_Model {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function _get_stock_movil($mostrar = array(), $filtrar = array())
 	{
@@ -351,6 +355,8 @@ class stock_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function _get_stock_fijo($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
@@ -474,7 +480,7 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-
+	// --------------------------------------------------------------------
 
 	public function get_stock_transito($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
@@ -489,6 +495,8 @@ class stock_sap_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function _get_stock_transito_fijo($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
@@ -502,14 +510,18 @@ class stock_sap_model extends CI_Model {
 		}
 
 		// almacenes
-		$this->db->select('s.centro');
-		$this->db->group_by('s.centro');
-		$this->db->order_by('s.centro');
+		if (in_array('almacen', $mostrar))
+		{
+			$this->db->select('s.centro');
+			$this->db->group_by('s.centro');
+			$this->db->order_by('s.centro');
+		}
 
 		// cantidades y tipos de stock
 		if (in_array('tipo_stock', $mostrar))
 		{
 			$this->db->select('s.estado, s.acreedor, p.des_proveedor');
+			$this->db->join($this->bd_logistica . 'cp_proveedores p', 'p.cod_proveedor=s.acreedor', 'left');
 			$this->db->group_by('s.estado, s.acreedor, p.des_proveedor');
 			$this->db->order_by('s.estado, s.acreedor');
 		}
@@ -534,10 +546,6 @@ class stock_sap_model extends CI_Model {
 
 		// tablas
 		$this->db->from($this->bd_logistica . 'bd_stock_sap_fija s');
-		if (in_array('tipo_stock', $mostrar))
-		{
-			$this->db->join($this->bd_logistica . 'cp_proveedores p', 'p.cod_proveedor=s.acreedor', 'left');
-		}
 
 		// condiciones
 		// fechas
@@ -548,22 +556,15 @@ class stock_sap_model extends CI_Model {
 
 		$this->db->where('s.almacen is null');
 
-		// tipos de articulo
-		/*
-		if (array_key_exists('tipo_articulo', $filtrar))
-		{
-			$this->db->where_in('tipo_articulo', $filtrar['tipo_articulo']);
-		}
-		*/
 
 		$arr_result = $this->db->get()->result_array();
 		//print_r($arr_result);
-
 
 		return $arr_result;
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_combo_fechas($tipo_op = '')
 	{
@@ -586,39 +587,38 @@ class stock_sap_model extends CI_Model {
 		return $arr_fecha;
 	}
 
+
+	// --------------------------------------------------------------------
+
 	private function _get_combo_fechas_movil()
 	{
-		$arr_result = array();
-		$arr_combo  = array();
+		$arr_result = $this->db
+			->select('convert(varchar(20), fecha_stock, 112) as llave')
+			->select('convert(varchar(20), fecha_stock, 102) as valor')
+			->order_by('llave','desc')
+			->get($this->bd_logistica . 'stock_scl_fechas')
+			->result_array();
 
-		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 102) as fecha');
-		$this->db->order_by('fecha_stock','desc');
-		$arr_result = $this->db->get($this->bd_logistica . 'stock_scl_fechas')->result_array();
-
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['fecha_stock']] = $reg['fecha'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	private function _get_combo_fechas_fija()
 	{
-		$arr_result = array();
-		$arr_combo  = array();
+		$arr_result = $this->db
+			->select('convert(varchar(20), fecha_stock, 112) as llave')
+			->select('convert(varchar(20), fecha_stock, 103) as valor')
+			->order_by('llave','desc')
+			->get($this->bd_logistica . 'bd_stock_sap_fija_fechas')
+			->result_array();
 
-		$this->db->select('convert(varchar(20), fecha_stock, 112) as fecha_stock, convert(varchar(20), fecha_stock, 103) as fecha');
-		$this->db->order_by('fecha_stock','desc');
-		$arr_result = $this->db->get($this->bd_logistica . 'bd_stock_sap_fija_fechas')->result_array();
-
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['fecha_stock']] = $reg['fecha'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
@@ -646,8 +646,6 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-
 }
-
 /* End of file stock_sap_model.php */
 /* Location: ./application/models/stock_sap_model.php */

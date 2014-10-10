@@ -74,39 +74,63 @@ class Almacen_sap extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return (string)$this->centro . '-' . $this->cod_almacen . ' ' .$this->des_almacen;
 	}
 
 
+	// --------------------------------------------------------------------
+
+	public function get_combo_almacenes($tipo_op = '')
+	{
+		$arr_result = array();
+		$arr_combo = array();
+
+		$arr_result = $this->CI->db
+			->select('centro + \'-\' + cod_almacen as llave')
+			->select('centro + \'-\' + cod_almacen + \' \' + des_almacen as valor')
+			->order_by('centro, cod_almacen')
+			->where('tipo_op', $tipo_op)
+			->get($this->get_model_tabla())
+			->result_array();
+
+		return form_array_format($arr_result);
+	}
+
+
+	// --------------------------------------------------------------------
+
 	public function almacenes_no_ingresados()
 	{
-		$this->db->distinct();
-		$this->db->select('s.centro, s.cod_bodega');
-		$this->db->from('bd_logistica..stock_scl s');
-		$this->db->join('bd_logistica..cp_almacenes a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left');
-		$this->db->where('fecha_stock in (select max(fecha_stock) from bd_logistica..stock_scl)');
-		$this->db->where('a.cod_almacen is null');
-		$this->db->order_by('s.centro');
-		$this->db->order_by('s.cod_bodega');
-		$alm_movil = $this->db->get()->result_array();
+		$alm_movil = $this->CI->db->distinct()
+			->select('s.centro, s.cod_bodega')
+			->from('bd_logistica..stock_scl s')
+			->join('bd_logistica..cp_almacenes a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from bd_logistica..stock_scl)')
+			->where('a.cod_almacen is null')
+			->order_by('s.centro')
+			->order_by('s.cod_bodega')
+			->get()
+			->result_array();
 
-		$this->db->distinct();
-		$this->db->select('s.centro, s.almacen as cod_bodega');
-		$this->db->from('bd_logistica..bd_stock_sap_fija s');
-		$this->db->join('bd_logistica..cp_almacenes a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left');
-		$this->db->where('fecha_stock in (select max(fecha_stock) from bd_logistica..bd_stock_sap_fija)');
-		$this->db->where('a.cod_almacen is null');
-		$this->db->order_by('s.centro');
-		$this->db->order_by('s.almacen');
-		$alm_fija = $this->db->get()->result_array();
+		$alm_fija = $this->CI->db->distinct()
+			->select('s.centro, s.almacen as cod_bodega')
+			->from('bd_logistica..bd_stock_sap_fija s')
+			->join('bd_logistica..cp_almacenes a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from bd_logistica..bd_stock_sap_fija)')
+			->where('a.cod_almacen is null')
+			->order_by('s.centro')
+			->order_by('s.almacen')
+			->get()
+			->result_array();
 
 		return array_merge($alm_movil, $alm_fija);
-
 	}
 
 }
-
 /* End of file almacen.php */
 /* Location: ./application/models/almacen.php */

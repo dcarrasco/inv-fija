@@ -50,10 +50,16 @@ class Catalogo extends ORM_Model {
 		parent::__construct($cfg);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function __toString()
 	{
 		return $this->descripcion;
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_combo_catalogo($filtro = '')
 	{
@@ -61,10 +67,13 @@ class Catalogo extends ORM_Model {
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccionar material ...';
 
-		$this->db->order_by('catalogo')->like('descripcion', $filtro);
-		$this->db->like('descripcion', $filtro);
-		$this->db->or_like('catalogo', $filtro);
-		$arr_result = $this->db->get($this->get_model_tabla())->result_array();
+		$arr_result = $this->CI->db
+			->order_by('catalogo')
+			->like('descripcion', $filtro)
+			->like('descripcion', $filtro)
+			->or_like('catalogo', $filtro)
+			->get($this->get_model_tabla())
+			->result_array();
 
 		foreach($arr_result as $reg)
 		{
@@ -75,43 +84,55 @@ class Catalogo extends ORM_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_descripcion($catalogo = '')
 	{
-		$row = $this->db->get_where($this->get_model_tabla(), array('catalogo' => $catalogo))->row_array();
+		$row = $this->CI->db
+			->get_where($this->get_model_tabla(), array('catalogo' => $catalogo))
+			->row_array();
+
 		return ($row['descripcion']);
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_materiales($filtro = '_', $limit = 0, $offset = 0)
 	{
-		$this->db->order_by('catalogo ASC');
+		$this->CI->db->order_by('catalogo ASC');
 
 		if ($filtro != '_')
 		{
-			$this->db->like('descripcion', $filtro);
+			$this->CI->db->like('descripcion', $filtro);
 		}
-		return $this->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
+
+		return $this->CI->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function total_materiales($filtro = '_')
 	{
 		if ($filtro != '_')
 		{
-			$this->db->like('descripcion', $filtro);
+			$this->CI->db->like('descripcion', $filtro);
 		}
 
-		return $this->db->get($this->get_model_tabla())->num_rows();
+		return $this->CI->db->get($this->get_model_tabla())->num_rows();
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function get_cant_registros_catalogo($id = 0)
 	{
-		return ($this->db->get_where('fija_detalle_inventario', array('catalogo' => $id))->num_rows());
+		return $this->CI->db->get_where('fija_detalle_inventario', array('catalogo' => $id))->num_rows();
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function actualiza_precios()
 	{
@@ -119,13 +140,14 @@ class Catalogo extends ORM_Model {
 		$this->load->dbforge();
 
 		// actualiza precios nulos --> 0
-		$this->db->where('pmp is null');
-		$this->db->update($this->model_tabla, array(
-												'pmp' => 0,
-						));
+		$this->db->where('pmp is null')
+			->update($this->model_tabla, array('pmp' => 0));
 
 		// selecciona maxima fecha del stock_sap_fija
-		$arr_max_fecha = $this->db->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)->get('bd_logistica..bd_stock_sap_fija')->row();
+		$arr_max_fecha = $this->db
+			->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)
+			->get('bd_logistica..bd_stock_sap_fija')
+			->row();
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
@@ -156,6 +178,5 @@ class Catalogo extends ORM_Model {
 
 
 }
-
 /* End of file catalogo.php */
 /* Location: ./application/models/catalogo.php */
