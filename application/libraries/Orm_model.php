@@ -198,7 +198,7 @@ class ORM_Model implements Iterator {
 	 */
 	private function _config_modelo($cfg = array())
 	{
-		foreach($cfg as $key => $val)
+		foreach ($cfg as $key => $val)
 		{
 			if (isset($key))
 			{
@@ -316,11 +316,13 @@ class ORM_Model implements Iterator {
 
 	/**
 	 * determina y fija el campo id del modelo
+	 *
 	 * @return arreglo con nombre de los campos marcados como id
 	 */
 	private function _determina_campo_id()
 	{
 		$arr_key = array();
+
 		foreach ($this->model_fields as $key => $metadata)
 		{
 			if ($metadata->get_es_id())
@@ -342,6 +344,7 @@ class ORM_Model implements Iterator {
 	public function get_model_id()
 	{
 		$arr_id = array();
+
 		foreach ($this->model_campo_id as $campo)
 		{
 			array_push($arr_id, $this->{$campo});
@@ -405,6 +408,11 @@ class ORM_Model implements Iterator {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los campos relacionados
+	 *
+	 * @return none
+	 */
 	public function get_relation_fields()
 	{
 		$this->_recuperar_relation_fields();
@@ -426,7 +434,7 @@ class ORM_Model implements Iterator {
 
 		if (array_key_exists('conditions', $arr_relation))
 		{
-			foreach($arr_relation['conditions'] as $cond_key => $cond_value)
+			foreach ($arr_relation['conditions'] as $cond_key => $cond_value)
 			{
 				// si encontramos un valor que comience por @filed_value,
 				// se reemplaza por el valor del campo en el objeto
@@ -486,14 +494,7 @@ class ORM_Model implements Iterator {
 	 */
 	public function get_valor_field($campo = '', $formatted = TRUE)
 	{
-		if (!$formatted)
-		{
-			return ($this->$campo);
-		}
-		else
-		{
-			return ($this->model_fields[$campo]->get_formatted_value($this->$campo));
-		}
+		return (!$formatted) ? $this->$campo : $this->model_fields[$campo]->get_formatted_value($this->$campo);
 	}
 
 	// --------------------------------------------------------------------
@@ -658,16 +659,16 @@ class ORM_Model implements Iterator {
 
 			return $rs;
 		}
-
-		if ($tipo == 'all')
+		else if ($tipo == 'all')
 		{
 			if ($this->model_order_by != '')
 			{
 				$this->CI->db->order_by($this->model_order_by);
 			}
+
 			$rs = $this->CI->db->get($this->model_tabla)->result_array();
 
-			foreach($rs as $reg)
+			foreach ($rs as $reg)
 			{
 				$o = new $this->model_class();
 				$o->get_from_array($reg);
@@ -682,16 +683,14 @@ class ORM_Model implements Iterator {
 
 			return $rs;
 		}
-
-		if ($tipo == 'count')
+		else if ($tipo == 'count')
 		{
 			$this->CI->db->select('count(*) as cant');
 			$rs = $this->CI->db->get($this->model_tabla)->row_array();
 
 			return $rs['cant'];
 		}
-
-		if ($tipo == 'list')
+		else if ($tipo == 'list')
 		{
 			$arr_list = array();
 
@@ -702,7 +701,7 @@ class ORM_Model implements Iterator {
 
 			$rs = $this->CI->db->get($this->model_tabla)->result_array();
 
-			foreach($rs as $reg)
+			foreach ($rs as $reg)
 			{
 				$o = new $this->model_class();
 				$o->get_from_array($reg);
@@ -728,7 +727,7 @@ class ORM_Model implements Iterator {
 
 		if (count($this->model_campo_id) == 1)
 		{
-			foreach($this->model_campo_id as $campo_id)
+			foreach ($this->model_campo_id as $campo_id)
 			{
 				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
 
@@ -746,7 +745,7 @@ class ORM_Model implements Iterator {
 		{
 			$arr_val_id = explode($this->separador_campos, $id);
 
-			foreach($this->model_campo_id as $i => $campo_id)
+			foreach ($this->model_campo_id as $i => $campo_id)
 			{
 				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
 			}
@@ -780,7 +779,7 @@ class ORM_Model implements Iterator {
 	 */
 	private function _recuperar_relation_fields()
 	{
-		foreach($this->model_fields as $nombre_campo => $obj_campo)
+		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
 			if($obj_campo->get_tipo() == 'has_one')
 			{
@@ -821,7 +820,7 @@ class ORM_Model implements Iterator {
 				// genera arreglo de condiciones de busqueda
 				$arr_where = array();
 
-				foreach($rs as $reg)
+				foreach ($rs as $reg)
 				{
 					array_push($arr_where, array_pop($reg));
 				}
@@ -881,7 +880,7 @@ class ORM_Model implements Iterator {
 	 */
 	public function get_from_array($rs = array())
 	{
-		foreach($this->model_fields as $nombre => $metadata)
+		foreach ($this->model_fields as $nombre => $metadata)
 		{
 			if (array_key_exists($nombre, $rs))
 			{
@@ -914,22 +913,19 @@ class ORM_Model implements Iterator {
 	 */
 	private function _put_filtro($filtro = '')
 	{
-		$i = 0;
+		$arr_like = array();
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach ($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'char')
 			{
-				if ($i == 0)
-				{
-					$this->CI->db->like($nombre, $filtro, 'both');
-				}
-				else
-				{
-					$this->CI->db->or_like($nombre, $filtro, 'both');
-				}
-				$i++;
+				$arr_like[$nombre] = $filtro;
 			}
+		}
+
+		if (count($arr_like) > 0)
+		{
+			$this->CI->db->or_like($arr_like, $filtro, 'both');
 		}
 	}
 
@@ -942,14 +938,14 @@ class ORM_Model implements Iterator {
 	 */
 	public function recuperar_post()
 	{
-		foreach($this->model_fields as $nombre => $metadata)
+		foreach ($this->model_fields as $nombre => $metadata)
 		{
 			// si el valor del post es un arreglo, transforma los valores a llaves del arreglo
 			if (is_array($this->CI->input->post($nombre)))
 			{
 				$arr = array();
 
-				foreach($this->CI->input->post($nombre) as $key => $val)
+				foreach ($this->CI->input->post($nombre) as $key => $val)
 				{
 					$arr[$val] = $val;
 				}
@@ -1009,7 +1005,7 @@ class ORM_Model implements Iterator {
 		$es_auto_id   = FALSE;
 		$es_insert    = FALSE;
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach ($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id() and $campo->get_es_autoincrement())
 			{
@@ -1031,7 +1027,7 @@ class ORM_Model implements Iterator {
 
 		if ($es_auto_id)
 		{
-			foreach($data_where as $key => $val)
+			foreach ($data_where as $key => $val)
 			{
 				$es_insert = ($val == '' || $val == 0) ? TRUE : FALSE;
 			}
@@ -1052,7 +1048,7 @@ class ORM_Model implements Iterator {
 			{
 				$this->CI->db->insert($this->model_tabla, $data_update);
 
-				foreach($this->model_campo_id as $campo_id)
+				foreach ($this->model_campo_id as $campo_id)
 				{
 					$data_where[$campo_id] = $this->CI->db->insert_id();
 					$this->{$campo_id} = $this->CI->db->insert_id();
@@ -1068,7 +1064,7 @@ class ORM_Model implements Iterator {
 
 		// Revisa todos los campos en busqueda de relaciones has_many,
 		// para actualizar la tabla relacionada
-		foreach($this->model_fields as $nombre => $campo)
+		foreach ($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'has_many')
 			{
@@ -1077,27 +1073,27 @@ class ORM_Model implements Iterator {
 				$arr_where_delete = array();
 				$data_where_tmp = $data_where;
 
-				foreach($rel['id_one_table'] as $id_one_table_key)
+				foreach ($rel['id_one_table'] as $id_one_table_key)
 				{
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 
 				$this->CI->db->delete($rel['join_table'], $arr_where_delete);
 
-				foreach($this->$nombre as $valor_campo)
+				foreach ($this->$nombre as $valor_campo)
 				{
 					$arr_values = array();
 
 					$data_where_tmp = $data_where;
 
-					foreach($rel['id_one_table'] as $id_one_table_key)
+					foreach ($rel['id_one_table'] as $id_one_table_key)
 					{
 						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
 					}
 
 					$arr_many_valores = explode($this->separador_campos, $valor_campo);
 
-					foreach($rel['id_many_table'] as $id_many)
+					foreach ($rel['id_many_table'] as $id_many)
 					{
 						$arr_values[$id_many] = array_shift($arr_many_valores);
 					}
@@ -1119,7 +1115,7 @@ class ORM_Model implements Iterator {
 	{
 		$data_where = array();
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach ($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id())
 			{
@@ -1129,7 +1125,7 @@ class ORM_Model implements Iterator {
 
 		$this->CI->db->delete($this->model_tabla, $data_where);
 
-		foreach($this->model_fields as $nombre => $campo)
+		foreach ($this->model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() == 'has_many')
 			{
@@ -1137,7 +1133,7 @@ class ORM_Model implements Iterator {
 				$arr_where_delete = array();
 				$data_where_tmp = $data_where;
 
-				foreach($rel['id_one_table'] as $id_one_table_key)
+				foreach ($rel['id_one_table'] as $id_one_table_key)
 				{
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
@@ -1298,7 +1294,7 @@ class ORM_Field {
 
 		if (is_array($param))
 		{
-			foreach($param as $key => $val)
+			foreach ($param as $key => $val)
 			{
 				if (isset($key))
 				{
@@ -1538,6 +1534,7 @@ class ORM_Field {
 		}
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el valor, formateado de acuerdo al tipo del campo
@@ -1554,7 +1551,7 @@ class ORM_Field {
 
 		if ($this->tipo == 'has_one')
 		{
-			return $this->relation['data']->__toString();
+			return (string) $this->relation['data'];
 		}
 
 		if ($this->tipo == 'has_many')
@@ -1577,6 +1574,7 @@ class ORM_Field {
 		return $valor;
 	}
 
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve los atributos para construir el campo en la base de datos
@@ -1588,52 +1586,52 @@ class ORM_Field {
 		if ($this->tipo == 'id')
 		{
 			return array(
-							'type'           => 'INT',
-							'constraint'     => $this->largo,
-							'auto_increment' => $this->es_autoincrement,
-							'null'           => $this->es_obligatorio,
-						);
+				'type'           => 'INT',
+				'constraint'     => $this->largo,
+				'auto_increment' => $this->es_autoincrement,
+				'null'           => $this->es_obligatorio,
+			);
 		}
 		else if ($this->tipo == 'char')
 		{
 			return array(
-							'type'       => 'VARCHAR',
-							'constraint' => $this->largo,
-							'default'    => $this->default,
-							'null'       => $this->es_obligatorio,
-						);
+				'type'       => 'VARCHAR',
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
+			);
 		}
 		else if ($this->tipo == 'text')
 		{
 			return array(
-							'type'       => 'TEXT',
-							'constraint' => $this->largo,
-							'default'    => $this->default,
-							'null'       => $this->es_obligatorio,
-						);
+				'type'       => 'TEXT',
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
+			);
 		}
 		else if ($this->tipo == 'integer')
 		{
 			return array(
-								'type'       => 'INT',
-								'constraint' => $this->largo,
-								'default'    => $this->default,
-								'null'       => $this->es_obligatorio,
-							);
+				'type'       => 'INT',
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
+			);
 		}
 		else if ($this->tipo == 'boolean')
 		{
 			return array(
-								'type'       => 'BIT',
-								'null'       => $this->es_obligatorio,
-							);
+				'type'       => 'BIT',
+				'null'       => $this->es_obligatorio,
+			);
 		}
 		else if ($this->tipo == 'datetime')
 		{
 			$bd_attrib = array(
-								'type'       => 'DATETIME',
-								'null'       => $this->es_obligatorio,
-							);
+				'type'       => 'DATETIME',
+				'null'       => $this->es_obligatorio,
+			);
 		}
 	}
 
