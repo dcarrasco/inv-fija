@@ -378,6 +378,99 @@ class Reportestock_model extends CI_Model {
 	}
 
 
+	public function get_treemap_permanencia($centro = 'CL03', $tipo_material = 'EQUIPO')
+	{
+		return $this->db
+			->select('t.tipo')
+			->select('s.almacen + \' - \' + s.des_almacen as alm')
+			->select('substring(s.material,6,2) + \' (\' + s.almacen + \')\' as marca')
+			->select('substring(s.material,6,7) + \' (\' + s.almacen + \')\' as modelo')
+			->select_sum('s.total', 'cant')
+			->select_sum('convert(FLOAT, s.total)*(case when v.pmp IS NULL then 0 else v.pmp END)/1000000', 'valor')
+			->select_sum('s.m030*15+s.m060*45+s.m090*75+s.m120*115+s.m180*150+s.m360*270+s.m720*540+s.mas720*720', 'perm')
+			->from('bd_logistica..cp_permanencia as s')
+			->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left')
+			->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left')
+			->join('bd_planificacion..ca_stock_sap_04 v', 's.centro=v.centro and s.material=v.material and s.lote=v.lote and s.estado_stock=v.estado_stock', 'left')
+			->where('s.centro', $centro)
+			->where('s.almacen is not NULL')
+			->where('s.tipo_material', $tipo_material)
+			->group_by('t.tipo')
+			->group_by('s.almacen + \' - \' + s.des_almacen')
+			->group_by('substring(s.material,6,2) + \' (\' + s.almacen + \')\'')
+			->group_by('substring(s.material,6,7) + \' (\' + s.almacen + \')\'')
+			->order_by('t.tipo')
+			->order_by('s.almacen + \' - \' + s.des_almacen')
+			->order_by('substring(s.material,6,2) + \' (\' + s.almacen + \')\'')
+			->order_by('substring(s.material,6,7) + \' (\' + s.almacen + \')\'')
+			->get()->result_array();
+	}
+
+
+	public function arr_query2treemap($tipo = 'cantidad', $arr = array(), $arr_nodos = array(), $campo_size = '', $campo_color = '')
+	{
+		$arr_final = array();
+
+		$tipo = ($tipo == 'cantidad') ? 'cantidad' : 'valor';
+
+		if(count($arr) > 0 AND count($arr_nodos) > 0)
+		{
+			$campo_item = array_pop($arr_nodos);
+			$campo_padre = array_pop($arr_nodos);
+
+			foreach($arr as $v)
+			{
+				array_push($arr_final, array("'".$v[$campo_item]."'", "'".$v[$campo_padre]."'", (int) $v[$campo_size], $v[$campo_color]));
+			}
+
+			$campo_item = $campo_padre;
+
+			while (count($arr_nodos) > 0)
+			{
+				$campo_padre = array_pop($arr_nodos);
+				$arr_tmp = array();
+				$arr_tmp2 = $arr_final;
+
+				foreach($arr as $v)
+				{
+					$arr_v = array("'".$v[$campo_item]."'", "'".$v[$campo_padre]."'", 0, 0);
+
+					if(!in_array($arr_v, $arr_tmp))
+					{
+						array_push($arr_tmp, $arr_v);
+					}
+				}
+
+				$arr_final = array();
+				$arr_final = array_merge($arr_tmp, $arr_tmp2);
+				$campo_item = $campo_padre;
+			}
+
+			$campo_padre = "'TOTAL'";
+			$arr_tmp = array();
+			$arr_tmp2 = $arr_final;
+			foreach($arr as $v)
+			{
+				$arr_v = array("'".$v[$campo_item]."'", $campo_padre, 0, 0);
+				if(!in_array($arr_v, $arr_tmp))
+				{
+					array_push($arr_tmp, $arr_v);
+				}
+			}
+			$arr_final = array();
+			$arr_tmp3 = array(array($campo_padre, 'null', 0, 0));
+			$arr_final = array_merge($arr_tmp3, $arr_tmp, $arr_tmp2);
+
+			$salida = "['Item','Padre','$tipo','Antiguedad'],\n";
+			foreach($arr_final as $v)
+			{
+				$salida .= "[" . implode($v, ',') . "],\n";
+			}
+
+			return "[".$salida."]";
+
+		}
+	}
 
 }
 
