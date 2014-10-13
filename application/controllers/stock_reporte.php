@@ -186,10 +186,27 @@ class Stock_reporte extends CI_Controller {
 
 	public function mapastock()
 	{
+		$this->form_validation->set_rules('sel_centro','', 'trim');
+		$this->form_validation->set_rules('sel_treemap_type','', 'trim');
+		$this->form_validation->run();
+
+		$centro = set_value('sel_centro', 'CL03');
+
 		$this->load->model('reportestock_model');
-		$arr = $this->reportestock_model->get_treemap_permanencia();
-		$arr2 = $this->reportestock_model->arr_query2treemap($arr, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
-		echo($arr2);
+		$arr = $this->reportestock_model->get_treemap_permanencia($centro);
+		$arr2 = $this->reportestock_model->arr_query2treemap('cantidad', $arr, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
+		$arr3 = $this->reportestock_model->arr_query2treemap('valor', $arr, array('tipo', 'alm', 'marca', 'modelo'), 'valor', 'perm');
+
+		$data = array(
+			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => 'mapastock'),
+			'treemap_data_cantidad' => $arr2,
+			'treemap_data_valor' => $arr3,
+		);
+
+		$this->load->view('app_header', $data);
+		$this->load->view('stock_sap/treemap', $data);
+		$this->load->view('app_footer', $data);
+
 
 
 	}
