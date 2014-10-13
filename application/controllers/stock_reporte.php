@@ -12,6 +12,7 @@ class Stock_reporte extends CI_Controller {
 
 		$this->arr_menu = array(
 			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),
+			'mapastock'   => array('url' => $this->uri->segment(1) . '/mapastock', 'texto' => 'Mapa Stock'),
 		);
 	}
 
@@ -180,6 +181,17 @@ class Stock_reporte extends CI_Controller {
 		$this->load->view('app_footer', $data);
 
 		$this->load->model('reportestock_model');
+	}
+
+
+	public function mapastock()
+	{
+		$this->load->model('reportestock_model');
+		$arr = $this->reportestock_model->get_treemap_permanencia();
+		$arr2 = $this->reportestock_model->arr_query2treemap($arr, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
+		echo($arr2);
+
+
 	}
 
 
