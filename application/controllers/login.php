@@ -38,8 +38,7 @@ class Login extends CI_Controller {
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
-		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: </strong>', '</p>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)
 		{
@@ -103,9 +102,8 @@ class Login extends CI_Controller {
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
 		}
-		$this->form_validation->set_error_delimiters('<p class="text-error"><strong>ERROR: </strong>', '</p>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
-		$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
+
+		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)
 		{

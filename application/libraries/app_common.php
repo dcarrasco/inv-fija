@@ -9,6 +9,7 @@ class App_common {
 		$this->load->model('acl_model');
 	}
 
+	// --------------------------------------------------------------------
 
 	public function __get($key)
 	{
@@ -16,7 +17,7 @@ class App_common {
 		return $CI->$key;
 	}
 
-
+	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve arreglo con el menu de las aplicaciones del sistema
@@ -70,6 +71,12 @@ class App_common {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * [titulo_modulo description]
+	 * @return string Titulo del modulo
+	 */
 	public function titulo_modulo()
 	{
 		$arr_modulos = $this->acl_model->get_user_menu();
@@ -84,19 +91,60 @@ class App_common {
 
 	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve listado con el menu modulo
+	 * @param  string $op_selected opción del módulo seleccionada
+	 * @param  array  $menu        menu
+	 * @return sring               listado menu
+	 */
 	public function menu_modulo($op_selected = '', $menu = array())
 	{
 		$menu = '<ul class="nav nav-tabs">';
+
 		foreach($menu as $key => $val)
 		{
 			$selected = ($key == $op_selected) ? ' class="active"' : '';
 			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
 		}
 		$menu .= '</ul>';
+
 		return $menu;
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Configura los parámetros del módulo form_validation
+	 * @return none
+	 */
+	public function form_validation_config()
+	{
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR: </strong>', '</div>');
+
+		$this->form_validation->set_message('required', 'Ingrese un valor para el campo "%s"');
+		$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
+		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
+		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
+		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
+		$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
+
+
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * [formato_reporte description]
+	 * @param  string $valor           [description]
+	 * @param  array  $arr_param_campo [description]
+	 * @param  array  $reg             [description]
+	 * @param  string $campo           [description]
+	 * @return [type]                  [description]
+	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $reg = array(), $campo = '')
 	{
 		switch ($arr_param_campo['tipo'])
@@ -151,7 +199,19 @@ class App_common {
 	}
 
 
-	public function reporte($arr_campos = array(), $arr_datos = array(), $arr_link_campos = array(), $arr_link_sort = array(), $arr_img_orden = array())
+	// --------------------------------------------------------------------
+
+	/**
+	 * Imprime reporte
+	 * @param  array  $arr_campos      [description]
+	 * @param  array  $arr_datos       [description]
+	 * @param  array  $arr_link_campos [description]
+	 * @param  array  $arr_link_sort   [description]
+	 * @param  array  $arr_img_orden   [description]
+	 * @return [type]                  [description]
+	 */
+	public function reporte($arr_campos = array(), $arr_datos = array(),
+		$arr_link_campos = array(), $arr_link_sort = array(), $arr_img_orden = array())
 	{
 		$tabla = array();
 

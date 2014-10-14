@@ -66,10 +66,7 @@ class Inventario_analisis extends CI_Controller {
 			}
 		}
 
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
-		$this->form_validation->set_message('integer', 'El valor del campo %s debe ser un numero entero');
-		$this->form_validation->set_message('greater_than', 'El valor del campo %s debe ser positivo');
+		$this->app_common->form_validation_config();
 
 		$msg_alerta = '';
 
@@ -216,9 +213,8 @@ class Inventario_analisis extends CI_Controller {
 		$this->form_validation->set_rules('pag_desde', 'Pagina Desde', 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('pag_hasta', 'Pagina Hasta', 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para [%s]');
-		$this->form_validation->set_message('greater_than', 'El valor del campo [%s] debe ser mayor o igual a 1');
+
+		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)
 		{

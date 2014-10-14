@@ -370,13 +370,7 @@ class ORM_Model implements Iterator {
 		{
 			$this->set_validation_rules_field($campo);
 		}
-
-		$this->CI->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
-		$this->CI->form_validation->set_message('required', 'Ingrese un valor para "%s"');
-		$this->CI->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
-		$this->CI->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
-		$this->CI->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
-		$this->CI->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
+		$this->CI->app_common->form_validation_config();
 
 		return $this->CI->form_validation->run();
 	}

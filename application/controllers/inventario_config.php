@@ -97,8 +97,7 @@ class Inventario_config extends ORM_Controller {
 			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
 		}
 
-		$this->form_validation->set_error_delimiters('<div class="error round">', '</div>');
-		$this->form_validation->set_message('required', 'Ingrese un valor para %s');
+		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)
 		{
