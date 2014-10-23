@@ -144,14 +144,14 @@
 
 <script language="javascript">
 	var data_grafico = {
-		q_equipos: <?php echo $serie_q_equipos; ?>,
-		v_equipos: <?php echo $serie_v_equipos; ?>,
-		q_simcard: <?php echo $serie_q_simcard; ?>,
-		v_simcard: <?php echo $serie_v_simcard; ?>,
-		q_otros: <?php echo $serie_q_otros; ?>,
-		v_otros: <?php echo $serie_v_otros; ?>,
-		x_label: <?php echo $str_eje_x; ?>,
-		series_label: <?php echo $str_label_series; ?>,
+		q_equipos: <?php echo $datos_grafico['serie_q_equipos']; ?>,
+		v_equipos: <?php echo $datos_grafico['serie_v_equipos']; ?>,
+		q_simcard: <?php echo $datos_grafico['serie_q_simcard']; ?>,
+		v_simcard: <?php echo $datos_grafico['serie_v_simcard']; ?>,
+		q_otros: <?php echo $datos_grafico['serie_q_otros']; ?>,
+		v_otros: <?php echo $datos_grafico['serie_v_otros']; ?>,
+		x_label: <?php echo $datos_grafico['str_eje_x']; ?>,
+		series_label: <?php echo $datos_grafico['str_label_series']; ?>,
 	}
 
 	$(document).ready(function(){
