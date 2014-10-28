@@ -26,7 +26,7 @@ class Acl_model extends CI_Model {
 
 		$usuario_valido = $this->db
 			->where(array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))
-			->get('fija_usuarios')
+			->get($this->config->item('bd_usuarios'))
 			->num_rows() > 0;
 
 		if ($usuario_valido)
@@ -34,7 +34,7 @@ class Acl_model extends CI_Model {
 			// escribe auditoria del login
 			$this->db
 				->where('usr', $usr)
-				->update('fija_usuarios',
+				->update($this->config->item('bd_usuarios'),
 					array(
 						'fecha_login'  => date('Ymd H:i:s'),
 						'ip_login'     => $this->input->ip_address(),
@@ -65,7 +65,7 @@ class Acl_model extends CI_Model {
 	public function get_id_usr($usr = '')
 	{
 		$user = ($usr == '') ? $this->get_user() : $usr;
-		$rs = $this->db->get_where('fija_usuarios', array('usr' => $user))->row_array();
+		$rs = $this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $user))->row_array();
 		return (is_array($rs) ? $rs['id'] : '');
 	}
 
@@ -112,9 +112,9 @@ class Acl_model extends CI_Model {
 	{
 		$arr_rs = $this->db->distinct()
 			->select('llave_modulo')
-			->from('fija_usuarios u')
-			->join('acl_usuario_rol ur', 'ur.id_usuario = u.id')
-			->join('acl_rol_modulo rm', 'rm.id_rol = ur.id_rol')
+			->from($this->config->item('bd_usuarios') . ' u')
+			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
+			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join('acl_modulo m', 'm.id = rm.id_modulo')
 			->where('usr', $usr)
 			->get()
@@ -141,11 +141,11 @@ class Acl_model extends CI_Model {
 	{
 		return $this->db->distinct()
 			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
-			->from('fija_usuarios u')
-			->join('acl_usuario_rol ur', 'ur.id_usuario = u.id')
-			->join('acl_rol_modulo rm', 'rm.id_rol = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->join('acl_app a', 'a.id = m.id_app')
+			->from($this->config->item('bd_usuarios') . ' u')
+			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
+			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
+			->join($this->config->item('bd_modulos') . ' m', 'm.id = rm.id_modulo')
+			->join($this->config->item('bd_app') . ' a', 'a.id = m.id_app')
 			->where('usr', (string)$usr)
 			->order_by('a.orden, m.orden')
 			->get()
@@ -245,7 +245,7 @@ class Acl_model extends CI_Model {
 	public function get_nombre_usuario($usr = '')
 	{
 		$arr_rs = $this->db
-			->get_where('fija_usuarios', array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
 			->row_array();
 
 		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
@@ -262,7 +262,7 @@ class Acl_model extends CI_Model {
 	public function tiene_clave($usr = '')
 	{
 		$arr_rs = $this->db
-			->get_where('fija_usuarios', array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
 			->row_array();
 
 		if (count($arr_rs) > 0)
@@ -285,7 +285,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function existe_usuario($usr = '')
 	{
-		$regs = $this->db->get_where('fija_usuarios', array('usr' => $usr))->num_rows();
+		$regs = $this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))->num_rows();
 
 		return (($regs > 0) ? TRUE : FALSE);
 	}
@@ -303,24 +303,24 @@ class Acl_model extends CI_Model {
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
 	{
 		$arr_rs = $this->db
-			->get_where('fija_usuarios', array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
 			->row_array();
 
 		if (!$this->tiene_clave($usr))
 		{
 			$this->db
 				->where('usr', $usr)
-				->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+				->update($this->config->item('bd_usuarios'), array('pwd' => sha1($clave_new)));
 
 			return array(TRUE);
 		}
 		else
 		{
-			if($this->db->get_where('fija_usuarios', array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
+			if($this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
 			{
 				$this->db
 					->where('usr', $usr)
-					->update('fija_usuarios', array('pwd' => sha1($clave_new)));
+					->update($this->config->item('bd_usuarios'), array('pwd' => sha1($clave_new)));
 
 				return array(TRUE);
 			}
@@ -342,7 +342,7 @@ class Acl_model extends CI_Model {
 	public function get_correo($usr = '')
 	{
 		$arr_rs = $this->db
-			->get_where('fija_usuarios', array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
 			->row_array();
 
 		return (count($arr_rs) > 0) ? $arr_rs['correo'] : '';

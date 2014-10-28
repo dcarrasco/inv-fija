@@ -4,42 +4,45 @@ class Inventario extends ORM_Model {
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$cfg = array(
-				'modelo' => array(
-						'model_tabla'        => 'fija_inventarios',
-						'model_label'        => 'Inventario',
-						'model_label_plural' => 'Inventarios',
-						'model_order_by'     => 'nombre',
+			'modelo' => array(
+				'model_tabla'        => $this->CI->config->item('bd_inventarios'),
+				'model_label'        => 'Inventario',
+				'model_label_plural' => 'Inventarios',
+				'model_order_by'     => 'nombre',
+			),
+			'campos' => array(
+				'id' => array(
+					'tipo'   => 'id',
+				),
+				'nombre' => array(
+					'label'          => 'Nombre del inventario',
+					'tipo'           => 'char',
+					'largo'          => 50,
+					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE
+				),
+				'activo' => array(
+					'label'          => 'Activo',
+					'tipo'           =>  'boolean',
+					'texto_ayuda'    => 'Indica se el inventario esta activo dentro del sistema.',
+					'es_obligatorio' => TRUE,
+				),
+				'tipo_inventario' => array(
+					'tipo'           =>  'has_one',
+					'relation'       => array(
+						'model' => 'tipo_inventario'
 					),
-				'campos' => array(
-						'id' => array(
-								'tipo'   => 'id',
-							),
-						'nombre' => array(
-								'label'          => 'Nombre del inventario',
-								'tipo'           => 'char',
-								'largo'          => 50,
-								'texto_ayuda'    => 'Maximo 50 caracteres.',
-								'es_obligatorio' => TRUE,
-								'es_unico'       => TRUE
-							),
-						'activo' => array(
-								'label'          => 'Activo',
-								'tipo'           =>  'boolean',
-								'texto_ayuda'    => 'Indica se el inventario esta activo dentro del sistema.',
-								'es_obligatorio' => TRUE,
-							),
-						'tipo_inventario' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array(
-										'model' => 'tipo_inventario'
-									),
-								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'es_obligatorio' => TRUE,
-							),
-						),
-					);
-		parent::__construct($cfg);
+					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+					'es_obligatorio' => TRUE,
+				),
+			),
+		);
+
+		$this->config_model($cfg);
 	}
 
 
@@ -82,7 +85,7 @@ class Inventario extends ORM_Model {
 	{
 		$rs = $this->CI->db
 			->select('max(hoja) as max_hoja')
-			->get_where('fija_detalle_inventario', array('id_inventario' => $this->id))
+			->get_where($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id))
 			->row();
 
 		return ($rs->max_hoja);
@@ -93,7 +96,7 @@ class Inventario extends ORM_Model {
 
 	public function borrar_detalle_inventario()
 	{
-		$this->CI->db->delete('fija_detalle_inventario', array('id_inventario' => $this->id));
+		$this->CI->db->delete($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id));
 	}
 
 

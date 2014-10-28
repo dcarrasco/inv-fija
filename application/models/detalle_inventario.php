@@ -4,150 +4,152 @@ class Detalle_inventario extends ORM_Model {
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$cfg = array(
-				'modelo' => array(
-						'model_tabla'        => 'fija_detalle_inventario',
-						'model_label'        => 'Detalle inventario',
-						'model_label_plural' => 'Detalles inventario',
-						'model_order_by'     => 'id',
-					),
-				'campos' => array(
-						'id' => array(
-								'tipo'   => 'id',
-							),
-						'id_inventario' => array(
-								'tipo'           => 'has_one',
-								'relation'       => array(
-										'model' => 'inventario',
-									),
-							),
-						'hoja' => array(
-								'label'          => 'Hoja',
-								'tipo'           => 'int',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Numero de la hoja usada en el inventario',
-								'es_obligatorio' => TRUE,
-							),
-						'ubicacion' => array(
-								'label'          => 'Ubicación del material',
-								'tipo'           =>  'char',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Indica la posición del material en el almacén.',
-								'es_obligatorio' => TRUE,
-							),
-						'hu' => array(
-								'label'          => 'HU del material',
-								'tipo'           =>  'char',
-								'largo'          => 20,
-								'texto_ayuda'    => 'Indica la HU del material en el almacén.',
-								'es_obligatorio' => FALSE,
-							),
-						'catalogo' => array(
-								'tipo'           => 'has_one',
-								'relation'       => array(
-										'model' => 'catalogo',
-									),
-								'texto_ayuda'    => 'Catálogo del material.',
-							),
-						'descripcion' => array(
-								'label'          => 'Descripcion del material',
-								'tipo'           =>  'char',
-								'largo'          => 45,
-								'texto_ayuda'    => 'Maximo 45 caracteres.',
-								'es_obligatorio' => TRUE,
-							),
-						'lote' => array(
-								'label'          => 'Lote del material',
-								'tipo'           =>  'char',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Lote del material.',
-								'es_obligatorio' => TRUE,
-							),
-						'centro' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array(
-										'model' => 'centro'
-									),
-							),
-						'almacen' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array(
-										'model' => 'almacen'
-									),
-							),
-						'um' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array(
-										'model' => 'unidad_medida'
-									),
-							),
-						'stock_sap' => array(
-								'label'          => 'Stock SAP del material',
-								'tipo'           =>  'int',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Stock sistémico (SAP) del material.',
-								'es_obligatorio' => TRUE,
-							),
-						'stock_fisico' => array(
-								'label'          => 'Stock Fisico del material',
-								'tipo'           =>  'int',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Stock físico (inventariado) del material.',
-								'es_obligatorio' => TRUE,
-							),
-						'digitador' => array(
-								'tipo'           => 'has_one',
-								'relation'       => array(
-										'model' => 'usuario',
-									),
-								'texto_ayuda'    => 'Digitador de la hoja.',
-							),
-						'auditor' => array(
-								'tipo'           => 'has_one',
-								'relation'       => array(
-										'model'      => 'auditor',
-										'conditions' => array('activo' => 1),
-									),
-								'texto_ayuda'    => 'Auditor de la hoja.',
-							),
-						'reg_nuevo' => array(
-								'label'          => 'Registro nuevo',
-								'tipo'           =>  'boolean',
-								'texto_ayuda'    => 'Indica si el registro es nuevo.',
-								'es_obligatorio' => TRUE,
-							),
-						'fecha_modificacion' => array(
-								'label'          => 'Fecha de modificacion',
-								'tipo'           =>  'datetime',
-								'texto_ayuda'    => 'Fecha de modificación del registro.',
-								'es_obligatorio' => TRUE,
-							),
-						'observacion' => array(
-								'label'          => 'Observacion de registro',
-								'tipo'           =>  'char',
-								'largo'          => 200,
-								'texto_ayuda'    => 'Maximo 200 caracteres.',
-							),
-						'stock_ajuste' => array(
-								'label'          => 'Stock de ajuste del material',
-								'tipo'           =>  'int',
-								'largo'          => 10,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
-							),
-						'glosa_ajuste' => array(
-								'label'          => 'Observacion del ajuste',
-								'tipo'           =>  'char',
-								'largo'          => 100,
-								'texto_ayuda'    => 'Maximo 100 caracteres.',
-							),
-						'fecha_ajuste' => array(
-								'label'          => 'Fecha del ajuste',
-								'tipo'           =>  'datetime',
-								'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
-							),
+			'modelo' => array(
+				'model_tabla'        => $this->CI->config->item('bd_detalle_inventario'),
+				'model_label'        => 'Detalle inventario',
+				'model_label_plural' => 'Detalles inventario',
+				'model_order_by'     => 'id',
+			),
+			'campos' => array(
+				'id' => array(
+					'tipo'   => 'id',
 				),
-			);
-		parent::__construct($cfg);
+				'id_inventario' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model' => 'inventario',
+					),
+				),
+				'hoja' => array(
+					'label'          => 'Hoja',
+					'tipo'           => 'int',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Numero de la hoja usada en el inventario',
+					'es_obligatorio' => TRUE,
+				),
+				'ubicacion' => array(
+					'label'          => 'Ubicación del material',
+					'tipo'           =>  'char',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Indica la posición del material en el almacén.',
+					'es_obligatorio' => TRUE,
+				),
+				'hu' => array(
+					'label'          => 'HU del material',
+					'tipo'           =>  'char',
+					'largo'          => 20,
+					'texto_ayuda'    => 'Indica la HU del material en el almacén.',
+					'es_obligatorio' => FALSE,
+				),
+				'catalogo' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model' => 'catalogo',
+					),
+					'texto_ayuda'    => 'Catálogo del material.',
+				),
+				'descripcion' => array(
+					'label'          => 'Descripcion del material',
+					'tipo'           =>  'char',
+					'largo'          => 45,
+					'texto_ayuda'    => 'Maximo 45 caracteres.',
+					'es_obligatorio' => TRUE,
+				),
+				'lote' => array(
+					'label'          => 'Lote del material',
+					'tipo'           =>  'char',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Lote del material.',
+					'es_obligatorio' => TRUE,
+				),
+				'centro' => array(
+					'tipo'           =>  'has_one',
+					'relation'       => array(
+						'model' => 'centro'
+					),
+				),
+				'almacen' => array(
+					'tipo'           =>  'has_one',
+					'relation'       => array(
+						'model' => 'almacen'
+					),
+				),
+				'um' => array(
+					'tipo'           =>  'has_one',
+					'relation'       => array(
+						'model' => 'unidad_medida'
+					),
+				),
+				'stock_sap' => array(
+					'label'          => 'Stock SAP del material',
+					'tipo'           =>  'int',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Stock sistémico (SAP) del material.',
+					'es_obligatorio' => TRUE,
+				),
+				'stock_fisico' => array(
+					'label'          => 'Stock Fisico del material',
+					'tipo'           =>  'int',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Stock físico (inventariado) del material.',
+					'es_obligatorio' => TRUE,
+				),
+				'digitador' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model' => 'usuario',
+					),
+					'texto_ayuda'    => 'Digitador de la hoja.',
+				),
+				'auditor' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model'      => 'auditor',
+						'conditions' => array('activo' => 1),
+					),
+					'texto_ayuda'    => 'Auditor de la hoja.',
+				),
+				'reg_nuevo' => array(
+					'label'          => 'Registro nuevo',
+					'tipo'           =>  'boolean',
+					'texto_ayuda'    => 'Indica si el registro es nuevo.',
+					'es_obligatorio' => TRUE,
+				),
+				'fecha_modificacion' => array(
+					'label'          => 'Fecha de modificacion',
+					'tipo'           =>  'datetime',
+					'texto_ayuda'    => 'Fecha de modificación del registro.',
+					'es_obligatorio' => TRUE,
+				),
+				'observacion' => array(
+					'label'          => 'Observacion de registro',
+					'tipo'           =>  'char',
+					'largo'          => 200,
+					'texto_ayuda'    => 'Maximo 200 caracteres.',
+				),
+				'stock_ajuste' => array(
+					'label'          => 'Stock de ajuste del material',
+					'tipo'           =>  'int',
+					'largo'          => 10,
+					'texto_ayuda'    => 'Maximo 100 caracteres.',
+				),
+				'glosa_ajuste' => array(
+					'label'          => 'Observacion del ajuste',
+					'tipo'           =>  'char',
+					'largo'          => 100,
+					'texto_ayuda'    => 'Maximo 100 caracteres.',
+				),
+				'fecha_ajuste' => array(
+					'label'          => 'Fecha del ajuste',
+					'tipo'           =>  'datetime',
+					'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
+				),
+			),
+		);
+		$this->config_model($cfg);
 	}
 
 
@@ -241,7 +243,7 @@ class Detalle_inventario extends ORM_Model {
 				'stock_fisico - stock_sap + stock_ajuste <> 0' :
 				'stock_fisico - stock_sap <> 0'
 			)
-			->count_all_results('fija_detalle_inventario');
+			->count_all_results($this->get_model_tabla());
 
 		// recupera el detalle de registros
 		$per_page = 50;
@@ -255,7 +257,7 @@ class Detalle_inventario extends ORM_Model {
 				'stock_fisico - stock_sap <> 0'
 			)
 			->limit($per_page, $pag)
-			->get('fija_detalle_inventario')
+			->get($this->get_model_tabla())
 			->result_array();
 
 		$this->CI->load->library('pagination');

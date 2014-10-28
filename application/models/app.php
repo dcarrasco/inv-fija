@@ -4,54 +4,57 @@ class App extends ORM_Model {
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$cfg = array(
-		'modelo' => array(
-				'model_tabla'        => 'acl_app',
+			'modelo' => array(
+				'model_tabla'        => $this->CI->config->item('bd_app'),
 				'model_label'        => 'Aplicacion',
 				'model_label_plural' => 'Aplicaciones',
 				'model_order_by'     => 'app',
 			),
-		'campos' => array(
+			'campos' => array(
 				'id' => array(
-						'tipo'   => 'id',
-					),
-				'app' => array(
-						'label'          => 'Aplicacion',
-						'tipo'           => 'char',
-						'largo'          => 50,
-						'texto_ayuda'    => 'Nombre de la aplicación. Maximo 50 caracteres.',
-						'es_obligatorio' => TRUE,
-						'es_unico'       => TRUE
-					),
-				'descripcion' => array(
-						'label'          => 'Descripcion de la Aplicacion',
-						'tipo'           =>  'char',
-						'largo'          => 50,
-						'texto_ayuda'    => 'Breve descripcion de la aplicacion. Maximo 50 caracteres.',
-						'es_obligatorio' => TRUE,
-					),
-				'orden' => array(
-						'label'          => 'Orden de la Aplicacion',
-						'tipo'           =>  'int',
-						'texto_ayuda'    => 'Orden de la aplicacion en el menu.',
-						'es_obligatorio' => TRUE,
-						'es_unico'       => TRUE
-					),
-				'url' => array(
-						'label'          => 'Direccion de la Aplicacion',
-						'tipo'           =>  'char',
-						'largo'          => 100,
-						'texto_ayuda'    => 'Dirección web (URL) de la aplicacion. Maximo 100 caracteres.',
-					),
-				'icono' => array(
-						'label'          => 'Icono de la apliacion',
-						'tipo'           =>  'char',
-						'largo'          => 50,
-						'texto_ayuda'    => 'Nombre del archivo del icono de la aplicacion. Maximo 50 caracteres.',
-					),
+					'tipo'   => 'id',
 				),
-			);
-		parent::__construct($cfg);
+				'app' => array(
+					'label'          => 'Aplicacion',
+					'tipo'           => 'char',
+					'largo'          => 50,
+					'texto_ayuda'    => 'Nombre de la aplicación. Maximo 50 caracteres.',
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE
+				),
+				'descripcion' => array(
+					'label'          => 'Descripcion de la Aplicacion',
+					'tipo'           =>  'char',
+					'largo'          => 50,
+					'texto_ayuda'    => 'Breve descripcion de la aplicacion. Maximo 50 caracteres.',
+					'es_obligatorio' => TRUE,
+				),
+				'orden' => array(
+					'label'          => 'Orden de la Aplicacion',
+					'tipo'           =>  'int',
+					'texto_ayuda'    => 'Orden de la aplicacion en el menu.',
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE
+				),
+				'url' => array(
+					'label'          => 'Direccion de la Aplicacion',
+					'tipo'           =>  'char',
+					'largo'          => 100,
+					'texto_ayuda'    => 'Dirección web (URL) de la aplicacion. Maximo 100 caracteres.',
+				),
+				'icono' => array(
+					'label'          => 'Icono de la apliacion',
+					'tipo'           =>  'char',
+					'largo'          => 50,
+					'texto_ayuda'    => 'Nombre del archivo del icono de la aplicacion. Maximo 50 caracteres.',
+				),
+			),
+		);
+
+		$this->config_model($cfg);
 	}
 
 

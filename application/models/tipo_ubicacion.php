@@ -4,36 +4,39 @@ class Tipo_ubicacion extends ORM_Model {
 
 	public function __construct()
 	{
+		parent::__construct();
+
 		$cfg = array(
-				'modelo' => array(
-						'model_tabla'        => 'fija_tipo_ubicacion',
-						'model_label'        => 'Tipo de ubicacion',
-						'model_label_plural' => 'Tipos de ubicacion',
-						'model_order_by'     => 'tipo_inventario, tipo_ubicacion',
+			'modelo' => array(
+				'model_tabla'        => $this->CI->config->item('bd_tipo_ubicacion'),
+				'model_label'        => 'Tipo de ubicacion',
+				'model_label_plural' => 'Tipos de ubicacion',
+				'model_order_by'     => 'tipo_inventario, tipo_ubicacion',
+			),
+			'campos' => array(
+				'id' => array(
+					'tipo'   => 'id',
+				),
+				'tipo_inventario' => array(
+					'tipo'           =>  'has_one',
+					'relation'       => array(
+						'model' => 'tipo_inventario'
 					),
-				'campos' => array(
-						'id' => array(
-								'tipo'   => 'id',
-							),
-						'tipo_inventario' => array(
-								'tipo'           =>  'has_one',
-								'relation'       => array(
-										'model' => 'tipo_inventario'
-									),
-								'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-								'es_obligatorio' => TRUE,
-							),
-						'tipo_ubicacion' => array(
-								'label'          => 'Tipo de ubicacion',
-								'tipo'           =>  'char',
-								'largo'          => 30,
-								'texto_ayuda'    => 'Maximo 30 caracteres.',
-								'es_obligatorio' => TRUE,
-								'es_unico'       => TRUE
-							),
-						),
-					);
-		parent::__construct($cfg);
+					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+					'es_obligatorio' => TRUE,
+				),
+				'tipo_ubicacion' => array(
+					'label'          => 'Tipo de ubicacion',
+					'tipo'           =>  'char',
+					'largo'          => 30,
+					'texto_ayuda'    => 'Maximo 30 caracteres.',
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE
+				),
+			),
+		);
+
+		$this->config_model($cfg);
 	}
 
 

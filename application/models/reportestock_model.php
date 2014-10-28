@@ -19,7 +19,7 @@ class Reportestock_model extends CI_Model {
 	{
 		$this->db->distinct();
 		$this->db->select('convert(varchar(20), fecha_stock, 102) as fecha_stock');
-		$arr_result = $this->db->get('bd_logistica..cp_permanencia as p')->row_array();
+		$arr_result = $this->db->get($this->config->item('bd_permanencia') . ' as p')->row_array();
 		if (count($arr_result) > 0)
 		{
 			return $arr_result['fecha_stock'];
@@ -38,7 +38,7 @@ class Reportestock_model extends CI_Model {
 		$arr_rs = $this->db
 			->distinct()
 			->select('t.id_tipo, t.tipo')
-			->from('bd_logistica..cp_tiposalm t')
+			->from($this->config->item('bd_tiposalm_sap') . ' t')
 			->where('t.tipo_op', $tipo_op)
 			->order_by('t.tipo')
 			->get()
@@ -75,8 +75,8 @@ class Reportestock_model extends CI_Model {
 		$arr_rs = $this->db
 			->distinct()
 			->select('t.id_tipo, t.tipo')
-			->from('bd_logistica..cp_tipos_almacenes ta')
-			->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left')
+			->from($this->config->item('bd_tipoalmacen_sap') . ' ta')
+			->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
 			->like('t.tipo', '(CONSUMO)')
 			->order_by('t.tipo')
 			->get()
@@ -134,9 +134,9 @@ class Reportestock_model extends CI_Model {
 		$this->db->select('sum(mas720) as mas720');
 		$this->db->select('sum(otro) as otro');
 		$this->db->select('sum(total) as \'total\'');
-		$this->db->from('bd_logistica..cp_permanencia as p');
-		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left');
-		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->from($this->config->item('bd_permanencia') . ' as p');
+		$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left');
+		$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left');
 		$this->db->group_by('t.tipo, t.id_tipo');
 		$this->db->order_by($orden_campo, $orden_tipo);
 
@@ -213,9 +213,9 @@ class Reportestock_model extends CI_Model {
 		$this->db->select('count(case when s.dias > 90 and s.dias<= 180 then 1 else null end) as m180');
 		$this->db->select('count(case when s.dias > 180 then 1 else null end) as mas180');
 		$this->db->select('count(1) as \'total\'');
-		$this->db->from('bd_logistica..perm_series_consumo_fija s');
-		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
-		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->from($this->config->item('bd_permanencia_fija') . ' s');
+		$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
+		$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left');
 		$this->db->group_by('t.tipo');
 		$this->db->order_by($orden_campo, $orden_tipo);
 
@@ -231,7 +231,7 @@ class Reportestock_model extends CI_Model {
 		if ($incl_almacen == '1')
 		{
 			$this->db->select('s.centro, s.almacen, a.des_almacen');
-			$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
+			$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
 			$this->db->group_by('s.centro, s.almacen, a.des_almacen');
 			$this->db->order_by('s.centro, s.almacen, a.des_almacen');
 		}
@@ -273,11 +273,11 @@ class Reportestock_model extends CI_Model {
 		$this->db->select('s.modificado_por');
 		$this->db->select('u.nom_usuario');
 
-		$this->db->from('bd_logistica..bd_stock_sap s');
-		$this->db->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
-		$this->db->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left');
-		$this->db->join('bd_logistica..cp_almacenes a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
-		$this->db->join('bd_logistica..cp_usuarios u', 'u.usuario=s.modificado_por', 'left');
+		$this->db->from($this->config->item('bd_stock_seriado_sap') . ' s');
+		$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left');
+		$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left');
+		$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 's.centro=a.centro and s.almacen=a.cod_almacen', 'left');
+		$this->db->join($this->config->item('bd_usuarios_sap') . ' u', 'u.usuario=s.modificado_por', 'left');
 		$this->db->order_by('t.tipo');
 		$this->db->order_by('s.centro');
 		$this->db->order_by('s.almacen');
@@ -388,10 +388,10 @@ class Reportestock_model extends CI_Model {
 			->select_sum('s.total', 'cant')
 			->select_sum('convert(FLOAT, s.total)*(case when v.pmp IS NULL then 0 else v.pmp END)/1000000', 'valor')
 			->select_sum('s.m030*15+s.m060*45+s.m090*75+s.m120*115+s.m180*150+s.m360*270+s.m720*540+s.mas720*720', 'perm')
-			->from('bd_logistica..cp_permanencia as s')
-			->join('bd_logistica..cp_tipos_almacenes ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left')
-			->join('bd_logistica..cp_tiposalm t', 'ta.id_tipo=t.id_tipo', 'left')
-			->join('bd_planificacion..ca_stock_sap_04 v', 's.centro=v.centro and s.material=v.material and s.lote=v.lote and s.estado_stock=v.estado_stock', 'left')
+			->from($this->config->item('bd_permanencia') . ' as s')
+			->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left')
+			->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
+			->join($this->config->item('bd_pmp') . ' v', 's.centro=v.centro and s.material=v.material and s.lote=v.lote and s.estado_stock=v.estado_stock', 'left')
 			->where('s.centro', $centro)
 			->where('s.almacen is not NULL')
 			->where('s.tipo_material', $tipo_material)

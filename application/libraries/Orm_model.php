@@ -121,8 +121,8 @@ class ORM_Model implements Iterator {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	public function __construct($param = array()) {
-
+	public function __construct($param = array())
+	{
 		$this->CI =& get_instance();
 
 		$this->model_class  = get_class($this);
@@ -130,7 +130,16 @@ class ORM_Model implements Iterator {
 		$this->model_tabla  = $this->model_nombre;
 		$this->model_label  = $this->model_nombre;
 		$this->model_label_plural = $this->model_label . 's';
+	}
 
+	/**
+	 * Constructor
+	 *
+	 * Define las propiedades basicas de un nuevo modelo
+	 *
+	 **/
+	public function config_model($param = array())
+	{
 		if (array_key_exists('modelo', $param))
 		{
 			$this->_config_modelo($param['modelo']);
