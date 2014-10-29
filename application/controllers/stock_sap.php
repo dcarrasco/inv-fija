@@ -108,6 +108,10 @@ class Stock_sap extends CI_Controller {
 		{
 			$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
 		}
+		else
+		{
+			$datos_grafico = array();
+		}
 
 		$data = array(
 			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'),
