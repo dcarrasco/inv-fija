@@ -432,8 +432,8 @@ class stock_sap_model extends CI_Model {
 		{
 			$this->db->from($this->config->item('bd_stock_fija') . ' s');
 			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
-			$this->db->join($this->config->item('bd_tiposalm_sap') . ' t',         't.id_tipo=ta.id_tipo');
-			$this->db->join($this->config->item('bd_almacenes_sap') . ' a',        'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+			$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 't.id_tipo=ta.id_tipo');
+			$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
 		}
 		else
 		{

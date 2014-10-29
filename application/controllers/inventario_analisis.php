@@ -19,11 +19,6 @@ class Inventario_analisis extends CI_Controller {
 			'imprime_inventario' => array('url' => $this->uri->segment(1) . '/imprime_inventario', 'texto' => 'Imprimir Hojas'),
 		);
 
-		$inventario_activo = new Inventario;
-		$this->id_inventario = $inventario_activo->get_id_inventario_activo();
-		$inventario_activo->find_id($this->id_inventario);
-
-		$this->nombre_inventario = $inventario_activo->nombre;
 	}
 
 
@@ -40,6 +35,14 @@ class Inventario_analisis extends CI_Controller {
 		$this->ajustes();
 	}
 
+	private function _get_datos_inventario()
+	{
+		$inventario_activo = new Inventario;
+		$this->id_inventario = $inventario_activo->get_id_inventario_activo();
+		$inventario_activo->find_id($this->id_inventario);
+		$this->nombre_inventario = $inventario_activo->nombre;
+	}
+
 
 	// --------------------------------------------------------------------
 
@@ -52,6 +55,7 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	public function ajustes($ocultar_regularizadas = 0, $pag = 0)
 	{
+		$this->_get_datos_inventario();
 
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
@@ -118,6 +122,7 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	public function sube_stock()
 	{
+		$this->_get_datos_inventario();
 
 		$upload_error = '';
 		$script_carga = '';
@@ -207,6 +212,8 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	public function imprime_inventario($id_inventario = 0)
 	{
+		$this->_get_datos_inventario();
+
 		$inventario = new Inventario;
 		$inventario->find_id($this->id_inventario);
 
