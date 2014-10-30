@@ -8,6 +8,7 @@
 | Listado con las tablas del sistema
 |
 */
+// Inventarios
 $config['bd_usuarios']           = 'fija_usuarios';
 $config['bd_inventarios']        = 'fija_inventarios';
 $config['bd_tipos_inventario']   = 'fija_tipos_inventario';
@@ -20,13 +21,14 @@ $config['bd_almacenes']          = 'fija_almacenes';
 $config['bd_familias']           = 'fija_familias';
 $config['bd_tipo_ubicacion']     = 'fija_tipo_ubicacion';
 
+// ACL
+$config['bd_app']               = 'acl_app';
+$config['bd_modulos']           = 'acl_modulo';
+$config['bd_rol']               = 'acl_rol';
 $config['bd_usuario_rol']       = 'acl_usuario_rol';
 $config['bd_rol_modulo']        = 'acl_rol_modulo';
-$config['bd_modulos']           = 'acl_modulo';
-$config['bd_app']               = 'acl_app';
-$config['bd_rol']               = 'acl_rol';
-$config['bd_modulo']            = 'acl_modulo';
 
+// Stock
 $config['bd_almacenes_sap']       = 'bd_logistica..cp_almacenes';
 $config['bd_tipoalmacen_sap']     = 'bd_logistica..cp_tipos_almacenes';
 $config['bd_tiposalm_sap']        = 'bd_logistica..cp_tiposalm';
@@ -41,14 +43,12 @@ $config['bd_stock_fija_fechas']   = 'bd_logistica..bd_stock_sap_fija_fechas';
 $config['bd_movimientos_sap']     = 'bd_logistica..mov_hist';
 $config['bd_cmv_sap']             = 'bd_logistica..cp_cmv';
 $config['bd_usuarios_sap']        = 'bd_logistica..cp_usuarios';
-$config['bd_material_fija']       = 'bd_logistica..cp_material_fija';
 $config['bd_despachos_sap']       = 'bd_logistica..despachos_sap';
 $config['bd_materiales_sap']      = 'bd_logistica..al_articulos';
 $config['bd_stock_seriado_sap']   = 'bd_logistica..bd_stock_sap';
 $config['bd_stock_scl']           = 'bd_logistica..bd_stock_scl';
 $config['bd_al_bodegas']          = 'bd_logistica..al_bodegas';
 $config['bd_al_tipos_bodegas']    = 'bd_logistica..al_tipos_bodegas';
-$config['bd_al_articulos']        = 'bd_logistica..al_articulos';
 $config['bd_al_tipos_stock']      = 'bd_logistica..al_tipos_stock';
 $config['bd_al_estados']          = 'bd_logistica..al_estados';
 $config['bd_al_usos']             = 'bd_logistica..al_usos';

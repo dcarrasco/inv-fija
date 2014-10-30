@@ -199,7 +199,7 @@ class Analisis_series_model extends CI_Model {
 				->from($this->config->item('bd_stock_scl') . ' s')
 				->join($this->config->item('bd_al_bodegas') . ' b', 'cast(s.cod_bodega as varchar(10)) = b.cod_bodega', 'left')
 				->join($this->config->item('bd_al_tipos_bodegas') . ' t', 'cast(s.tip_bodega as varchar(10)) = t.tip_bodega', 'left')
-				->join($this->config->item('bd_al_articulos') . ' a', 'cast(s.cod_articulo as varchar(10)) = a.cod_articulo', 'left')
+				->join($this->config->item('bd_materiales_sap') . ' a', 'cast(s.cod_articulo as varchar(10)) = a.cod_articulo', 'left')
 				->join($this->config->item('bd_al_tipos_stock') . ' ts', 's.tip_stock = ts.tipo_stock', 'left')
 				->join($this->config->item('bd_al_estados') . ' e', 's.cod_estado = e.cod_estado', 'left')
 				->join($this->config->item('bd_al_usos') . ' u', 's.cod_uso = u.cod_uso', 'left')

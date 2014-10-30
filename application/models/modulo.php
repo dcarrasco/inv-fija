@@ -8,7 +8,7 @@ class Modulo extends ORM_Model {
 
 		$cfg = array(
 			'modelo' => array(
-				'model_tabla'    => $this->CI->config->item('bd_modulo'),
+				'model_tabla'    => $this->CI->config->item('bd_modulos'),
 				'model_order_by' => 'id_app, orden, modulo',
 			),
 			'campos' => array(
