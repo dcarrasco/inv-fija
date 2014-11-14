@@ -55,6 +55,19 @@
 
 						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="8" class="form-control"'); ?>
 
+						<div class="text-right">
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_cruce_alm', 'alm',set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
+								Alm
+							</div>
+
+							<div class="radio-inline">
+								<?php echo form_radio('tipo_cruce_alm', 'rec',set_radio('tipo_cruce_alm', 'rec')); ?>
+								Rec
+							</div>
+						</div>
+
+
 						<?php echo form_error('almacenes'); ?>
 
 					</div>

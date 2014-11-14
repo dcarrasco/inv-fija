@@ -740,12 +740,24 @@ class Reportestock_model extends CI_Model {
 			'DIA'       => 'f.fecha',
 		);
 
-		$arr_filtro_almacenes = array(
-			'MOVIL-TIPOALM' => 't.id_tipo',
-			'MOVIL-ALM'     => 'm.ce+\'-\'+m.alm',
-			'FIJA-TIPOALM'  => 't.id_tipo',
-			'FIJA-ALM'      => 'm.ce+\'-\'+m.alm',
-		);
+		if ($config['tipo_cruce_alm'] == 'alm')
+		{
+			$arr_filtro_almacenes = array(
+				'MOVIL-TIPOALM' => 't.id_tipo',
+				'MOVIL-ALM'     => 'm.ce+\'-\'+m.alm',
+				'FIJA-TIPOALM'  => 't.id_tipo',
+				'FIJA-ALM'      => 'm.ce+\'-\'+m.alm',
+			);
+		}
+		else
+		{
+			$arr_filtro_almacenes = array(
+				'MOVIL-TIPOALM' => 't.id_tipo',
+				'MOVIL-ALM'     => 'm.ce+\'-\'+m.rec',
+				'FIJA-TIPOALM'  => 't.id_tipo',
+				'FIJA-ALM'      => 'm.ce+\'-\'+m.rec',
+			);
+		}
 
 		$arr_filtro_materiales = array(
 			'TIPO'     => 'mat.tipo1',
@@ -761,9 +773,19 @@ class Reportestock_model extends CI_Model {
 			$this->db->from($this->config->item('bd_resmovimientos_sap') . ' as m');
 			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.fecha=f.fecha');
 			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.cmv=c.cmv');
-			$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.alm=a.cod_almacen');
-			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.alm=t.cod_almacen');
 			$this->db->join($this->config->item('bd_materiales2_sap') . ' as mat', 'm.codigo_sap=mat.codigo_sap');
+
+			if ($config['tipo_cruce_alm'] == 'alm')
+			{
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.alm=a.cod_almacen');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.alm=t.cod_almacen');
+			}
+			else
+			{
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.rec=a.cod_almacen');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.rec=t.cod_almacen');
+			}
+
 
 			$this->db->where_in($arr_filtro_fechas[$config['tipo_fecha']], $config['fechas']);
 			$this->db->where_in('m.cmv', $config['cmv']);

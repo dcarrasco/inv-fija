@@ -222,6 +222,7 @@ class Stock_reporte extends CI_Controller {
 		$this->form_validation->set_rules('tipo_fecha');
 		$this->form_validation->set_rules('tipo_alm');
 		$this->form_validation->set_rules('tipo_mat');
+		$this->form_validation->set_rules('tipo_cruce_alm');
 		$this->form_validation->set_rules('fechas','Fecha reporte', 'required');
 		$this->form_validation->set_rules('cmv','Movimientos', 'required');
 		$this->form_validation->set_rules('almacenes','Almacenes', 'required');
@@ -229,18 +230,20 @@ class Stock_reporte extends CI_Controller {
 
 		$this->form_validation->run();
 
-		$param_tipo_fecha = set_value('tipo_fecha', 'ANNO');
-		$param_tipo_alm   = set_value('tipo_alm', 'MOVIL-TIPOALM');
-		$param_tipo_mat   = set_value('tipo_mat', 'TIPO');
+		$param_tipo_fecha     = set_value('tipo_fecha', 'ANNO');
+		$param_tipo_alm       = set_value('tipo_alm', 'MOVIL-TIPOALM');
+		$param_tipo_mat       = set_value('tipo_mat', 'TIPO');
+		$param_tipo_cruce_alm = set_value('tipo_cruce_alm', 'alm');
 
 		$config_reporte = array(
-			'tipo_fecha' => $param_tipo_fecha,
-			'fechas'     => $this->input->post('fechas'),
-			'cmv'        => $this->input->post('cmv'),
-			'tipo_alm'   => $param_tipo_alm,
-			'almacenes'  => $this->input->post('almacenes'),
-			'tipo_mat'   => $param_tipo_mat,
-			'materiales' => $this->input->post('materiales'),
+			'tipo_fecha'     => $param_tipo_fecha,
+			'fechas'         => $this->input->post('fechas'),
+			'cmv'            => $this->input->post('cmv'),
+			'tipo_alm'       => $param_tipo_alm,
+			'almacenes'      => $this->input->post('almacenes'),
+			'tipo_cruce_alm' => $param_tipo_cruce_alm,
+			'tipo_mat'       => $param_tipo_mat,
+			'materiales'     => $this->input->post('materiales'),
 		);
 
 		$arr_campos = array();
