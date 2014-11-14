@@ -225,15 +225,17 @@ class Analisis_series_model extends CI_Model {
 
 		foreach ($arr_series as $serie)
 		{
-			$anomes = $this->db->select_max('ano*100+mes', 'anomes')
-				->get('bd_controles.dbo.trafico_dias_procesados')
+			$anomes = $this->db
+				->select_max('ano*100+mes', 'anomes')
+				->get($this->config->item('bd_trafico_dias_proc'))
 				->row()
 				->anomes;
 
 			$ano = intval($anomes/100);
 			$mes = $anomes - 100*$ano;
 
-			$this->db->select('t.*, a.*, c.*, b.*')
+			$this->db
+				->select('t.*, a.*, c.*, b.*')
 				->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta')
 				->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja')
 				->from($this->config->item('bd_trafico_mes') . ' t')

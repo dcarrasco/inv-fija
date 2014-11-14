@@ -8,7 +8,7 @@ class Catalogo extends ORM_Model {
 
 		$cfg = array(
 			'modelo' => array(
-				'model_tabla'        => 'fija_catalogos',
+				'model_tabla'        => $this->CI->config->item('bd_catalogos'),
 				'model_label'        => 'Catalogo',
 				'model_label_plural' => 'Catalogos',
 				'model_order_by'     => 'catalogo',

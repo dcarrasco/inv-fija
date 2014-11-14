@@ -20,6 +20,7 @@ $config['bd_auditores']          = 'fija_auditores';
 $config['bd_almacenes']          = 'fija_almacenes';
 $config['bd_familias']           = 'fija_familias';
 $config['bd_tipo_ubicacion']     = 'fija_tipo_ubicacion';
+$config['bd_ubic_tipoubic']      = 'fija_ubicacion_tipo_ubicacion';
 
 // ACL
 $config['bd_app']               = 'acl_app';

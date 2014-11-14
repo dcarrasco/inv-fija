@@ -3,30 +3,6 @@
 class Ubicacion_model extends CI_Model {
 
 
-/*
-CREATE TABLE bd_inventario.dbo.fija_detalle_inventario
-(
-id int identity(1,1) not null,
-id_inventario int,
-ubicacion   varchar(45),
-catalogo    varchar(45),
-descripcion varchar(100),
-lote        varchar(45),
-centro      varchar(10),
-almacen     varchar(10),
-um          varchar(10),
-stock_sap   int,
-stock_fisico int,
-digitador   int,
-auditor     int,
-hoja        int,
-reg_nuevo   char(1),
-observacion varchar(100),
-fecha_modificacion datetime,
-primary key(id)
-)
-*/
-
 
 	public function __construct()
 	{
@@ -34,35 +10,46 @@ primary key(id)
 	}
 
 
+	// --------------------------------------------------------------------
 
-	public function total_ubicacion_tipo_ubicacion() 
+	public function total_ubicacion_tipo_ubicacion()
 	{
-		return $this->db->count_all('fija_ubicacion_tipo_ubicacion');
+		return $this->db->count_all($this->config->item('bd_ubic_tipoubic'));
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_tipos_ubicacion($limit = 0, $offset =0)
 	{
-		$this->db->order_by('tipo_inventario ASC, tipo_ubicacion ASC');
-		return $this->db->get('fija_tipo_ubicacion', $limit, $offset)->result_array();
+		return $this->db
+			->order_by('tipo_inventario ASC, tipo_ubicacion ASC')
+			->get($this->config->item('bd_tipo_ubicacion'), $limit, $offset)
+			->result_array();
 	}
 
 	public function get_ubicacion_tipo_ubicacion($limit = 0, $offset =0)
 	{
-		$this->db->order_by('tipo_inventario ASC, id_tipo_ubicacion ASC, ubicacion ASC');
-		return $this->db->get('fija_ubicacion_tipo_ubicacion', $limit, $offset)->result_array();
+		return $this->db
+			->order_by('tipo_inventario ASC, id_tipo_ubicacion ASC, ubicacion ASC')
+			->get($this->config->item('bd_ubic_tipoubic'), $limit, $offset)
+			->result_array();
 	}
 
 
-
+	// --------------------------------------------------------------------
 
 	public function get_combo_tipos_ubicacion($tipo_inventario = '')
 	{
-		$arr_rs = $this->db->order_by('tipo_ubicacion')->get_where('fija_tipo_ubicacion', array('tipo_inventario'=>$tipo_inventario))->result_array();
+		$arr_rs = $this->db
+			->order_by('tipo_ubicacion')
+			->where('tipo_inventario', $tipo_inventario)
+			->get($this->config->item('bd_tipo_ubicacion'))
+			->result_array();
 
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccione tipo de ubicacion...';
+
 		foreach($arr_rs as $val)
 		{
 			$arr_combo[$val['id']] = $val['tipo_ubicacion'];
@@ -73,77 +60,90 @@ primary key(id)
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function get_ubicaciones_libres($tipo_inventario = '')
 	{
-		$this->db->distinct();
-		$this->db->select('d.ubicacion');
-		$this->db->from('fija_detalle_inventario d');
-		$this->db->join('fija_inventarios i','d.id_inventario=i.id');
-		$this->db->join('fija_ubicacion_tipo_ubicacion u','d.ubicacion=u.ubicacion and i.tipo_inventario=u.tipo_inventario', 'left');
-		$this->db->where('i.tipo_inventario', $tipo_inventario);
-		$this->db->where('u.id_tipo_ubicacion is null');
-		$this->db->order_by('d.ubicacion');
-		$arr_rs = $this->db->get()->result_array();
+		$arr_rs = $this->db
+			->distinct()
+			->select('d.ubicacion')
+			->from($this->config->item('bd_detalle_inventario') . ' d')
+			->join($this->config->item('bd_inventarios') . ' i','d.id_inventario=i.id')
+			->join($this->config->item('bd_ubic_tipoubic') . ' u','d.ubicacion=u.ubicacion and i.tipo_inventario=u.tipo_inventario', 'left')
+			->where('i.tipo_inventario', $tipo_inventario)
+			->where('u.id_tipo_ubicacion is null')
+			->order_by('d.ubicacion')
+			->get()->result_array();
 
 		$arr_ubicaciones = array();
+
 		foreach($arr_rs as $val)
 		{
 			$arr_ubicaciones[$val['ubicacion']] = $val['ubicacion'];
 		}
-		return ($arr_ubicaciones);
+
+		return $arr_ubicaciones;
 	}
 
 
-
+	// --------------------------------------------------------------------
 
 	public function guardar_tipo_ubicacion($id = 0, $tipo_inventario = '', $tipo_ubicacion = '')
 	{
 		if ($id == 0)
 		{
-			$this->db->insert('fija_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
+			$this->db->insert($this->config->item('bd_tipo_ubicacion'), array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
 		}
 		else
 		{
-			$this->db->where('id', $id);
-			$this->db->update('fija_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
+			$this->db
+				->where('id', $id)
+				->update($this->config->item('bd_tipo_ubicacion'), array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
 		}
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function guardar_ubicacion_tipo_ubicacion($id = 0, $tipo_inventario = '', $ubicacion = '', $id_tipo_ubicacion = 0)
 	{
 		if ($id == 0)
 		{
-			$this->db->insert('fija_ubicacion_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
+			$this->db->insert($this->config->item('bd_ubic_tipoubic'), array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
 		}
 		else
 		{
-			$this->db->where('id', $id);
-			$this->db->update('fija_ubicacion_tipo_ubicacion', array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
+			$this->db
+				->where('id', $id)
+				->update($this->config->item('bd_ubic_tipoubic'), array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
 		}
 	}
 
 
+	// --------------------------------------------------------------------
 
 	public function borrar_tipo_ubicacion($id = 0)
 	{
-		$this->db->delete('fija_tipo_ubicacion', array('id' => $id));
+		$this->db->delete($this->config->item('bd_tipo_ubicacion'), array('id' => $id));
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function borrar_ubicacion_tipo_ubicacion($id = 0)
 	{
-		$this->db->delete('fija_ubicacion_tipo_ubicacion', array('id' => $id));
+		$this->db->delete($this->config->item('bd_ubic_tipoubic'), array('id' => $id));
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_cant_registros_tipo_ubicacion($id = 0)
 	{
-		return $this->db->get_where('fija_ubicacion_tipo_ubicacion', array('id_tipo_ubicacion' => $id))->num_rows();
+		return $this->db->get_where($this->config->item('bd_ubic_tipoubic'), array('id_tipo_ubicacion' => $id))->num_rows();
 	}
 
 
-
-
 }
-
 /* End of file ubicacion_model.php */
 /* Location: ./application/models/ubicacion_model.php */
