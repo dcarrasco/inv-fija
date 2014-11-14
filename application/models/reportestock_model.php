@@ -194,6 +194,8 @@ class Reportestock_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve reporte por hojas
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
@@ -378,6 +380,8 @@ class Reportestock_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function get_treemap_permanencia($centro = 'CL03', $tipo_material = 'EQUIPO')
 	{
 		return $this->db
@@ -406,6 +410,8 @@ class Reportestock_model extends CI_Model {
 			->get()->result_array();
 	}
 
+
+	// --------------------------------------------------------------------
 
 	public function arr_query2treemap($tipo = 'cantidad', $arr = array(), $arr_nodos = array(), $campo_size = '', $campo_color = '')
 	{
@@ -471,6 +477,306 @@ class Reportestock_model extends CI_Model {
 
 		}
 	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_tipo_fecha($tipo_fecha = '')
+	{
+		$arr = array(
+			'ANNO'      => 'Año',
+			'TRIMESTRE' => 'Trimestre',
+			'MES'       => 'Meses',
+			'DIA'       => 'Dias'
+		);
+
+		if ($tipo_fecha == 'ANNO')
+		{
+			unset($arr['ANNO']);
+		}
+		else if ($tipo_fecha == 'TRIMESTRE')
+		{
+			unset($arr['ANNO']);
+			unset($arr['TRIMESTRE']);
+		}
+		else if ($tipo_fecha == 'MES')
+		{
+			unset($arr['ANNO']);
+			unset($arr['TRIMESTRE']);
+			unset($arr['MES']);
+		}
+
+		return $arr;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_fechas($tipo_fecha = 'ANNO', $filtro = '')
+	{
+		$filtro = urldecode($filtro);
+
+		if ($tipo_fecha == 'ANNO')
+		{
+			$arr_combo = $this->db->distinct()
+				->select('anno as llave')
+				->select('anno as valor')
+				->from($this->config->item('bd_fechas_sap'))
+				->order_by('anno ASC')
+				->get()->result_array();
+		}
+		else if ($tipo_fecha == 'TRIMESTRE')
+		{
+			$this->db->distinct()
+				->select('cast(anno as varchar(10)) + \'-\' + trimestre as llave')
+				->select('cast(anno as varchar(10)) + \'-\' + trimestre as valor')
+				->from($this->config->item('bd_fechas_sap'))
+				->order_by('cast(anno as varchar(10)) + \'-\' + trimestre ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('anno',explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+		else if ($tipo_fecha == 'MES')
+		{
+			$this->db->distinct()
+				->select('anomes as llave')
+				->select('anomes as valor')
+				->from($this->config->item('bd_fechas_sap'))
+				->order_by('anomes ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('cast(anno as varchar(10)) + \'-\' + trimestre', explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+		else if ($tipo_fecha == 'DIA')
+		{
+			$this->db->distinct()
+				->select('convert(varchar(8), fecha, 112) as llave')
+				->select('convert(varchar(8), fecha, 112) as valor')
+				->from($this->config->item('bd_fechas_sap'))
+				->order_by('convert(varchar(8), fecha, 112) ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('anomes', explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+		return form_array_format($arr_combo);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_cmv()
+	{
+		$arr_combo = $this->db
+			->select('cmv as llave')
+			->select('cmv + \' \' + des_cmv as valor')
+			->from($this->config->item('bd_cmv_sap'))
+			->order_by('cmv ASC')
+			->get()->result_array();
+
+		return form_array_format($arr_combo);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_tipo_alm($tipo_alm = '')
+	{
+		$arr = array(
+			'MOVIL-TIPOALM' => 'Móvil - Tipos Almacén',
+			'MOVIL-ALM'     => 'Móvil - Almacenes',
+			'FIJA-TIPOALM'  => 'Fija - Tipos Almacén',
+			'FIJA-ALM'      => 'Fija - Almacenes',
+		);
+
+		if ($tipo_alm == 'MOVIL-TIPOALM')
+		{
+			unset($arr['MOVIL-TIPOALM']);
+			unset($arr['FIJA-TIPOALM']);
+			unset($arr['FIJA-ALM']);
+		}
+		else if ($tipo_alm == 'FIJA-TIPOALM')
+		{
+			unset($arr['MOVIL-TIPOALM']);
+			unset($arr['MOVIL-ALM']);
+			unset($arr['FIJA-TIPOALM']);
+		}
+
+		return $arr;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_almacenes($tipo = 'MOVIL-TIPOALM', $filtro = '')
+	{
+		$param = explode('-', $tipo);
+
+		$almacen_sap = new Almacen_sap;
+		$tipoalmacen_sap = new Tipoalmacen_sap;
+
+		return ($param[1] == 'TIPOALM') ?
+			$tipoalmacen_sap->get_combo_tiposalm($param[0]) :
+			$almacen_sap->get_combo_almacenes($param[0], $filtro);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_tipo_mat($tipo_mat = '')
+	{
+		$arr = array(
+			'TIPO'     => 'Tipo',
+			'MARCA'    => 'Marca',
+			'MODELO'   => 'Modelo',
+			'MATERIAL' => 'Material',
+		);
+
+		if ($tipo_mat == 'TIPO')
+		{
+			unset($arr['TIPO']);
+		}
+		else if ($tipo_mat == 'MARCA')
+		{
+			unset($arr['TIPO']);
+			unset($arr['MARCA']);
+		}
+		else if ($tipo_mat == 'MODELO')
+		{
+			unset($arr['TIPO']);
+			unset($arr['MARCA']);
+			unset($arr['MODELO']);
+		}
+
+		return $arr;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_combo_materiales($tipo = 'TIPO', $filtro = '')
+	{
+		if ($tipo == 'TIPO')
+		{
+			$arr_combo = $this->db
+				->select('tipo1 as llave')
+				->select('tipo1 as valor')
+				->from($this->config->item('bd_materiales2_sap'))
+				->order_by('tipo1 ASC')
+				->get()->result_array();
+		}
+		else if ($tipo == 'MARCA')
+		{
+			$this->db
+				->select('sub_marca as llave')
+				->select('sub_marca + \' \'+ des_marca as valor')
+				->from($this->config->item('bd_materiales2_sap'))
+				->order_by('des_marca ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('tipo1', explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+		else if ($tipo == 'MODELO')
+		{
+			$this->db
+				->select('sub_marcamodelo as llave')
+				->select('sub_marcamodelo as valor')
+				->from($this->config->item('bd_materiales2_sap'))
+				->order_by('sub_marcamodelo ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('sub_marca', explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+		else if ($tipo == 'MATERIAL')
+		{
+			$arr_combo = $this->db
+				->select('codigo_sap as llave')
+				->select('codigo_sap + \' \' + descripcion as valor')
+				->from($this->config->item('bd_materiales2_sap'))
+				->order_by('codigo_sap ASC');
+
+			if ($filtro != '')
+			{
+				$this->db->where_in('sub_marcamodelo', explode('~', $filtro));
+			}
+
+			$arr_combo = $this->db->get()->result_array();
+		}
+
+		return form_array_format($arr_combo);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function get_reporte_movhist($config = array())
+	{
+		$param_ok = $config['fechas'] AND $config['cmv'] AND $config['almacenes'] AND $config['materiales'];
+
+		$arr_reporte = array();
+
+		$arr_filtro_fechas = array(
+			'ANNO'      => 'f.anno',
+			'TRIMESTRE' => 'cast(f.anno as varchar(10)) + \'/\' + trimestre',
+			'MES'       => 'f.anomes',
+			'DIA'       => 'f.fecha',
+		);
+
+		$arr_filtro_almacenes = array(
+			'MOVIL-TIPOALM' => 't.id_tipo',
+			'MOVIL-ALM'     => 'm.ce+\'-\'+m.alm',
+			'FIJA-TIPOALM'  => 't.id_tipo',
+			'FIJA-ALM'      => 'm.ce+\'-\'+m.alm',
+		);
+
+		$arr_filtro_materiales = array(
+			'TIPO'     => 'mat.tipo1',
+			'MARCA'    => 'mat.sub_marca',
+			'MODELO'   => 'mat.sub_marcamodelo',
+			'MATERIAL' => 'm.codigo_sap',
+		);
+
+		if ($param_ok)
+		{
+			$this->db->limit(1000);
+
+			$this->db->from($this->config->item('bd_resmovimientos_sap') . ' as m');
+			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.fecha=f.fecha');
+			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.cmv=c.cmv');
+			$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.alm=a.cod_almacen');
+			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.alm=t.cod_almacen');
+			$this->db->join($this->config->item('bd_materiales2_sap') . ' as mat', 'm.codigo_sap=mat.codigo_sap');
+
+			$this->db->where_in($arr_filtro_fechas[$config['tipo_fecha']], $config['fechas']);
+			$this->db->where_in('m.cmv', $config['cmv']);
+			$this->db->where_in($arr_filtro_almacenes[$config['tipo_alm']], $config['almacenes']);
+			$this->db->where_in($arr_filtro_materiales[$config['tipo_mat']], $config['materiales']);
+
+			$arr_reporte = $this->db->get()->result_array();
+		}
+
+		return $arr_reporte;
+
+	}
+
 
 }
 

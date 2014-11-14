@@ -13,6 +13,7 @@ class Stock_reporte extends CI_Controller {
 		$this->arr_menu = array(
 			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),
 			'mapastock'   => array('url' => $this->uri->segment(1) . '/mapastock', 'texto' => 'Mapa Stock'),
+			'movhist'     => array('url' => $this->uri->segment(1) . '/movhist', 'texto' => 'Consulta Movimientos'),
 		);
 	}
 
@@ -184,6 +185,8 @@ class Stock_reporte extends CI_Controller {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function mapastock()
 	{
 		$this->form_validation->set_rules('sel_centro','', 'trim');
@@ -206,11 +209,138 @@ class Stock_reporte extends CI_Controller {
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/treemap', $data);
 		$this->load->view('app_footer', $data);
-
-
-
 	}
 
+
+	// --------------------------------------------------------------------
+
+	public function movhist()
+	{
+		$this->load->model('reportestock_model');
+		$this->app_common->form_validation_config();
+
+		$this->form_validation->set_rules('tipo_fecha');
+		$this->form_validation->set_rules('tipo_alm');
+		$this->form_validation->set_rules('tipo_mat');
+		$this->form_validation->set_rules('fechas','Fecha reporte', 'required');
+		$this->form_validation->set_rules('cmv','Movimientos', 'required');
+		$this->form_validation->set_rules('almacenes','Almacenes', 'required');
+		$this->form_validation->set_rules('materiales','Materiales', 'required');
+
+		$this->form_validation->run();
+
+		$param_tipo_fecha = set_value('tipo_fecha', 'ANNO');
+		$param_tipo_alm   = set_value('tipo_alm', 'MOVIL-TIPOALM');
+		$param_tipo_mat   = set_value('tipo_mat', 'TIPO');
+
+		$config_reporte = array(
+			'tipo_fecha' => $param_tipo_fecha,
+			'fechas'     => $this->input->post('fechas'),
+			'cmv'        => $this->input->post('cmv'),
+			'tipo_alm'   => $param_tipo_alm,
+			'almacenes'  => $this->input->post('almacenes'),
+			'tipo_mat'   => $param_tipo_mat,
+			'materiales' => $this->input->post('materiales'),
+		);
+
+		$arr_campos = array();
+		$arr_campos['fecha'] = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['cmv'] = array('titulo' => 'CMov', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['ce'] = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['alm'] = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['rec'] = array('titulo' => 'Dest', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['n_doc'] = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['lote'] = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['codigo_sap'] = array('titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['cantidad'] = array('titulo' => 'Cantidad', 'class' => '', 'tipo' => 'numero');
+
+		$orden_campo   = set_value('order_by');
+		$orden_tipo    = set_value('order_sort');
+		$new_orden_tipo  = ($orden_tipo == 'ASC') ? 'DESC' : 'ASC';
+		$arr_link_campos = array();
+		$arr_link_sort = array();
+		$arr_img_orden = array();
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_link_campos[$campo] = $campo;
+			$arr_link_sort[$campo]   = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
+			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
+											' <span class="text-muted glyphicon ' .
+											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+											'" ></span>': '';
+		}
+
+		$data = array(
+			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => 'movhist'),
+			'combo_tipo_fecha' => $this->reportestock_model->get_combo_tipo_fecha(),
+			'combo_fechas'     => $this->reportestock_model->get_combo_fechas($param_tipo_fecha),
+			'combo_cmv'        => $this->reportestock_model->get_combo_cmv(),
+			'combo_tipo_alm'   => $this->reportestock_model->get_combo_tipo_alm(),
+			'combo_almacenes'  => $this->reportestock_model->get_combo_almacenes($param_tipo_alm),
+			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
+			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
+			//'reporte'          => $this->reportestock_model->get_reporte_movhist($config_reporte),
+			'reporte'          => $this->app_common->reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte), $arr_link_campos, $arr_link_sort, $arr_img_orden),
+		);
+
+		$this->load->view('app_header', $data);
+		$this->load->view('stock_sap/movhist', $data);
+		$this->load->view('app_footer', $data);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_tipo_fecha($tipo = 'ANNO')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_tipo_fecha($tipo));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_fechas($tipo = 'ANNO', $filtro = '')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_fechas($tipo, $filtro));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_tipo_alm($tipo = '')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_tipo_alm($tipo));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_almacenes($tipo = 'MOVIL-TIPOALM', $filtro = '')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_almacenes($tipo, $filtro));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_tipo_mat($tipo = '')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_tipo_mat($tipo));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function movhist_ajax_materiales($tipo = 'TIPO', $filtro = '')
+	{
+		$this->load->model('reportestock_model');
+		echo json_encode($this->reportestock_model->get_combo_materiales($tipo, $filtro));
+	}
 
 }
 /* End of file stock_reporte.php */
