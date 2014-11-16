@@ -514,16 +514,15 @@ class Reportestock_model extends CI_Model {
 
 	public function get_combo_fechas($tipo_fecha = 'ANNO', $filtro = '')
 	{
-		$filtro = urldecode($filtro);
+		$arr_filtro = explode('~', urldecode($filtro));
 
 		if ($tipo_fecha == 'ANNO')
 		{
-			$arr_combo = $this->db->distinct()
+			$this->db->distinct()
 				->select('anno as llave')
 				->select('anno as valor')
 				->from($this->config->item('bd_fechas_sap'))
-				->order_by('anno ASC')
-				->get()->result_array();
+				->order_by('anno ASC');
 		}
 		else if ($tipo_fecha == 'TRIMESTRE')
 		{
@@ -535,10 +534,8 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('anno',explode('~', $filtro));
+				$this->db->where_in('anno', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
 		else if ($tipo_fecha == 'MES')
 		{
@@ -550,10 +547,8 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('cast(anno as varchar(10)) + \'-\' + trimestre', explode('~', $filtro));
+				$this->db->where_in('cast(anno as varchar(10)) + \'-\' + trimestre', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
 		else if ($tipo_fecha == 'DIA')
 		{
@@ -565,11 +560,12 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('anomes', explode('~', $filtro));
+				$this->db->where_in('anomes', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
+
+		$arr_combo = $this->db->get()->result_array();
+
 		return form_array_format($arr_combo);
 	}
 
@@ -666,14 +662,15 @@ class Reportestock_model extends CI_Model {
 
 	public function get_combo_materiales($tipo = 'TIPO', $filtro = '')
 	{
+		$arr_filtro = explode('~', $filtro);
+
 		if ($tipo == 'TIPO')
 		{
-			$arr_combo = $this->db
+			$this->db
 				->select('tipo1 as llave')
 				->select('tipo1 as valor')
 				->from($this->config->item('bd_materiales2_sap'))
-				->order_by('tipo1 ASC')
-				->get()->result_array();
+				->order_by('tipo1 ASC');
 		}
 		else if ($tipo == 'MARCA')
 		{
@@ -685,10 +682,8 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('tipo1', explode('~', $filtro));
+				$this->db->where_in('tipo1', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
 		else if ($tipo == 'MODELO')
 		{
@@ -700,10 +695,8 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('sub_marca', explode('~', $filtro));
+				$this->db->where_in('sub_marca', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
 		else if ($tipo == 'MATERIAL')
 		{
@@ -715,11 +708,11 @@ class Reportestock_model extends CI_Model {
 
 			if ($filtro != '')
 			{
-				$this->db->where_in('sub_marcamodelo', explode('~', $filtro));
+				$this->db->where_in('sub_marcamodelo', $arr_filtro);
 			}
-
-			$arr_combo = $this->db->get()->result_array();
 		}
+
+		$arr_combo = $this->db->get()->result_array();
 
 		return form_array_format($arr_combo);
 	}
