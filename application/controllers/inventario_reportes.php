@@ -303,11 +303,10 @@ class Inventario_reportes extends CI_Controller {
 
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_link_campos[$campo] = $campo;
-			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
+			$arr_campos[$campo]['order_by'] = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden']   = ($campo == $orden_campo) ?
 											' <span class="text-muted glyphicon ' .
-											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+											(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 											'" ></span>': '';
 		}
 
@@ -316,7 +315,7 @@ class Inventario_reportes extends CI_Controller {
 
 		$data = array(
 			'menu_modulo'     => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-			'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
+			'reporte'         => $this->app_common->reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'    => $view,
 			'nombre_reporte'  => $tipo,
 			'filtro_dif'      => '',

@@ -205,13 +205,9 @@ class App_common {
 	 * Imprime reporte
 	 * @param  array  $arr_campos      [description]
 	 * @param  array  $arr_datos       [description]
-	 * @param  array  $arr_link_campos [description]
-	 * @param  array  $arr_link_sort   [description]
-	 * @param  array  $arr_img_orden   [description]
-	 * @return [type]                  [description]
+	 * @return string                  [description]
 	 */
-	public function reporte($arr_campos = array(), $arr_datos = array(),
-		$arr_link_campos = array(), $arr_link_sort = array(), $arr_img_orden = array())
+	public function reporte($arr_campos = array(), $arr_datos = array())
 	{
 		$tabla = array();
 
@@ -222,14 +218,16 @@ class App_common {
 		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
 
 		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed reporte">');
+
+		// --- ENCABEZADO REPORTE ---
 		array_push($tabla, '<thead>');
 		array_push($tabla, '<tr>');
 		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
 			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
-			array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])));
-			array_push($tabla, $arr_img_orden[$campo]);
+			array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $campo, 'order_sort' => $arr_param_campo['order_by'])));
+			array_push($tabla, $arr_param_campo['img_orden']);
 			array_push($tabla, '</th>');
 
 			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
@@ -241,6 +239,7 @@ class App_common {
 		array_push($tabla, '</tr>');
 		array_push($tabla, '</thead>');
 
+		// --- CUERPO REPORTE ---
 		array_push($tabla, '<tbody>');
 		foreach ($arr_datos as $reg)
 		{

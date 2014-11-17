@@ -71,7 +71,25 @@ class Stock_reporte extends CI_Controller {
 		if ($tipo == 'permanencia')
 		{
 			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
-			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $tipo_mat, $incl_almacen, $incl_lote, $incl_modelos);
+
+			$arr_config = array(
+					'orden' => array(
+						'campo' => $orden_campo,
+						'tipo'  => $orden_tipo,
+					),
+					'filtros' => array(
+						'tipo_alm'   => $tipo_alm,
+						'estado_sap' => $estado_sap,
+						'tipo_mat'   => $tipo_mat,
+					),
+					'mostrar' => array(
+						'almacen' => $incl_almacen,
+						'lote'    => $incl_lote,
+						'modelos' => $incl_modelos,
+					),
+				);
+
+			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($arr_config);
 
 			$arr_campos = array();
 
@@ -116,22 +134,18 @@ class Stock_reporte extends CI_Controller {
 			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
 		}
 
-		$arr_link_campos = array();
-		$arr_link_sort   = array();
-		$arr_img_orden   = array();
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_link_campos[$campo] = $campo;
-			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
+			$arr_campos[$campo]['order_by'] = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden']   = ($campo == $orden_campo) ?
 											' <span class="text-muted glyphicon ' .
-											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+											(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 											'" ></span>': '';
 		}
 
 		$data = array(
 				'menu_modulo'    => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'reporte'        => $this->app_common->reporte($arr_campos, $datos_hoja, $arr_link_campos, $arr_link_sort, $arr_img_orden),
+				'reporte'        => $this->app_common->reporte($arr_campos, $datos_hoja),
 				'tipo_reporte'   => $view,
 				'nombre_reporte' => $tipo,
 				'filtro_dif'     => '',
@@ -247,34 +261,33 @@ class Stock_reporte extends CI_Controller {
 		);
 
 		$arr_campos = array();
-		$arr_campos['fecha'] = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cmv'] = array('titulo' => 'CMov', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['ce'] = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['alm'] = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['rec'] = array('titulo' => 'Dest', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['n_doc'] = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['lote'] = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['cmv']        = array('titulo' => 'CMov', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['ce']         = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['alm']        = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['rec']        = array('titulo' => 'Dest', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['n_doc']      = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['lote']       = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
 		$arr_campos['codigo_sap'] = array('titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cantidad'] = array('titulo' => 'Cantidad', 'class' => '', 'tipo' => 'numero');
+		$arr_campos['cantidad']   = array('titulo' => 'Cantidad', 'class' => '', 'tipo' => 'numero');
 
-		$orden_campo   = set_value('order_by');
-		$orden_tipo    = set_value('order_sort');
+		$orden_campo     = set_value('order_by');
+		$orden_tipo      = set_value('order_sort');
 		$new_orden_tipo  = ($orden_tipo == 'ASC') ? 'DESC' : 'ASC';
 		$arr_link_campos = array();
-		$arr_link_sort = array();
-		$arr_img_orden = array();
+		$arr_link_sort   = array();
+		$arr_img_orden   = array();
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_link_campos[$campo] = $campo;
-			$arr_link_sort[$campo]   = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
+			$arr_campos[$campo]['order_by'] = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden']   = ($campo == $orden_campo) ?
 											' <span class="text-muted glyphicon ' .
-											(($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+											(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 											'" ></span>': '';
 		}
 
 		$data = array(
-			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => 'movhist'),
+			'menu_modulo'      => array('menu' => $this->arr_menu, 'mod_selected' => 'movhist'),
 			'combo_tipo_fecha' => $this->reportestock_model->get_combo_tipo_fecha(),
 			'combo_fechas'     => $this->reportestock_model->get_combo_fechas($param_tipo_fecha),
 			'combo_cmv'        => $this->reportestock_model->get_combo_cmv(),
@@ -282,8 +295,7 @@ class Stock_reporte extends CI_Controller {
 			'combo_almacenes'  => $this->reportestock_model->get_combo_almacenes($param_tipo_alm),
 			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
 			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
-			//'reporte'          => $this->reportestock_model->get_reporte_movhist($config_reporte),
-			'reporte'          => $this->app_common->reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte), $arr_link_campos, $arr_link_sort, $arr_img_orden),
+			'reporte'          => $this->app_common->reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte)),
 		);
 
 		$this->load->view('app_header', $data);

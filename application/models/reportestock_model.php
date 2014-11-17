@@ -111,86 +111,86 @@ class Reportestock_model extends CI_Model {
 
 	/**
 	 * Devuelve reporte por hojas
-	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
-	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
-	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
-	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
-	 * @return array                  arreglo con el detalle del reporte
+	 * @param  array $config Arreglo de configuración
+	 * @return array         Arreglo con el detalle del reporte
 	 */
-	public function get_reporte_permanencia($orden_campo = 't.tipo', $orden_tipo = 'ASC',
-		$tipo_alm = array(), $estado_sap = array(),
-		$tipo_mat = array(), $incl_almacen = '0', $incl_lote = '0', $incl_modelos = '0')
+	public function get_reporte_permanencia($config = array())
 	{
+		//dbg($config);
+		$arr_reporte = array();
+		$param_ok = $config['filtros']['tipo_alm'];
 
-		$this->db->select('t.tipo, t.id_tipo');
-		$this->db->select('sum(m030) as m030');
-		$this->db->select('sum(m060) as m060');
-		$this->db->select('sum(m090) as m090');
-		$this->db->select('sum(m120) as m120');
-		$this->db->select('sum(m180) as m180');
-		$this->db->select('sum(m360) as m360');
-		$this->db->select('sum(m720) as m720');
-		$this->db->select('sum(mas720) as mas720');
-		$this->db->select('sum(otro) as otro');
-		$this->db->select('sum(total) as \'total\'');
-		$this->db->from($this->config->item('bd_permanencia') . ' as p');
-		$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left');
-		$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left');
-		$this->db->group_by('t.tipo, t.id_tipo');
-		$this->db->order_by($orden_campo, $orden_tipo);
-
-		if (count($tipo_alm) > 0)
+		if ($param_ok)
 		{
-			$this->db->where_in('t.id_tipo', $tipo_alm);
+			$this->db
+				->select('t.tipo, t.id_tipo')
+				->select('sum(m030) as m030')
+				->select('sum(m060) as m060')
+				->select('sum(m090) as m090')
+				->select('sum(m120) as m120')
+				->select('sum(m180) as m180')
+				->select('sum(m360) as m360')
+				->select('sum(m720) as m720')
+				->select('sum(mas720) as mas720')
+				->select('sum(otro) as otro')
+				->select('sum(total) as \'total\'')
+				->from($this->config->item('bd_permanencia') . ' as p')
+				->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left')
+				->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
+				->group_by('t.tipo, t.id_tipo')
+				->order_by($config['orden']['campo'], $config['orden']['tipo']);
+
+
+			// FILTROS
+			if (count($config['filtros']['tipo_alm']) > 0)
+			{
+				$this->db->where_in('t.id_tipo', $config['filtros']['tipo_alm']);
+			}
+
+			if (count($config['filtros']['estado_sap']) > 0 and is_array($config['filtros']['estado_sap']))
+			{
+				$this->db
+					->where_in('p.estado_stock', $config['filtros']['estado_sap'])
+					->select('case p.estado_stock when \'01\' then \'01 Libre util\' when \'02\' then \'02 Control Calidad\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_stock end as estado_sap, p.estado_stock')
+					->group_by('p.estado_stock');
+			}
+
+			if (count($config['filtros']['tipo_mat']) > 0 and is_array($config['filtros']['tipo_mat']))
+			{
+				$this->db
+					->where_in('tipo_material', $config['filtros']['tipo_mat'])
+					->select('tipo_material')
+					->group_by('tipo_material');
+			}
+
+			// INFORMACION ADICIONAL
+			if ($config['mostrar']['almacen'] == '1')
+			{
+				$this->db
+					->select('p.centro, p.almacen, p.des_almacen')
+					->group_by('p.centro, p.almacen, p.des_almacen');
+			}
+
+			if ($config['mostrar']['lote'] == '1')
+			{
+				$this->db
+					->select('p.lote')
+					->group_by('p.lote');
+			}
+
+			if ($config['mostrar']['modelos'] == '1')
+			{
+				$this->db
+					->select('p.material')
+					->select('p.material + \' \' + p.des_material as modelo')
+					->group_by('p.material + \' \' + p.des_material')
+					->group_by('p.material');
+			}
+
+			$arr_reporte = $this->db->get()->result_array();
 		}
-		else
-		{
-			$this->db->where('t.id_tipo', -1);
-		}
 
-		if (count($estado_sap) > 0 and is_array($estado_sap))
-		{
-			$this->db->where_in('p.estado_stock', $estado_sap);
-			$this->db->select('case p.estado_stock when \'01\' then \'01 Libre util\' when \'02\' then \'02 Control Calidad\' when \'03\' then \'03 Devol cliente\' when \'07\' then \'07 Bloqueado\' when \'06\' then \'06 Transito\' else p.estado_stock end as estado_sap, p.estado_stock');
-			$this->db->group_by('p.estado_stock');
-			$this->db->order_by('p.estado_stock');
-		}
-
-		if ($incl_almacen == '1')
-		{
-			$this->db->select('p.centro, p.almacen, p.des_almacen');
-			$this->db->group_by('p.centro, p.almacen, p.des_almacen');
-			$this->db->order_by('p.centro, p.almacen, p.des_almacen');
-		}
-
-		if ($incl_lote == '1')
-		{
-			$this->db->select('p.lote');
-			$this->db->group_by('p.lote');
-			$this->db->order_by('p.lote');
-		}
-
-		if (count($tipo_mat) > 0 and is_array($tipo_mat))
-		{
-			$this->db->where_in('tipo_material', $tipo_mat);
-			$this->db->select('tipo_material');
-			$this->db->group_by('tipo_material');
-			$this->db->order_by('tipo_material');
-		}
-
-		if ($incl_modelos == '1')
-		{
-
-			$this->db->select('p.material');
-			$this->db->group_by('p.material');
-
-			$this->db->select('p.material + \' \' + p.des_material as modelo');
-			$this->db->group_by('p.material + \' \' + p.des_material');
-			$this->db->order_by('modelo');
-		}
-
-			return $this->db->get()->result_array();
+		return $arr_reporte;
 	}
 
 
@@ -662,7 +662,7 @@ class Reportestock_model extends CI_Model {
 
 	public function get_combo_materiales($tipo = 'TIPO', $filtro = '')
 	{
-		$arr_filtro = explode('~', $filtro);
+		$arr_filtro = explode('~', urldecode($filtro));
 
 		if ($tipo == 'TIPO')
 		{
