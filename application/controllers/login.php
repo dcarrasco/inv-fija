@@ -5,7 +5,6 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		//$this->output->enable_profiler(TRUE);
 	}
 
 	// --------------------------------------------------------------------
@@ -34,51 +33,75 @@ class Login extends CI_Controller {
 		$this->load->model('acl_model');
 		$this->load->helper('cookie');
 
-		$this->acl_model->delete_session_cookies();
-
-		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
-		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
-		$this->app_common->form_validation_config();
-
-		if ($this->form_validation->run() == FALSE)
+		if ($this->acl_model->is_user_logged())
 		{
-			$data = array('msg_alerta' => $this->session->flashdata('msg_alerta'));
-			$this->load->view('ACL/login', $data);
+			$arr_menu = $this->acl_model->get_menu_usuario($this->acl_model->get_user());
+			redirect($arr_menu[0]['url']);
 		}
 		else
 		{
-			$usr = set_value('usr');
-			$pwd = set_value('pwd');
+			$this->acl_model->delete_session_cookies();
 
-			// si el usuario existe
-			if ($this->acl_model->existe_usuario($usr))
+			$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
+			$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
+			$this->form_validation->set_rules('remember_me', 'Recordarme', '');
+			$this->app_common->form_validation_config();
+
+			if ($this->form_validation->run() == FALSE)
 			{
-				// si el usuario no tiene fijada una clave, lo obligamos a fijarla
-				if (!$this->acl_model->tiene_clave($usr))
-				{
-					redirect('login/cambio_password/' . $usr);
-				}
-				else
-				{
-					if (!$this->acl_model->login($usr, $pwd))
-					{
-						$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
-						$this->load->view('ACL/login', $data);
-					}
-					else
-					{
-						$arr_menu = $this->acl_model->get_menu_usuario($usr);
-						redirect($arr_menu[0]['url']);
-					}
-				}
+				$data = array('msg_alerta' => $this->session->flashdata('msg_alerta'));
+				$this->load->view('ACL/login', $data);
 			}
 			else
 			{
-				$data = array('msg_alerta' => 'Error en el nombre de usuario y/o clave');
-				$this->load->view('ACL/login', $data);
+				$usr = set_value('usr');
+				$pwd = set_value('pwd');
+				$rem = set_value('remember_me');
+
+				// si el usuario existe
+				if ($this->acl_model->existe_usuario($usr))
+				{
+					// si el usuario no tiene fijada una clave, lo obligamos a fijarla
+					if (!$this->acl_model->tiene_clave($usr))
+					{
+						redirect('login/cambio_password/' . $usr);
+					}
+					else
+					{
+						if (!$this->acl_model->login($usr, $pwd, $rem == 'remember'))
+						{
+							$data = array('msg_alerta' => '<div class="alert alert-danger">Error en el nombre de usuario y/o clave</div>');
+							$this->load->view('ACL/login', $data);
+						}
+						else
+						{
+							$arr_menu = $this->acl_model->get_menu_usuario($usr);
+							redirect($arr_menu[0]['url']);
+						}
+					}
+				}
+				else
+				{
+					$data = array('msg_alerta' => '<div class="alert alert-danger">Error en el nombre de usuario y/o clave</div>');
+					$this->load->view('ACL/login', $data);
+				}
 			}
 		}
 	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Desconecta al usuario
+	 * @return none
+	 */
+	public function logout()
+	{
+		$this->acl_model->delete_session_cookies();
+		redirect('login/');
+	}
+
 
 	// --------------------------------------------------------------------
 
@@ -93,44 +116,50 @@ class Login extends CI_Controller {
 		$this->load->model('acl_model');
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
-		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', 'trim|required');
+		$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
+		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', "trim|required|min_length[6]");
 		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
+		$this->app_common->form_validation_config();
 
-		$usr = ($this->input->post('usr')) ? $this->input->post('usr') : '';
-
-		if ($this->acl_model->tiene_clave($usr))
+		if (!$this->acl_model->tiene_clave($this->input->post('usr')))
 		{
-			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
+			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
 		}
 
-		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)
 		{
+			$usr = set_value('usr');
+
 			$data = array(
-							'msg_alerta' => '',
-							'usr'        => $usr,
-							'nombre_usuario' => $this->acl_model->get_nombre_usuario($usr),
-							'tiene_clave'    => $this->acl_model->tiene_clave($usr),
-							'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
-						);
+				'msg_alerta'       => '',
+				'usr'              => $usr,
+				'tiene_clave'      => $this->acl_model->tiene_clave($usr),
+				'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
+			);
 			$this->load->view('ACL/cambio_password', $data);
 		}
 		else
 		{
-			$res = $this->acl_model->cambio_clave($usr, set_value('pwd_old'), set_value('pwd_new1'));
-			if ($res[0])
+			$usr = set_value('usr');
+			$msg_alerta = '';
+			if (!$this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
-				$this->session->set_flashdata('msg_alerta', 'La clave se cambió con exito. Vuelva a ingresar al sistema.');
+				$msg_alerta = 'Error en el nombre de usuario y/o clave';
+			}
+
+			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
+			{
+				$this->session->set_flashdata('msg_alerta', '<div class="alert alert-success">La clave se cambió con exito. Vuelva a ingresar al sistema.</div>');
 				redirect('login');
 			}
 			else
 			{
 				$data = array(
-					'msg_alerta' => $res[1],
-					'usr'        => $usr,
+					'usr'              => $usr,
+					'msg_alerta'       => $msg_alerta,
 					'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
-					'tiene_clave'    => $this->acl_model->tiene_clave($usr),
+					'tiene_clave'      => $this->acl_model->tiene_clave($usr),
 				);
 				$this->load->view('ACL/cambio_password', $data);
 			}

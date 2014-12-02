@@ -20,31 +20,18 @@ class Acl_model extends CI_Model {
 	 * @param  string $pwd clave
 	 * @return boolean     TRUE si se loguea al usuario, FALSE si no
 	 */
-	public function login($usr = '', $pwd = '')
+	public function login($usr = '', $pwd = '', $remember = FALSE)
 	{
 		$this->delete_session_cookies();
 
-		$usuario_valido = $this->db
-			->where(array('usr' => $usr, 'pwd' => sha1($pwd), 'activo' => '1'))
-			->get($this->config->item('bd_usuarios'))
-			->num_rows() > 0;
-
-		if ($usuario_valido)
+		if ($this->check_user_credentials($usr, $pwd))
 		{
-			// escribe auditoria del login
-			$this->db
-				->where('usr', $usr)
-				->update($this->config->item('bd_usuarios'),
-					array(
-						'fecha_login'  => date('Ymd H:i:s'),
-						'ip_login'     => $this->input->ip_address(),
-						'agente_login' => $this->input->user_agent(),
-					)
-				);
 
+			// escribe auditoria del login
+			$this->write_login_audit($usr);
 			// crea cookie con la sesion del usuario
-			$this->_set_session_cookies($usr);
-			$this->_set_menu_cookies($usr);
+			$this->_set_session_cookies($usr, $remember);
+			$this->_set_menu_cookies($usr, $remember);
 
 			return TRUE;
 		}
@@ -80,6 +67,55 @@ class Acl_model extends CI_Model {
 	public function get_user()
 	{
 		return $this->encrypt->decode($this->input->cookie('user'));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Chequea si el usuario esta logueado en el sistema
+	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
+	 */
+	public function is_user_logged()
+	{
+		return (($this->input->cookie('user') and $this->input->cookie('modulos')) ? TRUE : FALSE);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Chequea si las credenciales del usuario son validas
+	 * @return boolean TRUE/FALSE
+	 */
+	public function check_user_credentials($usr = '', $pwd = '')
+	{
+		return $this->db
+			->where(array(
+				'usr'    => $usr,
+				'pwd'    => sha1($pwd),
+				'activo' => '1'
+			))
+			->get($this->config->item('bd_usuarios'))
+			->num_rows() > 0;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Escribe datos de auditoria al loguear al usuario
+	 * @return none
+	 */
+	public function write_login_audit($usr = '')
+	{
+		$this->db
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'), array(
+				'fecha_login'  => date('Ymd H:i:s'),
+				'ip_login'     => $this->input->ip_address(),
+				'agente_login' => $this->input->user_agent(),
+			));
 	}
 
 
@@ -159,12 +195,14 @@ class Acl_model extends CI_Model {
 	 * Crea las cookies de login para un usuario
 	 * @param string $usr Usuario
 	 */
-	private function _set_session_cookies($usr = '')
+	private function _set_session_cookies($usr = '', $remember = FALSE)
 	{
+		$expire = $remember ? '0' : '1200';
+
 		$this->input->set_cookie(array(
 			'name'   => 'user',
 			'value'  => $this->encrypt->encode($usr),
-			'expire' => '1200',
+			'expire' => $expire,
 		));
 	}
 
@@ -175,7 +213,7 @@ class Acl_model extends CI_Model {
 	 * Crea las cookies de menu para un usuario
 	 * @param string $usr Usuario
 	 */
-	private function _set_menu_cookies($usr)
+	private function _set_menu_cookies($usr, $remember = FALSE)
 	{
 		$this->input->set_cookie(array(
 			'name'   => 'modulos',
@@ -187,6 +225,12 @@ class Acl_model extends CI_Model {
 			'name'   => 'menu_app',
 			'value'  => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
 			'expire' => '0'
+		));
+
+		$this->input->set_cookie(array(
+			'name'   => 'remember_me',
+			'value'  => $remember ? 'TRUE' : 'FALSE',
+			'expire' => '0',
 		));
 	}
 
@@ -200,6 +244,7 @@ class Acl_model extends CI_Model {
 	public function delete_session_cookies()
 	{
 		delete_cookie('user');
+		delete_cookie('remember_me');
 		delete_cookie('modulos');
 		delete_cookie('menu_app');
 	}
@@ -302,32 +347,19 @@ class Acl_model extends CI_Model {
 	 */
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
 	{
-		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
-			->row_array();
+		$chk_usr = (!$this->tiene_clave($usr)) ? TRUE : $this->check_user_credentials($usr, $clave_old);
 
-		if (!$this->tiene_clave($usr))
+		if ($chk_usr)
 		{
 			$this->db
 				->where('usr', $usr)
 				->update($this->config->item('bd_usuarios'), array('pwd' => sha1($clave_new)));
 
-			return array(TRUE);
+			return TRUE;
 		}
 		else
 		{
-			if($this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $usr, 'pwd' => sha1($clave_old)))->num_rows() > 0)
-			{
-				$this->db
-					->where('usr', $usr)
-					->update($this->config->item('bd_usuarios'), array('pwd' => sha1($clave_new)));
-
-				return array(TRUE);
-			}
-			else
-			{
-				return array(FALSE, 'Clave anterior incorrecta');
-			}
+			return FALSE;
 		}
 	}
 

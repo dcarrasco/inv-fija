@@ -15,6 +15,22 @@ if ( ! function_exists('dbg'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('dbg_die'))
+{
+	function dbg_die($item)
+	{
+		//echo '<pre style="font-family: courier, font-size: 8px">';
+		//$dump = print_r($item, TRUE);
+		//echo gettype($item) . ' : ' . $dump;
+		//echo '</pre><hr>';
+		var_dump($item);
+		die();
+	}
+}
+
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('form_array_format'))
 {
 	function form_array_format($arr = array())

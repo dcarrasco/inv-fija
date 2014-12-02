@@ -54,7 +54,7 @@
 			</li>
 			<?php endforeach; ?>
 			<li>
-				<a href="<?php echo site_url('login'); ?>">
+				<a href="<?php echo site_url('login/logout'); ?>">
 					<span class="glyphicon glyphicon-off"></span>
 					Logout
 				</a>

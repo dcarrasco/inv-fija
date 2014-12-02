@@ -131,6 +131,7 @@ class App_common {
 		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
 		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
 		$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
+		$this->form_validation->set_message('min_length', 'El largo minimo del campo "%s" debe ser %d');
 
 
 	}

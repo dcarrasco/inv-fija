@@ -8,7 +8,7 @@
 
 	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
 
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" /	>
+	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" />
 
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
 	<script language="javascript" type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
@@ -17,7 +17,6 @@
 	</style>
 </head>
 <body>
-
 <div class="container">
 <div class="row">
 
@@ -56,6 +55,15 @@
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+				<div class="checkbox">
+					<label>
+						<?php echo form_checkbox('remember_me', 'remember', set_checkbox('remember_me', 'remember', FALSE)); ?>
+						Recordarme
+					</label>
+				</div>
+			</div>
+
+				<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<hr>
 			</div>
 
