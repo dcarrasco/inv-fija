@@ -85,6 +85,18 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Chequea si el usuario esta logueado en el sistema
+	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
+	 */
+	public function is_user_remembered()
+	{
+		return ($this->input->cookie('remember_me') == 'TRUE' ? TRUE : FALSE);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Chequea si las credenciales del usuario son validas
 	 * @return boolean TRUE/FALSE
 	 */
@@ -274,7 +286,7 @@ class Acl_model extends CI_Model {
 			else
 			{
 				// renueva la cookie de usuario (por timeout)
-				$this->_set_session_cookies($this->get_user());
+				$this->_set_session_cookies($this->get_user(), $this->is_user_remembered());
 			}
 		}
 	}

@@ -46,7 +46,7 @@
 	<div class="">
 		<?php echo form_open('', 'id="frm_usuarios"'); ?>
 		<?php echo form_hidden('formulario','editar'); ?>
-		<table class="table table-hover table-condensed">
+		<table class="table table-hover table-condensed table-striped">
 			<thead>
 				<tr>
 					<th>id</th>
