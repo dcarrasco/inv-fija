@@ -2,14 +2,14 @@
 <?php echo form_hidden('formulario','buscar'); ?>
 <div class="row">
 
-	<div class="col-md-3">
+	<div class="col-md-5">
 		<div class="form-group">
 			<label>Inventario</label>
 			<p class="form-control-static"><?php echo $nombre_inventario; ?></p>
 		</div>
 	</div>
 
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<div class="form-group <?php echo form_has_error('hoja'); ?>">
 			<label>Hoja</label>
 			<div class="input-group">
@@ -40,10 +40,10 @@
 		</div>
 	</div>
 
-	<div class="col-md-3">
+	<div class="col-md-2">
 		<div class="form-group">
 			<label></label>
-			<a href="#" id="btn_mostrar_agregar" class="btn btn-default pull-right">
+			<a href="#" id="btn_mostrar_agregar" class="btn btn-default pull-right class-toggle">
 				<span class="glyphicon glyphicon-plus-sign"></span> Nuevo material...
 			</a>
 		</div>
@@ -238,8 +238,8 @@
 				<th class="text-center">centro</th>
 				<th class="text-center">almacen</th>
 				<th class="text-center">UM</th>
-				<th class="text-center">cantidad sap</th>
-				<th class="text-center">cantidad fisica</th>
+				<th class="text-right" nowrap>cant SAP</th>
+				<th class="text-right">cant fisica</th>
 				<th class="text-center">HU</th>
 				<th class="text-center">observacion</th>
 			</tr>
@@ -249,7 +249,7 @@
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
 				<tr>
-					<td class="text-center">
+					<td class="text-center" nowrap>
 						<?php echo $linea_det->get_valor_field('ubicacion'); ?>
 
 						<?php if ($linea_det->reg_nuevo == 'S'):?>
@@ -273,12 +273,12 @@
 					<td class="text-center"><?php echo $linea_det->get_valor_field('centro'); ?></td>
 					<td class="text-center"><?php echo $linea_det->get_valor_field('almacen'); ?></td>
 					<td class="text-center"><?php echo $linea_det->um; ?></td>
-					<td class="text-center"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
-					<td class="text-center">
-						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
+					<td class="text-right"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
+					<td class="text-center col-md-1">
+						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control text-right" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
-					<td class="text-center">
+					<td class="text-center col-md-1">
 						<?php echo form_input('hu_' . $linea_det->id, set_value('hu_' . $linea_det->id, $linea_det->hu), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('hu_' . $linea_det->id); ?>
 					</td>
@@ -300,8 +300,8 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td class="text-center"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
-				<td class="text-center"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
+				<td class="text-right"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
+				<td class="text-right"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
 				<td></td>
 				<td>
 					<div class="text-center">

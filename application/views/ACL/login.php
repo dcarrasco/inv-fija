@@ -21,9 +21,14 @@
 <div class="row">
 
 	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
-		<div>
-			<h2>Login</h2>
+		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+			<h2>Ingreso</h2>
 		</div>
+
+		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+			<hr>
+		</div>
+
 		<div>
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 		</div>
@@ -63,7 +68,7 @@
 				</div>
 			</div>
 
-				<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<hr>
 			</div>
 

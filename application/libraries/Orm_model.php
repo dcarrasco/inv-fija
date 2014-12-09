@@ -70,7 +70,7 @@ class ORM_Model implements Iterator {
 	 *
 	 * @var integer
 	 */
-	private $model_page_results = 10;
+	private $model_page_results = 15;
 
 	/**
 	 * Filtro para buscar resultados
@@ -523,7 +523,7 @@ class ORM_Model implements Iterator {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? '<span class="text-danger">*</span>' : '';
+		return ($this->get_es_obligatorio_field($campo)) ? ' <span class="text-danger">*</span>' : '';
 	}
 
 	// --------------------------------------------------------------------
