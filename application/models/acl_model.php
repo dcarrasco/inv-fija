@@ -73,6 +73,25 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Devuelve el usuario (leido desde cookie)
+	 * @param  none
+	 * @return string Usuario
+	 */
+	public function get_user_firstname()
+	{
+		$nombre = $this->db
+			->where('usr', $this->get_user())
+			->get($this->config->item('bd_usuarios'))
+			->row()
+			->nombre;
+
+		return substr($nombre, 0, strpos($nombre, ' '));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Chequea si el usuario esta logueado en el sistema
 	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
 	 */

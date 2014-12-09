@@ -29,7 +29,8 @@
 	<div class="container">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">
-				<strong><?php echo $this->app_common->titulo_modulo(); ?></strong>
+				<!-- <img src="<?php echo base_url(); ?>img/TEL-logo_neg1.jpg" height="35"> -->
+				<?php echo $this->app_common->titulo_modulo(); ?>
 			</a>
 		</div>
 
@@ -53,12 +54,14 @@
 				</ul>
 			</li>
 			<?php endforeach; ?>
+
 			<li>
 				<a href="<?php echo site_url('login/logout'); ?>">
 					<span class="glyphicon glyphicon-off"></span>
-					Logout
+					Logout <?php echo $this->acl_model->get_user_firstname(); ?>
 				</a>
 			</li>
+
 		</ul>
 	</div>
 </nav>
