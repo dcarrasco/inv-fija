@@ -16,6 +16,22 @@
 	border-bottom: transparent;
 }
 
+.navbar-nav > li > ul.dropdown-menu,
+.navbar-nav > li > ul.dropdown-menu > li,
+.navbar-nav > li > ul.dropdown-menu > li > a {
+	background-color: #005466;
+	color: #DFDFDF;
+}
+
+.navbar-nav > li > ul.dropdown-menu > li.active > a {
+	background-color: #003245;
+}
+
+.navbar-nav > li > ul.dropdown-menu > li > a:hover {
+	background-color: #003245;
+	color: #FFF;
+}
+
 @media print {
 	html, body, input, select, option, form, .form-control, .btn {
 		font-size: 10px;
