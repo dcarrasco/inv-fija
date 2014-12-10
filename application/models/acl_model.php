@@ -85,7 +85,7 @@ class Acl_model extends CI_Model {
 			->row()
 			->nombre;
 
-		return substr($nombre, 0, strpos($nombre, ' '));
+		return strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 	}
 
 

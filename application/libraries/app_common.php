@@ -187,10 +187,10 @@ class App_common {
 				return fmt_monto($valor);
 				break;
 			case 'numero_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_cantidad($valor) . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-success">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_cantidad($valor) . (($valor != 0) ? '</span>' : '');
 				break;
 			case 'valor_dif':
-				return (($valor > 0) ? '<span class="label label-warning">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_monto($valor) . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0) ? '<span class="label label-success">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_monto($valor) . (($valor != 0) ? '</span>' : '');
 				break;
 			default:
 				return $valor;
@@ -218,7 +218,7 @@ class App_common {
 		$subtot_ant = array();
 		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
 
-		array_push($tabla, '<table class="table table-bordered table-striped table-hover table-condensed reporte">');
+		array_push($tabla, '<br/><table class="table table-striped table-hover table-condensed reporte">');
 
 		// --- ENCABEZADO REPORTE ---
 		array_push($tabla, '<thead>');

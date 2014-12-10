@@ -4,7 +4,7 @@
 <?php $campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad'); ?>
 <?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
 
-<table id='stock' class="table table-bordered table-striped table-hover table-condensed reporte">
+<table id='stock' class="table table-striped table-hover table-condensed reporte">
 	<?php foreach($stock as $key_reg => $reg): ?>
 		<?php // ********************************************************* ?>
 		<?php // Imprime encabezados                                       ?>
