@@ -258,6 +258,8 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	public function imprime_hojas($hoja_desde = 1, $hoja_hasta = 1, $oculta_stock_sap = 0)
 	{
+		$this->_get_datos_inventario();
+
 		$hoja_desde = ($hoja_desde < 1) ? 1 : $hoja_desde;
 		$hoja_hasta = ($hoja_hasta < $hoja_desde) ? $hoja_desde : $hoja_hasta;
 
