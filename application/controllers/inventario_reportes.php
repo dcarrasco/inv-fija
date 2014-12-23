@@ -12,6 +12,7 @@ class Inventario_reportes extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->model('inventario_model');
+		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
 			'hoja'              => array('url' => $this->uri->segment(1) . '/listado/hoja', 'texto' => 'Hoja'),

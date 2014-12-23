@@ -28,18 +28,18 @@
 				<div class="pull-right">
 					<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
 						<span class="glyphicon glyphicon-ok"></span>
-						Guardar
+						<?php echo $this->lang->line('orm_button_save'); ?>
 					</button>
 					<a href="<?php echo $link_cancelar; ?>" class="btn btn-default">
 						<span class="glyphicon glyphicon-ban-circle"></span>
-						Cancelar
+						<?php echo $this->lang->line('orm_button_cancel'); ?>
 					</a>
 				</div>
 
 				<div class="pull-left">
 					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
 						<span class="glyphicon glyphicon-trash"></span>
-						Borrar
+						<?php echo $this->lang->line('orm_button_delete'); ?>
 					</button>
 				</div>
 			</div>

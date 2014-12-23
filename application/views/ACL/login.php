@@ -22,7 +22,9 @@
 
 	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<h2>Ingreso</h2>
+			<h2>
+				<?php echo $this->lang->line('login_form_title'); ?>
+			</h2>
 		</div>
 
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
@@ -36,7 +38,9 @@
 		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-				<label class="control-label" for="usr">Usuario</label>
+				<label class="control-label" for="usr">
+					<?php echo $this->lang->line('login_input_user'); ?>
+				</label>
 				<div class="controls">
 					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
 					<div><?php echo form_error('usr'); ?></div>
@@ -45,7 +49,7 @@
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<label class="control-label" for="pwd">
-					Clave
+					<?php echo $this->lang->line('login_input_password'); ?>
 				</label>
 				<div class="controls">
 					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control"'); ?>
@@ -55,7 +59,7 @@
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
-					<?php echo anchor('#', 'cambiar clave', 'id="lnk_cambio_password"'); ?>
+					<?php echo anchor('#', $this->lang->line('login_link_change_password'), 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 
@@ -63,7 +67,7 @@
 				<div class="checkbox">
 					<label>
 						<?php echo form_checkbox('remember_me', 'remember', set_checkbox('remember_me', 'remember', FALSE)); ?>
-						Recordarme
+						<?php echo $this->lang->line('login_check_remember_me'); ?>
 					</label>
 				</div>
 			</div>
@@ -75,7 +79,7 @@
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
-						Ingresar
+						<?php echo $this->lang->line('login_button_login'); ?>
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
 				</div>

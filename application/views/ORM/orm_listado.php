@@ -2,7 +2,7 @@
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="Texto a filtrar..."'); ?>
+			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="' . $this->lang->line('orm_filter') .'"'); ?>
 			<span class="input-group-btn">
 				<button type="submit" id="btn_filtro" class="btn btn-default">
 					<span class="glyphicon glyphicon-search"></span>
@@ -14,7 +14,7 @@
 	<div class="col-md-9 text-right">
 		<a href="<?php echo $url_editar; ?>" class="btn btn-primary" id="btn_mostrar_agregar">
 			<span class="glyphicon glyphicon-plus-sign"></span>
-			Agregar <?php echo strtolower($modelo->get_model_label()); ?>
+			<?php echo $this->lang->line('orm_button_new'); ?> <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
 	<?php echo form_close(''); ?>
@@ -45,7 +45,7 @@
 					<td class="text-center">
 						<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="">
 							<!-- <span class="glyphicon glyphicon-edit"></span> -->
-							editar
+							<?php echo $this->lang->line('orm_link_edit'); ?>
 						</a>
 					</td>
 				</tr>

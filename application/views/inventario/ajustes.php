@@ -10,21 +10,49 @@
 	<table class="table table-bordered table-hover table-condensed reporte">
 		<thead>
 			<tr>
-				<th>material</th>
-				<th>descripcion</th>
-				<th>lote</th>
-				<th>centro</th>
-				<th>almacen</th>
-				<th>ubicacion</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_material'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_descripcion'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_lote'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_centro'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_almacen'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?>
+				</th>
 				<!-- <th>hu</th> -->
-				<th>hoja</th>
-				<th>UM</th>
-				<th class="text-center">cant sap</th>
-				<th class="text-center">cant fisica</th>
-				<th class="text-center">cant ajuste</th>
-				<th class="text-center">dif</th>
-				<th class="text-center">tipo dif</th>
-				<th>observacion ajuste</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_hoja'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_UM'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_cant_ajuste'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_dif'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_tipo_dif'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_observacion_ajuste'); ?>
+				</th>
 			</tr>
 		</thead>
 
@@ -62,17 +90,17 @@
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
 							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-question-sign"></span>
-								Sobrante
+								<?php echo $this->lang->line('inventario_report_label_sobrante'); ?>
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
 							<button class="btn btn-default btn-sm btn-danger" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-remove"></span>
-								Faltante
+								<?php echo $this->lang->line('inventario_report_label_faltante'); ?>
 							</button>
 						<?php else: ?>
 							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-ok"></span>
-								OK
+								<?php echo $this->lang->line('inventario_report_label_OK'); ?>
 							</button>
 						<?php endif; ?>
 					</td>
@@ -109,7 +137,7 @@
 				<td>
 					<button type="submit" class="btn btn-primary">
 						<span class="glyphicon glyphicon-ok-sign"></span>
-						Guardar ajustes
+						<?php echo $this->lang->line('inventario_report_save'); ?>
 					</button>
 				</td>
 			</tr>

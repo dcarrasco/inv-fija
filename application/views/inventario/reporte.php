@@ -2,7 +2,7 @@
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="Texto a filtrar..." onKeyPress="return event.keyCode!=13"'); ?>
+			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="'. $this->lang->line('inventario_report_filter') .'" onKeyPress="return event.keyCode!=13"'); ?>
 			<span class="input-group-btn">
 				<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
 			</span>
@@ -13,25 +13,25 @@
 		<div>
 			<div class="checkbox-inline">
 				<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
-				Ocultar registros sin diferencias
+				<?php echo $this->lang->line('inventario_report_check_ocultar_regs'); ?>
 			</div>
 		</div>
 		<div>
 			<div class="checkbox-inline">
 				<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
-				Incluir ajustes de inventario
+				<?php echo $this->lang->line('inventario_report_check_incluir_ajustes'); ?>
 			</div>
 		</div>
 		<div>
 			<div class="checkbox-inline">
 				<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
-				Incluir familias de productos
+				<?php echo $this->lang->line('inventario_report_check_incluir_familias'); ?>
 			</div>
 		</div>
 	</div>
 
 	<div class="col-md-4">
-		Inventario:
+		<?php echo $this->lang->line('inventario_report_label_inventario'); ?>
 		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 
 	</div>

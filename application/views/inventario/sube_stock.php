@@ -9,7 +9,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Inventario
+				<?php echo $this->lang->line('inventario_upload_label_inventario'); ?>
 			</label>
 			<div class="col-sm-9">
 				<p class="form-control-static"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></p>
@@ -19,14 +19,18 @@
 		<?php if (!$show_script_carga): ?>
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Archivo
+				<?php echo $this->lang->line('inventario_upload_label_file'); ?>
 			</label>
 			<div class="col-sm-9">
 				<div class="alert alert-danger">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
-					<p><strong>ADVERTENCIA</strong></p>
-					<p>Al subir un archivo se eliminar <strong>TODOS</strong> los registros asociados al inventario
-					"<?php echo $inventario_nombre?>"</p>
+					<p><strong>
+						<?php echo $this->lang->line('inventario_upload_warning_line1'); ?>
+					</strong></p>
+					<p>
+						<?php echo $this->lang->line('inventario_upload_warning_line2'); ?>
+						"<?php echo $inventario_nombre?>"
+					</p>
 				</div>
 				<?php echo form_upload('upload_file','','class="form-control"'); ?>
 			</div>
@@ -34,7 +38,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Clave Administrador
+				<?php echo $this->lang->line('inventario_upload_label_password'); ?>
 			</label>
 			<div class="col-sm-4">
 				<?php echo form_password('password', '', 'class="form-control"'); ?>
@@ -54,8 +58,14 @@
 					<div class="progress">
 						<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
 					</div>
-					<div id="status_progreso1">Registros cargados OK: <span id="reg_actual">0</span> de <?php echo ($regs_OK); ?></div>
-					<div id="status_progreso2">Registros con error: <span id="reg_error">0</span></div>
+					<div id="status_progreso1">
+						<?php echo $this->lang->line('inventario_upload_status_OK'); ?>
+						<span id="reg_actual">0</span> de <?php echo ($regs_OK); ?>
+					</div>
+					<div id="status_progreso2">
+						<?php echo $this->lang->line('inventario_upload_status_error'); ?>
+						<span id="reg_error">0</span>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -68,12 +78,12 @@
 				<?php if ($show_script_carga): ?>
 					<button class="btn btn-primary pull-right" id="ejecuta_carga">
 						<span class="glyphicon glyphicon-play"></span>
-						Ejecutar carga
+						<?php echo $this->lang->line('inventario_upload_button_load'); ?>
 					</button>
 				<?php else: ?>
 				<button type="submit" name="submit" class="btn btn-primary pull-right" id="btn_guardar">
 					<span class="glyphicon glyphicon-upload"></span>
-					Subir archivo
+					<?php echo $this->lang->line('inventario_upload_button_upload'); ?>
 				</button>
 				<?php endif; ?>
 			</div>
@@ -84,22 +94,7 @@
 			</label>
 			<div class="col-sm-9">
 				<pre>
-Formato del archivo:
-	Archivo de texto
-	Extension .txt
-	Campos separados por tabulación
-
-	Campos
-			Ubicacion
-			[HU - eliminada]
-			Catalogo
-			Descripcion catalogo
-			Lote
-			Centro
-			Almacen
-			Unidad de medida
-			Stock SAP
-			Hoja
+<?php echo $this->lang->line('inventario_upload_format_file'); ?>
 				</pre>
 			</div>
 		</div>

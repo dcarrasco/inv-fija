@@ -4,14 +4,18 @@
 
 	<div class="col-md-5">
 		<div class="form-group">
-			<label>Inventario</label>
+			<label>
+				<?php echo $this->lang->line('inventario_inventario'); ?>
+			</label>
 			<p class="form-control-static"><?php echo $nombre_inventario; ?></p>
 		</div>
 	</div>
 
 	<div class="col-md-2">
 		<div class="form-group <?php echo form_has_error('hoja'); ?>">
-			<label>Hoja</label>
+			<label>
+				<?php echo $this->lang->line('inventario_page'); ?>
+			</label>
 			<div class="input-group">
 				<span class="input-group-btn">
 					<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
@@ -34,7 +38,9 @@
 
 	<div class="col-md-3">
 		<div class="form-group <?php echo form_has_error('auditor'); ?>">
-			<label>Auditor</label>
+			<label>
+				<?php echo $this->lang->line('inventario_auditor'); ?>
+			</label>
 			<?php echo $nuevo_detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'); ?>
 			<?php echo form_error('auditor');?>
 		</div>
@@ -44,7 +50,8 @@
 		<div class="form-group">
 			<label></label>
 			<a href="#" id="btn_mostrar_agregar" class="btn btn-default pull-right class-toggle">
-				<span class="glyphicon glyphicon-plus-sign"></span> Nuevo material...
+				<span class="glyphicon glyphicon-plus-sign"></span>
+				<?php echo $this->lang->line('inventario_button_new_line'); ?>
 			</a>
 		</div>
 	</div>
@@ -62,7 +69,9 @@
 		<?php echo form_hidden('id', ''); ?>
 
 		<fieldset>
-		<legend>Ingreso datos inventario</legend>
+		<legend>
+			<?php echo $this->lang->line('inventario_form_new'); ?>
+		</legend>
 
 		<div class="form-group <?php echo form_has_error('ubicacion'); ?>">
 			<label class="control-label col-sm-4">
@@ -90,7 +99,7 @@
 
 		<div class="form-group <?php echo form_has_error('catalogo'); ?>">
 			<label class="control-label col-sm-4">
-				Material
+				<?php echo $this->lang->line('inventario_form_new_material'); ?>
 				<?php echo $nuevo_detalle_inventario->get_marca_obligatorio_field('catalogo'); ?>
 			</label>
 			<div class="col-sm-3">
@@ -199,18 +208,18 @@
 				<div class="pull-left">
 					<a href="#" class="btn btn-danger" id="btn_borrar">
 						<span class="glyphicon glyphicon-trash"></span>
-						Borrar
+						<?php echo $this->lang->line('inventario_form_new_button_delete'); ?>
 					</a>
 				</div>
 
 				<div class="pull-right">
 					<a href="#" class="btn btn-primary" id="btn_agregar">
 						<span class="glyphicon glyphicon-plus-sign"></span>
-						Agregar material
+						<?php echo $this->lang->line('inventario_form_new_button_add'); ?>
 					</a>
 					<a href="#" class="btn btn-default" id="btn_cancelar">
 						<span class="glyphicon glyphicon-ban-circle"></span>
-						Cancelar
+						<?php echo $this->lang->line('inventario_form_new_button_cancel'); ?>
 					</a>
 				</div>
 			</div>
@@ -230,18 +239,40 @@
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
-				<th class="text-center">ubicacion</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?>
+				</th>
 				<!-- <th>HU</th> -->
-				<th class="text-center">material</th>
-				<th>descripcion</th>
-				<th class="text-center">lote</th>
-				<th class="text-center">centro</th>
-				<th class="text-center">almacen</th>
-				<th class="text-center">UM</th>
-				<th class="text-right" nowrap>cant SAP</th>
-				<th class="text-right">cant fisica</th>
-				<th class="text-center">HU</th>
-				<th class="text-center">observacion</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_material'); ?>
+				</th>
+				<th>
+					<?php echo $this->lang->line('inventario_digit_th_descripcion'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_lote'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_centro'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_almacen'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_UM'); ?>
+				</th>
+				<th class="text-right" nowrap>
+					<?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?>
+				</th>
+				<th class="text-right">
+					<?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_HU'); ?>
+				</th>
+				<th class="text-center">
+					<?php echo $this->lang->line('inventario_digit_th_observacion'); ?>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -307,7 +338,7 @@
 					<div class="text-center">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
 							<span class="glyphicon glyphicon-ok"></span>
-							Guardar hoja
+							<?php echo $this->lang->line('inventario_digit_button_save_page'); ?>
 						</a>
 					</div>
 				</td>

@@ -12,6 +12,7 @@ class Inventario_analisis extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
 			'ajustes'            => array('url' => $this->uri->segment(1) . '/ajustes', 'texto' => 'Ajustes de inventario'),

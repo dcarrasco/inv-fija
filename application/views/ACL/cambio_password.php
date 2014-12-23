@@ -23,7 +23,9 @@
 
 	<div class="col-md-6 col-md-offset-3 well">
 		<div>
-			<h2>Cambio de clave</h2>
+			<h2>
+				<?php echo $this->lang->line('login_form_change_password'); ?>
+			</h2>
 		</div>
 
 
@@ -37,7 +39,9 @@
 			<?php endif; ?>
 
 			<div class="control-group col-md-8 col-md-offset-2">
-				<label class="control-label" for="usr">Nombre de usuario</label>
+				<label class="control-label" for="usr">
+					<?php echo $this->lang->line('login_input_user'); ?>
+				</label>
 				<div class="controls">
 					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('usr'); ?></div>
@@ -45,7 +49,9 @@
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2">
-				<label class="control-label" for="pwd_old">Clave anterior</label>
+				<label class="control-label" for="pwd_old">
+					<?php echo $this->lang->line('login_input_old_password'); ?>
+				</label>
 				<div class="controls">
 					<?php echo form_password('pwd_old', '','maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('pwd_old'); ?></div>
@@ -53,7 +59,9 @@
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2">
-				<label class="control-label" for="usr">Clave nueva</label>
+				<label class="control-label" for="pwd_new1">
+					<?php echo $this->lang->line('login_input_new1_password'); ?>
+				</label>
 				<div class="controls">
 					<?php echo form_password('pwd_new1', '','maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('pwd_new1'); ?></div>
@@ -61,7 +69,9 @@
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2">
-				<label class="control-label" for="usr">Reingrese clave nueva</label>
+				<label class="control-label" for="pwd_new2">
+					<?php echo $this->lang->line('login_input_new2_password'); ?>
+				</label>
 				<div class="controls">
 					<?php echo form_password('pwd_new2', '','maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('pwd_new2'); ?></div>
@@ -76,7 +86,7 @@
 				<div class="controls">
 					<button type="submit" name="btn_submit" class="btn btn-primary">
 						<span class="glyphicon glyphicon-lock"></span>
-						Cambiar clave
+						<?php echo $this->lang->line('login_button_change_password'); ?>
 					</button>
 				</div>
 			</div>

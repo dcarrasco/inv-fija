@@ -9,7 +9,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Inventario
+				<?php echo $this->lang->line('inventario_print_label_inventario'); ?>
 			</label>
 			<div class="col-sm-8">
 				<p class="form-control-static">
@@ -20,7 +20,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Pagina desde
+				<?php echo $this->lang->line('inventario_print_label_page_from'); ?>
 			</label>
 			<div class="col-sm-2">
 				<?php echo form_input('pag_desde', set_value('pag_desde',1), 'class="form-control"  maxlength="5"'); ?>
@@ -30,7 +30,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Pagina hasta
+				<?php echo $this->lang->line('inventario_print_label_page_to'); ?>
 			</label>
 			<div class="col-sm-2">
 				<?php echo form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="form-control"  maxlength="5"'); ?>
@@ -40,12 +40,12 @@
 
 		<div class="form-group">
 			<label class="control-label col-sm-3">
-				Opciones
+				<?php echo $this->lang->line('inventario_print_label_options'); ?>
 			</label>
 			<div class="col-sm-8">
 				<label class="checkbox-inline">
 					<?php echo form_checkbox('oculta_stock_sap', 'oculta_stock_sap', set_checkbox('oculta_stock_sap','oculta_stock_sap', FALSE)); ?>
-					Oculta columnas [STOCK_SAP] y [F/A]
+					<?php echo $this->lang->line('inventario_print_check_hide_columns'); ?>
 				</label>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 			<div class="col-sm-8">
 				<button name="submit" type="submit" class="btn btn-primary pull-right" id="btn_imprimir">
 					<span class="glyphicon glyphicon-print"></span>
-					Imprimir
+					<?php echo $this->lang->line('inventario_print_button_print'); ?>
 				</button>
 			</div>
 		</div>
