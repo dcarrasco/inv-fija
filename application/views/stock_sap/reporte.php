@@ -5,13 +5,14 @@
 			<div class="row">
 				<div class="col-md-6">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						Parametros consulta
+						<?php echo $this->lang->line('stock_perm_panel_params'); ?>
 					</a>
 				</div>
 
 				<div class="col-md-6">
 					<div class="pull-right">
-						Fecha reporte: <?php echo $fecha_reporte; ?>
+						<?php echo $this->lang->line('stock_perm_panel_date'); ?>
+						<?php echo $fecha_reporte; ?>
 					</div>
 				</div>
 			</div>
@@ -21,18 +22,24 @@
 			<div class="panel-body">
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>Almacenes</label>
+						<label>
+							<?php echo $this->lang->line('stock_perm_label_alm'); ?>
+						</label>
 
 						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 
 						<div class="pull-right">
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"') ?>
-								Movil
+								<label>
+									<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"') ?>
+									<?php echo $this->lang->line('stock_perm_radio_movil'); ?>
+								</label>
 							</div>
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"') ?>
-								Fija
+								<label>
+									<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"') ?>
+									<?php echo $this->lang->line('stock_perm_radio_fija'); ?>
+								</label>
 							</div>
 						</div>
 					</div>
@@ -41,33 +48,39 @@
 
 				<div class="col-md-3">
 					<div class="form-group">
-						<label>Estados Stock</label>
+						<label>
+							<?php echo $this->lang->line('stock_perm_label_estados'); ?>
+						</label>
 						<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-2">
 					<div class="form-group">
-						<label>Tipos Material</label>
+						<label>
+							<?php echo $this->lang->line('stock_perm_label_tipmat'); ?>
+						</label>
 						<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-3">
 					<div class="form-group">
-						<label>Detalle</label>
+						<label>
+							<?php echo $this->lang->line('stock_perm_label_detalle'); ?>
+						</label>
 
 						<div class="checkbox">
 							<?php echo form_checkbox('incl_almacen', '1', set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
-							Mostrar almacenes
+							<?php echo $this->lang->line('stock_perm_check_alm'); ?>
 						</div>
 						<div class="checkbox">
 							<?php echo form_checkbox('incl_lote', '1', set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
-							Mostrar lotes
+							<?php echo $this->lang->line('stock_perm_check_lotes'); ?>
 						</div>
 						<div class="checkbox">
 							<?php echo form_checkbox('incl_modelos', '1', set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
-							Mostrar modelos equipos
+							<?php echo $this->lang->line('stock_perm_check_modelos'); ?>
 						</div>
 
 						<hr/>
@@ -75,7 +88,7 @@
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="glyphicon glyphicon-list-alt"></span>
-								Reporte
+								<?php echo $this->lang->line('stock_perm_button_report'); ?>
 							</button>
 						</div>
 

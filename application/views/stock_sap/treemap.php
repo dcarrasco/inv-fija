@@ -1,27 +1,39 @@
 <div>
 	<div class="form-group">
 		<?php echo form_open('', array('id' => 'form_centro')); ?>
-		<strong>Centro</strong>
-		<label class="radio-inline">
-			<?php echo form_radio('sel_centro', 'CL03', set_radio('sel_centro','CL03', TRUE)); ?>
-			CL03
-		</label>
-		<label class="radio-inline">
-			<?php echo form_radio('sel_centro', 'CL15', set_radio('sel_centro','CL15')); ?>
-			CL15
-		</label>
+		<strong>
+			<?php echo $this->lang->line('stock_map_label_centro'); ?>
+		</strong>
+		<div class="radio-inline">
+			<label>
+				<?php echo form_radio('sel_centro', 'CL03', set_radio('sel_centro','CL03', TRUE)); ?>
+				CL03
+			</label>
+		</div>
+		<div class="radio-inline">
+			<label>
+				<?php echo form_radio('sel_centro', 'CL15', set_radio('sel_centro','CL15')); ?>
+				CL15
+			</label>
+		</div>
 		<?php echo form_close(); ?>
 	</div>
 	<div class="form-group">
-		<strong>Tipo Mapa</strong>
-		<label class="radio-inline">
-			<?php echo form_radio('sel_treemap_type', 'cantidad', set_radio('sel_treemap_type','cantidad', TRUE)); ?>
-			Cantidad de equipos
-		</label>
-		<label class="radio-inline">
-			<?php echo form_radio('sel_treemap_type', 'valor', set_radio('sel_treemap_type','valor')); ?>
-			Valor de equipos
-		</label>
+		<strong>
+			<?php echo $this->lang->line('stock_map_label_type'); ?>
+		</strong>
+		<div class="radio-inline">
+			<label>
+				<?php echo form_radio('sel_treemap_type', 'cantidad', set_radio('sel_treemap_type','cantidad', TRUE)); ?>
+				Cantidad de equipos
+			</label>
+		</div>
+		<div class="radio-inline">
+			<label>
+				<?php echo form_radio('sel_treemap_type', 'valor', set_radio('sel_treemap_type','valor')); ?>
+				Valor de equipos
+			</label>
+		</div>
 	</div>
 </div>
 

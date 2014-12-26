@@ -7,6 +7,7 @@ class Stock_analisis_series extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->lang->load('stock');
 	}
 
 	// --------------------------------------------------------------------

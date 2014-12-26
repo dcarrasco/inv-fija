@@ -9,6 +9,7 @@ class Stock_reporte extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->lang->load('stock');
 
 		$this->arr_menu = array(
 			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),

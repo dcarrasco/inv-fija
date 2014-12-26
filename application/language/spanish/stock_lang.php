@@ -24,13 +24,13 @@ $lang['stock_analisis_title_gestor']      = 'Gestor DTH';
 
 $lang['stock_sap_panel_params']   = 'Parametros consulta';
 $lang['stock_sap_panel_graph']    = 'Ver grafico';
-$lang['stock_sap_label_dates']    = 'Seleccionar Fechas';
-$lang['stock_sap_label_alm']      = 'Seleccionar Almacenes';
-$lang['stock_sap_label_mats']     = 'Seleccionar Detalle Materiales';
+$lang['stock_sap_label_dates']    = 'Seleccionar fechas';
+$lang['stock_sap_label_alm']      = 'Seleccionar almacenes';
+$lang['stock_sap_label_mats']     = 'Seleccionar detalle materiales';
 $lang['stock_sap_radio_date1']    = 'Seleccionar ultimo dia mes';
 $lang['stock_sap_radio_date2']    = 'Seleccionar todas las fechas';
-$lang['stock_sap_radio_alm1']     = 'Seleccionar Tipos de Almacen';
-$lang['stock_sap_radio_alm2']     = 'Seleccionar Almacenes';
+$lang['stock_sap_radio_alm1']     = 'Seleccionar tipos de almacen';
+$lang['stock_sap_radio_alm2']     = 'Seleccionar almacenes';
 $lang['stock_sap_check_show_alm'] = 'Desplegar detalle almacenes';
 $lang['stock_sap_check_mat']      = 'Desplegar detalle materiales';
 $lang['stock_sap_check_lotes']    = 'Desplegar detalle lotes';
@@ -50,10 +50,41 @@ $lang['stock_perm_label_alm']     = 'Almacenes';
 $lang['stock_perm_label_estados'] = 'Estados stock';
 $lang['stock_perm_label_tipmat']  = 'Tipos material';
 $lang['stock_perm_label_detalle'] = 'Detalle';
+$lang['stock_perm_radio_movil']   = 'Movil';
+$lang['stock_perm_radio_fija']    = 'Fija';
 $lang['stock_perm_check_alm']     = 'Mostrar almacenes';
 $lang['stock_perm_check_lotes']   = 'Mostrar lotes';
 $lang['stock_perm_check_modelos'] = 'Mostrar modelos equipos';
 $lang['stock_perm_button_report'] = 'Reporte';
+
+$lang['stock_map_label_centro'] = 'Centro';
+$lang['stock_map_label_type']   = 'Tipo mapa';
+$lang['stock_map_radio_cant']   = 'Cantidad de equipos';
+$lang['stock_map_radio_value']  = 'Valor de equipos';
+
+$lang['stock_movhist_panel_params']  = 'Parametros consulta';
+$lang['stock_movhist_label_dates']   = 'Fechas';
+$lang['stock_movhist_label_movs']    = 'Movimientos';
+$lang['stock_movhist_label_alm']     = 'Almacenes';
+$lang['stock_movhist_label_mats']    = 'Materiales';
+$lang['stock_movhist_radio_alm']     = 'Alm';
+$lang['stock_movhist_radio_rec']     = 'Rec';
+$lang['stock_movhist_button_filter'] = 'Filtro';
+$lang['stock_movhist_button_report'] = 'Reporte';
+
+$lang['stock_gestor_panel_params']          = 'Parametros consulta';
+$lang['stock_gestor_panel_log']             = 'Log Gestor DTH';
+$lang['stock_gestor_radio_deco']            = 'Serie deco';
+$lang['stock_gestor_radio_cliente']         = 'RUT cliente';
+$lang['stock_gestor_label_report']          = 'Reportes';
+$lang['stock_gestor_label_typeop']          = 'Tipo operacion CAS';
+$lang['stock_gestor_radio_log_complete']    = 'Log completo';
+$lang['stock_gestor_radio_log_ultdeco']     = 'Ultimo deco';
+$lang['stock_gestor_check_filter_last_mov'] = 'Filtrar ultimo movimiento';
+$lang['stock_gestor_check_alta']            = 'Alta';
+$lang['stock_gestor_check_baja']            = 'Baja';
+$lang['stock_gestor_button_report']         = 'Consultar';
+$lang['stock_gestor_button_reset']          = 'Limpiar';
 
 
 /* End of file stock_lang.php */

@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						Parametros consulta
+						<?php echo $this->lang->line('stock_sap_panel_params'); ?>
 					</a>
 				</div>
 			</div>
@@ -16,14 +16,16 @@
 			<div class="panel-body">
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>Seleccionar Fechas</label>
+						<label>
+							<?php echo $this->lang->line('stock_sap_label_dates'); ?>
+						</label>
 						<div class="radio">
 							<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
-							Seleccionar ultimo dia mes
+							<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
 						</div>
 						<div class="radio">
 							<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-							Seleccionar todas las fechas
+							<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
 						</div>
 						<div id="show_fecha_ultimodia">
 							<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
@@ -36,20 +38,23 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>Seleccionar Almacenes</label>
+						<label>
+							<?php echo $this->lang->line('stock_sap_label_alm'); ?>
+						</label>
 						<div class="radio">
 							<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
-							Seleccionar Tipos de Almacen
+							<?php echo $this->lang->line('stock_sap_radio_alm1'); ?>
 						</div>
 						<div class="radio">
 							<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
-							Seleccionar Almacenes
+							<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
 						</div>
 						<div id="show_tiposalm">
 							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 							<div>
 								<div class="checkbox">
-									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?> Desplegar detalle almacenes
+									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
+									<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
 								</div>
 							</div>
 						</div>
@@ -61,7 +66,9 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>Seleccionar Detalle Materiales</label>
+						<label>
+							<?php echo $this->lang->line('stock_sap_label_mats'); ?>
+						</label>
 
 						<!--
 						<div class="checkbox">
@@ -72,30 +79,30 @@
 
 						<div class="checkbox">
 							<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
-							Desplegar detalle materiales
+							<?php echo $this->lang->line('stock_sap_check_mat'); ?>
 						</div>
 						<div class="checkbox">
 							<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
-							Desplegar detalle lotes
+							<?php echo $this->lang->line('stock_sap_check_lotes'); ?>
 						</div>
 						<div class="checkbox">
 							<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
-							Desplegar detalle tipos stock
+							<?php echo $this->lang->line('stock_sap_check_tipstock'); ?>
 						</div>
 
 						<?php if($tipo_op == 'MOVIL'): ?>
 						<div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?>
-								Equipos
+								<?php echo $this->lang->line('stock_sap_radio_equipos'); ?>
 							</div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?>
-								Simcard
+								<?php echo $this->lang->line('stock_sap_radio_sim'); ?>
 							</div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?>
-								Otros
+								<?php echo $this->lang->line('stock_sap_radio_otros'); ?>
 							</div>
 						</div>
 						<?php endif; ?>
@@ -104,14 +111,14 @@
 
 					<hr/>
 					<div class="form-group">
-						Mostrar
+						<?php echo $this->lang->line('stock_sap_label_mostrar'); ?>
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
-							cantidad
+							<?php echo $this->lang->line('stock_sap_radio_cant'); ?>
 						</div>
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
-							monto
+							<?php echo $this->lang->line('stock_sap_radio_monto'); ?>
 						</div>
 					</div>
 
@@ -119,11 +126,11 @@
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-list-alt"></span>
-							Reporte
+							<?php echo $this->lang->line('stock_sap_button_report'); ?>
 						</button>
 						<button type="submit" name="excel" value="excel" class="btn btn-default">
 							<span class="glyphicon glyphicon-file"></span>
-							Exportar a Excel...
+							<?php echo $this->lang->line('stock_sap_button_export'); ?>
 						</button>
 					</div>
 

@@ -2,7 +2,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-			Parametros consulta
+			<?php echo $this->lang->line('stock_gestor_panel_params'); ?>
 		</a>
 	</div>
 
@@ -12,12 +12,16 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<div class="radio-inline">
-							<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
-							Serie Deco
+							<label>
+								<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
+								<?php echo $this->lang->line('stock_gestor_radio_deco'); ?>
+							</label>
 						</div>
 						<div class="radio-inline">
-							<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
-							RUT Cliente
+							<label>
+								<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
+								<?php echo $this->lang->line('stock_gestor_radio_cliente'); ?>
+							</label>
 						</div>
 						<?php echo form_textarea(array(
 								'id' => 'series',
@@ -32,34 +36,48 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>Reportes</label>
+						<label>
+							<?php echo $this->lang->line('stock_gestor_label_report'); ?>
+						</label>
 
 						<div>
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
-								Log completo
+								<label>
+									<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
+									<?php echo $this->lang->line('stock_gestor_radio_log_complete'); ?>
+								</label>
 							</div>
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
-								Ultimo deco
+								<label>
+									<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
+									<?php echo $this->lang->line('stock_gestor_radio_log_ultdeco'); ?>
+								</label>
 							</div>
 						</div>
 
 						<div class="checkbox">
-							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
-							Filtrar ultimo movimiento
+							<label>
+								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
+								<?php echo $this->lang->line('stock_gestor_check_filter_last_mov'); ?>
+							</label>
 						</div>
 
-						<label>Tipo Operacion CAS</label>
+						<label>
+							<?php echo $this->lang->line('stock_gestor_label_typeop'); ?>
+						</label>
 
 						<div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
-								Alta
+								<label>
+									<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+									<?php echo $this->lang->line('stock_gestor_check_alta'); ?>
+								</label>
 							</div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
-								Baja
+								<label>
+									<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+									<?php echo $this->lang->line('stock_gestor_check_baja'); ?>
+								</label>
 							</div>
 						</div>
 					</div>
@@ -69,11 +87,11 @@
 					<div class="form-group pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
 							<span class="glyphicon glyphicon-list-alt"></span>
-							Consultar
+							<?php echo $this->lang->line('stock_gestor_button_report'); ?>
 						</button>
 						<button name="excel" class="btn btn-default" id="boton-reset">
 							<span class="glyphicon glyphicon-refresh"></span>
-							Limpiar
+							<?php echo $this->lang->line('stock_gestor_button_reset'); ?>
 						</button>
 					</div>
 				</div>
@@ -88,7 +106,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
-			Log Gestor DTH
+			<?php echo $this->lang->line('stock_gestor_panel_log'); ?>
 		</a>
 	</div>
 
