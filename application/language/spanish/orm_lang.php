@@ -8,6 +8,11 @@ $lang['orm_button_save']   = 'Guardar';
 $lang['orm_button_cancel'] = 'Cancelar';
 $lang['orm_button_delete'] = 'Borrar';
 
+$lang['orm_radio_yes'] = 'Si';
+$lang['orm_radio_no']  = 'No';
+
+$lang['orm_msg_save_ok']   = '%s (%s) grabado correctamente.';
+$lang['orm_msg_delete_ok'] = '%s (%s) borrado correctamente.';
 
 
 

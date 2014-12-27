@@ -136,7 +136,7 @@ class Inventario_digitacion extends CI_Controller {
 					$cant_modif += 1;
 				}
 
-				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente en hoja ' . $hoja : ''));
+				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '';
 			}
 			else if ($this->input->post('formulario') == 'agregar')
 			{
@@ -145,7 +145,7 @@ class Inventario_digitacion extends CI_Controller {
 					$nuevo_detalle_inventario = new Detalle_inventario;
 					$nuevo_detalle_inventario->find_id($this->input->post('id'));
 					$nuevo_detalle_inventario->borrar();
-					$this->session->set_flashdata('msg_alerta', 'Linea (id=' . $this->input->post('id') . ') borrada correctamente en hoja '. $hoja);
+					$msg_alerta = sprintf($this->lang->line('inventario_digit_msg_delete'), $this->input->post('id'), $hoja);
 				}
 				else
 				{
@@ -174,10 +174,11 @@ class Inventario_digitacion extends CI_Controller {
 					));
 
 					$nuevo_detalle_inventario->grabar();
-					$this->session->set_flashdata('msg_alerta', 'Linea agregada correctamente en hoja '. $hoja);
+					$msg_alerta = sprintf($this->lang->line('inventario_digit_msg_add'), $hoja);
 				}
 			}
 
+			$this->session->set_flashdata('msg_alerta', $msg_alerta);
 			redirect($this->uri->segment(1) . '/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 

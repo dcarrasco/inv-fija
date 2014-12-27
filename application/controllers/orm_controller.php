@@ -99,16 +99,19 @@ class ORM_Controller extends CI_Controller {
 		else
 		{
 			$modelo->recuperar_post();
+
 			if ($this->input->post('grabar'))
 			{
 				$modelo->grabar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' (' . $modelo . ') grabado correctamente');
+				$msg = sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo);
 			}
 			else if ($this->input->post('borrar'))
 			{
 				$modelo->borrar();
-				$this->session->set_flashdata('msg_alerta', $modelo->get_model_label() . ' ('. $modelo . ') borrado correctamente');
+				$msg = sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo);
 			}
+
+			$this->session->set_flashdata('msg_alerta', $msg);
 			redirect($this->uri->segment(1) . '/listado/' . $nombre_modelo);
 		}
 	}

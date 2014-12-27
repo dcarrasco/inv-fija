@@ -1,6 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
+$lang['inventario_menu_reporte_hoja']      = 'Hoja';
+$lang['inventario_menu_reporte_mat']       = 'Material';
+$lang['inventario_menu_reporte_faltante']  = 'Faltante-Sobrante';
+$lang['inventario_menu_reporte_ubicacion'] = 'Ubicaci&oacute;n';
+$lang['inventario_menu_reporte_tip_ubic']  = 'Tipos Ubicaci&oacute;n';
+$lang['inventario_menu_reporte_ajustes']   = 'Ajustes';
+
+$lang['inventario_menu_ajustes'] = 'Ajustes de inventario';
+$lang['inventario_menu_upload']  = 'Subir stock';
+$lang['inventario_menu_print']   = 'Imprimir hojas';
+
 $lang['inventario_inventario']      = 'Inventario';
 $lang['inventario_page']            = 'Hoja';
 $lang['inventario_auditor']         = 'Auditor';
@@ -29,6 +40,11 @@ $lang['inventario_digit_th_cant_ajuste']        = 'cant ajuste';
 $lang['inventario_digit_th_dif']                = 'dif';
 $lang['inventario_digit_th_tipo_dif']           = 'tipo dif';
 $lang['inventario_digit_th_observacion_ajuste'] = 'observaci&oacute;n ajuste';
+
+$lang['inventario_digit_msg_save']   = '%d linea(s) modificadas correctamente en hoja %d.';
+$lang['inventario_digit_msg_delete'] = 'Linea (id=%d) borrada correctamente en hoja %d.';
+$lang['inventario_digit_msg_add']    = 'Linea agregada correctamente en hoja %d.';
+$lang['inventario_adjust_msg_save']  = '%d linea(s) modificadas correctamente.';
 
 $lang['inventario_report_filter']                 = 'Texto a filtrar...';
 $lang['inventario_report_check_ocultar_regs']     = 'Ocultar registros sin diferencias';

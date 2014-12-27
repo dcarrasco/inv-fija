@@ -15,12 +15,30 @@ class Inventario_reportes extends CI_Controller {
 		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
-			'hoja'              => array('url' => $this->uri->segment(1) . '/listado/hoja', 'texto' => 'Hoja'),
-			'material'          => array('url' => $this->uri->segment(1) . '/listado/material', 'texto' => 'Material'),
-			'material_faltante' => array('url' => $this->uri->segment(1) . '/listado/material_faltante', 'texto' => 'Faltante-Sobrante'),
-			'ubicacion'         => array('url' => $this->uri->segment(1) . '/listado/ubicacion' , 'texto' => 'Ubicacion'),
-			'tipos_ubicacion'   => array('url' => $this->uri->segment(1) . '/listado/tipos_ubicacion', 'texto' => 'Tipos Ubicacion'),
-			'ajustes'           => array('url' => $this->uri->segment(1) . '/listado/ajustes', 'texto' => 'Ajustes'),
+			'hoja' => array(
+				'url'   => $this->uri->segment(1) . '/listado/hoja',
+				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
+			),
+			'material' => array(
+				'url'   => $this->uri->segment(1) . '/listado/material',
+				'texto' => $this->lang->line('inventario_menu_reporte_mat'),
+			),
+			'material_faltante' => array(
+				'url'   => $this->uri->segment(1) . '/listado/material_faltante',
+				'texto' => $this->lang->line('inventario_menu_reporte_faltante'),
+			),
+			'ubicacion' => array(
+				'url'   => $this->uri->segment(1) . '/listado/ubicacion' ,
+				'texto' => $this->lang->line('inventario_menu_reporte_ubicacion'),
+			),
+			'tipos_ubicacion' => array(
+				'url'   => $this->uri->segment(1) . '/listado/tipos_ubicacion',
+				'texto' => $this->lang->line('inventario_menu_reporte_tip_ubic'),
+			),
+			'ajustes' => array(
+				'url'   => $this->uri->segment(1) . '/listado/ajustes',
+				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
+			),
 		);
 	}
 

@@ -124,6 +124,7 @@ class ORM_Model implements Iterator {
 	public function __construct($param = array())
 	{
 		$this->CI =& get_instance();
+		$this->CI->lang->load('orm');
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
@@ -1291,6 +1292,8 @@ class ORM_Field {
 	 **/
 	function __construct($nombre = '', $param = array()) {
 
+		$this->CI =& get_instance();
+
 		$this->nombre    = $nombre;
 		$this->nombre_bd = $nombre;
 		$this->label     = $nombre;
@@ -1482,13 +1485,15 @@ class ORM_Field {
 
 		if ($this->tipo == 'boolean')
 		{
-			$form = '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_1">';
-			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1") . 'Si';
-			$form .= '</label>';
+			$form = '<div class="radio-inline"><label for="' . $id_prefix . $this->nombre . '_1">';
+			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1");
+			$form .= $this->CI->lang->line('orm_radio_yes');
+			$form .= '</label></div>';
 
-			$form .= '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_0">';
-			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0") . 'No';
-			$form .= '</label>';
+			$form .= '<div class="radio-inline"><label for="' . $id_prefix . $this->nombre . '_0">';
+			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0");
+			$form .= $this->CI->lang->line('orm_radio_no');
+			$form .= '</label></div>';
 
 			return $form;
 		}
@@ -1549,7 +1554,7 @@ class ORM_Field {
 	{
 		if ($this->tipo == 'boolean')
 		{
-			return ($valor == 1) ? 'SI' : 'NO';
+			return ($valor == 1) ? $this->CI->lang->line('orm_radio_yes') : $this->CI->lang->line('orm_radio_no');
 		}
 
 		if ($this->tipo == 'has_one')

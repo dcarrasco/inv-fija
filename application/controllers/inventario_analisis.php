@@ -15,9 +15,18 @@ class Inventario_analisis extends CI_Controller {
 		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
-			'ajustes'            => array('url' => $this->uri->segment(1) . '/ajustes', 'texto' => 'Ajustes de inventario'),
-			'sube_stock'         => array('url' => $this->uri->segment(1) . '/sube_stock', 'texto' => 'Subir Stock'),
-			'imprime_inventario' => array('url' => $this->uri->segment(1) . '/imprime_inventario', 'texto' => 'Imprimir Hojas'),
+			'ajustes' => array(
+				'url'   => $this->uri->segment(1) . '/ajustes',
+				'texto' => $this->lang->line('inventario_menu_ajustes'),
+			),
+			'sube_stock' => array(
+				'url'   => $this->uri->segment(1) . '/sube_stock',
+				'texto' => $this->lang->line('inventario_menu_upload'),
+			),
+			'imprime_inventario' => array(
+				'url'   => $this->uri->segment(1) . '/imprime_inventario',
+				'texto' => $this->lang->line('inventario_menu_print'),
+			),
 		);
 
 	}
@@ -105,9 +114,10 @@ class Inventario_analisis extends CI_Controller {
 					}
 
 				}
-				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' linea(s) modificadas correctamente' : ''));
+				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif) : '';
 			}
 
+			$this->session->set_flashdata('msg_alerta', $msg_alerta);
 			redirect($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
 		}
 
