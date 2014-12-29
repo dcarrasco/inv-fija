@@ -37,7 +37,7 @@
 				</div>
 
 				<div class="pull-left">
-					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('Esta seguro de borrar este(a) <?php echo strtolower($modelo->get_model_label()); ?>?\n\nEliminar: <?php echo strtoupper($modelo->__toString()); ?>\n');">
+					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo $msg_js_delete; ?>');">
 						<span class="glyphicon glyphicon-trash"></span>
 						<?php echo $this->lang->line('orm_button_delete'); ?>
 					</button>

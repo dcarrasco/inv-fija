@@ -1,6 +1,8 @@
 <div>
-
-	<?php echo anchor($this->uri->segment(1) . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time() ,(($ocultar_regularizadas == 0) ? 'Ocultar' : 'Mostrar') . ' lineas regularizadas') ?>
+	<?php echo anchor(
+		$this->uri->segment(1) . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
+		($ocultar_regularizadas == 0) ? $this->lang->line('inventario_adjust_link_hide') : $this->lang->line('inventario_adjust_link_show')
+	); ?>
 </div>
 
 <div>

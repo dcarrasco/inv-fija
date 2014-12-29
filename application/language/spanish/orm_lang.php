@@ -17,6 +17,8 @@ $lang['orm_msg_delete_ok'] = '%s (%s) borrado correctamente.';
 $lang['orm_pag_first'] = 'Primero';
 $lang['orm_pag_last']  = '&Uacute;ltimo';
 
+$lang['orm_js_delete_confirm']  = '¿Esta seguro de borrar este(a) %s?\n\nEliminar: %s\n';
+
 
 /* End of file orm_lang.php */
 /* Location: ./application/language/spanish/orm_lang.php */

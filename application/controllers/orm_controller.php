@@ -93,6 +93,7 @@ class ORM_Controller extends CI_Controller {
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 				'modelo'             => $modelo,
 				'link_cancelar'      => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo),
+				'msg_js_delete'      => sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)),
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}

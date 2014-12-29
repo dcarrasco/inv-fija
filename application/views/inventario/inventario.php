@@ -304,7 +304,7 @@
 					<td class="text-center"><?php echo $linea_det->get_valor_field('centro'); ?></td>
 					<td class="text-center"><?php echo $linea_det->get_valor_field('almacen'); ?></td>
 					<td class="text-center"><?php echo $linea_det->um; ?></td>
-					<td class="text-right"><?php echo number_format($linea_det->stock_sap,0,',','.'); ?></td>
+					<td class="text-right"><?php echo fmt_cantidad($linea_det->stock_sap); ?></td>
 					<td class="text-center col-md-1">
 						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control text-right" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
@@ -320,8 +320,10 @@
 				<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>
 				<?php $tab_index += 1; ?>
 			<?php endforeach; ?>
+		</tbody>
 
-			<!-- totales -->
+		<!-- totales -->
+		<tfoot>
 			<tr>
 				<td colspan="2">
 				</td>
@@ -331,8 +333,8 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td class="text-right"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
-				<td class="text-right"><strong><?php echo number_format($sum_fisico,0,',','.'); ?></strong></td>
+				<td class="text-right"><strong><?php echo fmt_cantidad($sum_sap); ?></strong></td>
+				<td class="text-right"><strong><?php echo fmt_cantidad($sum_fisico); ?></strong></td>
 				<td></td>
 				<td>
 					<div class="text-center">
@@ -343,7 +345,8 @@
 					</div>
 				</td>
 			</tr>
-		</tbody>
+		</tfoot>
+
 	</table>
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->

@@ -63,7 +63,7 @@
 					<td class="ac"><?php echo $detalle->um; ?></td>
 
 					<?php if (!$oculta_stock_sap): ?>
-						<td class="ac"><?php echo number_format($detalle->stock_sap, 0, ',', '.'); ?></td>
+						<td class="ac"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
 					<?php endif; ?>
 
 					<!-- cantidad física -->
@@ -112,7 +112,7 @@
 			<?php if (!$oculta_stock_sap): ?>
 				<tr>
 					<td colspan="7" class="no-border"></td>
-					<td class="ac"><strong><?php echo number_format($sum_sap,0,',','.'); ?></strong></td>
+					<td class="ac"><strong><?php echo fmt_cantidad($sum_sap); ?></strong></td>
 					<td colspan="4" class="no-border"></td>
 				</tr>
 			<?php endif; ?>

@@ -175,7 +175,7 @@ class App_common {
 				$href_param .= '&tipo_material=' . $tipo_material;
 				$href_param .= '&permanencia=' . $permanencia;
 
-				return anchor($arr_param_campo['href'] . $href_param, number_format($valor, 0, ',', '.'));
+				return anchor($arr_param_campo['href'] . $href_param, fmt_cantidad($valor));
 				break;
 			case 'numero':
 				return fmt_cantidad($valor);
