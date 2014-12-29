@@ -45,8 +45,8 @@ $lang['inventario_digit_msg_save']   = '%d linea(s) modificadas correctamente en
 $lang['inventario_digit_msg_delete'] = 'Linea (id=%d) borrada correctamente en hoja %d.';
 $lang['inventario_digit_msg_add']    = 'Linea agregada correctamente en hoja %d.';
 $lang['inventario_adjust_msg_save']  = '%d linea(s) modificadas correctamente.';
-$lang['inventario_adjust_link_hide'] = 'Ocultar lineas regularizadas.';
-$lang['inventario_adjust_link_show'] = 'Mostrar lineas regularizadas.';
+$lang['inventario_adjust_link_hide'] = 'Ocultar lineas regularizadas';
+$lang['inventario_adjust_link_show'] = 'Mostrar lineas regularizadas';
 
 $lang['inventario_report_filter']                 = 'Texto a filtrar...';
 $lang['inventario_report_check_ocultar_regs']     = 'Ocultar registros sin diferencias';
