@@ -574,8 +574,8 @@ class ORM_Model implements Iterator {
 			'per_page'    => $this->model_page_results,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url($this->CI->uri->segment(1) . '/' . ($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
-			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+			'first_link'  => $this->CI->lang->line('orm_pag_first'),
+			'last_link'   => $this->CI->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);

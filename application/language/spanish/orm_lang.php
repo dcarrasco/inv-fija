@@ -14,6 +14,8 @@ $lang['orm_radio_no']  = 'No';
 $lang['orm_msg_save_ok']   = '%s (%s) grabado correctamente.';
 $lang['orm_msg_delete_ok'] = '%s (%s) borrado correctamente.';
 
+$lang['orm_pag_first'] = 'Primero';
+$lang['orm_pag_last']  = '&Uacute;ltimo';
 
 
 /* End of file orm_lang.php */
