@@ -13,9 +13,18 @@ class Stock_sap extends CI_Controller {
 		$this->lang->load('stock');
 
 		$this->arr_menu = array(
-			'stock_movil'   => array('url' => $this->uri->segment(1) . '/mostrar_stock/MOVIL', 'texto' => 'Stock Movil'),
-			'stock_fija'    => array('url' => $this->uri->segment(1) . '/mostrar_stock/FIJA', 'texto' => 'Stock Fija'),
-			'transito_fija' => array('url' => $this->uri->segment(1) . '/transito/FIJA', 'texto' => 'Transito Fija'),
+			'stock_movil' => array(
+				'url' => $this->uri->segment(1) . '/mostrar_stock/MOVIL',
+				'texto' => $this->lang->line('stock_sap_menu_movil'),
+			),
+			'stock_fija' => array(
+				'url' => $this->uri->segment(1) . '/mostrar_stock/FIJA',
+				'texto' => $this->lang->line('stock_sap_menu_fijo'),
+			),
+			'transito_fija' => array(
+				'url' => $this->uri->segment(1) . '/transito/FIJA',
+				'texto' => $this->lang->line('stock_sap_menu_transito'),
+			),
 		);
 	}
 

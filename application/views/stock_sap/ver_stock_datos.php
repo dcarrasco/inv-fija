@@ -89,7 +89,9 @@
 <div class="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">Ver grafico</a>
+			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">
+				<?php echo $this->lang->line('stock_sap_panel_graph'); ?>
+			</a>
 		</div>
 		<div class="panel-body collapse" id="panel_graficos">
 			<div class="row">

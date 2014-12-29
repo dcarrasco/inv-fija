@@ -12,9 +12,18 @@ class Stock_reporte extends CI_Controller {
 		$this->lang->load('stock');
 
 		$this->arr_menu = array(
-			'permanencia' => array('url' => $this->uri->segment(1) . '/listado/permanencia', 'texto' => 'Permanencia'),
-			'mapastock'   => array('url' => $this->uri->segment(1) . '/mapastock', 'texto' => 'Mapa Stock'),
-			'movhist'     => array('url' => $this->uri->segment(1) . '/movhist', 'texto' => 'Consulta Movimientos'),
+			'permanencia' => array(
+				'url' => $this->uri->segment(1) . '/listado/permanencia',
+				'texto' => $this->lang->line('stock_perm_menu_perm'),
+			),
+			'mapastock' => array(
+				'url' => $this->uri->segment(1) . '/mapastock',
+				'texto' => $this->lang->line('stock_perm_menu_mapa'),
+				),
+			'movhist' => array(
+				'url' => $this->uri->segment(1) . '/movhist',
+				'texto' => $this->lang->line('stock_perm_menu_movs'),
+			),
 		);
 	}
 
