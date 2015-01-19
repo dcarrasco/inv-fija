@@ -29,6 +29,18 @@ body {
 	color:#fff
 }
 
+.navbar-inverse .navbar-brand {
+	color:#dfdfdf
+}
+
+.navbar-inverse .navbar-text{
+	color:#dfdfdf
+}
+
+.navbar-inverse .navbar-nav>li>a{
+	color:#dfdfdf
+}
+
 .tab-pane {
 	border-bottom: 1px solid #ddd;
 	padding: 10px;
