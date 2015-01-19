@@ -35,33 +35,47 @@
 						<?php echo $this->lang->line('stock_analisis_label_reports'); ?>
 					</label>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_mov', 'show', set_checkbox('show_mov', 'show', TRUE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_movimientos'); ?>
+						<label>
+							<?php echo form_checkbox('show_mov', 'show', set_checkbox('show_mov', 'show', TRUE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_movimientos'); ?>
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('ult_mov', 'show', set_checkbox('ult_mov', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_filtrar_ultmov'); ?>
+						<label>
+							<?php echo form_checkbox('ult_mov', 'show', set_checkbox('ult_mov', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_filtrar_ultmov'); ?>
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_despachos', 'show', set_checkbox('show_despachos', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_despachos'); ?>
+						<label>
+							<?php echo form_checkbox('show_despachos', 'show', set_checkbox('show_despachos', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_despachos'); ?>
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_stock_sap', 'show', set_checkbox('show_stock_sap', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_stock_sap'); ?>
+						<label>
+							<?php echo form_checkbox('show_stock_sap', 'show', set_checkbox('show_stock_sap', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_stock_sap'); ?>
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_stock_scl', 'show', set_checkbox('show_stock_scl', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_stock_scl'); ?>
+						<label>
+							<?php echo form_checkbox('show_stock_scl', 'show', set_checkbox('show_stock_scl', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_stock_scl'); ?>
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_trafico'); ?>
-						(<?php echo anchor($this->uri->segment(1) . '/trafico_por_mes',$this->lang->line('stock_analisis_link_detalle_trafico')); ?>)
+						<label>
+							<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_trafico'); ?>
+							(<?php echo anchor($this->uri->segment(1) . '/trafico_por_mes',$this->lang->line('stock_analisis_link_detalle_trafico')); ?>)
+						</label>
 					</div>
 					<div class="checkbox">
-						<?php echo form_checkbox('show_gdth', 'show', set_checkbox('show_gdth', 'show', FALSE)); ?>
-						<?php echo $this->lang->line('stock_analisis_check_gestor'); ?>
+						<label>
+							<?php echo form_checkbox('show_gdth', 'show', set_checkbox('show_gdth', 'show', FALSE)); ?>
+							<?php echo $this->lang->line('stock_analisis_check_gestor'); ?>
+						</label>
 					</div>
 				</div>
 			</div>

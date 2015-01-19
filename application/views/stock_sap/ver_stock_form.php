@@ -20,12 +20,16 @@
 							<?php echo $this->lang->line('stock_sap_label_dates'); ?>
 						</label>
 						<div class="radio">
-							<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
-							<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
+							<label>
+								<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
+								<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
+							</label>
 						</div>
 						<div class="radio">
-							<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-							<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
+							<label>
+								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
+								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
+							</label>
 						</div>
 						<div id="show_fecha_ultimodia">
 							<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
@@ -42,19 +46,25 @@
 							<?php echo $this->lang->line('stock_sap_label_alm'); ?>
 						</label>
 						<div class="radio">
-							<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
-							<?php echo $this->lang->line('stock_sap_radio_alm1'); ?>
+							<label>
+								<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
+								<?php echo $this->lang->line('stock_sap_radio_alm1'); ?>
+							</label>
 						</div>
 						<div class="radio">
-							<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
-							<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
+							<label>
+								<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
+								<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
+							</label>
 						</div>
 						<div id="show_tiposalm">
 							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 							<div>
 								<div class="checkbox">
-									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
-									<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
+									<label>
+										<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
+										<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
+									</label>
 								</div>
 							</div>
 						</div>
@@ -78,16 +88,22 @@
 						-->
 
 						<div class="checkbox">
-							<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
-							<?php echo $this->lang->line('stock_sap_check_mat'); ?>
+							<label>
+								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
+								<?php echo $this->lang->line('stock_sap_check_mat'); ?>
+							</label>
 						</div>
 						<div class="checkbox">
-							<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
-							<?php echo $this->lang->line('stock_sap_check_lotes'); ?>
+							<label>
+								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
+								<?php echo $this->lang->line('stock_sap_check_lotes'); ?>
+							</label>
 						</div>
 						<div class="checkbox">
-							<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
-							<?php echo $this->lang->line('stock_sap_check_tipstock'); ?>
+							<label>
+								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
+								<?php echo $this->lang->line('stock_sap_check_tipstock'); ?>
+							</label>
 						</div>
 
 						<?php if($tipo_op == 'MOVIL'): ?>
