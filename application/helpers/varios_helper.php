@@ -64,7 +64,7 @@ if ( ! function_exists('fmt_cantidad'))
 {
 	function fmt_cantidad($valor = 0, $decimales = 0)
 	{
-		return ($valor == 0) ? '' : number_format($valor, $decimales, ',', '.');
+		return ($valor == 0) ? ' ' : number_format($valor, $decimales, ',', '.');
 	}
 }
 
