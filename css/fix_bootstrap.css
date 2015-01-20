@@ -2,6 +2,10 @@
 	font-size: 85%;
 }
 
+.search_found {
+	background-color: #d9edf7;
+}
+
 body {
 	font-family: "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
@@ -59,7 +63,7 @@ body {
 .navbar-nav > li > ul.dropdown-menu > li,
 .navbar-nav > li > ul.dropdown-menu > li > a {
 	background-color: #005466;
-	color: #DFDFDF;
+	color: #dfdfdf;
 }
 
 .navbar-nav > li > ul.dropdown-menu > li.active > a {

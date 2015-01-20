@@ -67,12 +67,11 @@ $(document).ready(function() {
 
 	$('#filtrar_material').keyup(function (event) {
 		var a_buscar = $('#filtrar_material').val().toUpperCase();
+
 		if (a_buscar.length > 2) {
 			$('tr.not_found').show();
 			$('tr.not_found').removeClass('not_found');
-
-			$('table tr').each(function() {
-				console.log()
+			$('table.reporte tr').each(function() {
 				var nodo_texto1 = $(this).children('td:eq(1)'),
 					nodo_texto2 = $(this).children('td:eq(2)'),
 					nodo_texto;
@@ -88,10 +87,14 @@ $(document).ready(function() {
 			$('#filtrar_material').addClass('search_found');
 		} else {
 			$('#filtrar_material').removeClass('search_found');
+			$('tr.not_found').show();
+			$('tr.not_found').removeClass('not_found');
 		}
 	});
 
-	$('table th a').click(function (event) {
+	$('table th span').css('cursor', 'pointer');
+
+	$('table th span').click(function (event) {
 		event.preventDefault();
 		$('form input[name="order_by"]').val($(this).attr('order_by'));
 		$('form input[name="order_sort"]').val($(this).attr('order_sort'));

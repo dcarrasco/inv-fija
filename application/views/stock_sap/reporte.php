@@ -138,7 +138,9 @@ $(document).ready(function() {
 		}
 	});
 
-	$('table th a').click(function (event) {
+	$('table th span').css('cursor', 'pointer');
+
+	$('table th span').click(function (event) {
 		event.preventDefault();
 		$('form#frm_param input[name="order_by"]').val($(this).attr('order_by'));
 		$('form#frm_param input[name="order_sort"]').val($(this).attr('order_sort'));

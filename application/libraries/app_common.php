@@ -227,7 +227,7 @@ class App_common {
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
 			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
-			array_push($tabla, anchor('#', $arr_param_campo['titulo'], array('order_by' => $campo, 'order_sort' => $arr_param_campo['order_by'])));
+			array_push($tabla, '<span order_by="' . $campo . '" order_sort="' . $arr_param_campo['order_by'] . '">' . $arr_param_campo['titulo'] . '</span>');
 			array_push($tabla, $arr_param_campo['img_orden']);
 			array_push($tabla, '</th>');
 
