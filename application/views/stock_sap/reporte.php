@@ -20,6 +20,7 @@
 
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
+
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
@@ -30,20 +31,15 @@
 
 						<div class="pull-right">
 							<div class="radio-inline">
-								<label>
-									<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"') ?>
-									<?php echo $this->lang->line('stock_perm_radio_movil'); ?>
-								</label>
+								<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"'); ?>
+								<?php echo $this->lang->line('stock_perm_radio_movil'); ?>
 							</div>
 							<div class="radio-inline">
-								<label>
-									<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"') ?>
-									<?php echo $this->lang->line('stock_perm_radio_fija'); ?>
-								</label>
+								<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"'); ?>
+								<?php echo $this->lang->line('stock_perm_radio_fija'); ?>
 							</div>
 						</div>
 					</div>
-
 				</div>
 
 				<div class="col-md-3">
@@ -97,10 +93,9 @@
 								<?php echo $this->lang->line('stock_perm_button_report'); ?>
 							</button>
 						</div>
-
 					</div>
-
 				</div>
+
 			</div>
 		</div>
 
@@ -112,7 +107,7 @@
 
 <div>
 	<?php echo $reporte; ?>
-</div> <!-- fin content-module-main -->
+</div>
 
 <script type="text/javascript">
 $(document).ready(function() {
