@@ -4,7 +4,7 @@
 		<div class="input-group input-group-sm">
 			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="'. $this->lang->line('inventario_report_filter') .'" onKeyPress="return event.keyCode!=13"'); ?>
 			<span class="input-group-btn">
-				<button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+				<button type="submit" class="btn btn-default" id="btn_filtrar"><span class="glyphicon glyphicon-search"></span></button>
 			</span>
 		</div>
 	</div>
@@ -65,6 +65,8 @@ $(document).ready(function() {
 		$('form').submit();
 	});
 
+	$('[data-toggle="tooltip"]').tooltip();
+
 	$('#filtrar_material').keyup(function (event) {
 		var a_buscar = $('#filtrar_material').val().toUpperCase();
 
@@ -85,8 +87,10 @@ $(document).ready(function() {
 			});
 			$('tr.not_found').hide();
 			$('#filtrar_material').addClass('search_found');
+			$('#btn_filtrar').removeClass('btn-default').addClass('btn-primary');
 		} else {
 			$('#filtrar_material').removeClass('search_found');
+			$('#btn_filtrar').removeClass('btn-primary').addClass('btn-default');
 			$('tr.not_found').show();
 			$('tr.not_found').removeClass('not_found');
 		}
@@ -113,7 +117,8 @@ $(document).ready(function() {
 	$('td.subtotal[colspan]').parent().each(function(i) {
 		if ($(this).size() == 1) {
 			if ($(this).children(':eq(1)').html() != '&nbsp;') {
-				$(this).children(':eq(1)').html('<span>[-]</span>' + $(this).children(':eq(1)').html());
+				$(this).children(':eq(1)').html('<span class="glyphicon glyphicon-minus-sign"></span> ' + $(this).children(':eq(1)').html());
+				$(this).children(':eq(1)').css('cursor', 'pointer');
 				$(this).addClass('tr_subtotal_' + i);
 				$(this).children().addClass('tr_subtotal');
 			}
@@ -125,10 +130,14 @@ $(document).ready(function() {
 		$(this).nextUntil('tr[class^="tr_subtotal_"]').addClass(clase + '_data');
 	})
 
-	$('td.tr_subtotal').click(function() {
-		var clase = $(this).parent().attr('class');
-		var txt_expand = ($(this).parent().next().is(':visible')) ? '[+]' : '[-]';
-		$(this).children('span').html(txt_expand);
+	$('table.reporte td.tr_subtotal').click(function() {
+		var icon_plus   = 'glyphicon-plus-sign',
+			icon_minus  = 'glyphicon-minus-sign',
+			clase       = $(this).parent().attr('class');
+		var icon_expand = ($(this).parent().next().is(':visible')) ? icon_plus : icon_minus;
+
+		$(this).children('span').removeClass(icon_minus).removeClass(icon_plus);
+		$(this).children('span').addClass(icon_expand);
 		$('tr.' + clase + '_data').toggle();
 	});
 

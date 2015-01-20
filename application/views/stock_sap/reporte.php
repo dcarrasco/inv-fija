@@ -116,6 +116,7 @@ $(document).ready(function() {
 	});
 
 
+	$('[data-toggle="tooltip"]').tooltip();
 
 	$('#filtrar_material').keyup(function (event) {
 		$('tr.not_found').show();
@@ -137,6 +138,7 @@ $(document).ready(function() {
 			$('#filtrar_material').removeClass('search_found');
 		}
 	});
+
 
 	$('table th span').css('cursor', 'pointer');
 

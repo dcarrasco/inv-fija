@@ -135,7 +135,7 @@
 
 		$('form#frm_agregar select[name="agr-tipo_inventario"]').change(function() {
 
-			var url_json_ubic = js_base_url + 'config2/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
+			var url_json_ubic = js_base_url + 'inventario_config/get_json_ubicaciones_libres/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_ubic, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {
@@ -144,7 +144,7 @@
 				$('select[name="agr-ubicacion[]"]').empty().append(items.join(''));
 			});
 
-			var url_json_tipo = js_base_url + 'config2/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
+			var url_json_tipo = js_base_url + 'inventario_config/get_json_tipo_ubicacion/' + $(this).val() + '/' + Date.now();
 			$.getJSON(url_json_tipo, function(data) {
 				var items = [];
 				$.each(data, function(key, val) {
