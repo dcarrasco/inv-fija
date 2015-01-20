@@ -9,32 +9,34 @@
 	<?php echo form_open($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
-	<table class="table table-bordered table-hover table-condensed reporte">
+	<table class="table table-hover table-condensed reporte">
+
+		<!-- encabezado -->
 		<thead>
 			<tr>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_material'); ?>
 				</th>
 				<th>
 					<?php echo $this->lang->line('inventario_digit_th_descripcion'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_lote'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_centro'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_almacen'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?>
 				</th>
-				<!-- <th>hu</th> -->
-				<th>
+				<!-- <th class="text-center">hu</th> -->
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_hoja'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_UM'); ?>
 				</th>
 				<th class="text-center">
@@ -52,37 +54,56 @@
 				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_tipo_dif'); ?>
 				</th>
-				<th>
+				<th class="text-center">
 					<?php echo $this->lang->line('inventario_digit_th_observacion_ajuste'); ?>
 				</th>
 			</tr>
 		</thead>
 
+		<!-- cuerpo -->
 		<tbody>
 			<?php $sum_sap = 0; $sum_fisico = 0; $sum_ajuste = 0; ?>
+			<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
 			<?php $tab_index = 10; ?>
 			<?php $cat_ant = ''; ?>
 			<?php foreach ($detalle_ajustes->get_model_all() as $detalle): ?>
-				<?php if($cat_ant != $detalle->catalogo and $cat_ant != ''): ?>
+				<?php if ($cat_ant != $detalle->catalogo AND $cat_ant != ''): ?>
+					<tr class="active">
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste); ?></strong></td>
+						<td></td>
+						<td></td>
+					</tr>
 					<tr>
 						<td colspan="15">&nbsp;</td>
 					</tr>
+					<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
 				<?php endif; ?>
 
 				<tr>
-					<td><?php echo $detalle->catalogo; ?></td>
-					<td><?php echo $detalle->descripcion; ?></td>
-					<td><?php echo $detalle->lote; ?></td>
-					<td><?php echo $detalle->centro; ?></td>
-					<td><?php echo $detalle->almacen; ?></td>
-					<td><?php echo $detalle->ubicacion; ?></td>
-					<!-- <td><?php //echo $detalle->hu; ?></td> -->
-					<td><?php echo $detalle->hoja; ?></td>
-					<td><?php echo $detalle->um; ?></td>
+					<td class="text-center"><?php echo ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
+					<td><?php echo ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
+					<td class="text-center"><?php echo $detalle->lote; ?></td>
+					<td class="text-center"><?php echo $detalle->centro; ?></td>
+					<td class="text-center"><?php echo $detalle->almacen; ?></td>
+					<td class="text-center"><?php echo $detalle->ubicacion; ?></td>
+					<!-- <td class="text-center"><?php //echo $detalle->hu; ?></td> -->
+					<td class="text-center"><?php echo $detalle->hoja; ?></td>
+					<td class="text-center"><?php echo $detalle->um; ?></td>
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_fisico); ?></td>
 					<td>
-						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm" size="5" tabindex="' . $tab_index . '"'); ?>
+						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="' . $tab_index . '"'); ?>
 						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
 					</td>
 					<td class="text-center">
@@ -106,21 +127,40 @@
 							</button>
 						<?php endif; ?>
 					</td>
-					<!--
-					<td style="<?php echo (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0) ? 'background-color: yellow; color: black' : ((($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0) ? 'background-color: red; color: white' : 'background-color: green; color: white'); ?>">
-						<strong><?php echo (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0) ? 'Sobrante' : ((($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0) ? 'Faltante' : 'OK'); ?></strong>
-					</td>
-					-->
-					<td>
+					<td class="text-center">
 						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $detalle->stock_sap; $sum_fisico += $detalle->stock_fisico; $sum_ajuste += $detalle->stock_ajuste?>
+				<?php $subtot_sap += $detalle->stock_sap; $subtot_fisico += $detalle->stock_fisico; $subtot_ajuste += $detalle->stock_ajuste?>
 				<?php $tab_index += 1; ?>
 				<?php $cat_ant = $detalle->catalogo; ?>
 			<?php endforeach; ?>
 
-			<!-- totales -->
+			<!-- subtotales (ultima linea) -->
+			<tr class="active">
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste); ?></strong></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan="15">&nbsp;</td>
+			</tr>
+		</tbody>
+
+		<!-- totales -->
+		<tfoot>
 			<tr>
 				<td></td>
 				<td></td>
@@ -143,7 +183,7 @@
 					</button>
 				</td>
 			</tr>
-		</tbody>
+		</tfoot>
 	</table>
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
