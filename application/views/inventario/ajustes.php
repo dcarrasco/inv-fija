@@ -77,10 +77,10 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, true); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, true); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, true); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, true); ?></strong></td>
 						<td></td>
 						<td></td>
 					</tr>
@@ -147,10 +147,10 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, true); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, true); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, true); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, true); ?></strong></td>
 				<td></td>
 				<td></td>
 			</tr>

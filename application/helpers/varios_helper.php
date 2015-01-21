@@ -62,9 +62,11 @@ if ( ! function_exists('form_has_error'))
 
 if ( ! function_exists('fmt_cantidad'))
 {
-	function fmt_cantidad($valor = 0, $decimales = 0)
+	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = false)
 	{
-		return ($valor == 0) ? ' ' : number_format($valor, $decimales, ',', '.');
+		$cero = $mostrar_cero ? '0' : ' ';
+
+		return ($valor == 0) ? $cero : number_format($valor, $decimales, ',', '.');
 	}
 }
 
@@ -77,7 +79,7 @@ if ( ! function_exists('fmt_monto'))
 	{
 		if ($monto == 0)
 		{
-			return '';
+			return ' ';
 		}
 		else
 		{
