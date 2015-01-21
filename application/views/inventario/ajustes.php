@@ -1,9 +1,17 @@
 <div>
-	<?php echo anchor(
-		$this->uri->segment(1) . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
-		($ocultar_regularizadas == 0) ? $this->lang->line('inventario_adjust_link_hide') : $this->lang->line('inventario_adjust_link_show')
-	); ?>
+	<div class="pull-left">
+		<strong>Inventario</strong>
+		<?php echo $inventario; ?>
+	</div>
+	<div class="pull-right">
+		<?php echo anchor(
+			$this->uri->segment(1) . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
+			($ocultar_regularizadas == 0) ? $this->lang->line('inventario_adjust_link_hide') : $this->lang->line('inventario_adjust_link_show')
+		); ?>
+	</div>
 </div>
+<hr>
+
 
 <div>
 	<?php echo form_open($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
@@ -14,49 +22,20 @@
 		<!-- encabezado -->
 		<thead>
 			<tr>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_material'); ?>
-				</th>
-				<th>
-					<?php echo $this->lang->line('inventario_digit_th_descripcion'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_lote'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_centro'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_almacen'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?>
-				</th>
-				<!-- <th class="text-center">hu</th> -->
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_hoja'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_UM'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_cant_ajuste'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_dif'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_tipo_dif'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_observacion_ajuste'); ?>
-				</th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_material'); ?></th>
+				<th><?php echo $this->lang->line('inventario_digit_th_descripcion'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_lote'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_centro'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_almacen'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_hoja'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_UM'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_ajuste'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_dif'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_tipo_dif'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_observacion_ajuste'); ?></th>
 			</tr>
 		</thead>
 

@@ -87,6 +87,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+				'inventario'            => $this->id_inventario . ' - ' . $this->nombre_inventario,
 				'detalle_ajustes'       => $detalle_ajustes,
 				'ocultar_regularizadas' => $ocultar_regularizadas,
 				'pag'                   => $pag,
