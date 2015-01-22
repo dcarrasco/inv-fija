@@ -10,17 +10,17 @@
 		); ?>
 	</div>
 </div>
-<hr>
+<hr/>
 
 
 <div>
 	<?php echo form_open($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
-	<table class="table table-hover table-condensed reporte">
+	<table class="table table-hover table-condensed reporte table-fixed-header">
 
 		<!-- encabezado -->
-		<thead>
+		<thead class="header">
 			<tr>
 				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_material'); ?></th>
 				<th><?php echo $this->lang->line('inventario_digit_th_descripcion'); ?></th>
@@ -164,6 +164,7 @@
 			</tr>
 		</tfoot>
 	</table>
+	<script type="text/javascript" src="<?php echo base_url(); ?>js/reporte.js"></script>
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 

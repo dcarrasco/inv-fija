@@ -139,48 +139,5 @@ $(document).ready(function() {
 		}
 	});
 
-
-	$('table th span').css('cursor', 'pointer');
-
-	$('table th span').click(function (event) {
-		event.preventDefault();
-		$('form#frm_param input[name="order_by"]').val($(this).attr('order_by'));
-		$('form#frm_param input[name="order_sort"]').val($(this).attr('order_sort'));
-		$('#frm_param').submit();
-	});
-
-	$('div.content-module-main td a').click(function (event) {
-		event.preventDefault();
-		$('form').attr('action', ($(this).attr('href')));
-		$('form input[name="order_by"]').val('');
-		$('form input[name="order_sort"]').val('');
-		$('form').submit();
-	});
-
-
-	$('td.subtotal[colspan]').parent().each(function(i) {
-		if ($(this).size() == 1) {
-			if ($(this).children().html() != '&nbsp;') {
-				$(this).children(':first').html('<span>[-]</span>' + $(this).children(':first').html());
-				$(this).addClass('tr_subtotal_' + i);
-				$(this).children().addClass('tr_subtotal');
-			}
-		}
-	});
-
-	$('tr[class^="tr_subtotal_"]').each(function() {
-		var clase = $(this).attr('class');
-		$(this).nextUntil('tr[class^="tr_subtotal_"]').addClass(clase + '_data');
-	})
-
-	$('td.tr_subtotal').click(function() {
-		var clase = $(this).parent().attr('class');
-		var txt_expand = ($(this).parent().next().is(':visible')) ? '[+]' : '[-]';
-		$(this).children('span').html(txt_expand);
-		$('tr.' + clase + '_data').toggle();
-	});
-
-
-
 });
 </script>

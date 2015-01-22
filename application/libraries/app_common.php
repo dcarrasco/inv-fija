@@ -218,10 +218,10 @@ class App_common {
 		$subtot_ant = array();
 		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
 
-		array_push($tabla, '<br/><table class="table table-striped table-hover table-condensed reporte">');
+		array_push($tabla, '<br/><table class="table table-striped table-hover table-condensed reporte table-fixed-header">');
 
 		// --- ENCABEZADO REPORTE ---
-		array_push($tabla, '<thead>');
+		array_push($tabla, '<thead class="header">');
 		array_push($tabla, '<tr>');
 		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
@@ -357,6 +357,7 @@ class App_common {
 
 		array_push($tabla, '</tfoot>');
 		array_push($tabla, '</table>');
+		array_push($tabla, '<script type="text/javascript" src="' . base_url() . 'js/reporte.js"></script>');
 
 		return (implode('', $tabla));
 	}

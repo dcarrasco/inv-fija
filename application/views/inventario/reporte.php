@@ -96,52 +96,5 @@ $(document).ready(function() {
 		}
 	});
 
-	$('table th span').css('cursor', 'pointer');
-
-	$('table th span').click(function (event) {
-		event.preventDefault();
-		$('form input[name="order_by"]').val($(this).attr('order_by'));
-		$('form input[name="order_sort"]').val($(this).attr('order_sort'));
-		$('form').submit();
-	});
-
-	$('div.content-module-main td a').click(function (event) {
-		event.preventDefault();
-		$('form').attr('action', ($(this).attr('href')));
-		$('form input[name="order_by"]').val('');
-		$('form input[name="order_sort"]').val('');
-		$('form').submit();
-	});
-
-
-	$('td.subtotal[colspan]').parent().each(function(i) {
-		if ($(this).size() == 1) {
-			if ($(this).children(':eq(1)').html() != '&nbsp;') {
-				$(this).children(':eq(1)').html('<span class="glyphicon glyphicon-minus-sign"></span> ' + $(this).children(':eq(1)').html());
-				$(this).children(':eq(1)').css('cursor', 'pointer');
-				$(this).addClass('tr_subtotal_' + i);
-				$(this).children().addClass('tr_subtotal');
-			}
-		}
-	});
-
-	$('tr[class^="tr_subtotal_"]').each(function() {
-		var clase = $(this).attr('class');
-		$(this).nextUntil('tr[class^="tr_subtotal_"]').addClass(clase + '_data');
-	})
-
-	$('table.reporte td.tr_subtotal').click(function() {
-		var icon_plus   = 'glyphicon-plus-sign',
-			icon_minus  = 'glyphicon-minus-sign',
-			clase       = $(this).parent().attr('class');
-		var icon_expand = ($(this).parent().next().is(':visible')) ? icon_plus : icon_minus;
-
-		$(this).children('span').removeClass(icon_minus).removeClass(icon_plus);
-		$(this).children('span').addClass(icon_expand);
-		$('tr.' + clase + '_data').toggle();
-	});
-
-
-
 });
 </script>
