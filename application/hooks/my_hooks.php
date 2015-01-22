@@ -20,7 +20,7 @@ class myHooks {
 
 		if (ENVIRONMENT != 'production')
 		{
-			$CI_local->output->enable_profiler(TRUE);
+			//$CI_local->output->enable_profiler(TRUE);
 		}
 	}
 

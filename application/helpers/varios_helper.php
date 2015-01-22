@@ -85,11 +85,11 @@ if ( ! function_exists('fmt_monto'))
 		{
 			if (strtoupper($unidad) == 'UN')
 			{
-				return $signo_moneda . ' ' . number_format($monto, 0, ',', '.');
+				return $signo_moneda . '&nbsp;' . number_format($monto, 0, ',', '.');
 			}
 			elseif (strtoupper($unidad) == 'MM')
 			{
-				return 'MM' . $signo_moneda . ' ' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
+				return 'MM' . $signo_moneda . '&nbsp;' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
 			}
 		}
 	}

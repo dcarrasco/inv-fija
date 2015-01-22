@@ -265,7 +265,9 @@ class App_common {
 							foreach ($arr_campos as $c => $arr_c)
 							{
 								array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+								array_push($tabla, '<strong>');
 								array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
+								array_push($tabla, '</strong>');
 								array_push($tabla, '</td>');
 							}
 
@@ -289,7 +291,9 @@ class App_common {
 						}
 
 						array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">');
+						array_push($tabla, '<strong>');
 						array_push($tabla, ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : '');
+						array_push($tabla, '</strong>');
 						array_push($tabla, '</td>');
 						array_push($tabla, '</tr>');
 						array_push($tabla, '<tr>');
@@ -325,7 +329,9 @@ class App_common {
 				foreach ($arr_campos as $c => $arr_c)
 				{
 					array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+					array_push($tabla, '<strong>');
 					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
+					array_push($tabla, '</strong>');
 					array_push($tabla, '</td>');
 				}
 
@@ -337,17 +343,19 @@ class App_common {
 		}
 
 		// totales
+		array_push($tabla, '</tbody>');
+		array_push($tabla, '<tfoot>');
 		array_push($tabla, '<tr>');
-		array_push($tabla, '<td></td>');
+		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
-			array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"') . '>');
+			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"') . '>');
 			array_push($tabla, in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($totales[$campo], $arr_param_campo) : '');
-			array_push($tabla, '</td>');
+			array_push($tabla, '</th>');
 		}
 		array_push($tabla, '</tr>');
 
-		array_push($tabla, '</tbody>');
+		array_push($tabla, '</tfoot>');
 		array_push($tabla, '</table>');
 
 		return (implode('', $tabla));
