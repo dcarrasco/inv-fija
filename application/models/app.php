@@ -9,7 +9,7 @@ class App extends ORM_Model {
 		$cfg = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_app'),
-				'model_label'        => 'Aplicacion',
+				'model_label'        => 'Aplicaci&oacute;n',
 				'model_label_plural' => 'Aplicaciones',
 				'model_order_by'     => 'app',
 			),
@@ -18,38 +18,38 @@ class App extends ORM_Model {
 					'tipo'   => 'id',
 				),
 				'app' => array(
-					'label'          => 'Aplicacion',
+					'label'          => 'Aplicaci&oacute;n',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre de la aplicación. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Nombre de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'descripcion' => array(
-					'label'          => 'Descripcion de la Aplicacion',
+					'label'          => 'Descripci&oacute;n de la Aplicaci&oacute;n',
 					'tipo'           =>  'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Breve descripcion de la aplicacion. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Breve descripcion de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'orden' => array(
-					'label'          => 'Orden de la Aplicacion',
+					'label'          => 'Orden de la Aplicaci&oacute;n',
 					'tipo'           =>  'int',
-					'texto_ayuda'    => 'Orden de la aplicacion en el menu.',
+					'texto_ayuda'    => 'Orden de la aplicaci&oacute;n en el menu.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'url' => array(
-					'label'          => 'Direccion de la Aplicacion',
+					'label'          => 'Direcci&oacute;n de la Aplicaci&oacute;n',
 					'tipo'           =>  'char',
 					'largo'          => 100,
-					'texto_ayuda'    => 'Dirección web (URL) de la aplicacion. Maximo 100 caracteres.',
+					'texto_ayuda'    => 'Direcci&oacute;n web (URL) de la aplicaci&oacute;n. M&aacute;ximo 100 caracteres.',
 				),
 				'icono' => array(
-					'label'          => 'Icono de la apliacion',
+					'label'          => '&Iacute;cono de la aplicaci&oacute;n',
 					'tipo'           =>  'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del archivo del icono de la aplicacion. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Nombre del archivo del &iacute;cono de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 				),
 			),
 		);

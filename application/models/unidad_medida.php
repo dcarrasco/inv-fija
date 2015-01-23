@@ -18,16 +18,16 @@ class Unidad_medida extends ORM_Model {
 					'label'          => 'Unidad',
 					'tipo'           => 'char',
 					'largo'          => 10,
-					'texto_ayuda'    => 'Unidad de medida. Maximo 10 caracteres.',
+					'texto_ayuda'    => 'Unidad de medida. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'desc_unidad' => array(
-					'label'          => 'Descripcion unidad de medida',
+					'label'          => 'Descripci&oacute;n unidad de medida',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Descripción de la unidad de medida. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),

@@ -18,7 +18,7 @@ class Centro extends ORM_Model {
 					'label'          => 'Centro',
 					'tipo'           => 'char',
 					'largo'          => 10,
-					'texto_ayuda'    => 'Nombre del centro. Maximo 10 caracteres.',
+					'texto_ayuda'    => 'Nombre del centro. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE

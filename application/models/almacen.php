@@ -9,16 +9,16 @@ class Almacen extends ORM_Model {
 		$cfg = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_almacenes'),
-				'model_label'        => 'Almacen',
+				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'almacen',
 			),
 			'campos' => array(
 				'almacen' => array(
-					'label'          => 'Almacen',
+					'label'          => 'Almac&eacute;n',
 					'tipo'           => 'char',
 					'largo'          => 10,
-					'texto_ayuda'    => 'Nombre del almacen. Maximo 10 caracteres.',
+					'texto_ayuda'    => 'Nombre del almac&eacute;n. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE

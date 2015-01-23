@@ -15,17 +15,17 @@ class Familia extends ORM_Model {
 			),
 			'campos' => array(
 				'codigo' => array(
-					'label'          => 'Codigo de la familia',
+					'label'          => 'C&oacute;digo de la familia',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
 				),
 				'tipo' => array(
 					'label'          => 'Tipo de familia',
-					'tipo'           =>  'char',
+					'tipo'           => 'char',
 					'largo'          => 30,
 					'texto_ayuda'    => 'Seleccione el tipo de familia.',
 					'choices'        => array(
@@ -38,7 +38,7 @@ class Familia extends ORM_Model {
 					'label'          => 'Nombre de la familia',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
 				),

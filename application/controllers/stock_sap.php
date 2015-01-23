@@ -114,13 +114,10 @@ class Stock_sap extends CI_Controller {
 		}
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
+		$datos_grafico = array();
 		if ($tipo_op == 'MOVIL' AND count($stock) > 0)
 		{
 			$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
-		}
-		else
-		{
-			$datos_grafico = array();
 		}
 
 		$data = array(

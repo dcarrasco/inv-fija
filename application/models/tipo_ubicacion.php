@@ -9,8 +9,8 @@ class Tipo_ubicacion extends ORM_Model {
 		$cfg = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_tipo_ubicacion'),
-				'model_label'        => 'Tipo de ubicacion',
-				'model_label_plural' => 'Tipos de ubicacion',
+				'model_label'        => 'Tipo de ubicaci&oacute;n',
+				'model_label_plural' => 'Tipos de ubicaci&oacute;n',
 				'model_order_by'     => 'tipo_inventario, tipo_ubicacion',
 			),
 			'campos' => array(
@@ -26,10 +26,10 @@ class Tipo_ubicacion extends ORM_Model {
 					'es_obligatorio' => TRUE,
 				),
 				'tipo_ubicacion' => array(
-					'label'          => 'Tipo de ubicacion',
-					'tipo'           =>  'char',
+					'label'          => 'Tipo de ubicaci&oacute;n',
+					'tipo'           => 'char',
 					'largo'          => 30,
-					'texto_ayuda'    => 'Maximo 30 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 30 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),

@@ -21,14 +21,14 @@ class Auditor extends ORM_Model {
 					'label'          => 'Nombre del auditor',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'activo' => array(
 					'label'          => 'Activo',
 					'tipo'           =>  'boolean',
-					'texto_ayuda'    => 'Indica se el auditor esta activo dentro del sistema.',
+					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 1
 				),

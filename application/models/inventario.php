@@ -21,14 +21,14 @@ class Inventario extends ORM_Model {
 					'label'          => 'Nombre del inventario',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'activo' => array(
 					'label'          => 'Activo',
-					'tipo'           =>  'boolean',
-					'texto_ayuda'    => 'Indica se el inventario esta activo dentro del sistema.',
+					'tipo'           => 'boolean',
+					'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 				),
 				'tipo_inventario' => array(

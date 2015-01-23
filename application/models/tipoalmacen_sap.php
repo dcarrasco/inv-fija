@@ -9,8 +9,8 @@ class Tipoalmacen_sap extends ORM_Model {
 		$cfg = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_tiposalm_sap'),
-				'model_label'        => 'Tipo Almacen',
-				'model_label_plural' => 'Tipos de Almacen',
+				'model_label'        => 'Tipo Almac&eacute;n',
+				'model_label_plural' => 'Tipos de Almac&eacute;n',
 				'model_order_by'     => 'tipo_op, tipo',
 			),
 			'campos' => array(
@@ -25,20 +25,20 @@ class Tipoalmacen_sap extends ORM_Model {
 						'es_autoincrement' => TRUE,
 				),
 				'tipo' => array(
-					'label'          => 'Tipo de Almacen',
+					'label'          => 'Tipo de Almac&eacute;n',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Tipo del almacen. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Tipo del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'tipo_op' => array(
-					'label'          => 'Tipo operacion',
-					'tipo'           =>  'char',
+					'label'          => 'Tipo operaci&oacute;n',
+					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Seleccione el tipo de operación.',
+					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
 					'choices'        => array(
-						'MOVIL' => 'Operación Móvil',
-						'FIJA'  => 'Operación Fija'
+						'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
+						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
 				),
@@ -51,7 +51,7 @@ class Tipoalmacen_sap extends ORM_Model {
 						'id_many_table' => array('centro', 'cod_almacen'),
 						//'conditions'    => array('tipo_op' => 'tipo_op')
 					),
-					'texto_ayuda'    => 'Tipos asociados al almacen.',
+					'texto_ayuda'    => 'Tipos asociados al almac&eacute;n.',
 				),
 			),
 		);

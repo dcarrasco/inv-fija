@@ -22,21 +22,21 @@ class Rol extends ORM_Model {
 					'relation'       => array(
 						'model' => 'app',
 					),
-					'texto_ayuda'    => 'Aplicación a la que pertenece el rol.',
+					'texto_ayuda'    => 'Aplicaci&oacute;n a la que pertenece el rol.',
 				),
 				'rol' => array(
 					'label'          => 'Rol',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del rol. Maximo 50 caracteres.',
+					'texto_ayuda'    => 'Nombre del rol. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'descripcion' => array(
-					'label'          => 'Descripcion del rol',
-					'tipo'           =>  'char',
+					'label'          => 'Descripci&oacute;n del rol',
+					'tipo'           => 'char',
 					'largo'          => 100,
-					'texto_ayuda'    => 'Descripción del rol. Maximo 100 caracteres.',
+					'texto_ayuda'    => 'Descripci&oacute;n del rol. M&aacute;ximo 100 caracteres.',
 				),
 				'modulo' => array(
 					'tipo'           => 'has_many',
@@ -47,7 +47,7 @@ class Rol extends ORM_Model {
 						'id_many_table' => array('id_modulo'),
 						'conditions'    => array('id_app' => '@field_value:id_app'),
 					),
-					'texto_ayuda'    => 'Módulos del rol.',
+					'texto_ayuda'    => 'M&oacute;dulos del rol.',
 				),
 			),
 		);

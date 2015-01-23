@@ -15,10 +15,10 @@ class Proveedor extends ORM_Model {
 			),
 			'campos' => array(
 				'cod_proveedor' => array(
-					'label'          => 'Codigo del proveedor',
+					'label'          => 'C&oacute;digo del proveedor',
 					'tipo'           => 'char',
 					'largo'          => 10,
-					'texto_ayuda'    => 'Maximo 10 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
 					'es_id' => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
@@ -27,7 +27,7 @@ class Proveedor extends ORM_Model {
 					'label'          => 'Nombre del proveedor',
 					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Maximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => FALSE,
 				),

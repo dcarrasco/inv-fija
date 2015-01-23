@@ -9,31 +9,31 @@ class Catalogo extends ORM_Model {
 		$cfg = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_catalogos'),
-				'model_label'        => 'Catalogo',
-				'model_label_plural' => 'Catalogos',
+				'model_label'        => 'Cat&aacute;logo',
+				'model_label_plural' => 'Cat&aacute;logos',
 				'model_order_by'     => 'catalogo',
 			),
 			'campos' => array(
 				'catalogo' => array(
-					'label'          => 'Catalogo',
+					'label'          => 'Cat&aacute;logo',
 					'tipo'           => 'char',
 					'largo'          => 20,
-					'texto_ayuda'    => 'Código del catálogo. Máximo 20 caracteres',
+					'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'descripcion' => array(
-					'label'          => 'Descripcion del material',
-					'tipo'           =>  'char',
+					'label'          => 'Descripci&oacute;n del material',
+					'tipo'           => 'char',
 					'largo'          => 50,
-					'texto_ayuda'    => 'Descripción del material. Máximo 50 caracteres.',
+					'texto_ayuda'    => 'Descripci&oacute;n del material. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					//'es_unico'       => TRUE
 				),
 				'pmp' => array(
 					'label'          => 'Precio Medio Ponderado (PMP)',
-					'tipo'           =>  'real',
+					'tipo'           => 'real',
 					'largo'          => 10,
 					'decimales'      => 2,
 					'texto_ayuda'    => 'Valor PMP del material',
@@ -42,8 +42,8 @@ class Catalogo extends ORM_Model {
 				),
 				'es_seriado' => array(
 					'label'          => 'Material seriado',
-					'tipo'           =>  'boolean',
-					'texto_ayuda'    => 'Indica se el material esta seriado dentro del sistema.',
+					'tipo'           => 'boolean',
+					'texto_ayuda'    => 'Indica se el material est&aacute; seriado en el sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 0
 				),
