@@ -9,6 +9,15 @@ class Grafica_stock {
 
 	public function datos_grafico($stock = array(), $param = array())
 	{
+		$arr_param_key = array('fecha_ultimodia', 'fecha_todas');
+		foreach ($arr_param_key as $p)
+		{
+			if (!array_key_exists($p, $param))
+			{
+				$param[$p] = array();
+			}
+		}
+
 		$graph_q_equipos  = array();
 		$graph_q_simcard  = array();
 		$graph_q_otros    = array();
