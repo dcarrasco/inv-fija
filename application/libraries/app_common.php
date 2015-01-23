@@ -123,15 +123,15 @@ class App_common {
 	 */
 	public function form_validation_config()
 	{
-		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR: </strong>', '</div>');
+		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
 
-		$this->form_validation->set_message('required', 'Ingrese un valor para el campo "%s"');
-		$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
-		$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
-		$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
-		$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
-		$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
-		$this->form_validation->set_message('min_length', 'El largo minimo del campo "%s" debe ser %d');
+		//$this->form_validation->set_message('required', 'Ingrese un valor para el campo "%s"');
+		//$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
+		//$this->form_validation->set_message('greater_than', 'Seleccione un valor para "%s"');
+		//$this->form_validation->set_message('numeric', 'Ingrese un valor numérico para "%s"');
+		//$this->form_validation->set_message('integer', 'Ingrese un valor entero para "%s"');
+		//$this->form_validation->set_message('edit_unique', 'El valor del campo "%s" debe ser único');
+		//$this->form_validation->set_message('min_length', 'El largo minimo del campo "%s" debe ser %d');
 
 
 	}
