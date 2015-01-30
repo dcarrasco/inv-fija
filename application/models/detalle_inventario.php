@@ -91,7 +91,7 @@ class Detalle_inventario extends ORM_Model {
 					'es_obligatorio' => TRUE,
 				),
 				'stock_fisico' => array(
-					'label'          => 'Stock F&iacute;sico del material',
+					'label'          => 'Stock f&iacute;sico del material',
 					'tipo'           => 'int',
 					'largo'          => 10,
 					'texto_ayuda'    => 'Stock f&iacute;sico (inventariado) del material.',

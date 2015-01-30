@@ -239,40 +239,17 @@
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?>
-				</th>
-				<!-- <th>HU</th> -->
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_material'); ?>
-				</th>
-				<th>
-					<?php echo $this->lang->line('inventario_digit_th_descripcion'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_lote'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_centro'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_almacen'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_UM'); ?>
-				</th>
-				<th class="text-right" nowrap>
-					<?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?>
-				</th>
-				<th class="text-right">
-					<?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_HU'); ?>
-				</th>
-				<th class="text-center">
-					<?php echo $this->lang->line('inventario_digit_th_observacion'); ?>
-				</th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_material'); ?></th>
+				<th><?php echo $this->lang->line('inventario_digit_th_descripcion'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_lote'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_centro'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_almacen'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_UM'); ?></th>
+				<th class="text-right" nowrap><?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?></th>
+				<th class="text-right"><?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_HU'); ?></th>
+				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_observacion'); ?></th>
 			</tr>
 		</thead>
 		<tbody>

@@ -64,6 +64,8 @@ $config['bd_trafico_dias_proc']   = 'bd_controles..trafico_dias_procesados';
 $config['bd_pmp']                 = 'bd_planificacion..ca_stock_sap_04';
 
 
+// Despachos
+$config['bd_despachos_pack']       = 'bd_logistica..despachos_sap_res01_pack';
 
 
 /* End of file inv-fija.php */

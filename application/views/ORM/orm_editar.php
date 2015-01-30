@@ -5,11 +5,10 @@
 		<?php foreach ($modelo as $campo => $valor): ?>
 		<div class="form-group <?php echo form_has_error($campo); ?>">
 			<?php echo form_label(
-							ucfirst($modelo->get_label_field($campo)) .
-								$modelo->get_marca_obligatorio_field($campo),
-							"id_" . $campo,
-							array('class' => 'control-label col-sm-4')
-						);
+						ucfirst($modelo->get_label_field($campo)) .	$modelo->get_marca_obligatorio_field($campo),
+						"id_" . $campo,
+						array('class' => 'control-label col-sm-4')
+					);
 			?>
 			<div class="col-sm-7">
 				<?php echo $modelo->print_form_field($campo); ?>
