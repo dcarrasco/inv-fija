@@ -27,10 +27,17 @@ Modulo que permite controlar el acceso a las funciones de esta aplicacion a trav
 
 * Configuración ACL. Permite ingresar/modificar/eliminar datos a los maestros que soportan el control de acceso.
 
+## Modulo Despachos
+
+Modulo que permite generar reportes sobre los despachos de la operación móvil
+
+* Despachos retail. Permite visualizar documentos de despacho para un retail y materiales especificados.
+
 ## Requerimientos y especificaciones
 
 * PHP 5.3.x
 * SQL Server / MySQL
+* Codeigniter 3.0 RC2
 * JQuery 1.7.1
 * Bootstrap 3.0.0
 * JqPlot 1.0.8

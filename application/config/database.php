@@ -56,7 +56,7 @@ if (ENVIRONMENT == 'development-mac')
 	$active_group = 'mac';
 }
 
-$active_record = TRUE;
+$query_builder = TRUE;
 
 $db['default']['hostname'] = 'localhost';
 $db['default']['username'] = 'invfija';

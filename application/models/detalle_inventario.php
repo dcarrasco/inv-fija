@@ -241,7 +241,8 @@ class Detalle_inventario extends ORM_Model {
 			->where(
 				($ocultar_regularizadas == 1) ?
 				'stock_fisico - stock_sap + stock_ajuste <> 0' :
-				'stock_fisico - stock_sap <> 0'
+				'stock_fisico - stock_sap <> 0',
+				NULL, FALSE
 			)
 			->count_all_results($this->get_model_tabla());
 
@@ -254,7 +255,8 @@ class Detalle_inventario extends ORM_Model {
 			->where(
 				($ocultar_regularizadas == 1) ?
 				'stock_fisico - stock_sap + stock_ajuste <> 0' :
-				'stock_fisico - stock_sap <> 0'
+				'stock_fisico - stock_sap <> 0',
+				NULL, FALSE
 			)
 			->limit($per_page, $pag)
 			->get($this->get_model_tabla())

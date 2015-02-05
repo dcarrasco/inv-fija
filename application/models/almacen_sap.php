@@ -93,8 +93,8 @@ class Almacen_sap extends ORM_Model {
 		$arr_combo = array();
 
 		$this->CI->db
-			->select('a.centro + \'-\' + a.cod_almacen as llave')
-			->select('a.centro + \'-\' + a.cod_almacen + \' \' + a.des_almacen as valor')
+			->select('a.centro + \'-\' + a.cod_almacen as llave', FALSE)
+			->select('a.centro + \'-\' + a.cod_almacen + \' \' + a.des_almacen as valor', FALSE)
 			->order_by('a.centro, a.cod_almacen')
 			->where('a.tipo_op', $tipo_op)
 			->from($this->get_model_tabla() . ' a');
@@ -120,7 +120,7 @@ class Almacen_sap extends ORM_Model {
 			->select('s.centro, s.cod_bodega')
 			->from($this->CI->config->item('bd_stock_movil') . ' s')
 			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_movil') . ')')
+			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_movil') . ')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.cod_bodega')
@@ -131,7 +131,7 @@ class Almacen_sap extends ORM_Model {
 			->select('s.centro, s.almacen as cod_bodega')
 			->from($this->CI->config->item('bd_stock_fija') . ' s')
 			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_fija') . ')')
+			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_fija') . ')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.almacen')

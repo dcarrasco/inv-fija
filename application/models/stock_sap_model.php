@@ -106,11 +106,11 @@ class stock_sap_model extends CI_Model {
 				$this->db->select_sum('s.transito_traslado', 'TT');
 				$this->db->select_sum('s.otros','OT');
 
-				$this->db->select_sum('s.libre_utilizacion * p.pmp', 'VAL_LU');
-				$this->db->select_sum('s.bloqueado * p.pmp', 'VAL_BQ');
-				$this->db->select_sum('s.contro_calidad * p.pmp', 'VAL_CC');
-				$this->db->select_sum('s.transito_traslado * p.pmp', 'VAL_TT');
-				$this->db->select_sum('s.otros * p.pmp','VAL_OT');
+				$this->db->select_sum('(s.libre_utilizacion * p.pmp)', 'VAL_LU');
+				$this->db->select_sum('(s.bloqueado * p.pmp)', 'VAL_BQ');
+				$this->db->select_sum('(s.contro_calidad * p.pmp)', 'VAL_CC');
+				$this->db->select_sum('(s.transito_traslado * p.pmp)', 'VAL_TT');
+				$this->db->select_sum('(s.otros * p.pmp)','VAL_OT');
 			}
 			else
 			{
@@ -130,8 +130,8 @@ class stock_sap_model extends CI_Model {
 
 		if (in_array('material', $mostrar))
 		{
-			$this->db->select_sum('s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros','total');
-			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp','VAL_total');
+			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)','total');
+			$this->db->select_sum('((s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp)','VAL_total');
 		}
 		else
 		{
@@ -588,8 +588,8 @@ class stock_sap_model extends CI_Model {
 	private function _get_combo_fechas_movil()
 	{
 		$arr_result = $this->db
-			->select('convert(varchar(20), fecha_stock, 112) as llave')
-			->select('convert(varchar(20), fecha_stock, 102) as valor')
+			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
+			->select('convert(varchar(20), fecha_stock, 102) as valor', FALSE)
 			->order_by('llave','desc')
 			->get($this->config->item('bd_stock_movil_fechas'))
 			->result_array();
@@ -603,8 +603,8 @@ class stock_sap_model extends CI_Model {
 	private function _get_combo_fechas_fija()
 	{
 		$arr_result = $this->db
-			->select('convert(varchar(20), fecha_stock, 112) as llave')
-			->select('convert(varchar(20), fecha_stock, 103) as valor')
+			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
+			->select('convert(varchar(20), fecha_stock, 103) as valor', FALSE)
 			->order_by('llave','desc')
 			->get($this->config->item('bd_stock_fija_fechas'))
 			->result_array();

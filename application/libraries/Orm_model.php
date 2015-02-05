@@ -404,7 +404,7 @@ class ORM_Model implements Iterator {
 
 		if ($field->get_tipo() == 'has_many')
 		{
-			$reglas = '';
+			$reglas = 'trim';
 		}
 
 		$this->CI->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
@@ -884,20 +884,23 @@ class ORM_Model implements Iterator {
 	 */
 	public function get_from_array($rs = array())
 	{
-		foreach ($this->model_fields as $nombre => $metadata)
+		if ($rs)
 		{
-			if (array_key_exists($nombre, $rs))
+			foreach ($this->model_fields as $nombre => $metadata)
 			{
-				if ($metadata->get_tipo() == 'datetime')
+				if (array_key_exists($nombre, $rs))
 				{
-					if ($rs[$nombre] != '')
+					if ($metadata->get_tipo() == 'datetime')
 					{
-						$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($rs[$nombre]));
+						if ($rs[$nombre] != '')
+						{
+							$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($rs[$nombre]));
+						}
 					}
-				}
-				else
-				{
-					$this->fields_values[$nombre] = $rs[$nombre];
+					else
+					{
+						$this->fields_values[$nombre] = $rs[$nombre];
+					}
 				}
 			}
 		}

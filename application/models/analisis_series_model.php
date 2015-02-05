@@ -105,8 +105,8 @@ class Analisis_series_model extends CI_Model {
 				->select('m.*')
 				->select('a1.des_almacen as des_alm, a2.des_almacen as des_rec, u.nom_usuario')
 				->select('c.*')
-				->select('convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc')
-				->select('convert(varchar(20),fecha,103) as fec')
+				->select('convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc', FALSE)
+				->select('convert(varchar(20),fecha,103) as fec', FALSE)
 				->from($this->config->item('bd_movimientos_sap') . ' m')
 				->join($this->config->item('bd_cmv_sap') . ' c', 'm.cmv=c.cmv', 'left')
 				->join($this->config->item('bd_almacenes_sap') . ' a1', "a1.centro=m.ce and m.alm=a1.cod_almacen", 'left')
@@ -138,7 +138,7 @@ class Analisis_series_model extends CI_Model {
 		{
 			return $this->db->limit(1000)
 				->select('*')
-				->select('convert(varchar(20),fecha,120) as fecha_despacho')
+				->select('convert(varchar(20),fecha,120) as fecha_despacho', FALSE)
 				->from($this->config->item('bd_despachos_sap'))
 				->where_in('n_serie', $arr_series)
 				->get()
@@ -164,13 +164,13 @@ class Analisis_series_model extends CI_Model {
 		{
 			return $this->db->limit(1000)
 				->select('s.*, u.*, m.*')
-				->select('convert(varchar(20), fecha_stock, 103) as fecha')
-				->select('convert(varchar(20), modificado_el, 103) as modif_el')
+				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
+				->select('convert(varchar(20), modificado_el, 103) as modif_el', FALSE)
 				->select('a.des_almacen')
 				->from($this->config->item('bd_stock_seriado_sap') . ' s')
 				->join($this->config->item('bd_materiales_sap') . ' m', 's.material = m.cod_articulo', 'left')
-				->join($this->config->item('bd_almacenes_sap')  . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
-				->join($this->config->item('bd_usuarios_sap')   . ' u', 's.modificado_por=u.usuario', 'left')
+				->join($this->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
+				->join($this->config->item('bd_usuarios_sap') . ' u', 's.modificado_por=u.usuario', 'left')
 				->where_in('serie', $arr_series)
 				->get()
 				->result_array();
@@ -193,13 +193,12 @@ class Analisis_series_model extends CI_Model {
 		if (count($arr_series) > 0)
 		{
 			return $this->db->limit(1000)
-				->select('s.*, b.*, t.*')
-				->select('a.*, ts.*, u.*, e.*')
-				->select('convert(varchar(20), FECHA_STOCK, 103) as FECHA')
+				->select('s.*, b.*, t.*, a.*, ts.*, u.*, e.*')
+				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
 				->from($this->config->item('bd_stock_scl') . ' s')
 				->join($this->config->item('bd_al_bodegas') . ' b', 'cast(s.cod_bodega as varchar(10)) = b.cod_bodega', 'left')
-				->join($this->config->item('bd_al_tipos_bodegas') . ' t', 'cast(s.tip_bodega as varchar(10)) = t.tip_bodega', 'left')
-				->join($this->config->item('bd_materiales_sap') . ' a', 'cast(s.cod_articulo as varchar(10)) = a.cod_articulo', 'left')
+				->join($this->config->item('bd_al_tipos_bodegas') . ' t', '(cast(s.tip_bodega as varchar(10)) = t.tip_bodega)', 'left')
+				->join($this->config->item('bd_materiales_sap') . ' a', '(cast(s.cod_articulo as varchar(10)) = a.cod_articulo)', 'left')
 				->join($this->config->item('bd_al_tipos_stock') . ' ts', 's.tip_stock = ts.tipo_stock', 'left')
 				->join($this->config->item('bd_al_estados') . ' e', 's.cod_estado = e.cod_estado', 'left')
 				->join($this->config->item('bd_al_usos') . ' u', 's.cod_uso = u.cod_uso', 'left')
@@ -226,7 +225,7 @@ class Analisis_series_model extends CI_Model {
 		foreach ($arr_series as $serie)
 		{
 			$anomes = $this->db
-				->select_max('ano*100+mes', 'anomes')
+				->select_max('(ano*100+mes)', 'anomes')
 				->get($this->config->item('bd_trafico_dias_proc'))
 				->row()
 				->anomes;
@@ -236,8 +235,8 @@ class Analisis_series_model extends CI_Model {
 
 			$this->db
 				->select('t.*, a.*, c.*, b.*')
-				->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta')
-				->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja')
+				->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
+				->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
 				->from($this->config->item('bd_trafico_mes') . ' t')
 				->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 				->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
@@ -266,7 +265,7 @@ class Analisis_series_model extends CI_Model {
 
 		$this->db
 			->distinct()
-			->select('100*ano+mes as mes')
+			->select('(100*ano+mes) as mes', FALSE)
 			->from($this->config->item('bd_trafico_dias_proc'))
 			->order_by('mes desc');
 
@@ -303,8 +302,8 @@ class Analisis_series_model extends CI_Model {
 				$mes_mes = substr($mes,4,2);
 
 				$this->db->select('t.*, a.*, c.*, b.*')
-					->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta')
-					->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja')
+					->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
+					->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
 					->from($this->config->item('bd_trafico_mes') . ' t')
 					->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 					->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
@@ -405,7 +404,7 @@ class Analisis_series_model extends CI_Model {
 	private function _get_datos_comerciales($imei = '', $celular = '')
 	{
 		$maxfecha = $this->db
-			->select('max(convert(varchar(20), fec_alta, 112)) as fec_alta')
+			->select('max(convert(varchar(20), fec_alta, 112)) as fec_alta', FALSE)
 			->where('num_celular', $celular)
 			->get($this->config->item('bd_trafico_abocelamist'))
 			->row()
@@ -413,8 +412,8 @@ class Analisis_series_model extends CI_Model {
 
 		return $this->db
 			->select('a.tipo, a.num_celular, a.cod_situacion')
-			->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta')
-			->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja')
+			->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
+			->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
 			->select('c.num_ident as rut')
 			->select('c.nom_cliente + \' \' + c.ape1_cliente + \' \' + c.ape2_cliente as nombre')
 			->from($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
