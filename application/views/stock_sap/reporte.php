@@ -1,5 +1,5 @@
 <?php echo form_open('','id="frm_param"'); ?>
-<div class="accordion" id="accordion">
+<div class="accordion hidden-print" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<div class="row">

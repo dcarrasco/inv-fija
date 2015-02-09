@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row hidden-print">
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">

@@ -3,7 +3,7 @@
 </div>
 
 <?php echo form_open('','id="frm_ppal"'); ?>
-<div class="panel panel-default">
+<div class="panel panel-default hidden-print">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 			<?php echo $this->lang->line('stock_analisis_params'); ?>
