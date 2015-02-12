@@ -43,6 +43,7 @@ $(document).ready(function () {
         $('div.mostrar-ocultar').parent().parent().next().toggle();
     });
 
+    /**
     $('input[name="mostrar_cant_monto"]').click(function (event) {
         radio_selected = $('input[name="mostrar_cant_monto"]:checked');
         if (radio_selected.val() == 'cantidad') {
@@ -53,7 +54,7 @@ $(document).ready(function () {
             $('table#stock th.text-right span').each(function() {$(this).text($(this).data('monto'))});
         }
     });
-
+    */
 
     function jTabla(idTabla) {
         var tabla = {headers: [], datos: [], campos_sumables: [], campos_montos: []};
@@ -227,8 +228,8 @@ $(document).ready(function () {
         agrega_orden_columnas();
     }
 
-    var tablaDatos = new jTabla('table.reporte');
-    tablaDatos.activa_subtotales_columnas();
-    tablaDatos.activa_orden_columnas();
+    // var tablaDatos = new jTabla('table.reporte');
+    // tablaDatos.activa_subtotales_columnas();
+    // tablaDatos.activa_orden_columnas();
 
 });

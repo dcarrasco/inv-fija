@@ -1,8 +1,7 @@
 <?php $totales = array(); ?>
 <?php $campos  = array(); ?>
-<?php //$campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
-<?php $campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad'); ?>
-<?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','monto','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS'); ?>
+<?php $campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS', 'VAL_cantidad', 'monto'); ?>
+<?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS','VAL_cantidad', 'monto'); ?>
 
 <table id='stock' class="table table-striped table-hover table-condensed reporte">
 	<?php foreach($stock as $key_reg => $reg): ?>
@@ -13,18 +12,12 @@
 			<thead>
 				<tr>
 				<?php foreach($reg as $key => $val): ?>
-					<?php if (substr($key, 0, 4) != 'VAL_'):  ?>
-						<?php if (in_array($key, $campos_sumables)): ?>
-							<th class="text-right">
-								<span data-cantidad="<?php echo $key; ?>" data-monto="<?php echo 'VAL_'.$key; ?>">
-									<?php echo $key; ?>
-								</span>
-							</th>
-						<?php else: ?>
-							<th><?php echo str_replace('_', ' ', $key); ?></th>
-						<?php endif; ?>
-						<?php array_push($campos, $key); ?>
+					<?php if (in_array($key, $campos_sumables)): ?>
+						<th class="text-right"><?php echo str_replace('_', ' ', $key); ?></th>
+					<?php else: ?>
+						<th><?php echo str_replace('_', ' ', $key); ?></th>
 					<?php endif; ?>
+					<?php array_push($campos, $key); ?>
 				<?php endforeach; ?>
 				</tr>
 			</thead>
@@ -37,28 +30,23 @@
 		<?php // ********************************************************* ?>
 		<tr>
 			<?php foreach($reg as $key => $val): ?>
-				<?php if (substr($key, 0, 4) != 'VAL_'):  ?>
-					<?php if (in_array($key, $campos_sumables)): ?>
-						<?php $str_url      = base_url(
-												'stock_sap/detalle_series/' .
-												(array_key_exists('centro', $reg) ? $reg['centro'] : '_') . '/' .
-												(array_key_exists('cod_almacen', $reg) ? $reg['cod_almacen'] : '_') . '/' .
-												(array_key_exists('cod_articulo', $reg) ? $reg['cod_articulo'] : '_') . '/' .
-												(array_key_exists('lote', $reg) ? $reg['lote'] : '_')
-											); ?>
-						<td class="text-right">
-							<a href="<?php echo $str_url; ?>">
-								<span data-cantidad="<?php echo fmt_cantidad($val); ?>" data-monto="<?php echo fmt_monto($reg['VAL_'.$key]); ?>">
-									<?php echo fmt_cantidad($val); ?>
-								</span>
-							</a>
-						</td>
-						<?php if (!array_key_exists($key, $totales)) $totales[$key] = 0; ?>
-						<?php if (!array_key_exists('VAL_'.$key, $totales)) $totales['VAL_'.$key] = 0; ?>
-						<?php $totales[$key] += $val; $totales['VAL_'.$key] += $reg['VAL_'.$key];?>
-					<?php else: ?>
-						<td><?php echo $val; ?></td>
-					<?php endif; ?>
+				<?php if (in_array($key, $campos_sumables)): ?>
+					<?php $str_url = base_url(
+											'stock_sap/detalle_series/' .
+											(array_key_exists('centro', $reg) ? $reg['centro'] : '_') . '/' .
+											(array_key_exists('cod_almacen', $reg) ? $reg['cod_almacen'] : '_') . '/' .
+											(array_key_exists('cod_articulo', $reg) ? $reg['cod_articulo'] : '_') . '/' .
+											(array_key_exists('lote', $reg) ? $reg['lote'] : '_')
+										); ?>
+					<td class="text-right">
+						<a href="<?php echo $str_url; ?>">
+							<?php echo (in_array($key, $campos_montos)) ? fmt_monto($val) : fmt_cantidad($val); ?>
+						</a>
+					</td>
+					<?php if (!array_key_exists($key, $totales)) $totales[$key] = 0; ?>
+					<?php $totales[$key] += $val; ?>
+				<?php else: ?>
+					<td><?php echo $val; ?></td>
 				<?php endif; ?>
 			<?php endforeach; ?>
 		</tr>
@@ -73,9 +61,7 @@
 			<?php foreach($campos as $val): ?>
 				<?php if (in_array($val, $campos_sumables)): ?>
 					<th class="text-right">
-						<span data-cantidad="<?php echo fmt_cantidad($totales[$val]); ?>" data-monto="<?php echo fmt_monto($totales['VAL_'.$val]); ?>">
-							<?php echo fmt_cantidad($totales[$val]); ?>
-						</span>
+						<?php echo (in_array($val, $campos_montos)) ? fmt_monto($totales[$val]) : fmt_cantidad($totales[$val]); ?>
 					</th>
 				<?php else: ?>
 					<th></th>

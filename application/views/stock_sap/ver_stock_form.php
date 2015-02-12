@@ -125,6 +125,7 @@
 					</div>
 
 
+					<!--
 					<hr/>
 					<div class="form-group">
 						<?php echo $this->lang->line('stock_sap_label_mostrar'); ?>
@@ -137,6 +138,7 @@
 							<?php echo $this->lang->line('stock_sap_radio_monto'); ?>
 						</div>
 					</div>
+					-->
 
 					<hr/>
 					<div class="pull-right">
