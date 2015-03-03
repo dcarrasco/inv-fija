@@ -362,7 +362,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('fecha', $mostrar))
 		{
 			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)');
+			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
 			$this->db->order_by('fecha_stock');
 		}
 
@@ -502,7 +502,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('fecha', $mostrar))
 		{
 			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)');
+			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
 			$this->db->order_by('fecha_stock');
 		}
 
