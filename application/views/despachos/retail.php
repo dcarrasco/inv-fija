@@ -1,4 +1,4 @@
-<?php echo form_open('','id="frm_param" class="form-horizontal"'); ?>
+<?php echo form_open('','id="frm_param" class="form-horizontal hidden-print"'); ?>
 <div class="form-group">
 	<label class="control-label col-md-2 col-md-offset-2"><?php echo $this->lang->line('label_rut_retail'); ?></label>
 	<div class="col-sm-6">

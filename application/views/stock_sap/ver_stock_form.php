@@ -1,5 +1,5 @@
 <?php echo form_open(); ?>
-<div class="accordion">
+<div class="accordion hidden-print">
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -125,6 +125,7 @@
 					</div>
 
 
+					<!--
 					<hr/>
 					<div class="form-group">
 						<?php echo $this->lang->line('stock_sap_label_mostrar'); ?>
@@ -137,6 +138,7 @@
 							<?php echo $this->lang->line('stock_sap_radio_monto'); ?>
 						</div>
 					</div>
+					-->
 
 					<hr/>
 					<div class="pull-right">

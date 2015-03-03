@@ -425,7 +425,7 @@ class stock_sap_model extends CI_Model {
 			$this->db->order_by('s.estado');
 		}
 
-		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
+		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE);
 
 		// tablas
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')

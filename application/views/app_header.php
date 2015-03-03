@@ -76,7 +76,7 @@
 <?php endif; ?>
 
 <?php if (isset($menu_modulo)): ?>
-<ul class="nav nav-tabs">
+<ul class="nav nav-tabs hidden-print">
 	<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
 		<li class="<?php echo ($modulo == $menu_modulo['mod_selected']) ? 'active' : ''; ?>">
 			<?php echo anchor($val['url'], $val['texto']); ?>

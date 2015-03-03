@@ -7,11 +7,15 @@
 }
 
 body {
-	font-family: "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "Calibri", "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
 	font-size: 14px;
 	line-height: 1.42857143;
 	color: #333;
 	background-color: #fff
+}
+
+.navbar {
+	font-family: "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .navbar-inverse {
@@ -92,7 +96,7 @@ table .header-fixed {
 
 @media print {
 	html, body, input, select, option, form, .form-control, .btn {
-		font-size: 10px;
+		font-size: 9px;
 	}
 
 	a[href]:after {
