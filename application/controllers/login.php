@@ -41,7 +41,7 @@ class Login extends CI_Controller {
 		}
 		else
 		{
-			$this->acl_model->delete_session_cookies();
+			$this->acl_model->delete_session_data();
 
 			$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 			$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
@@ -99,7 +99,7 @@ class Login extends CI_Controller {
 	 */
 	public function logout()
 	{
-		$this->acl_model->delete_session_cookies();
+		$this->acl_model->delete_session_data();
 		redirect('login/');
 	}
 

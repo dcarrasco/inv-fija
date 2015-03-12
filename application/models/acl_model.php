@@ -6,8 +6,6 @@ class Acl_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->helper('cookie');
 		$this->load->library('encrypt');
 	}
 
@@ -22,16 +20,17 @@ class Acl_model extends CI_Model {
 	 */
 	public function login($usr = '', $pwd = '', $remember = FALSE)
 	{
-		$this->delete_session_cookies();
+		$this->delete_session_data();
 
 		if ($this->check_user_credentials($usr, $pwd))
 		{
 
 			// escribe auditoria del login
 			$this->write_login_audit($usr);
-			// crea cookie con la sesion del usuario
-			$this->_set_session_cookies($usr, $remember);
-			$this->_set_menu_cookies($usr, $remember);
+
+			// crea session con los datos del usuario
+			$this->_set_session_data($usr, $remember);
+			$this->_set_session_menu($usr, $remember);
 
 			return TRUE;
 		}
@@ -60,20 +59,20 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve el usuario (leido desde cookie)
+	 * Devuelve el usuario (leido desde la session)
 	 * @param  none
 	 * @return string Usuario
 	 */
 	public function get_user()
 	{
-		return $this->encrypt->decode($this->input->cookie('user'));
+		return $this->encrypt->decode($this->session->userdata('user'));
 	}
 
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve el usuario (leido desde cookie)
+	 * Devuelve el usuario (leido desde la session)
 	 * @param  none
 	 * @return string Usuario
 	 */
@@ -97,7 +96,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_logged()
 	{
-		return (($this->input->cookie('user') and $this->input->cookie('modulos')) ? TRUE : FALSE);
+		return (($this->session->userdata('user') and $this->session->userdata('modulos')) ? TRUE : FALSE);
 	}
 
 
@@ -109,7 +108,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_remembered()
 	{
-		return ($this->input->cookie('remember_me') == 'TRUE' ? TRUE : FALSE);
+		return ($this->session->userdata('remember_me') == 'TRUE' ? TRUE : FALSE);
 	}
 
 
@@ -153,18 +152,18 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve el menu del usuario desde la cookie. Si no existe cookie, la crea
+	 * Devuelve el menu del usuario desde la session. Si no existe session, la crea
 	 * @param  none
 	 * @return string Menu del usuario en formato JSON
 	 */
 	public function get_user_menu()
 	{
-		if (!$this->input->cookie('menu_app'))
+		if (!$this->session->userdata('menu_app'))
 		{
-			$this->_set_menu_cookies($this->get_user());
+			$this->_set_session_menu($this->get_user());
 		}
 
-		return json_decode($this->encrypt->decode($this->input->cookie('menu_app')), TRUE);
+		return json_decode($this->encrypt->decode($this->session->userdata('menu_app')), TRUE);
 	}
 
 
@@ -223,17 +222,15 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Crea las cookies de login para un usuario
+	 * Crea las session de login para un usuario
 	 * @param string $usr Usuario
 	 */
-	private function _set_session_cookies($usr = '', $remember = FALSE)
+	private function _set_session_data($usr = '', $remember = FALSE)
 	{
 		$expire = $remember ? '0' : '1200';
 
-		$this->input->set_cookie(array(
-			'name'   => 'user',
-			'value'  => $this->encrypt->encode($usr),
-			'expire' => $expire,
+		$this->session->set_userdata(array(
+			'user'  => $this->encrypt->encode($usr),
 		));
 	}
 
@@ -241,27 +238,15 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Crea las cookies de menu para un usuario
+	 * Crea las session de menu para un usuario
 	 * @param string $usr Usuario
 	 */
-	private function _set_menu_cookies($usr, $remember = FALSE)
+	private function _set_session_menu($usr, $remember = FALSE)
 	{
-		$this->input->set_cookie(array(
-			'name'   => 'modulos',
-			'value'  => $this->encrypt->encode(json_encode($this->get_llaves_modulos($usr))),
-			'expire' => '0'
-		));
-
-		$this->input->set_cookie(array(
-			'name'   => 'menu_app',
-			'value'  => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
-			'expire' => '0'
-		));
-
-		$this->input->set_cookie(array(
-			'name'   => 'remember_me',
-			'value'  => $remember ? 'TRUE' : 'FALSE',
-			'expire' => '0',
+		$this->session->set_userdata(array(
+			'modulos'     => $this->encrypt->encode(json_encode($this->get_llaves_modulos($usr))),
+			'menu_app'    => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
+			'remember_me' => $remember ? 'TRUE' : 'FALSE',
 		));
 	}
 
@@ -269,15 +254,15 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Borra las cookies de login
+	 * Borra las session de login
 	 * @return none
 	 */
-	public function delete_session_cookies()
+	public function delete_session_data()
 	{
-		delete_cookie('user');
-		delete_cookie('remember_me');
-		delete_cookie('modulos');
-		delete_cookie('menu_app');
+		$this->session->unset_userdata('user');
+		$this->session->unset_userdata('remember_me');
+		$this->session->unset_userdata('modulos');
+		$this->session->unset_userdata('menu_app');
 	}
 
 
@@ -290,13 +275,13 @@ class Acl_model extends CI_Model {
 	 */
 	public function autentica($mod = '')
 	{
-		if (!$this->input->cookie('user') or !$this->input->cookie('modulos'))
+		if (!$this->session->userdata('user') or !$this->session->userdata('modulos'))
 		{
 			redirect('login');
 		}
 		else
 		{
-			$arr_modulos = json_decode($this->encrypt->decode($this->input->cookie('modulos')));
+			$arr_modulos = json_decode($this->encrypt->decode($this->session->userdata('modulos')));
 
 			if (!in_array($mod, $arr_modulos))
 			{
@@ -304,8 +289,8 @@ class Acl_model extends CI_Model {
 			}
 			else
 			{
-				// renueva la cookie de usuario (por timeout)
-				$this->_set_session_cookies($this->get_user(), $this->is_user_remembered());
+				// renueva la session de usuario (por timeout)
+				$this->_set_session_data($this->get_user(), $this->is_user_remembered());
 			}
 		}
 	}

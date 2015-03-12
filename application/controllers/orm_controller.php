@@ -88,7 +88,6 @@ class ORM_Controller extends CI_Controller {
 
 		if (!$modelo->valida_form())
 		{
-			dbg($this->form_validation);
 			$data = array(
 				'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
