@@ -71,7 +71,7 @@ class Login extends CI_Controller {
 					{
 						if (!$this->acl_model->login($usr, $pwd, $rem == 'remember'))
 						{
-							$data = array('msg_alerta' => '<div class="alert alert-danger">Error en el nombre de usuario y/o clave</div>');
+							$data = array('msg_alerta' => '<div class="alert alert-danger">' . $this->lang->line('login_error_usr_pwd') . '</div>');
 							$this->load->view('ACL/login', $data);
 						}
 						else
@@ -83,7 +83,7 @@ class Login extends CI_Controller {
 				}
 				else
 				{
-					$data = array('msg_alerta' => '<div class="alert alert-danger">Error en el nombre de usuario y/o clave</div>');
+					$data = array('msg_alerta' => '<div class="alert alert-danger">' . $this->lang->line('login_error_usr_pwd') . '</div>');
 					$this->load->view('ACL/login', $data);
 				}
 			}
@@ -151,7 +151,7 @@ class Login extends CI_Controller {
 
 			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
 			{
-				$this->session->set_flashdata('msg_alerta', '<div class="alert alert-success">La clave se cambió con exito. Vuelva a ingresar al sistema.</div>');
+				$this->session->set_flashdata('msg_alerta', '<div class="alert alert-success">' . $this->lang->line('login_success_pwd_changed') . '</div>');
 				redirect('login');
 			}
 			else

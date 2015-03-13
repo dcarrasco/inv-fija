@@ -8,6 +8,9 @@ $lang['login_link_change_password'] = 'cambiar clave';
 $lang['login_check_remember_me']    = 'Recordarme';
 $lang['login_button_login']         = 'Ingresar';
 
+$lang['login_error_usr_pwd']       = 'Error en el nombre de usuario y/o clave';
+$lang['login_success_pwd_changed'] = 'La clave se cambi&oacute; con &eacute;xito. Vuelva a ingresar al sistema.';
+
 $lang['login_form_change_password']   = 'Cambio de clave';
 $lang['login_input_old_password']     = 'Clave anterior';
 $lang['login_input_new1_password']    = 'Clave nueva';
