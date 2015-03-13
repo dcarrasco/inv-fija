@@ -35,7 +35,7 @@
 			<hr>
 		</div>
 
-		<div>
+		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
 		</div>
 

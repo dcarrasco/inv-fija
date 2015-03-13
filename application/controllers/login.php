@@ -135,7 +135,7 @@ class Login extends CI_Controller {
 			$data = array(
 				'msg_alerta'       => '',
 				'usr'              => $usr,
-				'tiene_clave'      => $this->acl_model->tiene_clave($usr),
+				'tiene_clave_class' => $this->acl_model->tiene_clave($usr) ? '' : ' disabled',
 				'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
 			);
 			$this->load->view('ACL/cambio_password', $data);
