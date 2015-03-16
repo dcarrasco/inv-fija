@@ -405,6 +405,7 @@ class ORM_Model implements Iterator {
 		if ($field->get_tipo() == 'has_many')
 		{
 			$reglas = 'trim';
+			$campo = $campo . '[]';
 		}
 
 		$this->CI->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
