@@ -1,6 +1,6 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-class myHooks {
+class MY_Hooks {
 
 	public function acl_hook()
 	{
@@ -20,7 +20,7 @@ class myHooks {
 
 		if (ENVIRONMENT != 'production')
 		{
-			$CI_local->output->enable_profiler(TRUE);
+			//$CI_local->output->enable_profiler(TRUE);
 		}
 	}
 

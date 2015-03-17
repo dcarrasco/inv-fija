@@ -7,7 +7,7 @@
  * @author		dcr
  * @link
  */
-class ORM_Model implements Iterator {
+class Orm_model implements Iterator {
 
 	/**
 	 * Nombre del modelo
