@@ -355,9 +355,9 @@ class Inventario_model extends CI_Model {
 		$this->db->select('stock_fisico as stock_fisico');
 		$this->db->select('stock_sap as stock_sap');
 		$this->db->select('stock_ajuste as stock_ajuste');
-		$this->db->select('stock_fisico * c.pmp as valor_fisico');
-		$this->db->select('stock_sap * c.pmp as valor_sap');
-		$this->db->select('stock_ajuste * c.pmp as valor_ajuste');
+		$this->db->select('stock_fisico * c.pmp as valor_fisico', FALSE);
+		$this->db->select('stock_sap * c.pmp as valor_sap', FALSE);
+		$this->db->select('stock_ajuste * c.pmp as valor_ajuste', FALSE);
 
 		if ($incl_ajustes == '1')
 		{
