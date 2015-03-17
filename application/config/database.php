@@ -53,7 +53,7 @@ if (ENVIRONMENT == 'development')
 }
 if (ENVIRONMENT == 'development-mac')
 {
-	$active_group = 'mac';
+	$active_group = 'mac-sirio';
 }
 
 $query_builder = TRUE;
@@ -105,6 +105,22 @@ $db['mac']['dbcollat'] = 'utf8_general_ci';
 $db['mac']['swap_pre'] = '';
 $db['mac']['autoinit'] = TRUE;
 $db['mac']['stricton'] = FALSE;
+
+$db['mac-sirio']['hostname'] = 'sirio';
+$db['mac-sirio']['username'] = 'invfija';
+$db['mac-sirio']['password'] = 'fijainv2014!';
+$db['mac-sirio']['database'] = 'BD_inventario';
+$db['mac-sirio']['dbdriver'] = 'mssql';
+$db['mac-sirio']['dbprefix'] = '';
+$db['mac-sirio']['pconnect'] = FALSE;
+$db['mac-sirio']['db_debug'] = TRUE;
+$db['mac-sirio']['cache_on'] = FALSE;
+$db['mac-sirio']['cachedir'] = '';
+$db['mac-sirio']['char_set'] = 'utf8';
+$db['mac-sirio']['dbcollat'] = 'utf8_general_ci';
+$db['mac-sirio']['swap_pre'] = '';
+$db['mac-sirio']['autoinit'] = TRUE;
+$db['mac-sirio']['stricton'] = FALSE;
 
 /* End of file database.php */
 /* Location: ./application/config/database.php */
