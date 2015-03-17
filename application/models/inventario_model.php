@@ -12,23 +12,6 @@ class Inventario_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve datos para poblar combobox de tipos de inventario
-	 * @return array Arreglo con los tipos de inventiaro
-	 */
-	public function get_combo_tipos_inventario()
-	{
-		return array(
-			''           => 'Seleccione tipo de inventario...',
-			'FIJA'       => 'Inventario Fija (Puerto Madero)',
-			'MAIMONIDES' => 'Inventario Empresas (Maimonides)',
-			'CABLES'     => 'Inventario Proveedores Cables',
-		);
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Devuelve el identificador del inventario activo
 	 * @return integer ID del inventario activo
 	 */

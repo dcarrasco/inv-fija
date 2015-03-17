@@ -40,7 +40,7 @@ class Inventario_config extends ORM_Controller {
 	 */
 	public function ubicacion_tipo_ubicacion($pag = 0)
 	{
-		$this->load->model('inventario_model');
+		$tipo_inventario = new Tipo_inventario;
 		$this->load->model('ubicacion_model');
 
 		$this->load->library('pagination');
@@ -117,7 +117,7 @@ class Inventario_config extends ORM_Controller {
 			$data = array(
 				'menu_modulo'            => array('menu' => $this->arr_menu, 'mod_selected' => 'ubicaciones'),
 				'datos_hoja'             => $datos_hoja,
-				'combo_tipos_inventario' => $this->inventario_model->get_combo_tipos_inventario(),
+				'combo_tipos_inventario' => $tipo_inventario->find('list'),
 				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 				'msg_alerta'             => $this->session->flashdata('msg_alerta'),
 				'links_paginas'          => $this->pagination->create_links(),
