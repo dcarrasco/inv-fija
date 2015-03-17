@@ -47,7 +47,7 @@
 					<?php echo $this->lang->line('login_input_user'); ?>
 				</label>
 				<div class="controls">
-					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control"'); ?>
+					<?php echo form_input('usr', set_value('usr', $usr),'maxlength="45" class="form-control"'); ?>
 					<div><?php echo form_error('usr'); ?></div>
 				</div>
 			</div>

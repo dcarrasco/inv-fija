@@ -112,13 +112,13 @@ class Login extends CI_Controller {
 	 * @param  none
 	 * @return none
 	 */
-	public function cambio_password()
+	public function cambio_password($usr_param = '')
 	{
 		$this->load->model('acl_model');
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
-		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', "trim|required|min_length[6]");
+		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', "trim|required|min_length[8]");
 		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
 		$this->app_common->form_validation_config();
 
@@ -130,13 +130,13 @@ class Login extends CI_Controller {
 
 		if ($this->form_validation->run() == FALSE)
 		{
-			$usr = set_value('usr');
+			$usr = set_value('usr', $usr_param);
 
 			$data = array(
-				'msg_alerta'       => '',
-				'usr'              => $usr,
+				'msg_alerta'        => '',
+				'usr'               => $usr,
 				'tiene_clave_class' => $this->acl_model->tiene_clave($usr) ? '' : ' disabled',
-				'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
+				'ocultar_password'  => (($this->input->post('usr')) ? TRUE : FALSE),
 			);
 			$this->load->view('ACL/cambio_password', $data);
 		}
@@ -146,7 +146,7 @@ class Login extends CI_Controller {
 			$msg_alerta = '';
 			if (!$this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
-				$msg_alerta = 'Error en el nombre de usuario y/o clave';
+				$msg_alerta = $this->lang->line('login_error_usr_pwd');
 			}
 
 			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))

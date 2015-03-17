@@ -6,7 +6,6 @@ class Acl_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->library('encrypt');
 	}
 
 
@@ -65,7 +64,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_user()
 	{
-		return $this->encrypt->decode($this->session->userdata('user'));
+		return $this->session->userdata('user');
 	}
 
 
@@ -115,6 +114,19 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Genera el hash de una password
+	 * @param  string $pwd password
+	 * @return string Hash de la password
+	 */
+	private function _hash_password($pwd = '')
+	{
+		return crypt($pwd, '$2a$10$'.$this->config->item('encryption_key'));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Chequea si las credenciales del usuario son validas
 	 * @return boolean TRUE/FALSE
 	 */
@@ -123,7 +135,7 @@ class Acl_model extends CI_Model {
 		return $this->db
 			->where(array(
 				'usr'    => $usr,
-				'pwd'    => sha1($pwd),
+				'pwd'    => $this->_hash_password($pwd),
 				'activo' => '1'
 			))
 			->get($this->config->item('bd_usuarios'))
@@ -163,7 +175,7 @@ class Acl_model extends CI_Model {
 			$this->_set_session_menu($this->get_user());
 		}
 
-		return json_decode($this->encrypt->decode($this->session->userdata('menu_app')), TRUE);
+		return json_decode($this->session->userdata('menu_app'), TRUE);
 	}
 
 
@@ -230,7 +242,7 @@ class Acl_model extends CI_Model {
 		$expire = $remember ? '0' : '1200';
 
 		$this->session->set_userdata(array(
-			'user'  => $this->encrypt->encode($usr),
+			'user'  => $usr,
 		));
 	}
 
@@ -244,8 +256,8 @@ class Acl_model extends CI_Model {
 	private function _set_session_menu($usr, $remember = FALSE)
 	{
 		$this->session->set_userdata(array(
-			'modulos'     => $this->encrypt->encode(json_encode($this->get_llaves_modulos($usr))),
-			'menu_app'    => $this->encrypt->encode(json_encode($this->acl_model->get_menu_usuario($usr))),
+			'modulos'     => json_encode($this->get_llaves_modulos($usr)),
+			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usr)),
 			'remember_me' => $remember ? 'TRUE' : 'FALSE',
 		));
 	}
@@ -281,7 +293,7 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
-			$arr_modulos = json_decode($this->encrypt->decode($this->session->userdata('modulos')));
+			$arr_modulos = json_decode($this->session->userdata('modulos'));
 
 			if (!in_array($mod, $arr_modulos))
 			{
@@ -369,7 +381,7 @@ class Acl_model extends CI_Model {
 		{
 			$this->db
 				->where('usr', $usr)
-				->update($this->config->item('bd_usuarios'), array('pwd' => sha1($clave_new)));
+				->update($this->config->item('bd_usuarios'), array('pwd' => $this->_hash_password($clave_new)));
 
 			return TRUE;
 		}
