@@ -160,7 +160,6 @@ class Stock_reporte extends CI_Controller {
 				'nombre_reporte' => $tipo,
 				'filtro_dif'     => '',
 				'arr_campos'     => $arr_campos,
-				'titulo_modulo'  => 'Reportes Stock',
 				'fecha_reporte'  => $this->reportestock_model->get_fecha_reporte(),
 				'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm($tipo_op),
 				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),

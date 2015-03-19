@@ -228,12 +228,13 @@ class Stock_sap extends CI_Controller {
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
 			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
-											|| in_array('material', $arr_mostrar)
-											|| in_array('lote', $arr_mostrar)
-											|| in_array('tipo_stock', $arr_mostrar)
+												|| in_array('material', $arr_mostrar)
+												|| in_array('lote', $arr_mostrar)
+												|| in_array('tipo_stock', $arr_mostrar)
 											)
-											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
-											) ? TRUE : FALSE),
+											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm'))
+											? TRUE : FALSE
+										),
 		);
 
 		$data['titulo_modulo'] = 'Consulta stock SAP';

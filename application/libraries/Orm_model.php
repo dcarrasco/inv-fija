@@ -70,7 +70,7 @@ class Orm_model implements Iterator {
 	 *
 	 * @var integer
 	 */
-	private $model_page_results = 15;
+	private $model_page_results = 12;
 
 	/**
 	 * Filtro para buscar resultados

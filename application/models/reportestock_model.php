@@ -391,7 +391,7 @@ class Reportestock_model extends CI_Model {
 			->select('substring(s.material,6,7) + \' (\' + s.almacen + \')\' as modelo', FALSE)
 			->select_sum('s.total', 'cant')
 			->select_sum('convert(FLOAT, s.total)*(case when v.pmp IS NULL then 0 else v.pmp END)/1000000', 'valor', FALSE)
-			->select_sum('s.m030*15+s.m060*45+s.m090*75+s.m120*115+s.m180*150+s.m360*270+s.m720*540+s.mas720*720', 'perm', FALSE)
+			->select_sum('(s.m030*15 + s.m060*45 + s.m090*75 + s.m120*115 + s.m180*150 + s.m360*270 + s.m720*540 + s.mas720*720)', 'perm', FALSE)
 			->from($this->config->item('bd_permanencia') . ' as s')
 			->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=s.centro and ta.cod_almacen=s.almacen', 'left')
 			->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')

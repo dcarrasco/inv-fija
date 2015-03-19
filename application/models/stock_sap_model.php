@@ -404,7 +404,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select('s.material, m.descripcion, s.umb');
-			$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material collate Latin1_General_CI_AS = m.catalogo collate Latin1_General_CI_AS', 'left');
+			$this->db->join($this->config->item('bd_catalogos') . ' m', '(s.material collate Latin1_General_CI_AS = m.catalogo collate Latin1_General_CI_AS)', 'left', FALSE);
 			$this->db->group_by('s.material, m.descripcion, s.umb');
 			$this->db->order_by('s.material, m.descripcion, s.umb');
 		}
