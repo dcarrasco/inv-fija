@@ -3,7 +3,6 @@
 class Stock_config extends ORM_Controller {
 
 	public $llave_modulo  = 'config_stock';
-	public $titulo_modulo = 'Configuracion Stock';
 
 	public function __construct()
 	{
