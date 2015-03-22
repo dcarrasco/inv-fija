@@ -115,7 +115,10 @@ class Inventario_analisis extends CI_Controller {
 					}
 
 				}
-				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif) : '';
+
+				$msg_alerta = ($cant_modif > 0)
+					? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
+					: '';
 			}
 
 			$this->session->set_flashdata('msg_alerta', $msg_alerta);
@@ -175,7 +178,9 @@ class Inventario_analisis extends CI_Controller {
 					$show_script_carga = TRUE;
 					$regs_OK      = $res_procesa_archivo['regs_OK'];
 					$regs_error   = $res_procesa_archivo['regs_error'];
-					$msj_error    = ($regs_error > 0) ? '<br><div class="error round">' . $res_procesa_archivo['msj_termino'] . '</div>' : '';
+					$msj_error    = ($regs_error > 0)
+						? '<br><div class="error round">' . $res_procesa_archivo['msj_termino'] . '</div>'
+						: '';
 				}
 			}
 		}
@@ -253,7 +258,13 @@ class Inventario_analisis extends CI_Controller {
 		{
 			$oculta_stock_sap = (set_value('oculta_stock_sap') == 'oculta_stock_sap') ? 1 : 0;
 
-			redirect($this->uri->segment(1) . "/imprime_hojas/" . set_value('pag_desde') . '/' . set_value('pag_hasta') . '/' . $oculta_stock_sap . '/' . time());
+			redirect(
+				$this->uri->segment(1) . "/imprime_hojas/" .
+				set_value('pag_desde') . '/' .
+				set_value('pag_hasta') . '/' .
+				$oculta_stock_sap . '/' .
+				time()
+			);
 		}
 
 	}

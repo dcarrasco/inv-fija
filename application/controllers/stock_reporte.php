@@ -83,53 +83,53 @@ class Stock_reporte extends CI_Controller {
 			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
 
 			$arr_config = array(
-					'orden' => array(
-						'campo' => $orden_campo,
-						'tipo'  => $orden_tipo,
-					),
-					'filtros' => array(
-						'tipo_alm'   => $tipo_alm,
-						'estado_sap' => $estado_sap,
-						'tipo_mat'   => $tipo_mat,
-					),
-					'mostrar' => array(
-						'almacen' => $incl_almacen,
-						'lote'    => $incl_lote,
-						'modelos' => $incl_modelos,
-					),
-				);
+				'orden' => array(
+					'campo' => $orden_campo,
+					'tipo'  => $orden_tipo,
+				),
+				'filtros' => array(
+					'tipo_alm'   => $tipo_alm,
+					'estado_sap' => $estado_sap,
+					'tipo_mat'   => $tipo_mat,
+				),
+				'mostrar' => array(
+					'almacen' => $incl_almacen,
+					'lote'    => $incl_lote,
+					'modelos' => $incl_modelos,
+				),
+			);
 
 			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($arr_config);
 
 			$arr_campos = array();
 
-			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
 
 			if ($incl_almacen == '1')
 			{
-				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
-				$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
+				$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto');
+				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
 			}
 
 			if (count($estado_sap) > 0 and is_array($estado_sap))
 			{
-				$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto');
 			}
 
 			if ($incl_lote == '1')
 			{
-				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
+				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
 			}
 
 			if (count($tipo_mat) > 0 and is_array($tipo_mat))
 			{
-				$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '',   'tipo' => 'texto');
+				$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto');
 			}
 
 			if ($incl_modelos == '1')
 			{
-				$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
+				$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '', 'tipo' => 'texto');
 			}
 
 			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
@@ -289,11 +289,14 @@ class Stock_reporte extends CI_Controller {
 		$arr_img_orden   = array();
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_campos[$campo]['order_by'] = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
-			$arr_campos[$campo]['img_orden']   = ($campo == $orden_campo) ?
-											' <span class="text-muted glyphicon ' .
-											(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
-											'" ></span>': '';
+			$arr_campos[$campo]['order_by']  = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden'] = ($campo == $orden_campo)
+				? ' <span class="text-muted glyphicon ' .
+					(($arr_campos[$campo]['order_by'] == 'ASC')
+						? 'glyphicon-circle-arrow-up'
+						: 'glyphicon-circle-arrow-down') .
+					'" ></span>'
+				: '';
 		}
 
 		$data = array(

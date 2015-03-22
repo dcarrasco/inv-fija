@@ -72,29 +72,29 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
 
 			if ($incl_almacen == '1')
 			{
-				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
-				$arr_campos['almacen'] = array('titulo' => 'CodAlm','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
+				$arr_campos['almacen'] = array('titulo' => 'CodAlm','class' => '', 'tipo' => 'texto');
+				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
 			}
 
 			if ($incl_estado == '1')
 			{
-				$arr_campos['estado_sap'] = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_sap'] = array('titulo' => 'Estado SAP','class' => '', 'tipo' => 'texto');
 			}
 
 			if ($incl_modelos == '1')
 			{
-				$arr_campos['material'] = array('titulo' => 'CodMat','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_material'] = array('titulo' => 'Material','class' => '',   'tipo' => 'texto');
+				$arr_campos['material'] = array('titulo' => 'CodMat','class' => '', 'tipo' => 'texto');
+				$arr_campos['des_material'] = array('titulo' => 'Material','class' => '', 'tipo' => 'texto');
 			}
 
 			if ($incl_lote == '1')
 			{
-				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
+				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
 			}
 
 			$arr_campos['m030']   = array('titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'numero');

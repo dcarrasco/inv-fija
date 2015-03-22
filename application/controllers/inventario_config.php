@@ -137,18 +137,32 @@ class Inventario_config extends ORM_Controller {
 						(set_value($reg['id'].'-ubicacion')       != $reg['ubicacion']) or
 						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['id_tipo_ubicacion']))
 					{
-						$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion($reg['id'], set_value($reg['id'].'-tipo_inventario'), set_value($reg['id'].'-ubicacion'), set_value($reg['id'].'-tipo_ubicacion'));
+						$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
+							$reg['id'],
+							set_value($reg['id'] . '-tipo_inventario'),
+							set_value($reg['id'] . '-ubicacion'),
+							set_value($reg['id'] . '-tipo_ubicacion')
+						);
 						$cant_modif += 1;
 					}
 				}
-				$this->session->set_flashdata('msg_alerta', (($cant_modif > 0) ? $cant_modif . ' inventario(s) modificados correctamente' : ''));
+				$this->session->set_flashdata('msg_alerta', (
+					($cant_modif > 0)
+						? $cant_modif . ' inventario(s) modificados correctamente'
+						: ''
+				));
 			}
 			else if ($this->input->post('formulario') == 'agregar')
 			{
 				$count = 0;
 				foreach($this->input->post('agr-ubicacion') as $val)
 				{
-					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(0, set_value('agr-tipo_inventario'), $val, set_value('agr-tipo_ubicacion'));
+					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
+						0,
+						set_value('agr-tipo_inventario'),
+						$val,
+						set_value('agr-tipo_ubicacion')
+					);
 					$count += 1;
 				}
 				$this->session->set_flashdata('msg_alerta', 'Se agregaron ' . $count . ' ubicaciones correctamente');

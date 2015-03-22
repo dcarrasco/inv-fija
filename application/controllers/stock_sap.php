@@ -90,7 +90,9 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$val] = $this->input->post($val);
 		}
 
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia') ? $this->input->post('fecha_ultimodia') : $this->input->post('fecha_todas');
+		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
+			? $this->input->post('fecha_ultimodia')
+			: $this->input->post('fecha_todas');
 
 		$this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
 		$this->form_validation->set_rules('fecha_ultimodia', 'Fechas (ultimo dia del mes)', '');
@@ -122,7 +124,10 @@ class Stock_sap extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'),
+			'menu_modulo'            => array(
+				'menu'         => $this->arr_menu,
+				'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'
+			),
 			'stock'                  => $stock,
 			'combo_tipo_alm'         => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
 			'combo_almacenes'        => $almacen_sap->get_combo_almacenes($tipo_op),
@@ -208,7 +213,9 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$val] = $this->input->post($val);
 		}
 
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia') ? $this->input->post('fecha_ultimodia') : $this->input->post('fecha_todas');
+		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
+			? $this->input->post('fecha_ultimodia')
+			: $this->input->post('fecha_todas');
 
 		$this->form_validation->set_rules('sel_fechas', '', '');
 		$this->form_validation->set_rules('fecha_ultimodia', '', '');
