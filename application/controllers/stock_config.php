@@ -45,7 +45,7 @@ class Stock_config extends ORM_Controller {
 				'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => 'almacenes_no_ingresados'),
 				'msg_alerta'  => $this->session->flashdata('msg_alerta'),
 				'almacenes'   => $almacen->almacenes_no_ingresados(),
-				);
+			);
 		$this->_render_view('stock_sap/almacenes_no_ingresados', $data);
 
 	}

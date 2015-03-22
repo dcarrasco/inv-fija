@@ -53,11 +53,15 @@ class Despachos_retail extends CI_Controller {
 		$this->despachos_model->limite_facturas = set_value('max_facturas', 5);
 
 		$datos = array(
-			'combo_retail' => $this->despachos_model->get_combo_rut_retail(),
+			'combo_retail'       => $this->despachos_model->get_combo_rut_retail(),
 			'combo_max_facturas' => $combo_max_facturas,
-			'facturas'     => $this->despachos_model->get_listado_ultimas_facturas(set_value('rut_retail'), set_value('modelos')),
+			'facturas'           => $this->despachos_model->get_listado_ultimas_facturas(
+										set_value('rut_retail'),
+										set_value('modelos')
+									),
 
 		);
+
 		$this->load->view('app_header', $datos);
 		$this->load->view('despachos/retail', $datos);
 		$this->load->view('app_footer', $datos);

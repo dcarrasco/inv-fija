@@ -72,37 +72,37 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['tipo']    = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
 
 			if ($incl_almacen == '1')
 			{
-				$arr_campos['centro']    = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
-				$arr_campos['almacen']    = array('titulo' => 'CodAlm','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
+				$arr_campos['almacen'] = array('titulo' => 'CodAlm','class' => '',   'tipo' => 'texto');
+				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
 
 			if ($incl_estado == '1')
 			{
-				$arr_campos['estado_sap']    = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_sap'] = array('titulo' => 'Estado SAP','class' => '',   'tipo' => 'texto');
 			}
 
 			if ($incl_modelos == '1')
 			{
-				$arr_campos['material']    = array('titulo' => 'CodMat','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_material']    = array('titulo' => 'Material','class' => '',   'tipo' => 'texto');
+				$arr_campos['material'] = array('titulo' => 'CodMat','class' => '',   'tipo' => 'texto');
+				$arr_campos['des_material'] = array('titulo' => 'Material','class' => '',   'tipo' => 'texto');
 			}
 
 			if ($incl_lote == '1')
 			{
-				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
+				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
 			}
 
-			$arr_campos['m030']   = array('titulo' => '000-030',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m060']   = array('titulo' => '031-060',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m090']   = array('titulo' => '061-090',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['m180']   = array('titulo' => '091-180',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['mas180'] = array('titulo' => '+181',     'class' => 'text-center',  'tipo' => 'numero');
-			$arr_campos['total']  = array('titulo' => 'Total',       'class' => 'text-center',  'tipo' => 'numero');
+			$arr_campos['m030']   = array('titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['m060']   = array('titulo' => '031-060', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['m090']   = array('titulo' => '061-090', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['m180']   = array('titulo' => '091-180', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['mas180'] = array('titulo' => '+181', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center', 'tipo' => 'numero');
 		}
 		elseif ($tipo == 'det_consumo')
 		{
@@ -111,15 +111,15 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['tipo']         = array('titulo' => 'Tipo Almacen', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['centro']       = array('titulo' => 'Centro', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['almacen']      = array('titulo' => 'Cod Alm', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['des_almacen']  = array('titulo' => 'Almacen', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['material']     = array('titulo' => 'Cod Mat', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['des_material'] = array('titulo' => 'Material', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['dias']         = array('titulo' => 'Permanencia', 'class' => '',   'tipo' => 'texto');
-			$arr_campos['serie']        = array('titulo' => 'Serie', 'class' => '',   'tipo' => 'texto');
+			$arr_campos['tipo']         = array('titulo' => 'Tipo Almacen', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['centro']       = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['almacen']      = array('titulo' => 'Cod Alm', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['des_almacen']  = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['material']     = array('titulo' => 'Cod Mat', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['des_material'] = array('titulo' => 'Material', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['dias']         = array('titulo' => 'Permanencia', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['serie']        = array('titulo' => 'Serie', 'class' => '', 'tipo' => 'texto');
 
 		}
 

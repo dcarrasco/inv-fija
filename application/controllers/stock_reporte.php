@@ -13,15 +13,15 @@ class Stock_reporte extends CI_Controller {
 
 		$this->arr_menu = array(
 			'permanencia' => array(
-				'url' => $this->uri->segment(1) . '/listado/permanencia',
+				'url'   => $this->uri->segment(1) . '/listado/permanencia',
 				'texto' => $this->lang->line('stock_perm_menu_perm'),
 			),
 			'mapastock' => array(
-				'url' => $this->uri->segment(1) . '/mapastock',
+				'url'   => $this->uri->segment(1) . '/mapastock',
 				'texto' => $this->lang->line('stock_perm_menu_mapa'),
 				),
 			'movhist' => array(
-				'url' => $this->uri->segment(1) . '/movhist',
+				'url'   => $this->uri->segment(1) . '/movhist',
 				'texto' => $this->lang->line('stock_perm_menu_movs'),
 			),
 		);
@@ -103,45 +103,45 @@ class Stock_reporte extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['tipo']    = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
+			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '',   'tipo' => 'texto');
 
 			if ($incl_almacen == '1')
 			{
-				$arr_campos['centro']    = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
-				$arr_campos['almacen']    = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
-				$arr_campos['des_almacen']    = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '',   'tipo' => 'texto');
+				$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '',   'tipo' => 'texto');
+				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '',   'tipo' => 'texto');
 			}
 
 			if (count($estado_sap) > 0 and is_array($estado_sap))
 			{
-				$arr_campos['estado_sap']    = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
+				$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '',   'tipo' => 'texto');
 			}
 
 			if ($incl_lote == '1')
 			{
-				$arr_campos['lote']    = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
+				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '',   'tipo' => 'texto');
 			}
 
 			if (count($tipo_mat) > 0 and is_array($tipo_mat))
 			{
-				$arr_campos['tipo_material']    = array('titulo' => 'Tipo Material','class' => '',   'tipo' => 'texto');
+				$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '',   'tipo' => 'texto');
 			}
 
 			if ($incl_modelos == '1')
 			{
-				$arr_campos['modelo']    = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
+				$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '',   'tipo' => 'texto');
 			}
 
-			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
-			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold',  'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
+			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold', 'tipo' => 'link_detalle_series', 'href' => $this->uri->segment(1) . '/detalle');
 		}
 
 		foreach ($arr_campos as $campo => $valor)
@@ -154,18 +154,18 @@ class Stock_reporte extends CI_Controller {
 		}
 
 		$data = array(
-				'menu_modulo'    => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
-				'reporte'        => $this->app_common->reporte($arr_campos, $datos_hoja),
-				'tipo_reporte'   => $view,
-				'nombre_reporte' => $tipo,
-				'filtro_dif'     => '',
-				'arr_campos'     => $arr_campos,
-				'titulo_modulo'  => 'Reportes Stock',
-				'fecha_reporte'  => $this->reportestock_model->get_fecha_reporte(),
-				'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm($tipo_op),
-				'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
-				'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
-			);
+			'menu_modulo'      => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
+			'reporte'          => $this->app_common->reporte($arr_campos, $datos_hoja),
+			'tipo_reporte'     => $view,
+			'nombre_reporte'   => $tipo,
+			'filtro_dif'       => '',
+			'arr_campos'       => $arr_campos,
+			'titulo_modulo'    => 'Reportes Stock',
+			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
+			'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm($tipo_op),
+			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
+			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
+		);
 
 		$this->load->view('app_header', $data);
 		$this->load->view('stock_sap/reporte', $data);
@@ -189,15 +189,15 @@ class Stock_reporte extends CI_Controller {
 			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => 'permanencia'),
 			'menu_configuracion' => '',
 			'detalle_series'     => $this->reportestock_model->get_detalle_series(
-										$this->input->get('id_tipo'),
-										$this->input->get('centro'),
-										$this->input->get('almacen'),
-										$this->input->get('estado_stock'),
-										$this->input->get('lote'),
-										$this->input->get('material'),
-										$this->input->get('tipo_material'),
-										$this->input->get('permanencia')
-									),
+				$this->input->get('id_tipo'),
+				$this->input->get('centro'),
+				$this->input->get('almacen'),
+				$this->input->get('estado_stock'),
+				$this->input->get('lote'),
+				$this->input->get('material'),
+				$this->input->get('tipo_material'),
+				$this->input->get('permanencia')
+			),
 			'titulo_modulo'   => 'Reportes Stock',
 		);
 

@@ -14,15 +14,15 @@ class Stock_sap extends CI_Controller {
 
 		$this->arr_menu = array(
 			'stock_movil' => array(
-				'url' => $this->uri->segment(1) . '/mostrar_stock/MOVIL',
+				'url'   => $this->uri->segment(1) . '/mostrar_stock/MOVIL',
 				'texto' => $this->lang->line('stock_sap_menu_movil'),
 			),
 			'stock_fija' => array(
-				'url' => $this->uri->segment(1) . '/mostrar_stock/FIJA',
+				'url'   => $this->uri->segment(1) . '/mostrar_stock/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_fijo'),
 			),
 			'transito_fija' => array(
-				'url' => $this->uri->segment(1) . '/transito/FIJA',
+				'url'   => $this->uri->segment(1) . '/transito/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
 			),
 		);
@@ -53,6 +53,7 @@ class Stock_sap extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['titulo_modulo'] = 'Consulta stock SAP';
+
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
@@ -170,7 +171,7 @@ class Stock_sap extends CI_Controller {
 
 		$data = array(
 			'detalle_series' => $this->stock_sap_model->get_detalle_series($centro, $almacen, $material, $lote),
-			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => ''),
+			'menu_modulo'    => array('menu' => $this->arr_menu, 'mod_selected' => ''),
 		);
 
 		$this->_render_view('stock_sap/detalle_series', $data);
