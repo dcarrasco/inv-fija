@@ -129,10 +129,11 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_link_campos[$campo] = $campo;
-			$arr_link_sort[$campo] = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-			$arr_img_orden[$campo]   = ($campo == $orden_campo) ?
-											'<span class="glyphicon ' . (($orden_tipo == 'ASC') ?
-											'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') . '"></span>': '';
+			$arr_link_sort[$campo]   = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
+			$arr_img_orden[$campo]   = ($campo == $orden_campo)
+				? '<span class="glyphicon ' . (($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down')
+					. '"></span>'
+				: '';
 		}
 
 		$data = array(

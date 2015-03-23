@@ -42,7 +42,7 @@ class Unidad_medida extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->desc_unidad;
+		return (string) $this->desc_unidad;
 	}
 
 }

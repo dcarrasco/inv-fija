@@ -34,7 +34,7 @@ class Centro extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->centro;
+		return (string) $this->centro;
 	}
 
 }

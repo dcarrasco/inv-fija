@@ -78,7 +78,7 @@ class Analisis_series_model extends CI_Model {
 		$sum_dv = 0;
 		foreach(str_split($serie14) as $i => $n)
 		{
-			$sum_dv += ($i %2 !== 0) ? (($n*2>9)?$n*2-9:$n*2): $n;
+			$sum_dv += ($i %2 !== 0) ? (($n*2>9) ? $n*2-9 : $n*2) : $n;
 		}
 
 		return $serie14 . (10 - $sum_dv % 10);
@@ -273,6 +273,7 @@ class Analisis_series_model extends CI_Model {
 		{
 			$resultado[$res['mes']] = substr($res['mes'],0,4) . "-" . substr($res['mes'],4,2);
 		}
+
 		return $resultado;
 	}
 
@@ -363,7 +364,6 @@ class Analisis_series_model extends CI_Model {
 				{
 					$result[$this->_get_dv_imei($reg['imei'])][$reg['celular']][$mes] = ($reg['seg_entrada']+$reg['seg_salida'])/60;
 				}
-				//dbg($result);
 			}
 		}
 

@@ -110,7 +110,9 @@ class Catalogo extends ORM_Model {
 			$this->CI->db->like('descripcion', $filtro);
 		}
 
-		return $this->CI->db->get($this->get_model_tabla(), $limit, $offset)->result_array();
+		return $this->CI->db
+			->get($this->get_model_tabla(), $limit, $offset)
+			->result_array();
 	}
 
 
@@ -123,7 +125,9 @@ class Catalogo extends ORM_Model {
 			$this->CI->db->like('descripcion', $filtro);
 		}
 
-		return $this->CI->db->get($this->get_model_tabla())->num_rows();
+		return $this->CI->db
+			->get($this->get_model_tabla())
+			->num_rows();
 	}
 
 
@@ -131,7 +135,9 @@ class Catalogo extends ORM_Model {
 
 	public function get_cant_registros_catalogo($id = 0)
 	{
-		return $this->CI->db->get_where($this->CI->config->item('bd_detalle_inventario'), array('catalogo' => $id))->num_rows();
+		return $this->CI->db
+			->get_where($this->CI->config->item('bd_detalle_inventario'), array('catalogo' => $id))
+			->num_rows();
 	}
 
 
@@ -151,6 +157,7 @@ class Catalogo extends ORM_Model {
 			->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)
 			->get($this->CI->config->item('bd_stock_fija'))
 			->row();
+
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
@@ -158,6 +165,7 @@ class Catalogo extends ORM_Model {
 		{
 			$this->dbforge->drop_table('tmp0001');
 		}
+
 		$this->db->select('material, max(valor/cantidad) as pmp into tmp0001', FALSE);
 		$this->db->from($this->CI->config->item('bd_stock_fija'));
 		$this->db->where('fecha_stock', $max_fecha);

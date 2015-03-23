@@ -50,8 +50,12 @@ class Acl_model extends CI_Model {
 	public function get_id_usr($usr = '')
 	{
 		$user = ($usr == '') ? $this->get_user() : $usr;
-		$rs = $this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $user))->row_array();
-		return (is_array($rs) ? $rs['id'] : '');
+
+		$rs = $this->db
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $user))
+			->row_array();
+
+		return is_array($rs) ? $rs['id'] : '';
 	}
 
 
@@ -95,7 +99,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_logged()
 	{
-		return (($this->session->userdata('user') and $this->session->userdata('modulos')) ? TRUE : FALSE);
+		return (($this->session->userdata('user') AND $this->session->userdata('modulos')) ? TRUE : FALSE);
 	}
 
 
@@ -107,7 +111,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_remembered()
 	{
-		return ($this->session->userdata('remember_me') == 'TRUE' ? TRUE : FALSE);
+		return ($this->session->userdata('remember_me') == 'TRUE') ? TRUE : FALSE;
 	}
 
 
@@ -170,7 +174,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_user_menu()
 	{
-		if (!$this->session->userdata('menu_app'))
+		if ( ! $this->session->userdata('menu_app'))
 		{
 			$this->_set_session_menu($this->get_user());
 		}
@@ -340,7 +344,7 @@ class Acl_model extends CI_Model {
 
 		if (count($arr_rs) > 0)
 		{
-			return ((is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) == '') ? FALSE : TRUE);
+			return (is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) == '') ? FALSE : TRUE;
 		}
 		else
 		{
@@ -358,9 +362,11 @@ class Acl_model extends CI_Model {
 	 */
 	public function existe_usuario($usr = '')
 	{
-		$regs = $this->db->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))->num_rows();
+		$regs = $this->db
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
+			->num_rows();
 
-		return (($regs > 0) ? TRUE : FALSE);
+		return ($regs > 0) ? TRUE : FALSE;
 	}
 
 
@@ -375,7 +381,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
 	{
-		$chk_usr = (!$this->tiene_clave($usr)) ? TRUE : $this->check_user_credentials($usr, $clave_old);
+		$chk_usr = ( ! $this->tiene_clave($usr)) ? TRUE : $this->check_user_credentials($usr, $clave_old);
 
 		if ($chk_usr)
 		{

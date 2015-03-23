@@ -19,16 +19,14 @@ class Despachos_model extends CI_Model {
 	 */
 	public function get_combo_rut_retail()
 	{
-		$arr_result = array();
-
-		$this->db
+		$arr_result = $this->db
 			->select('rut as llave')
-			->select_max('des_bodega + \' (\' + rut + \')\'', 'valor')
+			->select_max("des_bodega + ' (' + rut + ')'", 'valor')
 			->group_by('rut')
 			->order_by('valor')
-			->from($this->config->item('bd_despachos_pack'));
-
-		$arr_result = $this->db->get()->result_array();
+			->from($this->config->item('bd_despachos_pack'))
+			->get()
+			->result_array();
 
 		return form_array_format($arr_result);
 	}
@@ -69,15 +67,14 @@ class Despachos_model extends CI_Model {
 	{
 		if ($rut AND $modelo)
 		{
-			$this->db
+			$arr_result = $this->db
 				->limit($this->limite_facturas)
 				->where('rut', $rut)
 				->like('texto_breve_material', $modelo)
 				->from($this->config->item('bd_despachos_pack'))
-				->order_by('fecha', 'desc');
-
-			$arr_result = $this->db->get()->result_array();
-
+				->order_by('fecha', 'desc')
+				->get()
+				->result_array();
 
 			$arr_facturas = array();
 

@@ -104,8 +104,8 @@ class Inventario_analisis extends CI_Controller {
 				$cant_modif = 0;
 				foreach($detalle_ajustes->get_model_all() as $detalle)
 				{
-					if (((int) set_value('stock_ajuste_' . $detalle->id) != $detalle->stock_ajuste) OR
-						(trim(set_value('observacion_' . $detalle->id)) != trim($detalle->glosa_ajuste)) )
+					if ( (int) set_value('stock_ajuste_' . $detalle->id) != $detalle->stock_ajuste
+						OR trim(set_value('observacion_' . $detalle->id)) != trim($detalle->glosa_ajuste) )
 					{
 						$detalle->stock_ajuste = (int) set_value('stock_ajuste_' . $detalle->id);
 						$detalle->glosa_ajuste = trim(set_value('observacion_' . $detalle->id));
@@ -139,11 +139,11 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->_get_datos_inventario();
 
-		$upload_error = '';
-		$script_carga = '';
-		$regs_OK      = 0;
-		$regs_error   = 0;
-		$msj_error    = '';
+		$upload_error      = '';
+		$script_carga      = '';
+		$regs_OK           = 0;
+		$regs_error        = 0;
+		$msj_error         = '';
 		$show_script_carga = FALSE;
 
 		if ($this->input->post('formulario') == 'upload')

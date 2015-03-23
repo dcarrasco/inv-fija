@@ -146,11 +146,12 @@ class Stock_reporte extends CI_Controller {
 
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_campos[$campo]['order_by'] = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
-			$arr_campos[$campo]['img_orden']   = ($campo == $orden_campo) ?
-											' <span class="text-muted glyphicon ' .
-											(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
-											'" ></span>': '';
+			$arr_campos[$campo]['order_by']  = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden'] = ($campo == $orden_campo)
+				? ' <span class="text-muted glyphicon ' .
+					(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+					'" ></span>'
+				: '';
 		}
 
 		$data = array(
@@ -292,9 +293,7 @@ class Stock_reporte extends CI_Controller {
 			$arr_campos[$campo]['order_by']  = ($campo == $orden_campo) ? $new_orden_tipo : 'ASC';
 			$arr_campos[$campo]['img_orden'] = ($campo == $orden_campo)
 				? ' <span class="text-muted glyphicon ' .
-					(($arr_campos[$campo]['order_by'] == 'ASC')
-						? 'glyphicon-circle-arrow-up'
-						: 'glyphicon-circle-arrow-down') .
+					(($arr_campos[$campo]['order_by'] == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
 					'" ></span>'
 				: '';
 		}

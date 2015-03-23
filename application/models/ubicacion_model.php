@@ -92,13 +92,25 @@ class Ubicacion_model extends CI_Model {
 	{
 		if ($id == 0)
 		{
-			$this->db->insert($this->config->item('bd_tipo_ubicacion'), array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
+			$this->db->insert(
+				$this->config->item('bd_tipo_ubicacion'),
+				array(
+					'tipo_inventario' => $tipo_inventario,
+					'tipo_ubicacion' => $tipo_ubicacion,
+				)
+			);
 		}
 		else
 		{
 			$this->db
 				->where('id', $id)
-				->update($this->config->item('bd_tipo_ubicacion'), array('tipo_inventario' => $tipo_inventario, 'tipo_ubicacion' => $tipo_ubicacion));
+				->update(
+					$this->config->item('bd_tipo_ubicacion'),
+					array(
+						'tipo_inventario' => $tipo_inventario,
+						'tipo_ubicacion' => $tipo_ubicacion,
+					)
+				);
 		}
 	}
 
@@ -109,13 +121,28 @@ class Ubicacion_model extends CI_Model {
 	{
 		if ($id == 0)
 		{
-			$this->db->insert($this->config->item('bd_ubic_tipoubic'), array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
+			$this->db
+				->insert(
+					$this->config->item('bd_ubic_tipoubic'),
+					array(
+						'tipo_inventario'   => $tipo_inventario,
+						'ubicacion'         => $ubicacion,
+						'id_tipo_ubicacion' => $id_tipo_ubicacion,
+					)
+				);
 		}
 		else
 		{
 			$this->db
 				->where('id', $id)
-				->update($this->config->item('bd_ubic_tipoubic'), array('tipo_inventario' => $tipo_inventario, 'ubicacion' => $ubicacion, 'id_tipo_ubicacion' => $id_tipo_ubicacion));
+				->update(
+					$this->config->item('bd_ubic_tipoubic'),
+					array(
+						'tipo_inventario'   => $tipo_inventario,
+						'ubicacion'         => $ubicacion,
+						'id_tipo_ubicacion' => $id_tipo_ubicacion,
+					)
+				);
 		}
 	}
 
@@ -140,7 +167,9 @@ class Ubicacion_model extends CI_Model {
 
 	public function get_cant_registros_tipo_ubicacion($id = 0)
 	{
-		return $this->db->get_where($this->config->item('bd_ubic_tipoubic'), array('id_tipo_ubicacion' => $id))->num_rows();
+		return $this->db
+			->get_where($this->config->item('bd_ubic_tipoubic'), array('id_tipo_ubicacion' => $id))
+			->num_rows();
 	}
 
 

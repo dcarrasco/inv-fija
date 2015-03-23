@@ -42,7 +42,7 @@ class Tipo_inventario extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->desc_tipo_inventario;
+		return (string) $this->desc_tipo_inventario;
 	}
 
 

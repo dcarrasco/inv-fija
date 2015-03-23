@@ -60,7 +60,7 @@ class Rol extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->rol;
+		return (string) $this->rol;
 	}
 
 }

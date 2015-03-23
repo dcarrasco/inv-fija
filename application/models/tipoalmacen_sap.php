@@ -64,7 +64,7 @@ class Tipoalmacen_sap extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->tipo;
+		return (string) $this->tipo;
 	}
 
 

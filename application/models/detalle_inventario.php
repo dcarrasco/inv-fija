@@ -238,12 +238,10 @@ class Detalle_inventario extends ORM_Model {
 		//determina la cantidad de registros
 		$total_rows = $this->CI->db
 			->where('id_inventario', $id_inventario)
-			->where(
-				($ocultar_regularizadas == 1) ?
-				'stock_fisico - stock_sap + stock_ajuste <> 0' :
-				'stock_fisico - stock_sap <> 0',
-				NULL, FALSE
-			)
+			->where(($ocultar_regularizadas == 1)
+				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
+				: 'stock_fisico - stock_sap <> 0',
+				NULL, FALSE)
 			->count_all_results($this->get_model_tabla());
 
 		// recupera el detalle de registros
@@ -252,12 +250,10 @@ class Detalle_inventario extends ORM_Model {
 		$rs = $this->CI->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
 			->where('id_inventario', $id_inventario)
-			->where(
-				($ocultar_regularizadas == 1) ?
-				'stock_fisico - stock_sap + stock_ajuste <> 0' :
-				'stock_fisico - stock_sap <> 0',
-				NULL, FALSE
-			)
+			->where(($ocultar_regularizadas == 1)
+				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
+				: 'stock_fisico - stock_sap <> 0',
+				NULL, FALSE)
 			->limit($per_page, $pag)
 			->get($this->get_model_tabla())
 			->result_array();
