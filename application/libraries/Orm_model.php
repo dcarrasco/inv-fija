@@ -499,7 +499,7 @@ class Orm_model implements Iterator {
 	 */
 	public function get_valor_field($campo = '', $formatted = TRUE)
 	{
-		return (!$formatted) ? $this->$campo : $this->model_fields[$campo]->get_formatted_value($this->$campo);
+		return ( ! $formatted) ? $this->$campo : $this->model_fields[$campo]->get_formatted_value($this->$campo);
 	}
 
 	// --------------------------------------------------------------------
@@ -1242,6 +1242,13 @@ class ORM_Field {
 	private $decimales = 2;
 
 	/**
+	 * Cantidad de decimales del campo
+	 *
+	 * @var  string
+	 */
+	private $formato = null;
+
+	/**
 	 * Lista de los valores válidos para el campo
 	 *
 	 * @var  array
@@ -1581,6 +1588,18 @@ class ORM_Field {
 		if (count($this->choices) > 0)
 		{
 			return $this->choices[$valor];
+		}
+
+		if ($this->formato)
+		{
+			if ($this->formato == 'monto,2')
+			{
+				return fmt_monto($valor,'UN','$',2);
+			}
+			else
+			{
+				return 'XX' . $valor . 'XX';
+			}
 		}
 
 		return $valor;

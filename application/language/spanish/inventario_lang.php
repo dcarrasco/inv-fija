@@ -8,9 +8,10 @@ $lang['inventario_menu_reporte_ubicacion'] = 'Ubicaci&oacute;n';
 $lang['inventario_menu_reporte_tip_ubic']  = 'Tipos Ubicaci&oacute;n';
 $lang['inventario_menu_reporte_ajustes']   = 'Ajustes';
 
-$lang['inventario_menu_ajustes'] = 'Ajustes de inventario';
-$lang['inventario_menu_upload']  = 'Subir stock';
-$lang['inventario_menu_print']   = 'Imprimir hojas';
+$lang['inventario_menu_ajustes']     = 'Ajustes de inventario';
+$lang['inventario_menu_upload']      = 'Subir stock';
+$lang['inventario_menu_print']       = 'Imprimir hojas';
+$lang['inventario_menu_act_precios'] = 'Actualiza precios cat&aacute;logo';
 
 $lang['inventario_inventario']      = 'Inventario';
 $lang['inventario_page']            = 'Hoja';
@@ -90,6 +91,9 @@ $lang['inventario_print_label_page_to']      = 'P&aacute;gina hasta';
 $lang['inventario_print_label_options']      = 'Opciones';
 $lang['inventario_print_check_hide_columns'] = 'Oculta columnas [STOCK_SAP] y [F/A]';
 $lang['inventario_print_button_print']       = 'Imprimir';
+
+$lang['inventario_act_precios_button'] = 'Actualizar precios';
+$lang['inventario_act_precios_msg']    = 'Actualizados %s registros.';
 
 
 

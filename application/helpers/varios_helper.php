@@ -75,7 +75,7 @@ if ( ! function_exists('fmt_cantidad'))
 
 if ( ! function_exists('fmt_monto'))
 {
-	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$')
+	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
 	{
 		if ($monto == 0)
 		{
@@ -85,7 +85,7 @@ if ( ! function_exists('fmt_monto'))
 		{
 			if (strtoupper($unidad) == 'UN')
 			{
-				return $signo_moneda . '&nbsp;' . number_format($monto, 0, ',', '.');
+				return $signo_moneda . '&nbsp;' . number_format($monto, $decimales, ',', '.');
 			}
 			elseif (strtoupper($unidad) == 'MM')
 			{

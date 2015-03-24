@@ -27,6 +27,10 @@ class Inventario_analisis extends CI_Controller {
 				'url'   => $this->uri->segment(1) . '/imprime_inventario',
 				'texto' => $this->lang->line('inventario_menu_print'),
 			),
+			'actualiza_precios' => array(
+				'url'   => $this->uri->segment(1) . '/actualiza_precios',
+				'texto' => $this->lang->line('inventario_menu_act_precios'),
+			),
 		);
 
 	}
@@ -45,6 +49,14 @@ class Inventario_analisis extends CI_Controller {
 		$this->ajustes();
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera los datos del inventario activo
+	 *
+	 * @param  nada
+	 * @return nada
+	 */
 	private function _get_datos_inventario()
 	{
 		$inventario_activo = new Inventario;
@@ -304,6 +316,36 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$this->load->view('inventario/inventario_print_footer');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza los precios del catálogo
+	 *
+	 * @param  none
+	 * @return none
+	 */
+	public function actualiza_precios()
+	{
+		$update_status = '';
+		$cant_actualizada = 0;
+
+		if ($this->input->post('actualizar') == 'actualizar')
+		{
+			$catalogo = new Catalogo;
+			$cant_actualizada = $catalogo->actualiza_precios();
+			$update_status = ' disabled';
+		}
+
+		$data = array(
+			'msg_alerta'       => '',
+			'update_status'    => $update_status,
+			'cant_actualizada' => $cant_actualizada,
+		);
+
+		$this->_render_view('actualiza_precios', $data);
+
 	}
 
 	// --------------------------------------------------------------------

@@ -38,7 +38,8 @@ class Catalogo extends ORM_Model {
 					'decimales'      => 2,
 					'texto_ayuda'    => 'Valor PMP del material',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => FALSE
+					'es_unico'       => FALSE,
+					'formato'        => 'monto,2',
 				),
 				'es_seriado' => array(
 					'label'          => 'Material seriado',
@@ -146,14 +147,14 @@ class Catalogo extends ORM_Model {
 	public function actualiza_precios()
 	{
 
-		$this->load->dbforge();
+		$this->CI->load->dbforge();
 
 		// actualiza precios nulos --> 0
-		$this->db->where('pmp is null')
-			->update($this->model_tabla, array('pmp' => 0));
+		$this->CI->db->where('pmp is null')
+			->update($this->get_model_tabla(), array('pmp' => 0));
 
 		// selecciona maxima fecha del stock_sap_fija
-		$arr_max_fecha = $this->db
+		$arr_max_fecha = $this->CI->db
 			->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)
 			->get($this->CI->config->item('bd_stock_fija'))
 			->row();
@@ -161,27 +162,36 @@ class Catalogo extends ORM_Model {
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
-		if ($this->db->table_exists('tmp0001'))
+		if ($this->CI->db->table_exists('tmp0001'))
 		{
-			$this->dbforge->drop_table('tmp0001');
+			$this->CI->dbforge->drop_table('tmp0001');
 		}
 
-		$this->db->select('material, max(valor/cantidad) as pmp into tmp0001', FALSE);
-		$this->db->from($this->CI->config->item('bd_stock_fija'));
-		$this->db->where('fecha_stock', $max_fecha);
-		$this->db->group_by('material');
-		$this->db->get();
+		$this->CI->db
+			->select('material, max(valor/cantidad) as pmp into tmp0001', FALSE)
+			->from($this->CI->config->item('bd_stock_fija'))
+			->where('fecha_stock', $max_fecha)
+			->where_in('lote', array('I', 'A'))
+			->group_by('material')
+			->get();
 
 		//actualiza los precios
-		$this->db->query('update ' . $this->get_model_tabla() . ' set fija_catalogos.pmp=s.pmp from tmp0001 as s where catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS');
+		$this->CI->db->query('update ' . $this->get_model_tabla() . ' set fija_catalogos.pmp=s.pmp from tmp0001 as s where catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS');
 
 		// cuenta los precios actualizados
-		$cant_regs = $this->db->from($this->model_tabla)->join('tmp0001', $this->get_model_tabla() . '.catalogo collate Latin1_General_CI_AS = tmp0001.material collate Latin1_General_CI_AS')->count_all_results();
+		$cant_regs = $this->CI->db
+			->query(
+				'SELECT count(*) as cant ' .
+				'FROM ' . $this->get_model_tabla() . ' as c ' .
+				'JOIN tmp0001 as t on (c.catalogo collate Latin1_General_CI_AS = t.material collate Latin1_General_CI_AS)'
+			)
+			->row()
+			->cant;
 
 		// borra tabla temporal con ultimos precios
-		if ($this->db->table_exists('tmp0001'))
+		if ($this->CI->db->table_exists('tmp0001'))
 		{
-			$this->dbforge->drop_table('tmp0001');
+			$this->CI->dbforge->drop_table('tmp0001');
 		}
 
 		return $cant_regs;

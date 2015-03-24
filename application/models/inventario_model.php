@@ -17,12 +17,11 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_id_inventario_activo()
 	{
-		$row = $this->db
-			->where('activo', 1);
+		return $this->db
+			->where('activo', 1)
 			->get($this->config->item('bd_inventarios'))
-			->row_array();
-
-		return ($row['id']);
+			->row()
+			->id;
 	}
 
 
