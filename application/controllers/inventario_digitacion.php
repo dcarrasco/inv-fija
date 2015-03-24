@@ -170,6 +170,8 @@ class Inventario_digitacion extends CI_Controller {
 						'stock_fisico'  => $this->input->post('stock_fisico'),
 						'observacion'   => $this->input->post('observacion'),
 						'fecha_modificacion' => date('Ymd H:i:s'),
+						'stock_ajuste'  => 0,
+						'glosa_ajuste'  => '',
 						'reg_nuevo'     => 'S',
 					));
 
