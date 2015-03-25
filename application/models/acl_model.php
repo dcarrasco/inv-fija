@@ -202,13 +202,7 @@ class Acl_model extends CI_Model {
 			->get()
 			->result_array();
 
-		$arr_modulos = array();
-		foreach($arr_rs as $rs)
-		{
-			array_push($arr_modulos, $rs['llave_modulo']);
-		}
-
-		return $arr_modulos;
+		return array_column($arr_rs, 'llave_modulo');
 	}
 
 
@@ -228,7 +222,7 @@ class Acl_model extends CI_Model {
 			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join($this->config->item('bd_modulos') . ' m', 'm.id = rm.id_modulo')
 			->join($this->config->item('bd_app') . ' a', 'a.id = m.id_app')
-			->where('usr', (string)$usr)
+			->where('usr', (string) $usr)
 			->order_by('a.orden, m.orden')
 			->get()
 			->result_array();

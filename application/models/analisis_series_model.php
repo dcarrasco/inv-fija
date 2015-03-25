@@ -100,8 +100,8 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-
-			return $this->db->limit(3000)
+			return $this->db
+				->limit(3000)
 				->select('m.*')
 				->select('a1.des_almacen as des_alm, a2.des_almacen as des_rec, u.nom_usuario')
 				->select('c.*')
@@ -136,7 +136,8 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db->limit(1000)
+			return $this->db
+				->limit(1000)
 				->select('*')
 				->select('convert(varchar(20),fecha,120) as fecha_despacho', FALSE)
 				->from($this->config->item('bd_despachos_sap'))
@@ -162,7 +163,8 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db->limit(1000)
+			return $this->db
+				->limit(1000)
 				->select('s.*, u.*, m.*')
 				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
 				->select('convert(varchar(20), modificado_el, 103) as modif_el', FALSE)
@@ -192,7 +194,8 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db->limit(1000)
+			return $this->db
+				->limit(1000)
 				->select('s.*, b.*, t.*, a.*, ts.*, u.*, e.*')
 				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
 				->from($this->config->item('bd_stock_scl') . ' s')
@@ -271,7 +274,7 @@ class Analisis_series_model extends CI_Model {
 
 		foreach($this->db->get()->result_array() as $res)
 		{
-			$resultado[$res['mes']] = substr($res['mes'],0,4) . "-" . substr($res['mes'],4,2);
+			$resultado[$res['mes']] = substr($res['mes'], 0, 4) . "-" . substr($res['mes'], 4, 2);
 		}
 
 		return $resultado;
@@ -295,12 +298,12 @@ class Analisis_series_model extends CI_Model {
 		foreach ($arr_series as $serie)
 		{
 			$serie_orig = $serie;
-			$serie_cero = substr($serie,0,14) . "0";
+			$serie_cero = substr($serie, 0, 14) . "0";
 
 			foreach($meses as $mes)
 			{
-				$mes_ano = substr($mes,0,4);
-				$mes_mes = substr($mes,4,2);
+				$mes_ano = substr($mes, 0, 4);
+				$mes_mes = substr($mes, 4, 2);
 
 				$this->db->select('t.*, a.*, c.*, b.*')
 					->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
@@ -352,8 +355,8 @@ class Analisis_series_model extends CI_Model {
 
 			foreach($meses as $mes)
 			{
-				$mes_ano = (int) substr($mes,0,4);
-				$mes_mes = (int) substr($mes,4,2);
+				$mes_ano = (int) substr($mes, 0, 4);
+				$mes_mes = (int) substr($mes, 4, 2);
 
 				// recupera datos de trafico
 				$this->db->from($this->config->item('bd_trafico_mes'));
@@ -415,7 +418,7 @@ class Analisis_series_model extends CI_Model {
 			->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
 			->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
 			->select('c.num_ident as rut')
-			->select('c.nom_cliente + \' \' + c.ape1_cliente + \' \' + c.ape2_cliente as nombre')
+			->select("c.nom_cliente + ' ' + c.ape1_cliente + ' ' + c.ape2_cliente as nombre")
 			->from($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 			->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
 			->where(array('a.num_celular' => $celular, 'a.fec_alta' => $maxfecha))

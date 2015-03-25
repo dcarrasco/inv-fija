@@ -53,7 +53,7 @@ class Familia extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->nombre;
+		return (string) $this->nombre;
 	}
 
 

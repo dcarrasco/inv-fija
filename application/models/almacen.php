@@ -34,7 +34,7 @@ class Almacen extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->almacen;
+		return (string) $this->almacen;
 	}
 
 }

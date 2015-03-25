@@ -81,7 +81,7 @@ class Almacen_sap extends ORM_Model {
 
 	public function __toString()
 	{
-		return (string)$this->centro . '-' . $this->cod_almacen . ' ' .$this->des_almacen;
+		return (string) $this->centro . '-' . $this->cod_almacen . ' ' .$this->des_almacen;
 	}
 
 
@@ -93,8 +93,8 @@ class Almacen_sap extends ORM_Model {
 		$arr_combo = array();
 
 		$this->CI->db
-			->select('a.centro + \'-\' + a.cod_almacen as llave', FALSE)
-			->select('a.centro + \'-\' + a.cod_almacen + \' \' + a.des_almacen as valor', FALSE)
+			->select("a.centro + '-' + a.cod_almacen as llave", FALSE)
+			->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 			->order_by('a.centro, a.cod_almacen')
 			->where('a.tipo_op', $tipo_op)
 			->from($this->get_model_tabla() . ' a');
@@ -116,7 +116,8 @@ class Almacen_sap extends ORM_Model {
 
 	public function almacenes_no_ingresados()
 	{
-		$alm_movil = $this->CI->db->distinct()
+		$alm_movil = $this->CI->db
+			->distinct()
 			->select('s.centro, s.cod_bodega')
 			->from($this->CI->config->item('bd_stock_movil') . ' s')
 			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
@@ -127,7 +128,8 @@ class Almacen_sap extends ORM_Model {
 			->get()
 			->result_array();
 
-		$alm_fija = $this->CI->db->distinct()
+		$alm_fija = $this->CI->db
+			->distinct()
 			->select('s.centro, s.almacen as cod_bodega')
 			->from($this->CI->config->item('bd_stock_fija') . ' s')
 			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')

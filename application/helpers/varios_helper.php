@@ -33,9 +33,14 @@ if ( ! function_exists('dbg_die'))
 
 if ( ! function_exists('form_array_format'))
 {
-	function form_array_format($arr = array())
+	function form_array_format($arr = array(), $msg_ini = null)
 	{
 		$arr_combo = array();
+
+		if ($msg_ini)
+		{
+			$arr_combo[''] = $msg_ini;
+		}
 
 		foreach($arr as $reg)
 		{

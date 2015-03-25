@@ -42,7 +42,7 @@ class Proveedor extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->des_proveedor;
+		return (string) $this->des_proveedor;
 	}
 
 

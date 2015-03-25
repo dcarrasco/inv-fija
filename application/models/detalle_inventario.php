@@ -157,7 +157,7 @@ class Detalle_inventario extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->hoja;
+		return (string) $this->hoja;
 	}
 
 
@@ -188,7 +188,7 @@ class Detalle_inventario extends ORM_Model {
 
 	public function get_id_auditor()
 	{
-		if(count($this->get_model_all()) > 0)
+		if (count($this->get_model_all()) > 0)
 		{
 			$all = $this->get_model_all();
 

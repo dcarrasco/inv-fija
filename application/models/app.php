@@ -62,7 +62,7 @@ class App extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->app;
+		return (string) $this->app;
 	}
 
 }

@@ -33,16 +33,14 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_combo_inventarios()
 	{
-		$arr_inv = array();
-		$this->db->order_by('nombre ASC');
-		$arr_rs = $this->db->get($this->config->item('bd_inventarios'))->result_array();
-		$arr_inv[''] = 'Seleccione inventario activo...';
-		foreach($arr_rs as $val)
-		{
-			$arr_inv[$val['id']] = $val['nombre'];
-		}
+		$arr_rs = $this->db
+			->select('id as llave')
+			->select('nombre as valor')
+			->order_by('nombre ASC')
+			->get($this->config->item('bd_inventarios'))
+			->result_array();
 
-		return $arr_inv;
+		return form_array_format($arr_rs, 'Seleccione un inventario...');
 	}
 
 

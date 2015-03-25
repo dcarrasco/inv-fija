@@ -17,17 +17,12 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_fecha_reporte()
 	{
-		$this->db->distinct();
-		$this->db->select('convert(varchar(20), fecha_stock, 102) as fecha_stock', FALSE);
-		$arr_result = $this->db->get($this->config->item('bd_permanencia') . ' as p')->row_array();
-		if (count($arr_result) > 0)
-		{
-			return $arr_result['fecha_stock'];
-		}
-		else
-		{
-			return '';
-		}
+		return $this->db
+			->distinct()
+			->select('convert(varchar(20), fecha_stock, 102) as fecha_stock', FALSE)
+			->get($this->config->item('bd_permanencia'))
+			->row()
+			->fecha_stock;
 	}
 
 
@@ -37,20 +32,15 @@ class Reportestock_model extends CI_Model {
 	{
 		$arr_rs = $this->db
 			->distinct()
-			->select('t.id_tipo, t.tipo')
+			->select('t.id_tipo as llave')
+			->select('t.tipo as valor')
 			->from($this->config->item('bd_tiposalm_sap') . ' t')
 			->where('t.tipo_op', $tipo_op)
 			->order_by('t.tipo')
 			->get()
 			->result_array();
 
-		$arr_combo = array();
-		foreach($arr_rs as $reg)
-		{
-			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_rs);
 	}
 
 
@@ -74,7 +64,8 @@ class Reportestock_model extends CI_Model {
 	{
 		$arr_rs = $this->db
 			->distinct()
-			->select('t.id_tipo, t.tipo')
+			->select('t.id_tipo as llave')
+			->select('t.tipo as valor')
 			->from($this->config->item('bd_tipoalmacen_sap') . ' ta')
 			->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
 			->like('t.tipo', '(CONSUMO)')
@@ -82,13 +73,7 @@ class Reportestock_model extends CI_Model {
 			->get()
 			->result_array();
 
-		$arr_combo = array();
-		foreach($arr_rs as $reg)
-		{
-			$arr_combo[$reg['id_tipo']] = $reg['tipo'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_rs);
 	}
 
 
@@ -256,6 +241,9 @@ class Reportestock_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function get_detalle_series($tipo_alm = '', $centro = '', $almacen = '', $estado_stock = '', $lote = '', $material = '', $tipo_material = '', $permanencia = '')
 	{

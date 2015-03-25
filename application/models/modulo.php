@@ -76,7 +76,7 @@ class Modulo extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->modulo;
+		return (string) $this->modulo;
 	}
 
 }

@@ -59,7 +59,7 @@ class Catalogo extends ORM_Model {
 
 	public function __toString()
 	{
-		return $this->descripcion;
+		return (string) $this->descripcion;
 	}
 
 
@@ -67,11 +67,12 @@ class Catalogo extends ORM_Model {
 
 	public function get_combo_catalogo($filtro = '')
 	{
-		$arr_result = array();
 		$arr_combo = array();
 		$arr_combo[''] = 'Seleccionar material ...';
 
 		$arr_result = $this->CI->db
+			->select('catalogo as llave')
+			->select("catalogo + ' - ' + descripcion as valor")
 			->order_by('catalogo')
 			->like('descripcion', $filtro)
 			->like('descripcion', $filtro)
@@ -79,12 +80,7 @@ class Catalogo extends ORM_Model {
 			->get($this->get_model_tabla())
 			->result_array();
 
-		foreach($arr_result as $reg)
-		{
-			$arr_combo[$reg['catalogo']] = $reg['catalogo'] . ' - ' . $reg['descripcion'];
-		}
-
-		return $arr_combo;
+		return form_array_format($arr_result);
 	}
 
 
