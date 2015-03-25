@@ -400,7 +400,10 @@ class Orm_model implements Iterator {
 		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
 		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
-		$reglas .= ($field->get_es_unico() AND !$field->get_es_id()) ? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' . implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']' : '';
+		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
+			? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' .
+				implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
+			: '';
 
 		if ($field->get_tipo() == 'has_many')
 		{
@@ -467,7 +470,7 @@ class Orm_model implements Iterator {
 	{
 		$tipo = $this->model_fields[$campo]->get_tipo();
 
-		if (($tipo == 'has_one' OR $tipo == 'has_many') AND !($this->model_got_relations))
+		if (($tipo == 'has_one' OR $tipo == 'has_many') AND ! $this->model_got_relations)
 		{
 			$this->_recuperar_relation_fields();
 		}
@@ -525,7 +528,7 @@ class Orm_model implements Iterator {
 	 */
 	public function get_marca_obligatorio_field($campo = '')
 	{
-		return ($this->get_es_obligatorio_field($campo)) ? ' <span class="text-danger">*</span>' : '';
+		return $this->get_es_obligatorio_field($campo) ? ' <span class="text-danger">*</span>' : '';
 	}
 
 	// --------------------------------------------------------------------
@@ -574,7 +577,12 @@ class Orm_model implements Iterator {
 
 			'per_page'    => $this->model_page_results,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->CI->uri->segment(1) . '/' . ($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' . $this->get_model_nombre() . '/' . $this->model_filtro . '/'),
+			'base_url'    => site_url(
+				$this->CI->uri->segment(1) . '/' .
+				($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' .
+				$this->get_model_nombre() . '/' .
+				$this->model_filtro . '/'
+			),
 			'first_link'  => $this->CI->lang->line('orm_pag_first'),
 			'last_link'   => $this->CI->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
@@ -690,10 +698,11 @@ class Orm_model implements Iterator {
 		}
 		else if ($tipo == 'count')
 		{
-			$this->CI->db->select('count(*) as cant');
-			$rs = $this->CI->db->get($this->model_tabla)->row_array();
-
-			return $rs['cant'];
+			return $this->CI->db
+				->select('count(*) as cant')
+				->get($this->model_tabla)
+				->row()
+				->cant;
 		}
 		else if ($tipo == 'list')
 		{
@@ -752,7 +761,7 @@ class Orm_model implements Iterator {
 
 			foreach ($this->model_campo_id as $i => $campo_id)
 			{
-				$arr_condiciones[$campo_id] = (is_null($id)) ? '' : $arr_val_id[$i];
+				$arr_condiciones[$campo_id] = is_null($id) ? '' : $arr_val_id[$i];
 			}
 		}
 
@@ -885,12 +894,18 @@ class Orm_model implements Iterator {
 	 */
 	public function get_from_array($rs = array())
 	{
-		if ($rs)
+		if ($rs OR count($rs) > 0)
 		{
 			foreach ($this->model_fields as $nombre => $metadata)
 			{
 				if (array_key_exists($nombre, $rs))
 				{
+					$tipo_campo = $metadata->get_tipo();
+
+					if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
+					{
+						$this->fields_values[$nombre] = (int) $rs[$nombre];
+					}
 					if ($metadata->get_tipo() == 'datetime')
 					{
 						if ($rs[$nombre] != '')
@@ -907,7 +922,20 @@ class Orm_model implements Iterator {
 		}
 	}
 
+
 	// --------------------------------------------------------------------
+
+	/**
+	 * Puebla los campos del modelo con los valores del post
+	 *
+	 * @param  nada
+	 * @return nada
+	 */
+	public function recuperar_post()
+	{
+		return $this->get_from_array($this->CI->input->post());
+	}
+
 
 	// =======================================================================
 	// FUNCIONES PRIVADAS DE CONSULTA EN BD
@@ -937,44 +965,6 @@ class Orm_model implements Iterator {
 		}
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Puebla los campos del modelo con los valores del post
-	 *
-	 * @return nada
-	 */
-	public function recuperar_post()
-	{
-		foreach ($this->model_fields as $nombre => $metadata)
-		{
-			// si el valor del post es un arreglo, transforma los valores a llaves del arreglo
-			if (is_array($this->CI->input->post($nombre)))
-			{
-				$arr = array();
-
-				foreach ($this->CI->input->post($nombre) as $key => $val)
-				{
-					$arr[$val] = $val;
-				}
-
-				$this->$nombre = $arr;
-			}
-			else
-			{
-				$tipo_campo = $metadata->get_tipo();
-
-				if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
-				{
-					$this->$nombre = (int) $this->CI->input->post($nombre);
-				}
-				else
-				{
-					$this->$nombre = $this->CI->input->post($nombre);
-				}
-			}
-		}
-	}
 
 	// --------------------------------------------------------------------
 
@@ -1461,7 +1451,7 @@ class ORM_Field {
 			return $form;
 		}
 
-		if (!empty($this->choices))
+		if ( ! empty($this->choices))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control"';
 
@@ -1516,7 +1506,9 @@ class ORM_Field {
 
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" class="form-control '. $param_adic . '"';
 
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$dropdown_conditions = array_key_exists('conditions', $this->relation)
+				? array('conditions' => $this->relation['conditions'])
+				: array();
 
 			$form = form_dropdown(
 				$this->nombre,
@@ -1535,7 +1527,9 @@ class ORM_Field {
 
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '" size="7" class="form-control ' . $param_adic . '"';
 
-			$dropdown_conditions = (array_key_exists('conditions', $this->relation)) ? array('conditions' => $this->relation['conditions']) : array();
+			$dropdown_conditions = array_key_exists('conditions', $this->relation)
+				? array('conditions' => $this->relation['conditions'])
+				: array();
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);

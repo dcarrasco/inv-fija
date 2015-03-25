@@ -63,83 +63,15 @@ class Catalogo extends ORM_Model {
 	}
 
 
-	// --------------------------------------------------------------------
-
-	public function get_combo_catalogo($filtro = '')
-	{
-		$arr_combo = array();
-		$arr_combo[''] = 'Seleccionar material ...';
-
-		$arr_result = $this->CI->db
-			->select('catalogo as llave')
-			->select("catalogo + ' - ' + descripcion as valor")
-			->order_by('catalogo')
-			->like('descripcion', $filtro)
-			->like('descripcion', $filtro)
-			->or_like('catalogo', $filtro)
-			->get($this->get_model_tabla())
-			->result_array();
-
-		return form_array_format($arr_result);
-	}
-
 
 	// --------------------------------------------------------------------
 
-	public function get_descripcion($catalogo = '')
-	{
-		$row = $this->CI->db
-			->get_where($this->get_model_tabla(), array('catalogo' => $catalogo))
-			->row_array();
-
-		return ($row['descripcion']);
-	}
-
-
-	// --------------------------------------------------------------------
-
-	public function get_materiales($filtro = '_', $limit = 0, $offset = 0)
-	{
-		$this->CI->db->order_by('catalogo ASC');
-
-		if ($filtro != '_')
-		{
-			$this->CI->db->like('descripcion', $filtro);
-		}
-
-		return $this->CI->db
-			->get($this->get_model_tabla(), $limit, $offset)
-			->result_array();
-	}
-
-
-	// --------------------------------------------------------------------
-
-	public function total_materiales($filtro = '_')
-	{
-		if ($filtro != '_')
-		{
-			$this->CI->db->like('descripcion', $filtro);
-		}
-
-		return $this->CI->db
-			->get($this->get_model_tabla())
-			->num_rows();
-	}
-
-
-	// --------------------------------------------------------------------
-
-	public function get_cant_registros_catalogo($id = 0)
-	{
-		return $this->CI->db
-			->get_where($this->CI->config->item('bd_detalle_inventario'), array('catalogo' => $id))
-			->num_rows();
-	}
-
-
-	// --------------------------------------------------------------------
-
+	/**
+	 * Actualiza los precios del catálogos de productos, con el último PMP
+	 *
+	 * @param  none
+	 * @return int Cantidad de registros modificados
+	 */
 	public function actualiza_precios()
 	{
 

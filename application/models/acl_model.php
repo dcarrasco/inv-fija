@@ -29,7 +29,6 @@ class Acl_model extends CI_Model {
 
 			// crea session con los datos del usuario
 			$this->_set_session_data($usr, $remember);
-			$this->_set_session_menu($usr, $remember);
 
 			return TRUE;
 		}
@@ -176,7 +175,7 @@ class Acl_model extends CI_Model {
 	{
 		if ( ! $this->session->userdata('menu_app'))
 		{
-			$this->_set_session_menu($this->get_user());
+			$this->_set_session_data($this->get_user());
 		}
 
 		return json_decode($this->session->userdata('menu_app'), TRUE);
@@ -232,28 +231,13 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Crea las session de login para un usuario
-	 * @param string $usr Usuario
-	 */
-	private function _set_session_data($usr = '', $remember = FALSE)
-	{
-		$expire = $remember ? '0' : '1200';
-
-		$this->session->set_userdata(array(
-			'user'  => $usr,
-		));
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Crea las session de menu para un usuario
 	 * @param string $usr Usuario
 	 */
-	private function _set_session_menu($usr, $remember = FALSE)
+	private function _set_session_data($usr, $remember = FALSE)
 	{
 		$this->session->set_userdata(array(
+			'user'        => $usr,
 			'modulos'     => json_encode($this->get_llaves_modulos($usr)),
 			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usr)),
 			'remember_me' => $remember ? 'TRUE' : 'FALSE',
@@ -285,7 +269,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function autentica($mod = '')
 	{
-		if (!$this->session->userdata('user') or !$this->session->userdata('modulos'))
+		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
 			redirect('login');
 		}
@@ -293,14 +277,13 @@ class Acl_model extends CI_Model {
 		{
 			$arr_modulos = json_decode($this->session->userdata('modulos'));
 
-			if (!in_array($mod, $arr_modulos))
+			if ( ! in_array($mod, $arr_modulos))
 			{
 				redirect('login');
 			}
 			else
 			{
-				// renueva la session de usuario (por timeout)
-				$this->_set_session_data($this->get_user(), $this->is_user_remembered());
+				return TRUE;
 			}
 		}
 	}
