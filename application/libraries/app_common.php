@@ -37,11 +37,11 @@ class App_common {
 			if ($modulo['app'] != $app_ant and $app_ant != '')
 			{
 				array_push($arr_apps, array(
-											'selected' => $app_sel,
-											'icono'    => $modulo_ant['app_icono'],
-											'app'      => $modulo_ant['app'],
-											'modulos'  => $arr_mods
-										));
+					'selected' => $app_sel,
+					'icono'    => $modulo_ant['app_icono'],
+					'app'      => $modulo_ant['app'],
+					'modulos'  => $arr_mods
+				));
 				$arr_mods = array();
 				$app_sel = '';
 			}
@@ -52,20 +52,20 @@ class App_common {
 			}
 
 			array_push($arr_mods, array(
-									'url'    => $modulo['url'],
-									'icono'  => $modulo['modulo_icono'],
-									'modulo' => $modulo['modulo']
-									));
+				'url'    => $modulo['url'],
+				'icono'  => $modulo['modulo_icono'],
+				'modulo' => $modulo['modulo']
+			));
 
 			$app_ant = $modulo['app'];
 			$modulo_ant = $modulo;
 		}
 		array_push($arr_apps, array(
-									'selected' => $app_sel,
-									'icono'    => $modulo_ant['app_icono'],
-									'app'      => $modulo_ant['app'],
-									'modulos'  => $arr_mods
-								));
+			'selected' => $app_sel,
+			'icono'    => $modulo_ant['app_icono'],
+			'app'      => $modulo_ant['app'],
+			'modulos'  => $arr_mods
+		));
 
 		return $arr_apps;
 	}
@@ -157,13 +157,13 @@ class App_common {
 				return anchor($arr_param_campo['href'] . $valor, $valor);
 				break;
 			case 'link_detalle_series':
-				$id_tipo        = (array_key_exists('id_tipo', $reg)) ? $reg['id_tipo'] : '';
-				$centro         = (array_key_exists('centro', $reg)) ? $reg['centro'] : '';
-				$almacen        = (array_key_exists('almacen', $reg)) ? $reg['almacen'] : '';
-				$lote           = (array_key_exists('lote', $reg)) ? $reg['lote'] : '';
-				$estado_stock   = (array_key_exists('estado_stock', $reg)) ? $reg['estado_stock'] : '';
-				$material       = (array_key_exists('material', $reg)) ? $reg['material'] : '';
-				$tipo_material  = (array_key_exists('tipo_material', $reg)) ? $reg['tipo_material']: '';
+				$id_tipo        = array_key_exists('id_tipo', $reg) ? $reg['id_tipo'] : '';
+				$centro         = array_key_exists('centro', $reg) ? $reg['centro'] : '';
+				$almacen        = array_key_exists('almacen', $reg) ? $reg['almacen'] : '';
+				$lote           = array_key_exists('lote', $reg) ? $reg['lote'] : '';
+				$estado_stock   = array_key_exists('estado_stock', $reg) ? $reg['estado_stock'] : '';
+				$material       = array_key_exists('material', $reg) ? $reg['material'] : '';
+				$tipo_material  = array_key_exists('tipo_material', $reg) ? $reg['tipo_material']: '';
 				$permanencia    = $campo;
 
 				$href_param  = '?id_tipo=' . $id_tipo;
@@ -187,10 +187,18 @@ class App_common {
 				return fmt_monto($valor);
 				break;
 			case 'numero_dif':
-				return (($valor > 0) ? '<span class="label label-success">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_cantidad($valor) . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0)
+						? '<span class="label label-success">'
+						: (($valor < 0) ? '<span class="label label-danger">' : '')) .
+					(($valor > 0) ? '+' : '') . fmt_cantidad($valor) .
+					(($valor != 0) ? '</span>' : '');
 				break;
 			case 'valor_dif':
-				return (($valor > 0) ? '<span class="label label-success">' : (($valor < 0) ? '<span class="label label-danger">' : '')) . (($valor > 0) ? '+' : '') . fmt_monto($valor) . (($valor != 0) ? '</span>' : '');
+				return (($valor > 0)
+						? '<span class="label label-success">'
+						: (($valor < 0) ? '<span class="label label-danger">' : '')) .
+					(($valor > 0) ? '+' : '') . fmt_monto($valor) .
+					(($valor != 0) ? '</span>' : '');
 				break;
 			default:
 				return $valor;
