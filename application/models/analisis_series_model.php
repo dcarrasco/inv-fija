@@ -194,20 +194,23 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db
+			$query = $this->db
 				->limit(1000)
 				->select('s.*, b.*, t.*, a.*, ts.*, u.*, e.*')
-				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
+				->select('convert(varchar(20), fecha_stock, 103) as FECHA', FALSE)
 				->from($this->config->item('bd_stock_scl') . ' s')
 				->join($this->config->item('bd_al_bodegas') . ' b', 'cast(s.cod_bodega as varchar(10)) = b.cod_bodega', 'left')
-				->join($this->config->item('bd_al_tipos_bodegas') . ' t', '(cast(s.tip_bodega as varchar(10)) = t.tip_bodega)', 'left')
-				->join($this->config->item('bd_materiales_sap') . ' a', '(cast(s.cod_articulo as varchar(10)) = a.cod_articulo)', 'left')
+				->join($this->config->item('bd_al_tipos_bodegas') . ' t', 'cast(s.tip_bodega as varchar(10)) = t.tip_bodega', 'left')
+				->join($this->config->item('bd_materiales_sap') . ' a', 'cast(s.cod_articulo as varchar(10)) = a.cod_articulo', 'left')
 				->join($this->config->item('bd_al_tipos_stock') . ' ts', 's.tip_stock = ts.tipo_stock', 'left')
 				->join($this->config->item('bd_al_estados') . ' e', 's.cod_estado = e.cod_estado', 'left')
 				->join($this->config->item('bd_al_usos') . ' u', 's.cod_uso = u.cod_uso', 'left')
 				->where_in('serie_sap', $arr_series)
-				->get()
-				->result_array();
+				->get_compiled_select();
+
+			$query = str_replace('"', '', $query);
+
+			return $this->db->query($query)->result_array();
 		}
 	}
 

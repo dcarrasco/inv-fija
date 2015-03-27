@@ -122,7 +122,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('<?php echo base_url(); ?>/<?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
+						$.getJSON('<?php echo base_url(); ?><?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';
