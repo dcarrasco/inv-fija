@@ -15,7 +15,7 @@ body {
 }
 
 .navbar {
-	font-family: "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "TelefonicaHeadlineLightRegular", "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .navbar-inverse {
@@ -38,7 +38,8 @@ body {
 }
 
 .navbar-inverse .navbar-brand {
-	color:#dfdfdf
+	color:#dfdfdf;
+	font-size: 20px;
 }
 
 .navbar-inverse .navbar-text{
@@ -102,4 +103,69 @@ table .header-fixed {
 	a[href]:after {
 		content: none;
 	}
+}
+
+
+
+
+/*
+==============================================================================
+Hoja de estilos para tipografias corporativas
+==============================================================================
+*/
+
+
+@font-face {
+	font-family: 'TelefonicaHeadlineLightRegular';
+	src: local('☺'),
+		 url('../fonts/TELEFONICAHEADLINELIGHT.eot.gz') format('embedded-opentype'),
+		 url('../fonts/TELEFONICAHEADLINELIGHT.woff') format('woff'),
+		 url('../fonts/TELEFONICAHEADLINELIGHT.otf') format('opentype'),
+		 url('../fonts/TELEFONICAHEADLINELIGHT.svg#TelefonicaHeadlineLightRegula') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'TelefonicaTextBold';
+	src: local('☺'),
+		 url('../fonts/TELEFONICATEXTBOLD.eot.gz') format('embedded-opentype'),
+		 url('../fonts/TELEFONICATEXTBOLD.woff') format('woff'),
+		 url('../fonts/TELEFONICATEXTBOLD.otf') format('opentype'),
+		 url('../fonts/TELEFONICATEXTBOLD.svg#TelefonicaTextBold') format('svg');
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'TelefonicaTextItalic';
+	src: local('☺'),
+		 url('../fonts/TELEFONICATEXTITALIC.eot.gz') format('embedded-opentype'),
+		 url('../fonts/TELEFONICATEXTITALIC.woff') format('woff'),
+		 url('../fonts/TELEFONICATEXTITALIC.otf') format('opentype'),
+		 url('../fonts/TELEFONICATEXTITALIC.svg#TelefonicaTextItalic') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'TelefonicaTextRegular';
+	src: local('☺'),
+		 url('../fonts/TELEFONICATEXTREGULAR.eot.gz') format('embedded-opentype'),
+		 url('../fonts/TELEFONICATEXTREGULAR.woff') format('woff'),
+		 url('../fonts/TELEFONICATEXTREGULAR.otf') format('opentype'),
+		 url('../fonts/TELEFONICATEXTREGULAR.svg#TelefonicaTextRegular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+
+@font-face {
+	font-family: 'TelefonicaCap';
+	src: local('☺'),
+		 url('../fonts/TELEFONICACAP.eot.gz') format('embedded-opentype'),
+		 url('../fonts/TELEFONICACAP.woff') format('woff'),
+		 url('../fonts/TELEFONICACAP.otf') format('opentype'),
+		 url('../fonts/TELEFONICACAP.svg#TelefonicaCap') format('svg');
+	font-weight: normal;
+	font-style: normal;
 }
