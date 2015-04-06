@@ -7,6 +7,8 @@ $lang['orm_link_edit']     = 'editar';
 $lang['orm_button_save']   = 'Guardar';
 $lang['orm_button_cancel'] = 'Cancelar';
 $lang['orm_button_delete'] = 'Borrar';
+$lang['orm_title_create']  = 'Crear';
+$lang['orm_title_edit']    = 'Editar';
 
 $lang['orm_radio_yes'] = 'Si';
 $lang['orm_radio_no']  = 'No';

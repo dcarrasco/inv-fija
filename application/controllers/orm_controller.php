@@ -66,8 +66,8 @@ class ORM_Controller extends CI_Controller {
 		$data = array(
 				'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'      => $modelo,
-				'url_filtro'  => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
-				'url_editar'  => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
+				'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
+				'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
 			);
 		$this->_render_view('ORM/orm_listado', $data);
 	}
@@ -91,8 +91,7 @@ class ORM_Controller extends CI_Controller {
 			$data = array(
 				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'        => $modelo,
-				'link_cancelar' => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo),
-				'msg_js_delete' => sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)),
+				'link_cancelar' => site_url($this->router->class . '/listado/' . $nombre_modelo),
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}
@@ -112,7 +111,7 @@ class ORM_Controller extends CI_Controller {
 			}
 
 			$this->session->set_flashdata('msg_alerta', $msg);
-			redirect($this->uri->segment(1) . '/listado/' . $nombre_modelo);
+			redirect($this->router->class . '/listado/' . $nombre_modelo);
 		}
 	}
 

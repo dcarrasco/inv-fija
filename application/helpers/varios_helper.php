@@ -17,7 +17,7 @@ if ( ! function_exists('dbg'))
 
 if ( ! function_exists('dbg_die'))
 {
-	function dbg_die($item)
+	function dd($item)
 	{
 		dbg($item);
 		die();

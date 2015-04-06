@@ -360,7 +360,9 @@ class Orm_model implements Iterator {
 			array_push($arr_id, $this->{$campo});
 		}
 
-		return implode($this->separador_campos, $arr_id);
+		$model_id = implode($this->separador_campos, $arr_id);
+
+		return ($model_id === '') ? null : $model_id;
 	}
 
 	// --------------------------------------------------------------------
@@ -600,7 +602,7 @@ class Orm_model implements Iterator {
 			'per_page'    => $this->model_page_results,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url(
-				$this->CI->uri->segment(1) . '/' .
+				$this->CI->router->class . '/' .
 				($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' .
 				$this->get_model_nombre() . '/' .
 				$this->model_filtro . '/'

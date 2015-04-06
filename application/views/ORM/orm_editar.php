@@ -2,6 +2,8 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 
+		<h3><?php echo ($modelo->get_model_id() ? 'Editar ' : 'Crear ') . $modelo->get_model_label() ?></h3>
+
 		<?php if (validation_errors()): ?>
 			<div class="alert alert-danger">
 				<ul>
@@ -9,7 +11,6 @@
 				</ul>
 			</div>
 		<?php endif; ?>
-
 
 		<?php foreach ($modelo as $campo => $valor): ?>
 			<?php echo $modelo->form_item($campo); ?>
@@ -31,7 +32,7 @@
 				</div>
 
 				<div class="pull-left">
-					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo $msg_js_delete; ?>');">
+					<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
 						<span class="glyphicon glyphicon-trash"></span>
 						<?php echo $this->lang->line('orm_button_delete'); ?>
 					</button>
