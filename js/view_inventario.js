@@ -43,6 +43,8 @@ $(document).ready(function() {
 	$('#btn_cancelar').click(function (event) {
 		event.preventDefault();
 		$('#formulario_agregar').toggle();
+		$('#formulario_digitador').toggle();
+		$('#btn_mostrar_agregar').toggle();
 		$('#btn_guardar').toggle();
 	});
 
@@ -69,6 +71,7 @@ $(document).ready(function() {
 		var id = id_elem.substr(14, id_elem.length);
 		$('#formulario_agregar').toggle();
 		$('#formulario_digitador').toggle();
+		$('#btn_mostrar_agregar').toggle();
 		$('#btn_guardar').toggle();
 
 		$('#agr_material').html('<option value="' + $('form#frm_inventario input[name="catalogo_' + id + '"]').val() + '">' + $('form#frm_inventario input[name="descripcion_' + id + '"]').val()+ '</option>');
