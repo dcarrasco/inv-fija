@@ -235,7 +235,7 @@
 	</div> <!-- fin content-module-main-agregar -->
 </div>
 
-<div>
+<div id="formulario_digitador">
 	<?php echo form_open($this->router->class . "/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>

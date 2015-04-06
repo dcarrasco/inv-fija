@@ -20,6 +20,7 @@ $(document).ready(function() {
 		$('#frm_agregar input[name="observacion"]').val('');
 
 		$('#formulario_agregar').toggle();
+		$('#formulario_digitador').toggle();
 		$('#btn_guardar').toggle();
 	});
 
@@ -67,6 +68,7 @@ $(document).ready(function() {
 		var id_elem = $(this).attr('id');
 		var id = id_elem.substr(14, id_elem.length);
 		$('#formulario_agregar').toggle();
+		$('#formulario_digitador').toggle();
 		$('#btn_guardar').toggle();
 
 		$('#agr_material').html('<option value="' + $('form#frm_inventario input[name="catalogo_' + id + '"]').val() + '">' + $('form#frm_inventario input[name="descripcion_' + id + '"]').val()+ '</option>');
