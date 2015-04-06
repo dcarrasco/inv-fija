@@ -11,8 +11,8 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		parent::__construct();
 
 		$this->arr_menu = array(
-			'perm_consumo' => array('url' => $this->uri->segment(1) . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
-			'det_consumo' => array('url' => $this->uri->segment(1) . '/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
+			'perm_consumo' => array('url' => $this->router->class . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
+			'det_consumo' => array('url' => $this->router->class . '/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
 		);
 	}
 

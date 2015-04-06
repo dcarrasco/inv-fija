@@ -4,7 +4,7 @@
 
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
-		<?php echo form_open_multipart($this->uri->segment(1) . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
+		<?php echo form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
 
 		<div class="form-group">

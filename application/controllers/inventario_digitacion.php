@@ -112,8 +112,8 @@ class Inventario_digitacion extends CI_Controller {
 				'link_config'        => 'config',
 				'link_reporte'       => 'reportes',
 				'link_inventario'    => 'inventario',
-				'link_hoja_ant'      => base_url($this->uri->segment(1) . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
-				'link_hoja_sig'      => base_url($this->uri->segment(1) . '/ingreso/' . ($hoja + 1) . '/' . time()),
+				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
@@ -181,7 +181,7 @@ class Inventario_digitacion extends CI_Controller {
 			}
 
 			$this->session->set_flashdata('msg_alerta', $msg_alerta);
-			redirect($this->uri->segment(1) . '/ingreso/' . $this->input->post('hoja') . '/' . time());
+			redirect($this->router->class . '/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
 	}

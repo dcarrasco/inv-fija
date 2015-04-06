@@ -16,19 +16,19 @@ class Inventario_analisis extends CI_Controller {
 
 		$this->arr_menu = array(
 			'ajustes' => array(
-				'url'   => $this->uri->segment(1) . '/ajustes',
+				'url'   => $this->router->class . '/ajustes',
 				'texto' => $this->lang->line('inventario_menu_ajustes'),
 			),
 			'sube_stock' => array(
-				'url'   => $this->uri->segment(1) . '/sube_stock',
+				'url'   => $this->router->class . '/sube_stock',
 				'texto' => $this->lang->line('inventario_menu_upload'),
 			),
 			'imprime_inventario' => array(
-				'url'   => $this->uri->segment(1) . '/imprime_inventario',
+				'url'   => $this->router->class . '/imprime_inventario',
 				'texto' => $this->lang->line('inventario_menu_print'),
 			),
 			'actualiza_precios' => array(
-				'url'   => $this->uri->segment(1) . '/actualiza_precios',
+				'url'   => $this->router->class . '/actualiza_precios',
 				'texto' => $this->lang->line('inventario_menu_act_precios'),
 			),
 		);
@@ -133,7 +133,7 @@ class Inventario_analisis extends CI_Controller {
 			}
 
 			$this->session->set_flashdata('msg_alerta', $msg_alerta);
-			redirect($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
+			redirect($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time());
 		}
 
 	}
@@ -271,7 +271,7 @@ class Inventario_analisis extends CI_Controller {
 			$oculta_stock_sap = (set_value('oculta_stock_sap') == 'oculta_stock_sap') ? 1 : 0;
 
 			redirect(
-				$this->uri->segment(1) . "/imprime_hojas/" .
+				$this->router->class . "/imprime_hojas/" .
 				set_value('pag_desde') . '/' .
 				set_value('pag_hasta') . '/' .
 				$oculta_stock_sap . '/' .

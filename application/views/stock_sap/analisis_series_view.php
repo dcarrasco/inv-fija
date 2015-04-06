@@ -68,7 +68,7 @@
 						<label>
 							<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
 							<?php echo $this->lang->line('stock_analisis_check_trafico'); ?>
-							(<?php echo anchor($this->uri->segment(1) . '/trafico_por_mes',$this->lang->line('stock_analisis_link_detalle_trafico')); ?>)
+							(<?php echo anchor($this->router->class . '/trafico_por_mes',$this->lang->line('stock_analisis_link_detalle_trafico')); ?>)
 						</label>
 					</div>
 					<div class="checkbox">

@@ -1,4 +1,4 @@
-<?php echo form_open($this->uri->segment(1) . '/ingreso', 'id="frm_buscar" role="form"'); ?>
+<?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
 <div class="row">
 
@@ -61,7 +61,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well" style="display: none;" id="formulario_agregar">
 
-		<?php echo form_open($this->uri->segment(1) . "/ingreso/$hoja/".time(), 'id="frm_agregar" class="form-horizontal" role="form"')?>
+		<?php echo form_open($this->router->class . "/ingreso/$hoja/".time(), 'id="frm_agregar" class="form-horizontal" role="form"')?>
 		<?php echo form_hidden('formulario','agregar'); ?>
 		<?php echo form_hidden('accion','agregar'); ?>
 		<?php echo form_hidden('hoja', $hoja); ?>
@@ -236,7 +236,7 @@
 </div>
 
 <div>
-	<?php echo form_open($this->uri->segment(1) . "/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open($this->router->class . "/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>
 	<?php echo form_hidden('auditor', $id_auditor); ?>

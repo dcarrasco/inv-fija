@@ -10,10 +10,10 @@ class Acl_config extends ORM_Controller {
 		parent::__construct();
 
 		$this->arr_menu = array(
-			'usuario'        => array('url' => $this->uri->segment(1) . '/listado/usuario', 'texto' => 'Usuarios'),
-			'app'            => array('url' => $this->uri->segment(1) . '/listado/app', 'texto' => 'Aplicaciones'),
-			'rol'            => array('url' => $this->uri->segment(1) . '/listado/rol', 'texto' => 'Roles'),
-			'modulo'         => array('url' => $this->uri->segment(1) . '/listado/modulo', 'texto' => 'Modulos'),
+			'usuario'        => array('url' => $this->router->class . '/listado/usuario', 'texto' => 'Usuarios'),
+			'app'            => array('url' => $this->router->class . '/listado/app', 'texto' => 'Aplicaciones'),
+			'rol'            => array('url' => $this->router->class . '/listado/rol', 'texto' => 'Roles'),
+			'modulo'         => array('url' => $this->router->class . '/listado/modulo', 'texto' => 'Modulos'),
 		);
 
 	}

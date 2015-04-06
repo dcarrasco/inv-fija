@@ -281,7 +281,7 @@ class Detalle_inventario extends ORM_Model {
 
 			'per_page'    => $per_page,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->CI->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/'),
+			'base_url'    => site_url($this->CI->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',

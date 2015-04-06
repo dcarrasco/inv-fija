@@ -146,7 +146,7 @@
 	</div>
 </div>
 
-<?php echo form_open($this->uri->segment(1) . '/historia', array('id' => 'frmHistoria')); ?>
+<?php echo form_open($this->router->class . '/historia', array('id' => 'frmHistoria')); ?>
 <?php echo form_hidden('series'); ?>
 <?php echo form_hidden('show_mov', 'show'); ?>
 <?php echo form_close(); ?>

@@ -11,19 +11,19 @@ class Stock_config extends ORM_Controller {
 
 		$this->arr_menu = array(
 			'almacen_sap' => array(
-				'url'   => $this->uri->segment(1) . '/listado/almacen_sap',
+				'url'   => $this->router->class . '/listado/almacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_alm'),
 			),
 			'tipoalmacen_sap' => array(
-				'url'   => $this->uri->segment(1) . '/listado/tipoalmacen_sap',
+				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_tipalm'),
 			),
 			'proveedor' => array(
-				'url'   => $this->uri->segment(1) . '/listado/proveedor',
+				'url'   => $this->router->class . '/listado/proveedor',
 				'texto' => $this->lang->line('stock_config_menu_proveedores'),
 			),
 			'almacenes_no_ingresados' => array(
-				'url'   => $this->uri->segment(1) . '/almacenes_no_ingresados',
+				'url'   => $this->router->class . '/almacenes_no_ingresados',
 				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),
 			),
 		);

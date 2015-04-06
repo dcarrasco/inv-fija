@@ -43,7 +43,7 @@
 							<span class="glyphicon glyphicon-list-alt"></span>
 							Consultar
 						</button>
-						<a href="<?php echo $this->uri->segment(1); ?>" class="btn btn-default">
+						<a href="<?php echo $this->router->class; ?>" class="btn btn-default">
 							<span class="glyphicon glyphicon-chevron-left"></span>
 							Volver
 						</a>
@@ -122,7 +122,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('<?php echo base_url(); ?><?php echo $this->uri->segment(1); ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
+						$.getJSON('<?php echo base_url(); ?><?php echo $this->router->class; ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';

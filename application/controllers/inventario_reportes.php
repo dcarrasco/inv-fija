@@ -16,27 +16,27 @@ class Inventario_reportes extends CI_Controller {
 
 		$this->arr_menu = array(
 			'hoja' => array(
-				'url'   => $this->uri->segment(1) . '/listado/hoja',
+				'url'   => $this->router->class . '/listado/hoja',
 				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
 			),
 			'material' => array(
-				'url'   => $this->uri->segment(1) . '/listado/material',
+				'url'   => $this->router->class . '/listado/material',
 				'texto' => $this->lang->line('inventario_menu_reporte_mat'),
 			),
 			'material_faltante' => array(
-				'url'   => $this->uri->segment(1) . '/listado/material_faltante',
+				'url'   => $this->router->class . '/listado/material_faltante',
 				'texto' => $this->lang->line('inventario_menu_reporte_faltante'),
 			),
 			'ubicacion' => array(
-				'url'   => $this->uri->segment(1) . '/listado/ubicacion' ,
+				'url'   => $this->router->class . '/listado/ubicacion' ,
 				'texto' => $this->lang->line('inventario_menu_reporte_ubicacion'),
 			),
 			'tipos_ubicacion' => array(
-				'url'   => $this->uri->segment(1) . '/listado/tipos_ubicacion',
+				'url'   => $this->router->class . '/listado/tipos_ubicacion',
 				'texto' => $this->lang->line('inventario_menu_reporte_tip_ubic'),
 			),
 			'ajustes' => array(
-				'url'   => $this->uri->segment(1) . '/listado/ajustes',
+				'url'   => $this->router->class . '/listado/ajustes',
 				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
 			),
 		);
@@ -97,7 +97,7 @@ class Inventario_reportes extends CI_Controller {
 
 			$arr_campos = array();
 
-			$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_hoja/');
+			$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/');
 			$arr_campos['auditor'] = array('titulo' => 'Auditor', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['digitador'] = array('titulo' => 'Digitador', 'class' => '', 'tipo' => 'texto');
 
@@ -129,7 +129,7 @@ class Inventario_reportes extends CI_Controller {
 
 			$arr_campos = array();
 			$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
-			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
+			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
 			$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['lote'] = array('titulo' => 'lote', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['centro'] = array('titulo' => 'centro', 'class' => '', 'tipo' => 'texto');
@@ -167,7 +167,7 @@ class Inventario_reportes extends CI_Controller {
 				$arr_campos['nombre_fam'] = array('titulo' => 'Familia', 'class' => '', 'tipo' => 'subtotal');
 			}
 
-			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
+			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
 			$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['um'] = array('titulo' => 'UM', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['pmp'] = array('titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp');
@@ -199,7 +199,7 @@ class Inventario_reportes extends CI_Controller {
 			$datos_hoja = $this->inventario_model->get_reporte_material_faltante($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
 
 			$arr_campos = array();
-			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_material/');
+			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
 			$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['um'] = array('titulo' => 'UM', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['q_faltante'] = array('titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero');
@@ -219,7 +219,7 @@ class Inventario_reportes extends CI_Controller {
 			$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
-			$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->uri->segment(1) . '/listado/detalle_hoja/');
+			$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/');
 			$arr_campos['lote'] = array('titulo' => 'lote', 'class' => '', 'tipo' => 'texto');
 
 			$arr_campos['stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');

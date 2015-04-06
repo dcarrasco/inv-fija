@@ -5,7 +5,7 @@
 	</div>
 	<div class="pull-right">
 		<?php echo anchor(
-			$this->uri->segment(1) . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
+			$this->router->class . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
 			($ocultar_regularizadas == 0) ? $this->lang->line('inventario_adjust_link_hide') : $this->lang->line('inventario_adjust_link_show')
 		); ?>
 	</div>
@@ -14,7 +14,7 @@
 
 
 <div>
-	<?php echo form_open($this->uri->segment(1) . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
 	<table class="table table-hover table-condensed reporte table-fixed-header">
