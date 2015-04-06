@@ -781,6 +781,65 @@ class Reportestock_model extends CI_Model {
 	}
 
 
+	public function get_almacenes_est03($garantia_cliente = TRUE)
+	{
+		if ($garantia_cliente)
+		{
+			$this->db->where('dif_03_eng >=', 0);
+			$this->db->where('dif_03_eng <=', 10);
+		}
+
+		return $this->db
+			->distinct()
+			->select("centro + '-' + almacen + ' ' + des_almacen as almacen", FALSE)
+			->from($this->config->item('bd_stock_seriado_sap_03'))
+			->order_by('almacen')
+			->get()->result_array();
+	}
+
+
+	public function get_marcas_est03($garantia_cliente = TRUE)
+	{
+		if ($garantia_cliente)
+		{
+			$this->db->where('dif_03_eng >=', 0);
+			$this->db->where('dif_03_eng <=', 10);
+		}
+
+		return $this->db
+			->distinct()
+			->select('substring(material, 6, 2) as marca', FALSE)
+			->from($this->config->item('bd_stock_seriado_sap_03'))
+			->order_by('marca')
+			->get()->result_array();
+	}
+
+	public function get_stock_est03($garantia_cliente = TRUE)
+	{
+		if ($garantia_cliente)
+		{
+			$this->db->where('dif_03_eng >=', 0);
+			$this->db->where('dif_03_eng <=', 10);
+		}
+
+		$this->db
+			->select("centro + '-' + almacen + ' ' + des_almacen as almacen", FALSE)
+			->select('substring(material, 6, 2) as marca', FALSE)
+			->select('count(*) as cantidad', FALSE)
+			->from($this->config->item('bd_stock_seriado_sap_03'))
+			->group_by("centro + '-' + almacen + ' ' + des_almacen, substring(material, 6, 2)", FALSE)
+			->order_by('almacen, marca');;
+
+		$return_array = array();
+		foreach($this->db->get()->result_array() as $reg)
+		{
+			$return_array[$reg['almacen']][$reg['marca']] = $reg['cantidad'];
+		}
+
+		return $return_array;
+	}
+
+
 }
 
 /* End of file reportestock_model.php */

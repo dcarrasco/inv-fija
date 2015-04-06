@@ -50,6 +50,7 @@ $config['bd_despachos_sap']       = 'bd_logistica..despachos_sap';
 $config['bd_materiales_sap']      = 'bd_logistica..al_articulos';
 $config['bd_materiales2_sap']     = 'bd_logistica..cp_materiales_sap';
 $config['bd_stock_seriado_sap']   = 'bd_logistica..bd_stock_sap';
+$config['bd_stock_seriado_sap_03'] = 'bd_logistica..bd_stock_03';
 $config['bd_stock_scl']           = 'bd_logistica..bd_stock_scl';
 $config['bd_al_bodegas']          = 'bd_logistica..al_bodegas';
 $config['bd_al_tipos_bodegas']    = 'bd_logistica..al_tipos_bodegas';

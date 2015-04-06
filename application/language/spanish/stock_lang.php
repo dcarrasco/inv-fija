@@ -7,6 +7,7 @@ $lang['stock_sap_menu_transito']       = 'Tr&aacute;nsito fija';
 $lang['stock_perm_menu_perm']          = 'Permanencia';
 $lang['stock_perm_menu_mapa']          = 'Mapa de stock';
 $lang['stock_perm_menu_movs']          = 'Consulta de movimientos';
+$lang['stock_perm_menu_est03']         = 'Consulta devolución clientes';
 $lang['stock_config_menu_alm']         = 'Almacenes SAP';
 $lang['stock_config_menu_tipalm']      = 'Tipo almacenes SAP';
 $lang['stock_config_menu_proveedores'] = 'Proveedores';
