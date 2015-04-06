@@ -101,6 +101,13 @@ class Orm_model implements Iterator {
 	private $fields_values = array();
 
 	/**
+	 * Arreglo temporal de objetos recuperados de la BD
+	 *
+	 * @var array
+	 */
+	private $fields_relation_objects = array();
+
+	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
@@ -712,9 +719,9 @@ class Orm_model implements Iterator {
 
 				if ($recupera_relation)
 				{
-					$o->_recuperar_relation_fields();
+					$o->_recuperar_relation_fields($this->fields_relation_objects);
+					$this->_add_relation_field_data($o->_get_relation_field_data_to_array());
 				}
-
 				array_push($this->model_all, $o);
 			}
 
@@ -811,22 +818,33 @@ class Orm_model implements Iterator {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera los mdelos dependientes (de las relaciones has_one y has_many)
+	 * Recupera los modelos dependientes (de las relaciones has_one y has_many)
 	 *
+	 * @param  array  $arr_obj Arreglo de objetos recuperados anteriormente (evita hacer queries repetidas)
 	 * @return nada
 	 */
-	private function _recuperar_relation_fields()
+	private function _recuperar_relation_fields($arr_obj = array())
 	{
+
 		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
 			if($obj_campo->get_tipo() == 'has_one')
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
-
 				$class_relacionado = $arr_props_relation['model'];
-				$model_relacionado = new $class_relacionado();
-				$model_relacionado->find_id($this->$nombre_campo, FALSE);
+
+				// si el objeto a recuperar existe en el arreglo $arr_obj,
+				// recupera el objeto del arreglo y no va a buscarlo a la BD
+				if (array_key_exists($nombre_campo, $arr_obj) AND array_key_exists($this->$nombre_campo, $arr_obj[$nombre_campo]))
+				{
+					$model_relacionado = $arr_obj[$nombre_campo][$this->$nombre_campo];
+				}
+				else
+				{
+					$model_relacionado = new $class_relacionado();
+					$model_relacionado->find_id($this->$nombre_campo, FALSE);
+				}
 
 				$arr_props_relation['data'] = $model_relacionado;
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
@@ -874,6 +892,56 @@ class Orm_model implements Iterator {
 			}
 		}
 	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera los datos de las relaciones y los devuelve como arreglo
+	 *
+	 * @return array  Arreglo con los objetos recuperados
+	 */
+	private function _get_relation_field_data_to_array()
+	{
+		$arr = array();
+		foreach ($this->model_fields as $nombre_campo => $obj_campo)
+		{
+			if($obj_campo->get_tipo() == 'has_one')
+			{
+				$arr[$nombre_campo][$this->$nombre_campo]=$this->get_relation_object($nombre_campo);
+			}
+		}
+
+		return $arr;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera los datos de las relaciones y los devuelve como arreglo
+	 *
+	 * @return nada
+	 */
+	private function _add_relation_field_data($arr = array())
+	{
+		foreach ($arr as $campo => $arr_valores)
+		{
+			if (! array_key_exists($campo, $this->fields_relation_objects))
+			{
+				$this->fields_relation_objects[$campo] = array();
+			}
+
+			foreach ($arr_valores as $key => $obj)
+			{
+				if (! array_key_exists($key, $this->fields_relation_objects[$campo]))
+				{
+					$this->fields_relation_objects[$campo][$key] = $obj;
+				}
+			}
+		}
+	}
+
 
 	// --------------------------------------------------------------------
 
