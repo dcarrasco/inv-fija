@@ -414,6 +414,7 @@ class Orm_model implements Iterator {
 		$this->CI->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
 	}
 
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -425,6 +426,27 @@ class Orm_model implements Iterator {
 	{
 		$this->_recuperar_relation_fields();
 	}
+
+
+	// --------------------------------------------------------------------
+	public function form_item($campo = '')
+	{
+		if ($campo != '')
+		{
+			$data = array(
+				'item_error'    => form_has_error($campo),
+				'item_label'    => ucfirst($this->get_label_field($campo)),
+				'item_required' => $this->get_es_obligatorio_field($campo),
+				'item_id'       => 'id_'.$campo,
+				'item_form'     => $this->print_form_field($campo),
+				'item_help'     => $this->get_texto_ayuda_field($campo),
+			);
+
+			return ($this->CI->load->view('orm/form_item', $data, TRUE));
+		}
+	}
+
+
 
 	// --------------------------------------------------------------------
 

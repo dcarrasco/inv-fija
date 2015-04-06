@@ -2,28 +2,23 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 
-		<?php foreach ($modelo as $campo => $valor): ?>
-		<div class="form-group <?php echo form_has_error($campo); ?>">
-			<?php echo form_label(
-						ucfirst($modelo->get_label_field($campo)) .	$modelo->get_marca_obligatorio_field($campo),
-						"id_" . $campo,
-						array('class' => 'control-label col-sm-4')
-					);
-			?>
-			<div class="col-sm-7">
-				<?php echo $modelo->print_form_field($campo); ?>
-				<span class="help-block">
-					<em><small><?php echo $modelo->get_texto_ayuda_field($campo); ?></small></em>
-				</span>
-				<?php echo form_error($campo); ?>
+		<?php if (validation_errors()): ?>
+			<div class="alert alert-danger">
+				<ul>
+					<?php echo validation_errors(); ?>
+				</ul>
 			</div>
-		</div>
+		<?php endif; ?>
+
+
+		<?php foreach ($modelo as $campo => $valor): ?>
+			<?php echo $modelo->form_item($campo); ?>
 		<?php endforeach; ?>
 
 		<div class="form-group">
 			<label class="control-label col-sm-4">
 			</label>
-			<div class="col-sm-7">
+			<div class="col-sm-8">
 				<div class="pull-right">
 					<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
 						<span class="glyphicon glyphicon-ok"></span>

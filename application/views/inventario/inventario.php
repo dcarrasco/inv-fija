@@ -138,6 +138,8 @@
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('um', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('um'); ?>
 			</div>
 		</div>
@@ -149,6 +151,8 @@
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('centro', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('centro'); ?>
 			</div>
 		</div>
@@ -160,6 +164,8 @@
 			</label>
 			<div class="col-sm-3">
 				<?php echo $nuevo_detalle_inventario->print_form_field('almacen', FALSE, 'input-sm'); ?>
+			</div>
+			<div class="col-sm-5">
 				<?php echo form_error('almacen'); ?>
 			</div>
 		</div>

@@ -37,7 +37,8 @@ class ORM_Controller extends CI_Controller {
 	 */
 	protected function _render_view($vista = '', $data = array())
 	{
-		$data['titulo_modulo'] = $this->titulo_modulo;
+		$data['msg_alerta']  = $this->session->flashdata('msg_alerta');
+
 		$this->load->view('app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('app_footer', $data);
@@ -64,7 +65,6 @@ class ORM_Controller extends CI_Controller {
 
 		$data = array(
 				'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'msg_alerta'  => $this->session->flashdata('msg_alerta'),
 				'modelo'      => $modelo,
 				'url_filtro'  => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo . '/'),
 				'url_editar'  => site_url($this->uri->segment(1) . '/editar/'  . $nombre_modelo . '/'),
@@ -90,10 +90,9 @@ class ORM_Controller extends CI_Controller {
 		{
 			$data = array(
 				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'msg_alerta'    => $this->session->flashdata('msg_alerta'),
 				'modelo'        => $modelo,
 				'link_cancelar' => site_url($this->uri->segment(1) . '/listado/' . $nombre_modelo),
-				'msg_js_delete' => sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo->__toString())),
+				'msg_js_delete' => sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)),
 				);
 			$this->_render_view('ORM/orm_editar', $data);
 		}

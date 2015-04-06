@@ -54,7 +54,7 @@ if ( ! function_exists('form_has_error'))
 {
 	function form_has_error($form_field = '')
 	{
-		return (form_error($form_field) != '') ? 'has-error' : '';
+		return (bool) (form_error($form_field) != '');
 	}
 }
 

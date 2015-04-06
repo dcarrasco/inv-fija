@@ -104,7 +104,6 @@ class Inventario_analisis extends CI_Controller {
 				'ocultar_regularizadas' => $ocultar_regularizadas,
 				'pag'                   => $pag,
 				'links_paginas'         => $links_paginas,
-				'msg_alerta'            => $this->session->flashdata('msg_alerta'),
 			);
 
 			$this->_render_view('ajustes', $data);
@@ -209,7 +208,6 @@ class Inventario_analisis extends CI_Controller {
 			'link_config'       => 'config',
 			'link_reporte'      => 'reportes',
 			'link_inventario'   => 'inventario',
-			'msg_alerta'        => $this->session->flashdata('msg_alerta'),
 		);
 
 		$this->_render_view('sube_stock', $data);
@@ -246,9 +244,12 @@ class Inventario_analisis extends CI_Controller {
 		$inventario = new Inventario;
 		$inventario->find_id($this->id_inventario);
 
-		$this->form_validation->set_rules('pag_desde', 'Pagina Desde', 'trim|required|greater_than[0]');
-		$this->form_validation->set_rules('pag_hasta', 'Pagina Hasta', 'trim|required|greater_than[0]');
+		$this->form_validation->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]');
+		$this->form_validation->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
+
+
+
 
 		$this->app_common->form_validation_config();
 
@@ -261,7 +262,6 @@ class Inventario_analisis extends CI_Controller {
 				'link_config'       => 'config',
 				'link_reporte'      => 'reportes',
 				'link_inventario'   => 'inventario',
-				'msg_alerta'        => $this->session->flashdata('msg_alerta'),
 			);
 
 			$this->_render_view('imprime_inventario', $data);
@@ -360,6 +360,8 @@ class Inventario_analisis extends CI_Controller {
 	private function _render_view($vista = '', $data = array())
 	{
 		$data['menu_modulo'] = array('menu' => $this->arr_menu, 'mod_selected' => $vista);
+		$data['msg_alerta']  = $this->session->flashdata('msg_alerta');
+
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/' . $vista, $data);
 		$this->load->view('app_footer', $data);

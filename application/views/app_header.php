@@ -68,13 +68,6 @@
 
 <div class="container">
 
-<?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
-<div class="alert alert-warning">
-	<button type="button" class="close" data-dismiss="alert">&times;</button>
-	<?php echo $msg_alerta; ?>
-</div>
-<?php endif; ?>
-
 <?php if (isset($menu_modulo)): ?>
 <ul class="nav nav-tabs hidden-print">
 	<?php foreach($menu_modulo['menu'] as $modulo => $val): ?>
@@ -83,6 +76,15 @@
 		</li>
 	<?php endforeach; ?>
 </ul>
+
 <div class="tab-content">
 <div class="tab-pane active">
 <?php endif; ?>
+
+<?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
+<div class="alert alert-warning">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<?php echo $msg_alerta; ?>
+</div>
+<?php endif; ?>
+

@@ -18,27 +18,27 @@
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('pag_desde'); ?>">
 			<label class="control-label col-sm-3">
 				<?php echo $this->lang->line('inventario_print_label_page_from'); ?>
 			</label>
-			<div class="col-sm-2">
+			<div class="col-sm-8">
 				<?php echo form_input('pag_desde', set_value('pag_desde',1), 'class="form-control"  maxlength="5"'); ?>
 				<?php echo form_error('pag_desde'); ?>
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('pag_hasta'); ?>">
 			<label class="control-label col-sm-3">
 				<?php echo $this->lang->line('inventario_print_label_page_to'); ?>
 			</label>
-			<div class="col-sm-2">
+			<div class="col-sm-8">
 				<?php echo form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="form-control"  maxlength="5"'); ?>
 				<?php echo form_error('pag_hasta'); ?>
 			</div>
 		</div>
 
-		<div class="form-group">
+		<div class="form-group <?php echo form_has_error('oculta_stock_sap'); ?>">
 			<label class="control-label col-sm-3">
 				<?php echo $this->lang->line('inventario_print_label_options'); ?>
 			</label>

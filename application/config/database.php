@@ -53,7 +53,7 @@ if (ENVIRONMENT == 'development')
 }
 if (ENVIRONMENT == 'development-mac')
 {
-	$active_group = 'mac-sirio';
+	$active_group = 'mac';
 }
 
 $query_builder = TRUE;

@@ -123,7 +123,8 @@ class App_common {
 	 */
 	public function form_validation_config()
 	{
-		$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
+		//$this->form_validation->set_error_delimiters('<div class="alert alert-danger"><strong>ERROR:</strong> ', '</div>');
+		$this->form_validation->set_error_delimiters('<li> ', '</li>');
 
 		//$this->form_validation->set_message('required', 'Ingrese un valor para el campo "%s"');
 		//$this->form_validation->set_message('matches', 'Nueva clave (reingreso) no coincide');
