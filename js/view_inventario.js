@@ -2,7 +2,8 @@ $(document).ready(function() {
 
 	if ($('#formulario_agregar div.alert-danger').length > 0) {
 		$('#formulario_agregar').toggle();
-		$('#btn_guardar').toggle();
+		$('#formulario_digitador').toggle();
+ 		$('#btn_guardar').toggle();
 	}
 
 	$('#btn_mostrar_agregar').click(function (event) {
@@ -44,7 +45,7 @@ $(document).ready(function() {
 		event.preventDefault();
 		$('#formulario_agregar').toggle();
 		$('#formulario_digitador').toggle();
-		$('#btn_mostrar_agregar').toggle();
+		$('#btn_mostrar_agregar').show();
 		$('#btn_guardar').toggle();
 	});
 
