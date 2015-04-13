@@ -880,14 +880,13 @@ class Orm_model implements Iterator {
 				{
 					array_push($arr_where, array_pop($reg));
 				}
-
 				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 
 				$arr_props_relation['data'] = $model_relacionado;
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
-				$this->$nombre_campo = $arr_where;
+				$this->fields_values[$nombre_campo] = $arr_where;
 				$this->model_got_relations = TRUE;
 			}
 		}
