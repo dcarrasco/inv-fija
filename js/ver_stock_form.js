@@ -2,21 +2,48 @@
 
 $(document).ready(function () {
 
-    if ($('input[name="sel_fechas"]:checked').val() === 'ultimo_dia') {
-        $("#show_fecha_todas").hide();
-    } else {
-        $("#show_fecha_ultimodia").hide();
+    $('input[name="sel_fechas"]').click(function (event) {
+
+        var sel_fechas = $('input[name="sel_fechas"]:checked').val();
+        var url_datos = js_base_url + 'stock_sap/get_combo_fechas/' + tipo_operacion + '/' + sel_fechas;
+        $('#combo_fechas').html('');
+
+        $.get(url_datos, function (data) {$('#combo_fechas').html(data); });
+    });
+
+    $('input[name="sel_tiposalm"]').click(function (event) {
+
+        var sel_tiposalm = $('input[name="sel_tiposalm"]:checked').val();
+        var url_datos = js_base_url + 'stock_sap/get_combo_almacenes/' + tipo_operacion + '/' + sel_tiposalm;
+        $('#combo_almacenes').html('');
+
+        fillCombo(url_datos, '#combo_almacenes');
+    });
+
+    var fillCombo = function (url_datos, selectElement)
+    {
+console.log(url_datos);
+        $.getJSON(url_datos, function(data) {
+            var items=[];
+            $.each(data, function(key, val) {
+               items.push('<option value="' + key + '">' + val + '</options>');
+            });
+
+            $(selectElement).html('');
+            $(selectElement).html(items.join(""));
+
+        });
+
+
+        $(selectElement).html();
+console.log(options_array);
+        var sOptions = '',
+            len = options_array.length;
+
+        for (var i = 0; i < len; i++){}
+
     }
 
-    $('input[name="sel_fechas"]').click(function (event) {
-        if ($('input[name="sel_fechas"]:checked').val() === 'ultimo_dia') {
-            $("#show_fecha_ultimodia").show();
-            $("#show_fecha_todas").hide();
-        } else {
-            $("#show_fecha_ultimodia").hide();
-            $("#show_fecha_todas").show();
-        }
-    });
 
     if ($('input[name="sel_tiposalm"]:checked').val() === 'sel_tiposalm') {
         $("#show_almacenes").hide();

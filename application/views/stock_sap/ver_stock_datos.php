@@ -4,6 +4,8 @@
 <?php $campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS','VAL_cantidad', 'monto'); ?>
 
 <table id='stock' class="table table-striped table-hover table-condensed reporte">
+	<?php if (isset($stock) AND count($stock) > 0): ?>
+
 	<?php foreach($stock as $key_reg => $reg): ?>
 		<?php // ********************************************************* ?>
 		<?php // Imprime encabezados                                       ?>
@@ -69,6 +71,7 @@
 			<?php endforeach; ?>
 		</tr>
 	</tfoot>
+	<?php endif ?>
 </table>
 
 

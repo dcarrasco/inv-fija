@@ -11,6 +11,7 @@ class Stock_sap extends CI_Controller {
 	{
 		parent::__construct();
 		$this->lang->load('stock');
+		$this->app_common->form_validation_config();
 
 		$this->arr_menu = array(
 			'stock_movil' => array(
@@ -72,76 +73,77 @@ class Stock_sap extends CI_Controller {
 		$this->load->model('stock_sap_model');
 		$this->load->library('grafica_stock');
 
-		$almacen_sap = new Almacen_sap;
-		$tipoalmacen_sap = new Tipoalmacen_sap;
-
-		$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
-		foreach (array('almacen','material','lote','tipo_stock') as $val)
-		{
-			if ($this->input->post($val) == $val)
-			{
-				array_push($arr_mostrar, $val);
-			}
-		}
-
-		$arr_filtrar = 	array();
-		foreach (array('tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $val)
-		{
-			$arr_filtrar[$val] = $this->input->post($val);
-		}
-
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
-			? $this->input->post('fecha_ultimodia')
-			: $this->input->post('fecha_todas');
-
-		$this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
-		$this->form_validation->set_rules('fecha_ultimodia', 'Fechas (ultimo dia del mes)', '');
-		$this->form_validation->set_rules('fecha_todas', 'Fechas (todas)', '');
-		$this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
-		$this->form_validation->set_rules('tipo_alm', 'Tipos de almacenes', '');
-		$this->form_validation->set_rules('almacenes', 'Almacenes', '');
-		$this->form_validation->set_rules('almacen', 'Indicador detalle almacenes', '');
-		$this->form_validation->set_rules('material', 'Indicador detalle materiales', '');
-		$this->form_validation->set_rules('lote', 'Indicador detalle lotes', '');
-		$this->form_validation->set_rules('tipo_stock', 'Indicador tipos de stock', '');
-		$this->form_validation->set_rules('tipo_stock_equipos', 'Mostrar equipos', '');
-		$this->form_validation->set_rules('tipo_stock_simcard', 'Mostrar simcards', '');
-		$this->form_validation->set_rules('tipo_stock_otros', '', 'Mostrar otros', '');
-		$this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
-		$this->form_validation->run();
-
-		$stock = array();
-		if($this->input->post('sel_fechas'))
-		{
-			$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
-		}
-		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
-
-		$datos_grafico = array();
-		if ($tipo_op == 'MOVIL' AND count($stock) > 0)
-		{
-			$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
-		}
-
 		$data = array(
 			'menu_modulo'            => array(
 				'menu'         => $this->arr_menu,
 				'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'
 			),
-			'stock'                  => $stock,
-			'combo_tipo_alm'         => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
-			'combo_almacenes'        => $almacen_sap->get_combo_almacenes($tipo_op),
-			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-			'combo_fechas_todas'     => $combo_fechas['todas'],
-			'tipo_op'                => $tipo_op,
-			'arr_mostrar'            => $arr_mostrar,
-			'datos_grafico'          => $datos_grafico,
-			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
+			'tipo_op'         => $tipo_op,
+			'combo_almacenes' => $this->_get_combo_almacenes($tipo_op, set_value('sel_tiposalm', 'sel_tiposalm')),
+			'combo_fechas'    => $this->stock_sap_model->get_combo_fechas($tipo_op, set_value('sel_fechas', 'ultimo_dia')),
+		);
+
+		if ($this->form_validation->run('stock_sap/mostrar_stock'))
+		{
+			$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
+			foreach (array('almacen','material','lote','tipo_stock') as $val)
+			{
+				if ($this->input->post($val) == $val)
+				{
+					array_push($arr_mostrar, $val);
+				}
+			}
+
+			$arr_filtrar = 	array();
+			foreach (array('tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $val)
+			{
+				$arr_filtrar[$val] = $this->input->post($val);
+			}
+
+			$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
+				? $this->input->post('fecha_ultimodia')
+				: $this->input->post('fecha_todas');
+
+			// $this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
+			// $this->form_validation->set_rules('fecha_ultimodia', 'Fechas (ultimo dia del mes)', '');
+			// $this->form_validation->set_rules('fecha_todas', 'Fechas (todas)', '');
+			// $this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
+			// $this->form_validation->set_rules('tipo_alm', 'Tipos de almacenes', '');
+			// $this->form_validation->set_rules('almacenes', 'Almacenes', '');
+			// $this->form_validation->set_rules('almacen', 'Indicador detalle almacenes', '');
+			// $this->form_validation->set_rules('material', 'Indicador detalle materiales', '');
+			// $this->form_validation->set_rules('lote', 'Indicador detalle lotes', '');
+			// $this->form_validation->set_rules('tipo_stock', 'Indicador tipos de stock', '');
+			// $this->form_validation->set_rules('tipo_stock_equipos', 'Mostrar equipos', '');
+			// $this->form_validation->set_rules('tipo_stock_simcard', 'Mostrar simcards', '');
+			// $this->form_validation->set_rules('tipo_stock_otros', '', 'Mostrar otros', '');
+			// $this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
+			// $this->form_validation->run();
+
+			$stock = array();
+			if($this->input->post('sel_fechas'))
+			{
+				$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+			}
+
+			$datos_grafico = array();
+			if ($tipo_op == 'MOVIL' AND count($stock) > 0)
+			{
+				$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
+			}
+
+			$data['stock']         = $stock;
+			$data['arr_mostrar']   = $arr_mostrar;
+			$data['datos_grafico'] = $datos_grafico;
+			$data['totaliza_tipo_almacen'] = (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
 											|| in_array('lote', $arr_mostrar) || in_array('tipo_stock', $arr_mostrar)
 											)
 											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
-											) ? TRUE : FALSE),
-		);
+											) ? TRUE : FALSE);
+		}
+
+
+
 
 
 		if ($this->input->post('excel'))
@@ -156,6 +158,44 @@ class Stock_sap extends CI_Controller {
 			$this->load->view('stock_sap/ver_stock_datos', $data);
 			$this->load->view('app_footer', $data);
 		}
+	}
+
+
+	public function get_combo_fechas($tipo_op = 'MOVIL', $sel_fechas = 'ultimo_dia')
+	{
+		$this->load->model('stock_sap_model');
+		$arr_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op, $sel_fechas);
+
+		$combo_fechas = '';
+		foreach ($arr_fechas as $k => $v)
+		{
+			$combo_fechas .= '<option value="'.$k.'">'.$v.'</option>';
+		}
+
+		echo $combo_fechas;
+	}
+
+
+	private function _get_combo_almacenes($tipo_op = 'MOVIL', $sel_almacenes = 'sel_tiposalm')
+	{
+		if ($sel_almacenes == 'sel_tiposalm')
+		{
+			$tipoalmacen_sap = new Tipoalmacen_sap;
+
+			return $tipoalmacen_sap->get_combo_tiposalm($tipo_op);
+		}
+		else
+		{
+			$almacen_sap = new Almacen_sap;
+
+			return $almacen_sap->get_combo_almacenes($tipo_op);
+		}
+	}
+
+
+	public function get_combo_almacenes($tipo_op = 'MOVIL', $sel_almacenes = 'sel_tiposalm')
+	{
+		echo json_encode($this->_get_combo_almacenes($tipo_op, $sel_almacenes));
 	}
 
 

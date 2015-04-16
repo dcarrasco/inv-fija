@@ -13,9 +13,9 @@
  */
 class MY_Form_validation extends CI_Form_validation {
 
-	function __construct()
+	function __construct($config)
 	{
-	    parent::__construct();
+	    parent::__construct($config);
 	}
 
 	// --------------------------------------------------------------------

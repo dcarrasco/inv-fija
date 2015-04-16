@@ -1,5 +1,4 @@
 <div class="row">
-	<?php //echo $menu_configuracion; ?>
 </div>
 
 <?php echo form_open('','id="frm_ppal"'); ?>
@@ -12,6 +11,14 @@
 
 	<div class="panel-collapse collapse in" id="form_param">
 		<div class="panel-body">
+			<?php //echo $menu_configuracion; ?>
+			<?php if (validation_errors()): ?>
+				<div class="alert alert-danger">
+					<ul>
+						<?php echo validation_errors(); ?>
+					</ul>
+				</div>
+			<?php endif; ?>
 
 			<div class="col-md-4">
 				<div class="form-group">
@@ -111,7 +118,7 @@
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
 				<?php $serie_hist_ant = ''; ?>
-				<?php if (count($hist) > 0) :?>
+				<?php if (isset($hist) AND count($hist) > 0) :?>
 				<?php foreach($hist as $reg_hist): ?>
 				<?php if ($reg_hist['serie'] != $serie_hist_ant): ?>
 					<tr>
@@ -175,6 +182,7 @@
 	<div class="panel-body collapse in" id="tabla_despachos">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
+			<?php if (isset($desp) AND count($desp) > 0) :?>
 				<tr>
 					<th>serie</th>
 					<th>cod_sap</th>
@@ -193,7 +201,6 @@
 					<th>n_doc</th>
 					<th>referencia</th>
 				</tr>
-			<?php if (count($desp) > 0) :?>
 			<?php foreach($desp as $reg_desp): ?>
 				<tr>
 					<td><?php echo $reg_desp['serie'] ?></td>
@@ -232,6 +239,7 @@
 	<div class="panel-body collapse in" id="tabla_stock_sap">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
+			<?php if (isset($stock) AND count($stock) > 0) :?>
 				<tr>
 					<th>fecha stock</th>
 					<th>serie</th>
@@ -247,7 +255,6 @@
 					<th>modificado por</th>
 					<th>nombre usuario</th>
 				</th>
-			<?php if (count($stock) > 0) :?>
 			<?php foreach($stock as $reg_stock): ?>
 				<tr>
 					<td><?php echo $reg_stock['fecha'] ?></td>
@@ -283,6 +290,7 @@
 	<div class="panel-body collapse in" id="tabla_stock_scl">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
+			<?php if (isset($stock_scl) AND count($stock_scl) > 0) :?>
 				<tr>
 					<th>fecha stock</th>
 					<th>serie</th>
@@ -299,7 +307,6 @@
 					<th>cod estado</th>
 					<th>des estado</th>
 				</th>
-			<?php if (count($stock_scl) > 0) :?>
 			<?php foreach($stock_scl as $reg_stock_scl): ?>
 				<tr>
 					<td><?php echo $reg_stock_scl['FECHA'] ?></td>
@@ -336,6 +343,7 @@
 	<div class="panel-body collapse in" id="tabla_trafico">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
+			<?php if (isset($trafico) AND count($trafico) > 0) :?>
 			<?php foreach($trafico as $serie_trafico): ?>
 				<tr>
 					<th>año</th>
@@ -372,6 +380,7 @@
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>
@@ -390,6 +399,7 @@
 	<div class="panel-body collapse in" id="tabla_gdth">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
+			<?php if (isset($log_gdth) AND count($log_gdth) > 0) :?>
 			<?php foreach($log_gdth as $serie_gdth): ?>
 				<tr>
 					<th>id</th>
@@ -418,6 +428,7 @@
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>
+			<?php endif; ?>
 			</table>
 		</div>
 	</div>

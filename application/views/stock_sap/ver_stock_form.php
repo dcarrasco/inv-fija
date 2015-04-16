@@ -14,6 +14,15 @@
 
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
+
+				<?php if (validation_errors()): ?>
+					<div class="alert alert-danger">
+						<ul>
+							<?php echo validation_errors(); ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
@@ -31,12 +40,7 @@
 								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
 							</label>
 						</div>
-						<div id="show_fecha_ultimodia">
-							<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
-						</div>
-						<div id="show_fecha_todas">
-							<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="form-control"'); ?>
-						</div>
+						<?php echo form_multiselect('fechas', $combo_fechas, $this->input->post('fechas'),'id="combo_fechas" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -57,20 +61,18 @@
 								<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
 							</label>
 						</div>
+
+						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="combo_almacenes" size="10" class="form-control"'); ?>
+
 						<div id="show_tiposalm">
-							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
-							<div>
-								<div class="checkbox">
-									<label>
-										<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
-										<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
-									</label>
-								</div>
+							<div class="checkbox">
+								<label>
+									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
+									<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
+								</label>
 							</div>
 						</div>
-						<div id="show_almacenes">
-							<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="10" class="form-control"'); ?>
-						</div>
+
 					</div>
 				</div>
 
@@ -160,5 +162,12 @@
 </div>
 
 <?php echo form_close(); ?>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		tipo_operacion = '<?php echo $tipo_op; ?>';
+	});
+</script>
+
 
 <script type="text/javascript" src="<?php echo base_url(); ?>js/ver_stock_form.js"></script>
