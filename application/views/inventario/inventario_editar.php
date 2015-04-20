@@ -148,7 +148,7 @@
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						<?php echo $this->lang->line('inventario_form_new_button_add'); ?>
 					</button>
-					<a href="<?php echo site_url('inventario_digitacion/ingreso/' . $hoja); ?>" class="btn btn-default">
+					<a href="<?php echo site_url($this->router->class . '/ingreso/' . $hoja); ?>" class="btn btn-default">
 						<span class="glyphicon glyphicon-ban-circle"></span>
 						<?php echo $this->lang->line('inventario_form_new_button_cancel'); ?>
 					</a>
