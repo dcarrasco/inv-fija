@@ -22,6 +22,10 @@ class Stock_config extends ORM_Controller {
 				'url'   => $this->router->class . '/listado/proveedor',
 				'texto' => $this->lang->line('stock_config_menu_proveedores'),
 			),
+			'usuario_sap' => array(
+				'url'   => $this->router->class . '/listado/usuario_sap',
+				'texto' => $this->lang->line('stock_config_menu_usuarios_sap'),
+			),
 			'almacenes_no_ingresados' => array(
 				'url'   => $this->router->class . '/almacenes_no_ingresados',
 				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),

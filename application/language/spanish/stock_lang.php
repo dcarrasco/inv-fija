@@ -1,17 +1,18 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-$lang['stock_sap_menu_movil']          = 'Stock m&oacute;vil';
-$lang['stock_sap_menu_fijo']           = 'Stock fija';
-$lang['stock_sap_menu_transito']       = 'Tr&aacute;nsito fija';
-$lang['stock_perm_menu_perm']          = 'Permanencia';
-$lang['stock_perm_menu_mapa']          = 'Mapa de stock';
-$lang['stock_perm_menu_movs']          = 'Consulta de movimientos';
-$lang['stock_perm_menu_est03']         = 'Consulta devolución clientes';
-$lang['stock_config_menu_alm']         = 'Almacenes SAP';
-$lang['stock_config_menu_tipalm']      = 'Tipo almacenes SAP';
-$lang['stock_config_menu_proveedores'] = 'Proveedores';
-$lang['stock_config_menu_alm_no_ing']  = 'Almacenes no ingresados';
+$lang['stock_sap_menu_movil']           = 'Stock m&oacute;vil';
+$lang['stock_sap_menu_fijo']            = 'Stock fija';
+$lang['stock_sap_menu_transito']        = 'Tr&aacute;nsito fija';
+$lang['stock_perm_menu_perm']           = 'Permanencia';
+$lang['stock_perm_menu_mapa']           = 'Mapa de stock';
+$lang['stock_perm_menu_movs']           = 'Consulta de movimientos';
+$lang['stock_perm_menu_est03']          = 'Consulta devolución clientes';
+$lang['stock_config_menu_alm']          = 'Almacenes SAP';
+$lang['stock_config_menu_tipalm']       = 'Tipo almacenes SAP';
+$lang['stock_config_menu_proveedores']  = 'Proveedores';
+$lang['stock_config_menu_usuarios_sap'] = 'Usuarios SAP';
+$lang['stock_config_menu_alm_no_ing']   = 'Almacenes no ingresados';
 
 $lang['stock_analisis_params']               = 'Par&aacute;metros consulta';
 $lang['stock_analisis_label_series']         = 'Series';
