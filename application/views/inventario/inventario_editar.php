@@ -22,7 +22,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('ubicacion'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('ubicacion', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('ubicacion'); ?>
 			</div>
 		</div>
 
@@ -44,16 +44,16 @@
 			</label>
 			<div class="col-sm-3">
 				<div class="input-group">
-					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control input-sm" id="agr_filtrar"'); ?>
+					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar"'); ?>
 					<span class="input-group-btn">
-						<div class="btn btn-default btn-sm">
+						<div class="btn btn-default">
 							<span class="glyphicon glyphicon-search"></span>
 						</div>
 					</span>
 				</div>
 			</div>
 			<div class="col-md-5">
-				<?php echo form_dropdown('catalogo', $arr_catalogo, '', 'class="form-control input-sm" id="agr_material"'); ?>
+				<?php echo form_dropdown('catalogo', $arr_catalogo, '', 'class="form-control" id="agr_material"'); ?>
 				<?php echo form_error('catalogo'); ?>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('lote'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('lote', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('lote'); ?>
 			</div>
 		</div>
 
@@ -74,7 +74,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('um'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('um', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('um'); ?>
 			</div>
 		</div>
 
@@ -84,7 +84,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('centro'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('centro', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('centro'); ?>
 			</div>
 		</div>
 
@@ -94,7 +94,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('almacen'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('almacen', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('almacen'); ?>
 			</div>
 		</div>
 
@@ -104,7 +104,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('stock_fisico', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('stock_fisico'); ?>
 			</div>
 		</div>
 
@@ -114,7 +114,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('hu', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('hu'); ?>
 			</div>
 		</div>
 
@@ -124,7 +124,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
 			</label>
 			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('observacion', FALSE, 'input-sm'); ?>
+				<?php echo $detalle_inventario->print_form_field('observacion'); ?>
 				<?php echo form_error('observacion'); ?>
 			</div>
 		</div>
