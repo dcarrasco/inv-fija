@@ -40,10 +40,6 @@ class Inventario_digitacion extends CI_Controller {
 			$hoja = 1;
 		}
 
-		$nuevo_detalle_inventario = new Detalle_inventario;
-		$nuevo_detalle_inventario->get_relation_fields();
-		$nuevo_detalle_inventario->hoja = $hoja;
-
 		// recupera el inventario activo
 		$inventario = new Inventario;
 		$this->id_inventario = $inventario->get_id_inventario_activo();
@@ -55,7 +51,6 @@ class Inventario_digitacion extends CI_Controller {
 		//$this->benchmark->mark('detalle_inventario_end');
 
 		$auditor = $detalle_inventario->get_id_auditor();
-		$nuevo_detalle_inventario->auditor = $auditor;
 
 		$nombre_inventario = $inventario->nombre;
 		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
@@ -65,13 +60,13 @@ class Inventario_digitacion extends CI_Controller {
 
 		if ($this->input->post('formulario') == 'buscar')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$detalle_inventario->set_validation_rules_field('hoja');
+			$detalle_inventario->set_validation_rules_field('auditor');
 		}
 		else if ($this->input->post('formulario') == 'inventario')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$detalle_inventario->set_validation_rules_field('hoja');
+			$detalle_inventario->set_validation_rules_field('auditor');
 
 			foreach($detalle_inventario->get_model_all() as $linea_detalle)
 			{
@@ -79,19 +74,6 @@ class Inventario_digitacion extends CI_Controller {
 				$this->form_validation->set_rules('hu_' . $linea_detalle->id, 'hu', 'trim');
 				$this->form_validation->set_rules('observacion_' . $linea_detalle->id, 'observacion', 'trim');
 			}
-		}
-		else if ($this->input->post('formulario')=='agregar')
-		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
-			$nuevo_detalle_inventario->set_validation_rules_field('ubicacion');
-			$nuevo_detalle_inventario->set_validation_rules_field('hu');
-			$nuevo_detalle_inventario->set_validation_rules_field('catalogo');
-			$nuevo_detalle_inventario->set_validation_rules_field('lote');
-			$nuevo_detalle_inventario->set_validation_rules_field('centro');
-			$nuevo_detalle_inventario->set_validation_rules_field('almacen');
-			$nuevo_detalle_inventario->set_validation_rules_field('um');
-			$nuevo_detalle_inventario->set_validation_rules_field('stock_fisico');
 		}
 
 		$this->app_common->form_validation_config();
@@ -101,7 +83,6 @@ class Inventario_digitacion extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
-				'nuevo_detalle_inventario' => $nuevo_detalle_inventario,
 				'detalle_inventario' => $detalle_inventario,
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $nombre_inventario,
@@ -188,6 +169,62 @@ class Inventario_digitacion extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+
+	public function editar($hoja = 0, $id = null)
+	{
+		$detalle_inventario = new Detalle_inventario;
+		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
+
+
+		if ($id)
+		{
+			$detalle_inventario->find_id($id);
+			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->catalogo . ' - ' . $detalle_inventario->descripcion);
+dd($detalle_inventario->get_json_fields());
+		}
+
+		$detalle_inventario->get_relation_fields();
+		$detalle_inventario->hoja = $hoja;
+
+		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
+		$auditor = $detalle_inventario->get_id_auditor();
+
+		$detalle_inventario->set_validation_rules_field('hoja');
+		$detalle_inventario->set_validation_rules_field('auditor');
+		$detalle_inventario->set_validation_rules_field('ubicacion');
+		$detalle_inventario->set_validation_rules_field('hu');
+		$detalle_inventario->set_validation_rules_field('catalogo');
+		$detalle_inventario->set_validation_rules_field('lote');
+		$detalle_inventario->set_validation_rules_field('centro');
+		$detalle_inventario->set_validation_rules_field('almacen');
+		$detalle_inventario->set_validation_rules_field('um');
+		$detalle_inventario->set_validation_rules_field('stock_fisico');
+
+		$this->app_common->form_validation_config();
+
+		$msg_alerta = '';
+
+		if ($this->form_validation->run() == FALSE)
+		{
+			$data = array(
+				'detalle_inventario' => $detalle_inventario,
+				'hoja'               => $hoja,
+				'id'                 => $id,
+				'arr_catalogo'       => $arr_catalogo,
+				'nombre_digitador'   => $nombre_digitador,
+				//'id_digitador'      => $digitador,
+				'id_auditor'         => $auditor,
+				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
+			);
+
+			$this->_render_view('inventario_editar', $data);
+		}
+
+	}
+
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Despliega listado con materiales, en formato de formulario select
 	 *
@@ -196,7 +233,7 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	public function ajax_act_agr_materiales($filtro = '')
 	{
-		$material = new catalogo;
+		$material = new Catalogo;
 		$arr_dropdown = $material->find('list', array('filtro' => $filtro));
 
 		$options = '';
@@ -205,7 +242,7 @@ class Inventario_digitacion extends CI_Controller {
 			$options .= '<option value="' . $key . '">' . $val . '</option>';
 		}
 
-		echo($options);
+		$this->output->set_content_type('text')->set_output($options);
 	}
 
 	// --------------------------------------------------------------------
@@ -219,7 +256,6 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	private function _render_view($vista = '', $data = array())
 	{
-		$data['titulo_modulo'] = 'Ingreso de Inventario ('.$data['nombre_inventario'].')';
 		$this->load->view('app_header', $data);
 		$this->load->view('inventario/'.$vista, $data);
 		$this->load->view('app_footer', $data);

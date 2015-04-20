@@ -329,6 +329,13 @@ class Orm_model implements Iterator {
 		return $relation['data'];
 	}
 
+	public function get_json_fields()
+	{
+		return json_encode($this->fields_values);
+	}
+
+
+
 	// --------------------------------------------------------------------
 
 	/**
