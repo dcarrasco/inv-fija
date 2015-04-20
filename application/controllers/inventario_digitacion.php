@@ -45,12 +45,16 @@ class Inventario_digitacion extends CI_Controller {
 		$this->id_inventario = $inventario->get_id_inventario_activo();
 		$inventario->find_id($this->id_inventario);
 
+		$nuevo_detalle_inventario = new Detalle_inventario;
+		$nuevo_detalle_inventario->get_relation_fields();
+
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
 
 		$auditor = $detalle_inventario->get_id_auditor();
+		$detalle_inventario->auditor = $auditor;
 
 		$nombre_inventario = $inventario->nombre;
 		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
@@ -60,13 +64,13 @@ class Inventario_digitacion extends CI_Controller {
 
 		if ($this->input->post('formulario') == 'buscar')
 		{
-			$detalle_inventario->set_validation_rules_field('hoja');
-			$detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
+			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 		}
 		else if ($this->input->post('formulario') == 'inventario')
 		{
-			$detalle_inventario->set_validation_rules_field('hoja');
-			$detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
+			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 
 			foreach($detalle_inventario->get_model_all() as $linea_detalle)
 			{
@@ -83,6 +87,7 @@ class Inventario_digitacion extends CI_Controller {
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
+				'nuevo_detalle_inventario' => $nuevo_detalle_inventario,
 				'detalle_inventario' => $detalle_inventario,
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $nombre_inventario,
@@ -119,47 +124,6 @@ class Inventario_digitacion extends CI_Controller {
 
 				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '';
 			}
-			else if ($this->input->post('formulario') == 'agregar')
-			{
-				if ($this->input->post('accion') == 'borrar')
-				{
-					$nuevo_detalle_inventario = new Detalle_inventario;
-					$nuevo_detalle_inventario->find_id($this->input->post('id'));
-					$nuevo_detalle_inventario->borrar();
-					$msg_alerta = sprintf($this->lang->line('inventario_digit_msg_delete'), $this->input->post('id'), $hoja);
-				}
-				else
-				{
-					$nuevo_material = new Catalogo;
-					$nuevo_material->find_id($this->input->post('catalogo'));
-
-					$nuevo_detalle_inventario->get_from_array(array(
-						'id'            => $this->input->post('id'),
-						'id_inventario' => $this->id_inventario,
-						'hoja'          => $hoja,
-						'digitador'     => $id_usuario_login,
-						'auditor'       => set_value('auditor'),
-						'ubicacion'     => $this->input->post('ubicacion'),
-						'hu'            => $this->input->post('hu'),
-						'catalogo'      => $this->input->post('catalogo'),
-						'descripcion'   => $nuevo_material->descripcion,
-						'lote'          => $this->input->post('lote'),
-						'centro'        => $this->input->post('centro'),
-						'almacen'       => $this->input->post('almacen'),
-						'um'            => $this->input->post('um'),
-						'stock_sap'     => 0,
-						'stock_fisico'  => $this->input->post('stock_fisico'),
-						'observacion'   => $this->input->post('observacion'),
-						'fecha_modificacion' => date('Ymd H:i:s'),
-						'stock_ajuste'  => 0,
-						'glosa_ajuste'  => '',
-						'reg_nuevo'     => 'S',
-					));
-
-					$nuevo_detalle_inventario->grabar();
-					$msg_alerta = sprintf($this->lang->line('inventario_digit_msg_add'), $hoja);
-				}
-			}
 
 			$this->session->set_flashdata('msg_alerta', $msg_alerta);
 			redirect($this->router->class . '/ingreso/' . $this->input->post('hoja') . '/' . time());
@@ -170,27 +134,42 @@ class Inventario_digitacion extends CI_Controller {
 	// --------------------------------------------------------------------
 
 
-	public function editar($hoja = 0, $id = null)
+	/**
+	 * Permite editar una linea de detalle agregada a un inventario
+	 *
+	 * @param  integer $hoja        Numero de la hoja a visualizar
+	 * @param  integer $id_auditor  ID del auditor de la hoja
+	 * @param  integer $id          ID del registro a editar
+	 * @return none
+	 */
+	public function editar($hoja = 0, $id_auditor = 0, $id = null)
 	{
 		$detalle_inventario = new Detalle_inventario;
-		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
 
+		$catalogo = new Catalogo;
+		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
+		if ($this->input->post('catalogo'))
+		{
+			$catalogo->find_id($this->input->post('catalogo'));
+			$arr_catalogo = array($this->input->post('catalogo') => $catalogo);
+		}
 
 		if ($id)
 		{
 			$detalle_inventario->find_id($id);
-			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->catalogo . ' - ' . $detalle_inventario->descripcion);
-dd($detalle_inventario->get_json_fields());
+			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->descripcion);
 		}
 
 		$detalle_inventario->get_relation_fields();
+
+		// recupera el inventario activo
+		$inventario = new Inventario;
+
 		$detalle_inventario->hoja = $hoja;
 
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
-		$auditor = $detalle_inventario->get_id_auditor();
+		$id_auditor = $detalle_inventario->get_id_auditor();
 
-		$detalle_inventario->set_validation_rules_field('hoja');
-		$detalle_inventario->set_validation_rules_field('auditor');
 		$detalle_inventario->set_validation_rules_field('ubicacion');
 		$detalle_inventario->set_validation_rules_field('hu');
 		$detalle_inventario->set_validation_rules_field('catalogo');
@@ -202,22 +181,59 @@ dd($detalle_inventario->get_json_fields());
 
 		$this->app_common->form_validation_config();
 
-		$msg_alerta = '';
-
 		if ($this->form_validation->run() == FALSE)
 		{
 			$data = array(
 				'detalle_inventario' => $detalle_inventario,
-				'hoja'               => $hoja,
 				'id'                 => $id,
+				'hoja'               => $hoja,
 				'arr_catalogo'       => $arr_catalogo,
-				'nombre_digitador'   => $nombre_digitador,
-				//'id_digitador'      => $digitador,
-				'id_auditor'         => $auditor,
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
 			$this->_render_view('inventario_editar', $data);
+		}
+		else
+		{
+			$nuevo_material = new Catalogo;
+			$nuevo_material->find_id($this->input->post('catalogo'));
+
+			$detalle_inventario->get_from_array(array(
+				'id'                 => (int) $id,
+				'id_inventario'      => (int) $inventario->get_id_inventario_activo(),
+				'hoja'               => (int) $hoja,
+				'ubicacion'          => strtoupper($this->input->post('ubicacion')),
+				'hu'                 => strtoupper($this->input->post('hu')),
+				'catalogo'           => strtoupper($this->input->post('catalogo')),
+				'descripcion'        => $nuevo_material->descripcion,
+				'lote'               => strtoupper($this->input->post('lote')),
+				'centro'             => strtoupper($this->input->post('centro')),
+				'almacen'            => strtoupper($this->input->post('almacen')),
+				'um'                 => strtoupper($this->input->post('um')),
+				'stock_sap'          => 0,
+				'stock_fisico'       => (int) $this->input->post('stock_fisico'),
+				'digitador'          => (int) $this->acl_model->get_id_usr(),
+				'auditor'            => (int) $id_auditor,
+				'reg_nuevo'          => 'S',
+				'fecha_modificacion' => date('Ymd H:i:s'),
+				'observacion'        => $this->input->post('observacion'),
+				'stock_ajuste'       => 0,
+				'glosa_ajuste'       => '',
+				'fecha_ajuste'       => null,
+			));
+
+			if ($this->input->post('accion') == 'agregar')
+			{
+				$detalle_inventario->grabar();
+				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
+			}
+			else
+			{
+				$detalle_inventario->borrar();
+				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_delete'), $id, $hoja));
+			}
+
+			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
 
 	}

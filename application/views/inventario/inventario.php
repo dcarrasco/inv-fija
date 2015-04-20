@@ -28,7 +28,7 @@
 						<span class="glyphicon glyphicon-chevron-left"></span>
 					</a>
 					<a href="<?php echo $link_hoja_sig; ?>" class="btn btn-default btn-sm" id="btn_hoja_sig">
-							<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="glyphicon glyphicon-chevron-right"></span>
 					</a>
 				</span>
 			</div>
@@ -49,7 +49,7 @@
 	<div class="col-md-2">
 		<div class="form-group">
 			<label></label>
-			<a href="<?php echo site_url('inventario_digitacion/editar/' . $hoja) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
+			<a href="<?php echo site_url('inventario_digitacion/editar/' . $hoja . '/' . $id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
 				<span class="glyphicon glyphicon-plus-sign"></span>
 				<?php echo $this->lang->line('inventario_button_new_line'); ?>
 			</a>
@@ -91,7 +91,7 @@
 						<?php echo $linea_det->get_valor_field('ubicacion'); ?>
 
 						<?php if ($linea_det->reg_nuevo == 'S'):?>
-							<a href="<?php echo site_url('inventario_digitacion/editar/' . $hoja . '/' . $linea_det->id); ?>" class="btn btn-default btn-xs">
+							<a href="<?php echo site_url('inventario_digitacion/editar/' . $hoja . '/' . $id_auditor . '/' . $linea_det->id); ?>" class="btn btn-default btn-xs">
 								<span class="glyphicon glyphicon-edit"></span>
 							</a>
 							<?php echo form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>

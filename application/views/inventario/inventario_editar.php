@@ -1,12 +1,7 @@
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
 
-		<?php echo form_open($this->router->class . "/ingreso/$hoja/".time(), 'id="frm_agregar" class="form-horizontal" role="form"')?>
-		<?php echo form_hidden('formulario','agregar'); ?>
-		<?php echo form_hidden('accion','agregar'); ?>
-		<?php echo form_hidden('hoja', $hoja); ?>
-		<?php echo form_hidden('auditor', $id_auditor); ?>
-		<?php echo form_hidden('id', ''); ?>
+		<?php echo form_open('', 'class="form-horizontal" role="form"')?>
 
 		<fieldset>
 		<legend>
@@ -141,18 +136,18 @@
 
 				<?php if ($id): ?>
 				<div class="pull-left">
-					<a href="#" class="btn btn-danger" id="btn_borrar">
+					<button type="submit" name="accion" value="borrar" class="btn btn-danger">
 						<span class="glyphicon glyphicon-trash"></span>
 						<?php echo $this->lang->line('inventario_form_new_button_delete'); ?>
-					</a>
+					</button>
 				</div>
 				<?php endif ?>
 
 				<div class="pull-right">
-					<a href="#" class="btn btn-primary" id="btn_agregar">
+					<button type="submit" name="accion" value="agregar" class="btn btn-primary">
 						<span class="glyphicon glyphicon-plus-sign"></span>
 						<?php echo $this->lang->line('inventario_form_new_button_add'); ?>
-					</a>
+					</button>
 					<a href="<?php echo site_url('inventario_digitacion/ingreso/' . $hoja); ?>" class="btn btn-default">
 						<span class="glyphicon glyphicon-ban-circle"></span>
 						<?php echo $this->lang->line('inventario_form_new_button_cancel'); ?>

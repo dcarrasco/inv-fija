@@ -17,17 +17,6 @@ $(document).ready(function() {
 		$('form#frm_inventario').submit();
 	});
 
-	$('#btn_agregar').click(function (event) {
-		event.preventDefault();
-		$('#frm_agregar').submit();
-	});
-
-	$('#btn_borrar').click(function (event) {
-		event.preventDefault();
-		$('#frm_agregar input[name="accion"]').val('borrar');
-		$('#frm_agregar').submit();
-	});
-
 	$('#agr_filtrar').bind('keypress', function (event) {
 		if(event.keyCode === 13) {
 			event.preventDefault();
