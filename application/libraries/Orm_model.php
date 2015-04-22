@@ -315,6 +315,12 @@ class Orm_model implements Iterator {
 	}
 
 
+	public function get_fields_values()
+	{
+		return $this->fields_values;
+	}
+
+
 	public function set_model_all($model_all = array())
 	{
 		$this->model_all = $model_all;
@@ -624,6 +630,34 @@ class Orm_model implements Iterator {
 
 		return $this->CI->pagination->create_links();
 	}
+
+	// --------------------------------------------------------------------
+
+	public function to_array()
+	{
+		if (count($this->model_all) > 0)
+		{
+			$arr_return = array();
+			foreach ($this->model_all as $obj)
+			{
+				$arr_return[] = $obj->get_fields_values();
+			}
+
+			return $arr_return;
+		}
+		else
+		{
+			return $this->fields_values;
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	public function to_json()
+	{
+		return json_encode($this->to_array());
+	}
+
 
 	// --------------------------------------------------------------------
 

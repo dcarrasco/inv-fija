@@ -79,6 +79,8 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->_get_datos_inventario();
 
+		dbg($this->input->post());
+
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
 		$links_paginas = $detalle_ajustes->get_ajustes($this->id_inventario, $ocultar_regularizadas, $pag);
@@ -87,8 +89,10 @@ class Inventario_analisis extends CI_Controller {
 		{
 			foreach($detalle_ajustes->get_model_all() as $detalle)
 			{
-				$this->form_validation->set_rules('stock_ajuste_' . $detalle->id, 'cantidad', 'trim|integer');
-				$this->form_validation->set_rules('observacion_' . $detalle->id, 'observacion', 'trim');
+				// $this->form_validation->set_rules('stock_ajuste_' . $detalle->id, 'cantidad', 'trim|integer');
+				// $this->form_validation->set_rules('observacion_' . $detalle->id, 'observacion', 'trim');
+				$this->form_validation->set_rules('stock_ajuste[]', 'cantidad', 'trim|integer');
+				$this->form_validation->set_rules('observacion[]', 'observacion', 'trim');
 			}
 		}
 
@@ -243,14 +247,6 @@ class Inventario_analisis extends CI_Controller {
 
 		$inventario = new Inventario;
 		$inventario->find_id($this->id_inventario);
-
-		$this->form_validation->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]');
-		$this->form_validation->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]');
-		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
-
-
-
-
 		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() == FALSE)

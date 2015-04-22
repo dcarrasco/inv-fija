@@ -9,7 +9,7 @@ if ( ! function_exists('dbg'))
 		//echo gettype($item) . ' : ' . $dump;
 		//echo '</pre><hr>';
 
-		ini_set('xdebug.var_display_max_depth', 6);
+		ini_set('xdebug.var_display_max_depth', 3);
 		var_dump($item);
 	}
 }

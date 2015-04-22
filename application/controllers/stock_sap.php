@@ -172,7 +172,9 @@ class Stock_sap extends CI_Controller {
 			$combo_fechas .= '<option value="'.$k.'">'.$v.'</option>';
 		}
 
-		echo $combo_fechas;
+		$this->output
+			->set_content_type('text')
+			->set_output($combo_fechas);
 	}
 
 
@@ -182,7 +184,7 @@ class Stock_sap extends CI_Controller {
 		{
 			$tipoalmacen_sap = new Tipoalmacen_sap;
 
-			return $tipoalmacen_sap->get_combo_tiposalm($tipo_op);
+			return $tipoalmacen_sap->find('list', array('conditions' => array('tipo_op' => $tipo_op)));
 		}
 		else
 		{
@@ -195,7 +197,16 @@ class Stock_sap extends CI_Controller {
 
 	public function get_combo_almacenes($tipo_op = 'MOVIL', $sel_almacenes = 'sel_tiposalm')
 	{
-		echo json_encode($this->_get_combo_almacenes($tipo_op, $sel_almacenes));
+		$options_string = '';
+
+		foreach ($this->_get_combo_almacenes($tipo_op, $sel_almacenes) as $key => $val)
+		{
+			$options_string .= '<option value="' . $key . '">' . $val . '</option>';
+		}
+
+		$this->output
+			->set_content_type('text')
+			->set_output($options_string);
 	}
 
 

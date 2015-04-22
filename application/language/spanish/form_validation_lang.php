@@ -23,7 +23,7 @@ $lang['form_validation_is_numeric']			= "El campo <em>{field}</em> debe contener
 $lang['form_validation_regex_match']		= "El campo <em>{field}</em> no tiene el formato correcto.";
 $lang['form_validation_is_unique'] 			= "El campo <em>{field}</em> debe contener un &uacute;nico valor.";
 $lang['form_validation_is_natural']			= "El campo <em>{field}</em> debe contener s&oacute;lo n&uacute;meros positivos.";
-$lang['form_validation_is_natural_no_zero']	= "El campo <em>{field}</em> debe contener un n&uacute;mero mayor a cero.";
+$lang['form_validation_is_natural_no_zero']	= "El campo <em>{field}</em> sólo debe contener n&uacute;meros enteros y debe ser mayor a cero.";
 $lang['form_validation_decimal']			= "El campo <em>{field}</em> debe contener un n&uacute;mero decimal.";
 $lang['form_validation_less_than']			= "El campo <em>{field}</em> debe contener un n&uacute;mero menor a {param}.";
 

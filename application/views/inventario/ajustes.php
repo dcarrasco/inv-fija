@@ -82,8 +82,11 @@
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_fisico); ?></td>
 					<td>
-						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="' . $tab_index . '"'); ?>
-						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
+					<div class="<?php echo (form_has_error('stock_ajuste[' . $detalle->id . ']') ? ' has-error' : ''); ?>">
+					<?php echo form_error('stock_ajuste[]'); ?>
+						<?php echo form_input('stock_ajuste[' . $detalle->id . ']', set_value('stock_ajuste[' . $detalle->id . ']', $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="' . $tab_index . '"'); ?>
+						<?php echo form_error('stock_ajuste[' . $detalle->id . ']'); ?>
+					</div>
 					</td>
 					<td class="text-center">
 						<?php echo fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>
@@ -107,7 +110,7 @@
 						<?php endif; ?>
 					</td>
 					<td class="text-center">
-						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
+						<?php echo form_input('observacion[' . $detalle->id . ']', set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $detalle->stock_sap; $sum_fisico += $detalle->stock_fisico; $sum_ajuste += $detalle->stock_ajuste?>

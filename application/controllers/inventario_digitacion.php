@@ -198,15 +198,17 @@ class Inventario_digitacion extends CI_Controller {
 	{
 		$material = new catalogo;
 		$arr_dropdown = $material->find('list', array('filtro' => $filtro));
+$this->output->set_content_type('application/json');
+$this->output->set_output(json_encode($arr_dropdown));
 
-		$options = '';
+/*		$options = '';
 		foreach ($arr_dropdown as $key => $val)
 		{
 			$options .= '<option value="' . $key . '">' . $val . '</option>';
 		}
 
 		echo($options);
-	}
+*/	}
 
 	// --------------------------------------------------------------------
 

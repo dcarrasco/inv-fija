@@ -3,7 +3,6 @@
 $(document).ready(function () {
 
     $('input[name="sel_fechas"]').click(function (event) {
-
         var sel_fechas = $('input[name="sel_fechas"]:checked').val();
         var url_datos = js_base_url + 'stock_sap/get_combo_fechas/' + tipo_operacion + '/' + sel_fechas;
         $('#combo_fechas').html('');
@@ -12,54 +11,20 @@ $(document).ready(function () {
     });
 
     $('input[name="sel_tiposalm"]').click(function (event) {
-
         var sel_tiposalm = $('input[name="sel_tiposalm"]:checked').val();
         var url_datos = js_base_url + 'stock_sap/get_combo_almacenes/' + tipo_operacion + '/' + sel_tiposalm;
         $('#combo_almacenes').html('');
 
-        fillCombo(url_datos, '#combo_almacenes');
-    });
+        $.get(url_datos, function (data) {$('#combo_almacenes').html(data); });
 
-    var fillCombo = function (url_datos, selectElement)
-    {
-console.log(url_datos);
-        $.getJSON(url_datos, function(data) {
-            var items=[];
-            $.each(data, function(key, val) {
-               items.push('<option value="' + key + '">' + val + '</options>');
-            });
-
-            $(selectElement).html('');
-            $(selectElement).html(items.join(""));
-
-        });
-
-
-        $(selectElement).html();
-console.log(options_array);
-        var sOptions = '',
-            len = options_array.length;
-
-        for (var i = 0; i < len; i++){}
-
-    }
-
-
-    if ($('input[name="sel_tiposalm"]:checked').val() === 'sel_tiposalm') {
-        $("#show_almacenes").hide();
-    } else {
-        $("#show_tiposalm").hide();
-    }
-
-    $('input[name="sel_tiposalm"]').click(function (event) {
         if ($('input[name="sel_tiposalm"]:checked').val() === 'sel_tiposalm') {
             $("#show_tiposalm").show();
-            $("#show_almacenes").hide();
         } else {
             $("#show_tiposalm").hide();
-            $("#show_almacenes").show();
         }
+
     });
+
 
     $('div.mostrar-ocultar').click(function (event) {
         if ($('div.mostrar-ocultar span').html() === 'Ocultar') {
