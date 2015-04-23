@@ -18,6 +18,14 @@ class Stock_config extends ORM_Controller {
 				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_tipalm'),
 			),
+			'clasifalmacen_sap' => array(
+				'url'   => $this->router->class . '/listado/clasifalmacen_sap',
+				'texto' => $this->lang->line('stock_config_menu_clasifalm'),
+			),
+			'tipo_clasifalm' => array(
+				'url'   => $this->router->class . '/listado/tipo_clasifalm',
+				'texto' => $this->lang->line('stock_config_menu_tipo_clasifalm'),
+			),
 			'proveedor' => array(
 				'url'   => $this->router->class . '/listado/proveedor',
 				'texto' => $this->lang->line('stock_config_menu_proveedores'),
