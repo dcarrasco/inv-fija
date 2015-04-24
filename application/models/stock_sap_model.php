@@ -604,7 +604,7 @@ class stock_sap_model extends CI_Model {
 	{
 		$arr_result = $this->db
 			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
-			->select('convert(varchar(20), fecha_stock, 103) as valor', FALSE)
+			->select('convert(varchar(20), fecha_stock, 102) as valor', FALSE)
 			->order_by('llave','desc')
 			->get($this->config->item('bd_stock_fija_fechas'))
 			->result_array();
@@ -639,6 +639,61 @@ class stock_sap_model extends CI_Model {
 			return array();
 		}
 	}
+
+
+	public function reporte_clasificacion($tipo_op = 'MOVIL', $fecha = null)
+	{
+		dbg($tipo_op);
+		dbg($fecha);
+
+		if ($fecha)
+		{
+			$result = $this->db
+				->select('tipo_op, convert(varchar(20), fecha_stock, 102) fecha_stock, orden, clasificacion, tipo, color, cantidad, monto', FALSE)
+				->from($this->config->item('bd_reporte_clasif'))
+				->where('tipo_op', $tipo_op)
+				->where('fecha_stock', $fecha)
+				->order_by('tipo_op, fecha_stock, orden')
+				->get()->result_array();
+
+			if (count($result) == 0)
+			{
+				$this->_genera_reporte_clasificacion($tipo_op, $fecha);
+
+				return $this->reporte_clasificacion($tipo_op, $fecha);
+			}
+			else
+			{
+				return $result;
+			}
+		}
+	}
+
+
+	private function _genera_reporte_clasificacion($tipo_op = null, $fecha = null)
+	{
+		if ($tipo_op == "FIJA")
+		{
+			$sql = "INSERT INTO " . $this->config->item('bd_reporte_clasif') .
+" SELECT
+A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
+SUM(E.CANTIDAD) AS CANTIDAD, SUM(E.VALOR) AS MONTO
+FROM " . $this->config->item('bd_clasifalm_sap') . " A
+JOIN " . $this->config->item('bd_clasif_tipoalm_sap') . " B ON A.ID_CLASIF=B.ID_CLASIF
+JOIN " . $this->config->item('bd_tiposalm_sap')       . " C ON B.ID_TIPO=C.ID_TIPO
+JOIN " . $this->config->item('bd_tipoalmacen_sap')    . " D ON C.ID_TIPO=D.ID_TIPO
+JOIN " . $this->config->item('bd_stock_fija')         . " E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.ALMACEN
+JOIN " . $this->config->item('bd_tipo_clasifalm_sap') . " F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
+WHERE A.TIPO_OP = ?
+AND E.FECHA_STOCK = ?
+GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR
+ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
+
+			return $this->db->query($sql, array($tipo_op, $fecha));
+		}
+	}
+
+
 
 
 }

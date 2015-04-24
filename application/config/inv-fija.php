@@ -36,6 +36,7 @@ $config['bd_tiposalm_sap']        = 'bd_logistica..cp_tiposalm';
 $config['bd_clasifalm_sap']       = 'bd_logistica..cp_clasifalm';
 $config['bd_clasif_tipoalm_sap']  = 'bd_logistica..cp_clasif_tipoalm';
 $config['bd_tipo_clasifalm_sap']  = 'bd_logistica..cp_tipo_clasifalm';
+$config['bd_reporte_clasif']      = 'bd_logistica..cp_reporte_clasificacion';
 $config['bd_proveedores']         = 'bd_logistica..cp_proveedores';
 $config['bd_permanencia']         = 'bd_logistica..cp_permanencia';
 $config['bd_permanencia_fija']    = 'bd_logistica..perm_series_consumo_fija';

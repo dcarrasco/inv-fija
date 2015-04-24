@@ -25,6 +25,10 @@ class Stock_sap extends CI_Controller {
 				'url'   => $this->router->class . '/transito/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
 			),
+			'reporte_clasif' => array(
+				'url'   => $this->router->class . '/reporte_clasif/FIJA/20150129',
+				'texto' => $this->lang->line('stock_sap_menu_transito'),
+			),
 		);
 	}
 
@@ -259,6 +263,14 @@ class Stock_sap extends CI_Controller {
 			$this->load->view('stock_sap/ver_stock_datos', $data);
 			$this->load->view('app_footer', $data);
 		}
+	}
+
+
+	public function reporte_clasif($tipo_op = 'MOVIL', $fecha = null)
+	{
+		$this->load->model('stock_sap_model');
+
+		dd($this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha));
 	}
 
 
