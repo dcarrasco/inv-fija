@@ -189,7 +189,10 @@ class Inventario_config extends ORM_Controller {
 	{
 		$this->load->model('ubicacion_model');
 		$arr_ubic = $this->ubicacion_model->get_ubicaciones_libres($tipo_inventario);
-		echo (json_encode($arr_ubic));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($arr_ubic));
 	}
 
 	// --------------------------------------------------------------------
@@ -204,7 +207,10 @@ class Inventario_config extends ORM_Controller {
 	{
 		$this->load->model('ubicacion_model');
 		$arr_ubic = $this->ubicacion_model->get_combo_tipos_ubicacion($tipo_inventario);
-		echo (json_encode($arr_ubic));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($arr_ubic));
 	}
 
 
