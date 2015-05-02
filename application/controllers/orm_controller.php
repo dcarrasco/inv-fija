@@ -58,17 +58,18 @@ class ORM_Controller extends CI_Controller {
 	{
 		$modelo = new $nombre_modelo;
 
-		$filtro = ($this->input->post('filtro')) ? $this->input->post('filtro') : $filtro;
+		$filtro = $this->input->post('filtro') ? $this->input->post('filtro') : $filtro;
 		$modelo->set_model_filtro($filtro);
 
 		$modelo->list_paginated($pag);
 
 		$data = array(
-				'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'      => $modelo,
-				'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
-				'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
-			);
+			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
+			'modelo'      => $modelo,
+			'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
+			'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
+		);
+
 		$this->_render_view('ORM/orm_listado', $data);
 	}
 
@@ -83,8 +84,7 @@ class ORM_Controller extends CI_Controller {
 	 */
 	public function editar($nombre_modelo = '' , $id = NULL)
 	{
-		$modelo = new $nombre_modelo;
-		$modelo->find_id($id);
+		$modelo = new $nombre_modelo($id);
 
 		if (!$modelo->valida_form())
 		{
@@ -92,7 +92,8 @@ class ORM_Controller extends CI_Controller {
 				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'        => $modelo,
 				'link_cancelar' => site_url($this->router->class . '/listado/' . $nombre_modelo),
-				);
+			);
+
 			$this->_render_view('ORM/orm_editar', $data);
 		}
 		else
@@ -118,5 +119,5 @@ class ORM_Controller extends CI_Controller {
 
 
 }
-/* End of file acl_config.php */
-/* Location: ./application/controllers/acl_config.php */
+/* End of file orm_controller.php */
+/* Location: ./application/controllers/orm_controller.php */

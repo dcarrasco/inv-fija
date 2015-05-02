@@ -2,7 +2,7 @@
 
 class Modulo extends ORM_Model {
 
-	public function __construct()
+	public function __construct($id = null)
 	{
 		parent::__construct();
 
@@ -69,6 +69,10 @@ class Modulo extends ORM_Model {
 
 		$this->config_model($cfg);
 
+		if ($id)
+		{
+			$this->fill($id);
+		}
 	}
 
 

@@ -2,7 +2,7 @@
 
 class Detalle_inventario extends ORM_Model {
 
-	public function __construct()
+	public function __construct($id = null)
 	{
 		parent::__construct();
 
@@ -150,6 +150,12 @@ class Detalle_inventario extends ORM_Model {
 			),
 		);
 		$this->config_model($cfg);
+
+
+		if ($id)
+		{
+			$this->fill($id);
+		}
 	}
 
 
@@ -163,6 +169,13 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve registros de inventario de una hoja específica
+	 *
+	 * @param  integer $id_inventario ID inventario a rescatar
+	 * @param  integer $hoja          Numero de la hoja a rescatar
+	 * @return none
+	 */
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
 		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
@@ -171,6 +184,11 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera nombre del auditor
+	 *
+	 * @return string Nombre del auditor
+	 */
 	public function get_nombre_auditor()
 	{
 		if (count($this->get_model_all()) > 0)
@@ -186,6 +204,11 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera ID del auditor
+	 *
+	 * @return integer ID del auditor
+	 */
 	public function get_id_auditor()
 	{
 		if (count($this->get_model_all()) > 0)
@@ -203,6 +226,11 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera nombre del digitador
+	 *
+	 * @return integer ID digitador
+	 */
 	public function get_nombre_digitador()
 	{
 		if(count($this->get_model_all()) > 0)
@@ -292,8 +320,7 @@ class Detalle_inventario extends ORM_Model {
 		$model_all = array();
 		foreach($rs as $reg)
 		{
-			$o = new Detalle_inventario();
-			$o->get_from_array($reg);
+			$o = new Detalle_inventario($reg);
 			array_push($model_all, $o);
 		}
 		$this->set_model_all($model_all);

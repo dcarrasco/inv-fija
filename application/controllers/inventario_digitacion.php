@@ -198,7 +198,7 @@ class Inventario_digitacion extends CI_Controller {
 			$nuevo_material = new Catalogo;
 			$nuevo_material->find_id($this->input->post('catalogo'));
 
-			$detalle_inventario->get_from_array(array(
+			$detalle_inventario->fill(array(
 				'id'                 => (int) $id,
 				'id_inventario'      => (int) $inventario->get_id_inventario_activo(),
 				'hoja'               => (int) $hoja,
