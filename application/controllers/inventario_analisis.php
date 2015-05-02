@@ -239,15 +239,11 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->_get_datos_inventario();
 
-		$inventario = new Inventario;
-		$inventario->find_id($this->id_inventario);
+		$inventario = new Inventario($this->id_inventario);
 
 		$this->form_validation->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
-
-
-
 
 		$this->app_common->form_validation_config();
 
