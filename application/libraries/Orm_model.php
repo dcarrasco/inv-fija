@@ -7,7 +7,7 @@
  * @author		dcr
  * @link
  */
-class Orm_model implements Iterator {
+class Orm_model implements IteratorAggregate {
 
 	/**
 	 * Nombre del modelo
@@ -128,7 +128,7 @@ class Orm_model implements Iterator {
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
 	 **/
-	public function __construct($param = array())
+	public function __construct()
 	{
 		$this->CI =& get_instance();
 		$this->CI->lang->load('orm');
@@ -180,29 +180,10 @@ class Orm_model implements Iterator {
 	// --------------------------------------------------------------------
 	// Iterator methods
 	// --------------------------------------------------------------------
-	public function rewind()
-	{
-		reset($this->fields_values);
-	}
 
-	public function current()
+	public function getIterator()
 	{
-		return current($this->fields_values);
-	}
-
-	public function key()
-	{
-		return key($this->fields_values);
-	}
-
-	public function next()
-	{
-		return next($this->fields_values);
-	}
-
-	public function valid()
-	{
-		return (key($this->fields_values) !== NULL AND key($this->fields_values) !== FALSE);
+		return new ArrayIterator($this->fields_values);
 	}
 
 	// --------------------------------------------------------------------
@@ -445,6 +426,13 @@ class Orm_model implements Iterator {
 
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve string con item de formulario para el campo indicado
+	 *
+	 * @param  string $campo Nombre del campo para devolver el elemento de formulario
+	 * @return string        Formulario
+	 */
 	public function form_item($campo = '')
 	{
 		if ($campo != '')
@@ -701,7 +689,7 @@ class Orm_model implements Iterator {
 		if ($tipo == 'first')
 		{
 			$rs = $this->CI->db->get($this->model_tabla)->row_array();
-			$this->get_from_array($rs);
+			$this->fill_from_array($rs);
 
 			if ($recupera_relation)
 			{
@@ -722,7 +710,7 @@ class Orm_model implements Iterator {
 			foreach ($rs as $reg)
 			{
 				$o = new $this->model_class();
-				$o->get_from_array($reg);
+				$o->fill_from_array($reg);
 
 				if ($recupera_relation)
 				{
@@ -756,7 +744,7 @@ class Orm_model implements Iterator {
 			foreach ($rs as $reg)
 			{
 				$o = new $this->model_class();
-				$o->get_from_array($reg);
+				$o->fill_from_array($reg);
 				$arr_list[$o->get_model_id()] = (string) $o;
 			}
 
@@ -982,6 +970,32 @@ class Orm_model implements Iterator {
 		}
 	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Puebla el modelo con datos de la base de datos o de un arreglo entregado
+	 *
+	 * @param  mixed $id ID del registro a recuperar o arreglo con datos
+	 * @return none
+	 */
+	public function fill($id = null)
+	{
+		if ($id)
+		{
+			if (is_array($id))
+			{
+				return $this->fill_from_array($id);
+			}
+			else
+			{
+				return $this->find_id($id);
+			}
+		}
+	}
+
+
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -990,7 +1004,7 @@ class Orm_model implements Iterator {
 	 * @param  array  $rs Arreglo con los valores
 	 * @return nada
 	 */
-	public function get_from_array($rs = array())
+	public function fill_from_array($rs = array())
 	{
 		if ($rs OR count($rs) > 0)
 		{
@@ -1031,7 +1045,7 @@ class Orm_model implements Iterator {
 	 */
 	public function recuperar_post()
 	{
-		return $this->get_from_array($this->CI->input->post());
+		return $this->fill_from_array($this->CI->input->post());
 	}
 
 

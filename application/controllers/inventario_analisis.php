@@ -159,7 +159,6 @@ class Inventario_analisis extends CI_Controller {
 
 		if ($this->input->post('formulario') == 'upload')
 		{
-
 			if ($this->input->post('password') == 'logistica2012')
 			{
 				$upload_config = array(
@@ -180,8 +179,7 @@ class Inventario_analisis extends CI_Controller {
 					$upload_data = $this->upload->data();
 					$archivo_cargado = $upload_data['full_path'];
 
-					$inventario = new Inventario;
-					$inventario->find_id($this->id_inventario);
+					$inventario = new Inventario($this->id_inventario);
 					$inventario->borrar_detalle_inventario();
 					$res_procesa_archivo = $inventario->cargar_datos_archivo($archivo_cargado);
 
@@ -241,15 +239,11 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->_get_datos_inventario();
 
-		$inventario = new Inventario;
-		$inventario->find_id($this->id_inventario);
+		$inventario = new Inventario($this->id_inventario);
 
 		$this->form_validation->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]');
 		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
-
-
-
 
 		$this->app_common->form_validation_config();
 

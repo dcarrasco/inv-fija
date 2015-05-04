@@ -35,7 +35,7 @@
 							"<?php echo $inventario_nombre?>"
 						</p>
 					</div>
-					<?php echo form_upload('upload_file','','class="form-control"'); ?>
+					<?php echo form_upload('upload_file', '', 'class="form-control"'); ?>
 				</div>
 			</div>
 

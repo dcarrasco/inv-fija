@@ -325,7 +325,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_tipo_fecha($tipo = 'ANNO')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_tipo_fecha($tipo));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_tipo_fecha($tipo)));
 	}
 
 
@@ -334,7 +337,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_fechas($tipo = 'ANNO', $filtro = '')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_fechas($tipo, $filtro));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_fechas($tipo, $filtro)));
 	}
 
 
@@ -343,7 +349,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_tipo_alm($tipo = '')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_tipo_alm($tipo));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_tipo_alm($tipo)));
 	}
 
 
@@ -352,7 +361,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_almacenes($tipo = 'MOVIL-TIPOALM', $filtro = '')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_almacenes($tipo, $filtro));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_almacenes($tipo, $filtro)));
 	}
 
 
@@ -361,7 +373,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_tipo_mat($tipo = '')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_tipo_mat($tipo));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_tipo_mat($tipo)));
 	}
 
 
@@ -370,7 +385,10 @@ class Stock_reporte extends CI_Controller {
 	public function movhist_ajax_materiales($tipo = 'TIPO', $filtro = '')
 	{
 		$this->load->model('reportestock_model');
-		echo json_encode($this->reportestock_model->get_combo_materiales($tipo, $filtro));
+
+		$this->output
+			->set_content_type('application/json')
+			->set_output(json_encode($this->reportestock_model->get_combo_materiales($tipo, $filtro)));
 	}
 
 

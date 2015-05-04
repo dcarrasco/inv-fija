@@ -2,7 +2,7 @@
 
 class Inventario extends ORM_Model {
 
-	public function __construct()
+	public function __construct($id = null)
 	{
 		parent::__construct();
 
@@ -43,6 +43,11 @@ class Inventario extends ORM_Model {
 		);
 
 		$this->config_model($cfg);
+
+		if ($id)
+		{
+			$this->fill($id);
+		}
 	}
 
 
@@ -56,6 +61,12 @@ class Inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Graba un inventario
+	 * Si tiene marca activo, elimina esta marca del resto de los inventarios
+	 *
+	 * @return none
+	 */
 	public function grabar()
 	{
 		parent::grabar();
@@ -71,6 +82,11 @@ class Inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve ID del inventario activo
+	 *
+	 * @return integer ID del inventario activo
+	 */
 	public function get_id_inventario_activo()
 	{
 		$this->find('first', array('conditions' => array('activo' => 1)));
@@ -81,6 +97,11 @@ class Inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve el numero de la mayor hoja del inventario
+	 *
+	 * @return integer Numero de la hoja mayor
+	 */
 	public function get_max_hoja_inventario()
 	{
 		$rs = $this->CI->db
@@ -94,6 +115,11 @@ class Inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Borra registros de detalle de inventario
+	 *
+	 * @return none
+	 */
 	public function borrar_detalle_inventario()
 	{
 		$this->CI->db->delete($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id));
@@ -104,6 +130,7 @@ class Inventario extends ORM_Model {
 
 	/**
 	 * Carga a la BD los datos del archivo
+	 *
 	 * @param  string $archivo Nombre del archivo a cargar a la BD (full path)
 	 * @return array           Estado de la carga del archivo
 	 */
@@ -112,54 +139,41 @@ class Inventario extends ORM_Model {
 		$count_OK    = 0;
 		$count_error = 0;
 		$num_linea   = 0;
-		$c           = 0;
 
 		$arr_lineas_error = array();
 		$arr_bulk_insert  = array();
 		$script_carga     = '';
 
-		ini_set("auto_detect_line_endings", TRUE);
-		$fh = fopen($archivo, 'r');
-
-		if ($fh)
+		foreach(file($archivo) as $linea)
 		{
-			while ($linea = fgets($fh))
-			{
-				$c += 1;
-				$num_linea += 1;
-				$resultado_procesa_linea = $this->_procesa_linea($linea);
+			$num_linea += 1;
+			$resultado_procesa_linea = $this->_procesa_linea($linea);
 
-				if ($resultado_procesa_linea == 'no_procesar')
+			if ($resultado_procesa_linea == 'no_procesar')
+			{
+				// no se procesa esta linea
+			}
+			else if ($resultado_procesa_linea == 'error')
+			{
+				$count_error += 1;
+				array_push($arr_lineas_error, $num_linea);
+			}
+			else
+			{
+				$count_OK += 1;
+				if (is_array($resultado_procesa_linea))
 				{
-					// no se procesa esta linea
-				}
-				else if ($resultado_procesa_linea == 'error')
-				{
-					$count_error += 1;
-					array_push($arr_lineas_error, $num_linea);
-				}
-				else
-				{
-					$count_OK += 1;
-					if ($resultado_procesa_linea != '')
-					{
-						$script_carga .= 'subeStock.proc_linea_carga({count:' . $c . ',' . $resultado_procesa_linea . '});' . "\n";
-					}
+					$resultado_procesa_linea['count'] = $num_linea;
+					$script_carga .= 'subeStock.proc_linea_carga(' . json_encode($resultado_procesa_linea). ");\n";
 				}
 			}
-			fclose($fh);
 		}
 
 		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')';
 
 		if ($count_error > 0)
 		{
-			$msj_termino .= '<br>Lineas con errores (';
-			foreach ($arr_lineas_error as $key => $lin_error)
-			{
-				$msj_termino .= $lin_error . (($key > 0) ? ', ' : '');
-			}
-			$msj_termino .= ')';
+			$msj_termino .= '<br>Lineas con errores (' . implode(', ', $arr_lineas_error) . ')';
 		}
 
 		return array('script' => $script_carga, 'regs_OK' => $count_OK, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
@@ -170,26 +184,23 @@ class Inventario extends ORM_Model {
 
 	private function _procesa_linea($linea = '')
 	{
-		$arr_linea = explode("\r", $linea);
+		$linea = utf8_encode(trim($linea, "\r\n"));
+		$linea = str_replace("'", '"', $linea);
 
-		if ($arr_linea[0] != '')
+		if ($linea != '')
 		{
-			$arr_datos = explode("\t", $arr_linea[0]);
+			$arr_datos = explode("\t", $linea);
 
 			if (count($arr_datos) == 9) // igual a 10 en caso de tener HU
 			{
-				$ubicacion   = trim(str_replace("'", '"', $arr_datos[0]));
-				//$hu          = trim(str_replace("'", '"', $arr_datos[1]));
-				$catalogo    = trim(str_replace("'", '"', $arr_datos[1]));
-				$descripcion = trim(str_replace("'", '"', $arr_datos[2]));
-				$lote        = trim(str_replace("'", '"', $arr_datos[3]));
-				$centro      = trim(str_replace("'", '"', $arr_datos[4]));
-				$almacen     = trim(str_replace("'", '"', $arr_datos[5]));
-				$um          = trim(str_replace("'", '"', $arr_datos[6]));
-				$stock_sap   = trim($arr_datos[7]);
-				$hoja        = trim($arr_datos[8]);
+				$arr_datos = array_combine(
+					array('ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'um', 'stock_sap', 'hoja'),
+					$arr_datos
+				);
+				extract($arr_datos);
 
 				if (strtoupper($ubicacion) == 'UBICACION' OR strtoupper($catalogo) == 'CATALOGO' OR
+					strtoupper($descripcion) == 'DESCRIPCION' OR
 					strtoupper($centro)    == 'CENTRO'    OR strtoupper($almacen)  == 'ALMACEN'  OR
 					strtoupper($lote)      == 'LOTE'      OR strtoupper($um)       == 'UM'       OR
 					strtoupper($stock_sap) == 'STOCK_SAP' OR strtoupper($hoja)     == 'HOJA') // OR $hu        == 'HU'
@@ -201,29 +212,29 @@ class Inventario extends ORM_Model {
 				{
 					if (is_numeric($stock_sap) and is_numeric($hoja))
 					{
-						return (
-							$this->CI->security->get_csrf_token_name() . ':\'' . $this->CI->security->get_csrf_hash() .'\'' .
-							',id:0' .
-							',id_inventario:' . $this->id .
-							',hoja:'          . $hoja .
-							',ubicacion:\''   . $ubicacion    . '\'' .
-							',hu:\'\''        .
-							',catalogo:\''    . $catalogo     . '\'' .
-							',descripcion:\'' . $descripcion  . '\'' .
-							',lote:\''        . $lote         . '\'' .
-							',centro:\''      . $centro       . '\'' .
-							',almacen:\''     . $almacen      . '\'' .
-							',um:\''          . $um           . '\'' .
-							',stock_sap:'     . $stock_sap           .
-							',stock_fisico:0' .
-							',digitador:0'    .
-							',auditor:0'      .
-							',observacion:\'\'' .
-							',fecha_modificacion:\''  . date('Ymd H:i:s') . '\'' .
-							',reg_nuevo:\'\'' .
-							',stock_ajuste:0' .
-							',glosa_ajuste:\'\''
-							);
+						return (array(
+							$this->CI->security->get_csrf_token_name() => $this->CI->security->get_csrf_hash(),
+							'id'                 => 0,
+							'id_inventario'      => $this->id,
+							'hoja'               => $hoja,
+							'ubicacion'          => $ubicacion,
+							'hu'                 => '',
+							'catalogo'           => $catalogo,
+							'descripcion'        => $descripcion,
+							'lote'               => $lote,
+							'centro'             => $centro,
+							'almacen'            => $almacen,
+							'um'                 => $um,
+							'stock_sap'          => $stock_sap,
+							'stock_fisico'       => 0,
+							'digitador'          => 0,
+							'auditor'            => 0,
+							'observacion'        => '',
+							'fecha_modificacion' => date('Ymd His'),
+							'reg_nuevo'          => '',
+							'stock_ajuste'       => 0,
+							'glosa_ajuste'       => '',
+						));
 
 					}
 					else
