@@ -4,6 +4,7 @@
 $lang['stock_sap_menu_movil']           = 'Stock m&oacute;vil';
 $lang['stock_sap_menu_fijo']            = 'Stock fija';
 $lang['stock_sap_menu_transito']        = 'Tr&aacute;nsito fija';
+$lang['stock_sap_menu_clasif']          = 'Reporte stock clasificaci&oacute;n';
 $lang['stock_perm_menu_perm']           = 'Permanencia';
 $lang['stock_perm_menu_mapa']           = 'Mapa de stock';
 $lang['stock_perm_menu_movs']           = 'Consulta de movimientos';

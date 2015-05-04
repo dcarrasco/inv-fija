@@ -688,9 +688,28 @@ WHERE A.TIPO_OP = ?
 AND E.FECHA_STOCK = ?
 GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
-
-			return $this->db->query($sql, array($tipo_op, $fecha));
 		}
+		else if ($tipo_op == "MOVIL")
+		{
+			$sql = "INSERT INTO " . $this->config->item('bd_reporte_clasif') .
+" SELECT
+A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
+SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
+SUM(E.VAL_LU + E.VAL_BQ + E.VAL_CQ + E.VAL_TT + E.VAL_OT) AS MONTO
+FROM " . $this->config->item('bd_clasifalm_sap')      . " A
+JOIN " . $this->config->item('bd_clasif_tipoalm_sap') . " B ON A.ID_CLASIF=B.ID_CLASIF
+JOIN " . $this->config->item('bd_tiposalm_sap')       . " C ON B.ID_TIPO=C.ID_TIPO
+JOIN " . $this->config->item('bd_tipoalmacen_sap')    . " D ON C.ID_TIPO=D.ID_TIPO
+JOIN " . $this->config->item('bd_stock_movil')        . " E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.COD_BODEGA
+JOIN " . $this->config->item('bd_tipo_clasifalm_sap') . " F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
+WHERE A.TIPO_OP= ?
+AND E.FECHA_STOCK = ?
+GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
+ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
+		}
+
+		return $this->db->query($sql, array($tipo_op, $fecha));
+
 	}
 
 

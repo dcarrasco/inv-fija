@@ -26,8 +26,8 @@ class Stock_sap extends CI_Controller {
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
 			),
 			'reporte_clasif' => array(
-				'url'   => $this->router->class . '/reporte_clasif/FIJA/20150129',
-				'texto' => $this->lang->line('stock_sap_menu_transito'),
+				'url'   => $this->router->class . '/reporte_clasif/MOVIL/20150424',
+				'texto' => $this->lang->line('stock_sap_menu_clasif'),
 			),
 		);
 	}
