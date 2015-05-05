@@ -106,11 +106,11 @@ class stock_sap_model extends CI_Model {
 				$this->db->select_sum('s.transito_traslado', 'TT');
 				$this->db->select_sum('s.otros','OT');
 
-				$this->db->select_sum('(s.libre_utilizacion * p.pmp)', 'VAL_LU');
-				$this->db->select_sum('(s.bloqueado * p.pmp)', 'VAL_BQ');
-				$this->db->select_sum('(s.contro_calidad * p.pmp)', 'VAL_CC');
-				$this->db->select_sum('(s.transito_traslado * p.pmp)', 'VAL_TT');
-				$this->db->select_sum('(s.otros * p.pmp)','VAL_OT');
+				$this->db->select_sum('(s.VAL_LU)', 'VAL_LU');
+				$this->db->select_sum('(s.VAL_BQ)', 'VAL_BQ');
+				$this->db->select_sum('(s.VAL_CQ)', 'VAL_CC');
+				$this->db->select_sum('(s.VAL_TT)', 'VAL_TT');
+				$this->db->select_sum('(s.VAL_OT)','VAL_OT');
 			}
 			else
 			{
@@ -131,7 +131,7 @@ class stock_sap_model extends CI_Model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)','total');
-			$this->db->select_sum('((s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)*p.pmp)','VAL_total');
+			$this->db->select_sum('(s.VAL_LU + s.VAL_BQ + s.VAL_CQ + s.VAL_TT + s.VAL_OT)','VAL_total');
 		}
 		else
 		{
@@ -149,7 +149,7 @@ class stock_sap_model extends CI_Model {
 			if (in_array('material', $mostrar))
 			{
 				$this->db->join($this->config->item('bd_stock_movil') . ' s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
-				$this->db->join($this->config->item('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
+				//$this->db->join($this->config->item('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
 			}
 			else
 			{
@@ -712,7 +712,28 @@ ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 
 	}
 
+/*
+actualiza PMP
 
+UPDATE S
+SET
+	S.VAL_LU=P.PMP_01,
+	S.VAL_BQ=P.PMP_07,
+	S.VAL_CQ=P.PMP_02,
+	S.VAL_TT=P.PMP_06,
+	S.VAL_OT=0
+FROM
+STOCK_SCL S
+JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
+WHERE S.FECHA_STOCK='20140930'
+
+SELECT *
+FROM
+STOCK_SCL S
+JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
+WHERE S.FECHA_STOCK='20140930'
+
+*/
 
 
 }
