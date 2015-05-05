@@ -8,6 +8,7 @@ if ( ! function_exists('dbg'))
 		//$dump = print_r($item, TRUE);
 		//echo gettype($item) . ' : ' . $dump;
 		//echo '</pre><hr>';
+		ini_set('xdebug.var_display_max_depth', '6');
 		var_dump($item);
 	}
 }

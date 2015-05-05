@@ -402,13 +402,14 @@ class Orm_model implements IteratorAggregate {
 				implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
 			: '';
 
+		$campo_rules = $campo;
 		if ($field->get_tipo() == 'has_many')
 		{
 			$reglas = 'trim';
-			$campo = $campo . '[]';
+			$campo_rules = $campo . '[]';
 		}
 
-		$this->CI->form_validation->set_rules($campo, ucfirst($field->get_label()), $reglas);
+		$this->CI->form_validation->set_rules($campo_rules, ucfirst($this->get_label_field($campo)), $reglas);
 	}
 
 
@@ -820,7 +821,6 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _recuperar_relation_fields($arr_obj = array())
 	{
-
 		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
 			if($obj_campo->get_tipo() == 'has_one')
