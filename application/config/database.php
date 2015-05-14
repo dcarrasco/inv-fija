@@ -122,5 +122,23 @@ $db['mac-sirio']['swap_pre'] = '';
 $db['mac-sirio']['autoinit'] = TRUE;
 $db['mac-sirio']['stricton'] = FALSE;
 
+$db['adminbd']['hostname'] = 'tcp:127.0.0.1,1500';
+$db['default']['hostname'] = 'localhost';
+$db['adminbd']['username'] = 'patripio';
+$db['adminbd']['password'] = 'movi.2015.logistica';
+$db['adminbd']['database'] = 'BD_inventario';
+$db['adminbd']['dbdriver'] = 'sqlsrv';
+$db['adminbd']['dbprefix'] = '';
+$db['adminbd']['pconnect'] = FALSE;
+$db['adminbd']['db_debug'] = TRUE;
+$db['adminbd']['cache_on'] = FALSE;
+$db['adminbd']['cachedir'] = '';
+$db['adminbd']['char_set'] = 'utf8';
+$db['adminbd']['dbcollat'] = 'utf8_general_ci';
+$db['adminbd']['swap_pre'] = '';
+$db['adminbd']['autoinit'] = TRUE;
+$db['adminbd']['stricton'] = FALSE;
+
+
 /* End of file database.php */
 /* Location: ./application/config/database.php */

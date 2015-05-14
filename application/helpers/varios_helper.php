@@ -96,6 +96,27 @@ if ( ! function_exists('fmt_monto'))
 		}
 	}
 
+// --------------------------------------------------------------------
+
+if ( ! function_exists('fmt_hora'))
+{
+	function fmt_hora($seg = 0)
+	{
+		$sep = ":";
+
+		$hh = (int) ($seg/3600);
+		$hh = (strlen($hh) == 1) ? '0' . $hh : $hh;
+
+		$mm = (int) (($seg - ((int) $hh) *3600)/60);
+		$mm = (strlen($mm) == 1) ? '0' . $mm : $mm;
+
+		$ss = (int) ($seg - ($hh*3600 + $mm*60));
+		$ss = (strlen($ss) == 1) ? '0' . $ss : $ss;
+
+		return $hh.$sep.$mm.$sep.$ss;
+	}
+}
+
 }
 /* helpers varios_helper.php */
 /* Location: ./application/helpers/varios_helper.php */
