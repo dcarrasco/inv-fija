@@ -122,8 +122,8 @@ $db['mac-sirio']['swap_pre'] = '';
 $db['mac-sirio']['autoinit'] = TRUE;
 $db['mac-sirio']['stricton'] = FALSE;
 
-$db['adminbd']['hostname'] = 'tcp:127.0.0.1,1500';
-$db['default']['hostname'] = 'localhost';
+//$db['adminbd']['hostname'] = 'tcp:127.0.0.1,1500';
+$db['adminbd']['hostname'] = 'localhost';
 $db['adminbd']['username'] = 'patripio';
 $db['adminbd']['password'] = 'movi.2015.logistica';
 $db['adminbd']['database'] = 'BD_inventario';
