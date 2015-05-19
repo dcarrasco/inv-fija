@@ -644,38 +644,86 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-	public function reporte_clasificacion($tipo_op = 'MOVIL', $fecha = null, $borrar_datos = FALSE)
+	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = null, $borrar_datos = FALSE)
 	{
 
-		if ($fecha)
+		$arr_result = array();
+
+		if ($fechas)
 		{
-			if ($borrar_datos)
+			foreach($fechas as $fecha)
 			{
-				$this->db
+				if ($borrar_datos)
+				{
+					$this->db
+						->where('tipo_op', $tipo_op)
+						->where('fecha_stock', $fecha)
+						->delete($this->config->item('bd_reporte_clasif'));
+				}
+
+				$result = $this->db
+					->select('tipo_op, convert(varchar(20), fecha_stock, 102) fecha_stock, orden, clasificacion, tipo, color, cantidad, monto', FALSE)
+					->from($this->config->item('bd_reporte_clasif'))
 					->where('tipo_op', $tipo_op)
 					->where('fecha_stock', $fecha)
-					->delete($this->config->item('bd_reporte_clasif'));
-			}
+					->order_by('tipo_op, fecha_stock, orden')
+					->get()->result_array();
 
-			$result = $this->db
-				->select('tipo_op, convert(varchar(20), fecha_stock, 102) fecha_stock, orden, clasificacion, tipo, color, cantidad, monto', FALSE)
-				->from($this->config->item('bd_reporte_clasif'))
-				->where('tipo_op', $tipo_op)
-				->where('fecha_stock', $fecha)
-				->order_by('tipo_op, fecha_stock, orden')
-				->get()->result_array();
+				if (count($result) == 0)
+				{
+					$this->_genera_reporte_clasificacion($tipo_op, $fecha);
 
-			if (count($result) == 0)
-			{
-				$this->_genera_reporte_clasificacion($tipo_op, $fecha);
-
-				return $this->reporte_clasificacion($tipo_op, $fecha);
-			}
-			else
-			{
-				return $result;
+					array_push($arr_result, $this->reporte_clasificacion($tipo_op, $fecha));
+				}
+				else
+				{
+					array_push($arr_result, $result);
+				}
 			}
 		}
+
+		// agrega registros en arreglo final
+		$arr_final = array();
+		$arr_fechas = array();
+		foreach($arr_result as $result_fecha)
+		{
+			foreach ($result_fecha as $reg)
+			{
+				if (! in_array($reg['fecha_stock'], $arr_fechas))
+				{
+					array_push($arr_fechas, $reg['fecha_stock']);
+				}
+
+				if (! array_key_exists($reg['orden'], $arr_final))
+				{
+					$arr_final[$reg['orden']] = array();
+				}
+
+				$arr_final[$reg['orden']]['tipo_op'] = $reg['tipo_op'];
+				$arr_final[$reg['orden']]['orden'] = $reg['orden'];
+				$arr_final[$reg['orden']]['clasificacion'] = $reg['clasificacion'];
+				$arr_final[$reg['orden']]['tipo'] = $reg['tipo'];
+				$arr_final[$reg['orden']]['color'] = $reg['color'];
+				$arr_final[$reg['orden']][$reg['fecha_stock']] = $reg['monto'];
+
+			}
+		}
+
+		// corrige arreglo final, agregando valores =0 en aquellas llaves de fecha que no existan
+		foreach($arr_final as $key => $reg)
+		{
+			foreach($arr_fechas as $fec)
+			{
+				if (! array_key_exists($fec, $reg))
+				{
+					$arr_final[$key][$fec] = 0;
+				}
+			}
+		}
+
+		asort($arr_fechas);
+
+		return array('datos' => $arr_final, 'fechas' => $arr_fechas);
 	}
 
 

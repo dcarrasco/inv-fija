@@ -29,7 +29,7 @@
 						<label>
 							<?php echo $this->lang->line('stock_clasif_label_fechas'); ?>
 						</label>
-						<?php echo form_dropdown('fecha', $combo_fechas, $fecha,'id="select_fecha" class="form-control"'); ?>
+						<?php echo form_multiselect('fechas[]', $combo_fechas, $fechas,'size="10" id="select_fecha" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -60,30 +60,35 @@
 </div>
 <?php echo form_close(); ?>
 
+<?php $total = array(); ?>
 <table class="table table-striped table-hover table-condensed reporte">
 	<thead>
 		<tr>
 			<th>tipo op</th>
-			<th>fecha</th>
 			<th>orden</th>
 			<th>clasificacion</th>
 			<th>tipo</th>
-			<th class="text-right">monto</th>
+			<?php if (count($reporte['fechas'])>0): ?>
+				<?php foreach ($reporte['fechas'] as $fec): ?>
+					<th class="text-right"><?php echo $fec; ?></th>
+					<?php $total[$fec] = 0; ?>
+				<?php endforeach ?>
+			<?php endif ?>
 		</tr>
 	</thead>
 
 	<tbody>
-		<?php $total = 0; ?>
-		<?php if (count($reporte) > 0): ?>
-		<?php foreach ($reporte as $lin): ?>
-		<?php $total += $lin['monto']; ?>
+		<?php if (count($reporte['datos']) > 0): ?>
+		<?php foreach ($reporte['datos'] as $lin): ?>
 		<tr>
 			<td><?php echo $lin['tipo_op'] ?></td>
-			<td><?php echo $lin['fecha_stock'] ?></td>
 			<td><?php echo $lin['orden'] ?></td>
 			<td><?php echo $lin['clasificacion'] ?></td>
 			<td><?php echo $lin['tipo'] ?></td>
-			<td class="text-right"><?php echo fmt_monto($lin['monto']); ?></td>
+			<?php foreach ($reporte['fechas'] as $fec): ?>
+				<td class="text-right"><?php echo fmt_monto($lin[$fec]); ?></td>
+				<?php $total[$fec] += $lin[$fec]; ?>
+			<?php endforeach ?>
 		</tr>
 		<?php endforeach; ?>
 		<?php endif; ?>
@@ -95,8 +100,10 @@
 			<th></th>
 			<th></th>
 			<th></th>
-			<th></th>
-			<th class="text-right"><?php echo fmt_monto($total); ?></th>
+			<?php foreach ($reporte['fechas'] as $fec): ?>
+				<th class="text-right"><?php echo fmt_monto($total[$fec]); ?></th>
+				<?php $total[$fec] = 0; ?>
+			<?php endforeach ?>
 		</tr>
 	</tfoot>
 </table>

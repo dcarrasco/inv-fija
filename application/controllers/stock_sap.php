@@ -271,22 +271,22 @@ class Stock_sap extends CI_Controller {
 		$this->load->model('stock_sap_model');
 
 		$tipo_op = set_value('operacion', 'FIJA');
-		$fecha   = set_value('fecha', null);
+		$fechas  = set_value('fechas', null);
 		$borrar_datos = set_value('sel_borrar') == 'borrar';
 
 		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 		$borrar_datos =
 
-		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha, $borrar_datos);
+		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
 
 		$arrjs_reporte = array();
 		$js_slices     = array();
-		if (count($reporte) > 0)
+		if (count($reporte['datos']) > 0)
 		{
-			foreach ($reporte as $linea)
+			foreach ($reporte['datos'] as $linea)
 			{
-				array_push($arrjs_reporte, '[\'' . $linea['clasificacion'] . '\', ' . (int)($linea['monto']/1000000) . ']');
+				//array_push($arrjs_reporte, '[\'' . $linea['clasificacion'] . '\', ' . (int)($linea['monto']/1000000) . ']');
 				array_push($js_slices, '{color: \'' . $linea['color'] . '\'}');
 			}
 		}
@@ -300,7 +300,7 @@ class Stock_sap extends CI_Controller {
 			'combo_operacion' => $combo_operacion,
 			'url_reporte'     => site_url($this->arr_menu['reporte_clasif']['url']),
 			'tipo_op'         => $tipo_op,
-			'fecha'           => $fecha,
+			'fechas'          => $fechas,
 			'reporte'         => $reporte,
 			'reporte_js'      => '[[\'Clasificacion\', \'Monto\'], ' . implode(', ', $arrjs_reporte) . ']',
 			'js_slices'       => '[' . implode(',', $js_slices). ']',
