@@ -498,64 +498,67 @@ class stock_sap_model extends CI_Model {
 	{
 		$arr_result = array();
 
-		// fecha stock
-		if (in_array('fecha', $mostrar))
+		if (array_key_exists('fecha', $filtrar) AND count($filtrar['fecha'])>0)
 		{
-			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
-			$this->db->order_by('fecha_stock');
+			// fecha stock
+			if (in_array('fecha', $mostrar))
+			{
+				$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
+				$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
+				$this->db->order_by('fecha_stock');
+			}
+
+			// almacenes
+			if (in_array('almacen', $mostrar))
+			{
+				$this->db->select('s.centro');
+				$this->db->group_by('s.centro');
+				$this->db->order_by('s.centro');
+			}
+
+			// cantidades y tipos de stock
+			if (in_array('tipo_stock', $mostrar))
+			{
+				$this->db->select('s.estado, s.acreedor, p.des_proveedor');
+				$this->db->join($this->config->item('bd_proveedores') . ' p', 'p.cod_proveedor=s.acreedor', 'left');
+				$this->db->group_by('s.estado, s.acreedor, p.des_proveedor');
+				$this->db->order_by('s.estado, s.acreedor');
+			}
+
+			// materiales
+			if (in_array('material', $mostrar))
+			{
+				$this->db->select('s.material, m.desc_material, s.umb');
+				$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
+				$this->db->group_by('s.material, m.desc_material, s.umb');
+				$this->db->order_by('s.material, m.desc_material, s.umb');
+			}
+
+			// lotes
+			if (in_array('lote', $mostrar))
+			{
+				$this->db->select('s.lote');
+				$this->db->group_by('s.lote');
+			}
+
+			$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
+
+			// tablas
+			$this->db->from($this->config->item('bd_stock_fija') . ' s');
+
+			// condiciones
+			// fechas
+			if (array_key_exists('fecha', $filtrar))
+			{
+				$this->db->where_in('s.fecha_stock', $filtrar['fecha']);
+			}
+
+			$this->db->where('s.almacen is null');
+
+
+			$arr_result = $this->db->get()->result_array();
+			//print_r($arr_result);
 		}
-
-		// almacenes
-		if (in_array('almacen', $mostrar))
-		{
-			$this->db->select('s.centro');
-			$this->db->group_by('s.centro');
-			$this->db->order_by('s.centro');
-		}
-
-		// cantidades y tipos de stock
-		if (in_array('tipo_stock', $mostrar))
-		{
-			$this->db->select('s.estado, s.acreedor, p.des_proveedor');
-			$this->db->join($this->config->item('bd_proveedores') . ' p', 'p.cod_proveedor=s.acreedor', 'left');
-			$this->db->group_by('s.estado, s.acreedor, p.des_proveedor');
-			$this->db->order_by('s.estado, s.acreedor');
-		}
-
-		// materiales
-		if (in_array('material', $mostrar))
-		{
-			$this->db->select('s.material, m.desc_material, s.umb');
-			$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
-			$this->db->group_by('s.material, m.desc_material, s.umb');
-			$this->db->order_by('s.material, m.desc_material, s.umb');
-		}
-
-		// lotes
-		if (in_array('lote', $mostrar))
-		{
-			$this->db->select('s.lote');
-			$this->db->group_by('s.lote');
-		}
-
-		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
-
-		// tablas
-		$this->db->from($this->config->item('bd_stock_fija') . ' s');
-
-		// condiciones
-		// fechas
-		if (array_key_exists('fecha', $filtrar))
-		{
-			$this->db->where_in('s.fecha_stock', $filtrar['fecha']);
-		}
-
-		$this->db->where('s.almacen is null');
-
-
-		$arr_result = $this->db->get()->result_array();
-		//print_r($arr_result);
 
 		return $arr_result;
 	}
