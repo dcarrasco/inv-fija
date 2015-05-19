@@ -641,10 +641,19 @@ class stock_sap_model extends CI_Model {
 	}
 
 
-	public function reporte_clasificacion($tipo_op = 'MOVIL', $fecha = null)
+	public function reporte_clasificacion($tipo_op = 'MOVIL', $fecha = null, $borrar_datos = FALSE)
 	{
+
 		if ($fecha)
 		{
+			if ($borrar_datos)
+			{
+				$this->db
+					->where('tipo_op', $tipo_op)
+					->where('fecha_stock', $fecha)
+					->delete($this->config->item('bd_reporte_clasif'));
+			}
+
 			$result = $this->db
 				->select('tipo_op, convert(varchar(20), fecha_stock, 102) fecha_stock, orden, clasificacion, tipo, color, cantidad, monto', FALSE)
 				->from($this->config->item('bd_reporte_clasif'))

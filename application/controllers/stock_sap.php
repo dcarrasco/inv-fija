@@ -266,13 +266,19 @@ class Stock_sap extends CI_Controller {
 	}
 
 
-	public function reporte_clasif($tipo_op = 'FIJA', $fecha = null)
+	public function reporte_clasif()
 	{
 		$this->load->model('stock_sap_model');
 
+		$tipo_op = set_value('operacion', 'FIJA');
+		$fecha   = set_value('fecha', null);
+		$borrar_datos = set_value('sel_borrar') == 'borrar';
+
 		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
-		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha);
+		$borrar_datos =
+
+		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha, $borrar_datos);
 
 		$arrjs_reporte = array();
 		$js_slices     = array();
@@ -300,9 +306,24 @@ class Stock_sap extends CI_Controller {
 			'js_slices'       => '[' . implode(',', $js_slices). ']',
 		);
 
-		$this->load->view('app_header', $view_data);
-		$this->load->view('stock_sap/reporte_clasif', $view_data);
-		$this->load->view('app_footer', $view_data);
+		$this->_render_view('stock_sap/reporte_clasif', $view_data);
+	}
+
+	public function ajax_fechas($tipo_op = 'MOVIL', $tipo_fecha = 'ultimodia')
+	{
+		$this->load->model('stock_sap_model');
+		$arr_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+
+		$arr_fechas2 = array();
+		foreach ($arr_fechas[$tipo_fecha] as $k => $v)
+		{
+			array_push($arr_fechas2, '<option value="' . $k . '">' . $v . '</option>');
+		}
+
+		$this->output
+			->set_content_type('text')
+			->set_output(implode('', $arr_fechas2));
+
 	}
 
 

@@ -102,6 +102,10 @@ $lang['stock_gestor_check_baja']            = 'Baja';
 $lang['stock_gestor_button_report']         = 'Consultar';
 $lang['stock_gestor_button_reset']          = 'Limpiar';
 
+$lang['stock_clasif_label_tipoop'] = 'Seleccionar operaci&oacute;n';
+$lang['stock_clasif_label_fechas'] = 'Seleccionar fechas';
+$lang['stock_clasif_label_delete'] = 'Borrar datos fecha';
+
 
 /* End of file stock_lang.php */
 /* Location: ./application/language/spanish/stock_lang.php */
