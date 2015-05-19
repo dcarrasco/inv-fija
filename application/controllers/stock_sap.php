@@ -26,7 +26,7 @@ class Stock_sap extends CI_Controller {
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
 			),
 			'reporte_clasif' => array(
-				'url'   => $this->router->class . '/reporte_clasif/MOVIL/20150424',
+				'url'   => $this->router->class . '/reporte_clasif',
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
 			),
 		);
@@ -266,11 +266,43 @@ class Stock_sap extends CI_Controller {
 	}
 
 
-	public function reporte_clasif($tipo_op = 'MOVIL', $fecha = null)
+	public function reporte_clasif($tipo_op = 'FIJA', $fecha = null)
 	{
 		$this->load->model('stock_sap_model');
 
-		dd($this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha));
+		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
+		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fecha);
+
+		$arrjs_reporte = array();
+		$js_slices     = array();
+		if (count($reporte) > 0)
+		{
+			foreach ($reporte as $linea)
+			{
+				array_push($arrjs_reporte, '[\'' . $linea['clasificacion'] . '\', ' . (int)($linea['monto']/1000000) . ']');
+				array_push($js_slices, '{color: \'' . $linea['color'] . '\'}');
+			}
+		}
+
+		$view_data = array(
+			'menu_modulo'            => array(
+				'menu'         => $this->arr_menu,
+				'mod_selected' => 'reporte_clasif',
+			),
+			'combo_fechas' => $combo_fechas['ultimodia'],
+			'combo_operacion' => $combo_operacion,
+			'url_reporte'     => site_url($this->arr_menu['reporte_clasif']['url']),
+			'tipo_op'         => $tipo_op,
+			'fecha'           => $fecha,
+			'reporte'         => $reporte,
+			'reporte_js'      => '[[\'Clasificacion\', \'Monto\'], ' . implode(', ', $arrjs_reporte) . ']',
+			'js_slices'       => '[' . implode(',', $js_slices). ']',
+		);
+
+		$this->load->view('app_header', $view_data);
+		$this->load->view('stock_sap/reporte_clasif', $view_data);
+		$this->load->view('app_footer', $view_data);
 	}
 
 
