@@ -65,6 +65,7 @@
 		<tr>
 			<th>tipo op</th>
 			<th>fecha</th>
+			<th>orden</th>
 			<th>clasificacion</th>
 			<th>tipo</th>
 			<th class="text-right">monto</th>
@@ -79,6 +80,7 @@
 		<tr>
 			<td><?php echo $lin['tipo_op'] ?></td>
 			<td><?php echo $lin['fecha_stock'] ?></td>
+			<td><?php echo $lin['orden'] ?></td>
 			<td><?php echo $lin['clasificacion'] ?></td>
 			<td><?php echo $lin['tipo'] ?></td>
 			<td class="text-right"><?php echo fmt_monto($lin['monto']); ?></td>
@@ -89,6 +91,7 @@
 
 	<tfoot>
 		<tr>
+			<th></th>
 			<th></th>
 			<th></th>
 			<th></th>
