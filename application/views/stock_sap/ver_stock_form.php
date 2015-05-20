@@ -1,4 +1,5 @@
 <?php echo form_open(); ?>
+<?php echo form_hidden('tipo_op', $tipo_op); ?>
 <div class="accordion hidden-print">
 	<div class="panel panel-default">
 
@@ -21,7 +22,7 @@
 						</label>
 						<div class="radio">
 							<label>
-								<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
+								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
 								<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
 							</label>
 						</div>
@@ -31,12 +32,7 @@
 								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
 							</label>
 						</div>
-						<div id="show_fecha_ultimodia">
-							<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
-						</div>
-						<div id="show_fecha_todas">
-							<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="form-control"'); ?>
-						</div>
+						<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'),'id="select_fechas" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 

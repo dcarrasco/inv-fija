@@ -94,13 +94,10 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$val] = $this->input->post($val);
 		}
 
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
-			? $this->input->post('fecha_ultimodia')
-			: $this->input->post('fecha_todas');
+		$arr_filtrar['fecha'] = $this->input->post('fechas');
 
 		$this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
-		$this->form_validation->set_rules('fecha_ultimodia', 'Fechas (ultimo dia del mes)', '');
-		$this->form_validation->set_rules('fecha_todas', 'Fechas (todas)', '');
+		$this->form_validation->set_rules('fechas', 'Fechas', '');
 		$this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
 		$this->form_validation->set_rules('tipo_alm', 'Tipos de almacenes', '');
 		$this->form_validation->set_rules('almacenes', 'Almacenes', '');
@@ -115,7 +112,7 @@ class Stock_sap extends CI_Controller {
 		$this->form_validation->run();
 
 		$stock = array();
-		if($this->input->post('sel_fechas'))
+		if ($this->input->post('sel_fechas'))
 		{
 			$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
 		}
@@ -132,15 +129,14 @@ class Stock_sap extends CI_Controller {
 				'menu'         => $this->arr_menu,
 				'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'
 			),
-			'stock'                  => $stock,
-			'combo_tipo_alm'         => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
-			'combo_almacenes'        => $almacen_sap->get_combo_almacenes($tipo_op),
-			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-			'combo_fechas_todas'     => $combo_fechas['todas'],
-			'tipo_op'                => $tipo_op,
-			'arr_mostrar'            => $arr_mostrar,
-			'datos_grafico'          => $datos_grafico,
-			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
+			'stock'                 => $stock,
+			'combo_tipo_alm'        => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
+			'combo_almacenes'       => $almacen_sap->get_combo_almacenes($tipo_op),
+			'combo_fechas'          => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
+			'tipo_op'               => $tipo_op,
+			'arr_mostrar'           => $arr_mostrar,
+			'datos_grafico'         => $datos_grafico,
+			'totaliza_tipo_almacen' => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
 											|| in_array('lote', $arr_mostrar) || in_array('tipo_stock', $arr_mostrar)
 											)
 											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
@@ -186,6 +182,7 @@ class Stock_sap extends CI_Controller {
 		$this->_render_view('stock_sap/detalle_series', $data);
 
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -266,6 +263,8 @@ class Stock_sap extends CI_Controller {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function reporte_clasif()
 	{
 		$this->load->model('stock_sap_model');
@@ -308,6 +307,9 @@ class Stock_sap extends CI_Controller {
 
 		$this->_render_view('stock_sap/reporte_clasif', $view_data);
 	}
+
+
+	// --------------------------------------------------------------------
 
 	public function ajax_fechas($tipo_op = 'MOVIL', $tipo_fecha = 'ultimodia')
 	{
