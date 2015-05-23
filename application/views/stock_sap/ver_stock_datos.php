@@ -71,7 +71,7 @@
 	</tfoot>
 </table>
 
-
+<?php if ($datos_grafico): ?>
 <div class="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -149,3 +149,5 @@
 
 	});
 </script>
+
+<?php endif ?>
