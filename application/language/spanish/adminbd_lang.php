@@ -1,7 +1,8 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-$lang['adminbd_']        = 'Texto a filtrar...';
+$lang['adminbd_log_menu_borra']   = 'Borrado Logs SQL';
+$lang['adminbd_log_menu_indices'] = 'Reordena indices SQL';
 
 
 
