@@ -94,26 +94,24 @@ class Almacen_sap extends ORM_Model {
 
 	public function get_combo_almacenes($tipo_op = '', $filtro = '')
 	{
-		$arr_result = array();
-		$arr_combo = array();
-
-		$this->CI->db
-			->select("a.centro + '-' + a.cod_almacen as llave", FALSE)
-			->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
-			->order_by('a.centro, a.cod_almacen')
-			->where('a.tipo_op', $tipo_op)
-			->from($this->get_model_tabla() . ' a');
-
-		if ($filtro != '')
+		if ($filtro == '')
 		{
-			$this->CI->db
-				->join($this->CI->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
-				->where_in('ta.id_tipo', explode('~', $filtro));
+			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op)));
 		}
+		else
+		{
+			$arr_result = $this->CI->db
+				->select("a.centro + '~' + a.cod_almacen as llave", FALSE)
+				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
+				->order_by('a.centro, a.cod_almacen')
+				->where('a.tipo_op', $tipo_op)
+				->from($this->get_model_tabla() . ' a')
+				->join($this->CI->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
+				->where_in('ta.id_tipo', explode('~', $filtro))
+				->get()->result_array();
 
-		$arr_result = $this->CI->db->get()->result_array();
-
-		return form_array_format($arr_result);
+			return form_array_format($arr_result);
+		}
 	}
 
 

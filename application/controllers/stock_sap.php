@@ -75,6 +75,7 @@ class Stock_sap extends CI_Controller {
 	{
 		$this->load->model('stock_sap_model');
 		$this->load->library('grafica_stock');
+		$this->app_common->form_validation_config();
 
 		$almacen_sap = new Almacen_sap;
 		$tipoalmacen_sap = new Tipoalmacen_sap;
@@ -94,56 +95,56 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$val] = $this->input->post($val);
 		}
 
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') == 'ultimo_dia')
-			? $this->input->post('fecha_ultimodia')
-			: $this->input->post('fecha_todas');
+		$arr_filtrar['fecha'] = $this->input->post('fechas');
 
-		$this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
-		$this->form_validation->set_rules('fecha_ultimodia', 'Fechas (ultimo dia del mes)', '');
-		$this->form_validation->set_rules('fecha_todas', 'Fechas (todas)', '');
-		$this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
-		$this->form_validation->set_rules('tipo_alm', 'Tipos de almacenes', '');
-		$this->form_validation->set_rules('almacenes', 'Almacenes', '');
-		$this->form_validation->set_rules('almacen', 'Indicador detalle almacenes', '');
-		$this->form_validation->set_rules('material', 'Indicador detalle materiales', '');
-		$this->form_validation->set_rules('lote', 'Indicador detalle lotes', '');
-		$this->form_validation->set_rules('tipo_stock', 'Indicador tipos de stock', '');
-		$this->form_validation->set_rules('tipo_stock_equipos', 'Mostrar equipos', '');
-		$this->form_validation->set_rules('tipo_stock_simcard', 'Mostrar simcards', '');
-		$this->form_validation->set_rules('tipo_stock_otros', '', 'Mostrar otros', '');
-		$this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
-		$this->form_validation->run();
+		$this->form_validation->set_rules('fechas[]', 'Fechas', 'required');
+		$this->form_validation->set_rules('almacenes[]', 'Almacenes', 'required');
+		// $this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
+		// $this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
+		// $this->form_validation->set_rules('almacen', 'Indicador detalle almacenes', '');
+		// $this->form_validation->set_rules('material', 'Indicador detalle materiales', '');
+		// $this->form_validation->set_rules('lote', 'Indicador detalle lotes', '');
+		// $this->form_validation->set_rules('tipo_stock', 'Indicador tipos de stock', '');
+		// $this->form_validation->set_rules('tipo_stock_equipos', 'Mostrar equipos', '');
+		// $this->form_validation->set_rules('tipo_stock_simcard', 'Mostrar simcards', '');
+		// $this->form_validation->set_rules('tipo_stock_otros', '', 'Mostrar otros', '');
+		// $this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
 
 		$stock = array();
-		if($this->input->post('sel_fechas'))
+		$datos_grafico = array();
+
+		if ($this->form_validation->run())
 		{
 			$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+
+			if ($tipo_op == 'MOVIL' AND count($stock) > 0)
+			{
+				//$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
+			}
 		}
+
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
-		$datos_grafico = array();
-		if ($tipo_op == 'MOVIL' AND count($stock) > 0)
-		{
-			$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
-		}
+		$combo_almacenes = (set_value('sel_tiposalm', 'sel_tiposalm') == 'sel_tiposalm')
+			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
+			: $almacen_sap->get_combo_almacenes($tipo_op);
+
 
 		$data = array(
 			'menu_modulo'            => array(
 				'menu'         => $this->arr_menu,
 				'mod_selected' => ($tipo_op == 'MOVIL') ? 'stock_movil' : 'stock_fija'
 			),
-			'stock'                  => $stock,
-			'combo_tipo_alm'         => $tipoalmacen_sap->get_combo_tiposalm($tipo_op),
-			'combo_almacenes'        => $almacen_sap->get_combo_almacenes($tipo_op),
-			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-			'combo_fechas_todas'     => $combo_fechas['todas'],
-			'tipo_op'                => $tipo_op,
-			'arr_mostrar'            => $arr_mostrar,
-			'datos_grafico'          => $datos_grafico,
-			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
+			'stock'                 => $stock,
+			'combo_almacenes'       => $combo_almacenes,
+			'combo_fechas'          => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
+			'tipo_op'               => $tipo_op,
+			'arr_mostrar'           => $arr_mostrar,
+			'datos_grafico'         => $datos_grafico,
+			'totaliza_tipo_almacen' => (((in_array('almacen', $arr_mostrar)  || in_array('material', $arr_mostrar)
 											|| in_array('lote', $arr_mostrar) || in_array('tipo_stock', $arr_mostrar)
 											)
-											&& ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
+											AND ($this->input->post('sel_tiposalm') == 'sel_tiposalm')
 											) ? TRUE : FALSE),
 		);
 
@@ -186,6 +187,7 @@ class Stock_sap extends CI_Controller {
 		$this->_render_view('stock_sap/detalle_series', $data);
 
 	}
+
 
 	// --------------------------------------------------------------------
 
@@ -266,6 +268,8 @@ class Stock_sap extends CI_Controller {
 	}
 
 
+	// --------------------------------------------------------------------
+
 	public function reporte_clasif()
 	{
 		$this->load->model('stock_sap_model');
@@ -309,6 +313,9 @@ class Stock_sap extends CI_Controller {
 		$this->_render_view('stock_sap/reporte_clasif', $view_data);
 	}
 
+
+	// --------------------------------------------------------------------
+
 	public function ajax_fechas($tipo_op = 'MOVIL', $tipo_fecha = 'ultimodia')
 	{
 		$this->load->model('stock_sap_model');
@@ -324,6 +331,30 @@ class Stock_sap extends CI_Controller {
 			->set_content_type('text')
 			->set_output(implode('', $arr_fechas2));
 
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function ajax_almacenes($tipo_op = 'MOVIL', $tipo_alm = 'sel_tiposalm')
+	{
+		$this->load->model('stock_sap_model');
+		$almacen_sap = new Almacen_sap;
+		$tipoalmacen_sap = new Tipoalmacen_sap;
+
+		$arr_almacenes = ($tipo_alm == 'sel_tiposalm')
+			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
+			: $almacen_sap->get_combo_almacenes($tipo_op);
+
+		$arr_output = array();
+		foreach ($arr_almacenes as $k => $v)
+		{
+			array_push($arr_output, '<option value="' . $k . '">' . $v . '</option>');
+		}
+
+		$this->output
+			->set_content_type('text')
+			->set_output(implode('', $arr_output));
 	}
 
 

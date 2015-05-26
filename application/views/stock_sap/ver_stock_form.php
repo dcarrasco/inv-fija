@@ -1,4 +1,5 @@
 <?php echo form_open(); ?>
+<?php echo form_hidden('tipo_op', $tipo_op); ?>
 <div class="accordion hidden-print">
 	<div class="panel panel-default">
 
@@ -14,6 +15,14 @@
 
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
+				<?php if (validation_errors()): ?>
+					<div class="alert alert-danger">
+						<ul>
+							<?php echo validation_errors(); ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
@@ -21,7 +30,7 @@
 						</label>
 						<div class="radio">
 							<label>
-								<?php echo form_radio('sel_fechas', 'ultimo_dia', set_radio('sel_fechas','ultimo_dia', TRUE)); ?>
+								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
 								<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
 							</label>
 						</div>
@@ -31,12 +40,7 @@
 								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
 							</label>
 						</div>
-						<div id="show_fecha_ultimodia">
-							<?php echo form_multiselect('fecha_ultimodia[]', $combo_fechas_ultimodia, $this->input->post('fecha_ultimodia'),'size="10" class="form-control"'); ?>
-						</div>
-						<div id="show_fecha_todas">
-							<?php echo form_multiselect('fecha_todas[]', $combo_fechas_todas, $this->input->post('fecha_todas'),'size="10" class="form-control"'); ?>
-						</div>
+						<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'),'id="select_fechas" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -57,19 +61,14 @@
 								<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
 							</label>
 						</div>
+						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
 						<div id="show_tiposalm">
-							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
-							<div>
-								<div class="checkbox">
-									<label>
-										<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
-										<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
-									</label>
-								</div>
+							<div class="checkbox">
+								<label>
+									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
+									<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
+								</label>
 							</div>
-						</div>
-						<div id="show_almacenes">
-							<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 				</div>

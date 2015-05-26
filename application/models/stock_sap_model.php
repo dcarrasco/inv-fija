@@ -40,12 +40,9 @@ class stock_sap_model extends CI_Model {
 		// tipo de almacen
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			if (in_array('tipo_alm', $mostrar))
-			{
-				$this->db->select('t.tipo as tipo_almacen');
-				$this->db->group_by('t.tipo');
-				$this->db->order_by('t.tipo');
-			}
+			$this->db->select('t.tipo as tipo_almacen');
+			$this->db->group_by('t.tipo');
+			$this->db->order_by('t.tipo');
 
 			// almacenes
 			if (in_array('almacen', $mostrar))
@@ -184,14 +181,11 @@ class stock_sap_model extends CI_Model {
 		// tipos de almacen
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			if (array_key_exists('tipo_alm', $filtrar))
-			{
-				$this->db->where_in('t.id_tipo', $filtrar['tipo_alm']);
-			}
+			$this->db->where_in('t.id_tipo', $filtrar['almacenes']);
 		}
-		else if($filtrar['sel_tiposalm'] == 'sel_almacenes')
+		else
 		{
-			$this->db->where_in("s.centro+'-'+s.cod_bodega", $filtrar['almacenes']);
+			$this->db->where_in("s.centro + '~' + s.cod_bodega", $filtrar['almacenes']);
 		}
 
 		// tipos de articulo
@@ -369,12 +363,9 @@ class stock_sap_model extends CI_Model {
 		// tipo de almacen
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			if (in_array('tipo_alm', $mostrar))
-			{
-				$this->db->select('t.tipo as tipo_almacen');
-				$this->db->group_by('t.tipo');
-				$this->db->order_by('t.tipo');
-			}
+			$this->db->select('t.tipo as tipo_almacen');
+			$this->db->group_by('t.tipo');
+			$this->db->order_by('t.tipo');
 
 			if (in_array('almacen', $mostrar))
 			{
@@ -382,7 +373,6 @@ class stock_sap_model extends CI_Model {
 				$this->db->group_by('ta.centro, ta.cod_almacen, a.des_almacen');
 				$this->db->order_by('ta.centro, ta.cod_almacen, a.des_almacen');
 			}
-
 		}
 		else
 		{
@@ -451,14 +441,11 @@ class stock_sap_model extends CI_Model {
 		// tipos de almacen
 		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
 		{
-			if (array_key_exists('tipo_alm', $filtrar))
-			{
-				$this->db->where_in('t.id_tipo', $filtrar['tipo_alm']);
-			}
+			$this->db->where_in('t.id_tipo', $filtrar['almacenes']);
 		}
 		else
 		{
-			$this->db->where_in("s.centro+'-'+s.almacen", $filtrar['almacenes']);
+			$this->db->where_in("s.centro + '~' + s.almacen", $filtrar['almacenes']);
 		}
 
 		// tipos de articulo

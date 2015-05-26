@@ -2,20 +2,13 @@
 
 $(document).ready(function () {
 
-    if ($('input[name="sel_fechas"]:checked').val() === 'ultimo_dia') {
-        $("#show_fecha_todas").hide();
-    } else {
-        $("#show_fecha_ultimodia").hide();
-    }
-
     $('input[name="sel_fechas"]').click(function (event) {
-        if ($('input[name="sel_fechas"]:checked').val() === 'ultimo_dia') {
-            $("#show_fecha_ultimodia").show();
-            $("#show_fecha_todas").hide();
-        } else {
-            $("#show_fecha_ultimodia").hide();
-            $("#show_fecha_todas").show();
-        }
+        tipo_fecha = $('input[name="sel_fechas"]:checked').val();
+        tipo_op    = $('input[name="tipo_op"]').val();
+
+        $('#select_fechas').html('');
+        var url_datos = js_base_url + 'stock_sap/ajax_fechas/' + tipo_op + '/' + tipo_fecha;
+        $.get(url_datos, function (data) {$('#select_fechas').html(data); });
     });
 
     if ($('input[name="sel_tiposalm"]:checked').val() === 'sel_tiposalm') {
@@ -25,13 +18,19 @@ $(document).ready(function () {
     }
 
     $('input[name="sel_tiposalm"]').click(function (event) {
-        if ($('input[name="sel_tiposalm"]:checked').val() === 'sel_tiposalm') {
+        tipo_op  = $('input[name="tipo_op"]').val();
+        tipo_alm = $('input[name="sel_tiposalm"]:checked').val();
+
+        if (tipo_alm === 'sel_tiposalm') {
             $("#show_tiposalm").show();
-            $("#show_almacenes").hide();
         } else {
             $("#show_tiposalm").hide();
-            $("#show_almacenes").show();
         }
+
+        $('#select_almacenes').html('');
+        var url_datos = js_base_url + 'stock_sap/ajax_almacenes/' + tipo_op + '/' + tipo_alm;
+        $.get(url_datos, function (data) {$('#select_almacenes').html(data); });
+
     });
 
     $('div.mostrar-ocultar').click(function (event) {
