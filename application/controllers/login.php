@@ -45,7 +45,7 @@ class Login extends CI_Controller {
 
 			$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 			$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
-			$this->form_validation->set_rules('remember_me', 'Recordarme', '');
+			$this->form_validation->set_rules('remember_me', 'Recordarme', 'trim');
 			$this->app_common->form_validation_config();
 
 			if ($this->form_validation->run() == FALSE)
@@ -76,6 +76,11 @@ class Login extends CI_Controller {
 						}
 						else
 						{
+							if ($rem == 'remember')
+							{
+								$this->acl_model->set_rememberme_cookie($usr);
+							}
+
 							$arr_menu = $this->acl_model->get_menu_usuario($usr);
 							redirect($arr_menu[0]['url']);
 						}
@@ -100,6 +105,7 @@ class Login extends CI_Controller {
 	public function logout()
 	{
 		$this->acl_model->delete_session_data();
+		$this->acl_model->delete_cookie_data();
 		redirect('login/');
 	}
 

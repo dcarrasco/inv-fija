@@ -240,7 +240,6 @@ class Acl_model extends CI_Model {
 			'user'        => $usr,
 			'modulos'     => json_encode($this->get_llaves_modulos($usr)),
 			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usr)),
-			'remember_me' => $remember ? 'TRUE' : 'FALSE',
 		));
 	}
 
@@ -263,6 +262,131 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Borra las cookies de login
+	 * @return none
+	 */
+	public function delete_cookie_data()
+	{
+		$this->input->set_cookie(array(
+			'name'  => 'login_token',
+			'value' => '',
+			'expire' => '',
+		));
+
+		$this->input->set_cookie(array(
+			'name'  => 'login_user',
+			'value' => '',
+			'expire' => '',
+		));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera cookie con token y usuario para login con remember-me
+	 * @param  string $usr Usuario
+	 * @return none
+	 */
+	public function set_rememberme_cookie($usr = '')
+	{
+		$random_string = $this->_random_string() . (string) time() . $usr . $this->_random_string();
+		$token = crypt($random_string, '$2a$10$'.$this->config->item('encryption_key'));
+		$expire = 60 * 60 * 24 * 31;   // fija la expiración en un mes
+
+		$this->input->set_cookie(array(
+			'name'  => 'login_token',
+			'value' => $token,
+			'expire' => $expire,
+		));
+
+		$this->input->set_cookie(array(
+			'name'  => 'login_user',
+			'value' => $usr,
+			'expire' => $expire,
+		));
+
+		$this->db
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'), array('remember_token' => $token));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera string aleatorio
+	 * @param  integer $rand_length Largo del string a generar
+	 * @return string               String generado
+	 */
+	private function _random_string($rand_length = 20)
+	{
+		$randstring = '';
+		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_()!#$%&/=';
+
+		for ($i = 0; $i < $rand_length; $i++)
+		{
+			$randstring .= $characters[rand(0, strlen($characters) - 1)];
+		}
+
+		return $randstring;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Loguea en el sistema cuando el usuario presenta cookie con token
+	 * @param  none
+	 * @return boolean               TRUE o FALSE, dependiendo si loguea correctamente
+	 */
+	public function login_rememberme_cookie()
+	{
+		$stored_login_token = $this->get_stored_login_token($this->input->cookie('login_user'));
+
+		if ($stored_login_token == $this->input->cookie('login_token'))
+		{
+			// regenera token
+			$this->set_rememberme_cookie($this->input->cookie('login_user'));
+
+			// escribe auditoria del login
+			$this->write_login_audit($this->input->cookie('login_user'));
+
+			// crea session con los datos del usuario
+			$this->_set_session_data($this->input->cookie('login_user'));
+
+			return TRUE;
+		}
+		else
+		{
+			return FALSE;
+		}
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera token de la base de datos
+	 * @param  string   $usr    Usuario a recuperar
+	 * @return string           Token del usuario
+	 */
+	public function get_stored_login_token($usr = '')
+	{
+		$rs = $this->db
+			->where(array(
+				'usr'    => $usr,
+				'activo' => '1'
+			))
+			->get($this->config->item('bd_usuarios'))
+			->row_array();
+
+		return (array_key_exists('remember_token', $rs)) ? $rs['remember_token'] : NULL;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Autentica el uso de un módulo de la aplicacion
 	 * @param  string $mod Modulo a autenticar
 	 * @return none
@@ -271,7 +395,14 @@ class Acl_model extends CI_Model {
 	{
 		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
-			redirect('login');
+			if ( ! $this->input->cookie('login_token') OR  ! $this->input->cookie('login_user'))
+			{
+				redirect('login');
+			}
+			else
+			{
+				return $this->login_rememberme_cookie();
+			}
 		}
 		else
 		{
