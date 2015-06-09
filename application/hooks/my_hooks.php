@@ -15,7 +15,10 @@ class MY_Hooks {
 
 		if ($class != 'login' AND $class != 'migration')
 		{
-			$CI_local->acl_model->autentica($llave_modulo);
+			if (! $CI_local->acl_model->autentica($llave_modulo))
+			{
+				redirect('login/');
+			}
 		}
 
 		if (ENVIRONMENT != 'production')

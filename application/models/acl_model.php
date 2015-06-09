@@ -67,7 +67,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_user()
 	{
-		return $this->session->userdata('user');
+		return (string) $this->session->userdata('user');
 	}
 
 
@@ -290,8 +290,8 @@ class Acl_model extends CI_Model {
 	 */
 	public function set_rememberme_cookie($usr = '')
 	{
-		$random_string = $this->_random_string() . (string) time() . $usr . $this->_random_string();
-		$token = crypt($random_string, '$2a$10$'.$this->config->item('encryption_key'));
+		$token = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
+
 		$expire = 60 * 60 * 24 * 31;   // fija la expiración en un mes
 
 		$this->input->set_cookie(array(
@@ -308,28 +308,10 @@ class Acl_model extends CI_Model {
 
 		$this->db
 			->where('usr', $usr)
-			->update($this->config->item('bd_usuarios'), array('remember_token' => $token));
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera string aleatorio
-	 * @param  integer $rand_length Largo del string a generar
-	 * @return string               String generado
-	 */
-	private function _random_string($rand_length = 20)
-	{
-		$randstring = '';
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_()!#$%&/=';
-
-		for ($i = 0; $i < $rand_length; $i++)
-		{
-			$randstring .= $characters[rand(0, strlen($characters) - 1)];
-		}
-
-		return $randstring;
+			->update(
+				$this->config->item('bd_usuarios'),
+				array('remember_token' => $this->_hash_password($token))
+			);
 	}
 
 
@@ -344,7 +326,7 @@ class Acl_model extends CI_Model {
 	{
 		$stored_login_token = $this->get_stored_login_token($this->input->cookie('login_user'));
 
-		if ($stored_login_token == $this->input->cookie('login_token'))
+		if ($stored_login_token == $this->_hash_password($this->input->cookie('login_token')))
 		{
 			// regenera token
 			$this->set_rememberme_cookie($this->input->cookie('login_user'));
