@@ -98,7 +98,21 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_logged()
 	{
-		return (($this->session->userdata('user') AND $this->session->userdata('modulos')) ? TRUE : FALSE);
+		if ($this->session->userdata('user') AND $this->session->userdata('modulos'))
+		{
+			return TRUE;
+		}
+		else
+		{
+			if ($this->is_user_remembered())
+			{
+				return $this->login_rememberme_cookie();
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
 	}
 
 
@@ -110,7 +124,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_remembered()
 	{
-		return ($this->session->userdata('remember_me') == 'TRUE') ? TRUE : FALSE;
+		return ($this->input->cookie('login_user') AND  $this->input->cookie('login_token')) ? TRUE : FALSE;
 	}
 
 
