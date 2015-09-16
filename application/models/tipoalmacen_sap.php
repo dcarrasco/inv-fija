@@ -41,7 +41,13 @@ class Tipoalmacen_sap extends ORM_Model {
 						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
-				),
+				'es_sumable' => array(
+					'label'          => 'Incluir tipo almacen en suma de stock',
+					'tipo'           => 'boolean',
+					'texto_ayuda'    => 'Indica si el tipo de almac&eacute;n se incluir&aacute; en la suma del stock.',
+					'es_obligatorio' => TRUE,
+					'default'        => 0
+				),				),
 				'almacenes' => array(
 					'tipo'           => 'has_many',
 					'relation'       => array(

@@ -44,7 +44,7 @@ class Catalogo extends ORM_Model {
 				'es_seriado' => array(
 					'label'          => 'Material seriado',
 					'tipo'           => 'boolean',
-					'texto_ayuda'    => 'Indica se el material est&aacute; seriado en el sistema.',
+					'texto_ayuda'    => 'Indica si el material est&aacute; seriado en el sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 0
 				),
