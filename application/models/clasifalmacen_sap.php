@@ -53,6 +53,18 @@ class Clasifalmacen_sap extends ORM_Model {
 					),
 					'es_obligatorio' => TRUE,
 				),
+				'estado_ajuste' => array(
+					'label'          => 'Estado de ajuste materiales',
+					'tipo'           => 'char',
+					'largo'          => 20,
+					'texto_ayuda'    => 'Indica confiabilidad de existencia del material.',
+					'choices'        => array(
+						'EXISTE'     => 'Existe',
+						'NO_EXISTE'  => 'No existe',
+						'NO_SABEMOS' => 'No sabemos',
+					),
+					'es_obligatorio' => TRUE,
+				),
 				'id_tipoclasif' => array(
 					'tipo'           =>  'has_one',
 					'relation'       => array(
