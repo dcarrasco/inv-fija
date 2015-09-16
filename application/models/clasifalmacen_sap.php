@@ -38,6 +38,21 @@ class Clasifalmacen_sap extends ORM_Model {
 					'texto_ayuda'    => 'Orden de la clasificaci&oacute;n del almac&eacute;n.',
 					'es_obligatorio' => TRUE,
 				),
+				'dir_responsable' => array(
+					'label'          => 'Direcci&oacute;n responsable',
+					'tipo'           => 'char',
+					'largo'          => 20,
+					'texto_ayuda'    => 'Seleccione la direcci&oacute;n responsable',
+					'choices'        => array(
+						'*'          => 'Por material',
+						'TERMINALES' => 'Terminales',
+						'REDES'      => 'Redes',
+						'EMPRESAS'   => 'Empresas',
+						'TTPP'       => 'Telefon&iacute;a P&uacute;blica',
+						'MARKETING'  => 'Marketing',
+					),
+					'es_obligatorio' => TRUE,
+				),
 				'id_tipoclasif' => array(
 					'tipo'           =>  'has_one',
 					'relation'       => array(
