@@ -48,6 +48,7 @@ class Clasifalmacen_sap extends ORM_Model {
 						'TERMINALES' => 'Terminales',
 						'REDES'      => 'Redes',
 						'EMPRESAS'   => 'Empresas',
+						'LOGISTICA'  => 'Log&iacute;stica',
 						'TTPP'       => 'Telefon&iacute;a P&uacute;blica',
 						'MARKETING'  => 'Marketing',
 					),
