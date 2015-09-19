@@ -30,6 +30,10 @@ fieldset > legend {
 	font-family: "MovistarHeadline-Regular";
 }
 
+.well > div > h2 {
+	font-family: "MovistarHeadline-Bold";
+}
+
 .navbar-inverse {
 	background-color:#005466;
 	border-color:#080808
