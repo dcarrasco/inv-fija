@@ -1,4 +1,4 @@
-<div class="form-group <?php echo $item_error ? 'has-error' : ''; ?>">
+<div class="form-group <?php echo $item_error; ?>">
 	<?php echo form_label(
 				$item_label . ($item_required ? ' <span class="text-danger">*</span>' : ''),
 				$item_id,
