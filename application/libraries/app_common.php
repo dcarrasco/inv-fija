@@ -188,18 +188,22 @@ class App_common {
 				return fmt_monto($valor);
 				break;
 			case 'numero_dif':
-				return (($valor > 0)
-						? '<span class="label label-success">'
-						: (($valor < 0) ? '<span class="label label-danger">' : '')) .
+				return '<strong>' .
+					(($valor > 0)
+						? '<p class="text-success">'
+						: (($valor < 0) ? '<p class="text-danger">' : '')) .
 					(($valor > 0) ? '+' : '') . fmt_cantidad($valor) .
-					(($valor != 0) ? '</span>' : '');
+					(($valor != 0) ? '</p>' : '') .
+					'</strong>';
 				break;
 			case 'valor_dif':
-				return (($valor > 0)
-						? '<span class="label label-success">'
-						: (($valor < 0) ? '<span class="label label-danger">' : '')) .
+				return '<strong>' .
+					(($valor > 0)
+						? '<p class="text-success">'
+						: (($valor < 0) ? '<p class="text-danger">' : '')) .
 					(($valor > 0) ? '+' : '') . fmt_monto($valor) .
-					(($valor != 0) ? '</span>' : '');
+					(($valor != 0) ? '</p>' : '') .
+					'</strong>';
 				break;
 			default:
 				return $valor;

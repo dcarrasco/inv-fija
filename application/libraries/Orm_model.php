@@ -436,10 +436,13 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function form_item($campo = '')
 	{
+		$formulario_enviado = (boolean) (count($this->CI->input->post()) != 0);
+		$item_error = $formulario_enviado ? '' : '';
+
 		if ($campo != '')
 		{
 			$data = array(
-				'item_error'    => form_has_error($campo),
+				'item_error'    => form_has_error($campo) ? 'has-error' : $item_error,
 				'item_label'    => ucfirst($this->get_label_field($campo)),
 				'item_required' => $this->get_es_obligatorio_field($campo),
 				'item_id'       => 'id_'.$campo,
@@ -1598,15 +1601,15 @@ class ORM_Field {
 
 		if ($this->tipo == 'boolean')
 		{
-			$form = '<div class="radio-inline"><label for="' . $id_prefix . $this->nombre . '_1">';
+			$form = '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_1">';
 			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1");
 			$form .= $this->CI->lang->line('orm_radio_yes');
-			$form .= '</label></div>';
+			$form .= '</label>';
 
-			$form .= '<div class="radio-inline"><label for="' . $id_prefix . $this->nombre . '_0">';
+			$form .= '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_0">';
 			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0");
 			$form .= $this->CI->lang->line('orm_radio_no');
-			$form .= '</label></div>';
+			$form .= '</label>';
 
 			return $form;
 		}
