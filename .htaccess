@@ -7,3 +7,8 @@
   RewriteCond $1 !^(index\.php|captcha|images|robots\.txt|css|javascripts|audio)
   RewriteRule ^(.*)$ /inv-fija/index.php?/$1 [L]
 </IfModule>
+
+
+<IfModule mod_headers.c>
+Header always append X-Frame-Options SAMEORIGIN
+</ifModule>
