@@ -69,7 +69,7 @@
 					<?php echo $this->lang->line('login_input_old_password'); ?>
 				</label>
 				<div class="controls">
-					<?php echo form_password('pwd_old', '','maxlength="45" class="form-control" ' . $tiene_clave_class); ?>
+					<?php echo form_password('pwd_old', '','maxlength="45" autocomplete="off" class="form-control" ' . $tiene_clave_class); ?>
 				</div>
 			</div>
 

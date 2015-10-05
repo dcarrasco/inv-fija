@@ -65,7 +65,7 @@
 					<?php echo $this->lang->line('login_input_password'); ?>
 				</label>
 				<div class="controls">
-					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control"'); ?>
+					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
 				</div>
 			</div>
 
