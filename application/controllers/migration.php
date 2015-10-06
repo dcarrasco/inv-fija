@@ -32,6 +32,29 @@ class Migration extends CI_Controller {
 
 	}
 
+	public function commands($command = '', $param1 = null)
+	{
+		$this->load->library('migration');
+
+		if ($command == 'find')
+		{
+			dbg($this->migration->find_migrations());
+		}
+		else if ($command == 'current')
+		{
+			dbg($this->migration->current());
+		}
+		else if ($command == 'latest')
+		{
+			dbg($this->migration->latest());
+		}
+		else if ($command == 'version')
+		{
+			dbg($this->migration->version($param1));
+		}
+
+	}
+
 
 
 

@@ -27,6 +27,9 @@ class Acl_model extends CI_Model {
 			// escribe auditoria del login
 			$this->write_login_audit($usr);
 
+			// resetea intentos fallidos de login
+			$this->reset_login_errors($usr);
+
 			// crea session con los datos del usuario
 			$this->_set_session_data($usr, $remember);
 
@@ -34,6 +37,9 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
+			// incrementa intentos fallidos de login
+			$this->add_login_errors($usr);
+
 			return FALSE;
 		}
 	}
@@ -175,6 +181,37 @@ class Acl_model extends CI_Model {
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
 			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Resetea cantidad de intentos fallidos de login
+	 * @return none
+	 */
+	public function reset_login_errors($usr = '')
+	{
+		$this->db
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'), array(
+				'login_errors'  => 0,
+			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Incrementa cantidad de intentos fallidos de login
+	 * @return none
+	 */
+	public function add_login_errors($usr = '')
+	{
+		$this->db
+			->set('login_errors', 'login_errors + 1', FALSE)
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'));
 	}
 
 
