@@ -12,7 +12,7 @@ class Migration_Add_captcha extends CI_Migration {
 
 		$this->dbforge->add_column('fija_usuarios',
 			array(
-				'login_errors' => array('type' => 'INT', 'null' => FALSE, 'default' => 0),
+				'login_errors' => array('type' => 'INT', 'null' => TRUE,),
 			)
 		);
 
@@ -25,7 +25,7 @@ class Migration_Add_captcha extends CI_Migration {
 			array(
 				'captcha_id'   => array('type' => 'INT', 'null' => FALSE, 'auto_increment' => TRUE),
 				'captcha_time' => array('type' => 'INT', 'null' => FALSE, ),
-				'ip_address'   => array('type' => 'VARCHAR', 'constraint' => 45, 'null' => FALSE, ),
+				'session_id'   => array('type' => 'VARCHAR', 'constraint' => 45, 'null' => FALSE, ),
 				'word'         => array('type' => 'VARCHAR', 'constraint' => 20, 'null' => FALSE, ),
 			)
 		);

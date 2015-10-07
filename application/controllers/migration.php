@@ -53,6 +53,8 @@ class Migration extends CI_Controller {
 			dbg($this->migration->version($param1));
 		}
 
+		dbg($this->migration->error_string());
+
 	}
 
 
