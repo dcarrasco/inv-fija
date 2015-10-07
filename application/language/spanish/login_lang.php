@@ -4,6 +4,7 @@
 $lang['login_form_title']           = 'Ingreso';
 $lang['login_input_user']           = 'Usuario';
 $lang['login_input_password']       = 'Clave';
+$lang['login_input_captcha']        = 'Palabra distorsionada';
 $lang['login_link_change_password'] = 'cambiar clave';
 $lang['login_check_remember_me']    = 'Recordarme';
 $lang['login_button_login']         = 'Ingresar';

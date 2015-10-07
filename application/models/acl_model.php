@@ -27,6 +27,12 @@ class Acl_model extends CI_Model {
 			// escribe auditoria del login
 			$this->write_login_audit($usr);
 
+			// resetea intentos fallidos de login
+			$this->reset_login_errors($usr);
+
+			// borra los captchas del usuario
+			$this->delete_captchas_session($this->session->userdata('session_id'));
+
 			// crea session con los datos del usuario
 			$this->_set_session_data($usr, $remember);
 
@@ -34,6 +40,9 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
+			// incrementa intentos fallidos de login
+			$this->add_login_errors($usr);
+
 			return FALSE;
 		}
 	}
@@ -175,6 +184,125 @@ class Acl_model extends CI_Model {
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
 			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Indica si se debe usar un captcha para el login del usuario
+	 * @return boolean Indicador si se debe usar o no captcha
+	 */
+	public function use_captcha($usr = '')
+	{
+		$row_user = $this->db
+			->get_where($this->config->item('bd_usuarios'), array(
+				'usr' => (string) $usr,
+			))
+			->row();
+
+		$login_attempts = isset($row_user) ? $row_user->login_errors : 0;
+
+		return (boolean) ($login_attempts > 2);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Escribe captcha en la base de datos
+	 * @return none
+	 */
+	public function write_captcha($time = '', $session_id = '', $word = '')
+	{
+		$this->delete_captchas_session($session_id);
+
+		$this->db
+			->insert($this->config->item('bd_captcha'), array(
+				'captcha_time' => (int) $time,
+				'session_id'   => (string) $session_id,
+				'word'         => (string) $word,
+			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Borra captchas de un usuario
+	 * @return none
+	 */
+	public function delete_captchas_session($session_id = '')
+	{
+		$this->db
+			->where('session_id', $session_id)
+			->delete($this->config->item('bd_captcha'));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Borra captchas con tiempo mayor a 10 minutos
+	 * @return none
+	 */
+	public function delete_old_captchas()
+	{
+		$this->db
+			->where('captcha_time < ', time() - 60*10)
+			->delete($this->config->item('bd_captcha'));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Borra captchas con tiempo mayor a 10 minutos
+	 * @return none
+	 */
+	public function validar_captcha($captcha = '', $session_id = '')
+	{
+		$row_captcha = $this->db
+			->get_where($this->config->item('bd_captcha'),
+				array(
+					'session_id' => $session_id,
+					'word'       => $captcha,
+					'captcha_time >' => time() - 60*10,
+				))
+			->row();
+
+		return isset($row_captcha);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Resetea cantidad de intentos fallidos de login
+	 * @return none
+	 */
+	public function reset_login_errors($usr = '')
+	{
+		$this->db
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'), array(
+				'login_errors'  => 0,
+			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Incrementa cantidad de intentos fallidos de login
+	 * @return none
+	 */
+	public function add_login_errors($usr = '')
+	{
+		$this->db
+			->set('login_errors', 'login_errors + 1', FALSE)
+			->where('usr', $usr)
+			->update($this->config->item('bd_usuarios'));
 	}
 
 

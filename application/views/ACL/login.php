@@ -75,6 +75,20 @@
 				</div>
 			</div>
 
+			<?php if ($usar_captcha): ?>
+				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('catpcha') ? 'has-error' : ''; ?>">
+					<label class="control-label" for="pwd">
+						<?php echo $this->lang->line('login_input_captcha'); ?>
+					</label>
+					<div class="controls">
+						<?php echo form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
+					</div>
+					<div class="controls">
+						<?php echo $captcha_img; ?>
+					</div>
+				</div>
+			<?php endif ?>
+
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="checkbox">
 					<label>

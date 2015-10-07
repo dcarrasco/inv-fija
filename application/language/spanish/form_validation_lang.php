@@ -27,6 +27,8 @@ $lang['form_validation_is_natural_no_zero']	= "El campo <em>{field}</em> debe co
 $lang['form_validation_decimal']			= "El campo <em>{field}</em> debe contener un n&uacute;mero decimal.";
 $lang['form_validation_less_than']			= "El campo <em>{field}</em> debe contener un n&uacute;mero menor a {param}.";
 
+$lang['form_validation_password_validation'] = "El campo <em>{field}</em> debe contener n&uacute;meros, min&uacute;sculas y may&uacute;sculas.";
+
 
 /* End of file form_validation_lang.php */
 /* Location: ./application/language/spanish/form_validation_lang.php */
