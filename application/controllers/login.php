@@ -33,6 +33,19 @@ class Login extends CI_Controller {
 	{
 		$this->load->model('acl_model');
 		$this->load->helper('cookie');
+		$this->load->helper('captcha');
+
+		$captcha_config = array(
+			'img_path'      => './img/captcha/',
+			'img_url'       => base_url() . '/img/captcha/',
+			'word'          => genera_captcha_word(),
+			'img_width'     => 260,
+			'img_height'    => 50,
+			'font_size'     => 30,
+		);
+
+		$captcha = create_captcha($captcha_config);
+		$this->acl_model->write_captcha((string) $captcha['time'], $this->input->ip_address(), $captcha['word']);
 
 		if ($this->acl_model->is_user_logged())
 		{
@@ -50,7 +63,10 @@ class Login extends CI_Controller {
 
 			if ($this->form_validation->run() == FALSE)
 			{
-				$data = array('msg_alerta' => $this->session->flashdata('msg_alerta'));
+				$data = array(
+					'msg_alerta'  => $this->session->flashdata('msg_alerta'),
+					'captcha_img' => $captcha['image'],
+				);
 				$this->load->view('ACL/login', $data);
 			}
 			else

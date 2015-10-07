@@ -69,6 +69,18 @@
 				</div>
 			</div>
 
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('pwd') ? 'has-error' : ''; ?>">
+				<label class="control-label" for="pwd">
+					<?php echo $this->lang->line('login_input_captcha'); ?>
+				</label>
+				<div class="controls">
+					<?php echo $captcha_img; ?>
+				</div>
+				<div class="controls">
+					<?php echo form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
+				</div>
+			</div>
+
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<?php echo anchor('#', $this->lang->line('login_link_change_password'), 'id="lnk_cambio_password"'); ?>

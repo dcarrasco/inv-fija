@@ -187,6 +187,23 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Escribe datos de auditoria al loguear al usuario
+	 * @return none
+	 */
+	public function write_captcha($time = '', $ip_address = '', $word = '')
+	{
+		$this->db
+			->insert($this->config->item('bd_captcha'), array(
+				'captcha_time' => $time,
+				'ip_address'   => $ip_address,
+				'word'         => $word,
+			));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Resetea cantidad de intentos fallidos de login
 	 * @return none
 	 */
