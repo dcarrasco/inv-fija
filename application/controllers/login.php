@@ -71,7 +71,7 @@ class Login extends CI_Controller {
 			$captcha_valido = TRUE;
 			if ($this->acl_model->use_captcha($usr))
 			{
-				$captcha_valido = $this->acl_model->validar_captcha($captcha_word, $this->session->userdata('session_id'));
+				$captcha_valido = $this->acl_model->validar_captcha($captcha_word, $this->session->session_id);
 			}
 
 			// si el usuario valida correctamente, redireccionamos a la app
@@ -108,7 +108,7 @@ class Login extends CI_Controller {
 
 			$this->acl_model->write_captcha(
 				(string) $captcha['time'],
-				(string) $this->session->userdata('session_id'),
+				(string) $this->session->session_id,
 				(string) $captcha['word']
 			);
 

@@ -123,7 +123,7 @@ class CI_Config {
 
 		foreach ($this->_config_paths as $path)
 		{
-			foreach (array($file, ENVIRONMENT.'/'.$file) as $location)
+			foreach (array($file, ENVIRONMENT.DIRECTORY_SEPARATOR.$file) as $location)
 			{
 				$file_path = $path.'config/'.$location.'.php';
 				if (in_array($file_path, $this->is_loaded, TRUE))
@@ -238,7 +238,15 @@ class CI_Config {
 
 		if (isset($protocol))
 		{
-			$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+				$base_url = substr($base_url, strpos($base_url, '//'));
+			}
+			else
+			{
+				$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
+			}
 		}
 
 		if (empty($uri))
@@ -293,7 +301,15 @@ class CI_Config {
 
 		if (isset($protocol))
 		{
-			$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
+			// For protocol-relative links
+			if ($protocol === '')
+			{
+				$base_url = substr($base_url, strpos($base_url, '//'));
+			}
+			else
+			{
+				$base_url = $protocol.substr($base_url, strpos($base_url, '://'));
+			}
 		}
 
 		return $base_url.ltrim($this->_uri_string($uri), '/');
