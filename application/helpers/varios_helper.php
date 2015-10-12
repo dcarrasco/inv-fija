@@ -2,6 +2,12 @@
 
 if ( ! function_exists('dbg'))
 {
+	/**
+	 * Debug de varianbles
+	 *
+	 * @param  mixed $item Elemento a revisar
+	 * @return void
+	 */
 	function dbg($item)
 	{
 		//echo '<pre style="font-family: courier, font-size: 8px">';
@@ -18,6 +24,12 @@ if ( ! function_exists('dbg'))
 
 if ( ! function_exists('dbg_die'))
 {
+	/**
+	 * Debug de variables y para la ejecución del programa
+	 *
+	 * @param  mixed $item Elemento a revisar
+	 * @return void
+	 */
 	function dd($item)
 	{
 		dbg($item);
@@ -28,13 +40,57 @@ if ( ! function_exists('dbg_die'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('app_render_view'))
+{
+	/**
+	 * Render vista
+	 *
+	 * @param  string $vista    Nombre de la vista a dibujar
+	 * @param  array  $datos    Arreglo con parámetros de datos a dibujar
+	 * @param  array  $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
+	 * @return void
+	 */
+	function app_render_view($vista = null, $datos = array(), $arr_menu = array())
+	{
+		if (! $vista)
+		{
+			return;
+		}
+
+		// carga objeto global CI
+		$CI =& get_instance();
+
+		if (count($arr_menu) > 0)
+		{
+			$datos['menu_modulo'] = array('menu' => $arr_menu, 'mod_selected' => basename($vista));
+		}
+
+		$datos['msg_alerta']  = $CI->session->flashdata('msg_alerta');
+
+		$CI->load->view('app_header', $datos);
+		$CI->load->view($vista, $datos);
+		$CI->load->view('app_footer', $datos);
+	}
+}
+
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('form_array_format'))
 {
-	function form_array_format($arr = array(), $msg_ini = null)
+	/**
+	 * Formatea un arreglo para que sea usado en un formuario select
+	 * Espera que el arreglo tenga a lo menos las llaves "llave" y "valor"
+	 *
+	 * @param  array  $arr     Arreglo a transformar
+	 * @param  string $msg_ini Elemento inicial a desplegar en select
+	 * @return array           Arreglo con formato a utilizar
+	 */
+	function form_array_format($arr = array(), $msg_ini = '')
 	{
 		$arr_combo = array();
 
-		if ($msg_ini)
+		if ($msg_ini != '')
 		{
 			$arr_combo[''] = $msg_ini;
 		}
@@ -53,6 +109,12 @@ if ( ! function_exists('form_array_format'))
 
 if ( ! function_exists('form_has_error'))
 {
+	/**
+	 * Indica si el elemento del formulario tiene un error de validación
+	 *
+	 * @param  string $form_field Nombre del elemento del formulario
+	 * @return bool               Indicador de error del elemento
+	 */
 	function form_has_error($form_field = '')
 	{
 		return (bool) (form_error($form_field) != '');
@@ -64,6 +126,14 @@ if ( ! function_exists('form_has_error'))
 
 if ( ! function_exists('fmt_cantidad'))
 {
+	/**
+	 * Formatea cantidades numéricas con separador decimal y de miles
+	 *
+	 * @param  integer $valor        Valor a formatear
+	 * @param  integer $decimales    Cantidad de decimales a mostrar
+	 * @param  boolean $mostrar_cero Indica si muestra o no valores ceros
+	 * @return string                Valor formateado
+	 */
 	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = false)
 	{
 		$cero = $mostrar_cero ? '0' : ' ';
@@ -77,6 +147,15 @@ if ( ! function_exists('fmt_cantidad'))
 
 if ( ! function_exists('fmt_monto'))
 {
+	/**
+	 * Formatea cantidades numéricas como un monto
+	 *
+	 * @param  integer $monto        Valor a formatear
+	 * @param  string  $unidad       Unidad a desplegar
+	 * @param  string  $signo_moneda Simbolo monetario
+	 * @param  integer $decimales    Cantidad de decimales a mostrar
+	 * @return string                Monto formateado
+	 */
 	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
 	{
 		if ($monto == 0)
@@ -100,6 +179,12 @@ if ( ! function_exists('fmt_monto'))
 
 if ( ! function_exists('fmt_hora'))
 {
+	/**
+	 * Devuelve una cantidad de segundos como una hora
+	 *
+	 * @param  integer $seg Cantidad de segundos a formatear
+	 * @return string       Segundos formateados como hora
+	 */
 	function fmt_hora($seg = 0)
 	{
 		$sep = ":";
@@ -121,6 +206,11 @@ if ( ! function_exists('fmt_hora'))
 
 if ( ! function_exists('genera_captcha_word'))
 {
+	/**
+	 * Devuelve una palabra aleatoria para ser usada en el captcha
+	 *
+	 * @return string Palabra aleatoria
+	 */
 	function genera_captcha_word()
 	{
 		$diccionario = array(

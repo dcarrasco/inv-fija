@@ -355,9 +355,7 @@ class Inventario_reportes extends CI_Controller {
 			'id_inventario'     => $id_inventario,
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('inventario/reporte', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('inventario/reporte', $data);
 	}
 
 

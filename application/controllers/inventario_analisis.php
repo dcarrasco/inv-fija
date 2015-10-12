@@ -106,7 +106,7 @@ class Inventario_analisis extends CI_Controller {
 				'links_paginas'         => $links_paginas,
 			);
 
-			$this->_render_view('ajustes', $data);
+			app_render_view('inventario/ajustes', $data, $this->arr_menu);
 		}
 		else
 		{
@@ -208,7 +208,7 @@ class Inventario_analisis extends CI_Controller {
 			'link_inventario'   => 'inventario',
 		);
 
-		$this->_render_view('sube_stock', $data);
+		app_render_view('inventario/sube_stock', $data, $this->arr_menu);
 
 	}
 
@@ -258,7 +258,7 @@ class Inventario_analisis extends CI_Controller {
 				'link_inventario'   => 'inventario',
 			);
 
-			$this->_render_view('imprime_inventario', $data);
+			app_render_view('inventario/imprime_inventario', $data, $this->arr_menu);
 		}
 		else
 		{
@@ -338,29 +338,9 @@ class Inventario_analisis extends CI_Controller {
 			'cant_actualizada' => $cant_actualizada,
 		);
 
-		$this->_render_view('actualiza_precios', $data);
+		app_render_view('inventario/actualiza_precios', $data, $this->arr_menu);
 
 	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera las vistas para los métodos de este controlador
-	 *
-	 * @param  string $vista Nombre de la vista a desplegar
-	 * @param  array  $data  Arreglo con las variables a pasar a la vista
-	 * @return none
-	 */
-	private function _render_view($vista = '', $data = array())
-	{
-		$data['menu_modulo'] = array('menu' => $this->arr_menu, 'mod_selected' => $vista);
-		$data['msg_alerta']  = $this->session->flashdata('msg_alerta');
-
-		$this->load->view('app_header', $data);
-		$this->load->view('inventario/' . $vista, $data);
-		$this->load->view('app_footer', $data);
-	}
-
 
 
 }

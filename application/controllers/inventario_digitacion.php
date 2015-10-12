@@ -103,7 +103,7 @@ class Inventario_digitacion extends CI_Controller {
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
-			$this->_render_view('inventario', $data);
+			app_render_view('inventario/inventario', $data);
 		}
 		else
 		{
@@ -191,7 +191,7 @@ class Inventario_digitacion extends CI_Controller {
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
-			$this->_render_view('inventario_editar', $data);
+			app_render_view('inventario/inventario_editar', $data);
 		}
 		else
 		{
@@ -260,23 +260,6 @@ class Inventario_digitacion extends CI_Controller {
 
 		$this->output->set_content_type('text')->set_output($options);
 	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera las vistas para los métodos de este controlador
-	 *
-	 * @param  string $vista Nombre de la vista a desplegar
-	 * @param  array  $data  Arreglo con las variables a pasar a la vista
-	 * @return none
-	 */
-	private function _render_view($vista = '', $data = array())
-	{
-		$this->load->view('app_header', $data);
-		$this->load->view('inventario/'.$vista, $data);
-		$this->load->view('app_footer', $data);
-	}
-
 
 
 }

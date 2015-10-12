@@ -151,9 +151,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 			//'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/reporte_trazabilidad', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/reporte_trazabilidad', $data);
 	}
 
 
