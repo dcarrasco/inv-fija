@@ -209,6 +209,7 @@ class Orm_model implements IteratorAggregate {
 
 	/**
 	 * Configura las propiedades de los campos del modelo
+	 *
 	 * @param  array $cfg arreglo con la configuración de los campos del modelo
 	 * @return nada
 	 */
@@ -986,14 +987,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		if ($id)
 		{
-			if (is_array($id))
-			{
-				return $this->fill_from_array($id);
-			}
-			else
-			{
-				return $this->find_id($id);
-			}
+			return is_array($id) ? $this->fill_from_array($id) : $this->find_id($id);
 		}
 	}
 
@@ -1021,6 +1015,7 @@ class Orm_model implements IteratorAggregate {
 					{
 						$this->fields_values[$nombre] = (int) $rs[$nombre];
 					}
+
 					if ($metadata->get_tipo() == 'datetime')
 					{
 						if ($rs[$nombre] != '')
