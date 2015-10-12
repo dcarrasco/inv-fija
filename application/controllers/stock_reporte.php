@@ -172,9 +172,7 @@ class Stock_reporte extends CI_Controller {
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/reporte', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/reporte', $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -206,9 +204,7 @@ class Stock_reporte extends CI_Controller {
 			'titulo_modulo'   => 'Reportes Stock',
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/detalle_series', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/detalle_series', $data);
 
 		$this->load->model('reportestock_model');
 	}
@@ -235,9 +231,7 @@ class Stock_reporte extends CI_Controller {
 			'treemap_data_valor' => $arr3,
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/treemap', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/treemap', $data);
 	}
 
 
@@ -314,9 +308,7 @@ class Stock_reporte extends CI_Controller {
 			'reporte'          => $this->app_common->reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte)),
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/movhist', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/movhist', $data);
 	}
 
 
@@ -412,9 +404,7 @@ class Stock_reporte extends CI_Controller {
 			'reporte'     => $this->reportestock_model->get_stock_est03(),
 		);
 
-		$this->load->view('app_header', $data);
-		$this->load->view('stock_sap/est03', $data);
-		$this->load->view('app_footer', $data);
+		app_render_view('stock_sap/est03', $data);
 
 	}
 }

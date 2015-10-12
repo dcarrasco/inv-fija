@@ -88,9 +88,7 @@ class Adminbd_logs extends CI_Controller {
 			'log_file' => $log_file,
 		);
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('admindb/logs', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('admindb/logs', $datos, $this->arr_menu);
 	}
 
 

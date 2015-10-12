@@ -59,7 +59,7 @@ class Stock_config extends ORM_Controller {
 			'almacenes'   => $almacen->almacenes_no_ingresados(),
 		);
 
-		$this->_render_view('stock_sap/almacenes_no_ingresados', $data);
+		app_render_view('stock_sap/almacenes_no_ingresados', $data);
 
 	}
 

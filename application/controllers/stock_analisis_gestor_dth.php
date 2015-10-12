@@ -61,9 +61,7 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 
 		$datos['titulo_modulo'] = 'Consulta información series';
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('stock_sap/analisis_log_gestor_dth_view', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('stock_sap/analisis_log_gestor_dth_view', $datos);
 	}
 
 

@@ -184,7 +184,7 @@ class Stock_sap extends CI_Controller {
 			'menu_modulo'    => array('menu' => $this->arr_menu, 'mod_selected' => ''),
 		);
 
-		$this->_render_view('stock_sap/detalle_series', $data);
+		app_render_view('stock_sap/detalle_series', $data);
 
 	}
 
@@ -310,7 +310,7 @@ class Stock_sap extends CI_Controller {
 			'js_slices'       => '[' . implode(',', $js_slices). ']',
 		);
 
-		$this->_render_view('stock_sap/reporte_clasif', $view_data);
+		app_render_view('stock_sap/reporte_clasif', $view_data);
 	}
 
 

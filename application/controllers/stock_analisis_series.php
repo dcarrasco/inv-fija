@@ -81,9 +81,7 @@ class Stock_analisis_series extends CI_Controller {
 		$this->form_validation->set_rules('show_gdth', 'Series', '');
 		$this->form_validation->run();
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('stock_sap/analisis_series_view', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('stock_sap/analisis_series_view', $datos);
 	}
 
 	// --------------------------------------------------------------------
@@ -108,9 +106,7 @@ class Stock_analisis_series extends CI_Controller {
 
 		$datos['titulo_modulo'] = 'Consulta información series';
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('stock_sap/analisis_series_trafico_view', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('stock_sap/analisis_series_trafico_view', $datos);
 	}
 
 	// --------------------------------------------------------------------

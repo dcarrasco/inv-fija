@@ -62,9 +62,7 @@ class Despachos_retail extends CI_Controller {
 
 		);
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('despachos/retail', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('despachos/retail', $datos);
 	}
 
 	// --------------------------------------------------------------------

@@ -39,9 +39,7 @@ class Adminbd_queries extends CI_Controller {
 			'queries_data' => $this->adminbd_model->get_running_queries(),
 		);
 
-		$this->load->view('app_header', $datos);
-		$this->load->view('admindb/queries', $datos);
-		$this->load->view('app_footer', $datos);
+		app_render_view('admindb/queries', $datos);
 
 	}
 
