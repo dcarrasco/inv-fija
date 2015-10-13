@@ -1,4 +1,6 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
 /*
 | -------------------------------------------------------------------------
 | Hooks
@@ -16,6 +18,3 @@ $hook['post_controller_constructor'] = array(
 	'filename' => 'MY_Hooks.php',
 	'filepath' => 'hooks',
 );
-
-/* End of file hooks.php */
-/* Location: ./application/config/hooks.php */
