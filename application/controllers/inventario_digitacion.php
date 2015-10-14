@@ -1,11 +1,50 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Controller Digitacion Inventario
+ *
+ * @category CodeIgniter
+ * @package  Inventario
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Inventario_digitacion extends CI_Controller {
 
-	private $id_inventario = 0;
+	/**
+	 * Llave de identificación del módulo
+	 *
+	 * @var  string
+	 */
 	public $llave_modulo = 'inventario';
 
+	/**
+	 * ID del inventario
+	 *
+	 * @var  integer
+	 */
+	private $_id_inventario = 0;
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -17,8 +56,7 @@ class Inventario_digitacion extends CI_Controller {
 	/**
 	 * Pagina index, ejecuta por defecto al no recibir parámetros
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function index()
 	{
@@ -31,11 +69,11 @@ class Inventario_digitacion extends CI_Controller {
 	 * Permite digitar una hoja de detalle de inventario
 	 *
 	 * @param  integer $hoja Numero de la hoja a visualizar
-	 * @return none
+	 * @return void
 	 */
 	public function ingreso($hoja = 0)
 	{
-		if ($hoja == 0 OR $hoja == "" OR $hoja == NULL)
+		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
 		{
 			$hoja = 1;
 		}
@@ -49,7 +87,7 @@ class Inventario_digitacion extends CI_Controller {
 
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
-		$detalle_inventario->get_hoja($this->id_inventario, $hoja);
+		$detalle_inventario->get_hoja($this->_id_inventario, $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
 
 		$auditor = $detalle_inventario->get_id_auditor();
@@ -61,12 +99,12 @@ class Inventario_digitacion extends CI_Controller {
 
 		$id_usuario_login  = $this->acl_model->get_id_usr();
 
-		if ($this->input->post('formulario') == 'buscar')
+		if ($this->input->post('formulario') === 'buscar')
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 		}
-		else if ($this->input->post('formulario') == 'inventario')
+		else if ($this->input->post('formulario') === 'inventario')
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
@@ -83,7 +121,7 @@ class Inventario_digitacion extends CI_Controller {
 
 		$msg_alerta = '';
 
-		if ($this->form_validation->run() == FALSE)
+		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
 				'nuevo_detalle_inventario' => $nuevo_detalle_inventario,
@@ -106,7 +144,7 @@ class Inventario_digitacion extends CI_Controller {
 		}
 		else
 		{
-			if ($this->input->post('formulario') == 'inventario')
+			if ($this->input->post('formulario') === 'inventario')
 			{
 				$cant_modif = 0;
 
@@ -141,10 +179,10 @@ class Inventario_digitacion extends CI_Controller {
 	 *
 	 * @param  integer $hoja        Numero de la hoja a visualizar
 	 * @param  integer $id_auditor  ID del auditor de la hoja
-	 * @param  integer $id          ID del registro a editar
-	 * @return none
+	 * @param  integer $id_registro ID del registro a editar
+	 * @return void
 	 */
-	public function editar($hoja = 0, $id_auditor = 0, $id = null)
+	public function editar($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
 		$detalle_inventario = new Detalle_inventario;
 
@@ -156,9 +194,9 @@ class Inventario_digitacion extends CI_Controller {
 			$arr_catalogo = array($this->input->post('catalogo') => $catalogo);
 		}
 
-		if ($id)
+		if ($id_registro)
 		{
-			$detalle_inventario->find_id($id);
+			$detalle_inventario->find_id($id_registro);
 			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->descripcion);
 		}
 
@@ -183,11 +221,11 @@ class Inventario_digitacion extends CI_Controller {
 
 		$this->app_common->form_validation_config();
 
-		if ($this->form_validation->run() == FALSE)
+		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
 				'detalle_inventario' => $detalle_inventario,
-				'id'                 => $id,
+				'id'                 => $id_registro,
 				'hoja'               => $hoja,
 				'arr_catalogo'       => $arr_catalogo,
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
@@ -201,7 +239,7 @@ class Inventario_digitacion extends CI_Controller {
 			$nuevo_material->find_id($this->input->post('catalogo'));
 
 			$detalle_inventario->fill(array(
-				'id'                 => (int) $id,
+				'id'                 => (int) $id_registro,
 				'id_inventario'      => (int) $inventario->get_id_inventario_activo(),
 				'hoja'               => (int) $hoja,
 				'ubicacion'          => strtoupper($this->input->post('ubicacion')),
@@ -221,10 +259,10 @@ class Inventario_digitacion extends CI_Controller {
 				'observacion'        => $this->input->post('observacion'),
 				'stock_ajuste'       => 0,
 				'glosa_ajuste'       => '',
-				'fecha_ajuste'       => null,
+				'fecha_ajuste'       => NULL,
 			));
 
-			if ($this->input->post('accion') == 'agregar')
+			if ($this->input->post('accion') === 'agregar')
 			{
 				$detalle_inventario->grabar();
 				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
@@ -232,7 +270,7 @@ class Inventario_digitacion extends CI_Controller {
 			else
 			{
 				$detalle_inventario->borrar();
-				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_delete'), $id, $hoja));
+				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 			}
 
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
@@ -247,7 +285,7 @@ class Inventario_digitacion extends CI_Controller {
 	 * Despliega listado con materiales, en formato de formulario select
 	 *
 	 * @param  string $filtro Filtro de los materiales a desplegar
-	 * @return none
+	 * @return void
 	 */
 	public function ajax_act_agr_materiales($filtro = '')
 	{
@@ -255,9 +293,9 @@ class Inventario_digitacion extends CI_Controller {
 		$arr_dropdown = $material->find('list', array('filtro' => $filtro));
 
 		$options = '';
-		foreach ($arr_dropdown as $key => $val)
+		foreach ($arr_dropdown as $llave => $valor)
 		{
-			$options .= '<option value="' . $key . '">' . $val . '</option>';
+			$options .= '<option value="' . $llave . '">' . $valor . '</option>';
 		}
 
 		$this->output->set_content_type('text')->set_output($options);
