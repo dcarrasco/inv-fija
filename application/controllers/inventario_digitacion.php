@@ -35,15 +35,14 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	public function ingreso($hoja = 0)
 	{
-		if ($hoja == 0 OR $hoja == "" or $hoja == NULL)
+		if ($hoja == 0 OR $hoja == "" OR $hoja == NULL)
 		{
 			$hoja = 1;
 		}
 
 		// recupera el inventario activo
 		$inventario = new Inventario;
-		$this->id_inventario = $inventario->get_id_inventario_activo();
-		$inventario->find_id($this->id_inventario);
+		$inventario->get_inventario_activo();
 
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
@@ -110,14 +109,17 @@ class Inventario_digitacion extends CI_Controller {
 			if ($this->input->post('formulario') == 'inventario')
 			{
 				$cant_modif = 0;
+
 				foreach($detalle_inventario->get_model_all() as $linea_detalle)
 				{
-					$linea_detalle->digitador          = $id_usuario_login;
-					$linea_detalle->auditor            = set_value('auditor');
-					$linea_detalle->stock_fisico       = set_value('stock_fisico_' . $linea_detalle->id);
-					$linea_detalle->hu                 = set_value('hu_' . $linea_detalle->id);
-					$linea_detalle->observacion        = set_value('observacion_'  . $linea_detalle->id);
-					$linea_detalle->fecha_modificacion = date('Ymd H:i:s');
+					$linea_detalle->fill(array(
+						'digitador'          => $id_usuario_login,
+						'auditor'            => set_value('auditor'),
+						'stock_fisico'       => set_value('stock_fisico_' . $linea_detalle->id),
+						'hu'                 => set_value('hu_' . $linea_detalle->id),
+						'observacion'        => set_value('observacion_'  . $linea_detalle->id),
+						'fecha_modificacion' => date('Ymd H:i:s'),
+					));
 					$linea_detalle->grabar();
 					$cant_modif += 1;
 				}

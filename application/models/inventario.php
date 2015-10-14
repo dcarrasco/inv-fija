@@ -98,6 +98,20 @@ class Inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Carga el registro del inventario activo
+	 *
+	 * @return void
+	 */
+	public function get_inventario_activo()
+	{
+		$inventario_activo = $this->get_id_inventario_activo();
+		$this->find_id($inventario_activo);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Devuelve el numero de la mayor hoja del inventario
 	 *
 	 * @return integer Numero de la hoja mayor
