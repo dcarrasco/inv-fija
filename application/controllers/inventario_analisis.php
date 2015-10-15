@@ -54,6 +54,8 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	private $_arr_menu = array();
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

@@ -33,6 +33,8 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	public $llave_modulo = 'inventario';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

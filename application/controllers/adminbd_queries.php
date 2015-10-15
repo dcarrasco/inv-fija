@@ -33,6 +33,8 @@ class Adminbd_queries extends CI_Controller {
 	 */
 	public $llave_modulo = 'jk8jkljKLJH28';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

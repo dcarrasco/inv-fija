@@ -36,6 +36,8 @@ class Migration extends CI_Controller {
 		parent::__construct();
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Migra la BD a la ultima version
 	 *
@@ -51,6 +53,8 @@ class Migration extends CI_Controller {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Actualiza la BD a una version especifica
 	 *
@@ -65,8 +69,9 @@ class Migration extends CI_Controller {
 		{
 			$this->migration->version($version);
 		}
-
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Ejecuta varia acciones de migracion

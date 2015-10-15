@@ -42,6 +42,8 @@ class Inventario_config extends ORM_Controller {
 	 */
 	public $titulo_modulo = 'Configuracion';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

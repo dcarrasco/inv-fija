@@ -33,6 +33,8 @@ class Adminbd_logs extends CI_Controller {
 	 */
 	public $llave_modulo = 'j8hdajhJKHHu12';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

@@ -33,6 +33,8 @@ class Despachos_retail extends CI_Controller {
 	 */
 	public $llave_modulo = 'iojms9128_$$21';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *

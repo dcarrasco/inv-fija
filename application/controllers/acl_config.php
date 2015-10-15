@@ -42,6 +42,8 @@ class Acl_config extends ORM_Controller {
 	 */
 	public $titulo_modulo = 'Configuración Control de Acceso';
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *
