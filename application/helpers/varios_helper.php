@@ -177,7 +177,7 @@ if ( ! function_exists('fmt_monto'))
 	 */
 	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
 	{
-		if ( ! is_numeric($valor))
+		if ( ! is_numeric($monto))
 		{
 			return NULL;
 		}
