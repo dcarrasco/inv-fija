@@ -167,7 +167,7 @@ class Inventario_config extends ORM_Controller {
 				'links_paginas'          => $this->pagination->create_links(),
 			);
 
-			$this->_render_view('ubicacion_tipo_ubicacion', $data);
+			app_render_view('ubicacion_tipo_ubicacion', $data);
 		}
 		else
 		{

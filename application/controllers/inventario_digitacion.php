@@ -34,13 +34,6 @@ class Inventario_digitacion extends CI_Controller {
 	public $llave_modulo = 'inventario';
 
 	/**
-	 * ID del inventario
-	 *
-	 * @var  integer
-	 */
-	private $_id_inventario = 0;
-
-	/**
 	 * Constructor de la clase
 	 *
 	 * @return  void
@@ -84,10 +77,9 @@ class Inventario_digitacion extends CI_Controller {
 
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
-
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
-		$detalle_inventario->get_hoja($this->_id_inventario, $hoja);
+		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
 
 		$auditor = $detalle_inventario->get_id_auditor();

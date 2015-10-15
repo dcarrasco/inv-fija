@@ -217,7 +217,8 @@ class App_common {
 							$href_param .= '&tipo_material=' . $tipo_material;
 							$href_param .= '&permanencia=' . $permanencia;
 
-							return anchor($arr_param_campo['href'] . $href_param, fmt_cantidad($valor));
+							$valor_desplegar = fmt_cantidad($valor);
+							return anchor($arr_param_campo['href'] . $href_param, $valor_desplegar === '' ? ' ' : $valor_desplegar);
 							break;
 			case 'numero':
 							return fmt_cantidad($valor);

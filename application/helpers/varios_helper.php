@@ -150,6 +150,11 @@ if ( ! function_exists('fmt_cantidad'))
 	 */
 	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE)
 	{
+		if ( ! is_numeric($valor))
+		{
+			return NULL;
+		}
+
 		$cero = $mostrar_cero ? '0' : '';
 
 		return ($valor === 0) ? $cero : number_format($valor, $decimales, ',', '.');
@@ -172,6 +177,11 @@ if ( ! function_exists('fmt_monto'))
 	 */
 	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
 	{
+		if ( ! is_numeric($valor))
+		{
+			return NULL;
+		}
+
 		if ($monto === 0)
 		{
 			return '';
