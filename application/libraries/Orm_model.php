@@ -1403,8 +1403,6 @@ class ORM_Field {
 	 **/
 	function __construct($nombre = '', $param = array()) {
 
-		$this->CI =& get_instance();
-
 		$this->nombre    = $nombre;
 		$this->nombre_bd = $nombre;
 		$this->label     = $nombre;
@@ -1535,6 +1533,8 @@ class ORM_Field {
 	 */
 	public function form_field($valor = '', $filtra_activos = FALSE, $param_adic = '')
 	{
+		$CI =& get_instance();
+
 		$id_prefix  = 'id_';
 
 		$valor_field = ($valor === '' AND $this->default != '') ? $this->default : $valor;
@@ -1598,12 +1598,12 @@ class ORM_Field {
 		{
 			$form = '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_1">';
 			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1");
-			$form .= $this->CI->lang->line('orm_radio_yes');
+			$form .= $CI->lang->line('orm_radio_yes');
 			$form .= '</label>';
 
 			$form .= '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_0">';
 			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0");
-			$form .= $this->CI->lang->line('orm_radio_no');
+			$form .= $CI->lang->line('orm_radio_no');
 			$form .= '</label>';
 
 			return $form;
@@ -1643,7 +1643,6 @@ class ORM_Field {
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$CI =& get_instance();
 			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
 
 			$form = form_multiselect(
@@ -1667,9 +1666,11 @@ class ORM_Field {
 	 */
 	public function get_formatted_value($valor)
 	{
+		$CI =& get_instance();
+
 		if ($this->tipo == 'boolean')
 		{
-			return ($valor == 1) ? $this->CI->lang->line('orm_radio_yes') : $this->CI->lang->line('orm_radio_no');
+			return ($valor == 1) ? $CI->lang->line('orm_radio_yes') : $CI->lang->line('orm_radio_no');
 		}
 
 		if ($this->tipo == 'has_one')

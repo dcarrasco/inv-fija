@@ -54,6 +54,9 @@ class MY_Hooks {
 		{
 			//$ci->output->enable_profiler(TRUE);
 		}
+
+		// log información
+		log_message('debug', 'Request User: ' . $CI_local->session->user . ', URI: '. $CI_local->uri->uri_string());
 	}
 
 }
