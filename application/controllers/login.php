@@ -1,7 +1,36 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Controller Login ACL
+ *
+ * @category CodeIgniter
+ * @package  ACL
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Login extends CI_Controller {
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -13,8 +42,7 @@ class Login extends CI_Controller {
 	/**
 	 * Pagina index, ejecuta por defecto al no recibir parámetros
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function index()
 	{
@@ -26,8 +54,7 @@ class Login extends CI_Controller {
 	/**
 	 * Despliega pagina para ingresar al sistema
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function login()
 	{
@@ -56,32 +83,32 @@ class Login extends CI_Controller {
 
 		if ($this->form_validation->run() === TRUE)
 		{
-			$usr          = set_value('usr');
-			$pwd          = set_value('pwd');
+			$usuario      = set_value('usr');
+			$password     = set_value('pwd');
 			$captcha_word = set_value('captcha');
-			$rem          = set_value('remember_me');
+			$remember_me  = set_value('remember_me');
 
 			// si el usuario existe y no tiene fijada una clave, lo obligamos a fijarla
-			if ($this->acl_model->existe_usuario($usr) AND !$this->acl_model->tiene_clave($usr))
+			if ($this->acl_model->existe_usuario($usuario) AND ! $this->acl_model->tiene_clave($usuario))
 			{
-				redirect('login/cambio_password/' . $usr);
+				redirect('login/cambio_password/' . $usuario);
 			}
 
 			// si el usuario debe validar captcha
 			$captcha_valido = TRUE;
-			if ($this->acl_model->use_captcha($usr))
+			if ($this->acl_model->use_captcha($usuario))
 			{
 				$captcha_valido = $this->acl_model->validar_captcha($captcha_word, $this->session->session_id);
 			}
 
 			// si el usuario valida correctamente, redireccionamos a la app
-			if ($captcha_valido AND $this->acl_model->login($usr, $pwd, $rem == 'remember'))
+			if ($captcha_valido AND $this->acl_model->login($usuario, $password, $remember_me === 'remember'))
 			{
-				if ($rem == 'remember')
+				if ($remember_me === 'remember')
 				{
-					$this->acl_model->set_rememberme_cookie($usr);
+					$this->acl_model->set_rememberme_cookie($usuario);
 				}
-				$arr_menu = $this->acl_model->get_menu_usuario($usr);
+				$arr_menu = $this->acl_model->get_menu_usuario($usuario);
 
 				redirect($arr_menu[0]['url']);
 			}
@@ -134,7 +161,8 @@ class Login extends CI_Controller {
 
 	/**
 	 * Desconecta al usuario
-	 * @return none
+	 *
+	 * @return void
 	 */
 	public function logout()
 	{
@@ -149,8 +177,8 @@ class Login extends CI_Controller {
 	/**
 	 * Despliega pagina para cambiar la password de un usuario
 	 *
-	 * @param  none
-	 * @return none
+	 * @param  string $usr_param Usuario
+	 * @return void
 	 */
 	public function cambio_password($usr_param = '')
 	{
@@ -158,33 +186,33 @@ class Login extends CI_Controller {
 
 		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
 		$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
-		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', "trim|required|min_length[8]|callback_password_validation");
+		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', 'trim|required|min_length[8]|callback_password_validation');
 		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
 		$this->app_common->form_validation_config();
 
-		if (!$this->acl_model->tiene_clave($this->input->post('usr')))
+		if ( ! $this->acl_model->tiene_clave($this->input->post('usr')))
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
 		}
 
 
-		if ($this->form_validation->run() == FALSE)
+		if ($this->form_validation->run() === FALSE)
 		{
-			$usr = set_value('usr', $usr_param);
+			$usuario = set_value('usr', $usr_param);
 
 			$data = array(
 				'msg_alerta'        => '',
-				'usr'               => $usr,
-				'tiene_clave_class' => $this->acl_model->tiene_clave($usr) ? '' : ' disabled',
-				'ocultar_password'  => (($this->input->post('usr')) ? TRUE : FALSE),
+				'usr'               => $usuario,
+				'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
+				'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
 			);
 			$this->load->view('ACL/cambio_password', $data);
 		}
 		else
 		{
-			$usr = set_value('usr');
+			$usuario = set_value('usr');
 			$msg_alerta = '';
-			if (!$this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
+			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
 				$msg_alerta = $this->lang->line('login_error_usr_pwd');
 			}
@@ -197,10 +225,10 @@ class Login extends CI_Controller {
 			else
 			{
 				$data = array(
-					'usr'              => $usr,
+					'usr'              => $usuario,
 					'msg_alerta'       => $msg_alerta,
 					'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
-					'tiene_clave'      => $this->acl_model->tiene_clave($usr),
+					'tiene_clave'      => $this->acl_model->tiene_clave($usuario),
 				);
 				$this->load->view('ACL/cambio_password', $data);
 			}
@@ -209,42 +237,21 @@ class Login extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
-	public function password_validation($str)
-	{
-		if (preg_match('#[0-9]#', $str) AND preg_match('#[a-z]#', $str) AND preg_match('#[A-Z]#', $str))
-		{
-     		return TRUE;
-   		}
-
-		return FALSE;
-	}
-
-	// --------------------------------------------------------------------
-
 	/**
-	 * PRUEBA ****** Enviar correo con nueva password
+	 * Valida que la password ingresada tenga a lo menos:
+	 * un digito numerico, un caracter minuscula y un caracter mayuscula
 	 *
-	 * @param  none
-	 * @return none
+	 * @param   string $password Password a validar
+	 * @return  boolean          Indica si la password cumple el formato a validar
 	 */
-	public function enviar_correo($usr = '')
+	public function password_validation($password = '')
 	{
-		$this->load->model('acl_model');
-		$this->load->helper('string');
-		$this->load->library('email');
-
-		$correo = $this->acl_model->get_correo($usr);
-		if ($correo != '')
+		if (preg_match('#[0-9]#', $password) AND preg_match('#[a-z]#', $password) AND preg_match('#[A-Z]#', $password))
 		{
-			$clave = random_string('alnum', 10);
-
-			$this->email->from('your@example.com', 'Your Name');
-			$this->email->to($correo);
-			$this->email->subject('Cambio de clave');
-			$this->email->message('Su nueva clave es: ' . $clave);
-			$this->email->send();
+			return TRUE;
 		}
 
+		return FALSE;
 	}
 
 
