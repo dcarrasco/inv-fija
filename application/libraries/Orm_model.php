@@ -382,7 +382,7 @@ class Orm_model implements IteratorAggregate {
 
 		$model_id = implode($this->separador_campos, $arr_id);
 
-		return ($model_id ==== '') ? null : $model_id;
+		return ($model_id === '') ? null : $model_id;
 	}
 
 	// --------------------------------------------------------------------
