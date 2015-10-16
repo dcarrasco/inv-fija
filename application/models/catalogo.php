@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Catalogo
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Catalogo extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_catalogo Identificador del catalogo
+	 * @return void
+	 */
+	public function __construct($id_catalogo = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_catalogos'),
 				'model_label'        => 'Cat&aacute;logo',
@@ -51,17 +83,22 @@ class Catalogo extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_catalogo)
 		{
-			$this->fill($id);
+			$this->fill($id_catalogo);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del modelo
+	 *
+	 * @return string Catalogo
+	 */
 	public function __toString()
 	{
 		return (string) $this->descripcion;
@@ -74,7 +111,6 @@ class Catalogo extends ORM_Model {
 	/**
 	 * Actualiza los precios del catálogos de productos, con el último PMP
 	 *
-	 * @param  none
 	 * @return int Cantidad de registros modificados
 	 */
 	public function actualiza_precios()

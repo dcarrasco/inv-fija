@@ -1,8 +1,37 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Inventario
+ *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Inventario_model extends CI_Model {
 
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -13,6 +42,7 @@ class Inventario_model extends CI_Model {
 
 	/**
 	 * Devuelve el identificador del inventario activo
+	 *
 	 * @return integer ID del inventario activo
 	 */
 	public function get_id_inventario_activo()
@@ -29,6 +59,7 @@ class Inventario_model extends CI_Model {
 
 	/**
 	 * Recupera los inventarios para desplegar en combobox
+	 *
 	 * @return array Arreglo con inventarios para usar en combobox
 	 */
 	public function get_combo_inventarios()
@@ -66,42 +97,42 @@ class Inventario_model extends CI_Model {
 	{
 		$this->db->select('di.hoja, d.nombre as digitador, a.nombre as auditor');
 
-		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
-		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
-		if ($incl_ajustes == '1')
+		$this->db->select_sum('stock_sap', 'sum_stock_sap');
+		$this->db->select_sum('stock_fisico', 'sum_stock_fisico');
+		if ($incl_ajustes === '1')
 		{
-			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
-			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)' , 'sum_stock_diff');
+			$this->db->select_sum('stock_ajuste', 'sum_stock_ajuste');
+			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)', 'sum_stock_diff');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_fisico - stock_sap)' , 'sum_stock_diff');
+			$this->db->select_sum('(stock_fisico - stock_sap)', 'sum_stock_diff');
 		}
 
-		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
-		if ($incl_ajustes == '1')
+		$this->db->select_sum('(stock_sap * c.pmp)', 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)', 'sum_valor_fisico');
+		if ($incl_ajustes === '1')
 		{
-			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
-			$this->db->select_sum('((stock_fisico - stock_sap + stock_ajuste) * c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_ajuste * c.pmp)', 'sum_valor_ajuste');
+			$this->db->select_sum('((stock_fisico - stock_sap + stock_ajuste) * c.pmp)', 'sum_valor_diff');
 		}
 		else
 		{
-			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)', 'sum_valor_diff');
 		}
 
-		$this->db->select_max('fecha_modificacion' , 'fecha');
+		$this->db->select_max('fecha_modificacion', 'fecha');
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_usuarios') . ' d', "d.id = di.digitador", 'left');
-		$this->db->join($this->config->item('bd_auditores') . ' a', "a.id = di.auditor", 'left');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = di.catalogo", 'left');
+		$this->db->join($this->config->item('bd_usuarios') . ' d', 'd.id = di.digitador', 'left');
+		$this->db->join($this->config->item('bd_auditores') . ' a', 'a.id = di.auditor', 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.hoja, d.nombre, a.nombre');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0', NULL, FALSE);
 			}
@@ -113,7 +144,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -141,7 +171,7 @@ class Inventario_model extends CI_Model {
 		$this->db->select('di.stock_sap');
 		$this->db->select('di.stock_fisico');
 		$this->db->select('di.stock_ajuste');
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('(di.stock_fisico - di.stock_sap + di.stock_ajuste) as stock_diff');
 		}
@@ -152,7 +182,7 @@ class Inventario_model extends CI_Model {
 		$this->db->select('(di.stock_sap * c.pmp) as valor_sap');
 		$this->db->select('(di.stock_fisico * c.pmp) as valor_fisico');
 		$this->db->select('(di.stock_ajuste * c.pmp) as valor_ajuste');
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('((di.stock_fisico - di.stock_sap + di.stock_ajuste) * c.pmp) as valor_diff');
 		}
@@ -162,14 +192,14 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = di.catalogo", 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 
 		$this->db->where('di.id_inventario', $id_inventario);
 		$this->db->where('di.hoja', $hoja);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0', NULL, FALSE);
 			}
@@ -184,7 +214,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -202,13 +231,13 @@ class Inventario_model extends CI_Model {
 		$this->db->select("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre as nombre_fam", FALSE);
 		$this->db->select("f.codigo + '_' + sf.codigo as fam_subfam", FALSE);
 		$this->db->select('di.catalogo, di.descripcion, di.um, c.pmp');
-		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
-		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
-		if ($incl_ajustes == '1')
+		$this->db->select_sum('stock_sap', 'sum_stock_sap');
+		$this->db->select_sum('stock_fisico', 'sum_stock_fisico');
+		if ($incl_ajustes === '1')
 		{
-			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
+			$this->db->select_sum('stock_ajuste', 'sum_stock_ajuste');
 		}
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('SUM(stock_fisico - stock_sap + stock_ajuste) as sum_stock_dif', FALSE);
 		}
@@ -218,11 +247,11 @@ class Inventario_model extends CI_Model {
 		}
 		$this->db->select('SUM(stock_sap * c.pmp) as sum_valor_sap', FALSE);
 		$this->db->select('SUM(stock_fisico * c.pmp) as sum_valor_fisico', FALSE);
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('SUM(stock_ajuste * c.pmp) as sum_valor_ajuste', FALSE);
 		}
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('SUM(stock_fisico * c.pmp - stock_sap * c.pmp + stock_ajuste * pmp) as sum_valor_diff', FALSE);
 		}
@@ -230,9 +259,9 @@ class Inventario_model extends CI_Model {
 		{
 			$this->db->select('SUM(stock_fisico * c.pmp - stock_sap * c.pmp) as sum_valor_diff', FALSE);
 		}
-		$this->db->select_max('fecha_modificacion' , 'fecha');
+		$this->db->select_max('fecha_modificacion', 'fecha');
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = di.catalogo", 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->join($this->config->item('bd_familias') . ' f', "f.codigo = substring(di.catalogo,1,5) and f.tipo='FAM'", 'left');
 		$this->db->join($this->config->item('bd_familias') . ' sf', "sf.codigo = substring(di.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
 
@@ -241,9 +270,9 @@ class Inventario_model extends CI_Model {
 		$this->db->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre");
 		$this->db->group_by("f.codigo + '_' + sf.codigo");
 		$this->db->group_by('di.catalogo, di.descripcion, di.um, c.pmp');
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->having('sum(stock_fisico - stock_sap + stock_ajuste) <> 0');
 			}
@@ -256,7 +285,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -275,7 +303,7 @@ class Inventario_model extends CI_Model {
 		$this->db->select_sum('stock_fisico', 'q_fisico');
 		$this->db->select_sum('stock_sap', 'q_sap');
 
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_faltante');
 			$this->db->select('(0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) as q_coincidente');
@@ -295,12 +323,12 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' i');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = i.catalogo", 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = i.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->having('(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
 				$this->db->or_having('(SUM((stock_fisico+stock_ajuste)) - 0.5 * (SUM(stock_sap + (stock_fisico+stock_ajuste)) - ABS(SUM(stock_sap - (stock_fisico+stock_ajuste))))) <> 0');
@@ -317,7 +345,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -341,7 +368,7 @@ class Inventario_model extends CI_Model {
 		$this->db->select('stock_sap * c.pmp as valor_sap', FALSE);
 		$this->db->select('stock_ajuste * c.pmp as valor_ajuste', FALSE);
 
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
 			$this->db->select('(stock_fisico - stock_sap + stock_ajuste) as stock_diff');
 			$this->db->select('(stock_fisico - stock_sap + stock_ajuste) * c.pmp as valor_diff');
@@ -363,13 +390,13 @@ class Inventario_model extends CI_Model {
 		$this->db->select('pmp * (0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_coincidente');
 		$this->db->select('pmp * (stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_sobrante');
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' i');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = i.catalogo", 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = i.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->where('i.catalogo', $catalogo);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0', NULL, FALSE);
 			}
@@ -384,7 +411,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -393,48 +419,50 @@ class Inventario_model extends CI_Model {
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
 	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
+	 * @param  string  $incl_ajustes  Indica si mostrar o no los ajustes
+	 * @param  string  $elim_sin_dif  Indica si mostrar o no registros sin diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
 	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$this->db->select('di.ubicacion');
 
-		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
-		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
+		$this->db->select_sum('stock_sap', 'sum_stock_sap');
+		$this->db->select_sum('stock_fisico', 'sum_stock_fisico');
 
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
-			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
-			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)' , 'sum_stock_dif');
+			$this->db->select_sum('stock_ajuste', 'sum_stock_ajuste');
+			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)', 'sum_stock_dif');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_fisico - stock_sap)' , 'sum_stock_dif');
+			$this->db->select_sum('(stock_fisico - stock_sap)', 'sum_stock_dif');
 		}
 
-		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('(stock_sap * c.pmp)', 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)', 'sum_valor_fisico');
 
-		if ($incl_ajustes == '1')
+		if ($incl_ajustes === '1')
 		{
-			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
-			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp + stock_ajuste * pmp)' , 'sum_valor_dif');
+			$this->db->select_sum('(stock_ajuste * c.pmp)', 'sum_valor_ajuste');
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp + stock_ajuste * pmp)', 'sum_valor_dif');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp)' , 'sum_valor_dif');
+			$this->db->select_sum('(stock_fisico * c.pmp - stock_sap * c.pmp)', 'sum_valor_dif');
 		}
 
-		$this->db->select_max('fecha_modificacion' , 'fecha');
+		$this->db->select_max('fecha_modificacion', 'fecha');
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
 		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0', NULL, FALSE);
 			}
@@ -446,7 +474,6 @@ class Inventario_model extends CI_Model {
 
 		return $this->db->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -463,40 +490,40 @@ class Inventario_model extends CI_Model {
 	{
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');
-		$this->db->select_sum('stock_sap' , 'sum_stock_sap');
-		$this->db->select_sum('stock_fisico' , 'sum_stock_fisico');
+		$this->db->select_sum('stock_sap', 'sum_stock_sap');
+		$this->db->select_sum('stock_fisico', 'sum_stock_fisico');
 
-		if ($incl_ajustes == '0')
+		if ($incl_ajustes === '0')
 		{
-			$this->db->select_sum('(stock_fisico - stock_sap)' , 'sum_stock_diff');
+			$this->db->select_sum('(stock_fisico - stock_sap)', 'sum_stock_diff');
 		}
 		else
 		{
-			$this->db->select_sum('stock_ajuste' , 'sum_stock_ajuste');
-			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)' , 'sum_stock_diff');
+			$this->db->select_sum('stock_ajuste', 'sum_stock_ajuste');
+			$this->db->select_sum('(stock_fisico - stock_sap + stock_ajuste)', 'sum_stock_diff');
 		}
 
-		$this->db->select_sum('(stock_fisico-stock_sap)' , 'sum_stock_diff');
-		$this->db->select_sum('(stock_sap * c.pmp)' , 'sum_valor_sap');
-		$this->db->select_sum('(stock_fisico * c.pmp)' , 'sum_valor_fisico');
+		$this->db->select_sum('(stock_fisico-stock_sap)', 'sum_stock_diff');
+		$this->db->select_sum('(stock_sap * c.pmp)', 'sum_valor_sap');
+		$this->db->select_sum('(stock_fisico * c.pmp)', 'sum_valor_fisico');
 
-		if ($incl_ajustes == '0')
+		if ($incl_ajustes === '0')
 		{
-			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('((stock_fisico-stock_sap) * c.pmp)', 'sum_valor_diff');
 		}
 		else
 		{
-			$this->db->select_sum('(stock_ajuste * c.pmp)' , 'sum_valor_ajuste');
-			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste) * c.pmp)' , 'sum_valor_diff');
+			$this->db->select_sum('(stock_ajuste * c.pmp)', 'sum_valor_ajuste');
+			$this->db->select_sum('((stock_fisico-stock_sap+stock_ajuste) * c.pmp)', 'sum_valor_diff');
 		}
 
-		$this->db->select_max('fecha_modificacion' , 'fecha');
+		$this->db->select_max('fecha_modificacion', 'fecha');
 
 		$this->db->from($this->config->item('bd_detalle_inventario') . ' d');
 		$this->db->join($this->config->item('bd_inventarios') . ' i', 'd.id_inventario=i.id', 'left');
 		$this->db->join($this->config->item('bd_ubic_tipoubic') . ' ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = d.ubicacion', 'left');
 		$this->db->join($this->config->item('bd_tipo_ubicacion') . ' t', 't.id=ut.id_tipo_ubicacion', 'left');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', "c.catalogo = d.catalogo", 'left');
+		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = d.catalogo', 'left');
 
 		$this->db->where('d.id_inventario', $id_inventario);
 
@@ -504,9 +531,9 @@ class Inventario_model extends CI_Model {
 		$this->db->group_by('d.ubicacion');
 		$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
-		if ($elim_sin_dif == '1')
+		if ($elim_sin_dif === '1')
 		{
-			if ($incl_ajustes == '1')
+			if ($incl_ajustes === '1')
 			{
 				$this->db->where('(stock_fisico - stock_sap + stock_ajuste) <> 0', NULL, FALSE);
 			}
@@ -521,6 +548,15 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Reporte de ajustes de inventario
+	 *
+	 * @param  integer $id_inventario Identificador del inventario
+	 * @param  string  $orden_campo   Campo para ordenar el reporte
+	 * @param  string  $orden_tipo    Tipo de orden (ascendente o descendente)
+	 * @param  string  $elim_sin_dif  Elimina registros sin diferencias
+	 * @return array                  Reporte de ajustes de inventario
+	 */
 	public function get_reporte_ajustes($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $elim_sin_dif = '0')
 	{
 		$this->db->select('catalogo');
@@ -538,7 +574,7 @@ class Inventario_model extends CI_Model {
 		$this->db->select('CASE WHEN (stock_fisico - stock_sap + stock_ajuste) > 0 THEN \'SOBRANTE\' WHEN (stock_fisico - stock_sap + stock_ajuste) < 0 THEN \'FALTANTE\' WHEN (stock_fisico - stock_sap + stock_ajuste) = 0 THEN \'OK\' END as tipo', FALSE);
 		$this->db->select('glosa_ajuste');
 		$this->db->where('id_inventario', $id_inventario);
-		if ($elim_sin_dif == 1)
+		if ($elim_sin_dif === 1)
 		{
 			$this->db->where('stock_fisico - stock_sap + stock_ajuste <> 0', NULL, FALSE);
 		}

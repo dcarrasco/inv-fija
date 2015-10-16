@@ -1,19 +1,54 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Despachos
+ * *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Despachos_model extends CI_Model {
 
+	/**
+	 * Limite de facturas a recuperar
+	 *
+	 * @var integer
+	 */
 	public $limite_facturas = 5;
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera RUTs retail para poblar combo box
 	 *
 	 * @return array Arreglo con los ruts de los retail
 	 */
@@ -36,8 +71,11 @@ class Despachos_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera listado de las ultimas facturas de un RUT y modelos de materiales
 	 *
-	 * @return array Arreglo con los tipos de inventiaro
+	 * @param string $rut     RUT del retail
+	 * @param string $modelos Modelo de materiales a consultar
+	 * @return array          Arreglo con los tipos de inventiaro
 	 */
 	public function get_listado_ultimas_facturas($rut = NULL, $modelos = NULL)
 	{
@@ -98,7 +136,7 @@ class Despachos_model extends CI_Model {
 			$i = 0;
 			foreach($arr_result as $factura)
 			{
-				if ($i == 0)
+				if ($i === 0)
 				{
 					foreach($arr_campos_enc as $campo)
 					{
