@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Tipo de Almacen SAP
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  Stock
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Tipoalmacen_sap extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_tipo_alm_sap Identificador del modulo
+	 * @return void
+	 */
+	public function __construct($id_tipo_alm_sap = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_tiposalm_sap'),
 				'model_label'        => 'Tipo Almac&eacute;n',
@@ -63,17 +95,22 @@ class Tipoalmacen_sap extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_tipo_alm_sap)
 		{
-			$this->fill($id);
+			$this->fill($id_tipo_alm_sap);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del Tipo Almacen
+	 *
+	 * @return string Tipo almacen SAP
+	 */
 	public function __toString()
 	{
 		return (string) $this->tipo;
@@ -82,11 +119,14 @@ class Tipoalmacen_sap extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera tipos de almacen y devuelve arreglo para poblar combo
+	 *
+	 * @param  string $tipo_op Tipo de operación (fija o movil)
+	 * @return array           Arreglo de tipos de almacén
+	 */
 	public function get_combo_tiposalm($tipo_op = '')
 	{
-		$arr_result = array();
-		$arr_combo = array();
-
 		$arr_result = $this->CI->db
 			->select('id_tipo as llave, tipo as valor')
 			->order_by('tipo')
