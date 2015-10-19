@@ -1,4 +1,18 @@
 <?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+
 
 if ( ! function_exists('dbg'))
 {
@@ -50,26 +64,26 @@ if ( ! function_exists('app_render_view'))
 	 * @param  array  $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
 	 * @return void
 	 */
-	function app_render_view($vista = null, $datos = array(), $arr_menu = array())
+	function app_render_view($vista = NULL, $datos = array(), $arr_menu = array())
 	{
-		if (! $vista)
+		if ( ! $vista)
 		{
 			return;
 		}
 
 		// carga objeto global CI
-		$CI =& get_instance();
+		$ci =& get_instance();
 
 		if (count($arr_menu) > 0)
 		{
 			$datos['menu_modulo'] = array('menu' => $arr_menu, 'mod_selected' => basename($vista));
 		}
 
-		$datos['msg_alerta']  = $CI->session->flashdata('msg_alerta');
+		$datos['msg_alerta']  = $ci->session->flashdata('msg_alerta');
 
-		$CI->load->view('app_header', $datos);
-		$CI->load->view($vista, $datos);
-		$CI->load->view('app_footer', $datos);
+		$ci->load->view('app_header', $datos);
+		$ci->load->view($vista, $datos);
+		$ci->load->view('app_footer', $datos);
 	}
 }
 
@@ -82,22 +96,22 @@ if ( ! function_exists('form_array_format'))
 	 * Formatea un arreglo para que sea usado en un formuario select
 	 * Espera que el arreglo tenga a lo menos las llaves "llave" y "valor"
 	 *
-	 * @param  array  $arr     Arreglo a transformar
+	 * @param  array  $arreglo Arreglo a transformar
 	 * @param  string $msg_ini Elemento inicial a desplegar en select
 	 * @return array           Arreglo con formato a utilizar
 	 */
-	function form_array_format($arr = array(), $msg_ini = '')
+	function form_array_format($arreglo = array(), $msg_ini = '')
 	{
 		$arr_combo = array();
 
-		if ($msg_ini != '')
+		if ($msg_ini !== '')
 		{
 			$arr_combo[''] = $msg_ini;
 		}
 
-		foreach($arr as $reg)
+		foreach($arreglo as $item)
 		{
-			$arr_combo[$reg['llave']] = $reg['valor'];
+			$arr_combo[$item['llave']] = $item['valor'];
 		}
 
 		return $arr_combo;
@@ -117,7 +131,7 @@ if ( ! function_exists('form_has_error'))
 	 */
 	function form_has_error($form_field = '')
 	{
-		return (bool) (form_error($form_field) != '');
+		return (bool) (form_error($form_field) !== '');
 	}
 }
 
@@ -134,11 +148,16 @@ if ( ! function_exists('fmt_cantidad'))
 	 * @param  boolean $mostrar_cero Indica si muestra o no valores ceros
 	 * @return string                Valor formateado
 	 */
-	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = false)
+	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE)
 	{
-		$cero = $mostrar_cero ? '0' : ' ';
+		if ( ! is_numeric($valor))
+		{
+			return NULL;
+		}
 
-		return ($valor == 0) ? $cero : number_format($valor, $decimales, ',', '.');
+		$cero = $mostrar_cero ? '0' : '';
+
+		return ($valor === 0) ? $cero : number_format($valor, $decimales, ',', '.');
 	}
 }
 
@@ -158,17 +177,22 @@ if ( ! function_exists('fmt_monto'))
 	 */
 	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
 	{
-		if ($monto == 0)
+		if ( ! is_numeric($monto))
 		{
-			return ' ';
+			return NULL;
+		}
+
+		if ($monto === 0)
+		{
+			return '';
 		}
 		else
 		{
-			if (strtoupper($unidad) == 'UN')
+			if (strtoupper($unidad) === 'UN')
 			{
 				return $signo_moneda . '&nbsp;' . number_format($monto, $decimales, ',', '.');
 			}
-			elseif (strtoupper($unidad) == 'MM')
+			elseif (strtoupper($unidad) === 'MM')
 			{
 				return 'MM' . $signo_moneda . '&nbsp;' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
 			}
@@ -182,23 +206,23 @@ if ( ! function_exists('fmt_hora'))
 	/**
 	 * Devuelve una cantidad de segundos como una hora
 	 *
-	 * @param  integer $seg Cantidad de segundos a formatear
+	 * @param  integer $segundos_totales Cantidad de segundos a formatear
 	 * @return string       Segundos formateados como hora
 	 */
-	function fmt_hora($seg = 0)
+	function fmt_hora($segundos_totales = 0)
 	{
-		$sep = ":";
+		$separador = ':';
 
-		$hh = (int) ($seg/3600);
-		$hh = (strlen($hh) == 1) ? '0' . $hh : $hh;
+		$hora = (int) ($segundos_totales/3600);
+		$hora = (strlen($hora) === 1) ? '0' . $hora : $hora;
 
-		$mm = (int) (($seg - ((int) $hh) *3600)/60);
-		$mm = (strlen($mm) == 1) ? '0' . $mm : $mm;
+		$minutos = (int) (($segundos_totales - ((int) $hora) *3600)/60);
+		$minutos = (strlen($minutos) === 1) ? '0' . $minutos : $minutos;
 
-		$ss = (int) ($seg - ($hh*3600 + $mm*60));
-		$ss = (strlen($ss) == 1) ? '0' . $ss : $ss;
+		$segundos = (int) ($segundos_totales - ($hora*3600 + $minutos*60));
+		$segundos = (strlen($segundos) === 1) ? '0' . $segundos : $segundos;
 
-		return $hh.$sep.$mm.$sep.$ss;
+		return $hora.$separador.$minutos.$separador.$segundos;
 	}
 }
 

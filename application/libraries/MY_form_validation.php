@@ -1,4 +1,19 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
 /**
  * MY_Form_validation Class
  *
@@ -13,23 +28,39 @@
  */
 class MY_Form_validation extends CI_Form_validation {
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return  void
+	 */
 	function __construct()
 	{
-	    parent::__construct();
+		parent::__construct();
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Validación de edición de registros únicos
+	 *
+	 * @param   string $value  Valor a validar
+	 * @param   string $params Paramtros de validación
+	 *
+	 * @return  [type]           [description]
+	 */
 	function edit_unique($value, $params)
 	{
-		$CI =& get_instance();
-		$CI->form_validation->set_message('edit_unique', 'El valor %s ya está en uso.');
+		$ci =& get_instance();
+		$ci->form_validation->set_message('edit_unique', 'El valor %s ya está en uso.');
 
 		list($table, $column, $id_field, $current_id) = explode('.', $params);
 
-		$query = $CI->db->select()->from($table)->where($column, $value)->limit(1)->get();
+		// si el id es numerico, cambia a formato numérico
+		$current_id = is_numeric($current_id) ? (int) $current_id : $current_id;
 
-		if ($query->row() && $query->row()->{$id_field} != $current_id)
+		$query = $ci->db->select()->from($table)->where($column, $value)->limit(1)->get();
+
+		if ($query->row() AND $query->row()->{$id_field} !== $current_id)
 		{
 			return FALSE;
 		}

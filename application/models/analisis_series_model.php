@@ -1,8 +1,36 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Analisis de series
+ *
+ * @category CodeIgniter
+ * @package  Stock
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Analisis_series_model extends CI_Model {
 
-
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -14,35 +42,35 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Toma un listado de series y lo convierte en arreglo, de acuerdo a un formato especifico
 	 *
-	 * @param  string  $series  Listado de series a convertir
-	 * @param  string  $tipo    Formato de salida de las series
-	 * @return array            Arreglo con las series con formato
+	 * @param  string $series Listado de series a convertir
+	 * @param  string $tipo   Formato de salida de las series
+	 * @return array           Arreglo con las series con formato
 	 */
 	private function _series_list_to_array($series = string, $tipo = 'SAP')
 	{
 		$arr_series = array();
-		$series = str_replace(" ", "", $series);
+		$series = str_replace(' ', '', $series);
 		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
 
-		foreach ($arr_series as $k => $v)
+		foreach ($arr_series as $llave => $valor)
 		{
-			$serie_temp = $v;
+			$serie_temp = $valor;
 			// Modificaciones de formato SAP
-			if ($tipo == 'SAP')
+			if ($tipo === 'SAP')
 			{
 				$serie_temp = preg_replace('/^01/', '1', $serie_temp);
-				$arr_series[$k] = (strlen($serie_temp) == '19') ? substr($serie_temp, 1, 18) : $serie_temp;
+				$arr_series[$llave] = (strlen($serie_temp) === '19') ? substr($serie_temp, 1, 18) : $serie_temp;
 			}
 			// Modificaciones de formato SCL
-			else if ($tipo == 'trafico')
+			else if ($tipo === 'trafico')
 			{
 				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
-				$arr_series[$k] = substr($serie_temp, 0, 14) . '0';
+				$arr_series[$llave] = substr($serie_temp, 0, 14) . '0';
 			}
-			else if ($tipo == 'SCL')
+			else if ($tipo === 'SCL')
 			{
 				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
-				$arr_series[$k] = $serie_temp;
+				$arr_series[$llave] = $serie_temp;
 			}
 		}
 
@@ -55,20 +83,19 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Toma una serie y le calcula el DV
 	 *
-	 * @param  string  $series  Listado de series a convertir
-	 * @param  string  $tipo    Formato de salida de las series
-	 * @return array            Arreglo con las series con formato
+	 * @param  string $serie Serie a calcular el DV
+	 * @return string        Serie con DV
 	 */
 	private function _get_dv_imei($serie = '')
 	{
 		$serie15 = '';
 
-		if (strlen($serie) == 14 AND substr($serie, 0, 1) == '1')
+		if (strlen($serie) === 14 AND substr($serie, 0, 1) === '1')
 		{
 			$serie15 = '0' . $serie;
 		}
 
-		if (strlen($serie) == 15)
+		if (strlen($serie) === 15)
 		{
 			$serie15 = $serie;
 		}
@@ -76,22 +103,21 @@ class Analisis_series_model extends CI_Model {
 		$serie14 = substr($serie15, 0, 14);
 
 		$sum_dv = 0;
-		foreach(str_split($serie14) as $i => $n)
+		foreach(str_split($serie14) as $indice => $numero)
 		{
-			$sum_dv += ($i %2 !== 0) ? (($n*2>9) ? $n*2-9 : $n*2) : $n;
+			$sum_dv += ($indice %2 !== 0) ? (($numero*2>9) ? $numero*2-9 : $numero*2) : $numero;
 		}
 
 		return $serie14 . (10 - $sum_dv % 10);
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera la historia de un conjunto de series
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
 	 */
 	public function get_historia($series = string)
 	{
@@ -109,13 +135,13 @@ class Analisis_series_model extends CI_Model {
 				->select('convert(varchar(20),fecha,103) as fec', FALSE)
 				->from($this->config->item('bd_movimientos_sap') . ' m')
 				->join($this->config->item('bd_cmv_sap') . ' c', 'm.cmv=c.cmv', 'left')
-				->join($this->config->item('bd_almacenes_sap') . ' a1', "a1.centro=m.ce and m.alm=a1.cod_almacen", 'left')
-				->join($this->config->item('bd_almacenes_sap') . ' a2', "a2.centro=m.ce and m.rec=a2.cod_almacen", 'left')
+				->join($this->config->item('bd_almacenes_sap') . ' a1', 'a1.centro=m.ce and m.alm=a1.cod_almacen', 'left')
+				->join($this->config->item('bd_almacenes_sap') . ' a2', 'a2.centro=m.ce and m.rec=a2.cod_almacen', 'left')
 				->join($this->config->item('bd_usuarios_sap')  . ' u', 'm.usuario=u.usuario', 'left')
 				->where_in('serie', $arr_series)
-				->order_by('serie','asc')
-				->order_by('fecha','asc')
-				->order_by('fec_entrada_doc','asc')
+				->order_by('serie', 'asc')
+				->order_by('fecha', 'asc')
+				->order_by('fec_entrada_doc', 'asc')
 				->get()
 				->result_array();
 		}
@@ -127,8 +153,8 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera los despachos de un conjunto de series
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
 	 */
 	public function get_despacho($series = string)
 	{
@@ -153,8 +179,8 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera el stock SAP de un conjunto de series
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
 	 */
 	public function get_stock_sap($series = string)
 	{
@@ -185,10 +211,11 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera el stock SCL de un conjunto de series
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
 	 */
-	public function get_stock_scl($series = string) {
+	public function get_stock_scl($series = string)
+	{
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
@@ -220,10 +247,10 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera ultimo trafico de un conjunto de series
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
 	 */
-	public function get_trafico($series = "")
+	public function get_trafico($series = '')
 	{
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series, 'trafico');
@@ -262,7 +289,6 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera arreglo con los meses de trafico
 	 *
-	 * @param  none
 	 * @return array            Arreglo con resultado
 	 */
 	public function get_meses_trafico()
@@ -275,9 +301,9 @@ class Analisis_series_model extends CI_Model {
 			->from($this->config->item('bd_trafico_dias_proc'))
 			->order_by('mes desc');
 
-		foreach($this->db->get()->result_array() as $res)
+		foreach($this->db->get()->result_array() as $registro)
 		{
-			$resultado[$res['mes']] = substr($res['mes'], 0, 4) . "-" . substr($res['mes'], 4, 2);
+			$resultado[$registro['mes']] = substr($registro['mes'], 0, 4) . '-' . substr($registro['mes'], 4, 2);
 		}
 
 		return $resultado;
@@ -289,11 +315,11 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera el trafico de una serie (imei/celular) para un conjunto de meses
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @param  array   $meses   Arreglo de meses a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @param  array  $meses  Arreglo de meses a consultar
+	 * @return array          Arreglo con resultado
 	 */
-	public function get_trafico_mes($series = "", $meses = array())
+	public function get_trafico_mes($series = '', $meses = array())
 	{
 		$result = array();
 		$arr_series = $this->_series_list_to_array($series, 'SCL');
@@ -301,7 +327,7 @@ class Analisis_series_model extends CI_Model {
 		foreach ($arr_series as $serie)
 		{
 			$serie_orig = $serie;
-			$serie_cero = substr($serie, 0, 14) . "0";
+			$serie_cero = substr($serie, 0, 14) . '0';
 
 			foreach($meses as $mes)
 			{
@@ -320,9 +346,9 @@ class Analisis_series_model extends CI_Model {
 					->where_in('imei', array($serie_orig, $serie_cero))
 					->order_by('imei, fec_alta');
 
-				foreach($this->db->get()->result_array() as $reg)
+				foreach($this->db->get()->result_array() as $registro)
 				{
-					$result[$serie][$reg['celular']][$mes] = $reg;
+					$result[$serie][$registro['celular']][$mes] = $registro;
 				}
 			}
 		}
@@ -336,25 +362,25 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera el trafico de una serie (imei/celular) para un conjunto de meses
 	 *
-	 * @param  string  $series  Listado de series a consultar
-	 * @param  array   $meses   Arreglo de meses a consultar
-	 * @param  string  $tipo    imei o celular a consultar
-	 * @return array            Arreglo con resultado
+	 * @param  string $series Listado de series a consultar
+	 * @param  array  $meses  Arreglo de meses a consultar
+	 * @param  string $tipo   imei o celular a consultar
+	 * @return array          Arreglo con resultado
 	 */
-	public function get_trafico_mes2($series = "", $str_meses = "", $tipo = 'imei')
+	public function get_trafico_mes2($series = '', $str_meses = '', $tipo = 'imei')
 	{
 		$result = array();
 		$arr_series = array();
 
-		if ($series != "")
+		if ($series !== '')
 		{
-			$arr_series = $this->_series_list_to_array($series, ($tipo == 'imei') ? 'trafico' : 'celular');
+			$arr_series = $this->_series_list_to_array($series, ($tipo === 'imei') ? 'trafico' : 'celular');
 		}
 
 		foreach ($arr_series as $serie)
 		{
 			$meses = array();
-			$meses = explode("-", $str_meses);
+			$meses = explode('-', $str_meses);
 
 			foreach($meses as $mes)
 			{
@@ -366,9 +392,9 @@ class Analisis_series_model extends CI_Model {
 				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes));
 				$this->db->where($tipo, $serie);
 
-				foreach($this->db->get()->result_array() as $reg)
+				foreach($this->db->get()->result_array() as $registro)
 				{
-					$result[$this->_get_dv_imei($reg['imei'])][$reg['celular']][$mes] = ($reg['seg_entrada']+$reg['seg_salida'])/60;
+					$result[$this->_get_dv_imei($registro['imei'])][$registro['celular']][$mes] = ($registro['seg_entrada']+$registro['seg_salida'])/60;
 				}
 			}
 		}
@@ -378,9 +404,9 @@ class Analisis_series_model extends CI_Model {
 
 		foreach($result as $imei => $datos_imei)
 		{
-			foreach($datos_imei as $cel => $datos_cel)
+			foreach($datos_imei as $celular => $datos_cel)
 			{
-				$num_celular = (string) $cel;
+				$num_celular = (string) $celular;
 				$result_temp = $this->_get_datos_comerciales($imei, $num_celular);
 				$result_temp['celular'] = $num_celular;
 				$result_temp['imei'] = $imei;
@@ -403,9 +429,9 @@ class Analisis_series_model extends CI_Model {
 	/**
 	 * Recupera los datos comerciales de un par imei/celular
 	 *
-	 * @param  string  $imei     IMEI a consultar
-	 * @param  array   $celular  Celular a consultar
-	 * @return array             Arreglo con resultado
+	 * @param  string $imei    IMEI a consultar
+	 * @param  array  $celular Celular a consultar
+	 * @return array           Arreglo con resultado
 	 */
 	private function _get_datos_comerciales($imei = '', $celular = '')
 	{

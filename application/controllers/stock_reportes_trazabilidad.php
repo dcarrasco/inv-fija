@@ -1,16 +1,59 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Controller Reportes de stock
+ *
+ * @category CodeIgniter
+ * @package  Stock
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Stock_reportes_trazabilidad extends CI_Controller {
 
+	/**
+	 * Llave de identificación del módulo
+	 *
+	 * @var  string
+	 */
 	public $llave_modulo = 'j*&on238=B';
-	private $arr_menu = array();
 
+	/**
+	 * Menu de opciones
+	 *
+	 * @var  array
+	 */
+	private $_arr_menu = array();
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Constructor de la clase
+	 *
+	 * Define el submenu del modulo
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 
-		$this->arr_menu = array(
+		$this->_arr_menu = array(
 			'perm_consumo' => array('url' => $this->router->class . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
 			'det_consumo' => array('url' => $this->router->class . '/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
 		);
@@ -21,8 +64,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 	/**
 	 * Pagina index, ejecuta por defecto al no recibir parámetros
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function index()
 	{
@@ -36,7 +78,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 	 *
 	 * @param  string $tipo   Tipo de reporte
 	 * @param  string $param1 [description]
-	 * @return [type]
+	 * @return void
 	 */
 	public function listado($tipo = 'perm_consumo', $param1 = '')
 	{
@@ -62,37 +104,37 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		$incl_estado   = set_value('incl_estado');
 		$incl_modelos  = set_value('incl_modelos');
 
-		$new_orden_tipo  = ($orden_tipo == 'ASC') ? 'DESC' : 'ASC';
+		$new_orden_tipo  = ($orden_tipo === 'ASC') ? 'DESC' : 'ASC';
 		$view = 'listado';
 
-		if ($tipo == 'perm_consumo')
+		if ($tipo === 'perm_consumo')
 		{
-			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? 'tipo' : $orden_campo;
 			$datos_hoja = $this->reportestock_model->get_reporte_perm_consumo($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $incl_almacen, $incl_lote, $incl_estado, $incl_modelos);
 
 			$arr_campos = array();
 
 			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
 
-			if ($incl_almacen == '1')
+			if ($incl_almacen === '1')
 			{
 				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
 				$arr_campos['almacen'] = array('titulo' => 'CodAlm','class' => '', 'tipo' => 'texto');
 				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
 			}
 
-			if ($incl_estado == '1')
+			if ($incl_estado === '1')
 			{
 				$arr_campos['estado_sap'] = array('titulo' => 'Estado SAP','class' => '', 'tipo' => 'texto');
 			}
 
-			if ($incl_modelos == '1')
+			if ($incl_modelos === '1')
 			{
 				$arr_campos['material'] = array('titulo' => 'CodMat','class' => '', 'tipo' => 'texto');
 				$arr_campos['des_material'] = array('titulo' => 'Material','class' => '', 'tipo' => 'texto');
 			}
 
-			if ($incl_lote == '1')
+			if ($incl_lote === '1')
 			{
 				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
 			}
@@ -104,9 +146,9 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 			$arr_campos['mas180'] = array('titulo' => '+181', 'class' => 'text-center', 'tipo' => 'numero');
 			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center', 'tipo' => 'numero');
 		}
-		elseif ($tipo == 'det_consumo')
+		elseif ($tipo === 'det_consumo')
 		{
-			$orden_campo = ($orden_campo == '') ? 'tipo' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? 'tipo' : $orden_campo;
 			$datos_hoja = $this->reportestock_model->get_detalle_series_consumo($tipo_alm);
 
 			$arr_campos = array();
@@ -129,15 +171,15 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_link_campos[$campo] = $campo;
-			$arr_link_sort[$campo]   = (($campo == $orden_campo) ? $new_orden_tipo : 'ASC' );
-			$arr_img_orden[$campo]   = ($campo == $orden_campo)
-				? '<span class="glyphicon ' . (($orden_tipo == 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down')
+			$arr_link_sort[$campo] = $campo === $orden_campo ? $new_orden_tipo : 'ASC';
+			$arr_img_orden[$campo] = ($campo === $orden_campo)
+				? '<span class="glyphicon ' . (($orden_tipo === 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down')
 					. '"></span>'
 				: '';
 		}
 
 		$data = array(
-			'menu_modulo'        => array('menu' => $this->arr_menu, 'mod_selected' => $tipo),
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
 			'datos_hoja'      => $datos_hoja,
 			'tipo_reporte'    => $view,
 			'nombre_reporte'  => $tipo,

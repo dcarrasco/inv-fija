@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Inventario
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Inventario extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_inventario Identificador del inventario
+	 * @return void
+	 */
+	public function __construct($id_inventario = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_inventarios'),
 				'model_label'        => 'Inventario',
@@ -42,17 +74,22 @@ class Inventario extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_inventario)
 		{
-			$this->fill($id);
+			$this->fill($id_inventario);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del modelo
+	 *
+	 * @return string Inventario
+	 */
 	public function __toString()
 	{
 		return (string) $this->nombre;
@@ -98,18 +135,32 @@ class Inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Carga el registro del inventario activo
+	 *
+	 * @return void
+	 */
+	public function get_inventario_activo()
+	{
+		$inventario_activo = $this->get_id_inventario_activo();
+		$this->find_id($inventario_activo);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Devuelve el numero de la mayor hoja del inventario
 	 *
 	 * @return integer Numero de la hoja mayor
 	 */
 	public function get_max_hoja_inventario()
 	{
-		$rs = $this->CI->db
+		$registro = $this->CI->db
 			->select('max(hoja) as max_hoja')
 			->get_where($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id))
 			->row();
 
-		return ($rs->max_hoja);
+		return ($registro->max_hoja);
 	}
 
 
@@ -136,7 +187,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function cargar_datos_archivo($archivo = '')
 	{
-		$count_OK    = 0;
+		$count_ok    = 0;
 		$count_error = 0;
 		$num_linea   = 0;
 
@@ -149,18 +200,18 @@ class Inventario extends ORM_Model {
 			$num_linea += 1;
 			$resultado_procesa_linea = $this->_procesa_linea($linea);
 
-			if ($resultado_procesa_linea == 'no_procesar')
+			if ($resultado_procesa_linea === 'no_procesar')
 			{
 				// no se procesa esta linea
 			}
-			else if ($resultado_procesa_linea == 'error')
+			else if ($resultado_procesa_linea === 'error')
 			{
 				$count_error += 1;
 				array_push($arr_lineas_error, $num_linea);
 			}
 			else
 			{
-				$count_OK += 1;
+				$count_ok += 1;
 				if (is_array($resultado_procesa_linea))
 				{
 					$resultado_procesa_linea['count'] = $num_linea;
@@ -169,94 +220,96 @@ class Inventario extends ORM_Model {
 			}
 		}
 
-		$msj_termino = 'Total lineas: ' . ($count_OK + $count_error) . ' (OK: ' . $count_OK . '; Error: ' . $count_error . ')';
+		$msj_termino = 'Total lineas: ' . ($count_ok + $count_error) . ' (OK: ' . $count_ok . '; Error: ' . $count_error . ')';
 
 		if ($count_error > 0)
 		{
 			$msj_termino .= '<br>Lineas con errores (' . implode(', ', $arr_lineas_error) . ')';
 		}
 
-		return array('script' => $script_carga, 'regs_OK' => $count_OK, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
+		return array('script' => $script_carga, 'regs_OK' => $count_ok, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Procesa una linea de texto con datos de inventario y devuelve un string con la informacion
+	 *
+	 * @param  string $linea Linea de texto con informacion de inventario
+	 * @return mixed        Arreglo con información de inventario
+	 */
 	private function _procesa_linea($linea = '')
 	{
 		$linea = utf8_encode(trim($linea, "\r\n"));
 		$linea = str_replace("'", '"', $linea);
 
-		if ($linea != '')
+		// no error: linea en blanco
+		if ($linea === '')
 		{
-			$arr_datos = explode("\t", $linea);
+			return 'no_procesar';
+		}
 
-			if (count($arr_datos) == 9) // igual a 10 en caso de tener HU
+		$arr_datos = explode("\t", $linea);
+
+		// error: linea con cantidad de campos <> 9
+		if (count($arr_datos) !== 9) // igual a 10 en caso de tener HU
+		{
+			return 'error';
+		}
+
+		$arr_datos = array_combine(
+			array('ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'um', 'stock_sap', 'hoja'),
+			$arr_datos
+		);
+		extract($arr_datos);
+
+		if (strtoupper($ubicacion) === 'UBICACION' OR strtoupper($catalogo) === 'CATALOGO' OR
+			strtoupper($descripcion) === 'DESCRIPCION' OR
+			strtoupper($centro) === 'CENTRO' OR strtoupper($almacen) === 'ALMACEN' OR
+			strtoupper($lote) === 'LOTE' OR strtoupper($um) === 'UM' OR
+			strtoupper($stock_sap) === 'STOCK_SAP' OR strtoupper($hoja) === 'HOJA') // OR $hu === 'HU'
+		{
+			// cabecera del archivo, no se hace nada
+			return 'no_procesar';
+		}
+		else
+		{
+			if (is_numeric($stock_sap) AND is_numeric($hoja))
 			{
-				$arr_datos = array_combine(
-					array('ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'um', 'stock_sap', 'hoja'),
-					$arr_datos
-				);
-				extract($arr_datos);
-
-				if (strtoupper($ubicacion) == 'UBICACION' OR strtoupper($catalogo) == 'CATALOGO' OR
-					strtoupper($descripcion) == 'DESCRIPCION' OR
-					strtoupper($centro)    == 'CENTRO'    OR strtoupper($almacen)  == 'ALMACEN'  OR
-					strtoupper($lote)      == 'LOTE'      OR strtoupper($um)       == 'UM'       OR
-					strtoupper($stock_sap) == 'STOCK_SAP' OR strtoupper($hoja)     == 'HOJA') // OR $hu        == 'HU'
-				{
-					// cabecera del archivo, no se hace nada
-					return 'no_procesar';
-				}
-				else
-				{
-					if (is_numeric($stock_sap) and is_numeric($hoja))
-					{
-						return (array(
-							$this->CI->security->get_csrf_token_name() => $this->CI->security->get_csrf_hash(),
-							'id'                 => 0,
-							'id_inventario'      => $this->id,
-							'hoja'               => $hoja,
-							'ubicacion'          => $ubicacion,
-							'hu'                 => '',
-							'catalogo'           => $catalogo,
-							'descripcion'        => $descripcion,
-							'lote'               => $lote,
-							'centro'             => $centro,
-							'almacen'            => $almacen,
-							'um'                 => $um,
-							'stock_sap'          => $stock_sap,
-							'stock_fisico'       => 0,
-							'digitador'          => 0,
-							'auditor'            => 0,
-							'observacion'        => '',
-							'fecha_modificacion' => date('Ymd His'),
-							'reg_nuevo'          => '',
-							'stock_ajuste'       => 0,
-							'glosa_ajuste'       => '',
-						));
-
-					}
-					else
-					{
-						// error: stock y/o hoja no son numericos
-						return 'error';
-					}
-				}
+				return (array(
+					$this->CI->security->get_csrf_token_name() => $this->CI->security->get_csrf_hash(),
+					'id'                 => 0,
+					'id_inventario'      => $this->id,
+					'hoja'               => $hoja,
+					'ubicacion'          => $ubicacion,
+					'hu'                 => '',
+					'catalogo'           => $catalogo,
+					'descripcion'        => $descripcion,
+					'lote'               => $lote,
+					'centro'             => $centro,
+					'almacen'            => $almacen,
+					'um'                 => $um,
+					'stock_sap'          => $stock_sap,
+					'stock_fisico'       => 0,
+					'digitador'          => 0,
+					'auditor'            => 0,
+					'observacion'        => '',
+					'fecha_modificacion' => date('Ymd His'),
+					'reg_nuevo'          => '',
+					'stock_ajuste'       => 0,
+					'glosa_ajuste'       => '',
+				));
 
 			}
 			else
 			{
-				// error: linea con cantidad de campos <> 9
+				// error: stock y/o hoja no son numericos
 				return 'error';
 			}
 		}
-		else
-		{
-			// no error: linea en blanco
-			return 'no_procesar';
-		}
 	}
+
 
 
 }

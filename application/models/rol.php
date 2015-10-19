@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Rol
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  ACL
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Rol extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_rol Identificador del modulo
+	 * @return void
+	 */
+	public function __construct($id_rol = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_rol'),
 				'model_label'        => 'Rol',
@@ -52,17 +84,22 @@ class Rol extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_rol)
 		{
-			$this->fill($id);
+			$this->fill($id_rol);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del rol
+	 *
+	 * @return string Proveedor
+	 */
 	public function __toString()
 	{
 		return (string) $this->rol;

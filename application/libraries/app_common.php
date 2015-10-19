@@ -1,8 +1,36 @@
-<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if (!defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase con functionalidades comunes de la aplicacion
+ * *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class App_common {
 
-
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		$this->load->helper('cookie');
@@ -11,16 +39,24 @@ class App_common {
 
 	// --------------------------------------------------------------------
 
-	public function __get($key)
+	/**
+	 * Funcion que permite recuperar objetos de la instancia global
+	 *
+	 * @param  string $key Llave a recuperar
+	 * @return mixed       Objeto CI
+	 */
+	public function __get($key = '')
 	{
-		$CI =& get_instance();
-		return $CI->$key;
+		$ci =& get_instance();
+
+		return $ci->$key;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve arreglo con el menu de las aplicaciones del sistema
+	 *
 	 * @return string    Texto con el menu (<ul>) de las aplicaciones
 	 */
 	public function menu_app()
@@ -34,7 +70,7 @@ class App_common {
 
 		foreach($arr_modulos as $modulo)
 		{
-			if ($modulo['app'] != $app_ant and $app_ant != '')
+			if ($modulo['app'] !== $app_ant AND $app_ant !== '')
 			{
 				array_push($arr_apps, array(
 					'selected' => $app_sel,
@@ -46,7 +82,7 @@ class App_common {
 				$app_sel = '';
 			}
 
-			if ($this->uri->segment(1) == $modulo['url'])
+			if ($this->uri->segment(1) === $modulo['url'])
 			{
 				$app_sel = 'active';
 			}
@@ -74,18 +110,19 @@ class App_common {
 	// --------------------------------------------------------------------
 
 	/**
-	 * [titulo_modulo description]
+	 * Devuelve el titulo del modulo
+	 *
 	 * @return string Titulo del modulo
 	 */
 	public function titulo_modulo()
 	{
 		$arr_modulos = $this->acl_model->get_user_menu();
 
-		foreach ($arr_modulos as $mods)
+		foreach ($arr_modulos as $modulo)
 		{
-			if($mods['url'] == $this->uri->segment(1))
+			if($modulo['url'] === $this->uri->segment(1))
 			{
-				return '<span class="' . $mods['modulo_icono'] . ' "></span>&nbsp;&nbsp;' . $mods['modulo'];
+				return '<span class="' . $modulo['modulo_icono'] . ' "></span>&nbsp;&nbsp;' . $modulo['modulo'];
 			}
 		}
 
@@ -96,6 +133,7 @@ class App_common {
 
 	/**
 	 * Devuelve listado con el menu modulo
+	 *
 	 * @param  string $op_selected opción del módulo seleccionada
 	 * @param  array  $menu        menu
 	 * @return sring               listado menu
@@ -104,11 +142,12 @@ class App_common {
 	{
 		$menu = '<ul class="nav nav-tabs">';
 
-		foreach($menu as $key => $val)
+		foreach($menu as $llave => $valor)
 		{
-			$selected = ($key == $op_selected) ? ' class="active"' : '';
-			$menu .= '<li' . $selected . '>' . anchor($val['url'], $val['texto']) . '</li>';
+			$selected = ($llave === $op_selected) ? ' class="active"' : '';
+			$menu .= '<li' . $selected . '>' . anchor($valor['url'], $valor['texto']) . '</li>';
 		}
+
 		$menu .= '</ul>';
 
 		return $menu;
@@ -119,7 +158,8 @@ class App_common {
 
 	/**
 	 * Configura los parámetros del módulo form_validation
-	 * @return none
+	 *
+	 * @return void
 	 */
 	public function form_validation_config()
 	{
@@ -140,74 +180,76 @@ class App_common {
 	// --------------------------------------------------------------------
 
 	/**
-	 * [formato_reporte description]
-	 * @param  string $valor           [description]
-	 * @param  array  $arr_param_campo [description]
+	 * Formatea un valor de acuerdo a los parametros de un reporte
+	 *
+	 * @param  string $valor           Valor a formatear
+	 * @param  array  $arr_param_campo Parametros del campo
 	 * @param  array  $reg             [description]
 	 * @param  string $campo           [description]
 	 * @return [type]                  [description]
 	 */
-	public function formato_reporte($valor = '', $arr_param_campo = array(), $reg = array(), $campo = '')
+	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
 		switch ($arr_param_campo['tipo'])
 		{
 			case 'texto':
-				return $valor;
-				break;
+							return $valor;
+							break;
 			case 'link':
-				return anchor($arr_param_campo['href'] . $valor, $valor);
-				break;
+							return anchor($arr_param_campo['href'] . $valor, $valor);
+							break;
 			case 'link_detalle_series':
-				$id_tipo        = array_key_exists('id_tipo', $reg) ? $reg['id_tipo'] : '';
-				$centro         = array_key_exists('centro', $reg) ? $reg['centro'] : '';
-				$almacen        = array_key_exists('almacen', $reg) ? $reg['almacen'] : '';
-				$lote           = array_key_exists('lote', $reg) ? $reg['lote'] : '';
-				$estado_stock   = array_key_exists('estado_stock', $reg) ? $reg['estado_stock'] : '';
-				$material       = array_key_exists('material', $reg) ? $reg['material'] : '';
-				$tipo_material  = array_key_exists('tipo_material', $reg) ? $reg['tipo_material']: '';
-				$permanencia    = $campo;
+							$id_tipo        = array_key_exists('id_tipo', $registro) ? $registro['id_tipo'] : '';
+							$centro         = array_key_exists('centro', $registro) ? $registro['centro'] : '';
+							$almacen        = array_key_exists('almacen', $registro) ? $registro['almacen'] : '';
+							$lote           = array_key_exists('lote', $registro) ? $registro['lote'] : '';
+							$estado_stock   = array_key_exists('estado_stock', $registro) ? $registro['estado_stock'] : '';
+							$material       = array_key_exists('material', $registro) ? $registro['material'] : '';
+							$tipo_material  = array_key_exists('tipo_material', $registro) ? $registro['tipo_material']: '';
+							$permanencia    = $campo;
 
-				$href_param  = '?id_tipo=' . $id_tipo;
-				$href_param .= '&centro=' . $centro;
-				$href_param .= '&almacen=' . $almacen;
-				$href_param .= '&lote=' . $lote;
-				$href_param .= '&estado_stock=' . $estado_stock;
-				$href_param .= '&material=' . $material;
-				$href_param .= '&tipo_material=' . $tipo_material;
-				$href_param .= '&permanencia=' . $permanencia;
+							$href_param  = '?id_tipo=' . $id_tipo;
+							$href_param .= '&centro=' . $centro;
+							$href_param .= '&almacen=' . $almacen;
+							$href_param .= '&lote=' . $lote;
+							$href_param .= '&estado_stock=' . $estado_stock;
+							$href_param .= '&material=' . $material;
+							$href_param .= '&tipo_material=' . $tipo_material;
+							$href_param .= '&permanencia=' . $permanencia;
 
-				return anchor($arr_param_campo['href'] . $href_param, fmt_cantidad($valor));
-				break;
+							$valor_desplegar = fmt_cantidad($valor);
+							return anchor($arr_param_campo['href'] . $href_param, $valor_desplegar === '' ? ' ' : $valor_desplegar);
+							break;
 			case 'numero':
-				return fmt_cantidad($valor);
-				break;
+							return fmt_cantidad($valor);
+							break;
 			case 'valor':
-				return fmt_monto($valor);
-				break;
+							return fmt_monto($valor);
+							break;
 			case 'valor_pmp':
-				return fmt_monto($valor);
-				break;
+							return fmt_monto($valor);
+							break;
 			case 'numero_dif':
-				return '<strong>' .
-					(($valor > 0)
-						? '<p class="text-success">'
-						: (($valor < 0) ? '<p class="text-danger">' : '')) .
-					(($valor > 0) ? '+' : '') . fmt_cantidad($valor) .
-					(($valor != 0) ? '</p>' : '') .
-					'</strong>';
-				break;
+							return '<strong>' .
+								(($valor > 0)
+									? '<p class="text-success">'
+									: (($valor < 0) ? '<p class="text-danger">' : '')) .
+								(($valor > 0) ? '+' : '') . fmt_cantidad($valor) .
+								(($valor !== 0) ? '</p>' : '') .
+								'</strong>';
+							break;
 			case 'valor_dif':
-				return '<strong>' .
-					(($valor > 0)
-						? '<p class="text-success">'
-						: (($valor < 0) ? '<p class="text-danger">' : '')) .
-					(($valor > 0) ? '+' : '') . fmt_monto($valor) .
-					(($valor != 0) ? '</p>' : '') .
-					'</strong>';
-				break;
+							return '<strong>' .
+								(($valor > 0)
+									? '<p class="text-success">'
+									: (($valor < 0) ? '<p class="text-danger">' : '')) .
+								(($valor > 0) ? '+' : '') . fmt_monto($valor) .
+								(($valor !== 0) ? '</p>' : '') .
+								'</strong>';
+							break;
 			default:
-				return $valor;
-				break;
+							return $valor;
+							break;
 		}
 
 	}
@@ -217,9 +259,10 @@ class App_common {
 
 	/**
 	 * Imprime reporte
-	 * @param  array  $arr_campos      [description]
-	 * @param  array  $arr_datos       [description]
-	 * @return string                  [description]
+	 *
+	 * @param  array $arr_campos Arreglo con los campos del reporte
+	 * @param  array $arr_datos  Arreglo con los datos del reporte
+	 * @return string             Reporte
 	 */
 	public function reporte($arr_campos = array(), $arr_datos = array())
 	{
@@ -239,7 +282,7 @@ class App_common {
 		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
-			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
+			array_push($tabla, '<th ' . (($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
 			array_push($tabla, '<span order_by="' . $campo . '" order_sort="' . $arr_param_campo['order_by'] . '" data-toggle="tooltip" title="Ordenar por campo \'' . $arr_param_campo['titulo'] . '\'">' . $arr_param_campo['titulo'] . '</span>');
 			array_push($tabla, $arr_param_campo['img_orden']);
 			array_push($tabla, '</th>');
@@ -255,7 +298,7 @@ class App_common {
 
 		// --- CUERPO REPORTE ---
 		array_push($tabla, '<tbody>');
-		foreach ($arr_datos as $reg)
+		foreach ($arr_datos as $registro)
 		{
 			array_push($tabla, '<tr>');
 			array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
@@ -263,21 +306,21 @@ class App_common {
 			foreach ($arr_campos as $campo => $arr_param_campo)
 			{
 				// Si el primer campo es un subtotal, inserta título del campo
-				if ($arr_param_campo['tipo'] == 'subtotal')
+				if ($arr_param_campo['tipo'] === 'subtotal')
 				{
-					if (!array_key_exists($campo, $subtot_ant))
+					if ( ! array_key_exists($campo, $subtot_ant))
 					{
 						$subtot_ant[$campo] = '';
 					}
 
 					// Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales
-					if ($reg[$campo] != $subtot_ant[$campo])
+					if ($registro[$campo] !== $subtot_ant[$campo])
 					{
-						if ($subtot_ant[$campo] != '')
+						if ($subtot_ant[$campo] !== '')
 						{
 							foreach ($arr_campos as $c => $arr_c)
 							{
-								array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+								array_push($tabla, '<td ' . (($arr_c === '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
 								array_push($tabla, '<strong>');
 								array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
 								array_push($tabla, '</strong>');
@@ -292,12 +335,12 @@ class App_common {
 							array_push($tabla, '<tr>');
 						}
 
-						if ($subtot_ant[$campo] != '')
+						if ($subtot_ant[$campo] !== '')
 						{
 							array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
 						}
 
-						$subtot_ant[$campo] = $reg[$campo];
+						$subtot_ant[$campo] = $registro[$campo];
 						foreach ($arr_campos as $c => $arr_c)
 						{
 							$subtotales[$c] = 0;
@@ -305,7 +348,7 @@ class App_common {
 
 						array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">');
 						array_push($tabla, '<strong>');
-						array_push($tabla, ($arr_param_campo['tipo'] == 'subtotal')  ? $reg[$campo] : '');
+						array_push($tabla, ($arr_param_campo['tipo'] === 'subtotal')  ? $registro[$campo] : '');
 						array_push($tabla, '</strong>');
 						array_push($tabla, '</td>');
 						array_push($tabla, '</tr>');
@@ -315,18 +358,18 @@ class App_common {
 					}
 				}
 
-				array_push($tabla, '<td ' . (($arr_param_campo == '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
-				array_push($tabla, $this->formato_reporte($reg[$campo], $arr_param_campo, $reg, $campo));
+				array_push($tabla, '<td ' . (($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"') . '>');
+				array_push($tabla, $this->formato_reporte($registro[$campo], $arr_param_campo, $registro, $campo));
 				array_push($tabla, '</td>');
 
 				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
 				{
-					$totales[$campo] += $reg[$campo];
+					$totales[$campo] += $registro[$campo];
 				}
 
 				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
 				{
-					$subtotales[$campo] += $reg[$campo];
+					$subtotales[$campo] += $registro[$campo];
 				}
 			}
 
@@ -336,12 +379,12 @@ class App_common {
 		//ultima linea de subtotales
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
-			if ($arr_param_campo['tipo'] == 'subtotal')
+			if ($arr_param_campo['tipo'] === 'subtotal')
 			{
 				array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
 				foreach ($arr_campos as $c => $arr_c)
 				{
-					array_push($tabla, '<td ' . (($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+					array_push($tabla, '<td ' . (($arr_c === '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
 					array_push($tabla, '<strong>');
 					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
 					array_push($tabla, '</strong>');
@@ -362,7 +405,7 @@ class App_common {
 		array_push($tabla, '<th></th>');
 		foreach ($arr_campos as $campo => $arr_param_campo)
 		{
-			array_push($tabla, '<th ' . (($arr_param_campo == '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"') . '>');
+			array_push($tabla, '<th ' . (($arr_param_campo === '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"') . '>');
 			array_push($tabla, in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($totales[$campo], $arr_param_campo) : '');
 			array_push($tabla, '</th>');
 		}

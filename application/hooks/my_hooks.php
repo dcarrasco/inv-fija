@@ -1,33 +1,62 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Hook Funcionalidad a ejecutar en todos los controladores
+ * *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class MY_Hooks {
 
+	/**
+	 * Funciones y operaciones ejecutadas con todos los controladores
+	 *
+	 * @return void
+	 */
 	public function acl_hook()
 	{
-		$CI_local =& get_instance();
+		$ci =& get_instance();
 
-		$CI_local->load->model('acl_model');
-		$CI_local->config->load('inv-fija');
+		$ci->load->model('acl_model');
+		$ci->config->load('inv-fija');
 
-		$class = $CI_local->router->fetch_class();
+		$class = $ci->router->fetch_class();
 
-		$llave_modulo = property_exists($class, 'llave_modulo') ? $CI_local->llave_modulo : '';
+		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
-		if ($class != 'login' AND $class != 'migration')
+		if ($class !== 'login' AND $class !== 'migration')
 		{
-			if (! $CI_local->acl_model->autentica($llave_modulo))
+			if ( ! $ci->acl_model->autentica($llave_modulo))
 			{
 				redirect('login/');
 			}
 		}
 
-		if (ENVIRONMENT != 'production')
+		if (ENVIRONMENT !== 'production')
 		{
-			//$CI_local->output->enable_profiler(TRUE);
+			//$ci->output->enable_profiler(TRUE);
 		}
 
 		// log información
-		log_message('debug', 'Request User: ' . $CI_local->session->user . ', URI: '. $CI_local->uri->uri_string());
+		log_message('debug', 'Request User: ' . $ci->session->user . ', URI: '. $ci->uri->uri_string());
 	}
 
 }

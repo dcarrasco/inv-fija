@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Detalle de inventario
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Detalle_inventario extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_detalle Identificador del detalle de inventario
+	 * @return void
+	 */
+	public function __construct($id_detalle = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_detalle_inventario'),
 				'model_label'        => 'Detalle inventario',
@@ -149,23 +181,26 @@ class Detalle_inventario extends ORM_Model {
 				),
 			),
 		);
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
 
-		if ($id)
+		if ($id_detalle)
 		{
-			$this->fill($id);
+			$this->fill($id_detalle);
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del modelo
+	 *
+	 * @return string Detalle de inventario (hoja)
+	 */
 	public function __toString()
 	{
 		return (string) $this->hoja;
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -181,7 +216,6 @@ class Detalle_inventario extends ORM_Model {
 		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -193,14 +227,13 @@ class Detalle_inventario extends ORM_Model {
 	{
 		if (count($this->get_model_all()) > 0)
 		{
-			$all = $this->get_model_all();
-			$all_fields = $all[0]->get_model_fields();
-			$rel = $all_fields['auditor']->get_relation();
+			$arr_detalles = $this->get_model_all();
+			$all_fields = $arr_detalles[0]->get_model_fields();
+			$relacion = $all_fields['auditor']->get_relation();
 
-			return $rel['data']->nombre;
+			return $relacion['data']->nombre;
 		}
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -213,16 +246,15 @@ class Detalle_inventario extends ORM_Model {
 	{
 		if (count($this->get_model_all()) > 0)
 		{
-			$all = $this->get_model_all();
+			$arr_detalles = $this->get_model_all();
 
-			return $all[0]->auditor;
+			return $arr_detalles[0]->auditor;
 		}
 		else
 		{
 			return 0;
 		}
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -235,13 +267,13 @@ class Detalle_inventario extends ORM_Model {
 	{
 		if(count($this->get_model_all()) > 0)
 		{
-			$all = $this->get_model_all();
-			$all_fields = $all[0]->get_model_fields();
-			$rel = $all_fields['digitador']->get_relation();
+			$arr_detalles = $this->get_model_all();
+			$all_fields = $arr_detalles[0]->get_model_fields();
+			$relacion = $all_fields['digitador']->get_relation();
 
-			return $rel['data']->nombre;
+			return $relacion['data']->nombre;
 		}
-		else if ($this->digitador != 0)
+		else if ($this->digitador !== 0)
 		{
 			return $this->digitador;
 		}
@@ -258,15 +290,15 @@ class Detalle_inventario extends ORM_Model {
 	 * Recuoera las lineas de detalle del inventario para ajustar
 	 * @param  integer $id_inventario         ID del inventario a consultar
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
-	 * @param  integer $pag                   pagina a mostrar
+	 * @param  integer $pagina                Pagina a mostrar
 	 * @return array                          Arreglo con el detalle de los registros
 	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pag = 0)
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
 	{
 		//determina la cantidad de registros
 		$total_rows = $this->CI->db
 			->where('id_inventario', $id_inventario)
-			->where(($ocultar_regularizadas == 1)
+			->where(($ocultar_regularizadas === 1)
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
@@ -275,14 +307,14 @@ class Detalle_inventario extends ORM_Model {
 		// recupera el detalle de registros
 		$per_page = 50;
 
-		$rs = $this->CI->db
+		$arr_detalles = $this->CI->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
 			->where('id_inventario', $id_inventario)
-			->where(($ocultar_regularizadas == 1)
+			->where(($ocultar_regularizadas === 1)
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
-			->limit($per_page, $pag)
+			->limit($per_page, $pagina)
 			->get($this->get_model_tabla())
 			->result_array();
 
@@ -318,10 +350,10 @@ class Detalle_inventario extends ORM_Model {
 		$this->CI->pagination->initialize($cfg_pagination);
 
 		$model_all = array();
-		foreach($rs as $reg)
+		foreach($arr_detalles as $registro)
 		{
-			$o = new Detalle_inventario($reg);
-			array_push($model_all, $o);
+			$detalle_inventario = new Detalle_inventario($registro);
+			array_push($model_all, $detalle_inventario);
 		}
 		$this->set_model_all($model_all);
 

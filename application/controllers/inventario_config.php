@@ -1,12 +1,56 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Controller Configuracion Inventario
+ *
+ * Utiliza ORM_Controller
+ *
+ * @category CodeIgniter
+ * @package  Inventario
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Inventario_config extends ORM_Controller {
 
+	/**
+	 * Llave de identificación del módulo
+	 *
+	 * @var  string
+	 */
 	public $llave_modulo  = 'config2';
+
+	/**
+	 * Titulo del modulo
+	 *
+	 * @var  string
+	 */
 	public $titulo_modulo = 'Configuracion';
 
+	// --------------------------------------------------------------------
 
-
+	/**
+	 * Constructor de la clase
+	 *
+	 * Define el submenu del modulo
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -35,10 +79,10 @@ class Inventario_config extends ORM_Controller {
 	/**
 	 * Asociacion de ubicaciones con el tipo de ubicacion
 	 *
-	 * @param  integer $pag Numero de pagina a desplegar
+	 * @param  integer $pagina Numero de pagina a desplegar
 	 * @return nada
 	 */
-	public function ubicacion_tipo_ubicacion($pag = 0)
+	public function ubicacion_tipo_ubicacion($pagina = 0)
 	{
 		$tipo_inventario = new Tipo_inventario;
 		$this->load->model('ubicacion_model');
@@ -75,43 +119,45 @@ class Inventario_config extends ORM_Controller {
 		);
 		$this->pagination->initialize($config_pagination);
 
-		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pag);
+		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pagina);
 
-		if ($this->input->post('formulario')=='editar')
+		if ($this->input->post('formulario') === 'editar')
 		{
-			foreach($datos_hoja as $reg)
+			foreach($datos_hoja as $registro)
 			{
-				$this->form_validation->set_rules($reg['id'].'-tipo_inventario', 'Tipo Inventario', 'trim|required');
-				$this->form_validation->set_rules($reg['id'].'-tipo_ubicacion',  'Tipo Ubicacion', 'trim|required');
-				$this->form_validation->set_rules($reg['id'].'-ubicacion',  'Ubicacion', 'trim|required');
+				$this->form_validation->set_rules($registro['id'].'-tipo_inventario', 'Tipo Inventario', 'trim|required');
+				$this->form_validation->set_rules($registro['id'].'-tipo_ubicacion', 'Tipo Ubicacion', 'trim|required');
+				$this->form_validation->set_rules($registro['id'].'-ubicacion', 'Ubicacion', 'trim|required');
 			}
 		}
-		else if ($this->input->post('formulario')=='agregar')
+		else if ($this->input->post('formulario') === 'agregar')
 		{
 			$this->form_validation->set_rules('agr-tipo_inventario', 'Tipo de inventario', 'trim|required');
 			$this->form_validation->set_rules('agr-ubicacion[]', 'Ubicaciones', 'trim|required');
 			$this->form_validation->set_rules('agr-tipo_ubicacion', 'Tipo de ubicacion', 'trim|required');
 		}
-		else if ($this->input->post('formulario')=='borrar')
+		else if ($this->input->post('formulario') === 'borrar')
 		{
 			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
 		}
 
 		$this->app_common->form_validation_config();
 
-		if ($this->form_validation->run() == FALSE)
+		if ($this->form_validation->run() === FALSE)
 		{
 			$arr_combo_tipo_ubic = array();
-			foreach($datos_hoja as $reg)
+
+			foreach($datos_hoja as $registro)
 			{
-				if (!array_key_exists($reg['tipo_inventario'], $arr_combo_tipo_ubic))
+				if ( ! array_key_exists($registro['tipo_inventario'], $arr_combo_tipo_ubic))
 				{
-					$arr_combo_tipo_ubic[$reg['tipo_inventario']] = array();
+					$arr_combo_tipo_ubic[$registro['tipo_inventario']] = array();
 				}
 			}
-			foreach($arr_combo_tipo_ubic as $key => $val)
+
+			foreach($arr_combo_tipo_ubic as $llave => $valor)
 			{
-				$arr_combo_tipo_ubic[$key] = $this->ubicacion_model->get_combo_tipos_ubicacion($key);
+				$arr_combo_tipo_ubic[$llave] = $this->ubicacion_model->get_combo_tipos_ubicacion($llave);
 			}
 
 			$data = array(
@@ -123,25 +169,25 @@ class Inventario_config extends ORM_Controller {
 				'links_paginas'          => $this->pagination->create_links(),
 			);
 
-			$this->_render_view('ubicacion_tipo_ubicacion', $data);
+			app_render_view('ubicacion_tipo_ubicacion', $data);
 		}
 		else
 		{
-			if ($this->input->post('formulario') == 'editar')
+			if ($this->input->post('formulario') === 'editar')
 			{
 				$cant_modif = 0;
 
-				foreach($datos_hoja as $reg)
+				foreach($datos_hoja as $registro)
 				{
-					if ((set_value($reg['id'].'-tipo_inventario') != $reg['tipo_inventario']) or
-						(set_value($reg['id'].'-ubicacion')       != $reg['ubicacion']) or
-						(set_value($reg['id'].'-tipo_ubicacion')  != $reg['id_tipo_ubicacion']))
+					if ((set_value($registro['id'].'-tipo_inventario') !== $registro['tipo_inventario']) OR
+						(set_value($registro['id'].'-ubicacion')       !== $registro['ubicacion']) OR
+						(set_value($registro['id'].'-tipo_ubicacion')  !== $registro['id_tipo_ubicacion']))
 					{
 						$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
-							$reg['id'],
-							set_value($reg['id'] . '-tipo_inventario'),
-							set_value($reg['id'] . '-ubicacion'),
-							set_value($reg['id'] . '-tipo_ubicacion')
+							$registro['id'],
+							set_value($registro['id'] . '-tipo_inventario'),
+							set_value($registro['id'] . '-ubicacion'),
+							set_value($registro['id'] . '-tipo_ubicacion')
 						);
 						$cant_modif += 1;
 					}
@@ -152,28 +198,30 @@ class Inventario_config extends ORM_Controller {
 						: ''
 				));
 			}
-			else if ($this->input->post('formulario') == 'agregar')
+			else if ($this->input->post('formulario') === 'agregar')
 			{
 				$count = 0;
-				foreach($this->input->post('agr-ubicacion') as $val)
+
+				foreach($this->input->post('agr-ubicacion') as $valor)
 				{
 					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
 						0,
 						set_value('agr-tipo_inventario'),
-						$val,
+						$valor,
 						set_value('agr-tipo_ubicacion')
 					);
 					$count += 1;
 				}
+
 				$this->session->set_flashdata('msg_alerta', 'Se agregaron ' . $count . ' ubicaciones correctamente');
 			}
-			else if ($this->input->post('formulario') == 'borrar')
+			else if ($this->input->post('formulario') === 'borrar')
 			{
 				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
 				$this->session->set_flashdata('msg_alerta', 'Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
 			}
 
-			redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pag);
+			redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pagina);
 		}
 	}
 

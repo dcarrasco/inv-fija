@@ -1,10 +1,47 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Controller Revision de logs servidor
+ * *
+ * @category CodeIgniter
+ * @package  AdministradorBD
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Adminbd_logs extends CI_Controller {
 
+	/**
+	 * Llave de identificación del módulo
+	 *
+	 * @var  string
+	 */
 	public $llave_modulo = 'j8hdajhJKHHu12';
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * Define el submenu del modulo
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -27,8 +64,7 @@ class Adminbd_logs extends CI_Controller {
 	/**
 	 * Pagina index, ejecuta por defecto al no recibir parámetros
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function index()
 	{
@@ -41,8 +77,7 @@ class Adminbd_logs extends CI_Controller {
 	/**
 	 * Permite mostrar log de borrado de logs sql
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function borra_log()
 	{
@@ -52,10 +87,9 @@ class Adminbd_logs extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Permite mostrar log de borrado de logs sql
+	 * Permite mostrar log de regeneracion de indices
 	 *
-	 * @param  none
-	 * @return none
+	 * @return void
 	 */
 	public function indices()
 	{
@@ -67,10 +101,11 @@ class Adminbd_logs extends CI_Controller {
 	/**
 	 * Permite mostrar un archivo de texto
 	 *
-	 * @param  string $archivo Ruta y nombre del archivo a mostrar
-	 * @return none
+	 * @param string $archivo Ruta y nombre del archivo a mostrar
+	 * @param string $menu    Opcion de menu seleccionada
+	 * @return void
 	 */
-	private function _show_file($archivo, $menu)
+	private function _show_file($archivo = '', $menu = '')
 	{
 		$log_file = array();
 

@@ -1,7 +1,36 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Stock SAP
+ *
+ * @category CodeIgniter
+ * @package  ACL
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class stock_sap_model extends CI_Model {
 
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,9 +39,17 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera stock fijo o movil
+	 *
+	 * @param  string $tipo_op Indicador del tipo de operación
+	 * @param  array  $mostrar Arreglo con campos a mostrar
+	 * @param  array  $filtrar Arreglo con campos a filtrar
+	 * @return array           Arreglo con stock
+	 */
 	public function get_stock($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
-		if ($tipo_op == 'MOVIL')
+		if ($tipo_op === 'MOVIL')
 		{
 			return $this->_get_stock_movil($mostrar, $filtrar);
 		}
@@ -25,7 +62,14 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function _get_stock_movil($mostrar = array(), $filtrar = array())
+	/**
+	 * Recupera stock operación movil
+	 *
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con campos a filtrar
+	 * @return array          Arreglo con stock
+	 */
+	private function _get_stock_movil($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
 
@@ -38,7 +82,7 @@ class stock_sap_model extends CI_Model {
 		}
 
 		// tipo de almacen
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->select('t.tipo as tipo_almacen');
 			$this->db->group_by('t.tipo');
@@ -101,43 +145,43 @@ class stock_sap_model extends CI_Model {
 				$this->db->select_sum('s.bloqueado', 'BQ');
 				$this->db->select_sum('s.contro_calidad', 'CC');
 				$this->db->select_sum('s.transito_traslado', 'TT');
-				$this->db->select_sum('s.otros','OT');
+				$this->db->select_sum('s.otros', 'OT');
 
 				$this->db->select_sum('(s.VAL_LU)', 'VAL_LU');
 				$this->db->select_sum('(s.VAL_BQ)', 'VAL_BQ');
 				$this->db->select_sum('(s.VAL_CQ)', 'VAL_CC');
 				$this->db->select_sum('(s.VAL_TT)', 'VAL_TT');
-				$this->db->select_sum('(s.VAL_OT)','VAL_OT');
+				$this->db->select_sum('(s.VAL_OT)', 'VAL_OT');
 			}
 			else
 			{
-				$this->db->select_sum('s.LU','LU');
-				$this->db->select_sum('s.BQ','BQ');
-				$this->db->select_sum('s.CC','CC');
-				$this->db->select_sum('s.TT','TT');
-				$this->db->select_sum('s.OT','OT');
+				$this->db->select_sum('s.LU', 'LU');
+				$this->db->select_sum('s.BQ', 'BQ');
+				$this->db->select_sum('s.CC', 'CC');
+				$this->db->select_sum('s.TT', 'TT');
+				$this->db->select_sum('s.OT', 'OT');
 
-				$this->db->select_sum('s.V_LU','VAL_LU');
-				$this->db->select_sum('s.V_BQ','VAL_BQ');
-				$this->db->select_sum('s.V_CC','VAL_CC');
-				$this->db->select_sum('s.V_TT','VAL_TT');
-				$this->db->select_sum('s.V_OT','VAL_OT');
+				$this->db->select_sum('s.V_LU', 'VAL_LU');
+				$this->db->select_sum('s.V_BQ', 'VAL_BQ');
+				$this->db->select_sum('s.V_CC', 'VAL_CC');
+				$this->db->select_sum('s.V_TT', 'VAL_TT');
+				$this->db->select_sum('s.V_OT', 'VAL_OT');
 			}
 		}
 
 		if (in_array('material', $mostrar))
 		{
-			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)','total');
-			$this->db->select_sum('(s.VAL_LU + s.VAL_BQ + s.VAL_CQ + s.VAL_TT + s.VAL_OT)','VAL_total');
+			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)', 'total');
+			$this->db->select_sum('(s.VAL_LU + s.VAL_BQ + s.VAL_CQ + s.VAL_TT + s.VAL_OT)', 'VAL_total');
 		}
 		else
 		{
-			$this->db->select_sum('s.cant','total');
-			$this->db->select_sum('s.monto','VAL_total');
+			$this->db->select_sum('s.cant', 'total');
+			$this->db->select_sum('s.monto', 'VAL_total');
 		}
 
 		// tablas
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->from($this->config->item('bd_tiposalm_sap') . ' t');
 			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.id_tipo = t.id_tipo');
@@ -158,7 +202,7 @@ class stock_sap_model extends CI_Model {
 			if (in_array('material', $mostrar))
 			{
 				$this->db->from($this->config->item('bd_stock_movil') . ' s');
-				$this->db->join($this->config->item('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
+				$this->db->join($this->config->item('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'", 'left');
 				$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
 			}
 			else
@@ -179,7 +223,7 @@ class stock_sap_model extends CI_Model {
 		}
 
 		// tipos de almacen
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->where_in('t.id_tipo', $filtrar['almacenes']);
 		}
@@ -234,25 +278,26 @@ class stock_sap_model extends CI_Model {
 		$arr_stock_tmp01 = array();
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
 		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
-		if (in_array('tipo_articulo', $mostrar) and !(in_array('tipo_stock', $mostrar)))
+		if (in_array('tipo_articulo', $mostrar) AND  ! in_array('tipo_stock', $mostrar))
 		{
-			foreach($arr_result as $reg)
+			foreach($arr_result as $registro)
 			{
 				$arr_reg = array();
 				$llave_total = '';
 				$valor_total = 0;
 				$valor_monto = 0;
-				foreach ($reg as $campo_key => $campo_val)
+
+				foreach ($registro as $campo_key => $campo_val)
 				{
-					if ($campo_key == 'tipo_articulo')
+					if ($campo_key === 'tipo_articulo')
 					{
 						$llave_total = $campo_val;
 					}
-					else if ($campo_key == 'total')
+					else if ($campo_key === 'total')
 					{
 						$valor_total = $campo_val;
 					}
-					else if ($campo_key == 'VAL_total')
+					else if ($campo_key === 'VAL_total')
 					{
 						$valor_monto = $campo_val;
 					}
@@ -270,7 +315,8 @@ class stock_sap_model extends CI_Model {
 			$arr_stock = array();
 			$llave_ant = '';
 			$i = 0;
-			foreach($arr_stock_tmp01 as $reg)
+
+			foreach($arr_stock_tmp01 as $registro)
 			{
 				$i += 1;
 				$llave_act = '';
@@ -281,14 +327,14 @@ class stock_sap_model extends CI_Model {
 
 				// determina la llave actual y el valor del campo total
 				$arr_tmp = array();
-				foreach ($reg as $campo_key => $campo_val)
+				foreach ($registro as $campo_key => $campo_val)
 				{
-					if ($campo_key == 'EQUIPOS' || $campo_key == 'OTROS' || $campo_key == 'SIMCARD')
+					if ($campo_key === 'EQUIPOS' OR $campo_key === 'OTROS' OR $campo_key === 'SIMCARD')
 					{
 						$llave_total = $campo_key;
 						$valor_total = $campo_val;
 					}
-					else if ($campo_key == 'VAL_EQUIPOS' || $campo_key == 'VAL_OTROS' || $campo_key == 'VAL_SIMCARD')
+					else if ($campo_key === 'VAL_EQUIPOS' OR $campo_key === 'VAL_OTROS' OR $campo_key === 'VAL_SIMCARD')
 					{
 						$llave_monto = $campo_key;
 						$valor_monto = $campo_val;
@@ -302,9 +348,9 @@ class stock_sap_model extends CI_Model {
 
 				// si la llave es distinta y no es el primer registro, agregamos el arreglo anterior
 				// y guardamos los nuevos valores en el arreglo anterior
-				if ($llave_act != $llave_ant)
+				if ($llave_act !== $llave_ant)
 				{
-					if ($i != 1)
+					if ($i !== 1)
 					{
 						//echo "i: $i llave_act: $llave_act llave_ant: $llave_ant<br>";
 						array_push($arr_stock, $arr_ant);
@@ -340,15 +386,20 @@ class stock_sap_model extends CI_Model {
 			$arr_result = $arr_stock;
 		}
 
-		//var_dump($arr_result);
-
 		return $arr_result;
 	}
 
 
 	// --------------------------------------------------------------------
 
-	public function _get_stock_fijo($mostrar = array(), $filtrar = array())
+	/**
+	 * Recupera stock operación fija
+	 *
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con campos a filtrar
+	 * @return array          Arreglo con stock
+	 */
+	private function _get_stock_fijo($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
 
@@ -361,7 +412,7 @@ class stock_sap_model extends CI_Model {
 		}
 
 		// tipo de almacen
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->select('t.tipo as tipo_almacen');
 			$this->db->group_by('t.tipo');
@@ -418,7 +469,7 @@ class stock_sap_model extends CI_Model {
 		$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE);
 
 		// tablas
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->from($this->config->item('bd_stock_fija') . ' s');
 			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
@@ -439,7 +490,7 @@ class stock_sap_model extends CI_Model {
 		}
 
 		// tipos de almacen
-		if ($filtrar['sel_tiposalm'] == 'sel_tiposalm')
+		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
 			$this->db->where_in('t.id_tipo', $filtrar['almacenes']);
 		}
@@ -466,9 +517,17 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera stock en transito, operación fija y/o movil
+	 *
+	 * @param  string $tipo_op Tipo de operación (fija o móvil)
+	 * @param  array  $mostrar Arreglo con campos a mostrar
+	 * @param  array  $filtrar Arreglo con filtros a aplicar
+	 * @return array           Stock en transito
+	 */
 	public function get_stock_transito($tipo_op = '', $mostrar = array(), $filtrar = array())
 	{
-		if ($tipo_op == 'MOVIL')
+		if ($tipo_op === 'MOVIL')
 		{
 			return $this->_get_stock_transito_movil($mostrar, $filtrar);
 		}
@@ -481,7 +540,14 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function _get_stock_transito_fijo($mostrar = array(), $filtrar = array())
+	/**
+	 * Recupera stock en transito, operación fija y/o movil
+	 *
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con filtros a aplicar
+	 * @return array           Stock en transito
+	 */
+	private function _get_stock_transito_fijo($mostrar = array(), $filtrar = array())
 	{
 		$arr_result = array();
 
@@ -544,7 +610,6 @@ class stock_sap_model extends CI_Model {
 
 
 			$arr_result = $this->db->get()->result_array();
-			//print_r($arr_result);
 		}
 
 		return $arr_result;
@@ -553,20 +618,26 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera fechas para mostrar en combobox
+	 *
+	 * @param  string $tipo_op Indicador del tipo de operación
+	 * @return array           Fechas
+	 */
 	public function get_combo_fechas($tipo_op = '')
 	{
-		$arr_fecha_tmp = ($tipo_op == 'MOVIL') ? $this->_get_combo_fechas_movil() : $this->_get_combo_fechas_fija();
+		$arr_fecha_tmp = ($tipo_op === 'MOVIL') ? $this->_get_combo_fechas_movil() : $this->_get_combo_fechas_fija();
 		$arr_fecha = array('ultimodia' => array(), 'todas' => $arr_fecha_tmp);
 
-		$año_mes_ant = '';
-		foreach($arr_fecha_tmp as $key => $val)
+		$anno_mes_ant = '';
+		foreach($arr_fecha_tmp as $llave => $valor)
 		{
-			if ($año_mes_ant != substr($key, 0, 6))
+			if ($anno_mes_ant !== substr($llave, 0, 6))
 			{
-				$arr_fecha['ultimodia'][$key] = $val;
+				$arr_fecha['ultimodia'][$llave] = $valor;
 			}
 
-			$año_mes_ant = substr($key, 0, 6);
+			$anno_mes_ant = substr($llave, 0, 6);
 		}
 
 		return $arr_fecha;
@@ -575,12 +646,17 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera fechas de la operación movil para mostrar en combobox
+	 *
+	 * @return array Fechas
+	 */
 	private function _get_combo_fechas_movil()
 	{
 		$arr_result = $this->db
 			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
 			->select('convert(varchar(20), fecha_stock, 102) as valor', FALSE)
-			->order_by('llave','desc')
+			->order_by('llave', 'desc')
 			->get($this->config->item('bd_stock_movil_fechas'))
 			->result_array();
 
@@ -590,12 +666,17 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera fechas de la operación fija para mostrar en combobox
+	 *
+	 * @return array Fechas
+	 */
 	private function _get_combo_fechas_fija()
 	{
 		$arr_result = $this->db
 			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
 			->select('convert(varchar(20), fecha_stock, 102) as valor', FALSE)
-			->order_by('llave','desc')
+			->order_by('llave', 'desc')
 			->get($this->config->item('bd_stock_fija_fechas'))
 			->result_array();
 
@@ -605,33 +686,64 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera el detalle de las series, dado un centro, almacén material y lote
+	 *
+	 * @param  string $centro   Centro series a recuperar
+	 * @param  string $almacen  Almacén series a recuperar
+	 * @param  string $material Material series a recuperar
+	 * @param  string $lote     Lote series a recuperar
+	 * @return array            Arreglo con series recuperadas
+	 */
 	public function get_detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
-		if ($almacen != '' && $almacen != '_')
-		{
-			if ($centro   != '' && $centro   != '_') $this->db->where('s.centro', $centro);
-			if ($almacen  != '' && $almacen  != '_') $this->db->where('s.almacen', $almacen);
-			if ($material != '' && $material != '_') $this->db->where('s.material', $material);
-			if ($lote     != '' && $lote     != '_') $this->db->where('s.lote', $lote);
-
-			$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.des_material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario, p.pmp');
-
-			$this->db->from($this->config->item('bd_stock_seriado_sap') . ' as s');
-			$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
-			$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'u.usuario=s.modificado_por', 'left');
-			$this->db->join($this->config->item('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.material and p.lote=s.lote and p.estado_stock=s.estado_stock",'left');
-			$this->db->order_by('material, lote, serie');
-
-			return $this->db->get()->result_array();
-		}
-		else
+		if ($almacen === '' OR $almacen === '_')
 		{
 			return array();
 		}
+
+		if ($centro !== '' AND $centro !== '_')
+		{
+			$this->db->where('s.centro', $centro);
+		}
+
+		if ($almacen !== '' AND $almacen !== '_')
+		{
+			$this->db->where('s.almacen', $almacen);
+		}
+
+		if ($material !== '' AND $material !== '_')
+		{
+			$this->db->where('s.material', $material);
+		}
+
+		if ($lote !== '' AND $lote !== '_')
+		{
+			$this->db->where('s.lote', $lote);
+		}
+
+		$this->db->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock, s.centro, s.almacen, a.des_almacen, s.material, s.des_material, s.lote, s.serie, s.estado_stock, convert(varchar(20), s.modificado_el, 103) as fecha_modificacion, s.modificado_por, u.nom_usuario, p.pmp');
+
+		$this->db->from($this->config->item('bd_stock_seriado_sap') . ' as s');
+		$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
+		$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'u.usuario=s.modificado_por', 'left');
+		$this->db->join($this->config->item('bd_pmp') . ' p', 'p.centro = s.centro and p.material=s.material and p.lote=s.lote and p.estado_stock=s.estado_stock', 'left');
+		$this->db->order_by('material, lote, serie');
+
+		return $this->db->get()->result_array();
 	}
 
+	// --------------------------------------------------------------------
 
-	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = null, $borrar_datos = FALSE)
+	/**
+	 * Genera reporte de stock con clasificacion de almacens
+	 *
+	 * @param  string  $tipo_op      Tipo de operación (fijo o movil)
+	 * @param  array   $fechas       Fechas a proceosar
+	 * @param  boolean $borrar_datos Indicador si el reporte se generar desde cero o se recupera
+	 * @return array                 Arreglo con el reporte
+	 */
+	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = NULL, $borrar_datos = FALSE)
 	{
 
 		$arr_result = array();
@@ -656,7 +768,7 @@ class stock_sap_model extends CI_Model {
 					->order_by('tipo_op, fecha_stock, orden')
 					->get()->result_array();
 
-				if (count($result) == 0)
+				if (count($result) === 0)
 				{
 					$this->_genera_reporte_clasificacion($tipo_op, $fecha);
 
@@ -674,36 +786,36 @@ class stock_sap_model extends CI_Model {
 		$arr_fechas = array();
 		foreach($arr_result as $result_fecha)
 		{
-			foreach ($result_fecha as $reg)
+			foreach ($result_fecha as $registro)
 			{
-				if (! in_array($reg['fecha_stock'], $arr_fechas))
+				if (! in_array($registro['fecha_stock'], $arr_fechas))
 				{
-					array_push($arr_fechas, $reg['fecha_stock']);
+					array_push($arr_fechas, $registro['fecha_stock']);
 				}
 
-				if (! array_key_exists($reg['orden'], $arr_final))
+				if (! array_key_exists($registro['orden'], $arr_final))
 				{
-					$arr_final[$reg['orden']] = array();
+					$arr_final[$registro['orden']] = array();
 				}
 
-				$arr_final[$reg['orden']]['tipo_op'] = $reg['tipo_op'];
-				$arr_final[$reg['orden']]['orden'] = $reg['orden'];
-				$arr_final[$reg['orden']]['clasificacion'] = $reg['clasificacion'];
-				$arr_final[$reg['orden']]['tipo'] = $reg['tipo'];
-				$arr_final[$reg['orden']]['color'] = $reg['color'];
-				$arr_final[$reg['orden']][$reg['fecha_stock']] = $reg['monto'];
+				$arr_final[$registro['orden']]['tipo_op'] = $registro['tipo_op'];
+				$arr_final[$registro['orden']]['orden'] = $registro['orden'];
+				$arr_final[$registro['orden']]['clasificacion'] = $registro['clasificacion'];
+				$arr_final[$registro['orden']]['tipo'] = $registro['tipo'];
+				$arr_final[$registro['orden']]['color'] = $registro['color'];
+				$arr_final[$registro['orden']][$registro['fecha_stock']] = $registro['monto'];
 
 			}
 		}
 
 		// corrige arreglo final, agregando valores =0 en aquellas llaves de fecha que no existan
-		foreach($arr_final as $key => $reg)
+		foreach($arr_final as $llave => $registro)
 		{
-			foreach($arr_fechas as $fec)
+			foreach($arr_fechas as $fecha)
 			{
-				if (! array_key_exists($fec, $reg))
+				if ( ! array_key_exists($fecha, $registro))
 				{
-					$arr_final[$key][$fec] = 0;
+					$arr_final[$llave][$fecha] = 0;
 				}
 			}
 		}
@@ -713,13 +825,21 @@ class stock_sap_model extends CI_Model {
 		return array('datos' => $arr_final, 'fechas' => $arr_fechas);
 	}
 
+	// --------------------------------------------------------------------
 
-	private function _genera_reporte_clasificacion($tipo_op = null, $fecha = null)
+	/**
+	 * Inserta registros del reporte de stock por clasificacion en tabla resumen
+	 *
+	 * @param  string $tipo_op Indicador de operación (fijo o movil)
+	 * @param  string $fecha   Fecha del reporte a generar
+	 * @return boolean         Indicador de exito o fallo de la query
+	 */
+	private function _genera_reporte_clasificacion($tipo_op = NULL, $fecha = NULL)
 	{
-		if ($tipo_op == "FIJA")
+		if ($tipo_op === 'FIJA')
 		{
-			$sql = "INSERT INTO " . $this->config->item('bd_reporte_clasif') .
-" SELECT
+			$sql_query = 'INSERT INTO ' . $this->config->item('bd_reporte_clasif');
+			$sql_query .= " SELECT
 A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
 SUM(E.CANTIDAD) AS CANTIDAD, SUM(E.VALOR) AS MONTO
 FROM " . $this->config->item('bd_clasifalm_sap') . " A
@@ -733,9 +853,9 @@ AND E.FECHA_STOCK = ?
 GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
 		}
-		else if ($tipo_op == "MOVIL")
+		else if ($tipo_op === "MOVIL")
 		{
-			$sql = "INSERT INTO " . $this->config->item('bd_reporte_clasif') .
+			$sql_query = "INSERT INTO " . $this->config->item('bd_reporte_clasif') .
 " SELECT
 A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
 SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
@@ -752,7 +872,7 @@ GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 		}
 
-		return $this->db->query($sql, array($tipo_op, $fecha));
+		return $this->db->query($sql_query, array($tipo_op, $fecha));
 
 	}
 

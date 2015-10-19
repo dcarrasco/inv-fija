@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Usuario SAP
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  Stock
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Usuario_sap extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_usuario_sap Identificador del modulo
+	 * @return void
+	 */
+	public function __construct($id_usuario_sap = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_usuarios_sap'),
 				'model_label'        => 'Usuario SAP',
@@ -34,17 +66,22 @@ class Usuario_sap extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_usuario_sap)
 		{
-			$this->fill($id);
+			$this->fill($id_usuario_sap);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del Usuario SAP
+	 *
+	 * @return string Usuario SAP
+	 */
 	public function __toString()
 	{
 		return (string) $this->nom_usuario;

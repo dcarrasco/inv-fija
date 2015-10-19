@@ -1,77 +1,105 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo ACL
+ * *
+ * @category CodeIgniter
+ * @package  ACL
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Acl_model extends CI_Model {
 
-
+	/**
+	 * Constructor de la clase
+	 *
+	 * @return  void
+	 */
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Loguea un usuario en el sistema
-	 * @param  string $usr usuario
-	 * @param  string $pwd clave
-	 * @return boolean     TRUE si se loguea al usuario, FALSE si no
+	 *
+	 * @param  string  $usuario  usuario
+	 * @param  string  $password clave
+	 * @param  boolean $remember Indica si el usuario será recordado
+	 * @return boolean           TRUE si se loguea al usuario, FALSE si no
 	 */
-	public function login($usr = '', $pwd = '', $remember = FALSE)
+	public function login($usuario = '', $password = '', $remember = FALSE)
 	{
 		$this->delete_session_data();
 
-		if ($this->check_user_credentials($usr, $pwd))
+		if ($this->check_user_credentials($usuario, $password))
 		{
 
 			// escribe auditoria del login
-			$this->write_login_audit($usr);
+			$this->write_login_audit($usuario);
 
 			// resetea intentos fallidos de login
-			$this->reset_login_errors($usr);
+			$this->reset_login_errors($usuario);
 
 			// borra los captchas del usuario
 			$this->delete_captchas_session($this->session->userdata('session_id'));
 
 			// crea session con los datos del usuario
-			$this->_set_session_data($usr, $remember);
+			$this->_set_session_data($usuario, $remember);
 
 			return TRUE;
 		}
 		else
 		{
 			// incrementa intentos fallidos de login
-			$this->add_login_errors($usr);
+			$this->add_login_errors($usuario);
 
 			return FALSE;
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el id del usuario, dado el nombre de usuario
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return string      ID del usuario
 	 */
-	public function get_id_usr($usr = '')
+	public function get_id_usr($usuario = '')
 	{
-		$user = ($usr == '') ? $this->get_user() : $usr;
+		$user = ($usuario === '') ? $this->get_user() : $usuario;
 
-		$rs = $this->db
+		$registro = $this->db
 			->get_where($this->config->item('bd_usuarios'), array('usr' => $user))
 			->row_array();
 
-		return is_array($rs) ? $rs['id'] : '';
+		return is_array($registro) ? $registro['id'] : '';
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el usuario (leido desde la session)
-	 * @param  none
+	 *
 	 * @return string Usuario
 	 */
 	public function get_user()
@@ -79,12 +107,11 @@ class Acl_model extends CI_Model {
 		return (string) $this->session->userdata('user');
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el usuario (leido desde la session)
-	 * @param  none
+	 *
 	 * @return string Usuario
 	 */
 	public function get_user_firstname()
@@ -98,11 +125,11 @@ class Acl_model extends CI_Model {
 		return strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Chequea si el usuario esta logueado en el sistema
+	 *
 	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
 	 */
 	public function is_user_logged()
@@ -124,11 +151,11 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Chequea si el usuario esta logueado en el sistema
+	 *
 	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
 	 */
 	public function is_user_remembered()
@@ -136,49 +163,52 @@ class Acl_model extends CI_Model {
 		return ($this->input->cookie('login_user') AND  $this->input->cookie('login_token')) ? TRUE : FALSE;
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Genera el hash de una password
-	 * @param  string $pwd password
+	 *
+	 * @param  string $password password
 	 * @return string Hash de la password
 	 */
-	private function _hash_password($pwd = '')
+	private function _hash_password($password = '')
 	{
-		return crypt($pwd, '$2a$10$'.$this->config->item('encryption_key'));
+		return crypt($password, '$2a$10$'.$this->config->item('encryption_key'));
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Chequea si las credenciales del usuario son validas
+	 *
+	 * @param string $usuario  Usuario a validar
+	 * @param string $password Clave del usuario
 	 * @return boolean TRUE/FALSE
 	 */
-	public function check_user_credentials($usr = '', $pwd = '')
+	public function check_user_credentials($usuario = '', $password = '')
 	{
 		return $this->db
 			->where(array(
-				'usr'    => $usr,
-				'pwd'    => $this->_hash_password($pwd),
+				'usr'    => $usuario,
+				'pwd'    => $this->_hash_password($password),
 				'activo' => '1'
 			))
 			->get($this->config->item('bd_usuarios'))
 			->num_rows() > 0;
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Escribe datos de auditoria al loguear al usuario
-	 * @return none
+	 *
+	 * @param  string $usuario Usuario a validar
+	 * @return void
 	 */
-	public function write_login_audit($usr = '')
+	public function write_login_audit($usuario = '')
 	{
 		$this->db
-			->where('usr', $usr)
+			->where('usr', $usuario)
 			->update($this->config->item('bd_usuarios'), array(
 				'fecha_login'  => date('Ymd H:i:s'),
 				'ip_login'     => $this->input->ip_address(),
@@ -186,18 +216,19 @@ class Acl_model extends CI_Model {
 			));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Indica si se debe usar un captcha para el login del usuario
-	 * @return boolean Indicador si se debe usar o no captcha
+	 *
+	 * @param  string $usuario Usuario a validar
+	 * @return boolean         Indicador si se debe usar o no captcha
 	 */
-	public function use_captcha($usr = '')
+	public function use_captcha($usuario = '')
 	{
 		$row_user = $this->db
 			->get_where($this->config->item('bd_usuarios'), array(
-				'usr' => (string) $usr,
+				'usr' => (string) $usuario,
 			))
 			->row();
 
@@ -206,12 +237,15 @@ class Acl_model extends CI_Model {
 		return (boolean) ($login_attempts > 2);
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Escribe captcha en la base de datos
-	 * @return none
+	 *
+	 * @param string $time       Texto con fecha hora en segundos
+	 * @param string $session_id Identificador de la sesion del usuario
+	 * @param string $word       Palabra del captcha
+	 * @return void
 	 */
 	public function write_captcha($time = '', $session_id = '', $word = '')
 	{
@@ -225,12 +259,13 @@ class Acl_model extends CI_Model {
 			));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Borra captchas de un usuario
-	 * @return none
+	 *
+	 * @param string $session_id Identificador de la sesion del usuario
+	 * @return void
 	 */
 	public function delete_captchas_session($session_id = '')
 	{
@@ -239,12 +274,12 @@ class Acl_model extends CI_Model {
 			->delete($this->config->item('bd_captcha'));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Borra captchas con tiempo mayor a 10 minutos
-	 * @return none
+	 *
+	 * @return void
 	 */
 	public function delete_old_captchas()
 	{
@@ -253,12 +288,14 @@ class Acl_model extends CI_Model {
 			->delete($this->config->item('bd_captcha'));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Borra captchas con tiempo mayor a 10 minutos
-	 * @return none
+	 *
+	 * @param string $captcha    Palabra del captcha
+	 * @param string $session_id Identificador de la sesion del usuario
+	 * @return void
 	 */
 	public function validar_captcha($captcha = '', $session_id = '')
 	{
@@ -274,43 +311,44 @@ class Acl_model extends CI_Model {
 		return isset($row_captcha);
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Resetea cantidad de intentos fallidos de login
-	 * @return none
+	 *
+	 * @param  string $usuario Usuario a resetear
+	 * @return void
 	 */
-	public function reset_login_errors($usr = '')
+	public function reset_login_errors($usuario = '')
 	{
 		$this->db
-			->where('usr', $usr)
+			->where('usr', $usuario)
 			->update($this->config->item('bd_usuarios'), array(
 				'login_errors'  => 0,
 			));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Incrementa cantidad de intentos fallidos de login
-	 * @return none
+	 *
+	 * @param  string $usuario Usuario a incrementar
+	 * @return void
 	 */
-	public function add_login_errors($usr = '')
+	public function add_login_errors($usuario = '')
 	{
 		$this->db
 			->set('login_errors', 'login_errors + 1', FALSE)
-			->where('usr', $usr)
+			->where('usr', $usuario)
 			->update($this->config->item('bd_usuarios'));
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el menu del usuario desde la session. Si no existe session, la crea
-	 * @param  none
+	 *
 	 * @return string Menu del usuario en formato JSON
 	 */
 	public function get_user_menu()
@@ -323,15 +361,15 @@ class Acl_model extends CI_Model {
 		return json_decode($this->session->userdata('menu_app'), TRUE);
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve arreglo con todos los modulos para un usuario
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return array       Arreglo con los módulos del usuario
 	 */
-	public function get_llaves_modulos($usr = '')
+	public function get_llaves_modulos($usuario = '')
 	{
 		$arr_rs = $this->db->distinct()
 			->select('llave_modulo')
@@ -339,22 +377,22 @@ class Acl_model extends CI_Model {
 			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
 			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->where('usr', $usr)
+			->where('usr', $usuario)
 			->get()
 			->result_array();
 
 		return array_column($arr_rs, 'llave_modulo');
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el menu de módulos del usuario
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return array       Modulos asociados al usuario
 	 */
-	public function get_menu_usuario($usr = '')
+	public function get_menu_usuario($usuario = '')
 	{
 		return $this->db->distinct()
 			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
@@ -363,34 +401,36 @@ class Acl_model extends CI_Model {
 			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join($this->config->item('bd_modulos') . ' m', 'm.id = rm.id_modulo')
 			->join($this->config->item('bd_app') . ' a', 'a.id = m.id_app')
-			->where('usr', (string) $usr)
+			->where('usr', (string) $usuario)
 			->order_by('a.orden, m.orden')
 			->get()
 			->result_array();
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Crea las session de menu para un usuario
-	 * @param string $usr Usuario
+	 *
+	 * @param  string  $usuario  Usuario
+	 * @param  boolean $remember Indica si el usuario será recordado
+	 * @return void
 	 */
-	private function _set_session_data($usr, $remember = FALSE)
+	private function _set_session_data($usuario, $remember = FALSE)
 	{
 		$this->session->set_userdata(array(
-			'user'        => $usr,
-			'modulos'     => json_encode($this->get_llaves_modulos($usr)),
-			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usr)),
+			'user'        => $usuario,
+			'modulos'     => json_encode($this->get_llaves_modulos($usuario)),
+			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usuario)),
 		));
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Borra las session de login
-	 * @return none
+	 *
+	 * @return void
 	 */
 	public function delete_session_data()
 	{
@@ -400,12 +440,12 @@ class Acl_model extends CI_Model {
 		$this->session->unset_userdata('menu_app');
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Borra las cookies de login
-	 * @return none
+	 *
+	 * @return void
 	 */
 	public function delete_cookie_data()
 	{
@@ -422,15 +462,15 @@ class Acl_model extends CI_Model {
 		));
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Genera cookie con token y usuario para login con remember-me
-	 * @param  string $usr Usuario
-	 * @return none
+	 *
+	 * @param  string $usuario Usuario
+	 * @return void
 	 */
-	public function set_rememberme_cookie($usr = '')
+	public function set_rememberme_cookie($usuario = '')
 	{
 		$token = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
 
@@ -444,31 +484,30 @@ class Acl_model extends CI_Model {
 
 		$this->input->set_cookie(array(
 			'name'  => 'login_user',
-			'value' => $usr,
+			'value' => $usuario,
 			'expire' => $expire,
 		));
 
 		$this->db
-			->where('usr', $usr)
+			->where('usr', $usuario)
 			->update(
 				$this->config->item('bd_usuarios'),
 				array('remember_token' => $this->_hash_password($token))
 			);
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Loguea en el sistema cuando el usuario presenta cookie con token
-	 * @param  none
+	 *
 	 * @return boolean               TRUE o FALSE, dependiendo si loguea correctamente
 	 */
 	public function login_rememberme_cookie()
 	{
 		$stored_login_token = $this->get_stored_login_token($this->input->cookie('login_user'));
 
-		if ($stored_login_token == $this->_hash_password($this->input->cookie('login_token')))
+		if ($stored_login_token === $this->_hash_password($this->input->cookie('login_token')))
 		{
 			// regenera token
 			$this->set_rememberme_cookie($this->input->cookie('login_user'));
@@ -487,35 +526,36 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera token de la base de datos
-	 * @param  string   $usr    Usuario a recuperar
+	 *
+	 * @param  string $usuario Usuario a recuperar
 	 * @return string           Token del usuario
 	 */
-	public function get_stored_login_token($usr = '')
+	public function get_stored_login_token($usuario = '')
 	{
-		$rs = $this->db
+		$registro = $this->db
 			->where(array(
-				'usr'    => $usr,
+				'usr'    => $usuario,
 				'activo' => '1'
 			))
 			->get($this->config->item('bd_usuarios'))
 			->row_array();
 
-		return (array_key_exists('remember_token', $rs)) ? $rs['remember_token'] : NULL;
+		return (array_key_exists('remember_token', $registro)) ? $registro['remember_token'] : NULL;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Autentica el uso de un módulo de la aplicacion
-	 * @param  string $mod Modulo a autenticar
-	 * @return none
+	 *
+	 * @param  string $modulo Modulo a autenticar
+	 * @return void
 	 */
-	public function autentica($mod = '')
+	public function autentica($modulo = '')
 	{
 		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
@@ -532,7 +572,7 @@ class Acl_model extends CI_Model {
 		{
 			$arr_modulos = json_decode($this->session->userdata('modulos'));
 
-			if ( ! in_array($mod, $arr_modulos))
+			if ( ! in_array($modulo, $arr_modulos))
 			{
 				redirect('login');
 			}
@@ -543,40 +583,40 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el nombre de un usuario
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return string      Nombre del usuario
 	 */
-	public function get_nombre_usuario($usr = '')
+	public function get_nombre_usuario($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
 			->row_array();
 
 		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Indica si un usuario tiene o no una clave
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return boolean     Indica si el usuario tiene o no clave
 	 */
-	public function tiene_clave($usr = '')
+	public function tiene_clave($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
 			->row_array();
 
 		if (count($arr_rs) > 0)
 		{
-			return (is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) == '') ? FALSE : TRUE;
+			return (is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) === '') ? FALSE : TRUE;
 		}
 		else
 		{
@@ -584,41 +624,41 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Indica si un usuario existe o no en el sistema
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return boolean     Indica si el usuario existe o no
 	 */
-	public function existe_usuario($usr = '')
+	public function existe_usuario($usuario = '')
 	{
 		$regs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
 			->num_rows();
 
 		return ($regs > 0) ? TRUE : FALSE;
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Cambia la clave de un usuario
-	 * @param  string $usr       Usuario
+	 *
+	 * @param  string $usuario       Usuario
 	 * @param  string $clave_old Clave anterior
 	 * @param  string $clave_new Nueva clave
 	 * @return array             Estado de cambio de clave
 	 */
-	public function cambio_clave($usr = '', $clave_old = '', $clave_new = '')
+	public function cambio_clave($usuario = '', $clave_old = '', $clave_new = '')
 	{
-		$chk_usr = ( ! $this->tiene_clave($usr)) ? TRUE : $this->check_user_credentials($usr, $clave_old);
+		$chk_usr = ( ! $this->tiene_clave($usuario)) ? TRUE : $this->check_user_credentials($usuario, $clave_old);
 
 		if ($chk_usr)
 		{
 			$this->db
-				->where('usr', $usr)
+				->where('usr', $usuario)
 				->update($this->config->item('bd_usuarios'), array('pwd' => $this->_hash_password($clave_new)));
 
 			return TRUE;
@@ -629,18 +669,18 @@ class Acl_model extends CI_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve el correo de un usuario
-	 * @param  string $usr Usuario
+	 *
+	 * @param  string $usuario Usuario
 	 * @return string      Correo del usuario
 	 */
-	public function get_correo($usr = '')
+	public function get_correo($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usr))
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
 			->row_array();
 
 		return (count($arr_rs) > 0) ? $arr_rs['correo'] : '';

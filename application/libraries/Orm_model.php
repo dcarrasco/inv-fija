@@ -1,11 +1,28 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Extension de clase CI_Model para usar con administracion de modelo
  *
- * @category	Controller
- * @author		dcr
- * @link
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
  */
 class Orm_model implements IteratorAggregate {
 
@@ -127,6 +144,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
+	 * @return  void
 	 **/
 	public function __construct()
 	{
@@ -141,10 +159,11 @@ class Orm_model implements IteratorAggregate {
 	}
 
 	/**
-	 * Constructor
-	 *
+	 * Configuración del modelo
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
+	 * @param   array $param Arreglo con los parametros a configurar
+	 * @return  void
 	 **/
 	public function config_model($param = array())
 	{
@@ -169,7 +188,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * Permite acceder a las clases de CI de forma directa
 	 *
-	 * @param	string
+	 * @param string $key Propiedad
 	 * @access private
 	 */
 	public function __get($key)
@@ -231,6 +250,11 @@ class Orm_model implements IteratorAggregate {
 	// SETTERS Y GETTERS
 	// =======================================================================
 
+	/**
+	 * Recupera el nombre del modelo
+	 *
+	 * @return string Nombre del modelo
+	 */
 	public function get_model_nombre()
 	{
 		return $this->model_nombre;
@@ -275,7 +299,7 @@ class Orm_model implements IteratorAggregate {
 
 	public function get_model_filtro()
 	{
-		return ($this->model_filtro == '_') ? '' : $this->model_filtro;
+		return ($this->model_filtro === '_') ? '' : $this->model_filtro;
 	}
 
 
@@ -396,15 +420,15 @@ class Orm_model implements IteratorAggregate {
 
 		$reglas = 'trim';
 		$reglas .= ($field->get_es_obligatorio() and !$field->get_es_autoincrement()) ? '|required' : '';
-		$reglas .= ($field->get_tipo() == 'int')  ? '|integer' : '';
-		$reglas .= ($field->get_tipo() == 'real') ? '|numeric' : '';
+		$reglas .= ($field->get_tipo() === 'int')  ? '|integer' : '';
+		$reglas .= ($field->get_tipo() === 'real') ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
 			? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' .
 				implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
 			: '';
 
 		$campo_rules = $campo;
-		if ($field->get_tipo() == 'has_many')
+		if ($field->get_tipo() === 'has_many')
 		{
 			$reglas = 'trim';
 			$campo_rules = $campo . '[]';
@@ -437,10 +461,10 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function form_item($campo = '')
 	{
-		$formulario_enviado = (boolean) (count($this->CI->input->post()) != 0);
+		$formulario_enviado = (boolean) (count($this->CI->input->post()) !== 0);
 		$item_error = $formulario_enviado ? '' : '';
 
-		if ($campo != '')
+		if ($campo !== '')
 		{
 			$data = array(
 				'item_error'    => form_has_error($campo) ? 'has-error' : $item_error,
@@ -501,7 +525,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		$tipo = $this->model_fields[$campo]->get_tipo();
 
-		if (($tipo == 'has_one' OR $tipo == 'has_many') AND ! $this->model_got_relations)
+		if (($tipo === 'has_one' OR $tipo === 'has_many') AND ! $this->model_got_relations)
 		{
 			$this->_recuperar_relation_fields();
 		}
@@ -655,7 +679,7 @@ class Orm_model implements IteratorAggregate {
 			{
 				if (is_array($valor))
 				{
-					if (count($valor) == 0)
+					if (count($valor) === 0)
 					{
 						$this->CI->db->where($campo.'=', 'NULL', FALSE);
 					}
@@ -673,7 +697,7 @@ class Orm_model implements IteratorAggregate {
 
 		if (array_key_exists('filtro', $param))
 		{
-			if ($param['filtro'] != '_' AND $param['filtro'] != '')
+			if ($param['filtro'] !== '_' AND $param['filtro'] !== '')
 			{
 				$this->_put_filtro($param['filtro']);
 			}
@@ -691,7 +715,7 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		if ($tipo == 'first')
+		if ($tipo === 'first')
 		{
 			$rs = $this->CI->db->get($this->model_tabla)->row_array();
 			$this->fill_from_array($rs);
@@ -703,9 +727,9 @@ class Orm_model implements IteratorAggregate {
 
 			return $rs;
 		}
-		else if ($tipo == 'all')
+		else if ($tipo === 'all')
 		{
-			if ($this->model_order_by != '')
+			if ($this->model_order_by !== '')
 			{
 				$this->CI->db->order_by($this->model_order_by);
 			}
@@ -727,7 +751,7 @@ class Orm_model implements IteratorAggregate {
 
 			return $rs;
 		}
-		else if ($tipo == 'count')
+		else if ($tipo === 'count')
 		{
 			return $this->CI->db
 				->select('count(*) as cant')
@@ -735,11 +759,11 @@ class Orm_model implements IteratorAggregate {
 				->row()
 				->cant;
 		}
-		else if ($tipo == 'list')
+		else if ($tipo === 'list')
 		{
 			$arr_list = array();
 
-			if ($this->model_order_by != '')
+			if ($this->model_order_by !== '')
 			{
 				$this->CI->db->order_by($this->model_order_by);
 			}
@@ -770,13 +794,13 @@ class Orm_model implements IteratorAggregate {
 	{
 		$arr_condiciones = array();
 
-		if (count($this->model_campo_id) == 1)
+		if (count($this->model_campo_id) === 1)
 		{
 			foreach ($this->model_campo_id as $campo_id)
 			{
 				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
 
-				if ($tipo_id == 'id' OR $tipo_id == 'integer')
+				if ($tipo_id === 'id' OR $tipo_id === 'integer')
 				{
 					$arr_condiciones[$campo_id] = (int) $id;
 				}
@@ -827,7 +851,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
-			if($obj_campo->get_tipo() == 'has_one')
+			if($obj_campo->get_tipo() === 'has_one')
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -849,7 +873,7 @@ class Orm_model implements IteratorAggregate {
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->model_got_relations = TRUE;
 			}
-			else if ($obj_campo->get_tipo() == 'has_many')
+			else if ($obj_campo->get_tipo() === 'has_many')
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -904,7 +928,7 @@ class Orm_model implements IteratorAggregate {
 		$arr = array();
 		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
-			if($obj_campo->get_tipo() == 'has_one')
+			if($obj_campo->get_tipo() === 'has_one')
 			{
 				$arr[$nombre_campo][$this->$nombre_campo]=$this->get_relation_object($nombre_campo);
 			}
@@ -952,13 +976,13 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _junta_campos_select($arr_campos = array())
 	{
-		if (count($arr_campos) == 1)
+		if (count($arr_campos) === 1)
 		{
 			return array_pop($arr_campos);
 		}
 		else
 		{
-			if (ENVIRONMENT == 'development-mac')
+			if (ENVIRONMENT === 'development-mac')
 			{
 				// CONCAT_WS es especifico para MYSQL
 				$lista_campos = implode(',', $arr_campos);
@@ -1011,14 +1035,14 @@ class Orm_model implements IteratorAggregate {
 				{
 					$tipo_campo = $metadata->get_tipo();
 
-					if ($tipo_campo == 'id' OR $tipo_campo == 'boolean' OR $tipo_campo == 'integer')
+					if ($tipo_campo === 'id' OR $tipo_campo === 'boolean' OR $tipo_campo === 'integer')
 					{
 						$this->fields_values[$nombre] = (int) $rs[$nombre];
 					}
 
-					if ($metadata->get_tipo() == 'datetime')
+					if ($metadata->get_tipo() === 'datetime')
 					{
-						if ($rs[$nombre] != '')
+						if ($rs[$nombre] !== '')
 						{
 							$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($rs[$nombre]));
 						}
@@ -1063,7 +1087,7 @@ class Orm_model implements IteratorAggregate {
 
 		foreach ($this->model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() == 'char')
+			if ($campo->get_tipo() === 'char')
 			{
 				$arr_like[$nombre] = $filtro;
 			}
@@ -1086,7 +1110,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _get_all_count($filtro = '_')
 	{
-		if ($filtro != '_' && $filtro != '')
+		if ($filtro !== '_' && $filtro !== '')
 		{
 			$this->_put_filtro($filtro);
 		}
@@ -1126,7 +1150,7 @@ class Orm_model implements IteratorAggregate {
 			}
 			else
 			{
-				if ($campo->get_tipo() != 'has_many')
+				if ($campo->get_tipo() !== 'has_many')
 				{
 					$data_update[$nombre] = $this->$nombre;
 				}
@@ -1137,12 +1161,12 @@ class Orm_model implements IteratorAggregate {
 		{
 			foreach ($data_where as $key => $val)
 			{
-				$es_insert = ($val == '' || $val == 0) ? TRUE : FALSE;
+				$es_insert = ($val === '' || $val === 0) ? TRUE : FALSE;
 			}
 		}
 		else
 		{
-			$es_insert = ($this->CI->db->get_where($this->model_tabla, $data_where)->num_rows() == 0);
+			$es_insert = ($this->CI->db->get_where($this->model_tabla, $data_where)->num_rows() === 0);
 		}
 
 		// NUEVO REGISTRO
@@ -1174,7 +1198,7 @@ class Orm_model implements IteratorAggregate {
 		// para actualizar la tabla relacionada
 		foreach ($this->model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() == 'has_many')
+			if ($campo->get_tipo() === 'has_many')
 			{
 				$rel = $campo->get_relation();
 
@@ -1235,7 +1259,7 @@ class Orm_model implements IteratorAggregate {
 
 		foreach ($this->model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() == 'has_many')
+			if ($campo->get_tipo() === 'has_many')
 			{
 				$rel = $campo->get_relation();
 				$arr_where_delete = array();
@@ -1418,22 +1442,22 @@ class ORM_Field {
 			}
 		}
 
-		if ($this->tipo == 'int' and $this->default == '')
+		if ($this->tipo === 'int' and $this->default === '')
 		{
 			$this->default = 0;
 		}
 
-		if ($this->tipo == 'has_one')
+		if ($this->tipo === 'has_one')
 		{
 			$this->es_obligatorio = TRUE;
 		}
 
-		if ($this->tipo == 'datetime')
+		if ($this->tipo === 'datetime')
 		{
 			$this->largo = 20;
 		}
 
-		if ($nombre == 'id')
+		if ($nombre === 'id')
 		{
 			$this->tipo  = 'id';
 			$this->largo = 10;
@@ -1454,12 +1478,12 @@ class ORM_Field {
 
 	public function get_label()
 	{
-		if ($this->tipo == 'has_one')
+		if ($this->tipo === 'has_one')
 		{
 			return $this->relation['data']->get_model_label();
 		}
 
-		if ($this->tipo == 'has_many')
+		if ($this->tipo === 'has_many')
 		{
 			return $this->relation['data']->get_model_label_plural();
 		}
@@ -1537,7 +1561,7 @@ class ORM_Field {
 
 		$id_prefix  = 'id_';
 
-		$valor_field = ($valor === '' AND $this->default != '') ? $this->default : $valor;
+		$valor_field = ($valor === '' AND $this->default !== '') ? $this->default : $valor;
 		$valor_field = set_value($this->nombre, $valor_field);
 
 		$arr_param = array(
@@ -1549,8 +1573,8 @@ class ORM_Field {
 			'size'      => $this->largo,
 		);
 
-		if ($this->tipo == 'id'
-			OR ($this->es_id AND $valor_field != '')
+		if ($this->tipo === 'id'
+			OR ($this->es_id AND $valor_field !== '')
 			OR ($this->es_id AND $this->es_autoincrement))
 		{
 			$param_adic = ' id="' . $id_prefix . $this->nombre . '"';
@@ -1568,7 +1592,7 @@ class ORM_Field {
 			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 
-		if ($this->tipo == 'char' AND $this->largo >= 100)
+		if ($this->tipo === 'char' AND $this->largo >= 100)
 		{
 			unset($arr_param['size']);
 			$arr_param['cols'] = '50';
@@ -1577,39 +1601,39 @@ class ORM_Field {
 			return form_textarea($arr_param);
 		}
 
-		if ($this->tipo == 'char' OR $this->tipo == 'int' OR $this->tipo == 'datetime')
+		if ($this->tipo === 'char' OR $this->tipo === 'int' OR $this->tipo === 'datetime')
 		{
 			return form_input($arr_param);
 		}
 
-		if ($this->tipo == 'password')
+		if ($this->tipo === 'password')
 		{
 			return form_password($arr_param);
 		}
 
-		if ($this->tipo == 'real')
+		if ($this->tipo === 'real')
 		{
 			$arr_param['size'] = $this->largo + $this->decimales + 1;
 
 			return form_input($arr_param);
 		}
 
-		if ($this->tipo == 'boolean')
+		if ($this->tipo === 'boolean')
 		{
 			$form = '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_1">';
-			$form .= form_radio($this->nombre, 1, ($valor_field == 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1");
+			$form .= form_radio($this->nombre, 1, ($valor_field === 1) ? TRUE : FALSE, "id=" . $id_prefix . $this->nombre . "_1");
 			$form .= $CI->lang->line('orm_radio_yes');
 			$form .= '</label>';
 
 			$form .= '<label class="radio-inline" for="' . $id_prefix . $this->nombre . '_0">';
-			$form .= form_radio($this->nombre, 0, ($valor_field == 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0");
+			$form .= form_radio($this->nombre, 0, ($valor_field === 1) ? FALSE : TRUE, "id=" . $id_prefix . $this->nombre . "_0");
 			$form .= $CI->lang->line('orm_radio_no');
 			$form .= '</label>';
 
 			return $form;
 		}
 
-		if ($this->tipo == 'has_one')
+		if ($this->tipo === 'has_one')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
@@ -1630,7 +1654,7 @@ class ORM_Field {
 			return $form;
 		}
 
-		if ($this->tipo == 'has_many')
+		if ($this->tipo === 'has_many')
 		{
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
@@ -1643,7 +1667,7 @@ class ORM_Field {
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = ($CI->input->post($this->nombre) != '') ? $CI->input->post($this->nombre) : $valor_field;
+			$opciones = ($CI->input->post($this->nombre) !== '') ? $CI->input->post($this->nombre) : $valor_field;
 
 			$form = form_multiselect(
 				$this->nombre.'[]',
@@ -1668,17 +1692,17 @@ class ORM_Field {
 	{
 		$CI =& get_instance();
 
-		if ($this->tipo == 'boolean')
+		if ($this->tipo === 'boolean')
 		{
-			return ($valor == 1) ? $CI->lang->line('orm_radio_yes') : $CI->lang->line('orm_radio_no');
+			return ($valor === 1) ? $CI->lang->line('orm_radio_yes') : $CI->lang->line('orm_radio_no');
 		}
 
-		if ($this->tipo == 'has_one')
+		if ($this->tipo === 'has_one')
 		{
 			return (string) $this->relation['data'];
 		}
 
-		if ($this->tipo == 'has_many')
+		if ($this->tipo === 'has_many')
 		{
 			$campo = '<ul class="formatted_has_many">';
 			foreach ($this->relation['data']->get_model_all() as $obj)
@@ -1697,7 +1721,7 @@ class ORM_Field {
 
 		if ($this->formato)
 		{
-			if ($this->formato == 'monto,2')
+			if ($this->formato === 'monto,2')
 			{
 				return fmt_monto($valor,'UN','$',2);
 			}
@@ -1719,7 +1743,7 @@ class ORM_Field {
 	 */
 	public function get_bd_attrib()
 	{
-		if ($this->tipo == 'id')
+		if ($this->tipo === 'id')
 		{
 			return array(
 				'type'           => 'INT',
@@ -1728,7 +1752,7 @@ class ORM_Field {
 				'null'           => $this->es_obligatorio,
 			);
 		}
-		else if ($this->tipo == 'char')
+		else if ($this->tipo === 'char')
 		{
 			return array(
 				'type'       => 'VARCHAR',
@@ -1737,7 +1761,7 @@ class ORM_Field {
 				'null'       => $this->es_obligatorio,
 			);
 		}
-		else if ($this->tipo == 'text')
+		else if ($this->tipo === 'text')
 		{
 			return array(
 				'type'       => 'TEXT',
@@ -1746,7 +1770,7 @@ class ORM_Field {
 				'null'       => $this->es_obligatorio,
 			);
 		}
-		else if ($this->tipo == 'integer')
+		else if ($this->tipo === 'integer')
 		{
 			return array(
 				'type'       => 'INT',
@@ -1755,14 +1779,14 @@ class ORM_Field {
 				'null'       => $this->es_obligatorio,
 			);
 		}
-		else if ($this->tipo == 'boolean')
+		else if ($this->tipo === 'boolean')
 		{
 			return array(
 				'type'       => 'BIT',
 				'null'       => $this->es_obligatorio,
 			);
 		}
-		else if ($this->tipo == 'datetime')
+		else if ($this->tipo === 'datetime')
 		{
 			$bd_attrib = array(
 				'type'       => 'DATETIME',

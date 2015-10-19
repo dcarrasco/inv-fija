@@ -1,12 +1,44 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+/**
+ * Clase Modelo Almacén SAP
+ *
+ * Basada en modelo ORM
+ *
+ * @category CodeIgniter
+ * @package  Stock
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
+ *
+ */
 class Almacen_sap extends ORM_Model {
 
-	public function __construct($id = null)
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  string $id_almacen Identificador del almacen
+	 * @return void
+	 */
+	public function __construct($id_almacen = NULL)
 	{
 		parent::__construct();
 
-		$cfg = array(
+		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->CI->config->item('bd_almacenes_sap'),
 				'model_label'        => 'Almac&eacute;n',
@@ -73,17 +105,22 @@ class Almacen_sap extends ORM_Model {
 			),
 		);
 
-		$this->config_model($cfg);
+		$this->config_model($arr_config);
 
-		if ($id)
+		if ($id_almacen)
 		{
-			$this->fill($id);
+			$this->fill($id_almacen);
 		}
 	}
 
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve representación string del modelo
+	 *
+	 * @return string Almacén
+	 */
 	public function __toString()
 	{
 		return (string) $this->centro . '-' . $this->cod_almacen . ' ' .$this->des_almacen;
@@ -92,9 +129,16 @@ class Almacen_sap extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve arreglo con almacenes para usar en combo
+	 *
+	 * @param  string $tipo_op Indica si la operacion es fija o movil
+	 * @param  string $filtro  Filtra almacenes por tipo
+	 * @return array           Arreglo de almacenes
+	 */
 	public function get_combo_almacenes($tipo_op = '', $filtro = '')
 	{
-		if ($filtro == '')
+		if ($filtro === '')
 		{
 			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op)));
 		}
@@ -114,9 +158,13 @@ class Almacen_sap extends ORM_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve arreglo con almacenes no ingresados al sistema
+	 *
+	 * @return array Arreglo de almacenes no ingresados
+	 */
 	public function almacenes_no_ingresados()
 	{
 		$alm_movil = $this->CI->db
