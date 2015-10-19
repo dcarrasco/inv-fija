@@ -55,6 +55,9 @@ class MY_Form_validation extends CI_Form_validation {
 
 		list($table, $column, $id_field, $current_id) = explode('.', $params);
 
+		// si el id es numerico, cambia a formato numérico
+		$current_id = is_numeric($current_id) ? (int) $current_id : $current_id;
+
 		$query = $ci->db->select()->from($table)->where($column, $value)->limit(1)->get();
 
 		if ($query->row() AND $query->row()->{$id_field} !== $current_id)
