@@ -26,6 +26,39 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Inventario_model extends CI_Model {
 
+	public $reportes_validation = array(
+		array(
+			'field' => 'inv_activo',
+			'label' => 'Inventario activo',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'elim_sin_dif',
+			'label' => 'Ocultar registros sin diferencias',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'incl_ajustes',
+			'label' => 'Incluir ajustes de inventario',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'incl_familias',
+			'label' => 'Incluir familias de productos',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'order_by',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'order_sort',
+			'label' => '',
+			'rules' => 'trim'
+		),
+	);
+
 
 	/**
 	 * Constructor de la clase
@@ -85,6 +118,55 @@ class Inventario_model extends CI_Model {
 
 	/**
 	 * Devuelve reporte por hojas
+	 * @param  string  $reporte       Nombre del reporte a ejecutar
+	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
+	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
+	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
+	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
+	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
+	 * @return array                  arreglo con el detalle del reporte
+	 */
+	public function get_reporte($reporte = '', $id_inventario = 0, $orden_campo = NULL, $orden_tipo = 'ASC',
+										$incl_ajustes = '0', $elim_sin_dif = '0', $param1 = NULL)
+	{
+		if ($reporte === 'hoja')
+		{
+			return $this->inventario_model->get_reporte_hoja($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'detalle_hoja')
+		{
+			return $this->inventario_model->get_reporte_detalle_hoja($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif, $param1);
+		}
+		elseif ($reporte === 'material')
+		{
+			return $this->inventario_model->get_reporte_material($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'material_faltante')
+		{
+			return $this->inventario_model->get_reporte_material_faltante($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'detalle_material')
+		{
+			return $this->inventario_model->get_reporte_detalle_material($id_inventario, $orden_campo, $orden_tipo, $param1, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'ubicacion')
+		{
+			return $this->inventario_model->get_reporte_ubicacion($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'tipos_ubicacion')
+		{
+			return $this->inventario_model->get_reporte_tipos_ubicacion($id_inventario, $orden_campo, $orden_tipo, $incl_ajustes, $elim_sin_dif);
+		}
+		elseif ($reporte === 'ajustes')
+		{
+			return $this->inventario_model->get_reporte_ajustes($id_inventario, $orden_campo, $orden_tipo, $elim_sin_dif);
+		}
+
+	}
+
+
+	/**
+	 * Devuelve reporte por hojas
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
 	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
@@ -95,6 +177,8 @@ class Inventario_model extends CI_Model {
 	public function get_reporte_hoja($id_inventario = 0, $orden_campo = 'hoja', $orden_tipo = 'ASC',
 										$incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'hoja' : $orden_campo;
+
 		$this->db->select('di.hoja, d.nombre as digitador, a.nombre as auditor');
 
 		$this->db->select_sum('stock_sap', 'sum_stock_sap');
@@ -152,14 +236,15 @@ class Inventario_model extends CI_Model {
 	 * @param  integer $id_inventario ID del inventario con el cual se hará el reporte
 	 * @param  string  $orden_campo   Nombre del campo para ordenar el reporte
 	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ASC/DESC)
-	 * @param  integer $hoja          numero de la hoja del inventario
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
+	 * @param  integer $hoja          numero de la hoja del inventario
 	 * @return array                  arreglo con el detalle del reporte
 	 */
 	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC',
-												$hoja = 0, $incl_ajustes = '0', $elim_sin_dif = '0')
+												$incl_ajustes = '0', $elim_sin_dif = '0', $hoja = 0)
 	{
+		$orden_campo = $orden_campo === '' ? 'ubicacion' : $orden_campo;
 
 		$this->db->select("case when reg_nuevo='S' THEN ubicacion + ' [*]' ELSE ubicacion END as ubicacion", FALSE);
 		$this->db->select('di.catalogo');
@@ -228,6 +313,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_material($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'catalogo' : $orden_campo;
+
 		$this->db->select("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre as nombre_fam", FALSE);
 		$this->db->select("f.codigo + '_' + sf.codigo as fam_subfam", FALSE);
 		$this->db->select('di.catalogo, di.descripcion, di.um, c.pmp');
@@ -299,6 +386,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'catalogo' : $orden_campo;
+
 		$this->db->select('i.catalogo, i.descripcion, i.um, c.pmp');
 		$this->db->select_sum('stock_fisico', 'q_fisico');
 		$this->db->select_sum('stock_sap', 'q_sap');
@@ -360,6 +449,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $catalogo = '', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'ubicacion' : $orden_campo;
+
 		$this->db->select('i.*, c.pmp');
 		$this->db->select('stock_fisico as stock_fisico');
 		$this->db->select('stock_sap as stock_sap');
@@ -425,6 +516,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'ubicacion' : $orden_campo;
+
 		$this->db->select('di.ubicacion');
 
 		$this->db->select_sum('stock_sap', 'sum_stock_sap');
@@ -488,6 +581,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'ubicacion' : $orden_campo;
+
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');
 		$this->db->select_sum('stock_sap', 'sum_stock_sap');
@@ -559,6 +654,8 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_ajustes($id_inventario = 0, $orden_campo = 'catalogo', $orden_tipo = 'ASC', $elim_sin_dif = '0')
 	{
+		$orden_campo = $orden_campo === '' ? 'catalogo' : $orden_campo;
+
 		$this->db->select('catalogo');
 		$this->db->select('descripcion');
 		$this->db->select('lote');
@@ -587,6 +684,473 @@ class Inventario_model extends CI_Model {
 		//$this->db->order_by($orden_campo . ' ' . $orden_tipo);
 
 		return $this->db->get($this->config->item('bd_detalle_inventario'))->result_array();
+	}
+
+
+	// --------------------------------------------------------------------
+
+	// =====================================================================================================
+	// CAMPOS DE LOS REPORTES
+	// =====================================================================================================
+
+	/**
+	 * Devuelve los campos de un reporte
+	 *
+	 * @param  string $reporte Nombre del reporte
+	 * @return array          Arreglo de campos
+	 */
+	public function get_campos_reporte($reporte)
+	{
+		if ($reporte === 'hoja')
+		{
+			return $this->inventario_model->get_campos_reporte_hoja();
+		}
+		elseif ($reporte === 'detalle_hoja')
+		{
+			return $this->inventario_model->get_campos_reporte_detalle_hoja();
+		}
+		elseif ($reporte === 'material')
+		{
+			return $this->inventario_model->get_campos_reporte_material();
+		}
+		elseif ($reporte === 'material_faltante')
+		{
+			return $this->inventario_model->get_campos_reporte_material_faltante();
+		}
+		elseif ($reporte === 'detalle_material')
+		{
+			return $this->inventario_model->get_campos_reporte_detalle_material();
+		}
+		elseif ($reporte === 'ubicacion')
+		{
+			return $this->inventario_model->get_campos_reporte_ubicacion();
+		}
+		elseif ($reporte === 'tipos_ubicacion')
+		{
+			return $this->inventario_model->get_campos_reporte_tipos_ubicacion();
+		}
+		elseif ($reporte === 'ajustes')
+		{
+			return $this->inventario_model->get_campos_reporte_ajustes();
+		}
+	}
+
+	/**
+	 * Devuelve los campos del reporte hoja
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_hoja()
+	{
+		$arr_campos = array();
+
+		$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/');
+		$arr_campos['auditor'] = array('titulo' => 'Auditor', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['digitador'] = array('titulo' => 'Digitador', 'class' => '', 'tipo' => 'texto');
+
+		$arr_campos['sum_stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['sum_stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+
+		$arr_campos['sum_valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['sum_valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'hoja') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'hoja')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte detalle hoja
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_detalle_hoja()
+	{
+		$arr_campos = array();
+
+		$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
+		$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['lote'] = array('titulo' => 'lote', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['centro'] = array('titulo' => 'centro', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['almacen'] = array('titulo' => 'almacen', 'class' => '', 'tipo' => 'texto');
+
+		$arr_campos['stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+		$arr_campos['valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte material
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_material()
+	{
+		$arr_campos = array();
+
+		if (set_value('incl_familias') === '1')
+		{
+			$arr_campos['nombre_fam'] = array('titulo' => 'Familia', 'class' => '', 'tipo' => 'subtotal');
+		}
+
+		$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
+		$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['um'] = array('titulo' => 'UM', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['pmp'] = array('titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp');
+
+		$arr_campos['sum_stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['sum_stock_dif'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+
+		$arr_campos['sum_valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['sum_valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte material faltante
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_material_faltante()
+	{
+		$arr_campos = array();
+
+		$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
+		$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['um'] = array('titulo' => 'UM', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['q_faltante'] = array('titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['q_coincidente'] = array('titulo' => 'Cant Coincidente', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['q_sobrante'] = array('titulo' => 'Cant Sobrante', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['v_faltante'] = array('titulo' => 'Valor Faltante', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['v_coincidente'] = array('titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['v_sobrante'] = array('titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'catalogo') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'catalogo')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte detalle material
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_detalle_material()
+	{
+		$arr_campos = array();
+
+		$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/');
+		$arr_campos['lote'] = array('titulo' => 'lote', 'class' => '', 'tipo' => 'texto');
+
+		$arr_campos['stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+
+		$arr_campos['valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte ubicacion
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_ubicacion()
+	{
+		$arr_campos = array();
+
+		$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
+
+		$arr_campos['sum_stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['sum_stock_dif'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+
+		$arr_campos['sum_valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['sum_valor_dif'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte tipos ubicacion
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_tipos_ubicacion()
+	{
+		$arr_campos = array();
+
+		$arr_campos['tipo_ubicacion'] = array('titulo' => 'Tipo Ubicacion', 'class' => '', 'tipo' => 'subtotal');
+		$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['sum_stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		}
+
+		$arr_campos['sum_stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+
+		$arr_campos['sum_valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+
+		if (set_value('incl_ajustes') === '1')
+		{
+			$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+		}
+
+		$arr_campos['sum_valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'tipo_ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'tipo_ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte ajustes
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_ajustes()
+	{
+		$arr_campos = array();
+
+		$arr_campos['catalogo'] = array('titulo' => 'Material', 'class' => '', 'tipo' => 'text');
+		$arr_campos['descripcion']  = array('titulo' => 'Desc Material', 'class' => '', 'tipo' => 'text');
+		$arr_campos['lote'] = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'text');
+		$arr_campos['centro'] = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'text');
+		$arr_campos['almacen'] = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'text');
+		$arr_campos['ubicacion'] = array('titulo' => 'Ubicacion', 'class' => '', 'tipo' => 'text');
+		$arr_campos['hoja'] = array('titulo' => 'Hoja', 'class' => '', 'tipo' => 'text');
+		$arr_campos['um'] = array('titulo' => 'UM', 'class' => '', 'tipo' => 'text');
+		$arr_campos['stock_sap'] = array('titulo' => 'Stock SAP', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_fisico'] = array('titulo' => 'Stock Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_ajuste'] = array('titulo' => 'Stock Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_dif'] = array('titulo' => 'Stock Dif', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['tipo'] = array('titulo' => 'Tipo Dif', 'class' => 'text-center', 'tipo' => 'texto');
+		$arr_campos['glosa_ajuste'] = array('titulo' => 'Observacion', 'class' => '', 'tipo' => 'texto');
+
+		// Establece el orden de los campos
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = $campo === set_value('order_by', 'tipo_ubicacion') ? $new_orden_tipo : 'ASC';
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC')
+				? 'glyphicon-circle-arrow-up'
+				: 'glyphicon-circle-arrow-down';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'tipo_ubicacion')
+				? ' <span class="text-muted glyphicon ' . $order_icon . '" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
 	}
 
 

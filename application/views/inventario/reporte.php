@@ -1,4 +1,13 @@
 <div class="row hidden-print">
+
+	<?php if (validation_errors()): ?>
+		<div class="alert alert-danger">
+			<ul>
+				<?php echo validation_errors(); ?>
+			</ul>
+		</div>
+	<?php endif; ?>
+
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
@@ -10,23 +19,23 @@
 	</div>
 
 	<div class="col-md-4 col-md-offset-1">
-		<div>
-			<div class="checkbox-inline">
+		<div class="checkbox">
+			<label>
 				<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
 				<?php echo $this->lang->line('inventario_report_check_ocultar_regs'); ?>
-			</div>
+			</label>
 		</div>
-		<div>
-			<div class="checkbox-inline">
+		<div class="checkbox">
+			<label>
 				<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
 				<?php echo $this->lang->line('inventario_report_check_incluir_ajustes'); ?>
-			</div>
+			</label>
 		</div>
-		<div>
-			<div class="checkbox-inline">
+		<div class="checkbox">
+			<label>
 				<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
 				<?php echo $this->lang->line('inventario_report_check_incluir_familias'); ?>
-			</div>
+			</label>
 		</div>
 	</div>
 
