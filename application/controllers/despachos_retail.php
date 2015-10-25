@@ -69,31 +69,19 @@ class Despachos_retail extends CI_Controller {
 	 */
 	public function retail($rut_retail = NULL)
 	{
-		$combo_max_facturas = array(
-			'1' => 1,
-			'3' => 3,
-			'5' => 5,
-			'10' => 10,
-			'20' => 20,
-			'30' => 30,
-			'50' => 50,
-		);
+		$this->form_validation->set_rules($this->despachos_model->validation_rules);
 
-		$this->form_validation->set_rules('rut_retail', 'RUT retail', 'trim');
-		$this->form_validation->set_rules('modelos', 'Modelos de equipos', 'trim');
-		$this->form_validation->set_rules('max_facturas', 'Maximo de facturas', 'trim');
-		$this->form_validation->run();
-
-		$this->despachos_model->limite_facturas = set_value('max_facturas', 5);
+		$arr_facturas = array();
+		if ($this->form_validation->run() === TRUE)
+		{
+			$this->despachos_model->limite_facturas = set_value('max_facturas', $this->despachos_model->limite_facturas);
+			$arr_facturas = $this->despachos_model->get_listado_ultimas_facturas(set_value('rut_retail'), set_value('modelos'));
+		}
 
 		$datos = array(
 			'combo_retail'       => $this->despachos_model->get_combo_rut_retail(),
-			'combo_max_facturas' => $combo_max_facturas,
-			'facturas'           => $this->despachos_model->get_listado_ultimas_facturas(
-										set_value('rut_retail'),
-										set_value('modelos')
-									),
-
+			'combo_max_facturas' => $this->despachos_model->get_combo_cantidad_facturas(),
+			'facturas'           => $arr_facturas,
 		);
 
 		app_render_view('despachos/retail', $datos);

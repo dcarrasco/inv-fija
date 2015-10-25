@@ -33,6 +33,24 @@ class Despachos_model extends CI_Model {
 	 */
 	public $limite_facturas = 5;
 
+	public $validation_rules = array(
+		array(
+			'field' => 'rut_retail',
+			'label' => 'RUT Retail',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'modelos',
+			'label' => 'Modelos de equipos',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'max_facturas',
+			'label' => 'Maximo de facturas',
+			'rules' => 'trim|required'
+		),
+	);
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -64,6 +82,28 @@ class Despachos_model extends CI_Model {
 			->result_array();
 
 		return form_array_format($arr_result);
+	}
+
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera cantidad de facturas para poblar combo box
+	 *
+	 * @return array Arreglo con las cantidades de facturas permitidas
+	 */
+	public function get_combo_cantidad_facturas()
+	{
+		return array(
+			'1' => 1,
+			'3' => 3,
+			'5' => 5,
+			'10' => 10,
+			'20' => 20,
+			'30' => 30,
+			'50' => 50,
+		);
 	}
 
 

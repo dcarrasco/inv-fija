@@ -1,3 +1,11 @@
+<?php if (validation_errors()): ?>
+	<div class="alert alert-danger">
+		<ul>
+			<?php echo validation_errors(); ?>
+		</ul>
+	</div>
+<?php endif; ?>
+
 <?php echo form_open('','id="frm_param" class="form-horizontal hidden-print"'); ?>
 <div class="form-group">
 	<label class="control-label col-md-2 col-md-offset-2"><?php echo $this->lang->line('label_rut_retail'); ?></label>
@@ -36,7 +44,7 @@
 				<th>operador</th>
 				<th class="text-center">retail</th>
 				<th class="text-center">cod_cliente</th>
-				<?php for($i=0;$i<$this->despachos_model->limite_facturas;$i++): ?>
+				<?php for($i=0; $i<$this->despachos_model->limite_facturas; $i++): ?>
 				<th class="text-center">factura <?php echo $i+1; ?></th>
 				<?php endfor; ?>
 			</tr>
@@ -50,12 +58,12 @@
 				<td class="text-center"><?php echo $datos['datos']['rut']; ?> <?php echo $datos['datos']['des_bodega']; ?></td>
 				<td class="text-center"><?php echo $datos['datos']['cod_cliente']; ?></td>
 
-				<?php for($i=0;$i<$this->despachos_model->limite_facturas;$i++): ?>
+				<?php for($i=0; $i<$this->despachos_model->limite_facturas; $i++): ?>
 				<td class="text-center">
-					<?php echo substr($datos['factura_' . $i]['fecha'],0,10); ?>
-					<br/><?php echo $datos['factura_' . $i]['n_doc']; ?>
-					<br/><?php echo $datos['factura_' . $i]['cod_sap']; ?>
-					<br/><?php echo fmt_cantidad($datos['factura_' . $i]['cant']); ?>
+					<?php echo substr($datos['factura_'.$i]['fecha'],0,10); ?>
+					<br/><?php echo $datos['factura_'.$i]['n_doc']; ?>
+					<br/><?php echo $datos['factura_'.$i]['cod_sap']; ?>
+					<br/><?php echo fmt_cantidad($datos['factura_'.$i]['cant']); ?>
 				</td>
 				<?php endfor; ?>
 			</tr>
