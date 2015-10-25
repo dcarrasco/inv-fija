@@ -34,7 +34,12 @@ class Login extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
 		$this->lang->load('login');
+
+		$this->load->model('acl_model');
+		$this->load->helper('cookie');
+
 	}
 
 	// --------------------------------------------------------------------
@@ -58,27 +63,18 @@ class Login extends CI_Controller {
 	 */
 	public function login()
 	{
-		$this->load->model('acl_model');
-		$this->load->helper('cookie');
-		$this->load->helper('captcha');
-
 		$msg_alerta = '';
-
 		$this->acl_model->delete_old_captchas();
 
 		// si el usuario ya está logueado, redireccionar a la app
 		if ($this->acl_model->is_user_logged())
 		{
-			$arr_menu = $this->acl_model->get_menu_usuario($this->acl_model->get_user());
-			redirect($arr_menu[0]['url']);
+			redirect($this->acl_model->get_redirect_app());
 		}
 
 		$this->acl_model->delete_session_data();
 
-
-		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
-		$this->form_validation->set_rules('pwd', 'Password', 'trim|required');
-		$this->form_validation->set_rules('remember_me', 'Recordarme', 'trim');
+		$this->form_validation->set_rules($this->acl_model->login_validation);
 		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() === TRUE)
@@ -108,39 +104,13 @@ class Login extends CI_Controller {
 				{
 					$this->acl_model->set_rememberme_cookie($usuario);
 				}
-				$arr_menu = $this->acl_model->get_menu_usuario($usuario);
-
-				redirect($arr_menu[0]['url']);
+				redirect($this->acl_model->get_redirect_app());
 			}
 
 			$msg_alerta = '<div class="alert alert-danger">' . $this->lang->line('login_error_usr_pwd') . '</div>';
 		}
 
-		$captcha_img  = '';
-		$usar_captcha = $this->acl_model->use_captcha($this->input->post('usr'));
-
-		if ($usar_captcha)
-		{
-			$captcha_config = array(
-				'img_path'      => './img/captcha/',
-				'img_url'       => base_url() . 'img/captcha/',
-				'word'          => genera_captcha_word(),
-				'img_width'     => 260,
-				'img_height'    => 50,
-				'font_size'     => 30,
-			);
-
-			$captcha     = create_captcha($captcha_config);
-			$captcha_img = $captcha['image'];
-
-			$this->acl_model->write_captcha(
-				(string) $captcha['time'],
-				(string) $this->session->session_id,
-				(string) $captcha['word']
-			);
-
-			$this->form_validation->set_rules('captcha', 'Palabra distorsionada', 'trim|required');
-		}
+		$captcha_img  = $this->acl_model->get_captcha_img(set_value('usr'));
 
 		// error en la validación de usuario/pwd
 		$msg_alerta = (count($this->form_validation->error_array()) > 0)
@@ -149,7 +119,7 @@ class Login extends CI_Controller {
 
 		$data = array(
 			'msg_alerta'   => $msg_alerta,
-			'usar_captcha' => $usar_captcha,
+			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
 		);
 
@@ -182,12 +152,7 @@ class Login extends CI_Controller {
 	 */
 	public function cambio_password($usr_param = '')
 	{
-		$this->load->model('acl_model');
-
-		$this->form_validation->set_rules('usr', 'Usuario', 'trim|required');
-		$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim|required');
-		$this->form_validation->set_rules('pwd_new1', 'Clave Nueva', 'trim|required|min_length[8]|callback_password_validation');
-		$this->form_validation->set_rules('pwd_new2', 'Clave Nueva (reingreso)', 'trim|required|matches[pwd_new1]');
+		$this->form_validation->set_rules($this->acl_model->change_password_validation);
 		$this->app_common->form_validation_config();
 
 		if ( ! $this->acl_model->tiene_clave($this->input->post('usr')))
@@ -233,25 +198,6 @@ class Login extends CI_Controller {
 				$this->load->view('ACL/cambio_password', $data);
 			}
 		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Valida que la password ingresada tenga a lo menos:
-	 * un digito numerico, un caracter minuscula y un caracter mayuscula
-	 *
-	 * @param   string $password Password a validar
-	 * @return  boolean          Indica si la password cumple el formato a validar
-	 */
-	public function password_validation($password = '')
-	{
-		if (preg_match('#[0-9]#', $password) AND preg_match('#[a-z]#', $password) AND preg_match('#[A-Z]#', $password))
-		{
-			return TRUE;
-		}
-
-		return FALSE;
 	}
 
 

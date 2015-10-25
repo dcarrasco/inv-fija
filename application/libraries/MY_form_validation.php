@@ -70,4 +70,24 @@ class MY_Form_validation extends CI_Form_validation {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Valida que la password ingresada tenga a lo menos:
+	 * un digito numerico, un caracter minuscula y un caracter mayuscula
+	 *
+	 * @param   string $password Password a validar
+	 * @return  boolean          Indica si la password cumple el formato a validar
+	 */
+	public function password_validation($password = '')
+	{
+		if (preg_match('#[0-9]#', $password) AND preg_match('#[a-z]#', $password) AND preg_match('#[A-Z]#', $password))
+		{
+			return TRUE;
+		}
+
+		return FALSE;
+	}
+
+
 }

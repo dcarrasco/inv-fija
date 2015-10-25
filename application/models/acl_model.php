@@ -27,6 +27,52 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Acl_model extends CI_Model {
 
 	/**
+	 * Reglas para formulario login
+	 *
+	 * @var array
+	 */
+	public $login_validation = array(
+		array(
+			'field' => 'usr',
+			'label' => 'Usuario',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'pwd',
+			'label' => 'Password',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'remember_me',
+			'label' => 'Recordarme',
+			'rules' => 'trim'
+		),
+	);
+
+	public $change_password_validation = array(
+		array(
+			'field' => 'usr',
+			'label' => 'Usuario',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'pwd_old',
+			'label' => 'Clave Anterior',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'pwd_new1',
+			'label' => 'Clave Nueva',
+			'rules' => 'trim|required|min_length[8]|password_validation'
+		),
+		array(
+			'field' => 'pwd_new2',
+			'label' => 'Clave Nueva (reingreso)',
+			'rules' => 'trim|required|matches[pwd_new1]'
+		),
+	);
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return  void
@@ -34,6 +80,8 @@ class Acl_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->helper('captcha');
 	}
 
 	// --------------------------------------------------------------------
@@ -219,6 +267,45 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera imagen para usuar en el captcha
+	 *
+	 * Valida si el usuario tiene intentos fallidos de login, para desplegar imagen captcha
+	 *
+	 * @param  string $usuario Usuario a loguear
+	 * @return string          Imagen captcha
+	 */
+	public function get_captcha_img($usuario = '')
+	{
+		if ( ! $this->use_captcha($usuario))
+		{
+			return '';
+		}
+
+		$captcha_config = array(
+			'img_path'      => './img/captcha/',
+			'img_url'       => base_url() . 'img/captcha/',
+			'word'          => genera_captcha_word(),
+			'img_width'     => 260,
+			'img_height'    => 50,
+			'font_size'     => 30,
+		);
+
+		$captcha = create_captcha($captcha_config);
+
+		$this->_write_captcha(
+			(string) $captcha['time'],
+			(string) $this->session->session_id,
+			(string) $captcha['word']
+		);
+
+		$this->form_validation->set_rules('captcha', 'Palabra distorsionada', 'trim|required');
+
+		return $captcha['image'];
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Indica si se debe usar un captcha para el login del usuario
 	 *
 	 * @param  string $usuario Usuario a validar
@@ -247,7 +334,7 @@ class Acl_model extends CI_Model {
 	 * @param string $word       Palabra del captcha
 	 * @return void
 	 */
-	public function write_captcha($time = '', $session_id = '', $word = '')
+	private function _write_captcha($time = '', $session_id = '', $word = '')
 	{
 		$this->delete_captchas_session($session_id);
 
@@ -646,7 +733,7 @@ class Acl_model extends CI_Model {
 	/**
 	 * Cambia la clave de un usuario
 	 *
-	 * @param  string $usuario       Usuario
+	 * @param  string $usuario   Usuario
 	 * @param  string $clave_old Clave anterior
 	 * @param  string $clave_new Nueva clave
 	 * @return array             Estado de cambio de clave
@@ -668,6 +755,29 @@ class Acl_model extends CI_Model {
 			return FALSE;
 		}
 	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera la app para redireccionar al usuario
+	 *
+	 * @return void
+	 */
+	public function get_redirect_app()
+	{
+		$arr_menu = $this->get_menu_usuario($this->get_user());
+
+		if (count($arr_menu))
+		{
+			redirect($arr_menu[0]['url']);
+		}
+		else
+		{
+			redirect('login/');
+		}
+
+	}
+
 
 	// --------------------------------------------------------------------
 
