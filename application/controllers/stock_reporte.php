@@ -55,6 +55,8 @@ class Stock_reporte extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->model('reportestock_model');
 		$this->lang->load('stock');
 
 		$this->_arr_menu = array(
@@ -100,107 +102,21 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function listado($tipo = 'permanencia', $param1 = '')
 	{
-		$this->load->model('reportestock_model');
-
-		// define reglas para usar set_value
-		$this->form_validation->set_rules('tipo_alm');
-		$this->form_validation->set_rules('estado_sap');
-		$this->form_validation->set_rules('tipo_mat');
-		$this->form_validation->set_rules('tipo_op', '', 'trim');
-		$this->form_validation->set_rules('incl_almacen', '', 'trim');
-		$this->form_validation->set_rules('incl_lote', '', 'trim');
-		$this->form_validation->set_rules('incl_modelos', '', 'trim');
-		$this->form_validation->set_rules('order_by', '', 'trim');
-		$this->form_validation->set_rules('order_sort', '', 'trim');
-		$this->form_validation->run();
-
-		$orden_campo   = set_value('order_by');
-		$orden_tipo    = set_value('order_sort');
-		$tipo_alm      = $this->input->post('tipo_alm');
-		$estado_sap    = $this->input->post('estado_sap');
-		$tipo_mat      = $this->input->post('tipo_mat');
-		$tipo_op       = set_value('tipo_op', 'MOVIL');
-		$incl_almacen  = set_value('incl_almacen');
-		$incl_lote     = set_value('incl_lote');
-		$incl_modelos  = set_value('incl_modelos');
-
-		$new_orden_tipo  = ($orden_tipo === 'ASC') ? 'DESC' : 'ASC';
+		$arr_campos = array();
+		$datos_hoja = array();
 		$view = 'listado';
 
-		if ($tipo === 'permanencia')
+		// define reglas para usar set_value
+		$this->form_validation->set_rules($this->reportestock_model->permanencia_validation);
+		$this->app_common->form_validation_config();
+
+		if ($this->form_validation->run() === TRUE)
 		{
-			$orden_campo = ($orden_campo === '') ? 'tipo' : $orden_campo;
-
-			$arr_config = array(
-				'orden' => array(
-					'campo' => $orden_campo,
-					'tipo'  => $orden_tipo,
-				),
-				'filtros' => array(
-					'tipo_alm'   => $tipo_alm,
-					'estado_sap' => $estado_sap,
-					'tipo_mat'   => $tipo_mat,
-				),
-				'mostrar' => array(
-					'almacen' => $incl_almacen,
-					'lote'    => $incl_lote,
-					'modelos' => $incl_modelos,
-				),
-			);
-
-			$datos_hoja = $this->reportestock_model->get_reporte_permanencia($arr_config);
-
-			$arr_campos = array();
-
-			$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
-
-			if ($incl_almacen === '1')
+			if ($tipo === 'permanencia')
 			{
-				$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
-				$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto');
-				$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
+				$arr_campos = $this->reportestock_model->get_campos_reporte_permanencia();
+				$datos_hoja = $this->reportestock_model->get_reporte_permanencia($this->reportestock_model->get_config_reporte_permanencia());
 			}
-
-			if (count($estado_sap) > 0 AND is_array($estado_sap))
-			{
-				$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto');
-			}
-
-			if ($incl_lote === '1')
-			{
-				$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
-			}
-
-			if (count($tipo_mat) > 0 AND is_array($tipo_mat))
-			{
-				$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto');
-			}
-
-			if ($incl_modelos === '1')
-			{
-				$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '', 'tipo' => 'texto');
-			}
-
-			$arr_campos['m030'] = array('titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m060'] = array('titulo' => '031-060', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m090'] = array('titulo' => '061-090', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m120'] = array('titulo' => '091-120', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m180'] = array('titulo' => '121-180', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m360'] = array('titulo' => '181-360', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['m720'] = array('titulo' => '361-720', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['mas720'] = array('titulo' => '+720', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['otro']   = array('titulo' => 'otro', 'class' => 'text-center', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-			$arr_campos['total']  = array('titulo' => 'Total', 'class' => 'text-center bold', 'tipo' => 'link_detalle_series', 'href' => $this->router->class . '/detalle');
-		}
-
-		foreach ($arr_campos as $campo => $valor)
-		{
-			$arr_campos[$campo]['order_by']  = ($campo === $orden_campo) ? $new_orden_tipo : 'ASC';
-			$arr_campos[$campo]['img_orden'] = ($campo === $orden_campo)
-				? ' <span class="text-muted glyphicon ' .
-					(($arr_campos[$campo]['order_by'] === 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
-					'" ></span>'
-				: '';
 		}
 
 		$data = array(
@@ -212,7 +128,7 @@ class Stock_reporte extends CI_Controller {
 			'arr_campos'       => $arr_campos,
 			'titulo_modulo'    => 'Reportes Stock',
 			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
-			'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm($tipo_op),
+			'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm(set_value('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 		);
@@ -229,9 +145,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function detalle()
 	{
-
-		$this->load->model('reportestock_model');
-
 		$data = array(
 			'menu_modulo'        => array('menu' => $this->_arr_menu, 'mod_selected' => 'permanencia'),
 			'menu_configuracion' => '',
@@ -269,7 +182,6 @@ class Stock_reporte extends CI_Controller {
 
 		$centro = set_value('sel_centro', 'CL03');
 
-		$this->load->model('reportestock_model');
 		$arr_treemap = $this->reportestock_model->get_treemap_permanencia($centro);
 		$arr_treemap_cantidad = $this->reportestock_model->arr_query2treemap('cantidad', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
 		$arr_treemap_valor = $this->reportestock_model->arr_query2treemap('valor', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'valor', 'perm');
@@ -288,7 +200,6 @@ class Stock_reporte extends CI_Controller {
 
 	public function movhist()
 	{
-		$this->load->model('reportestock_model');
 		$this->app_common->form_validation_config();
 
 		$this->form_validation->set_rules('tipo_fecha');
@@ -371,8 +282,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_tipo_fecha($tipo = 'ANNO')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_tipo_fecha($tipo)));
@@ -390,8 +299,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_fechas($tipo = 'ANNO', $filtro = '')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_fechas($tipo, $filtro)));
@@ -408,8 +315,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_tipo_alm($tipo = '')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_tipo_alm($tipo)));
@@ -427,8 +332,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_almacenes($tipo = 'MOVIL-TIPOALM', $filtro = '')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_almacenes($tipo, $filtro)));
@@ -445,8 +348,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_tipo_mat($tipo = '')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_tipo_mat($tipo)));
@@ -464,8 +365,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist_ajax_materiales($tipo = 'TIPO', $filtro = '')
 	{
-		$this->load->model('reportestock_model');
-
 		$this->output
 			->set_content_type('application/json')
 			->set_output(json_encode($this->reportestock_model->get_combo_materiales($tipo, $filtro)));
@@ -482,8 +381,6 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function est03()
 	{
-		$this->load->model('reportestock_model');
-
 		$data = array(
 			'menu_modulo' => array('menu' => $this->_arr_menu, 'mod_selected' => 'est03'),
 			'almacenes'   => $this->reportestock_model->get_almacenes_est03(),

@@ -27,6 +27,62 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Reportestock_model extends CI_Model {
 
 	/**
+	 * Arreglo de reglas de validación reporte permanencia
+	 *
+	 * @var array
+	 */
+	public $permanencia_validation = array(
+		array(
+			'field' => 'tipo_alm[]',
+			'label' => 'Almacenes',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'estado_sap[]',
+			'label' => 'Estados Stock',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'tipo_mat[]',
+			'label' => 'Tipos de material',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'tipo_op',
+			'label' => 'Tipo de operacion',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'incl_almacen',
+			'label' => 'Mostrar almacenes',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'incl_lotes',
+			'label' => 'Mostrar lotes',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'incl_modelos',
+			'label' => 'Mostrar modelos equipos',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'order_by',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'order_sort',
+			'label' => '',
+			'rules' => 'trim'
+		),
+	);
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return void
@@ -35,7 +91,6 @@ class Reportestock_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -229,6 +284,111 @@ class Reportestock_model extends CI_Model {
 		return $arr_reporte;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve la configuraciob del reporte permanencia
+	 *
+	 * @return array Arreglo de configuracion
+	 */
+	public function get_config_reporte_permanencia()
+	{
+		return array(
+			'orden' => array(
+				'campo' => (set_value('order_by') === '') ? 'tipo' : set_value('order_by'),
+				'tipo'  => set_value('order_sort'),
+			),
+			'filtros' => array(
+				'tipo_alm'   => set_value('tipo_alm'),
+				'estado_sap' => set_value('estado_sap'),
+				'tipo_mat'   => set_value('tipo_mat'),
+			),
+			'mostrar' => array(
+				'almacen' => set_value('incl_almacen'),
+				'lote'    => set_value('incl_lote'),
+				'modelos' => set_value('incl_modelos'),
+			),
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos a usar en reporte de permanencia.
+	 *
+	 * @return array Arreglo de campos para reporte permanencia
+	 */
+	public function get_campos_reporte_permanencia()
+	{
+		$arr_campos = array();
+
+		$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
+
+		if (set_value('incl_almacen') === '1')
+		{
+			$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
+			$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto');
+			$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
+		}
+
+		if (is_array(set_value('estado_sap')) AND count(set_value('estado_sap')) > 0)
+		{
+			$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto');
+		}
+
+		if (set_value('incl_lote') === '1')
+		{
+			$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
+		}
+
+		if (is_array(set_value('tipo_mat')) AND count(set_value('tipo_mat')) > 0)
+		{
+			$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto');
+		}
+
+		if (set_value('incl_modelos') === '1')
+		{
+			$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '', 'tipo' => 'texto');
+		}
+
+		$campos_datos = array(
+			'm030' => '000-030',
+			'm060' => '031-060',
+			'm090' => '061-090',
+			'm120' => '091-120',
+			'm180' => '121-180',
+			'm360' => '181-360',
+			'm720' => '361-720',
+			'mas720' => '+720',
+			'otro' => 'otro',
+			'total' => 'Total',
+		);
+
+		foreach ($campos_datos as $llave => $valor)
+		{
+			$arr_campos[$llave] = array(
+				'titulo' => $valor,
+				'class'  => 'text-center',
+				'tipo'   => 'link_detalle_series',
+				'href'   => $this->router->class . '/detalle',
+			);
+
+		}
+
+		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by']  = $campo === set_value('order_by', 'tipo') ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'tipo')
+				? ' <span class="text-muted glyphicon ' .
+					(($arr_campos[$campo]['order_by'] === 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
+					'" ></span>'
+				: '';
+		}
+
+		return $arr_campos;
+	}
 
 	// --------------------------------------------------------------------
 

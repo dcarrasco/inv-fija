@@ -21,6 +21,14 @@
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
 
+			<?php if (validation_errors()): ?>
+				<div class="alert alert-danger">
+					<ul>
+						<?php echo validation_errors(); ?>
+					</ul>
+				</div>
+			<?php endif; ?>
+
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
