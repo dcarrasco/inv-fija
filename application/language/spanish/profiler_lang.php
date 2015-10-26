@@ -21,7 +21,7 @@ $lang['profiler_no_memory']		= 'Memory Usage Unavailable';
 $lang['profiler_no_profiles']	= 'No Profile data - all Profiler sections have been disabled.';
 $lang['profiler_section_hide']	= 'Ocultar';
 $lang['profiler_section_show']	= 'Mostrar';
-
+$lang['profiler_seconds']       = 'seconds';
 
 /* End of file profiler_lang.php */
 /* Location: ./application/language/spanish/profiler_lang.php */
