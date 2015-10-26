@@ -52,7 +52,10 @@ class MY_Hooks {
 
 		if (ENVIRONMENT !== 'production')
 		{
-			//$ci->output->enable_profiler(TRUE);
+			if (! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE)
+			{
+				//$ci->output->enable_profiler(TRUE);
+			}
 		}
 
 		// log información
