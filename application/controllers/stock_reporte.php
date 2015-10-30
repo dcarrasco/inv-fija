@@ -104,6 +104,8 @@ class Stock_reporte extends CI_Controller {
 	{
 		$arr_campos = array();
 		$datos_hoja = array();
+		$tipoalmacen_sap = new Tipoalmacen_sap;
+
 		$view = 'listado';
 
 		// define reglas para usar set_value
@@ -128,7 +130,7 @@ class Stock_reporte extends CI_Controller {
 			'arr_campos'       => $arr_campos,
 			'titulo_modulo'    => 'Reportes Stock',
 			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
-			'combo_tipo_alm'   => $this->reportestock_model->combo_tipo_alm(set_value('tipo_op', 'MOVIL')),
+			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(set_value('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 		);
@@ -201,16 +203,7 @@ class Stock_reporte extends CI_Controller {
 	public function movhist()
 	{
 		$this->app_common->form_validation_config();
-
-		$this->form_validation->set_rules('tipo_fecha');
-		$this->form_validation->set_rules('tipo_alm');
-		$this->form_validation->set_rules('tipo_mat');
-		$this->form_validation->set_rules('tipo_cruce_alm');
-		$this->form_validation->set_rules('fechas', 'Fecha reporte', 'required');
-		$this->form_validation->set_rules('cmv', 'Movimientos', 'required');
-		$this->form_validation->set_rules('almacenes', 'Almacenes', 'required');
-		$this->form_validation->set_rules('materiales', 'Materiales', 'required');
-
+		$this->form_validation->set_rules($this->reportestock_model->movhist_validation);
 		$this->form_validation->run();
 
 		$param_tipo_fecha     = set_value('tipo_fecha', 'ANNO');
