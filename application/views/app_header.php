@@ -91,7 +91,7 @@
 <div class="tab-pane active">
 <?php endif; ?>
 
-<?php if (isset($msg_alerta) and $msg_alerta != ''): ?>
+<?php if (isset($msg_alerta) and $msg_alerta !== ''): ?>
 <div class="alert alert-warning">
 	<button type="button" class="close" data-dismiss="alert">&times;</button>
 	<?php echo $msg_alerta; ?>

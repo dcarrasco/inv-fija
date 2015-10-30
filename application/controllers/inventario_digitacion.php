@@ -79,19 +79,13 @@ class Inventario_digitacion extends CI_Controller {
 
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		$nuevo_detalle_inventario->get_relation_fields();
+
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
 
-		$auditor = $detalle_inventario->get_id_auditor();
-		$detalle_inventario->auditor = $auditor;
-
-		$nombre_inventario = $inventario->nombre;
-		$nombre_auditor    = $detalle_inventario->get_nombre_auditor();
-		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
-
-		$id_usuario_login  = $this->acl_model->get_id_usr();
+		$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
 
 		if ($this->input->post('formulario') === 'buscar')
 		{
@@ -112,16 +106,10 @@ class Inventario_digitacion extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'nuevo_detalle_inventario' => $nuevo_detalle_inventario,
 				'detalle_inventario' => $detalle_inventario,
 				'hoja'               => $hoja,
-				'nombre_inventario'  => $nombre_inventario,
-				'nombre_digitador'   => $nombre_digitador,
-				'nombre_auditor'     => $nombre_auditor,
-				'id_auditor'         => $auditor,
-				'link_config'        => 'config',
-				'link_reporte'       => 'reportes',
-				'link_inventario'    => 'inventario',
+				'nombre_inventario'  => $inventario->nombre,
+				'id_auditor'         => $detalle_inventario->get_id_auditor(),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
 				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
@@ -133,6 +121,7 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			if ($this->input->post('formulario') === 'inventario')
 			{
+				$id_usuario_login  = $this->acl_model->get_id_usr();
 				$cant_modif = $detalle_inventario->update_digitacion($id_usuario_login);
 				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '';
 			}
