@@ -13,6 +13,15 @@
 
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
+
+				<?php if (validation_errors()): ?>
+					<div class="alert alert-danger">
+						<ul>
+							<?php echo validation_errors(); ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
 				<div class="col-md-2">
 					<div class="form-group">
 						<label>
@@ -29,9 +38,6 @@
 						</div>
 
 						<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'), 'size="8" class="form-control"'); ?>
-
-						<?php echo form_error('fechas'); ?>
-
 					</div>
 				</div>
 
@@ -42,9 +48,6 @@
 						</label>
 
 						<?php echo form_multiselect('cmv[]', $combo_cmv, $this->input->post('cmv'), 'size="10" class="form-control"'); ?>
-
-						<?php echo form_error('cmv'); ?>
-
 					</div>
 				</div>
 
@@ -76,10 +79,6 @@
 								<?php echo $this->lang->line('stock_movhist_radio_rec'); ?>
 							</div>
 						</div>
-
-
-						<?php echo form_error('almacenes'); ?>
-
 					</div>
 				</div>
 
@@ -99,9 +98,6 @@
 						</div>
 
 						<?php echo form_multiselect('materiales[]', $combo_materiales, $this->input->post('materiales'), 'size="8" class="form-control"'); ?>
-
-						<?php echo form_error('materiales'); ?>
-
 					</div>
 				</div>
 
@@ -143,17 +139,19 @@ $(document).ready(function() {
 
 	$('#filtro_tipo_fecha').click(function (event) {
 		var sel_tipo_fecha = $('select[name="tipo_fecha"]'),
-			sel_fechas = $('select[name="fechas[]"]');
+			sel_fechas = $('select[name="fechas[]"]'),
+			val_tipo_fecha = sel_tipo_fecha.val(),
+			val_fechas = sel_fechas.val();
 
-		if (sel_fechas.val() !== null && sel_tipo_fecha.val() !== 'DIA')
+		if (val_fechas !== null && val_tipo_fecha !== 'DIA')
 		{
-			var url = url_ajax + 'movhist_ajax_tipo_fecha/' + sel_tipo_fecha.val();
+			var url = url_ajax + 'movhist_ajax_tipo_fecha/' + val_tipo_fecha;
 			actualizaCombo(sel_tipo_fecha, url);
 
-			var url = url_ajax + 'movhist_ajax_fechas/' + sel_tipo_fecha.val() + '/' + sel_fechas.val().toString().replace(/,/g, '~');
+			var url = url_ajax + 'movhist_ajax_fechas/' + sel_tipo_fecha.val() + '/' + val_fechas.toString().replace(/,/g, '~');
 			actualizaCombo(sel_fechas, url);
 
-		$(this).removeClass('btn-default').addClass('btn-success');
+			$(this).removeClass('btn-default').addClass('btn-success');
 		}
 	});
 
@@ -198,9 +196,24 @@ $(document).ready(function() {
 			async: false,
 			success: function(data) {
 				var items = [];
+
 				$.each(data, function(key, val) {
 					items.push('<option value="' + key + '">' + val + '</option>');
 				});
+
+				/*
+				var values = [];
+				for (var i in data) {
+					values.push({key: i, value: data[i]})
+				}
+				values.sort(function (a, b) {return a.value.localeCompare(b.value)});
+
+				$.each(values, function(key, val) {
+					items.push('<option value="' + val.key + '">' + val.value + '</option>');
+				});
+
+				 */
+
 				elem.empty().append(items.join(''));
 			},
 		});
