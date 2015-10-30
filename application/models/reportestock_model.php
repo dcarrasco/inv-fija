@@ -79,6 +79,53 @@ class Reportestock_model extends CI_Model {
 		),
 	);
 
+	/**
+	 * Arreglo de reglas de validación reporte movhist
+	 *
+	 * @var array
+	 */
+	public $movhist_validation = array(
+		array(
+			'field' => 'tipo_fecha',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'tipo_alm',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'tipo_mat',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'tipo_cruce_alm',
+			'label' => '',
+			'rules' => 'trim'
+		),
+		array(
+			'field' => 'fechas[]',
+			'label' => 'Fecha reporte',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'cmv[]',
+			'label' => 'Movimientos',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'almacenes[]',
+			'label' => 'Almacenes',
+			'rules' => 'trim|required'
+		),
+		array(
+			'field' => 'materiales',
+			'label' => 'Materiales',
+			'rules' => 'trim'
+		),
+	);
 
 	// --------------------------------------------------------------------
 
@@ -107,30 +154,6 @@ class Reportestock_model extends CI_Model {
 			->get($this->config->item('bd_permanencia'))
 			->row()
 			->fecha_stock;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera los tipos de almacén segun el tipo de operación
-	 *
-	 * @param  string $tipo_op Tipo de operacion (fija o movil)
-	 * @return array          Arreglo de almacenes
-	 */
-	public function combo_tipo_alm($tipo_op = '')
-	{
-		$arr_rs = $this->db
-			->distinct()
-			->select('t.id_tipo as llave')
-			->select('t.tipo as valor')
-			->from($this->config->item('bd_tiposalm_sap') . ' t')
-			->where('t.tipo_op', $tipo_op)
-			->order_by('t.tipo')
-			->get()
-			->result_array();
-
-		return form_array_format($arr_rs);
 	}
 
 
