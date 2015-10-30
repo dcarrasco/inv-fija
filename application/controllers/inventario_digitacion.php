@@ -102,13 +102,7 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
-
-			foreach($detalle_inventario->get_model_all() as $linea_detalle)
-			{
-				$this->form_validation->set_rules('stock_fisico_' . $linea_detalle->id, 'cantidad', 'trim|required|integer|greater_than[-1]');
-				$this->form_validation->set_rules('hu_' . $linea_detalle->id, 'hu', 'trim');
-				$this->form_validation->set_rules('observacion_' . $linea_detalle->id, 'observacion', 'trim');
-			}
+			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion());
 		}
 
 		$this->app_common->form_validation_config();
@@ -124,7 +118,6 @@ class Inventario_digitacion extends CI_Controller {
 				'nombre_inventario'  => $nombre_inventario,
 				'nombre_digitador'   => $nombre_digitador,
 				'nombre_auditor'     => $nombre_auditor,
-				//'id_digitador'      => $digitador,
 				'id_auditor'         => $auditor,
 				'link_config'        => 'config',
 				'link_reporte'       => 'reportes',
@@ -140,22 +133,7 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			if ($this->input->post('formulario') === 'inventario')
 			{
-				$cant_modif = 0;
-
-				foreach($detalle_inventario->get_model_all() as $linea_detalle)
-				{
-					$linea_detalle->fill(array(
-						'digitador'          => $id_usuario_login,
-						'auditor'            => set_value('auditor'),
-						'stock_fisico'       => set_value('stock_fisico_' . $linea_detalle->id),
-						'hu'                 => set_value('hu_' . $linea_detalle->id),
-						'observacion'        => set_value('observacion_'  . $linea_detalle->id),
-						'fecha_modificacion' => date('Ymd H:i:s'),
-					));
-					$linea_detalle->grabar();
-					$cant_modif += 1;
-				}
-
+				$cant_modif = $detalle_inventario->update_digitacion($id_usuario_login);
 				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '';
 			}
 

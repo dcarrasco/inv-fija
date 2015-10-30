@@ -137,11 +137,7 @@ class Inventario_analisis extends CI_Controller {
 
 		if ($this->input->post('formulario') === 'ajustes')
 		{
-			foreach($detalle_ajustes->get_model_all() as $detalle)
-			{
-				$this->form_validation->set_rules('stock_ajuste_' . $detalle->id, 'cantidad', 'trim|integer');
-				$this->form_validation->set_rules('observacion_' . $detalle->id, 'observacion', 'trim');
-			}
+			$this->form_validation->set_rules($detalle_ajustes->get_validation_ajustes());
 		}
 
 		$this->app_common->form_validation_config();
@@ -151,7 +147,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'inventario'            => $this->_id_inventario . ' - ' . $this->_nombre_inventario,
+				'inventario'            => $this->_id_inventario.' - '.$this->_nombre_inventario,
 				'detalle_ajustes'       => $detalle_ajustes,
 				'ocultar_regularizadas' => $ocultar_regularizadas,
 				'pag'                   => $pagina,
@@ -164,21 +160,7 @@ class Inventario_analisis extends CI_Controller {
 		{
 			if ($this->input->post('formulario') === 'ajustes')
 			{
-				$cant_modif = 0;
-				foreach($detalle_ajustes->get_model_all() as $detalle)
-				{
-					if ( (int) set_value('stock_ajuste_' . $detalle->id) !== $detalle->stock_ajuste
-						OR trim(set_value('observacion_' . $detalle->id)) !== trim($detalle->glosa_ajuste) )
-					{
-						$detalle->stock_ajuste = (int) set_value('stock_ajuste_' . $detalle->id);
-						$detalle->glosa_ajuste = trim(set_value('observacion_' . $detalle->id));
-						$detalle->fecha_ajuste = date('Ymd H:i:s');
-						$detalle->grabar();
-						$cant_modif += 1;
-					}
-
-				}
-
+				$cant_modif = $detalle_ajustes->update_ajustes();
 				$msg_alerta = ($cant_modif > 0)
 					? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
 					: '';

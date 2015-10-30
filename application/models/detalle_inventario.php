@@ -283,7 +283,6 @@ class Detalle_inventario extends ORM_Model {
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -360,7 +359,132 @@ class Detalle_inventario extends ORM_Model {
 		return $this->CI->pagination->create_links();
 	}
 
+	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve arreglo validación de un conjunto de lineas de detalle
+	 *
+	 * @return array Arreglo con reglas de validación
+	 */
+	public function get_validation_ajustes()
+	{
+		$arr_validation = array();
+
+		if (count($this->get_model_all()))
+		{
+			foreach($this->get_model_all() as $linea_detalle)
+			{
+				array_push($arr_validation, array(
+					'field' => 'stock_ajuste_'.$linea_detalle->id,
+					'label' => 'cantidad',
+					'rules' => 'trim|integer'
+				));
+				array_push($arr_validation, array(
+					'field' => 'observacion_'.$linea_detalle->id,
+					'label' => 'observacion',
+					'rules' => 'trim'
+				));
+			}
+		}
+
+		return $arr_validation;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo validación de un conjunto de lineas de detalle
+	 *
+	 * @return array Arreglo con reglas de validación
+	 */
+	public function get_validation_digitacion()
+	{
+		$arr_validation = array();
+
+		if (count($this->get_model_all()))
+		{
+			foreach($this->get_model_all() as $linea_detalle)
+			{
+				array_push($arr_validation, array(
+					'field' => 'stock_fisico_'.$linea_detalle->id,
+					'label' => 'Cantidad',
+					'rules' => 'trim|required|integer|greater_than[-1]'
+				));
+				array_push($arr_validation, array(
+					'field' => 'hu'.$linea_detalle->id,
+					'label' => 'HU',
+					'rules' => 'trim'
+				));
+				array_push($arr_validation, array(
+					'field' => 'observacion'.$linea_detalle->id,
+					'label' => 'Observacion',
+					'rules' => 'trim'
+				));
+			}
+		}
+
+		return $arr_validation;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza cantidades y observaciones de un conjunto de lineas de detalle
+	 * de acuerdo a información del POST
+	 *
+	 * @return integer Cantidad de registros modificados
+	 */
+	public function update_ajustes()
+	{
+		$cant_modif = 0;
+
+		foreach($this->get_model_all() as $linea_detalle)
+		{
+			if ( (int) set_value('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste OR
+				trim(set_value('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste) )
+			{
+				$linea_detalle->stock_ajuste = (int) set_value('stock_ajuste_'.$linea_detalle->id);
+				$linea_detalle->glosa_ajuste = trim(set_value('observacion_'.$linea_detalle->id));
+				$linea_detalle->fecha_ajuste = date('Ymd H:i:s');
+				$linea_detalle->grabar();
+				$cant_modif += 1;
+			}
+		}
+
+		return $cant_modif;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza un conjunto de lineas de detalle
+	 * de acuerdo a información del POST
+	 *
+	 * @param  integer ID del usuario que está modificando los datos
+	 * @return integer Cantidad de registros modificados
+	 */
+	public function update_digitacion($id_usr = 0)
+	{
+		$cant_modif = 0;
+
+		foreach($this->get_model_all() as $linea_detalle)
+		{
+			$linea_detalle->fill(array(
+				'digitador'          => $id_usr,
+				'auditor'            => set_value('auditor'),
+				'stock_fisico'       => set_value('stock_fisico_'.$linea_detalle->id),
+				'hu'                 => set_value('hu_'.$linea_detalle->id),
+				'observacion'        => set_value('observacion_'.$linea_detalle->id),
+				'fecha_modificacion' => date('Ymd H:i:s'),
+			));
+
+			$linea_detalle->grabar();
+			$cant_modif += 1;
+		}
+
+		return $cant_modif;
+	}
 }
 /* End of file detalle_inventario.php */
 /* Location: ./application/models/detalle_inventario.php */
