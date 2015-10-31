@@ -155,28 +155,15 @@ class Login extends CI_Controller {
 		$this->form_validation->set_rules($this->acl_model->change_password_validation);
 		$this->app_common->form_validation_config();
 
+		$msg_alerta = '';
+
 		if ( ! $this->acl_model->tiene_clave($this->input->post('usr')))
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
 		}
 
-
-		if ($this->form_validation->run() === FALSE)
+		if ($this->form_validation->run() === TRUE)
 		{
-			$usuario = set_value('usr', $usr_param);
-
-			$data = array(
-				'msg_alerta'        => '',
-				'usr'               => $usuario,
-				'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
-				'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
-			);
-			$this->load->view('ACL/cambio_password', $data);
-		}
-		else
-		{
-			$usuario = set_value('usr');
-			$msg_alerta = '';
 			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
 				$msg_alerta = $this->lang->line('login_error_usr_pwd');
@@ -185,19 +172,20 @@ class Login extends CI_Controller {
 			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
 			{
 				$this->session->set_flashdata('msg_alerta', '<div class="alert alert-success">' . $this->lang->line('login_success_pwd_changed') . '</div>');
+
 				redirect('login');
 			}
-			else
-			{
-				$data = array(
-					'usr'              => $usuario,
-					'msg_alerta'       => $msg_alerta,
-					'ocultar_password' => (($this->input->post('usr')) ? TRUE : FALSE),
-					'tiene_clave'      => $this->acl_model->tiene_clave($usuario),
-				);
-				$this->load->view('ACL/cambio_password', $data);
-			}
 		}
+
+		$usuario = set_value('usr', $usr_param);
+
+		$data = array(
+			'msg_alerta'        => $msg_alerta,
+			'usr'               => $usuario,
+			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
+			'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
+		);
+		$this->load->view('ACL/cambio_password', $data);
 	}
 
 

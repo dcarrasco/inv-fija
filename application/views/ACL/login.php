@@ -45,9 +45,13 @@
 		</div>
 		<?php endif; ?>
 
+		<?php if ($msg_alerta !== ''): ?>
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
+			<div class="alert alert-danger">
+				<?php echo $msg_alerta; ?>
+			</div>
 		</div>
+		<?php endif; ?>
 
 		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
 
