@@ -10,13 +10,7 @@
 		<fieldset>
 			<legend>Imprimir inventario</legend>
 
-			<?php if (validation_errors()): ?>
-				<div class="alert alert-danger">
-					<ul>
-						<?php echo validation_errors(); ?>
-					</ul>
-				</div>
-			<?php endif; ?>
+			<?php echo print_validation_errors(); ?>
 
 			<div class="form-group">
 				<label class="control-label col-sm-4">

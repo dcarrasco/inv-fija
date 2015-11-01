@@ -36,25 +36,13 @@
 			<hr>
 		</div>
 
-		<?php if (validation_errors()): ?>
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<div class="alert alert-danger">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<ul>
-					<?php echo validation_errors(); ?>
-				</ul>
-			</div>
+			<?php echo print_validation_errors(); ?>
 		</div>
-		<?php endif; ?>
 
-		<?php if ($msg_alerta != ''): ?>
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<div class="alert alert-danger">
-				<button type="button" class="close" data-dismiss="alert">&times;</button>
-				<?php echo $msg_alerta; ?>
-			</div>
+			<?php echo (isset($msg_alerta) and $msg_alerta !== '') ? $msg_alerta : ''; ?>
 		</div>
-		<?php endif; ?>
 
 		<?php echo form_open('login/cambio_password/' . $usr, 'id="frm_login" class="form-horizontal"'); ?>
 

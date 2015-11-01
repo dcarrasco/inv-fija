@@ -99,9 +99,9 @@ class Stock_sap extends CI_Controller {
 	{
 		$data['titulo_modulo'] = 'Consulta stock SAP';
 
-		$this->load->view('app_header', $data);
+		$this->load->view('common/app_header', $data);
 		$this->load->view($vista, $data);
-		$this->load->view('app_footer', $data);
+		$this->load->view('common/app_footer', $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -200,10 +200,10 @@ class Stock_sap extends CI_Controller {
 		}
 		else
 		{
-			$this->load->view('app_header', $data);
+			$this->load->view('common/app_header', $data);
 			$this->load->view('stock_sap/ver_stock_form', $data);
 			$this->load->view('stock_sap/ver_stock_datos', $data);
-			$this->load->view('app_footer', $data);
+			$this->load->view('common/app_footer', $data);
 		}
 	}
 
@@ -304,10 +304,10 @@ class Stock_sap extends CI_Controller {
 		}
 		else
 		{
-			$this->load->view('app_header', $data);
+			$this->load->view('common/app_header', $data);
 			$this->load->view('stock_sap/ver_stock_form_transito', $data);
 			$this->load->view('stock_sap/ver_stock_datos', $data);
-			$this->load->view('app_footer', $data);
+			$this->load->view('common/app_footer', $data);
 		}
 	}
 

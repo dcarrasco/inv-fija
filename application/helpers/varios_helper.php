@@ -81,12 +81,98 @@ if ( ! function_exists('app_render_view'))
 
 		$datos['msg_alerta']  = $ci->session->flashdata('msg_alerta');
 
-		$ci->load->view('app_header', $datos);
+		$ci->load->view('common/app_header', $datos);
 		$ci->load->view($vista, $datos);
-		$ci->load->view('app_footer', $datos);
+		$ci->load->view('common/app_footer', $datos);
 	}
 }
 
+// --------------------------------------------------------------------
+
+if ( ! function_exists('print_message'))
+{
+	/**
+	 * Devuelve un mensaje de alerta o error
+	 *
+	 * @param  string $mensaje Mensaje a desplegar
+	 * @param  string $tipo    Tipo de mensaje (warning, danger, info, success)
+	 * @return string          Mensaje formateado
+	 */
+	function print_message($mensaje = '', $tipo = 'info')
+	{
+		if ( $mensaje OR $mensaje !== '')
+		{
+			// carga objeto global CI
+			$ci =& get_instance();
+
+			$texto_tipo = 'INFORMACI&Oacute;N';
+			$img_tipo = 'info-sign';
+
+			if ($tipo === 'warning')
+			{
+				$texto_tipo = 'ALERTA';
+				$img_tipo = 'warning-sign';
+			}
+			else if ($tipo === 'danger' or $tipo === 'error')
+			{
+				$texto_tipo = 'ERROR';
+				$img_tipo = 'exclamation-sign';
+			}
+			else if ($tipo === 'success')
+			{
+				$texto_tipo = '&Eacute;XITO';
+				$img_tipo = 'ok-sign';
+			}
+
+			$arr_datos_view = array(
+				'tipo'       => $tipo,
+				'texto_tipo' => $texto_tipo,
+				'img_tipo'   => $img_tipo,
+				'mensaje'    => $mensaje,
+			);
+
+			return $ci->load->view('common/alert', $arr_datos_view, TRUE);
+		}
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('set_message'))
+{
+	/**
+	 * Devuelve un mensaje de alerta o error
+	 *
+	 * @param  string $mensaje Mensaje a desplegar
+	 * @param  string $tipo    Tipo de mensaje (warning, danger, info, success)
+	 * @return void
+	 */
+	function set_message($mensaje = '', $tipo = 'info')
+	{
+		// carga objeto global CI
+		$ci =& get_instance();
+
+		$ci->session->set_flashdata('msg_alerta', print_message($mensaje, $tipo));
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('print_validation_erros'))
+{
+	/**
+	 * Imprime errores de validacion
+	 *
+	 * @return string Errores de validacion
+	 */
+	function print_validation_errors()
+	{
+		if (validation_errors())
+		{
+			return print_message(validation_errors(), 'danger');
+		}
+	}
+}
 
 // --------------------------------------------------------------------
 

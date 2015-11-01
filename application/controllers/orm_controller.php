@@ -76,24 +76,6 @@ class ORM_Controller extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Genera las vistas para los métodos de este controlador
-	 *
-	 * @param  string $vista Nombre de la vista a desplegar
-	 * @param  array  $data  Arreglo con las variables a pasar a la vista
-	 * @return void
-	 */
-	private function _render_view($vista = '', $data = array())
-	{
-		$data['msg_alerta']  = $this->session->flashdata('msg_alerta');
-
-		$this->load->view('app_header', $data);
-		$this->load->view($vista, $data);
-		$this->load->view('app_footer', $data);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Despliega listado de los elementos de un modelo
 	 *
 	 * @param  string $nombre_modelo Modelo o entidad a desplegar
@@ -117,7 +99,7 @@ class ORM_Controller extends CI_Controller {
 			'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
 		);
 
-		$this->_render_view('ORM/orm_listado', $data);
+		app_render_view('ORM/orm_listado', $data);
 	}
 
 	// --------------------------------------------------------------------
@@ -141,7 +123,7 @@ class ORM_Controller extends CI_Controller {
 				'link_cancelar' => site_url($this->router->class . '/listado/' . $nombre_modelo),
 			);
 
-			$this->_render_view('ORM/orm_editar', $data);
+			app_render_view('ORM/orm_editar', $data);
 		}
 		else
 		{
@@ -158,7 +140,7 @@ class ORM_Controller extends CI_Controller {
 				$mensaje = sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo);
 			}
 
-			$this->session->set_flashdata('msg_alerta', $mensaje);
+			set_message($mensaje);
 			redirect($this->router->class . '/listado/' . $nombre_modelo);
 		}
 	}

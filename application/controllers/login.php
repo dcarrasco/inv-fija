@@ -63,7 +63,8 @@ class Login extends CI_Controller {
 	 */
 	public function login()
 	{
-		$msg_alerta = '';
+		$msg_alerta = $this->session->flashdata('msg_alerta');
+
 		$this->acl_model->delete_old_captchas();
 
 		// si el usuario ya está logueado, redireccionar a la app
@@ -107,15 +108,10 @@ class Login extends CI_Controller {
 				redirect($this->acl_model->get_redirect_app());
 			}
 
-			$msg_alerta = '<div class="alert alert-danger">' . $this->lang->line('login_error_usr_pwd') . '</div>';
+			$msg_alerta = print_message($this->lang->line('login_error_usr_pwd'), 'danger');
 		}
 
 		$captcha_img  = $this->acl_model->get_captcha_img(set_value('usr'));
-
-		// error en la validación de usuario/pwd
-		$msg_alerta = (count($this->form_validation->error_array()) > 0)
-			? $this->session->flashdata('msg_alerta')
-			: $msg_alerta;
 
 		$data = array(
 			'msg_alerta'   => $msg_alerta,
@@ -166,12 +162,12 @@ class Login extends CI_Controller {
 		{
 			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
-				$msg_alerta = $this->lang->line('login_error_usr_pwd');
+				$msg_alerta = print_message($this->lang->line('login_error_usr_pwd'), 'danger');
 			}
 
 			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
 			{
-				$this->session->set_flashdata('msg_alerta', '<div class="alert alert-success">' . $this->lang->line('login_success_pwd_changed') . '</div>');
+				set_message($this->lang->line('login_success_pwd_changed'));
 
 				redirect('login');
 			}
@@ -185,6 +181,7 @@ class Login extends CI_Controller {
 			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
 		);
+
 		$this->load->view('ACL/cambio_password', $data);
 	}
 

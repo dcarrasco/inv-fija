@@ -6,13 +6,7 @@
 				<?php echo ($modelo->get_model_id() ? 'Editar ' : 'Crear ') . $modelo->get_model_label() ?>
 			</legend>
 
-			<?php if (validation_errors()): ?>
-				<div class="alert alert-danger">
-					<ul>
-						<?php echo validation_errors(); ?>
-					</ul>
-				</div>
-			<?php endif; ?>
+			<?php echo print_validation_errors(); ?>
 
 			<?php foreach ($modelo as $campo => $valor): ?>
 				<?php echo $modelo->form_item($campo); ?>

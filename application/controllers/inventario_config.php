@@ -192,11 +192,11 @@ class Inventario_config extends ORM_Controller {
 						$cant_modif += 1;
 					}
 				}
-				$this->session->set_flashdata('msg_alerta', (
+				set_message(
 					($cant_modif > 0)
 						? $cant_modif . ' inventario(s) modificados correctamente'
 						: ''
-				));
+				);
 			}
 			else if ($this->input->post('formulario') === 'agregar')
 			{
@@ -213,12 +213,12 @@ class Inventario_config extends ORM_Controller {
 					$count += 1;
 				}
 
-				$this->session->set_flashdata('msg_alerta', 'Se agregaron ' . $count . ' ubicaciones correctamente');
+				set_message('Se agregaron ' . $count . ' ubicaciones correctamente');
 			}
 			else if ($this->input->post('formulario') === 'borrar')
 			{
 				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
-				$this->session->set_flashdata('msg_alerta', 'Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
+				set_message('Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
 			}
 
 			redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pagina);

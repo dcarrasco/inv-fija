@@ -101,8 +101,6 @@ class Inventario_digitacion extends CI_Controller {
 
 		$this->app_common->form_validation_config();
 
-		$msg_alerta = '';
-
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
@@ -112,7 +110,6 @@ class Inventario_digitacion extends CI_Controller {
 				'id_auditor'         => $detalle_inventario->get_id_auditor(),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
-				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
 			app_render_view('inventario/inventario', $data);
@@ -123,10 +120,10 @@ class Inventario_digitacion extends CI_Controller {
 			{
 				$id_usuario_login  = $this->acl_model->get_id_usr();
 				$cant_modif = $detalle_inventario->update_digitacion($id_usuario_login);
-				$msg_alerta = ($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '';
+
+				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 			}
 
-			$this->session->set_flashdata('msg_alerta', $msg_alerta);
 			redirect($this->router->class . '/ingreso/' . $this->input->post('hoja') . '/' . time());
 		}
 
@@ -189,7 +186,6 @@ class Inventario_digitacion extends CI_Controller {
 				'id'                 => $id_registro,
 				'hoja'               => $hoja,
 				'arr_catalogo'       => $arr_catalogo,
-				'msg_alerta'         => $this->session->flashdata('msg_alerta'),
 			);
 
 			app_render_view('inventario/inventario_editar', $data);
@@ -226,12 +222,12 @@ class Inventario_digitacion extends CI_Controller {
 			if ($this->input->post('accion') === 'agregar')
 			{
 				$detalle_inventario->grabar();
-				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
+				set_message(sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
 			}
 			else
 			{
 				$detalle_inventario->borrar();
-				$this->session->set_flashdata('msg_alerta', sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
+				set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 			}
 
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());

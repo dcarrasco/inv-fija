@@ -8,13 +8,7 @@
 			<?php echo $this->lang->line('inventario_form_new'); ?>
 		</legend>
 
-		<?php if (validation_errors()): ?>
-			<div class="alert alert-danger">
-				<ul>
-					<?php echo validation_errors(); ?>
-				</ul>
-			</div>
-		<?php endif; ?>
+		<?php echo print_validation_errors(); ?>
 
 		<div class="form-group <?php echo form_has_error('ubicacion') ? 'has-error' : ''; ?>">
 			<label class="control-label col-sm-4">

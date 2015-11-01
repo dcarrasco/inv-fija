@@ -1,12 +1,6 @@
 <div class="row hidden-print">
 
-	<?php if (validation_errors()): ?>
-		<div class="alert alert-danger">
-			<ul>
-				<?php echo validation_errors(); ?>
-			</ul>
-		</div>
-	<?php endif; ?>
+	<?php echo print_validation_errors(); ?>
 
 	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
 	<div class="col-md-3">

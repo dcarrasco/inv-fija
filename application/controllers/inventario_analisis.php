@@ -142,8 +142,6 @@ class Inventario_analisis extends CI_Controller {
 
 		$this->app_common->form_validation_config();
 
-		$msg_alerta = '';
-
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
@@ -161,12 +159,10 @@ class Inventario_analisis extends CI_Controller {
 			if ($this->input->post('formulario') === 'ajustes')
 			{
 				$cant_modif = $detalle_ajustes->update_ajustes();
-				$msg_alerta = ($cant_modif > 0)
-					? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
-					: '';
+				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
+					: '');
 			}
 
-			$this->session->set_flashdata('msg_alerta', $msg_alerta);
 			redirect($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/' . $pagina . '/' . time());
 		}
 
