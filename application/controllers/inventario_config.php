@@ -141,8 +141,6 @@ class Inventario_config extends ORM_Controller {
 			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
 		}
 
-		$this->app_common->form_validation_config();
-
 		if ($this->form_validation->run() === FALSE)
 		{
 			$arr_combo_tipo_ubic = array();

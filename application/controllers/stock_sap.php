@@ -116,7 +116,6 @@ class Stock_sap extends CI_Controller {
 	{
 		$this->load->model('stock_sap_model');
 		$this->load->library('grafica_stock');
-		$this->app_common->form_validation_config();
 
 		$almacen_sap = new Almacen_sap;
 		$tipoalmacen_sap = new Tipoalmacen_sap;

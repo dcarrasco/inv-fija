@@ -167,9 +167,14 @@ if ( ! function_exists('print_validation_erros'))
 	 */
 	function print_validation_errors()
 	{
+
+		// carga objeto global CI
+		$ci =& get_instance();
+		$ci->form_validation->set_error_delimiters('<li> ', '</li>');
+
 		if (validation_errors())
 		{
-			return print_message(validation_errors(), 'danger');
+			return print_message('<ul>'.validation_errors().'</ul>', 'danger');
 		}
 	}
 }

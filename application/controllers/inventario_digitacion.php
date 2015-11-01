@@ -99,8 +99,6 @@ class Inventario_digitacion extends CI_Controller {
 			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion());
 		}
 
-		$this->app_common->form_validation_config();
-
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
@@ -176,8 +174,6 @@ class Inventario_digitacion extends CI_Controller {
 		$detalle_inventario->set_validation_rules_field('almacen');
 		$detalle_inventario->set_validation_rules_field('um');
 		$detalle_inventario->set_validation_rules_field('stock_fisico');
-
-		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() === FALSE)
 		{

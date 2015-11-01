@@ -76,7 +76,6 @@ class Login extends CI_Controller {
 		$this->acl_model->delete_session_data();
 
 		$this->form_validation->set_rules($this->acl_model->login_validation);
-		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() === TRUE)
 		{
@@ -149,7 +148,6 @@ class Login extends CI_Controller {
 	public function cambio_password($usr_param = '')
 	{
 		$this->form_validation->set_rules($this->acl_model->change_password_validation);
-		$this->app_common->form_validation_config();
 
 		$msg_alerta = '';
 

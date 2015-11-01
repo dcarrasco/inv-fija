@@ -110,7 +110,6 @@ class Stock_reporte extends CI_Controller {
 
 		// define reglas para usar set_value
 		$this->form_validation->set_rules($this->reportestock_model->permanencia_validation);
-		$this->app_common->form_validation_config();
 
 		if ($this->form_validation->run() === TRUE)
 		{
@@ -202,7 +201,6 @@ class Stock_reporte extends CI_Controller {
 
 	public function movhist()
 	{
-		$this->app_common->form_validation_config();
 		$this->form_validation->set_rules($this->reportestock_model->movhist_validation);
 		$this->form_validation->run();
 

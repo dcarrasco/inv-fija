@@ -402,7 +402,6 @@ class Orm_model implements IteratorAggregate {
 		{
 			$this->set_validation_rules_field($campo);
 		}
-		$this->CI->app_common->form_validation_config();
 
 		return $this->CI->form_validation->run();
 	}

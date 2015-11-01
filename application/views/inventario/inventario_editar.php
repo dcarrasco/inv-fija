@@ -27,7 +27,6 @@
 				<?php //echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
 			</label>
 			<?php //echo detalle_inventario->print_form_field('hu'); ?>
-			<?php //echo form_error('hu'); ?>
 		</div>
 		-->
 
@@ -48,7 +47,6 @@
 			</div>
 			<div class="col-md-5">
 				<?php echo form_dropdown('catalogo', $arr_catalogo, '', 'class="form-control" id="agr_material"'); ?>
-				<?php echo form_error('catalogo'); ?>
 			</div>
 		</div>
 
@@ -119,7 +117,6 @@
 			</label>
 			<div class="col-sm-8">
 				<?php echo $detalle_inventario->print_form_field('observacion'); ?>
-				<?php echo form_error('observacion'); ?>
 			</div>
 		</div>
 
