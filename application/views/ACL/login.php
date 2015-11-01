@@ -1,11 +1,11 @@
 <!doctype html>
-<html>
+<html lang="es">
 <head>
-	<title>inventario fija</title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<title>inventario fija</title>
 	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
 
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" />
