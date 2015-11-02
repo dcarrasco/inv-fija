@@ -2,6 +2,7 @@
 
 $(document).ready(function () {
 
+    // ENCABEZADOS
     $('table.reporte th span').css('cursor', 'pointer');
 
     $('table.reporte th span').click(function (event) {
@@ -11,31 +12,33 @@ $(document).ready(function () {
         $('form').submit();
     });
 
-    $('td.subtotal[colspan]').parent().each(function(i) {
-        if ($(this).size() == 1) {
-            if ($(this).children(':eq(1)').html() != '&nbsp;') {
-                $(this).children(':eq(1)').html('<span class="glyphicon glyphicon-minus-sign"></span> ' + $(this).children(':eq(1)').html());
-                $(this).children(':eq(1)').css('cursor', 'pointer');
-                $(this).addClass('tr_subtotal_' + i);
-                $(this).children().addClass('tr_subtotal');
-            }
+
+    // LINEAS SUBTOTALES
+    var count_linea_reporte = 0;
+    $('table.reporte > tbody > tr').each(function () {
+        if ($(this).find('td > span.glyphicon').length) {
+            count_linea_reporte++;
+            $(this).attr('data-tipo','subtot-header');
+            $(this).attr('data-num',count_linea_reporte);
+            $(this).css('cursor','pointer');
+            $(this).addClass('info');
+        } else {
+            $(this).attr('data-tipo','data-detail');
+            $(this).attr('data-num',count_linea_reporte);
         }
     });
 
-    $('tr[class^="tr_subtotal_"]').each(function() {
-        var clase = $(this).attr('class');
-        $(this).nextUntil('tr[class^="tr_subtotal_"]').addClass(clase + '_data');
-    })
+    $('table.reporte > tbody > tr[data-tipo="subtot-header"]').click(function (event) {
+        event.preventDefault();
+        var detalle = $('table.reporte > tbody > tr[data-tipo="data-detail"][data-num="'+$(this).attr('data-num')+'"]');
+        detalle.toggle();
 
-    $('table.reporte td.tr_subtotal').click(function() {
-        var icon_plus   = 'glyphicon-plus-sign',
-            icon_minus  = 'glyphicon-minus-sign',
-            clase       = $(this).parent().attr('class');
-        var icon_expand = ($(this).parent().next().is(':visible')) ? icon_plus : icon_minus;
-
-        $(this).children('span').removeClass(icon_minus).removeClass(icon_plus);
-        $(this).children('span').addClass(icon_expand);
-        $('tr.' + clase + '_data').toggle();
+        if (detalle.find(':visible').length) {
+            $(this).find('td:first-child > span').removeClass('glyphicon-plus-sign').addClass('glyphicon-minus-sign');
+        }
+        else {
+            $(this).find('td:first-child > span').removeClass('glyphicon-minus-sign').addClass('glyphicon-plus-sign');
+        }
     });
 
 });

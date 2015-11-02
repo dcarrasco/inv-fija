@@ -373,18 +373,14 @@ class Reporte {
 		}
 
 		// agrega linea con titulo del subtotal
-		$arr_linea_totales = array();
-		array_push($arr_linea_totales, '');
-		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
-		{
-			array_push($arr_linea_totales, $nombre_campo === $campo_subtotal ? '<strong>'.$arr_linea[$campo_subtotal].'</strong>' : '');
-		}
-		$this->table->add_row($arr_linea_totales);
+		$this->table->add_row(array(
+			'data' => '<span class="glyphicon glyphicon-minus-sign"></span> <strong>'.$arr_linea[$campo_subtotal].'</strong>',
+			'colspan' => count($arr_campos) + 1,
+		));
 
-		// nuevo subtotal
+		// nuevo subtotal, y deja en cero, la suma de subtotales
 		$subtotal_ant = $arr_linea[$campo_subtotal];
 
-		// deja en cero, la suma de subtotales
 		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
 		{
 			if (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
