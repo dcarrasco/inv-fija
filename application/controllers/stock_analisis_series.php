@@ -103,8 +103,6 @@ class Stock_analisis_series extends CI_Controller {
 			$datos['log_gdth'] = $this->log_gestor_model->get_log($this->input->post('series'), 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE);
 		}
 
-		$datos['titulo_modulo'] = 'Consulta información series';
-
 		$this->form_validation->set_rules('series', 'Series', '');
 		$this->form_validation->set_rules('show_mov', 'Series', '');
 		$this->form_validation->set_rules('ult_mov', 'Series', '');
@@ -136,8 +134,6 @@ class Stock_analisis_series extends CI_Controller {
 				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
 				'datos_trafico' => $this->analisis_series_model->get_trafico_mes2($this->input->post('series'), $this->input->post('meses'), $tipo),
 			);
-
-		$datos['titulo_modulo'] = 'Consulta información series';
 
 		app_render_view('stock_sap/analisis_series_trafico_view', $datos);
 	}

@@ -35,13 +35,6 @@ class Inventario_config extends ORM_Controller {
 	 */
 	public $llave_modulo  = 'config2';
 
-	/**
-	 * Titulo del modulo
-	 *
-	 * @var  string
-	 */
-	public $titulo_modulo = 'Configuracion';
-
 	// --------------------------------------------------------------------
 
 	/**

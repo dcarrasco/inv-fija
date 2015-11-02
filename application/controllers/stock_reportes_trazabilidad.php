@@ -188,7 +188,6 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 			'arr_link_campos' => $arr_link_campos,
 			'arr_link_sort'   => $arr_link_sort,
 			'arr_img_orden'   => $arr_img_orden,
-			'titulo_modulo'   => 'Reportes Trazabilidad',
 			'combo_tipo_alm'  => $this->reportestock_model->combo_tipo_alm_consumo(),
 			//'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 		);

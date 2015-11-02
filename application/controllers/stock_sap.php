@@ -97,8 +97,6 @@ class Stock_sap extends CI_Controller {
 	 */
 	private function _render_view($vista = '', $data = array())
 	{
-		$data['titulo_modulo'] = 'Consulta stock SAP';
-
 		$this->load->view('common/app_header', $data);
 		$this->load->view($vista, $data);
 		$this->load->view('common/app_footer', $data);
@@ -293,8 +291,6 @@ class Stock_sap extends CI_Controller {
 											? TRUE : FALSE
 										),
 		);
-
-		$data['titulo_modulo'] = 'Consulta stock SAP';
 
 		if ($this->input->post('excel'))
 		{

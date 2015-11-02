@@ -40,13 +40,6 @@ class ORM_Controller extends CI_Controller {
 	 */
 	protected $arr_menu = array();
 
-	/**
-	 * Titulo del modulo
-	 *
-	 * @var string
-	 */
-	public $titulo_modulo = '';
-
 	// --------------------------------------------------------------------
 
 	/**

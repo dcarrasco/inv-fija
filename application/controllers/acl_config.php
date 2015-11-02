@@ -35,13 +35,6 @@ class Acl_config extends ORM_Controller {
 	 */
 	public $llave_modulo  = 'acl_config';
 
-	/**
-	 * Titulo del modulo
-	 *
-	 * @var  string
-	 */
-	public $titulo_modulo = 'Configuración Control de Acceso';
-
 	// --------------------------------------------------------------------
 
 	/**
