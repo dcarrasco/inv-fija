@@ -242,6 +242,166 @@ class App_common {
 	 */
 	public function reporte($arr_campos = array(), $arr_datos = array())
 	{
+		$this->load->library('table');
+
+		$template = array(
+			'table_open' => '<table class="table table-striped table-hover table-condensed reporte table-fixed-header">',
+		);
+
+		$this->table->set_template($template);
+
+		// dbg($arr_campos);
+		// dbg($arr_datos);
+
+		$arr_linea = array();
+
+		$tabla = array();
+
+		$n_linea    = 0;
+		$totales    = array();
+		$subtotales = array();
+		$subtot_ant = array();
+		$arr_campos_totalizados = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
+
+		// --- ENCABEZADO REPORTE ---
+		array_push($arr_linea, '');
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			$arr_celda = array(
+				'data' => '<span order_by="'.$campo.'" order_sort="'.$arr_param_campo['order_by'].'" data-toggle="tooltip" title="Ordenar por campo \''.$arr_param_campo['titulo'].'\'">'.$arr_param_campo['titulo'].'</span>'.$arr_param_campo['img_orden'],
+				'class' => $arr_param_campo === '' ? '' : $arr_param_campo['class'],
+			);
+			array_push($arr_linea, $arr_celda);
+
+			if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
+			{
+				$totales[$campo] = 0;
+				$subtotales[$campo] = 0;
+			}
+		}
+
+		$this->table->set_heading($arr_linea);
+
+		// --- CUERPO REPORTE ---
+		foreach ($arr_datos as $registro)
+		{
+			$arr_linea = array();
+			array_push($arr_linea, array('data' => ++$n_linea, 'class' => 'text-muted'));
+
+			foreach ($arr_campos as $campo => $arr_param_campo)
+			{
+				// Si el primer campo es un subtotal, inserta título del campo
+				if ($arr_param_campo['tipo'] === 'subtotal')
+				{
+					if ( ! array_key_exists($campo, $subtot_ant))
+					{
+						$subtot_ant[$campo] = '';
+					}
+
+					// Si el valor del subtotal es distinto al subtotal anterior, mostramos los subtotales
+					if ($registro[$campo] !== $subtot_ant[$campo])
+					{
+						if ($subtot_ant[$campo] !== '')
+						{
+							foreach ($arr_campos as $c => $arr_c)
+							{
+								$arr_celda = array(
+									'data'  => '<strong>'.(in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '').'</strong>',
+									'class' => $arr_c === '' ? '' : 'subtotal '.$arr_c['class'],
+								);
+								array_push($arr_linea, $arr_celda);
+							}
+							$this->table->add_row($arr_linea);
+
+							$arr_linea = array();
+							array_push($arr_linea, ++$n_linea);
+						}
+
+						if ($subtot_ant[$campo] !== '')
+						{
+							array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
+						}
+
+						$subtot_ant[$campo] = $registro[$campo];
+						foreach ($arr_campos as $c => $arr_c)
+						{
+							$subtotales[$c] = 0;
+						}
+
+						array_push($tabla, '<td colspan="' . count($arr_campos) . '" class="subtotal">');
+						array_push($tabla, '<strong>');
+						array_push($tabla, ($arr_param_campo['tipo'] === 'subtotal')  ? $registro[$campo] : '');
+						array_push($tabla, '</strong>');
+						array_push($tabla, '</td>');
+						array_push($tabla, '</tr>');
+						array_push($tabla, '<tr>');
+						array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
+
+					}
+				}
+
+				$arr_celda = array(
+					'data'  => $this->formato_reporte($registro[$campo], $arr_param_campo, $registro, $campo),
+					'class' => $arr_param_campo === '' ? '' : $arr_param_campo['class'],
+				);
+
+				array_push($arr_linea, $arr_celda);
+
+				if (in_array($arr_param_campo['tipo'], $arr_campos_totalizados))
+				{
+					$totales[$campo] += $registro[$campo];
+					$subtotales[$campo] += $registro[$campo];
+				}
+			}
+
+			$this->table->add_row($arr_linea);
+
+		}
+
+		// --- ULTIMA LINEA DE SUBTOTALES ---
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			if ($arr_param_campo['tipo'] === 'subtotal')
+			{
+				array_push($tabla, '<td><span class="text-muted">' . ++$n_linea . '</span></td>');
+				foreach ($arr_campos as $c => $arr_c)
+				{
+					array_push($tabla, '<td ' . (($arr_c === '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"') . '>');
+					array_push($tabla, '<strong>');
+					array_push($tabla, in_array($arr_c['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($subtotales[$c], $arr_c) : '');
+					array_push($tabla, '</strong>');
+					array_push($tabla, '</td>');
+				}
+
+				array_push($tabla, '</tr>');
+				array_push($tabla, '<tr>');
+				array_push($tabla, '<td colspan="' . (count($arr_campos) + 1) . '" class="subtotal">&nbsp;</td>');
+				array_push($tabla, '</tr>');
+			}
+		}
+
+		// --- TOTALES ---
+		$arr_linea = array();
+		array_push($arr_linea, '');
+		foreach ($arr_campos as $campo => $arr_param_campo)
+		{
+			$arr_celda = array(
+				'data' => in_array($arr_param_campo['tipo'], $arr_campos_totalizados) ? $this->formato_reporte($totales[$campo], $arr_param_campo) : '',
+				'class' => 'subtotal ' . ($arr_param_campo === '' ? '' : $arr_param_campo['class']),
+			);
+
+			array_push($arr_linea, $arr_celda);
+		}
+		$this->table->add_row($arr_linea);
+
+		array_push($tabla, '<script type="text/javascript" src="' . base_url() . 'js/reporte.js"></script>');
+
+		return $this->table->generate();
+	}
+
+
+	public function reporte2($arr_campos = array(), $arr_datos = array())
+	{
 		$tabla = array();
 
 		$n_linea    = 0;
