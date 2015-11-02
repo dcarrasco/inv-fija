@@ -30,7 +30,7 @@
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">
 				<!-- <img src="<?php echo base_url(); ?>img/TEL-logo_neg1.jpg" height="35"> -->
-				<?php echo $this->app_common->titulo_modulo(); ?>
+				<?php echo titulo_modulo(); ?>
 			</a>
 
 			<button class="navbar-toggle" data-toggle="collapse" data-target=".navMenuCollapse">
@@ -43,7 +43,7 @@
 
 		<div class="collapse navbar-collapse navMenuCollapse">
 			<ul class="nav navbar-nav navbar-right">
-				<?php foreach($this->app_common->menu_app() as $app_item): ?>
+				<?php foreach(menu_app() as $app_item): ?>
 				<li class="dropdown <?php echo $app_item['selected']; ?>">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
 						<span class="<?php echo $app_item['icono']; ?>"></span>

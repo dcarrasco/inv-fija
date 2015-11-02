@@ -122,12 +122,11 @@ class Stock_reporte extends CI_Controller {
 
 		$data = array(
 			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
-			'reporte'          => $this->app_common->reporte($arr_campos, $datos_hoja),
+			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'     => $view,
 			'nombre_reporte'   => $tipo,
 			'filtro_dif'       => '',
 			'arr_campos'       => $arr_campos,
-			'titulo_modulo'    => 'Reportes Stock',
 			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
 			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(set_value('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
@@ -159,7 +158,6 @@ class Stock_reporte extends CI_Controller {
 				$this->input->get('tipo_material'),
 				$this->input->get('permanencia')
 			),
-			'titulo_modulo'   => 'Reportes Stock',
 		);
 
 		app_render_view('stock_sap/detalle_series', $data);
@@ -256,7 +254,7 @@ class Stock_reporte extends CI_Controller {
 			'combo_almacenes'  => $this->reportestock_model->get_combo_almacenes($param_tipo_alm),
 			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
 			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
-			'reporte'          => $this->app_common->reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte)),
+			'reporte'          => $this->reporte->genera_reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte)),
 		);
 
 		app_render_view('stock_sap/movhist', $data);

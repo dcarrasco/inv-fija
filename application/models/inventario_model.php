@@ -581,7 +581,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = 'ubicacion', $orden_tipo = 'ASC', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? 'ubicacion' : $orden_campo;
+		$orden_campo = $orden_campo === '' ? 'tipo_ubicacion' : $orden_campo;
 
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');

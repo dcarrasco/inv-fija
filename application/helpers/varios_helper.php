@@ -51,6 +51,91 @@ if ( ! function_exists('dbg_die'))
 	}
 }
 
+// --------------------------------------------------------------------
+
+if ( ! function_exists('menu_app'))
+{
+	/**
+	 * Devuelve arreglo con el menu de las aplicaciones del sistema
+	 *
+	 * @return string    Texto con el menu (<ul>) de las aplicaciones
+	 */
+	function menu_app()
+	{
+		// carga objeto global CI
+		$ci =& get_instance();
+
+		$arr_modulos = $ci->acl_model->get_user_menu();
+
+		$arr_apps = array();
+		$arr_mods = array();
+		$app_ant = '';
+		$app_sel = '';
+
+		foreach($arr_modulos as $modulo)
+		{
+			if ($modulo['app'] !== $app_ant AND $app_ant !== '')
+			{
+				array_push($arr_apps, array(
+					'selected' => $app_sel,
+					'icono'    => $modulo_ant['app_icono'],
+					'app'      => $modulo_ant['app'],
+					'modulos'  => $arr_mods
+				));
+				$arr_mods = array();
+				$app_sel = '';
+			}
+
+			if ($ci->uri->segment(1) === $modulo['url'])
+			{
+				$app_sel = 'active';
+			}
+
+			array_push($arr_mods, array(
+				'url'    => $modulo['url'],
+				'icono'  => $modulo['modulo_icono'],
+				'modulo' => $modulo['modulo']
+			));
+
+			$app_ant = $modulo['app'];
+			$modulo_ant = $modulo;
+		}
+		array_push($arr_apps, array(
+			'selected' => $app_sel,
+			'icono'    => $modulo_ant['app_icono'],
+			'app'      => $modulo_ant['app'],
+			'modulos'  => $arr_mods
+		));
+
+		return $arr_apps;
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('titulo_modulo'))
+{
+	/**
+	 * Devuelve el titulo del modulo
+	 *
+	 * @return string Titulo del modulo
+	 */
+	function titulo_modulo()
+	{
+		// carga objeto global CI
+		$ci =& get_instance();
+
+		$arr_modulos = $ci->acl_model->get_user_menu();
+
+		foreach ($arr_modulos as $modulo)
+		{
+			if($modulo['url'] === $ci->uri->segment(1))
+			{
+				return '<span class="' . $modulo['modulo_icono'] . ' "></span>&nbsp;&nbsp;' . $modulo['modulo'];
+			}
+		}
+	}
+}
 
 // --------------------------------------------------------------------
 

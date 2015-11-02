@@ -119,11 +119,10 @@ class Inventario_reportes extends CI_Controller {
 
 		$data = array(
 			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
-			'reporte'           => $this->app_common->reporte($arr_campos, $datos_hoja),
+			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'      => $view,
 			'nombre_reporte'    => $tipo,
 			'filtro_dif'        => '',
-			'titulo_modulo'     => 'Reportes',
 			'combo_inventarios' => $this->inventario_model->get_combo_inventarios(),
 			'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
 			'id_inventario'     => $id_inventario,
