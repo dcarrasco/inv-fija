@@ -165,6 +165,68 @@ class Ubicacion_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo de validacion para el ingreso de una ubicacion
+	 *
+	 * @return array Arreglo de validación
+	 */
+	public function get_validation_add()
+	{
+		return array(
+			array(
+				'field' => 'agr-tipo_inventario',
+				'label' => 'Tipo de inventario',
+				'rules' => 'trim|required'
+			),
+			array(
+				'field' => 'agr-ubicacion[]',
+				'label' => 'Ubicaciones',
+				'rules' => 'trim|required'
+			),
+			array(
+				'field' => 'agr-tipo_ubicacion',
+				'label' => 'Tipo de ubicacion',
+				'rules' => 'trim|required'
+			),
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo de validacion para la edicion de un conjunto de ubicaciones
+	 *
+	 * @return array Arreglo de validación
+	 */
+	public function get_validation_edit($arr_datos)
+	{
+		$arr_validacion = array();
+
+		foreach($arr_datos as $registro)
+		{
+			array_push($arr_validacion, array(
+				'field' => $registro['id'].'-tipo_inventario',
+				'label' => 'Tipo de inventario',
+				'rules' => 'trim|required'
+			));
+			array_push($arr_validacion, array(
+				'field' => $registro['id'].'-tipo_ubicacion',
+				'label' => 'Tipo Ubicacion',
+				'rules' => 'trim|required'
+			));
+			array_push($arr_validacion, array(
+				'field' => $registro['id'].'-ubicacion',
+				'label' => 'Ubicacion',
+				'rules' => 'trim|required'
+			));
+		}
+
+		return $arr_validacion;
+	}
+
+
 
 }
 /* End of file ubicacion_model.php */

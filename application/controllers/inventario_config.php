@@ -116,18 +116,11 @@ class Inventario_config extends ORM_Controller {
 
 		if ($this->input->post('formulario') === 'editar')
 		{
-			foreach($datos_hoja as $registro)
-			{
-				$this->form_validation->set_rules($registro['id'].'-tipo_inventario', 'Tipo Inventario', 'trim|required');
-				$this->form_validation->set_rules($registro['id'].'-tipo_ubicacion', 'Tipo Ubicacion', 'trim|required');
-				$this->form_validation->set_rules($registro['id'].'-ubicacion', 'Ubicacion', 'trim|required');
-			}
+			$this->form_validation->set_rules($this->ubicacion_model->get_validation_edit($datos_hoja));
 		}
 		else if ($this->input->post('formulario') === 'agregar')
 		{
-			$this->form_validation->set_rules('agr-tipo_inventario', 'Tipo de inventario', 'trim|required');
-			$this->form_validation->set_rules('agr-ubicacion[]', 'Ubicaciones', 'trim|required');
-			$this->form_validation->set_rules('agr-tipo_ubicacion', 'Tipo de ubicacion', 'trim|required');
+			$this->form_validation->set_rules($this->ubicacion_model->get_validation_add());
 		}
 		else if ($this->input->post('formulario') === 'borrar')
 		{
