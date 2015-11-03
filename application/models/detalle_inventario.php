@@ -447,6 +447,14 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera información del post en para editar registro de inventario
+	 *
+	 * @param  integer $id_detalle ID del registro detalle inventario
+	 * @param  integer $hoja       Numero de la hoja del registro de detalle de inventario
+	 *
+	 * @return void
+	 */
 	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
 	{
 		$ci =& get_instance();
