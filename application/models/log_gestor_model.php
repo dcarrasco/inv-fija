@@ -27,6 +27,40 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Log_gestor_model extends CI_Model {
 
 
+	public $validation_rules = array(
+		array(
+			'field' => 'series',
+			'label' => 'Series',
+			'rules' => ''
+		),
+		array(
+			'field' => 'set_serie',
+			'label' => 'Series',
+			'rules' => ''
+		),
+		array(
+			'field' => 'tipo_reporte',
+			'label' => 'Tipo de Reporte',
+			'rules' => ''
+		),
+		array(
+			'field' => 'ult_mov',
+			'label' => 'Ultimo movimiento',
+			'rules' => ''
+		),
+		array(
+			'field' => 'tipo_op_alta',
+			'label' => 'Tipo de operación de alta',
+			'rules' => ''
+		),
+		array(
+			'field' => 'tipo_op_baja',
+			'label' => 'Tipo de operción de baja',
+			'rules' => ''
+		),
+	);
+
+
 	/**
 	 * Constructor de la clase
 	 *

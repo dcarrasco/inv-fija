@@ -71,12 +71,7 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 		$this->load->model('log_gestor_model');
 		$datos = array();
 
-		$this->form_validation->set_rules('series', 'Series', '');
-		$this->form_validation->set_rules('set_serie', 'Series', '');
-		$this->form_validation->set_rules('tipo_reporte', 'Series', '');
-		$this->form_validation->set_rules('ult_mov', 'Series', '');
-		$this->form_validation->set_rules('tipo_op_alta', 'Series', '');
-		$this->form_validation->set_rules('tipo_op_baja', 'Series', '');
+		$this->form_validation->set_rules($this->log_gestor_model->validation_rules);
 		$this->form_validation->run();
 
 		$arr_filtro_cas = array();
