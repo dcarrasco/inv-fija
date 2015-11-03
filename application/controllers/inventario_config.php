@@ -54,16 +54,11 @@ class Inventario_config extends ORM_Controller {
 			'catalogo'        => array('url' => $this->router->class . '/listado/catalogo', 'texto' => 'Materiales'),
 			'tipo_inventario' => array('url' => $this->router->class . '/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
 			'inventario'      => array('url' => $this->router->class . '/listado/inventario', 'texto' => 'Inventarios'),
-			//'detalle_inventario' => array('url' => $this->router->class . '/listado/detalle_inventario', 'texto' => 'Detalle inventario'),
 			'tipo_ubicacion'  => array('url' => $this->router->class . '/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
 			'ubicaciones'     => array('url' => $this->router->class . '/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
 			'centro'          => array('url' => $this->router->class . '/listado/centro', 'texto' => 'Centros'),
 			'almacen'         => array('url' => $this->router->class . '/listado/almacen', 'texto' => 'Almacenes'),
 			'unidad_medida'   => array('url' => $this->router->class . '/listado/unidad_medida', 'texto' => 'Unidades de medida'),
-			//'app'           => array('url' => $this->router->class . '/listado/app', 'texto' => 'Aplicaciones'),
-			//'rol'           => array('url' => $this->router->class . '/listado/rol', 'texto' => 'Roles'),
-			//'modulo'        => array('url' => $this->router->class . '/listado/modulo', 'texto' => 'Modulos'),
-			//'usuario'       => array('url' => $this->router->class . '/listado/usuario', 'texto' => 'Usuarios'),
 		);
 	}
 
