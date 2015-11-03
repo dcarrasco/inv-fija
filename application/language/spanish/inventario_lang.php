@@ -21,7 +21,8 @@ $lang['inventario_button_new_line'] = 'Nuevo material...';
 $lang['inventario_form_new']               = 'Ingreso datos inventario';
 $lang['inventario_form_new_material']      = 'Material';
 $lang['inventario_form_new_button_delete'] = 'Borrar';
-$lang['inventario_form_new_button_add']    = 'Agregar material';
+$lang['inventario_form_new_button_add']    = 'Agregar registro inventario';
+$lang['inventario_form_new_button_edit']   = 'Modificar registro inventario';
 $lang['inventario_form_new_button_cancel'] = 'Cancelar';
 $lang['inventario_digit_button_save_page'] = 'Guardar hoja';
 

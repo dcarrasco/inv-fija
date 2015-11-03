@@ -157,23 +157,11 @@ class Inventario_digitacion extends CI_Controller {
 		}
 
 		$detalle_inventario->get_relation_fields();
-
-		// recupera el inventario activo
-		$inventario = new Inventario;
-
 		$detalle_inventario->hoja = $hoja;
-
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
 		$id_auditor = $detalle_inventario->get_id_auditor();
 
-		$detalle_inventario->set_validation_rules_field('ubicacion');
-		$detalle_inventario->set_validation_rules_field('hu');
-		$detalle_inventario->set_validation_rules_field('catalogo');
-		$detalle_inventario->set_validation_rules_field('lote');
-		$detalle_inventario->set_validation_rules_field('centro');
-		$detalle_inventario->set_validation_rules_field('almacen');
-		$detalle_inventario->set_validation_rules_field('um');
-		$detalle_inventario->set_validation_rules_field('stock_fisico');
+		$detalle_inventario->get_validation_editar();
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -188,32 +176,7 @@ class Inventario_digitacion extends CI_Controller {
 		}
 		else
 		{
-			$nuevo_material = new Catalogo;
-			$nuevo_material->find_id($this->input->post('catalogo'));
-
-			$detalle_inventario->fill(array(
-				'id'                 => (int) $id_registro,
-				'id_inventario'      => (int) $inventario->get_id_inventario_activo(),
-				'hoja'               => (int) $hoja,
-				'ubicacion'          => strtoupper($this->input->post('ubicacion')),
-				'hu'                 => strtoupper($this->input->post('hu')),
-				'catalogo'           => strtoupper($this->input->post('catalogo')),
-				'descripcion'        => $nuevo_material->descripcion,
-				'lote'               => strtoupper($this->input->post('lote')),
-				'centro'             => strtoupper($this->input->post('centro')),
-				'almacen'            => strtoupper($this->input->post('almacen')),
-				'um'                 => strtoupper($this->input->post('um')),
-				'stock_sap'          => 0,
-				'stock_fisico'       => (int) $this->input->post('stock_fisico'),
-				'digitador'          => (int) $this->acl_model->get_id_usr(),
-				'auditor'            => (int) $id_auditor,
-				'reg_nuevo'          => 'S',
-				'fecha_modificacion' => date('Ymd H:i:s'),
-				'observacion'        => $this->input->post('observacion'),
-				'stock_ajuste'       => 0,
-				'glosa_ajuste'       => '',
-				'fecha_ajuste'       => NULL,
-			));
+			$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
 			if ($this->input->post('accion') === 'agregar')
 			{

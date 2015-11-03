@@ -429,6 +429,70 @@ class Detalle_inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Setea validación para formulario editar/agregar linea de detalle
+	 *
+	 * @return void
+	 */
+	public function get_validation_editar()
+	{
+		$this->set_validation_rules_field('ubicacion');
+		$this->set_validation_rules_field('hu');
+		$this->set_validation_rules_field('catalogo');
+		$this->set_validation_rules_field('lote');
+		$this->set_validation_rules_field('centro');
+		$this->set_validation_rules_field('almacen');
+		$this->set_validation_rules_field('um');
+		$this->set_validation_rules_field('stock_fisico');
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
+	{
+		$ci =& get_instance();
+		// recupera el inventario activo
+		$inventario = new Inventario;
+		$id_inventario = $inventario->get_id_inventario_activo();
+
+		// recupera el nombre del material
+		$material = new Catalogo;
+		$material->find_id($ci->input->post('catalogo'));
+
+		if ($id_detalle)
+		{
+			$this->find_id($id_detalle);
+		}
+		$id_auditor = $this->get_id_auditor();
+
+		$this->fill(array(
+			'id'                 => (int) $id_detalle,
+			'id_inventario'      => (int) $id_inventario,
+			'hoja'               => (int) $hoja,
+			'ubicacion'          => strtoupper($ci->input->post('ubicacion')),
+			'hu'                 => strtoupper($ci->input->post('hu')),
+			'catalogo'           => strtoupper($ci->input->post('catalogo')),
+			'descripcion'        => $material->descripcion,
+			'lote'               => strtoupper($ci->input->post('lote')),
+			'centro'             => strtoupper($ci->input->post('centro')),
+			'almacen'            => strtoupper($ci->input->post('almacen')),
+			'um'                 => strtoupper($ci->input->post('um')),
+			'stock_sap'          => 0,
+			'stock_fisico'       => (int) $ci->input->post('stock_fisico'),
+			'digitador'          => (int) $ci->acl_model->get_id_usr(),
+			'auditor'            => (int) $id_auditor,
+			'reg_nuevo'          => 'S',
+			'fecha_modificacion' => date('Ymd H:i:s'),
+			'observacion'        => $ci->input->post('observacion'),
+			'stock_ajuste'       => 0,
+			'glosa_ajuste'       => '',
+			'fecha_ajuste'       => NULL,
+		));
+
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Actualiza cantidades y observaciones de un conjunto de lineas de detalle
 	 * de acuerdo a información del POST
 	 *

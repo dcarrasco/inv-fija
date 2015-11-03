@@ -132,12 +132,16 @@
 						<?php echo $this->lang->line('inventario_form_new_button_delete'); ?>
 					</button>
 				</div>
-				<?php endif ?>
+				<?php endif; ?>
 
 				<div class="pull-right">
 					<button type="submit" name="accion" value="agregar" class="btn btn-primary">
-						<span class="glyphicon glyphicon-plus-sign"></span>
-						<?php echo $this->lang->line('inventario_form_new_button_add'); ?>
+						<span class="glyphicon glyphicon-ok"></span>
+						<?php if ( ! $id): ?>
+							<?php echo $this->lang->line('inventario_form_new_button_add'); ?>
+						<?php else: ?>
+							<?php echo $this->lang->line('inventario_form_new_button_edit'); ?>
+						<?php endif; ?>
 					</button>
 					<a href="<?php echo site_url($this->router->class . '/ingreso/' . $hoja); ?>" class="btn btn-default">
 						<span class="glyphicon glyphicon-ban-circle"></span>
