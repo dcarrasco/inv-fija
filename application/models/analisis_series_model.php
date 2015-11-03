@@ -27,6 +27,24 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Analisis_series_model extends CI_Model {
 
 	/**
+	 * Arreglo de validacion módulo analisis de series
+	 *
+	 * @var array
+	 */
+	public $validation_analisis = array(
+		array('field' => 'series', 'label' => 'Series', 'rules' => 'trim|required'),
+		array('field' => 'show_mov', 'label' => 'Mostrar Movimientos', 'rules' => ''),
+		array('field' => 'ult_mov', 'label' => 'Ultimo movimiento', 'rules' => ''),
+		array('field' => 'show_despachos', 'label' => 'Mostrar despachos', 'rules' => ''),
+		array('field' => 'show_stock_sap', 'label' => 'Mostrar stock SAP', 'rules' => ''),
+		array('field' => 'show_stock_scl', 'label' => 'Mostrar stock SCL', 'rules' => ''),
+		array('field' => 'show_trafico', 'label' => 'Mostrar trafico', 'rules' => ''),
+		array('field' => 'show_gdth', 'label' => 'Mostrar gestor DTH', 'rules' => ''),
+	);
+
+
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return void
@@ -34,6 +52,12 @@ class Analisis_series_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->library('table');
+		$this->table->set_template(array(
+			'table_open' => '<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">',
+		));
+
 	}
 
 
@@ -119,32 +143,61 @@ class Analisis_series_model extends CI_Model {
 	 * @param  string $series Listado de series a consultar
 	 * @return array          Arreglo con resultado
 	 */
-	public function get_historia($series = string)
+	public function get_historia($series = '')
 	{
-		$result = array();
+		$reporte = '';
+
 		$arr_series = $this->_series_list_to_array($series);
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db
-				->limit(3000)
-				->select('m.*')
-				->select('a1.des_almacen as des_alm, a2.des_almacen as des_rec, u.nom_usuario')
-				->select('c.*')
-				->select('convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc', FALSE)
-				->select('convert(varchar(20),fecha,103) as fec', FALSE)
-				->from($this->config->item('bd_movimientos_sap') . ' m')
-				->join($this->config->item('bd_cmv_sap') . ' c', 'm.cmv=c.cmv', 'left')
-				->join($this->config->item('bd_almacenes_sap') . ' a1', 'a1.centro=m.ce and m.alm=a1.cod_almacen', 'left')
-				->join($this->config->item('bd_almacenes_sap') . ' a2', 'a2.centro=m.ce and m.rec=a2.cod_almacen', 'left')
-				->join($this->config->item('bd_usuarios_sap')  . ' u', 'm.usuario=u.usuario', 'left')
-				->where_in('serie', $arr_series)
-				->order_by('serie', 'asc')
-				->order_by('fecha', 'asc')
-				->order_by('fec_entrada_doc', 'asc')
-				->get()
-				->result_array();
+			foreach($arr_series as $serie)
+			{
+				$reporte .= $this->table->generate($this->_get_historia_serie($serie));
+			}
 		}
+
+		return $reporte;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera la historia de un conjunto de series
+	 *
+	 * @param  string $series Listado de series a consultar
+	 * @return array          Arreglo con resultado
+	 */
+	private function _get_historia_serie($serie = '')
+	{
+		return $this->db
+			->limit(3000)
+			->select('m.serie')
+			->select('convert(varchar(20),fec_entrada_doc,120) as fecha_entrada_doc', FALSE)
+			->select('m.ce')
+			->select('m.alm')
+			->select('a1.des_almacen as des_alm')
+			->select('m.rec')
+			->select('a2.des_almacen as des_rec')
+			->select('m.cmv')
+			->select('c.des_cmv')
+			->select('m.codigo_sap')
+			->select('m.texto_breve_material')
+			->select('m.lote')
+			->select('m.n_doc')
+			->select('m.referencia')
+			->select('m.usuario')
+			->select('u.nom_usuario')
+			->from($this->config->item('bd_movimientos_sap') . ' m')
+			->join($this->config->item('bd_cmv_sap') . ' c', 'm.cmv=c.cmv', 'left')
+			->join($this->config->item('bd_almacenes_sap') . ' a1', 'a1.centro=m.ce and m.alm=a1.cod_almacen', 'left')
+			->join($this->config->item('bd_almacenes_sap') . ' a2', 'a2.centro=m.ce and m.rec=a2.cod_almacen', 'left')
+			->join($this->config->item('bd_usuarios_sap')  . ' u', 'm.usuario=u.usuario', 'left')
+			->where('serie', $serie)
+			->order_by('serie', 'asc')
+			->order_by('fecha', 'asc')
+			->order_by('fec_entrada_doc', 'asc')
+			->get();
 	}
 
 
@@ -162,14 +215,29 @@ class Analisis_series_model extends CI_Model {
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db
-				->limit(1000)
-				->select('*')
-				->select('convert(varchar(20),fecha,120) as fecha_despacho', FALSE)
-				->from($this->config->item('bd_despachos_sap'))
-				->where_in('n_serie', $arr_series)
-				->get()
-				->result_array();
+			return $this->table->generate(
+				$this->db
+					->limit(1000)
+					->select('serie')
+					->select('cod_sap as codigo sap')
+					->select('texto_breve_material')
+					->select('lote')
+					->select('operador')
+					->select('convert(varchar(20),fecha,120) as fecha_despacho', FALSE)
+					->select('cmv')
+					->select('alm')
+					->select('rec')
+					->select('des_bodega')
+					->select('rut')
+					->select('tipo_servicio')
+					->select('icc')
+					->select('abonado')
+					->select('n_doc')
+					->select('referencia')
+					->from($this->config->item('bd_despachos_sap'))
+					->where_in('n_serie', $arr_series)
+					->get()
+			);
 		}
 	}
 
@@ -184,24 +252,33 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_stock_sap($series = string)
 	{
-		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
 		if (count($arr_series) > 0)
 		{
-			return $this->db
-				->limit(1000)
-				->select('s.*, u.*, m.*')
-				->select('convert(varchar(20), fecha_stock, 103) as fecha', FALSE)
-				->select('convert(varchar(20), modificado_el, 103) as modif_el', FALSE)
-				->select('a.des_almacen')
-				->from($this->config->item('bd_stock_seriado_sap') . ' s')
-				->join($this->config->item('bd_materiales_sap') . ' m', 's.material = m.cod_articulo', 'left')
-				->join($this->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
-				->join($this->config->item('bd_usuarios_sap') . ' u', 's.modificado_por=u.usuario', 'left')
-				->where_in('serie', $arr_series)
-				->get()
-				->result_array();
+			return $this->table->generate(
+				$this->db
+					->limit(1000)
+					->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock', FALSE)
+					->select('s.serie')
+					->select('s.material')
+					->select('m.des_articulo as des_material')
+					->select('s.centro')
+					->select('s.almacen')
+					->select('a.des_almacen')
+					->select('s.lote')
+					->select('s.status_sistema')
+					->select('s.estado_stock')
+					->select('convert(varchar(20), modificado_el, 103) as modif_el', FALSE)
+					->select('s.modificado_por')
+					->select('u.nom_usuario')
+					->from($this->config->item('bd_stock_seriado_sap') . ' s')
+					->join($this->config->item('bd_materiales_sap') . ' m', 's.material = m.cod_articulo', 'left')
+					->join($this->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
+					->join($this->config->item('bd_usuarios_sap') . ' u', 's.modificado_por=u.usuario', 'left')
+					->where_in('serie', $arr_series)
+					->get()
+			);
 		}
 	}
 
@@ -216,15 +293,26 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_stock_scl($series = string)
 	{
-		$result = array();
 		$arr_series = $this->_series_list_to_array($series);
 
 		if (count($arr_series) > 0)
 		{
 			$query = $this->db
 				->limit(1000)
-				->select('s.*, b.*, t.*, a.*, ts.*, u.*, e.*')
-				->select('convert(varchar(20), fecha_stock, 103) as FECHA', FALSE)
+				->select('convert(varchar(20), s.fecha_stock, 103) as fecha', FALSE)
+				->select('s.serie_sap')
+				->select('s.cod_bodega')
+				->select('b.des_bodega')
+				->select('s.tip_bodega')
+				->select('t.des_tipbodega')
+				->select('s.cod_articulo')
+				->select('a.des_articulo')
+				->select('s.tip_stock')
+				->select('ts.desc_stock')
+				->select('s.cod_uso')
+				->select('u.desc_uso')
+				->select('s.cod_estado')
+				->select('e.des_estado')
 				->from($this->config->item('bd_stock_scl') . ' s')
 				->join($this->config->item('bd_al_bodegas') . ' b', 'cast(s.cod_bodega as varchar(10)) = b.cod_bodega', 'left')
 				->join($this->config->item('bd_al_tipos_bodegas') . ' t', 'cast(s.tip_bodega as varchar(10)) = t.tip_bodega', 'left')
@@ -237,7 +325,7 @@ class Analisis_series_model extends CI_Model {
 
 			$query = str_replace('"', '', $query);
 
-			return $this->db->query($query)->result_array();
+			return $this->table->generate($this->db->query($query));
 		}
 	}
 
@@ -252,10 +340,9 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_trafico($series = '')
 	{
-		$result = array();
 		$arr_series = $this->_series_list_to_array($series, 'trafico');
 
-		foreach ($arr_series as $serie)
+		if (count($arr_series) > 0)
 		{
 			$anomes = $this->db
 				->select_max('(ano*100+mes)', 'anomes')
@@ -266,21 +353,32 @@ class Analisis_series_model extends CI_Model {
 			$ano = intval($anomes/100);
 			$mes = $anomes - 100*$ano;
 
-			$this->db
-				->select('t.*, a.*, c.*, b.*')
-				->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
-				->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
-				->from($this->config->item('bd_trafico_mes') . ' t')
-				->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
-				->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
-				->join($this->config->item('bd_trafico_causabaja') . ' b', 'a.cod_causabaja = b.cod_causabaja', 'left')
-				->where(array('ano' => $ano, 'mes' => $mes, 'imei'=> $serie))
-				->order_by('imei, fec_alta');
-
-			array_push($result, $this->db->get()->result_array());
+			return $this->table->generate(
+				$this->db
+					->select('t.ano')
+					->select('t.mes')
+					->select('t.imei')
+					->select('t.celular')
+					->select('t.seg_entrada')
+					->select('t.seg_salida')
+					->select('a.tipo')
+					->select('a.cod_cliente')
+					->select('c.num_ident')
+					->select("c.nom_cliente+' '+c.ape1_cliente+' '+c.ape2_cliente as nombre_cliente")
+					->select('a.cod_situacion')
+					->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
+					->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
+					->select('b.des_causabaja')
+					->from($this->config->item('bd_trafico_mes') . ' t')
+					->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
+					->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
+					->join($this->config->item('bd_trafico_causabaja') . ' b', 'a.cod_causabaja = b.cod_causabaja', 'left')
+					->where(array('ano' => $ano, 'mes' => $mes))
+					->where_in('imei', $arr_series)
+					->order_by('imei, fec_alta')
+					->get()
+			);
 		}
-
-		return $result;
 	}
 
 

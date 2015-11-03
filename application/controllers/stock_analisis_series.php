@@ -72,47 +72,51 @@ class Stock_analisis_series extends CI_Controller {
 		$this->load->model('acl_model');
 		$datos = array();
 
-		if ($this->input->post('show_mov') === 'show')
+		$this->form_validation->set_rules($this->analisis_series_model->validation_analisis);
+
+		if ($this->form_validation->run() === TRUE)
 		{
-			$datos['hist'] = $this->analisis_series_model->get_historia($this->input->post('series'));
+			$series = set_value('series');
+
+			$arr_reportes = array(
+				'show_mov'       => '$this->analisis_series_model->get_historia',
+				'show_despachos' => '$this->analisis_series_model->get_despacho',
+				'show_stock_sap' => '$this->analisis_series_model->get_stock_sap',
+				'show_stock_scl' => '$this->analisis_series_model->get_stock_scl',
+				'show_trafico'   => '$this->analisis_series_model->get_trafico',
+			);
+
+			if ($this->input->post('show_mov') === 'show')
+			{
+				$datos['hist'] = $this->analisis_series_model->get_historia($series);
+			}
+
+			if ($this->input->post('show_despachos') === 'show')
+			{
+				$datos['desp'] = $this->analisis_series_model->get_despacho($series);
+			}
+
+			if ($this->input->post('show_stock_sap') === 'show')
+			{
+				$datos['stock'] = $this->analisis_series_model->get_stock_sap($series);
+			}
+
+			if ($this->input->post('show_stock_scl') === 'show')
+			{
+				$datos['stock_scl'] = $this->analisis_series_model->get_stock_scl($series);
+			}
+
+			if ($this->input->post('show_trafico') === 'show')
+			{
+				$datos['trafico'] = $this->analisis_series_model->get_trafico($series);
+			}
+
+			if ($this->input->post('show_gdth') === 'show')
+			{
+				$this->load->model('log_gestor_model');
+				$datos['log_gdth'] = $this->log_gestor_model->get_log($series, 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE);
+			}
 		}
-
-		if ($this->input->post('show_despachos') === 'show')
-		{
-			$datos['desp'] = $this->analisis_series_model->get_despacho($this->input->post('series'));
-		}
-
-		if ($this->input->post('show_stock_sap') === 'show')
-		{
-			$datos['stock'] = $this->analisis_series_model->get_stock_sap($this->input->post('series'));
-		}
-
-		if ($this->input->post('show_stock_scl') === 'show')
-		{
-			$datos['stock_scl'] = $this->analisis_series_model->get_stock_scl($this->input->post('series'));
-		}
-
-		if ($this->input->post('show_trafico') === 'show')
-		{
-			$datos['trafico'] = $this->analisis_series_model->get_trafico($this->input->post('series'));
-		}
-
-		if ($this->input->post('show_gdth') === 'show')
-		{
-			$this->load->model('log_gestor_model');
-			$datos['log_gdth'] = $this->log_gestor_model->get_log($this->input->post('series'), 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE);
-		}
-
-		$this->form_validation->set_rules('series', 'Series', '');
-		$this->form_validation->set_rules('show_mov', 'Series', '');
-		$this->form_validation->set_rules('ult_mov', 'Series', '');
-		$this->form_validation->set_rules('show_despachos', 'Series', '');
-		$this->form_validation->set_rules('show_stock_sap', 'Series', '');
-		$this->form_validation->set_rules('show_stock_scl', 'Series', '');
-		$this->form_validation->set_rules('show_trafico', 'Series', '');
-		$this->form_validation->set_rules('show_gdth', 'Series', '');
-		$this->form_validation->run();
-
 		app_render_view('stock_sap/analisis_series_view', $datos);
 	}
 
