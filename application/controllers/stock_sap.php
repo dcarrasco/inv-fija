@@ -151,14 +151,14 @@ class Stock_sap extends CI_Controller {
 		 * $this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
 		 */
 
-		$stock = array();
+		$tabla_stock = '';
 		$datos_grafico = array();
 
 		if ($this->form_validation->run())
 		{
-			$stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+			$tabla_stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
 
-			if ($tipo_op === 'MOVIL' AND count($stock) > 0)
+			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
 			{
 				//$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
 			}
@@ -172,11 +172,11 @@ class Stock_sap extends CI_Controller {
 
 
 		$data = array(
-			'menu_modulo'            => array(
+			'menu_modulo' => array(
 				'menu'         => $this->_arr_menu,
 				'mod_selected' => ($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'
 			),
-			'stock'                 => $stock,
+			'tabla_stock'           => $tabla_stock,
 			'combo_almacenes'       => $combo_almacenes,
 			'combo_fechas'          => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
 			'tipo_op'               => $tipo_op,

@@ -34,6 +34,12 @@ class stock_sap_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->helper('html');
+		$this->load->library('table');
+		$this->table->set_template(array(
+			'table_open' => '<table class="table table-striped table-hover table-condensed reporte">',
+		));
 	}
 
 
@@ -76,9 +82,18 @@ class stock_sap_model extends CI_Model {
 		// fecha stock
 		if (in_array('fecha', $mostrar))
 		{
-			$this->db->select('s.fecha_stock');
-			$this->db->group_by('s.fecha_stock');
-			$this->db->order_by('fecha_stock');
+			if (in_array('material', $mostrar))
+			{
+				$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
+				$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
+				$this->db->order_by('fecha_stock');
+			}
+			else
+			{
+				$this->db->select('s.fecha_stock');
+				$this->db->group_by('s.fecha_stock');
+				$this->db->order_by('fecha_stock');
+			}
 		}
 
 		// tipo de almacen
@@ -273,8 +288,6 @@ class stock_sap_model extends CI_Model {
 
 		$arr_result = $this->db->get()->result_array();
 
-		//dbg($arr_result);
-
 		$arr_stock_tmp01 = array();
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
 		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
@@ -310,7 +323,6 @@ class stock_sap_model extends CI_Model {
 				$arr_reg['VAL_' . $llave_total] = $valor_monto;
 				array_push($arr_stock_tmp01, $arr_reg);
 			}
-
 
 			$arr_stock = array();
 			$llave_ant = '';
@@ -386,9 +398,87 @@ class stock_sap_model extends CI_Model {
 			$arr_result = $arr_stock;
 		}
 
-		return $arr_result;
+		return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
 	}
 
+
+	// --------------------------------------------------------------------
+
+	public function _format_table_stock($arr_result = array(), $mostrar = array(), $filtrar = array())
+	{
+		$campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS', 'VAL_cantidad', 'monto');
+		$campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS','VAL_cantidad', 'monto');
+		$totales = array();
+
+		$num_reg = 0;
+
+		foreach ($arr_result as $linea_stock)
+		{
+			if ($num_reg === 0)
+			{
+				$arr_linea = array();
+				foreach ($linea_stock as $campo => $valor)
+				{
+					array_push($arr_linea, array(
+						'data'  => str_replace('_', ' ', $campo),
+						'class' => in_array($campo, $campos_sumables) ? 'text-right' : '',
+					));
+
+					$totales[$campo] = 0;
+				}
+				$this->table->set_heading($arr_linea);
+			}
+
+			$arr_linea = array();
+			foreach ($linea_stock as $campo => $valor)
+			{
+				if (in_array($campo, $campos_sumables))
+				{
+					$str_url = base_url(
+						'stock_sap/detalle_series/' .
+						(array_key_exists('centro', $linea_stock) ? $linea_stock['centro'] : '_') . '/' .
+						(array_key_exists('cod_almacen', $linea_stock) ? $linea_stock['cod_almacen'] : '_') . '/' .
+						(array_key_exists('cod_articulo', $linea_stock) ? $linea_stock['cod_articulo'] : '_') . '/' .
+						(array_key_exists('lote', $linea_stock) ? $linea_stock['lote'] : '_')
+					);
+
+					$data = anchor($str_url, nbs().(in_array($campo, $campos_montos) ? fmt_monto($valor) : fmt_cantidad($valor)));
+
+					$totales[$campo] += $valor;
+				}
+				else
+				{
+					$data = $valor;
+				}
+
+				array_push($arr_linea, array(
+					'data'  => $data,
+					'class' => in_array($campo, $campos_sumables) ? 'text-right' : '',
+				));
+			}
+			$this->table->add_row($arr_linea);
+			$num_reg += 1;
+		}
+
+		$arr_linea = array();
+		foreach($totales as $campo => $valor)
+		{
+			$data = '';
+
+			if (in_array($campo, $campos_sumables))
+			{
+				$data = in_array($campo, $campos_montos) ? fmt_monto($valor) : fmt_cantidad($valor);
+			}
+
+			array_push($arr_linea, array(
+				'data'  => '<strong>'.$data.'</strong>',
+				'class' => in_array($campo, $campos_sumables) ? 'text-right' : '',
+			));
+		}
+		$this->table->add_row($arr_linea);
+
+		return $this->table->generate();
+	}
 
 	// --------------------------------------------------------------------
 
@@ -508,10 +598,8 @@ class stock_sap_model extends CI_Model {
 		*/
 
 		$arr_result = $this->db->get()->result_array();
-		//print_r($arr_result);
 
-
-		return $arr_result;
+		return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
 	}
 
 
