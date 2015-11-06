@@ -434,15 +434,21 @@ class stock_sap_model extends CI_Model {
 			{
 				if (in_array($campo, $campos_sumables))
 				{
-					$str_url = base_url(
-						'stock_sap/detalle_series/' .
-						(array_key_exists('centro', $linea_stock) ? $linea_stock['centro'] : '_') . '/' .
-						(array_key_exists('cod_almacen', $linea_stock) ? $linea_stock['cod_almacen'] : '_') . '/' .
-						(array_key_exists('cod_articulo', $linea_stock) ? $linea_stock['cod_articulo'] : '_') . '/' .
-						(array_key_exists('lote', $linea_stock) ? $linea_stock['lote'] : '_')
-					);
-
-					$data = anchor($str_url, nbs().(in_array($campo, $campos_montos) ? fmt_monto($valor) : fmt_cantidad($valor)));
+					if (array_key_exists('cod_almacen', $linea_stock))
+					{
+						$str_url = base_url(
+							'stock_sap/detalle_series/' .
+							(array_key_exists('centro', $linea_stock) ? $linea_stock['centro'] : '_') . '/' .
+							(array_key_exists('cod_almacen', $linea_stock) ? $linea_stock['cod_almacen'] : '_') . '/' .
+							(array_key_exists('cod_articulo', $linea_stock) ? $linea_stock['cod_articulo'] : '_') . '/' .
+							(array_key_exists('lote', $linea_stock) ? $linea_stock['lote'] : '_')
+						);
+						$data = anchor($str_url, nbs().(in_array($campo, $campos_montos) ? fmt_monto($valor) : fmt_cantidad($valor)));
+					}
+					else
+					{
+						$data = in_array($campo, $campos_montos) ? fmt_monto($valor) : fmt_cantidad($valor);
+					}
 
 					$totales[$campo] += $valor;
 				}
@@ -781,13 +787,13 @@ class stock_sap_model extends CI_Model {
 	 * @param  string $almacen  Almacén series a recuperar
 	 * @param  string $material Material series a recuperar
 	 * @param  string $lote     Lote series a recuperar
-	 * @return array            Arreglo con series recuperadas
+	 * @return string           Texto tabla formateada
 	 */
 	public function get_detalle_series($centro = '', $almacen = '', $material = '', $lote = '')
 	{
 		if ($almacen === '' OR $almacen === '_')
 		{
-			return array();
+			return '';
 		}
 
 		if ($centro !== '' AND $centro !== '_')
@@ -811,6 +817,7 @@ class stock_sap_model extends CI_Model {
 		}
 
 		$this->db
+			->select('row_number() over (order by s.material, s.lote, s.serie) as lin', FALSE)
 			->select('convert(varchar(20), s.fecha_stock, 103) as fecha_stock')
 			->select('s.centro')
 			->select('s.almacen')
@@ -828,7 +835,7 @@ class stock_sap_model extends CI_Model {
 			->join($this->config->item('bd_almacenes_sap') . ' as a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left')
 			->join($this->config->item('bd_usuarios_sap') . ' as u', 'u.usuario=s.modificado_por', 'left')
 			->join($this->config->item('bd_pmp') . ' p', 'p.centro = s.centro and p.material=s.material and p.lote=s.lote and p.estado_stock=s.estado_stock', 'left')
-			->order_by('material, lote, serie');
+			->order_by('s.material, s.lote, s.serie');
 
 		return $this->table->generate($this->db->get());
 	}
