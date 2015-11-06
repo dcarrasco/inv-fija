@@ -250,8 +250,15 @@ class Stock_sap extends CI_Controller {
 	{
 		$this->load->model('stock_sap_model');
 
+		$cache_id = hash('md5', 'detalle_series'.$centro.$almacen.$material.$lote);
+		if ( ! $detalle_series = $this->cache->get($cache_id))
+		{
+			$detalle_series = $this->stock_sap_model->get_detalle_series($centro, $almacen, $material, $lote);
+			$this->cache->save($cache_id, $detalle_series, 300);
+		}
+
 		$data = array(
-			'detalle_series' => $this->stock_sap_model->get_detalle_series($centro, $almacen, $material, $lote),
+			'detalle_series' => $detalle_series,
 			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 		);
 

@@ -1,45 +1,7 @@
 <div class="content-module">
 
 	<div class="content-module-main">
-		<table class="table table-bordered table-striped table-hover table-condensed reporte">
-			<tr>
-				<th>n</th>
-				<th>fecha stock</th>
-				<th>centro</th>
-				<th>almacen</th>
-				<th>desc almacen</th>
-				<th>material</th>
-				<th>desc material</th>
-				<th>lote</th>
-				<th>serie</th>
-				<th>estado stock</th>
-				<th>pmp</th>
-				<th>fecha modificacion</th>
-				<th>usuario modificacion</th>
-				<th>nombre usuario modificacion</th>
-			</tr>
-
-			<?php $n_lin = 0; ?>
-			<?php foreach($detalle_series as $reg): ?>
-				<tr>
-					<td><?php echo (++$n_lin); ?></td>
-					<td><?php echo $reg['fecha_stock']; ?></td>
-					<td><?php echo $reg['centro']; ?></td>
-					<td><?php echo $reg['almacen']; ?></td>
-					<td><?php echo $reg['des_almacen']; ?></td>
-					<td><?php echo $reg['material']; ?></td>
-					<td><?php echo $reg['des_material']; ?></td>
-					<td><?php echo $reg['lote']; ?></td>
-					<td><span class="serie"><?php echo $reg['serie']; ?></span></td>
-					<td><?php echo $reg['estado_stock']; ?></td>
-					<td><?php echo $reg['pmp']; ?></td>
-					<td><?php echo $reg['fecha_modificacion']; ?></td>
-					<td><?php echo $reg['modificado_por']; ?></td>
-					<td><?php echo $reg['nom_usuario']; ?></td>
-				</tr>
-			<?php endforeach; ?>
-
-		</table>
+		<?php echo $detalle_series ?>
 	</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">
