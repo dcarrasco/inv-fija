@@ -72,6 +72,8 @@ class Stock_sap extends CI_Controller {
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
 			),
 		);
+
+		$this->load->driver('cache', array('adapter' => 'file'));
 	}
 
 	// --------------------------------------------------------------------
@@ -156,7 +158,13 @@ class Stock_sap extends CI_Controller {
 
 		if ($this->form_validation->run())
 		{
-			$tabla_stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+			// recupera tabla de stock de la BD o del cache
+			$cache_id = hash('md5', 'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar));
+			if ( ! $tabla_stock = $this->cache->get($cache_id))
+			{
+				$tabla_stock = $this->stock_sap_model->get_stock($tipo_op, $arr_mostrar, $arr_filtrar);
+				$this->cache->save($cache_id, $tabla_stock, 300);
+			}
 
 			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
 			{
@@ -164,11 +172,33 @@ class Stock_sap extends CI_Controller {
 			}
 		}
 
-		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+		// recupera combo fechas de la BD o del cache
+		$cache_id = hash('md5', 'combo_fechas'.$tipo_op);
+		if ( ! $combo_fechas = $this->cache->get($cache_id))
+		{
+			$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
+			$this->cache->save($cache_id, $combo_fechas, 300);
+		}
 
-		$combo_almacenes = (set_value('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
-			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
-			: $almacen_sap->get_combo_almacenes($tipo_op);
+		// recupera combo almacenes de la BD o del cache
+		if (set_value('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
+		{
+			$cache_id = hash('md5', 'combo_tiposalm'.$tipo_op);
+			if ( ! $combo_almacenes = $this->cache->get($cache_id))
+			{
+				$combo_almacenes = $tipoalmacen_sap->get_combo_tiposalm($tipo_op);
+				$this->cache->save($cache_id, $combo_almacenes, 300);
+			}
+		}
+		else
+		{
+			$cache_id = hash('md5', 'combo_almacenes'.$tipo_op);
+			if ( ! $combo_almacenes = $this->cache->get($cache_id))
+			{
+				$combo_almacenes = $almacen_sap->get_combo_almacenes($tipo_op);
+				$this->cache->save($cache_id, $combo_almacenes, 300);
+			}
+		}
 
 
 		$data = array(
