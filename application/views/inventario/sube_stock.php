@@ -63,7 +63,7 @@
 						</div>
 						<div id="status_progreso1">
 							<?php echo $this->lang->line('inventario_upload_status_OK'); ?>
-							<span id="reg_actual">0</span> / <?php echo ($regs_OK); ?>
+							<span id="reg_actual">0</span> / <?php echo ($regs_ok); ?>
 						</div>
 						<div id="status_progreso2">
 							<?php echo $this->lang->line('inventario_upload_status_error'); ?>

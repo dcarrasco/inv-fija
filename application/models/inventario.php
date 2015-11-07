@@ -227,7 +227,7 @@ class Inventario extends ORM_Model {
 			$msj_termino .= '<br>Lineas con errores (' . implode(', ', $arr_lineas_error) . ')';
 		}
 
-		return array('script' => $script_carga, 'regs_OK' => $count_ok, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
+		return array('script' => $script_carga, 'regs_ok' => $count_ok, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
 	}
 
 

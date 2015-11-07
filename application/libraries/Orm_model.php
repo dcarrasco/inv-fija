@@ -1024,31 +1024,30 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array  $rs Arreglo con los valores
 	 * @return nada
 	 */
-	public function fill_from_array($rs = array())
+	public function fill_from_array($arr_data = array())
 	{
-		if ($rs OR count($rs) > 0)
+		if ($arr_data OR count($arr_data) > 0)
 		{
 			foreach ($this->model_fields as $nombre => $metadata)
 			{
-				if (array_key_exists($nombre, $rs))
+				if (array_key_exists($nombre, $arr_data))
 				{
 					$tipo_campo = $metadata->get_tipo();
 
-					if ($tipo_campo === 'id' OR $tipo_campo === 'boolean' OR $tipo_campo === 'integer')
+					if ($tipo_campo === 'id' OR $tipo_campo === 'boolean' OR $tipo_campo === 'int')
 					{
-						$this->fields_values[$nombre] = (int) $rs[$nombre];
+						$this->fields_values[$nombre] = (int) $arr_data[$nombre];
 					}
-
-					if ($metadata->get_tipo() === 'datetime')
+					else if ($metadata->get_tipo() === 'datetime')
 					{
-						if ($rs[$nombre] !== '')
+						if ($arr_data[$nombre] !== '')
 						{
-							$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($rs[$nombre]));
+							$this->fields_values[$nombre] = date('Ymd H:i:s', strtotime($arr_data[$nombre]));
 						}
 					}
 					else
 					{
-						$this->fields_values[$nombre] = $rs[$nombre];
+						$this->fields_values[$nombre] = $arr_data[$nombre];
 					}
 				}
 			}
