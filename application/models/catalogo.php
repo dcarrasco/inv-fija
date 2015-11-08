@@ -115,6 +115,7 @@ class Catalogo extends ORM_Model {
 	 */
 	public function actualiza_precios()
 	{
+		$tabla_temporal_precios = 'tmp_actualiza_precios';
 
 		$this->CI->load->dbforge();
 
@@ -131,13 +132,13 @@ class Catalogo extends ORM_Model {
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
-		if ($this->CI->db->table_exists('tmp0001'))
+		if ($this->CI->db->table_exists($tabla_temporal_precios))
 		{
-			$this->CI->dbforge->drop_table('tmp0001');
+			$this->CI->dbforge->drop_table($tabla_temporal_precios);
 		}
 
 		$this->CI->db
-			->select('material, max(valor/cantidad) as pmp into tmp0001', FALSE)
+			->select('material, max(valor/cantidad) as pmp into '.$tabla_temporal_precios, FALSE)
 			->from($this->CI->config->item('bd_stock_fija'))
 			->where('fecha_stock', $max_fecha)
 			->where_in('lote', array('I', 'A'))
@@ -145,22 +146,24 @@ class Catalogo extends ORM_Model {
 			->get();
 
 		//actualiza los precios
-		$this->CI->db->query('update ' . $this->get_model_tabla() . ' set fija_catalogos.pmp=s.pmp from tmp0001 as s where catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS');
+		$this->CI->db->query(
+			'UPDATE '.$this->get_model_tabla().' '.
+			'SET fija_catalogos.pmp=s.pmp '.
+			'FROM '.$tabla_temporal_precios.' as s '.
+			'WHERE catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS'
+		);
 
 		// cuenta los precios actualizados
-		$cant_regs = $this->CI->db
-			->query(
-				'SELECT count(*) as cant ' .
-				'FROM ' . $this->get_model_tabla() . ' as c ' .
-				'JOIN tmp0001 as t on (c.catalogo collate Latin1_General_CI_AS = t.material collate Latin1_General_CI_AS)'
-			)
-			->row()
-			->cant;
+		$cant_regs = $this->CI->db->query(
+			'SELECT count(*) as cant '.
+			'FROM '.$this->get_model_tabla().' as c '.
+			'JOIN '.$tabla_temporal_precios.' as t on (c.catalogo collate Latin1_General_CI_AS = t.material collate Latin1_General_CI_AS)'
+		)->row()->cant;
 
 		// borra tabla temporal con ultimos precios
-		if ($this->CI->db->table_exists('tmp0001'))
+		if ($this->CI->db->table_exists($tabla_temporal_precios))
 		{
-			$this->CI->dbforge->drop_table('tmp0001');
+			$this->CI->dbforge->drop_table($tabla_temporal_precios);
 		}
 
 		return $cant_regs;
