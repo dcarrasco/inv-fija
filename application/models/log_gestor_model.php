@@ -26,7 +26,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Log_gestor_model extends CI_Model {
 
-
+	/**
+	 * Arreglo de validacion
+	 *
+	 * @var array
+	 */
 	public $validation_rules = array(
 		array(
 			'field' => 'series',
@@ -105,35 +109,40 @@ class Log_gestor_model extends CI_Model {
 
 			if ($serie !== '')
 			{
-				$s_query = 'SELECT id_log_deco_tarjeta, fecha_log, estado, peticion, tipo_operacion_cas, telefono, rut, serie_deco, serie_tarjeta, max(nombre) nombre ';
-				$s_query .= 'FROM (';
-				$s_query .= "SELECT L.ID_LOG_DECO_TARJETA, L.FECHA_LOG, L.ESTADO, L.PETICION, L.TIPO_OPERACION_CAS, L.AREA+'-'+L.TELEFONO AS TELEFONO, L.RUT+'-'+L.RUT_DV AS RUT, L.SERIE_DECO, L.SERIE_TARJETA, C.NOM_CLIENTE+' '+C.APE1_CLIENTE+' '+APE2_CLIENTE AS NOMBRE ";
+				$tabla_log_dth = $tipo_reporte === 'log' ? 'bd_logistica..bd_dth_log_decotarjeta' : 'bd_logistica..bd_dth_ult_log';
+				$campo_where = $tipo_serie === 'serie_deco' ? 'serie_deco' : 'rut';
 
-				if ($tipo_reporte === 'log')
-				{
-					$s_query .= 'FROM BD_LOGISTICA..BD_DTH_LOG_DECOTARJETA L ';
-				}
-				else
-				{
-					$s_query .= 'FROM BD_LOGISTICA..BD_DTH_ULT_LOG L ';
-				}
-
-				$s_query .= "LEFT JOIN BD_CONTROLES..TRAFICO_CLIENTES C ON C.NUM_IDENT = L.RUT+'-'+L.RUT_DV ";
-
-				if ($tipo_serie === 'serie_deco')
-				{
-					$s_query .= "WHERE SERIE_DECO = '" .$serie . "' ";
-				}
-				else
-				{
-					$s_query .= "WHERE RUT = '" .$serie . "' ";
-				}
-
-				$s_query .= 'AND TIPO_OPERACION_CAS IN ( ' . $filtro_cas . ') ';
-
-				$s_query .= ') T1 ';
-				$s_query .= 'GROUP BY ID_LOG_DECO_TARJETA, FECHA_LOG, ESTADO, PETICION, TIPO_OPERACION_CAS, TELEFONO, RUT, SERIE_DECO, SERIE_TARJETA ';
-				$s_query .= 'ORDER BY SERIE_DECO, ID_LOG_DECO_TARJETA';
+				$s_query =
+					"SELECT
+						id_log_deco_tarjeta,
+						fecha_log,
+						estado,
+						peticion,
+						tipo_operacion_cas,
+						telefono,
+						rut,
+						serie_deco,
+						serie_tarjeta,
+						MAX(nombre) nombre
+					FROM (
+						SELECT
+							l.id_log_deco_tarjeta,
+							l.fecha_log,
+							l.estado,
+							l.peticion,
+							l.tipo_operacion_cas,
+							l.area+'-'+l.telefono as telefono,
+							l.rut+'-'+l.rut_dv as rut,
+							l.serie_deco,
+							l.serie_tarjeta,
+							c.nom_cliente+' '+c.ape1_cliente+' '+ape2_cliente as nombre
+						FROM $tabla_log_dth l
+						LEFT JOIN bd_controles..trafico_clientes c on c.num_ident = l.rut+'-'+l.rut_dv
+						WHERE $campo_where = '$serie'
+							and TIPO_OPERACION_CAS in ($filtro_cas)
+					) T1
+					GROUP BY id_log_deco_tarjeta, fecha_log, estado, peticion, tipo_operacion_cas, telefono, rut, serie_deco, serie_tarjeta
+					ORDER BY serie_deco, id_log_deco_tarjeta";
 
 				$query = $this->db->query($s_query);
 
@@ -187,12 +196,15 @@ class Log_gestor_model extends CI_Model {
 	public function dv_serie_deco($serie_deco = '')
 	{
 		$serie_deco = substr($serie_deco, 0, 10);
-		$digito_verificador = 6*substr($serie_deco, 0, 2);
-		$digito_verificador += 19*substr($serie_deco, 2, 1);
-		$digito_verificador += 8*substr($serie_deco, 3, 3);
-		$digito_verificador += 1*substr($serie_deco, 6, 2);
-		$digito_verificador = $digito_verificador % 23;
-		$digito_verificador += 1*substr($serie_deco, 8, 2);
+
+		$digito_verificador  =  6 * substr($serie_deco, 0, 2);
+		$digito_verificador += 19 * substr($serie_deco, 2, 1);
+		$digito_verificador +=  8 * substr($serie_deco, 3, 3);
+		$digito_verificador +=  1 * substr($serie_deco, 6, 2);
+
+		$digito_verificador  = $digito_verificador % 23;
+		$digito_verificador += 1 * substr($serie_deco, 8, 2);
+
 		$digito_verificador = (string) $digito_verificador % 100;
 
 		if (strlen($digito_verificador) === 1)
