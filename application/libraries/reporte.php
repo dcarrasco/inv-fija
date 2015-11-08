@@ -12,7 +12,7 @@
  * @link      localhost:1520
  *
  */
-if (!defined('BASEPATH')) exit('No direct script access allowed');
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase con functionalidades comunes de la aplicacion
@@ -38,28 +38,13 @@ class Reporte {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Funcion que permite recuperar objetos de la instancia global
-	 *
-	 * @param  string $key Llave a recuperar
-	 * @return mixed       Objeto CI
-	 */
-	public function __get($key = '')
-	{
-		$ci =& get_instance();
-
-		return $ci->$key;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Formatea un valor de acuerdo a los parametros de un reporte
 	 *
 	 * @param  string $valor           Valor a formatear
 	 * @param  array  $arr_param_campo Parametros del campo
-	 * @param  array  $reg             [description]
+	 * @param  array  $registro        Registro del valor, para extraer valores del link
 	 * @param  string $campo           [description]
-	 * @return [type]                  [description]
+	 * @return string                  Variable formateada
 	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
@@ -81,14 +66,14 @@ class Reporte {
 							$tipo_material  = array_key_exists('tipo_material', $registro) ? $registro['tipo_material']: '';
 							$permanencia    = $campo;
 
-							$href_param  = '?id_tipo=' . $id_tipo;
-							$href_param .= '&centro=' . $centro;
-							$href_param .= '&almacen=' . $almacen;
-							$href_param .= '&lote=' . $lote;
-							$href_param .= '&estado_stock=' . $estado_stock;
-							$href_param .= '&material=' . $material;
-							$href_param .= '&tipo_material=' . $tipo_material;
-							$href_param .= '&permanencia=' . $permanencia;
+							$href_param  = '?id_tipo='.$id_tipo;
+							$href_param .= '&centro='.$centro;
+							$href_param .= '&almacen='.$almacen;
+							$href_param .= '&lote='.$lote;
+							$href_param .= '&estado_stock='.$estado_stock;
+							$href_param .= '&material='.$material;
+							$href_param .= '&tipo_material='.$tipo_material;
+							$href_param .= '&permanencia='.$permanencia;
 
 							$valor_desplegar = fmt_cantidad($valor);
 							return anchor($arr_param_campo['href'] . $href_param, $valor_desplegar === '' ? ' ' : $valor_desplegar);
@@ -105,19 +90,17 @@ class Reporte {
 			case 'numero_dif':
 							return '<strong>' .
 								(($valor > 0)
-									? '<p class="text-success">'
+									? '<p class="text-success">+'
 									: (($valor < 0) ? '<p class="text-danger">' : '')) .
-								(($valor > 0) ? '+' : '') . fmt_cantidad($valor) .
-								(($valor !== 0) ? '</p>' : '') .
+								fmt_cantidad($valor) . (($valor !== 0) ? '</p>' : '') .
 								'</strong>';
 							break;
 			case 'valor_dif':
 							return '<strong>' .
 								(($valor > 0)
-									? '<p class="text-success">'
+									? '<p class="text-success">+'
 									: (($valor < 0) ? '<p class="text-danger">' : '')) .
-								(($valor > 0) ? '+' : '') . fmt_monto($valor) .
-								(($valor !== 0) ? '</p>' : '') .
+								fmt_monto($valor) . (($valor !== 0) ? '</p>' : '') .
 								'</strong>';
 							break;
 			default:
@@ -126,7 +109,6 @@ class Reporte {
 		}
 
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -139,12 +121,14 @@ class Reporte {
 	 */
 	public function genera_reporte($arr_campos = array(), $arr_datos = array())
 	{
-		$this->load->library('table');
+		$ci =& get_instance();
+
+		$ci->load->library('table');
 		$template = array(
 			'table_open' => '<table class="table table-striped table-hover table-condensed reporte table-fixed-header">',
 			'thead_open' => '<thead class="header">',
 		);
-		$this->table->set_template($template);
+		$ci->table->set_template($template);
 
 		$script       = '<script type="text/javascript" src="'.base_url().'js/reporte.js"></script>';
 		$num_linea    = 0;
@@ -156,7 +140,7 @@ class Reporte {
 		);
 
 		// --- ENCABEZADO REPORTE ---
-		$this->table->set_heading($this->_reporte_linea_encabezado($arr_campos, $arr_totales));
+		$ci->table->set_heading($this->_reporte_linea_encabezado($arr_campos, $arr_totales));
 
 		// --- CUERPO REPORTE ---
 		foreach ($arr_datos as $linea)
@@ -168,21 +152,20 @@ class Reporte {
 				$this->_reporte_linea_subtotal($linea, $arr_campos, $arr_totales, $subtotal_ant);
 			}
 
-			$this->table->add_row($this->_reporte_linea_datos($linea, $arr_campos, $arr_totales, $num_linea));
+			$ci->table->add_row($this->_reporte_linea_datos($linea, $arr_campos, $arr_totales, $num_linea));
 		}
 
 		// --- ULTIMO SUBTOTAL ---
 		if ($this->_get_campo_subtotal($arr_campos) !== NULL)
 		{
-			$this->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
-			$this->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
+			$ci->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
+			$ci->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
 		}
 
 		// --- TOTALES ---
-		$this->table->add_row($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
+		$ci->table->add_row($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
 
-
-		return $this->table->generate() . $script;
+		return $ci->table->generate() . $script;
 	}
 
 
@@ -191,8 +174,8 @@ class Reporte {
 	/**
 	 * Genera arreglo con datos de encabezado del reporte
 	 *
-	 * @param  array  $arr_campos  Arreglo con la descripcion de los campos del reporte
-	 * @param  array &$arr_totales Arreglo con los totales y subtotales de los campos del reporte
+	 * @param  array $arr_campos  Arreglo con la descripcion de los campos del reporte
+	 * @param  array $arr_totales Arreglo con los totales y subtotales de los campos del reporte
 	 * @return array               Arreglo con los campos del encabezado
 	 */
 	private function _reporte_linea_encabezado($arr_campos = array(), &$arr_totales = array())
@@ -206,7 +189,15 @@ class Reporte {
 		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
 		{
 			$arr_celda = array(
-				'data' => '<span order_by="'.$nombre_campo.'" order_sort="'.$arr_param_campo['order_by'].'" data-toggle="tooltip" title="Ordenar por campo \''.$arr_param_campo['titulo'].'\'">'.$arr_param_campo['titulo'].'</span>'.$arr_param_campo['img_orden'],
+				'data' =>
+					'<span '.
+						'order_by="'.$nombre_campo.'" '.
+						'order_sort="'.$arr_param_campo['order_by'].'" '.
+						'data-toggle="tooltip" '.
+						'title="Ordenar por campo '.$arr_param_campo['titulo'].'">'.
+						$arr_param_campo['titulo'].
+					'</span>'.
+					$arr_param_campo['img_orden'],
 				'class' => $arr_param_campo === '' ? '' : $arr_param_campo['class'],
 			);
 			array_push($arr_linea_encabezado, $arr_celda);
@@ -226,10 +217,10 @@ class Reporte {
 	/**
 	 * Genera arreglo con los datos de una linea del reporte
 	 *
-	 * @param  array    $arr_linea   Arreglo con los valores de la linea
-	 * @param  array    $arr_campos  Arreglo con la descripcion de los campos del reporte
-	 * @param  array   &$arr_totales Arreglo con los totales y subtotales de los campos del reporte
-	 * @param  integer  $num_linea   Numero de linea actual
+	 * @param  array   $arr_linea   Arreglo con los valores de la linea
+	 * @param  array   $arr_campos  Arreglo con la descripcion de los campos del reporte
+	 * @param  array   $arr_totales Arreglo con los totales y subtotales de los campos del reporte
+	 * @param  integer $num_linea   Numero de linea actual
 	 * @return array                 Arreglo con los campos de una linea
 	 */
 	private function _reporte_linea_datos($arr_linea = array(), $arr_campos = array(), &$arr_totales = array(), $num_linea = 0)
@@ -310,7 +301,7 @@ class Reporte {
 	/**
 	 * Recupera el nombre del campo con el tipo subtotal
 	 *
-	 * @param  array  $arr_campos Arreglo con la descripcion de los campos del reporte
+	 * @param  array $arr_campos Arreglo con la descripcion de los campos del reporte
 	 * @return string             Nombre del campo con el tipo subtotal
 	 */
 	private function _get_campo_subtotal($arr_campos = array())
@@ -339,7 +330,7 @@ class Reporte {
 	{
 		$campo_subtotal = $this->_get_campo_subtotal($arr_campos);
 
-		if ($subtotal_ant == '***init***' OR $arr_linea[$campo_subtotal] !== $subtotal_ant)
+		if ($subtotal_ant === '***init***' OR $arr_linea[$campo_subtotal] !== $subtotal_ant)
 		{
 			return TRUE;
 		}
@@ -353,10 +344,10 @@ class Reporte {
 	/**
 	 * Genera linas de totalización del subtotal e inicio de un nuevo grupo
 	 *
-	 * @param  array   $arr_linea    Arreglo con los valores de la linea
-	 * @param  array   $arr_campos   Arreglo con la descripcion de los campos del reporte
-	 * @param  array  &$arr_totales  Arreglo con los totales y subtotales de los campos del reporte
-	 * @param  string &$subtotal_ant Nombre del campo con el subtotal anterior
+	 * @param  array  $arr_linea    Arreglo con los valores de la linea
+	 * @param  array  $arr_campos   Arreglo con la descripcion de los campos del reporte
+	 * @param  array  $arr_totales  Arreglo con los totales y subtotales de los campos del reporte
+	 * @param  string $subtotal_ant Nombre del campo con el subtotal anterior
 	 * @return void
 	 */
 	private function _reporte_linea_subtotal($arr_linea = array(), $arr_campos = array(), &$arr_totales = array(), &$subtotal_ant = NULL)
