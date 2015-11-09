@@ -57,7 +57,7 @@
 
 			</label>
 			<div class="col-xs-9">
-				<input type="number" name="stock_fisico" value="<?php echo $detalle_inventario->stock_fisico ?>" id="id_stock_fisico" class="form-control">
+				<input type="number" name="stock_fisico" value="<?php echo set_value('stock_fisico', $detalle_inventario->stock_fisico) ?>" id="id_stock_fisico" class="form-control">
 			</div>
 		</div>
 
@@ -67,7 +67,7 @@
 
 			</label>
 			<div class="col-xs-9">
-				<input type="number" name="hu" value="<?php echo $detalle_inventario->hu ?>" id="id_hu" class="form-control">
+				<input type="number" name="hu" value="<?php echo set_value('hu', $detalle_inventario->hu) ?>" id="id_hu" class="form-control">
 			</div>
 		</div>
 
@@ -77,7 +77,7 @@
 
 			</label>
 			<div class="col-xs-9">
-				<input type="text" name="observacion" value="<?php echo $detalle_inventario->observacion ?>" id="id_observacion" class="form-control">
+				<input type="text" name="observacion" value="<?php echo set_value('observacion', $detalle_inventario->observacion) ?>" id="id_observacion" class="form-control">
 			</div>
 		</div>
 
