@@ -71,7 +71,7 @@ class Inventario_digitacion extends CI_Controller {
 	{
 		if ($this->agent->is_mobile())
 		{
-			return $this->ingreso_mobile($hoja);
+			return $this->hoja_mobile($hoja);
 		}
 
 		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
@@ -134,7 +134,7 @@ class Inventario_digitacion extends CI_Controller {
 	}
 
 	// --------------------------------------------------------------------
-	public function ingreso_mobile($hoja = 0)
+	public function hoja_mobile($hoja = 0)
 	{
 		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
 		{
@@ -163,6 +163,33 @@ class Inventario_digitacion extends CI_Controller {
 
 			app_render_view('inventario/inventario_mobile', $data);
 		}
+
+	}
+
+	// --------------------------------------------------------------------
+	public function ingreso_mobile($hoja = 0, $id_registro = NULL)
+	{
+		if ( ! $id_registro)
+		{
+			return $this->ingreso($hoja);
+		}
+
+		$detalle_inventario = new Detalle_inventario;
+		$detalle_inventario->find_id($id_registro);
+
+		if ($this->form_validation->run() === FALSE)
+		{
+			$data = array(
+				'detalle_inventario' => $detalle_inventario,
+			);
+
+			app_render_view('inventario/inventario_mobile_ingreso', $data);
+		}
+		else
+		{
+			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
+		}
+
 
 	}
 

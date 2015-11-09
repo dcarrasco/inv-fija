@@ -62,7 +62,7 @@
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
 				<tr>
-					<td class="text-center" nowrap><?php echo $linea_det->get_valor_field('ubicacion'); ?></td>
+					<td class="text-center" nowrap><?php echo anchor('inventario_digitacion/ingreso_mobile/'.$hoja.'/'.$linea_det->id,$linea_det->get_valor_field('ubicacion')); ?></td>
 					<td class="text-center"><?php echo $linea_det->catalogo; ?></td>
 					<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
 					<td class="text-right"><?php echo fmt_cantidad($linea_det->stock_sap); ?></td>
