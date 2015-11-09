@@ -1709,9 +1709,14 @@ class ORM_Field {
 			return form_textarea($arr_param);
 		}
 
-		if ($this->tipo === 'char' OR $this->tipo === 'int' OR $this->tipo === 'datetime')
+		if ($this->tipo === 'char' OR $this->tipo === 'datetime')
 		{
 			return form_input($arr_param);
+		}
+
+		if ($this->tipo === 'int')
+		{
+			return form_number($arr_param);
 		}
 
 		if ($this->tipo === 'password')

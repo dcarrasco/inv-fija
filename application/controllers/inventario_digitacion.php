@@ -44,6 +44,7 @@ class Inventario_digitacion extends CI_Controller {
 	{
 		parent::__construct();
 		$this->lang->load('inventario');
+		$this->load->library('user_agent');
 	}
 
 	// --------------------------------------------------------------------
@@ -68,6 +69,11 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	public function ingreso($hoja = 0)
 	{
+		if ($this->agent->is_mobile())
+		{
+			return $this->ingreso_mobile($hoja);
+		}
+
 		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
 		{
 			$hoja = 1;
@@ -123,6 +129,39 @@ class Inventario_digitacion extends CI_Controller {
 			}
 
 			redirect($this->router->class . '/ingreso/' . $this->input->post('hoja') . '/' . time());
+		}
+
+	}
+
+	// --------------------------------------------------------------------
+	public function ingreso_mobile($hoja = 0)
+	{
+		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
+		{
+			$hoja = 1;
+		}
+
+		// recupera el inventario activo
+		$inventario = new Inventario;
+		$inventario->get_inventario_activo();
+
+		$detalle_inventario = new Detalle_inventario;
+		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
+
+		$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
+
+		if ($this->form_validation->run() === FALSE)
+		{
+			$data = array(
+				'detalle_inventario' => $detalle_inventario,
+				'hoja'               => $hoja,
+				'nombre_inventario'  => $inventario->nombre,
+				'id_auditor'         => $detalle_inventario->get_id_auditor(),
+				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
+			);
+
+			app_render_view('inventario/inventario_mobile', $data);
 		}
 
 	}
