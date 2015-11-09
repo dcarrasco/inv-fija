@@ -33,7 +33,7 @@
 		</div>
 
 		<div class="form-group">
-			<label class="control-label col-xs-3">Ce</label>
+			<label class="control-label col-xs-3">Centro</label>
 			<div class="col-xs-3">
 				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('centro'); ?></p>
 			</div>
@@ -54,17 +54,15 @@
 		<div class="form-group">
 			<label class="control-label col-xs-3">
 				Stock Fisico <?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
-
 			</label>
 			<div class="col-xs-9">
-				<input type="number" name="stock_fisico" value="<?php echo set_value('stock_fisico', $detalle_inventario->stock_fisico) ?>" id="id_stock_fisico" class="form-control">
+				<input type="number" name="stock_fisico" value="<?php echo set_value('stock_fisico', $detalle_inventario->stock_fisico) == 0 ? '' : set_value('stock_fisico', $detalle_inventario->stock_fisico) ?>" id="id_stock_fisico" class="form-control">
 			</div>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label col-xs-3">
 				HU <?php echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
-
 			</label>
 			<div class="col-xs-9">
 				<input type="number" name="hu" value="<?php echo set_value('hu', $detalle_inventario->hu) ?>" id="id_hu" class="form-control">
@@ -74,7 +72,6 @@
 		<div class="form-group">
 			<label class="control-label col-xs-3">
 				Obs <?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
-
 			</label>
 			<div class="col-xs-9">
 				<input type="text" name="observacion" value="<?php echo set_value('observacion', $detalle_inventario->observacion) ?>" id="id_observacion" class="form-control">
