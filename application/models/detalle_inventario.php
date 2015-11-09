@@ -146,7 +146,8 @@ class Detalle_inventario extends ORM_Model {
 				),
 				'reg_nuevo' => array(
 					'label'          => 'Registro nuevo',
-					'tipo'           => 'boolean',
+					'tipo'           => 'char',
+					'largo'          => 1,
 					'texto_ayuda'    => 'Indica si el registro es nuevo.',
 					'es_obligatorio' => TRUE,
 				),
