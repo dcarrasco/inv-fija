@@ -87,11 +87,12 @@ class Log_gestor_model extends CI_Model {
 	 * @param  boolean $ult_mov      Indicador si trae todos los movimientos o solo el ultimo
 	 * @return array                 Reporte
 	 */
-	public function get_log($series = string, $tipo_serie = 'serie_deco', $tipo_reporte = 'log', $filtro_cas = "'ALTA', 'BAJA'", $ult_mov = FALSE)
+	public function get_log($series = '', $tipo_serie = 'serie_deco', $tipo_reporte = 'log', $filtro_cas = "'ALTA', 'BAJA'", $ult_mov = FALSE)
 	{
 
 		$result = array();
 		$arr_series = explode("\n", $series);
+
 		foreach ($arr_series as $serie)
 		{
 			$serie = trim($serie);
