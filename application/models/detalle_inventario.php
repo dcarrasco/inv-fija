@@ -449,6 +449,20 @@ class Detalle_inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Setea validación para formulario editar/agregar linea de detalle
+	 *
+	 * @return void
+	 */
+	public function get_validation_editar_mobile()
+	{
+		$this->set_validation_rules_field('stock_fisico');
+		$this->set_validation_rules_field('hu');
+		$this->set_validation_rules_field('observacion');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Recupera información del post en para editar registro de inventario
 	 *
 	 * @param  integer $id_detalle ID del registro detalle inventario

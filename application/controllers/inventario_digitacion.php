@@ -176,6 +176,7 @@ class Inventario_digitacion extends CI_Controller {
 
 		$detalle_inventario = new Detalle_inventario;
 		$detalle_inventario->find_id($id_registro);
+		$detalle_inventario->get_validation_editar_mobile();
 
 		if ($this->form_validation->run() === FALSE)
 		{
@@ -187,6 +188,15 @@ class Inventario_digitacion extends CI_Controller {
 		}
 		else
 		{
+			$detalle_inventario->recuperar_post();
+			$detalle_inventario->fill(array(
+				'digitador' => $this->acl_model->get_id_usr(),
+				'auditor'   => $this->acl_model->get_id_usr(),
+				'fecha_modificacion' => date('Ymd H:i:s'),
+			));
+			$detalle_inventario->grabar();
+
+			set_message(sprintf($this->lang->line('inventario_digit_msg_save'), 1, $hoja));
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
 

@@ -4,10 +4,6 @@
 		<?php echo form_open('', 'class="form-horizontal" role="form"')?>
 
 		<fieldset>
-		<legend>
-			<?php echo $this->lang->line('inventario_form_new'); ?>
-		</legend>
-
 		<?php echo print_validation_errors(); ?>
 
 		<div class="form-group">
@@ -61,7 +57,7 @@
 
 			</label>
 			<div class="col-xs-9">
-				<?php echo $detalle_inventario->print_form_field('stock_sap'); ?>
+				<input type="number" name="stock_fisico" value="<?php echo $detalle_inventario->stock_fisico ?>" id="id_stock_fisico" class="form-control">
 			</div>
 		</div>
 
@@ -71,7 +67,7 @@
 
 			</label>
 			<div class="col-xs-9">
-				<?php echo $detalle_inventario->print_form_field('hu'); ?>
+				<input type="number" name="hu" value="<?php echo $detalle_inventario->hu ?>" id="id_hu" class="form-control">
 			</div>
 		</div>
 
@@ -81,24 +77,15 @@
 
 			</label>
 			<div class="col-xs-9">
-				<?php echo $detalle_inventario->print_form_field('observacion'); ?>
+				<input type="text" name="observacion" value="<?php echo $detalle_inventario->observacion ?>" id="id_observacion" class="form-control">
 			</div>
 		</div>
 
-		<div class="form-group">
-			<div class="col-xs-12">
-				<div class="pull-right">
-					<button type="submit" name="accion" value="agregar" class="btn btn-primary">
-						<span class="glyphicon glyphicon-ok"></span>
-						<?php echo $this->lang->line('inventario_form_new_button_edit'); ?>
-					</button>
-					<a href="<?php echo site_url($this->router->class . '/ingreso/' . $detalle_inventario->hoja); ?>" class="btn btn-default">
-						<span class="glyphicon glyphicon-ban-circle"></span>
-						<?php echo $this->lang->line('inventario_form_new_button_cancel'); ?>
-					</a>
-				</div>
-			</div>
-		</div>
+		<button type="submit" name="accion" value="agregar" class="btn btn-primary col-xs-12">
+			<span class="glyphicon glyphicon-ok"></span>
+			<?php echo $this->lang->line('inventario_form_new_button_edit'); ?>
+		</button>
+
 		</fieldset>
 		<?php echo form_close(); ?>
 	</div> <!-- fin content-module-main-agregar -->
