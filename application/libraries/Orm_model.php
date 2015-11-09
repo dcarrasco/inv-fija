@@ -1729,12 +1729,12 @@ class ORM_Field {
 		if ($this->tipo === 'boolean')
 		{
 			$form = '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_1">';
-			$form .= form_radio($this->nombre, 1, ($valor_field === 1) ? TRUE : FALSE, 'id='.$id_prefix.$this->nombre.'_1');
+			$form .= form_radio($this->nombre, 1, ($valor_field === '1') ? TRUE : FALSE, 'id='.$id_prefix.$this->nombre.'_1');
 			$form .= $ci->lang->line('orm_radio_yes');
 			$form .= '</label>';
 
 			$form .= '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_0">';
-			$form .= form_radio($this->nombre, 0, ($valor_field === 1) ? FALSE : TRUE, 'id='.$id_prefix.$this->nombre.'_0');
+			$form .= form_radio($this->nombre, 0, ($valor_field === '1') ? FALSE : TRUE, 'id='.$id_prefix.$this->nombre.'_0');
 			$form .= $ci->lang->line('orm_radio_no');
 			$form .= '</label>';
 
@@ -1775,7 +1775,7 @@ class ORM_Field {
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = ($ci->input->post($this->nombre) !== '') ? $ci->input->post($this->nombre) : $valor_field;
+			$opciones = $ci->input->post($this->nombre) ? $ci->input->post($this->nombre) : $valor_field;
 
 			$form = form_multiselect(
 				$this->nombre.'[]',
