@@ -6,54 +6,43 @@
 		<fieldset>
 		<?php echo print_validation_errors(); ?>
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">Ubic</label>
-			<div class="col-xs-9">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('ubicacion'); ?></p>
-			</div>
+		<div class="row">
+			<p class="col-xs-3"><strong>Ubicaci&oacute;n</strong></p>
+			<p class="col-xs-9"><?php echo $detalle_inventario->get_valor_field('ubicacion'); ?></p>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">Mat</label>
-			<div class="col-xs-9">
-				<p class="form-control-static"><?php echo $detalle_inventario->catalogo; ?> - <?php echo $detalle_inventario->get_valor_field('descripcion'); ?></p>
-			</div>
+		<div class="row">
+			<p class="col-xs-3"><strong>Material</strong></p>
+			<p class="col-xs-9">
+				<?php echo $detalle_inventario->catalogo; ?> <br>
+				<?php echo $detalle_inventario->get_valor_field('descripcion'); ?>
+			</p>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">Lote</label>
-			<div class="col-xs-3">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('lote'); ?></p>
-			</div>
+		<div class="row">
+			<p class="col-xs-3"><strong>Lote</strong></p>
+			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('lote'); ?></p>
 
-			<label class="control-label col-xs-3">UM</label>
-			<div class="col-xs-3">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('um'); ?></p>
-			</div>
+			<p class="col-xs-3"><strong>UM</strong></p>
+			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('um'); ?></p>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">Centro</label>
-			<div class="col-xs-3">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('centro'); ?></p>
-			</div>
+		<div class="row">
+			<p class="col-xs-3"><strong>Centro</strong></p>
+			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('centro'); ?></p>
 
-			<label class="control-label col-xs-3">Alm</label>
-			<div class="col-xs-3">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('almacen'); ?></p>
-			</div>
+			<p class="col-xs-3	"><strong>Almac&eacute;n</strong></p>
+			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('almacen'); ?></p>
 		</div>
 
-		<div class="form-group">
-			<label class="control-label col-xs-3">Stock SAP</label>
-			<div class="col-xs-9">
-				<p class="form-control-static"><?php echo $detalle_inventario->get_valor_field('stock_sap'); ?></p>
-			</div>
+		<div class="row">
+			<p class="col-xs-3"><strong>Stock SAP</strong></p>
+			<p class="col-xs-9"><?php echo $detalle_inventario->get_valor_field('stock_sap'); ?></p>
 		</div>
 
 		<div class="form-group">
 			<label class="control-label col-xs-3">
-				Stock Fisico <?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
+				Stock F&iacute;sico <?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
 			</label>
 			<div class="col-xs-9">
 				<input type="number" name="stock_fisico" value="<?php echo set_value('stock_fisico', $detalle_inventario->stock_fisico) == 0 ? '' : set_value('stock_fisico', $detalle_inventario->stock_fisico) ?>" id="id_stock_fisico" class="form-control">
@@ -71,7 +60,7 @@
 
 		<div class="form-group">
 			<label class="control-label col-xs-3">
-				Obs <?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
+				Observaci&oacute;n <?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
 			</label>
 			<div class="col-xs-9">
 				<input type="text" name="observacion" value="<?php echo set_value('observacion', $detalle_inventario->observacion) ?>" id="id_observacion" class="form-control">
