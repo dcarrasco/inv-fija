@@ -208,7 +208,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function is_user_remembered()
 	{
-		return ($this->input->cookie('login_user') AND  $this->input->cookie('login_token')) ? TRUE : FALSE;
+		return $this->input->cookie('login_token') ? TRUE : FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -217,11 +217,12 @@ class Acl_model extends CI_Model {
 	 * Genera el hash de una password
 	 *
 	 * @param  string $password password
+	 * @param  string $salt     salt para mayor seguridad
 	 * @return string Hash de la password
 	 */
-	private function _hash_password($password = '')
+	private function _hash_password($password = '', $salt = '')
 	{
-		return crypt($password, '$2a$10$'.$this->config->item('encryption_key'));
+		return crypt($password, '$2a$10$'.$salt.$this->config->item('encryption_key'));
 	}
 
 	// --------------------------------------------------------------------
@@ -560,26 +561,30 @@ class Acl_model extends CI_Model {
 	public function set_rememberme_cookie($usuario = '')
 	{
 		$token = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
+		$salt  = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
 
 		$expire = 60 * 60 * 24 * 31;   // fija la expiración en un mes
 
+		// Graba la cookie
 		$this->input->set_cookie(array(
 			'name'  => 'login_token',
-			'value' => $token,
+			'value' => json_encode(array(
+							'usr'   => $usuario,
+							'token' => $token,
+						)),
 			'expire' => $expire,
 		));
 
-		$this->input->set_cookie(array(
-			'name'  => 'login_user',
-			'value' => $usuario,
-			'expire' => $expire,
-		));
-
+		// Graba el registro en la BD
 		$this->db
-			->where('usr', $usuario)
-			->update(
-				$this->config->item('bd_usuarios'),
-				array('remember_token' => $this->_hash_password($token))
+			->insert(
+				$this->config->item('bd_pcookies'),
+				array(
+					'user_id'   => $usuario,
+					'cookie_id' => $this->_hash_password($token, $salt),
+					'expiry'    => date('Ymd H:i:s', time() + $expire),
+					'salt'      => $salt,
+				)
 			);
 	}
 
@@ -588,22 +593,22 @@ class Acl_model extends CI_Model {
 	/**
 	 * Loguea en el sistema cuando el usuario presenta cookie con token
 	 *
-	 * @return boolean               TRUE o FALSE, dependiendo si loguea correctamente
+	 * @return boolean TRUE o FALSE, dependiendo si loguea correctamente
 	 */
 	public function login_rememberme_cookie()
 	{
-		$stored_login_token = $this->get_stored_login_token($this->input->cookie('login_user'));
+		$user = $this->get_user_login_token($this->input->cookie('login_token'));
 
-		if ($stored_login_token === $this->_hash_password($this->input->cookie('login_token')))
+		if ($user)
 		{
 			// regenera token
-			$this->set_rememberme_cookie($this->input->cookie('login_user'));
+			$this->set_rememberme_cookie($user);
 
 			// escribe auditoria del login
-			$this->write_login_audit($this->input->cookie('login_user'));
+			$this->write_login_audit($user);
 
 			// crea session con los datos del usuario
-			$this->_set_session_data($this->input->cookie('login_user'));
+			$this->_set_session_data($user);
 
 			return TRUE;
 		}
@@ -621,17 +626,36 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario a recuperar
 	 * @return string           Token del usuario
 	 */
-	public function get_stored_login_token($usuario = '')
+	public function get_user_login_token($token_cookie = '')
 	{
-		$registro = $this->db
-			->where(array(
-				'usr'    => $usuario,
-				'activo' => '1'
-			))
-			->get($this->config->item('bd_usuarios'))
-			->row_array();
+		$token_object = json_decode($token_cookie);
 
-		return (array_key_exists('remember_token', $registro)) ? $registro['remember_token'] : NULL;
+		if ($token_object)
+		{
+			// elimina cookies antiguas
+			$this->db
+				->where('user_id', $token_object->usr)
+				->where('expiry<', date('Ymd H:i:s'))
+				->delete($this->config->item('bd_pcookies'));
+
+			// recupera cookies almacenadas
+			$reg_pcookies = $this->db
+				->get_where($this->config->item('bd_pcookies'), array(
+					'user_id'   => $token_object->usr,
+					'cookie_id' => $token_object->token,
+				))
+				->result_array();
+
+			foreach($reg_pcookies as $registro)
+			{
+				if ($registro['cookie_id'] === $this->_hash_password($token_object->token, $registro['salt']))
+				{
+					return $registro['user_id'];
+				}
+			}
+		}
+
+		return NULL;
 	}
 
 	// --------------------------------------------------------------------

@@ -29,6 +29,7 @@ $config['bd_rol']         = 'acl_rol';
 $config['bd_usuario_rol'] = 'acl_usuario_rol';
 $config['bd_rol_modulo']  = 'acl_rol_modulo';
 $config['bd_captcha']     = 'ci_captcha';
+$config['bd_pcookies']    = 'fija_pcookies';
 
 // Stock
 $config['bd_almacenes_sap']        = 'bd_logistica..cp_almacenes';
