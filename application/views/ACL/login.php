@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<title>inventario fija</title>
-	<link rel="icon" href="<?php echo base_url(); ?>favicon.png" type="image/png" />
+	<link rel="icon" href="<?php echo base_url(); ?>img/favicon.png" type="image/png" />
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?php echo base_url(); ?>img/favicon-152.png">
 
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" />
 	<link rel="stylesheet" href="<?php echo base_url(); ?>css/fix_bootstrap.css" />
