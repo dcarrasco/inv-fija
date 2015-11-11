@@ -86,18 +86,20 @@ class Acl_model extends CI_Model {
 	public $login_failed_attempts = 2;
 
 	/**
-	 * Tiempo de duración de un captcha (10 minutos)
+	 * Tiempo de duración de un captcha
+	 * (10 minutos = 60 * 10 = 600)
 	 *
 	 * @var integer
 	 */
-	public $captcha_duration = 60*10;
+	public $captcha_duration = 600;
 
 	/**
-	 * Tiempo de duración de la cookie remember_me (1 mes)
+	 * Tiempo de duración de la cookie remember_me
+	 * (1 mes = 60*60*24*31 = 2.678.400)
 	 *
 	 * @var integer
 	 */
-	public $rememberme_cookie_duration = 60*60*24*31;
+	public $rememberme_cookie_duration = 2678400;
 
 	// --------------------------------------------------------------------
 
@@ -131,13 +133,13 @@ class Acl_model extends CI_Model {
 		{
 
 			// escribe auditoria del login
-			$this->write_login_audit($usuario);
+			$this->_write_login_audit($usuario);
 
 			// resetea intentos fallidos de login
-			$this->reset_login_errors($usuario);
+			$this->_reset_login_errors($usuario);
 
 			// borra los captchas del usuario
-			$this->delete_captchas_session($this->session->userdata('session_id'));
+			$this->_delete_captchas_session($this->session->userdata('session_id'));
 
 			// crea session con los datos del usuario
 			$this->_set_session_data($usuario, $remember);
@@ -147,7 +149,7 @@ class Acl_model extends CI_Model {
 		else
 		{
 			// incrementa intentos fallidos de login
-			$this->add_login_errors($usuario);
+			$this->_inc_login_errors($usuario);
 
 			return FALSE;
 		}
@@ -217,9 +219,9 @@ class Acl_model extends CI_Model {
 		}
 		else
 		{
-			if ($this->is_user_remembered())
+			if ($this->_is_user_remembered())
 			{
-				return $this->login_rememberme_cookie();
+				return $this->_login_rememberme_cookie();
 			}
 			else
 			{
@@ -235,7 +237,7 @@ class Acl_model extends CI_Model {
 	 *
 	 * @return boolean TRUE/FALSE dependiendo si el usuario está logueado o no
 	 */
-	public function is_user_remembered()
+	private function _is_user_remembered()
 	{
 		return $this->input->cookie('login_token') ? TRUE : FALSE;
 	}
@@ -283,7 +285,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario a validar
 	 * @return void
 	 */
-	public function write_login_audit($usuario = '')
+	private function _write_login_audit($usuario = '')
 	{
 		$this->db
 			->where('usr', $usuario)
@@ -366,7 +368,7 @@ class Acl_model extends CI_Model {
 	 */
 	private function _write_captcha($time = '', $session_id = '', $word = '')
 	{
-		$this->delete_captchas_session($session_id);
+		$this->_delete_captchas_session($session_id);
 
 		$this->db
 			->insert($this->config->item('bd_captcha'), array(
@@ -384,7 +386,7 @@ class Acl_model extends CI_Model {
 	 * @param string $session_id Identificador de la sesion del usuario
 	 * @return void
 	 */
-	public function delete_captchas_session($session_id = '')
+	private function _delete_captchas_session($session_id = '')
 	{
 		$this->db
 			->where('session_id', $session_id)
@@ -436,7 +438,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario a resetear
 	 * @return void
 	 */
-	public function reset_login_errors($usuario = '')
+	private function _reset_login_errors($usuario = '')
 	{
 		$this->db
 			->where('usr', $usuario)
@@ -453,7 +455,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario a incrementar
 	 * @return void
 	 */
-	public function add_login_errors($usuario = '')
+	private function _inc_login_errors($usuario = '')
 	{
 		$this->db
 			->set('login_errors', 'login_errors + 1', FALSE)
@@ -483,6 +485,8 @@ class Acl_model extends CI_Model {
 	/**
 	 * Devuelve arreglo con todos los modulos para un usuario
 	 *
+	 ********************* SIN USO **********************************
+	 *
 	 * @param  string $usuario Usuario
 	 * @return array       Arreglo con los módulos del usuario
 	 */
@@ -509,7 +513,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario
 	 * @return array       Modulos asociados al usuario
 	 */
-	public function get_menu_usuario($usuario = '')
+	private function _get_menu_usuario($usuario = '')
 	{
 		return $this->db->distinct()
 			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
@@ -617,7 +621,7 @@ class Acl_model extends CI_Model {
 	 *
 	 * @return void
 	 */
-	public function delete_rememberme_cookie()
+	private function _delete_rememberme_cookie()
 	{
 		$token_object = json_decode($this->input->cookie('login_token'));
 
@@ -658,20 +662,20 @@ class Acl_model extends CI_Model {
 	 *
 	 * @return boolean TRUE o FALSE, dependiendo si loguea correctamente
 	 */
-	public function login_rememberme_cookie()
+	private function _login_rememberme_cookie()
 	{
-		$user = $this->get_user_login_token();
+		$user = $this->_get_user_login_token();
 
 		if ($user)
 		{
 			// borra token anterior
-			$this->delete_rememberme_cookie($user);
+			$this->_delete_rememberme_cookie($user);
 
 			// volvemos a definir nuevo token
 			$this->set_rememberme_cookie($user);
 
 			// escribe auditoria del login
-			$this->write_login_audit($user);
+			$this->_write_login_audit($user);
 
 			// crea session con los datos del usuario
 			$this->_set_session_data($user);
@@ -691,7 +695,7 @@ class Acl_model extends CI_Model {
 	 *
 	 * @return string               ID usuario token
 	 */
-	public function get_user_login_token()
+	private function _get_user_login_token()
 	{
 		$token_object = json_decode($this->input->cookie('login_token'));
 
@@ -734,13 +738,13 @@ class Acl_model extends CI_Model {
 	{
 		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
-			if ( ! $this->input->cookie('login_token') OR  ! $this->input->cookie('login_user'))
+			if ( ! $this->input->cookie('login_token'))
 			{
 				redirect('login');
 			}
 			else
 			{
-				return $this->login_rememberme_cookie();
+				return $this->_login_rememberme_cookie();
 			}
 		}
 		else
@@ -762,6 +766,8 @@ class Acl_model extends CI_Model {
 
 	/**
 	 * Devuelve el nombre de un usuario
+	 *
+	 ***************** SIN USO ********************
 	 *
 	 * @param  string $usuario Usuario
 	 * @return string      Nombre del usuario
@@ -853,7 +859,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_redirect_app()
 	{
-		$arr_menu = $this->get_menu_usuario($this->get_user());
+		$arr_menu = $this->_get_menu_usuario($this->get_user());
 
 		if (count($arr_menu))
 		{
@@ -871,6 +877,8 @@ class Acl_model extends CI_Model {
 
 	/**
 	 * Devuelve el correo de un usuario
+	 *
+	 ******************** SIN USO
 	 *
 	 * @param  string $usuario Usuario
 	 * @return string      Correo del usuario
