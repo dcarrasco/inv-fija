@@ -44,7 +44,7 @@ class MY_Hooks {
 
 		if ($class !== 'login' AND $class !== 'migration')
 		{
-			if ( ! $ci->acl_model->autentica($llave_modulo))
+			if ( ! $ci->acl_model->autentica_modulo($llave_modulo))
 			{
 				redirect('login/');
 			}
@@ -54,7 +54,7 @@ class MY_Hooks {
 		{
 			if (! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE)
 			{
-				//$ci->output->enable_profiler(TRUE);
+				$ci->output->enable_profiler(TRUE);
 			}
 		}
 
