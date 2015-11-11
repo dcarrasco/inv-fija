@@ -483,31 +483,6 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve arreglo con todos los modulos para un usuario
-	 *
-	 ********************* SIN USO **********************************
-	 *
-	 * @param  string $usuario Usuario
-	 * @return array       Arreglo con los módulos del usuario
-	 */
-	public function get_llaves_modulos($usuario = '')
-	{
-		$arr_rs = $this->db->distinct()
-			->select('llave_modulo')
-			->from($this->config->item('bd_usuarios') . ' u')
-			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
-			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->where('usr', $usuario)
-			->get()
-			->result_array();
-
-		return array_column($arr_rs, 'llave_modulo');
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Devuelve el menu de módulos del usuario
 	 *
 	 * @param  string $usuario Usuario
@@ -542,7 +517,7 @@ class Acl_model extends CI_Model {
 		$this->session->set_userdata(array(
 			'user'        => $usuario,
 			'modulos'     => json_encode($this->get_llaves_modulos($usuario)),
-			'menu_app'    => json_encode($this->acl_model->get_menu_usuario($usuario)),
+			'menu_app'    => json_encode($this->acl_model->_get_menu_usuario($usuario)),
 		));
 	}
 
@@ -765,25 +740,6 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve el nombre de un usuario
-	 *
-	 ***************** SIN USO ********************
-	 *
-	 * @param  string $usuario Usuario
-	 * @return string      Nombre del usuario
-	 */
-	public function get_nombre_usuario($usuario = '')
-	{
-		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
-			->row_array();
-
-		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Indica si un usuario tiene o no una clave
 	 *
 	 * @param  string $usuario Usuario
@@ -873,6 +829,53 @@ class Acl_model extends CI_Model {
 	}
 
 
+
+
+	// --------------------------------------------------------------------
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo con todos los modulos para un usuario
+	 *
+	 ********************* SIN USO **********************************
+	 *
+	 * @param  string $usuario Usuario
+	 * @return array       Arreglo con los módulos del usuario
+	 */
+	public function ___get_llaves_modulos($usuario = '')
+	{
+		$arr_rs = $this->db->distinct()
+			->select('llave_modulo')
+			->from($this->config->item('bd_usuarios') . ' u')
+			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
+			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
+			->join('acl_modulo m', 'm.id = rm.id_modulo')
+			->where('usr', $usuario)
+			->get()
+			->result_array();
+
+		return array_column($arr_rs, 'llave_modulo');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve el nombre de un usuario
+	 *
+	 ***************** SIN USO ********************
+	 *
+	 * @param  string $usuario Usuario
+	 * @return string      Nombre del usuario
+	 */
+	public function ___get_nombre_usuario($usuario = '')
+	{
+		$arr_rs = $this->db
+			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
+			->row_array();
+
+		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
+	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -883,7 +886,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $usuario Usuario
 	 * @return string      Correo del usuario
 	 */
-	public function get_correo($usuario = '')
+	public function ___get_correo($usuario = '')
 	{
 		$arr_rs = $this->db
 			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
@@ -891,7 +894,6 @@ class Acl_model extends CI_Model {
 
 		return (count($arr_rs) > 0) ? $arr_rs['correo'] : '';
 	}
-
 
 }
 /* End of file acl_model.php */
