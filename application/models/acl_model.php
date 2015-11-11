@@ -516,9 +516,32 @@ class Acl_model extends CI_Model {
 	{
 		$this->session->set_userdata(array(
 			'user'        => $usuario,
-			'modulos'     => json_encode($this->get_llaves_modulos($usuario)),
+			'modulos'     => json_encode($this->_get_llaves_modulos($usuario)),
 			'menu_app'    => json_encode($this->acl_model->_get_menu_usuario($usuario)),
 		));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo con todos los modulos para un usuario
+	 *
+	 * @param  string $usuario Usuario
+	 * @return array           Arreglo con los módulos del usuario
+	 */
+	private function _get_llaves_modulos($usuario = '')
+	{
+		$arr_rs = $this->db->distinct()
+			->select('llave_modulo')
+			->from($this->config->item('bd_usuarios') . ' u')
+			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
+			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
+			->join('acl_modulo m', 'm.id = rm.id_modulo')
+			->where('usr', $usuario)
+			->get()
+			->result_array();
+
+		return array_column($arr_rs, 'llave_modulo');
 	}
 
 	// --------------------------------------------------------------------
@@ -832,31 +855,6 @@ class Acl_model extends CI_Model {
 
 
 	// --------------------------------------------------------------------
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve arreglo con todos los modulos para un usuario
-	 *
-	 ********************* SIN USO **********************************
-	 *
-	 * @param  string $usuario Usuario
-	 * @return array       Arreglo con los módulos del usuario
-	 */
-	public function ___get_llaves_modulos($usuario = '')
-	{
-		$arr_rs = $this->db->distinct()
-			->select('llave_modulo')
-			->from($this->config->item('bd_usuarios') . ' u')
-			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
-			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->where('usr', $usuario)
-			->get()
-			->result_array();
-
-		return array_column($arr_rs, 'llave_modulo');
-	}
-
 	// --------------------------------------------------------------------
 
 	/**
