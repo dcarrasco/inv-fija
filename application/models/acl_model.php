@@ -49,6 +49,11 @@ class Acl_model extends CI_Model {
 		),
 	);
 
+	/**
+	 * Reglas para formulario cambiar password
+	 *
+	 * @var array
+	 */
 	public $change_password_validation = array(
 		array(
 			'field' => 'usr',
@@ -71,6 +76,30 @@ class Acl_model extends CI_Model {
 			'rules' => 'trim|required|matches[pwd_new1]'
 		),
 	);
+
+	/**
+	 * Cantidad de veces que el usuario puede loguearse erroneamente,
+	 * antes de requerir un captcha
+	 *
+	 * @var integer
+	 */
+	public $login_failed_attempts = 2;
+
+	/**
+	 * Tiempo de duración de un captcha (10 minutos)
+	 *
+	 * @var integer
+	 */
+	public $captcha_duration = 60*10;
+
+	/**
+	 * Tiempo de duración de la cookie remember_me (1 mes)
+	 *
+	 * @var integer
+	 */
+	public $rememberme_cookie_duration = 60*60*24*31;
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Constructor de la clase
@@ -322,7 +351,7 @@ class Acl_model extends CI_Model {
 
 		$login_attempts = isset($row_user) ? $row_user->login_errors : 0;
 
-		return (boolean) ($login_attempts > 2);
+		return (boolean) ($login_attempts > $this->login_failed_attempts);
 	}
 
 	// --------------------------------------------------------------------
@@ -372,7 +401,7 @@ class Acl_model extends CI_Model {
 	public function delete_old_captchas()
 	{
 		$this->db
-			->where('captcha_time < ', time() - 60*10)
+			->where('captcha_time < ', time() - $this->captcha_duration)
 			->delete($this->config->item('bd_captcha'));
 	}
 
@@ -392,7 +421,7 @@ class Acl_model extends CI_Model {
 				array(
 					'session_id' => $session_id,
 					'word'       => $captcha,
-					'captcha_time >' => time() - 60*10,
+					'captcha_time >' => time() - $this->captcha_duration,
 				))
 			->row();
 
@@ -538,14 +567,8 @@ class Acl_model extends CI_Model {
 	public function delete_cookie_data()
 	{
 		$this->input->set_cookie(array(
-			'name'  => 'login_token',
-			'value' => '',
-			'expire' => '',
-		));
-
-		$this->input->set_cookie(array(
-			'name'  => 'login_user',
-			'value' => '',
+			'name'   => 'login_token',
+			'value'  => '',
 			'expire' => '',
 		));
 	}
@@ -563,8 +586,6 @@ class Acl_model extends CI_Model {
 		$token = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
 		$salt  = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
 
-		$expire = 60 * 60 * 24 * 31;   // fija la expiración en un mes
-
 		// Graba la cookie que recuerda la sesion
 		$this->input->set_cookie(array(
 			'name'  => 'login_token',
@@ -572,7 +593,7 @@ class Acl_model extends CI_Model {
 							'usr'   => $usuario,
 							'token' => $token,
 						)),
-			'expire' => $expire,
+			'expire' => $this->rememberme_cookie_duration,
 		));
 
 		// Graba el registro en la BD
@@ -582,7 +603,7 @@ class Acl_model extends CI_Model {
 				array(
 					'user_id'   => $usuario,
 					'cookie_id' => $this->_hash_password($token, $salt),
-					'expiry'    => date('Ymd H:i:s', time() + $expire),
+					'expiry'    => date('Ymd H:i:s', time() + $this->rememberme_cookie_duration),
 					'salt'      => $salt,
 				)
 			);
@@ -590,7 +611,13 @@ class Acl_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function replace_rememberme_cookie()
+	/**
+	 * Reemplaza las cookie remember_me y el registro en la BD
+	 * con un nuevo token
+	 *
+	 * @return void
+	 */
+	public function delete_rememberme_cookie()
 	{
 		$token_object = json_decode($this->input->cookie('login_token'));
 
@@ -619,9 +646,6 @@ class Acl_model extends CI_Model {
 						'value'  => '',
 						'expire' => '',
 					));
-
-					// volvemos a definir nuevo token
-					$this->set_rememberme_cookie($token_object->usr);
 				}
 			}
 		}
@@ -640,8 +664,11 @@ class Acl_model extends CI_Model {
 
 		if ($user)
 		{
-			// regenera token
-			$this->replace_rememberme_cookie($user);
+			// borra token anterior
+			$this->delete_rememberme_cookie($user);
+
+			// volvemos a definir nuevo token
+			$this->set_rememberme_cookie($user);
 
 			// escribe auditoria del login
 			$this->write_login_audit($user);
@@ -703,7 +730,7 @@ class Acl_model extends CI_Model {
 	 * @param  string $modulo Modulo a autenticar
 	 * @return void
 	 */
-	public function autentica($modulo = '')
+	public function autentica_modulo($modulo = '')
 	{
 		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
