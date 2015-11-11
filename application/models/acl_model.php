@@ -565,7 +565,7 @@ class Acl_model extends CI_Model {
 
 		$expire = 60 * 60 * 24 * 31;   // fija la expiración en un mes
 
-		// Graba la cookie
+		// Graba la cookie que recuerda la sesion
 		$this->input->set_cookie(array(
 			'name'  => 'login_token',
 			'value' => json_encode(array(
@@ -590,6 +590,45 @@ class Acl_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	public function replace_rememberme_cookie()
+	{
+		$token_object = json_decode($this->input->cookie('login_token'));
+
+		if ($token_object)
+		{
+			// recupera cookies almacenadas
+			$reg_pcookies = $this->db
+				->get_where($this->config->item('bd_pcookies'), array(
+					'user_id'   => $token_object->usr,
+				))
+				->result_array();
+
+			foreach($reg_pcookies as $registro)
+			{
+				if ($registro['cookie_id'] === $this->_hash_password($token_object->token, $registro['salt']))
+				{
+					// eliminamos la cookie utilizada en la BD
+					$this->db
+						->where('user_id', $token_object->usr)
+						->where('cookie_id', $this->_hash_password($token_object->token, $registro['salt']))
+						->delete($this->config->item('bd_pcookies'));
+
+					// borramos la cookie del browser
+					$this->input->set_cookie(array(
+						'name'   => 'login_token',
+						'value'  => '',
+						'expire' => '',
+					));
+
+					// volvemos a definir nuevo token
+					$this->set_rememberme_cookie($token_object->usr);
+				}
+			}
+		}
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Loguea en el sistema cuando el usuario presenta cookie con token
 	 *
@@ -597,12 +636,12 @@ class Acl_model extends CI_Model {
 	 */
 	public function login_rememberme_cookie()
 	{
-		$user = $this->get_user_login_token($this->input->cookie('login_token'));
+		$user = $this->get_user_login_token();
 
 		if ($user)
 		{
 			// regenera token
-			$this->set_rememberme_cookie($user);
+			$this->replace_rememberme_cookie($user);
 
 			// escribe auditoria del login
 			$this->write_login_audit($user);
@@ -623,18 +662,17 @@ class Acl_model extends CI_Model {
 	/**
 	 * Recupera token de la base de datos
 	 *
-	 * @param  string $usuario Usuario a recuperar
-	 * @return string           Token del usuario
+	 * @return string               ID usuario token
 	 */
-	public function get_user_login_token($token_cookie = '')
+	public function get_user_login_token()
 	{
-		$token_object = json_decode($token_cookie);
+		$token_object = json_decode($this->input->cookie('login_token'));
 
 		if ($token_object)
 		{
 			// elimina cookies antiguas
 			$this->db
-				->where('user_id', $token_object->usr)
+				// ->where('user_id', $token_object->usr)
 				->where('expiry<', date('Ymd H:i:s'))
 				->delete($this->config->item('bd_pcookies'));
 
@@ -642,7 +680,6 @@ class Acl_model extends CI_Model {
 			$reg_pcookies = $this->db
 				->get_where($this->config->item('bd_pcookies'), array(
 					'user_id'   => $token_object->usr,
-					'cookie_id' => $token_object->token,
 				))
 				->result_array();
 
