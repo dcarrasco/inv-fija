@@ -513,14 +513,16 @@ $config['proxy_ips'] = '';
 /**
  * Autoload models y controllers
  */
-function __autoload($class)
+function orm_models_autoload($class)
 {
-	if (file_exists(APPPATH."models/".strtolower($class).'.php'))
+	if (file_exists(APPPATH.'models/'.strtolower($class).'.php'))
 	{
-		include_once(APPPATH."models/".strtolower($class).'.php');
+		include_once(APPPATH.'models/'.strtolower($class).'.php');
 	}
-	else if (file_exists(APPPATH."controllers/".strtolower($class).'.php'))
+	else if (file_exists(APPPATH.'controllers/'.strtolower($class).'.php'))
 	{
-		include_once(APPPATH."controllers/".strtolower($class).'.php');
+		include_once(APPPATH.'controllers/'.strtolower($class).'.php');
 	}
 }
+
+spl_autoload_register('orm_models_autoload');
