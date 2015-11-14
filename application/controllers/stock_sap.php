@@ -91,22 +91,6 @@ class Stock_sap extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Genera las vistas para los métodos de este controlador
-	 *
-	 * @param  string $vista Nombre de la vista a desplegar
-	 * @param  array  $data  Arreglo con las variables a pasar a la vista
-	 * @return void
-	 */
-	private function _render_view($vista = '', $data = array())
-	{
-		$this->load->view('common/app_header', $data);
-		$this->load->view($vista, $data);
-		$this->load->view('common/app_footer', $data);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Genera reporte con el stock SAP
 	 *
 	 * @param  string $tipo_op Indica si el stock a desplegar es fijo o movil
@@ -135,23 +119,10 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$filtro] = $this->input->post($filtro);
 		}
 
-		$arr_filtrar['fecha'] = $this->input->post('fechas');
+		$arr_filtrar['fecha'] = $this->input->post('fecha');
 
-		$this->form_validation->set_rules('fechas[]', 'Fechas', 'required');
+		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
 		$this->form_validation->set_rules('almacenes[]', 'Almacenes', 'required');
-
-		/**
-		 * $this->form_validation->set_rules('sel_fechas', 'Seleccion de fechas', '');
-		 * $this->form_validation->set_rules('sel_tiposalm', 'Seleccion de almacenes', '');
-		 * $this->form_validation->set_rules('almacen', 'Indicador detalle almacenes', '');
-		 * $this->form_validation->set_rules('material', 'Indicador detalle materiales', '');
-		 * $this->form_validation->set_rules('lote', 'Indicador detalle lotes', '');
-		 * $this->form_validation->set_rules('tipo_stock', 'Indicador tipos de stock', '');
-		 * $this->form_validation->set_rules('tipo_stock_equipos', 'Mostrar equipos', '');
-		 * $this->form_validation->set_rules('tipo_stock_simcard', 'Mostrar simcards', '');
-		 * $this->form_validation->set_rules('tipo_stock_otros', '', 'Mostrar otros', '');
-		 * $this->form_validation->set_rules('mostrar_cant_monto', 'Mostar cantidades/montos', '');
-		 */
 
 		$tabla_stock = '';
 		$datos_grafico = array();
@@ -227,10 +198,7 @@ class Stock_sap extends CI_Controller {
 		}
 		else
 		{
-			$this->load->view('common/app_header', $data);
-			$this->load->view('stock_sap/ver_stock_form', $data);
-			$this->load->view('stock_sap/ver_stock_datos', $data);
-			$this->load->view('common/app_footer', $data);
+			app_render_view(array('stock_sap/ver_stock_form', 'stock_sap/ver_stock_datos'), $data);
 		}
 	}
 
@@ -263,7 +231,6 @@ class Stock_sap extends CI_Controller {
 		);
 
 		app_render_view('stock_sap/detalle_series', $data);
-
 	}
 
 
@@ -278,6 +245,8 @@ class Stock_sap extends CI_Controller {
 	public function transito($tipo_op = 'FIJA')
 	{
 		$this->load->model('stock_sap_model');
+
+		$tabla_stock = '';
 
 		$arr_mostrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
 		$arr_filtrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
@@ -297,28 +266,23 @@ class Stock_sap extends CI_Controller {
 			$arr_filtrar[$filtrar] = $this->input->post($filtrar);
 		}
 
-		$arr_filtrar['fecha'] = ($this->input->post('sel_fechas') === 'ultimo_dia')
-			? $this->input->post('fecha_ultimodia')
-			: $this->input->post('fecha_todas');
+		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
 
-		$this->form_validation->set_rules('sel_fechas', '', '');
-		$this->form_validation->set_rules('fecha_ultimodia', '', '');
-		$this->form_validation->set_rules('fecha_todas', '', '');
-		$this->form_validation->set_rules('tipo_stock', '', '');
-		$this->form_validation->set_rules('material', '', '');
-		$this->form_validation->set_rules('lote', '', '');
-		$this->form_validation->run();
+		if ($this->form_validation->run())
+		{
+			$tabla_stock = $this->stock_sap_model->get_stock_transito($tipo_op, $arr_mostrar, $arr_filtrar);
+		}
 
-		$stock        = $this->stock_sap_model->get_stock_transito($tipo_op, $arr_mostrar, $arr_filtrar);
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
 		$data = array(
 			'menu_modulo'            => array('menu' => $this->_arr_menu, 'mod_selected' => 'transito_fija'),
-			'stock'                  => $stock,
+			'tabla_stock'            => $tabla_stock,
 			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
 			'combo_fechas_todas'     => $combo_fechas['todas'],
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
+			'datos_grafico'          => '',
 			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
 												OR in_array('material', $arr_mostrar)
 												OR in_array('lote', $arr_mostrar)
@@ -336,10 +300,7 @@ class Stock_sap extends CI_Controller {
 		}
 		else
 		{
-			$this->load->view('common/app_header', $data);
-			$this->load->view('stock_sap/ver_stock_form_transito', $data);
-			$this->load->view('stock_sap/ver_stock_datos', $data);
-			$this->load->view('common/app_footer', $data);
+			app_render_view(array('stock_sap/ver_stock_form_transito', 'stock_sap/ver_stock_datos'), $data);
 		}
 	}
 
@@ -361,7 +322,6 @@ class Stock_sap extends CI_Controller {
 
 		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
 		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
-		$borrar_datos =
 
 		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
 

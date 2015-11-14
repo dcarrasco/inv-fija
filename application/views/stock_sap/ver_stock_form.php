@@ -35,7 +35,7 @@
 								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
 							</label>
 						</div>
-						<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'),'id="select_fechas" size="10" class="form-control"'); ?>
+						<?php echo form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 

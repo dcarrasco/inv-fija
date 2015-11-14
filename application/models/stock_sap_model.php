@@ -704,9 +704,10 @@ class stock_sap_model extends CI_Model {
 
 
 			$arr_result = $this->db->get()->result_array();
+
+			return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
 		}
 
-		return $arr_result;
 	}
 
 
