@@ -144,7 +144,7 @@ if ( ! function_exists('app_render_view'))
 	/**
 	 * Render vista
 	 *
-	 * @param  string $vista    Nombre de la vista a dibujar
+	 * @param  mixed  $vista    Nombre o arreglo de nombre de la(s) vista(s) a dibujar
 	 * @param  array  $datos    Arreglo con parámetros de datos a dibujar
 	 * @param  array  $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
 	 * @return void
@@ -166,8 +166,15 @@ if ( ! function_exists('app_render_view'))
 
 		$datos['msg_alerta']  = $ci->session->flashdata('msg_alerta');
 
+		$vista = is_array($vista) ? $vista : array($vista);
+
 		$ci->load->view('common/app_header', $datos);
-		$ci->load->view($vista, $datos);
+
+		foreach($vista as $vista_elem)
+		{
+			$ci->load->view($vista_elem, $datos);
+		}
+
 		$ci->load->view('common/app_footer', $datos);
 	}
 }
