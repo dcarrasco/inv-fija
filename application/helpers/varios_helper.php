@@ -164,18 +164,11 @@ if ( ! function_exists('app_render_view'))
 			$datos['menu_modulo'] = array('menu' => $arr_menu, 'mod_selected' => basename($vista));
 		}
 
-		$datos['msg_alerta']  = $ci->session->flashdata('msg_alerta');
+		$datos['msg_alerta'] = $ci->session->flashdata('msg_alerta');
+		$datos['arr_vistas'] = is_array($vista) ? $vista : array($vista);
+		$datos['vista_login'] = FALSE;
 
-		$vista = is_array($vista) ? $vista : array($vista);
-
-		$ci->load->view('common/app_header', $datos);
-
-		foreach($vista as $vista_elem)
-		{
-			$ci->load->view($vista_elem, $datos);
-		}
-
-		$ci->load->view('common/app_footer', $datos);
+		$ci->load->view('common/app_layout', $datos);
 	}
 }
 

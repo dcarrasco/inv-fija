@@ -116,9 +116,12 @@ class Login extends CI_Controller {
 			'msg_alerta'   => $msg_alerta,
 			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
+			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
+			'arr_vistas'   => array('ACL/login'),
+			'vista_login'  => TRUE,
 		);
 
-		$this->load->view('ACL/login', $data);
+		$this->load->view('common/app_layout', $data);
 	}
 
 
@@ -178,9 +181,12 @@ class Login extends CI_Controller {
 			'usr'               => $usuario,
 			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
+			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
+			'arr_vistas'   => array('ACL/cambio_password'),
+			'vista_login'  => TRUE,
 		);
 
-		$this->load->view('ACL/cambio_password', $data);
+		$this->load->view('common/app_layout', $data);
 	}
 
 

@@ -1,28 +1,3 @@
-<!doctype html>
-<html lang="es">
-<head>
-	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<title>inventario fija</title>
-	<link rel="icon" href="<?php echo base_url(); ?>img/favicon.png" type="image/png" />
-	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?php echo base_url(); ?>img/favicon-152.png">
-
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/bootstrap.min.css" />
-	<link rel="stylesheet" href="<?php echo base_url(); ?>css/fix_bootstrap.css" />
-	<link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>css/jquery.jqplot.min.css" />
-
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/jquery.js"></script>
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/bootstrap.min.js"></script>
-
-	<style type="text/css">
-		body {margin-top: 40px;}
-	</style>
-</head>
-
-<body>
-<div class="container">
 <div class="row">
 
 	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
@@ -109,7 +84,6 @@
 	</div>
 
 </div>
-</div>
 
 <?php echo form_open('login/cambio_password', 'id="frm_cambio_password"') ?>
 <?php echo form_hidden('usr',''); ?>
@@ -126,6 +100,3 @@
 
 	});
 </script>
-
-</body>
-</html>
