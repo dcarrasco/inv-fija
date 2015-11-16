@@ -28,23 +28,23 @@
 <body>
 
 <?php if ( ! $vista_login): ?>
-	<!-- ********************************* NAVBAR ********************************* -->
+	<!-- ============================== NAVBAR ============================== -->
 	<?php $this->load->view('common/app_navbar') ?>
 <?php endif; ?>
 
 <div class="container">
 
 <?php if ( ! $vista_login AND isset($menu_modulo)): ?>
-	<!-- ********************************* MENU MODULO ********************************* -->
+	<!-- ============================== MENU MODULO ============================== -->
 	<?php $this->load->view('common/app_menu_modulo') ?>
 	<div class="tab-content">
 	<div class="tab-pane active">
+
+	<!-- ============================== MENSAJE ALERTA ============================== -->
+	<?php echo (isset($msg_alerta) AND $msg_alerta !== '') ? $msg_alerta : ''; ?>
 <?php endif; ?>
 
-<!-- ********************************* MENSAJE ALERTA ********************************* -->
-<?php echo (isset($msg_alerta) AND $msg_alerta !== '') ? $msg_alerta : ''; ?>
-
-<!-- ********************************* VISTAS APP ********************************* -->
+<!-- ============================== MODULOS APP ============================== -->
 <?php foreach ($arr_vistas as $vista): ?>
 	<?php $this->load->view($vista) ?>
 <?php endforeach; ?>
