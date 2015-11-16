@@ -131,7 +131,6 @@ class Acl_model extends CI_Model {
 
 		if ($this->check_user_credentials($usuario, $password))
 		{
-
 			// escribe auditoria del login
 			$this->_write_login_audit($usuario);
 
@@ -245,20 +244,6 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Genera el hash de una password
-	 *
-	 * @param  string $password password
-	 * @param  string $salt     salt para mayor seguridad
-	 * @return string Hash de la password
-	 */
-	private function _hash_password($password = '', $salt = '')
-	{
-		return crypt($password, '$2a$10$'.$salt.$this->config->item('encryption_key'));
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Chequea si las credenciales del usuario son validas
 	 *
 	 * @param string $usuario  Usuario a validar
@@ -267,14 +252,18 @@ class Acl_model extends CI_Model {
 	 */
 	public function check_user_credentials($usuario = '', $password = '')
 	{
-		return $this->db
-			->where(array(
-				'usr'    => $usuario,
-				'pwd'    => $this->_hash_password($password),
-				'activo' => '1'
-			))
+		$reg_usuario = $this->db
+			->where('usr', $usuario)
+			->where('activo', 1)
 			->get($this->config->item('bd_usuarios'))
-			->num_rows() > 0;
+			->row();
+
+		if ($reg_usuario)
+		{
+			return $this->_valida_password($password, $reg_usuario->pwd);
+		}
+
+		return FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -517,7 +506,7 @@ class Acl_model extends CI_Model {
 		$this->session->set_userdata(array(
 			'user'        => $usuario,
 			'modulos'     => json_encode($this->_get_llaves_modulos($usuario)),
-			'menu_app'    => json_encode($this->acl_model->_get_menu_usuario($usuario)),
+			'menu_app'    => json_encode($this->_get_menu_usuario($usuario)),
 		));
 	}
 
@@ -586,7 +575,7 @@ class Acl_model extends CI_Model {
 	public function set_rememberme_cookie($usuario = '')
 	{
 		$token = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
-		$salt  = substr(base64_encode(mcrypt_create_iv(32)), 0, 32);
+		$salt  = $this->_create_salt();
 
 		// Graba la cookie que recuerda la sesion
 		$this->input->set_cookie(array(
@@ -614,6 +603,60 @@ class Acl_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Crea una cadena de texto para ser usada como salt
+	 *
+	 * @param  integer $largo Largo de la cadena a devolver
+	 * @return string         Cadena de texto salt
+	 */
+	private function _create_salt($largo = 21)
+	{
+		$salt = '';
+		$caracteres_validos = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+		for ($i = 0; $i < $largo; $i++)
+		{
+			$salt .= $caracteres_validos[rand(0, strlen($caracteres_validos) - 1)];
+		}
+
+		return $salt;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Valida una password contra un texto hash
+	 *
+	 * @param  string $password Password a validar
+	 * @param  string $hash     Texto hash a comparar con la password
+	 * @return boolean          Indica si la password valida contra el hash
+	 */
+	private function _valida_password($password = '', $hash = '')
+	{
+		$algoritmo = substr($hash, 0, 7);
+		$salt      = substr($hash, 7, 21);
+
+		return $this->_hash_password($password, $salt, $algoritmo) === $hash;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera el hash de una password
+	 *
+	 * @param  string $password password
+	 * @param  string $salt     salt para mayor seguridad
+	 * @return string Hash de la password
+	 */
+	private function _hash_password($password = '', $salt = '', $algoritmo = '$2a$10$')
+	{
+		$salt = ($salt === '') ? $this->_create_salt() : $salt;
+		$salt .= $this->config->item('encryption_key');
+
+		return crypt($password, $algoritmo.$salt);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Reemplaza las cookie remember_me y el registro en la BD
 	 * con un nuevo token
 	 *
@@ -634,20 +677,16 @@ class Acl_model extends CI_Model {
 
 			foreach($reg_pcookies as $registro)
 			{
-				if ($registro['cookie_id'] === $this->_hash_password($token_object->token, $registro['salt']))
+				if ($this->_valida_password($token_object->token, $registro['cookie_id']))
 				{
 					// eliminamos la cookie utilizada en la BD
 					$this->db
 						->where('user_id', $token_object->usr)
-						->where('cookie_id', $this->_hash_password($token_object->token, $registro['salt']))
+						->where('cookie_id', $registro['cookie_id'])
 						->delete($this->config->item('bd_pcookies'));
 
 					// borramos la cookie del browser
-					$this->input->set_cookie(array(
-						'name'   => 'login_token',
-						'value'  => '',
-						'expire' => '',
-					));
+					$this->delete_cookie_data();
 				}
 			}
 		}
@@ -714,7 +753,7 @@ class Acl_model extends CI_Model {
 
 			foreach($reg_pcookies as $registro)
 			{
-				if ($registro['cookie_id'] === $this->_hash_password($token_object->token, $registro['salt']))
+				if ($this->_valida_password($token_object->token, $registro['cookie_id']))
 				{
 					return $registro['user_id'];
 				}
@@ -819,7 +858,9 @@ class Acl_model extends CI_Model {
 		{
 			$this->db
 				->where('usr', $usuario)
-				->update($this->config->item('bd_usuarios'), array('pwd' => $this->_hash_password($clave_new)));
+				->update($this->config->item('bd_usuarios'), array(
+					'pwd' => $this->_hash_password($clave_new)
+				));
 
 			return TRUE;
 		}
@@ -851,47 +892,6 @@ class Acl_model extends CI_Model {
 
 	}
 
-
-
-
-	// --------------------------------------------------------------------
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el nombre de un usuario
-	 *
-	 ***************** SIN USO ********************
-	 *
-	 * @param  string $usuario Usuario
-	 * @return string      Nombre del usuario
-	 */
-	public function ___get_nombre_usuario($usuario = '')
-	{
-		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
-			->row_array();
-
-		return (count($arr_rs) > 0) ? $arr_rs['nombre'] : '';
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el correo de un usuario
-	 *
-	 ******************** SIN USO
-	 *
-	 * @param  string $usuario Usuario
-	 * @return string      Correo del usuario
-	 */
-	public function ___get_correo($usuario = '')
-	{
-		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
-			->row_array();
-
-		return (count($arr_rs) > 0) ? $arr_rs['correo'] : '';
-	}
 
 }
 /* End of file acl_model.php */
