@@ -101,6 +101,16 @@ class Acl_model extends CI_Model {
 	 */
 	public $rememberme_cookie_duration = 2678400;
 
+	/**
+	 * Algoritmo y rondas para realizar hash de passwords
+	 * Valor por defecto $2a$10$ ($2a$ --> blowfish; 10 --> rondas)
+	 * Otros algoritmos
+	 *   $2a$, $2x$, $2y$
+	 *
+	 * @var string
+	 */
+	private $_crypt_algo = '$2a$10$';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -608,7 +618,7 @@ class Acl_model extends CI_Model {
 	 * @param  integer $largo Largo de la cadena a devolver
 	 * @return string         Cadena de texto salt
 	 */
-	private function _create_salt($largo = 21)
+	private function _create_salt($largo = 22)
 	{
 		$salt = '';
 		$caracteres_validos = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -617,7 +627,7 @@ class Acl_model extends CI_Model {
 			$salt .= $caracteres_validos[rand(0, strlen($caracteres_validos) - 1)];
 		}
 
-		return $salt;
+		return $this->_crypt_algo.$salt;
 	}
 
 	// --------------------------------------------------------------------
@@ -631,10 +641,7 @@ class Acl_model extends CI_Model {
 	 */
 	private function _valida_password($password = '', $hash = '')
 	{
-		$algoritmo = substr($hash, 0, 7);
-		$salt      = substr($hash, 7, 21);
-
-		return $this->_hash_password($password, $salt, $algoritmo) === $hash;
+		return $this->_hash_password($password, $hash) === $hash;
 	}
 
 	// --------------------------------------------------------------------
@@ -644,10 +651,9 @@ class Acl_model extends CI_Model {
 	 *
 	 * @param  string $password  password
 	 * @param  string $salt      salt para mayor seguridad
-	 * @param  string $algoritmo Algoritmo usado para realizar el hash
 	 * @return string            Hash de la password
 	 */
-	private function _hash_password($password = '', $salt = '', $algoritmo = '$2a$10$')
+	private function _hash_password($password = '', $salt = '')
 	{
 		$salt = ($salt === '') ? $this->_create_salt() : $salt;
 		$salt .= $this->config->item('encryption_key');
