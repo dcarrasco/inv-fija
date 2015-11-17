@@ -658,7 +658,7 @@ class Acl_model extends CI_Model {
 		$salt = ($salt === '') ? $this->_create_salt() : $salt;
 		$salt .= $this->config->item('encryption_key');
 
-		return crypt($password, $algoritmo.$salt);
+		return crypt($password, $salt);
 	}
 
 	// --------------------------------------------------------------------
