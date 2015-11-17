@@ -283,8 +283,6 @@ class Acl_model extends CI_Model {
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
 			));
-
-		dd($this->db->last_query());
 	}
 
 	// --------------------------------------------------------------------
