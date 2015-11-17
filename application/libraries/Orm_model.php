@@ -1108,7 +1108,7 @@ class Orm_model implements IteratorAggregate {
 					{
 						if ($arr_data[$nombre_campo] !== '')
 						{
-							$this->fields_values[$nombre_campo] = date('Ymd H:i:s', strtotime($arr_data[$nombre_campo]));
+							$this->fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
 						}
 					}
 					else

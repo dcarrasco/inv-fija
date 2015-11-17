@@ -504,7 +504,7 @@ class Detalle_inventario extends ORM_Model {
 			'digitador'          => (int) $ci->acl_model->get_id_usr(),
 			'auditor'            => (int) $id_auditor,
 			'reg_nuevo'          => 'S',
-			'fecha_modificacion' => date('Ymd H:i:s'),
+			'fecha_modificacion' => date('Y-m-d H:i:s'),
 			'observacion'        => $ci->input->post('observacion'),
 			'stock_ajuste'       => 0,
 			'glosa_ajuste'       => '',
@@ -532,7 +532,7 @@ class Detalle_inventario extends ORM_Model {
 			{
 				$linea_detalle->stock_ajuste = (int) set_value('stock_ajuste_'.$linea_detalle->id);
 				$linea_detalle->glosa_ajuste = trim(set_value('observacion_'.$linea_detalle->id));
-				$linea_detalle->fecha_ajuste = date('Ymd H:i:s');
+				$linea_detalle->fecha_ajuste = date('Y-m-d H:i:s');
 				$linea_detalle->grabar();
 				$cant_modif += 1;
 			}
@@ -563,7 +563,7 @@ class Detalle_inventario extends ORM_Model {
 				'stock_fisico'       => set_value('stock_fisico_'.$linea_detalle->id),
 				'hu'                 => set_value('hu_'.$linea_detalle->id),
 				'observacion'        => set_value('observacion_'.$linea_detalle->id),
-				'fecha_modificacion' => date('Ymd H:i:s'),
+				'fecha_modificacion' => date('Y-m-d H:i:s'),
 			));
 
 			$linea_detalle->grabar();

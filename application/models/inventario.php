@@ -295,7 +295,7 @@ class Inventario extends ORM_Model {
 					'digitador'          => 0,
 					'auditor'            => 0,
 					'observacion'        => '',
-					'fecha_modificacion' => date('Ymd His'),
+					'fecha_modificacion' => date('Y-m-d H:i:s'),
 					'reg_nuevo'          => '',
 					'stock_ajuste'       => 0,
 					'glosa_ajuste'       => '',

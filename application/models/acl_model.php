@@ -279,10 +279,12 @@ class Acl_model extends CI_Model {
 		$this->db
 			->where('usr', $usuario)
 			->update($this->config->item('bd_usuarios'), array(
-				'fecha_login'  => date('Ymd H:i:s'),
+				'fecha_login'  => date('Y-m-d H:i:s'),
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
 			));
+
+		dd($this->db->last_query());
 	}
 
 	// --------------------------------------------------------------------
@@ -594,7 +596,7 @@ class Acl_model extends CI_Model {
 				array(
 					'user_id'   => $usuario,
 					'cookie_id' => $this->_hash_password($token, $salt),
-					'expiry'    => date('Ymd H:i:s', time() + $this->rememberme_cookie_duration),
+					'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
 					'salt'      => $salt,
 				)
 			);
@@ -642,9 +644,10 @@ class Acl_model extends CI_Model {
 	/**
 	 * Genera el hash de una password
 	 *
-	 * @param  string $password password
-	 * @param  string $salt     salt para mayor seguridad
-	 * @return string Hash de la password
+	 * @param  string $password  password
+	 * @param  string $salt      salt para mayor seguridad
+	 * @param  string $algoritmo Algoritmo usado para realizar el hash
+	 * @return string            Hash de la password
 	 */
 	private function _hash_password($password = '', $salt = '', $algoritmo = '$2a$10$')
 	{
@@ -741,7 +744,7 @@ class Acl_model extends CI_Model {
 			// elimina cookies antiguas
 			$this->db
 				// ->where('user_id', $token_object->usr)
-				->where('expiry<', date('Ymd H:i:s'))
+				->where('expiry<', date('Y-m-d H:i:s'))
 				->delete($this->config->item('bd_pcookies'));
 
 			// recupera cookies almacenadas

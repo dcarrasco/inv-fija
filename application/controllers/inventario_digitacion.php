@@ -192,7 +192,7 @@ class Inventario_digitacion extends CI_Controller {
 			$detalle_inventario->fill(array(
 				'digitador' => $this->acl_model->get_id_usr(),
 				'auditor'   => $this->acl_model->get_id_usr(),
-				'fecha_modificacion' => date('Ymd H:i:s'),
+				'fecha_modificacion' => date('Y-m-d H:i:s'),
 			));
 			$detalle_inventario->grabar();
 
