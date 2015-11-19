@@ -40,7 +40,7 @@ class Catalogo extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_catalogos'),
+				'model_tabla'        => $this->config->item('bd_catalogos'),
 				'model_label'        => 'Cat&aacute;logo',
 				'model_label_plural' => 'Cat&aacute;logos',
 				'model_order_by'     => 'catalogo',
@@ -117,36 +117,36 @@ class Catalogo extends ORM_Model {
 	{
 		$tabla_temporal_precios = 'tmp_actualiza_precios';
 
-		$this->CI->load->dbforge();
+		$this->load->dbforge();
 
 		// actualiza precios nulos --> 0
-		$this->CI->db->where('pmp is null')
+		$this->db->where('pmp is null')
 			->update($this->get_model_tabla(), array('pmp' => 0));
 
 		// selecciona maxima fecha del stock_sap_fija
-		$arr_max_fecha = $this->CI->db
+		$arr_max_fecha = $this->db
 			->select('max(convert(varchar(8), fecha_stock, 112)) as fecha_stock', FALSE)
-			->get($this->CI->config->item('bd_stock_fija'))
+			->get($this->config->item('bd_stock_fija'))
 			->row();
 
 		$max_fecha = $arr_max_fecha->fecha_stock;
 
 		// crea tabla temporal con ultimos precios
-		if ($this->CI->db->table_exists($tabla_temporal_precios))
+		if ($this->db->table_exists($tabla_temporal_precios))
 		{
-			$this->CI->dbforge->drop_table($tabla_temporal_precios);
+			$this->dbforge->drop_table($tabla_temporal_precios);
 		}
 
-		$this->CI->db
+		$this->db
 			->select('material, max(valor/cantidad) as pmp into '.$tabla_temporal_precios, FALSE)
-			->from($this->CI->config->item('bd_stock_fija'))
+			->from($this->config->item('bd_stock_fija'))
 			->where('fecha_stock', $max_fecha)
 			->where_in('lote', array('I', 'A'))
 			->group_by('material')
 			->get();
 
 		//actualiza los precios
-		$this->CI->db->query(
+		$this->db->query(
 			'UPDATE '.$this->get_model_tabla().' '.
 			'SET fija_catalogos.pmp=s.pmp '.
 			'FROM '.$tabla_temporal_precios.' as s '.
@@ -154,16 +154,16 @@ class Catalogo extends ORM_Model {
 		);
 
 		// cuenta los precios actualizados
-		$cant_regs = $this->CI->db->query(
+		$cant_regs = $this->db->query(
 			'SELECT count(*) as cant '.
 			'FROM '.$this->get_model_tabla().' as c '.
 			'JOIN '.$tabla_temporal_precios.' as t on (c.catalogo collate Latin1_General_CI_AS = t.material collate Latin1_General_CI_AS)'
 		)->row()->cant;
 
 		// borra tabla temporal con ultimos precios
-		if ($this->CI->db->table_exists($tabla_temporal_precios))
+		if ($this->db->table_exists($tabla_temporal_precios))
 		{
-			$this->CI->dbforge->drop_table($tabla_temporal_precios);
+			$this->dbforge->drop_table($tabla_temporal_precios);
 		}
 
 		return $cant_regs;

@@ -40,7 +40,7 @@ class Familia extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_familias'),
+				'model_tabla'        => $this->config->item('bd_familias'),
 				'model_label'        => 'Familia',
 				'model_label_plural' => 'Familias',
 				'model_order_by'     => 'codigo',

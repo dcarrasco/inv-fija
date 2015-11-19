@@ -40,7 +40,7 @@ class Rol extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_rol'),
+				'model_tabla'        => $this->config->item('bd_rol'),
 				'model_label'        => 'Rol',
 				'model_label_plural' => 'Roles',
 				'model_order_by'     => 'rol',

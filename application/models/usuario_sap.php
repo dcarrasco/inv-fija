@@ -40,7 +40,7 @@ class Usuario_sap extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_usuarios_sap'),
+				'model_tabla'        => $this->config->item('bd_usuarios_sap'),
 				'model_label'        => 'Usuario SAP',
 				'model_label_plural' => 'Usuarios SAP',
 				'model_order_by'     => 'usuario',

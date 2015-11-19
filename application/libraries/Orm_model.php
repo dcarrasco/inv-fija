@@ -131,13 +131,6 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private $separador_campos = '~';
 
-	/**
-	 * Instacia CI para llamar objetos globales
-	 *
-	 * @var object
-	 */
-	protected $CI;
-
 
 	/**
 	 * Constructor
@@ -148,8 +141,7 @@ class Orm_model implements IteratorAggregate {
 	 **/
 	public function __construct()
 	{
-		$this->CI =& get_instance();
-		$this->CI->lang->load('orm');
+		$this->lang->load('orm');
 
 		$this->model_class  = get_class($this);
 		$this->model_nombre = strtolower($this->model_class);
@@ -193,7 +185,15 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function __get($campo)
 	{
-		return (array_key_exists($campo, $this->fields_values)) ? $this->fields_values[$campo] : NULL;
+		if (array_key_exists($campo, $this->fields_values))
+		{
+			return $this->fields_values[$campo];
+		}
+		else
+		{
+			$ci =& get_instance();
+			return $ci->{$campo};
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -467,7 +467,7 @@ class Orm_model implements IteratorAggregate {
 			$this->set_validation_rules_field($nombre_campo);
 		}
 
-		return $this->CI->form_validation->run();
+		return $this->form_validation->run();
 	}
 
 	// --------------------------------------------------------------------
@@ -497,7 +497,7 @@ class Orm_model implements IteratorAggregate {
 			$campo_rules = $campo . '[]';
 		}
 
-		$this->CI->form_validation->set_rules($campo_rules, ucfirst($this->get_label_field($campo)), $reglas);
+		$this->form_validation->set_rules($campo_rules, ucfirst($this->get_label_field($campo)), $reglas);
 	}
 
 
@@ -524,7 +524,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function form_item($campo = '')
 	{
-		$formulario_enviado = (boolean) (count($this->CI->input->post()) !== 0);
+		$formulario_enviado = (boolean) (count($this->input->post()) !== 0);
 		$item_error = $formulario_enviado ? '' : '';
 
 		if ($campo !== '')
@@ -538,7 +538,7 @@ class Orm_model implements IteratorAggregate {
 				'item_help'     => $this->get_texto_ayuda_field($campo),
 			);
 
-			return ($this->CI->load->view('orm/form_item', $data, TRUE));
+			return ($this->load->view('orm/form_item', $data, TRUE));
 		}
 	}
 
@@ -672,7 +672,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function crea_links_paginas()
 	{
-		$this->CI->load->library('pagination');
+		$this->load->library('pagination');
 		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
 
 		$cfg_pagination = array(
@@ -696,20 +696,20 @@ class Orm_model implements IteratorAggregate {
 			'per_page'    => $this->model_page_results,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url(
-				$this->CI->router->class . '/' .
-				($this->CI->uri->segment(2) ? $this->CI->uri->segment(2) : 'listado') . '/' .
+				$this->router->class . '/' .
+				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
 				$this->get_model_nombre() . '/' .
 				$this->model_filtro . '/'
 			),
-			'first_link'  => $this->CI->lang->line('orm_pag_first'),
-			'last_link'   => $this->CI->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+			'first_link'  => $this->lang->line('orm_pag_first'),
+			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->model_page_results + 1) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
 
-		$this->CI->pagination->initialize($cfg_pagination);
+		$this->pagination->initialize($cfg_pagination);
 
-		return $this->CI->pagination->create_links();
+		return $this->pagination->create_links();
 	}
 
 	// --------------------------------------------------------------------
@@ -744,16 +744,16 @@ class Orm_model implements IteratorAggregate {
 				{
 					if (count($valor) === 0)
 					{
-						$this->CI->db->where($campo.'=', 'NULL', FALSE);
+						$this->db->where($campo.'=', 'NULL', FALSE);
 					}
 					else
 					{
-						$this->CI->db->where_in($campo, $valor);
+						$this->db->where_in($campo, $valor);
 					}
 				}
 				else
 				{
-					$this->CI->db->where($campo, $valor);
+					$this->db->where($campo, $valor);
 				}
 			}
 		}
@@ -770,17 +770,17 @@ class Orm_model implements IteratorAggregate {
 		{
 			if (array_key_exists('offset', $param))
 			{
-				$this->CI->db->limit($param['limit'], $param['offset']);
+				$this->db->limit($param['limit'], $param['offset']);
 			}
 			else
 			{
-				$this->CI->db->limit($param['limit']);
+				$this->db->limit($param['limit']);
 			}
 		}
 
 		if ($tipo === 'first')
 		{
-			$registro = $this->CI->db->get($this->model_tabla)->row_array();
+			$registro = $this->db->get($this->model_tabla)->row_array();
 			$this->fill_from_array($registro);
 
 			if ($recupera_relation)
@@ -794,10 +794,10 @@ class Orm_model implements IteratorAggregate {
 		{
 			if ($this->model_order_by !== '')
 			{
-				$this->CI->db->order_by($this->model_order_by);
+				$this->db->order_by($this->model_order_by);
 			}
 
-			$registros = $this->CI->db->get($this->model_tabla)->result_array();
+			$registros = $this->db->get($this->model_tabla)->result_array();
 
 			foreach ($registros as $registro)
 			{
@@ -816,7 +816,7 @@ class Orm_model implements IteratorAggregate {
 		}
 		else if ($tipo === 'count')
 		{
-			return $this->CI->db
+			return $this->db
 				->select('count(*) as cant')
 				->get($this->model_tabla)
 				->row()
@@ -828,10 +828,10 @@ class Orm_model implements IteratorAggregate {
 
 			if ($this->model_order_by !== '')
 			{
-				$this->CI->db->order_by($this->model_order_by);
+				$this->db->order_by($this->model_order_by);
 			}
 
-			$registros = $this->CI->db->get($this->model_tabla)->result_array();
+			$registros = $this->db->get($this->model_tabla)->result_array();
 
 			foreach ($registros as $registro)
 			{
@@ -952,7 +952,7 @@ class Orm_model implements IteratorAggregate {
 				}
 
 				// recupera la llave del modelo en tabla de la relacion (n:m)
-				$registros = $this->CI->db
+				$registros = $this->db
 					->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)
 					->get_where($arr_props_relation['join_table'], $arr_where)
 					->result_array();
@@ -1130,7 +1130,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function recuperar_post()
 	{
-		return $this->fill_from_array($this->CI->input->post());
+		return $this->fill_from_array($this->input->post());
 	}
 
 
@@ -1158,7 +1158,7 @@ class Orm_model implements IteratorAggregate {
 
 		if (count($arr_like) > 0)
 		{
-			$this->CI->db->or_like($arr_like, $filtro, 'both');
+			$this->db->or_like($arr_like, $filtro, 'both');
 		}
 	}
 
@@ -1178,7 +1178,7 @@ class Orm_model implements IteratorAggregate {
 			$this->_put_filtro($filtro);
 		}
 
-		return $this->CI->db->count_all_results($this->model_tabla);
+		return $this->db->count_all_results($this->model_tabla);
 	}
 
 
@@ -1229,7 +1229,7 @@ class Orm_model implements IteratorAggregate {
 		}
 		else
 		{
-			$es_insert = ($this->CI->db->get_where($this->model_tabla, $data_where)->num_rows() === 0);
+			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() === 0);
 		}
 
 		// NUEVO REGISTRO
@@ -1237,24 +1237,24 @@ class Orm_model implements IteratorAggregate {
 		{
 			if ( ! $es_auto_id)
 			{
-				$this->CI->db->insert($this->model_tabla, array_merge($data_where, $data_update));
+				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
 			}
 			else
 			{
-				$this->CI->db->insert($this->model_tabla, $data_update);
+				$this->db->insert($this->model_tabla, $data_update);
 
 				foreach ($this->model_campo_id as $campo_id)
 				{
-					$data_where[$campo_id] = $this->CI->db->insert_id();
-					$this->{$campo_id} = $this->CI->db->insert_id();
+					$data_where[$campo_id] = $this->db->insert_id();
+					$this->{$campo_id} = $this->db->insert_id();
 				}
 			}
 		}
 		// REGISTRO EXISTENTE
 		else
 		{
-			$this->CI->db->where($data_where);
-			$this->CI->db->update($this->model_tabla, $data_update);
+			$this->db->where($data_where);
+			$this->db->update($this->model_tabla, $data_update);
 		}
 
 		// Revisa todos los campos en busqueda de relaciones has_many,
@@ -1273,7 +1273,7 @@ class Orm_model implements IteratorAggregate {
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 
-				$this->CI->db->delete($relation['join_table'], $arr_where_delete);
+				$this->db->delete($relation['join_table'], $arr_where_delete);
 
 				foreach ($this->$nombre as $valor_campo)
 				{
@@ -1293,7 +1293,7 @@ class Orm_model implements IteratorAggregate {
 						$arr_values[$id_many] = array_shift($arr_many_valores);
 					}
 
-					$this->CI->db->insert($relation['join_table'], $arr_values);
+					$this->db->insert($relation['join_table'], $arr_values);
 				}
 			}
 		}
@@ -1318,7 +1318,7 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		$this->CI->db->delete($this->model_tabla, $data_where);
+		$this->db->delete($this->model_tabla, $data_where);
 
 		foreach ($this->model_fields as $nombre => $campo)
 		{
@@ -1333,7 +1333,7 @@ class Orm_model implements IteratorAggregate {
 					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
 				}
 
-				$this->CI->db->delete($relation['join_table'], $arr_where_delete);
+				$this->db->delete($relation['join_table'], $arr_where_delete);
 			}
 		}
 	}

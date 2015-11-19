@@ -40,7 +40,7 @@ class Almacen extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_almacenes'),
+				'model_tabla'        => $this->config->item('bd_almacenes'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'almacen',

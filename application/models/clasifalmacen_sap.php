@@ -40,7 +40,7 @@ class Clasifalmacen_sap extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_clasifalm_sap'),
+				'model_tabla'        => $this->config->item('bd_clasifalm_sap'),
 				'model_label'        => 'Clasificaci&oacute;n Almac&eacute;n',
 				'model_label_plural' => 'Clasificaci&oacute;n de Almacenes',
 				'model_order_by'     => 'tipo_op, orden, clasificacion',
@@ -119,7 +119,7 @@ class Clasifalmacen_sap extends ORM_Model {
 					'tipo'           => 'has_many',
 					'relation'       => array(
 						'model'         => 'tipoalmacen_sap',
-						'join_table'    => $this->CI->config->item('bd_clasif_tipoalm_sap'),
+						'join_table'    => $this->config->item('bd_clasif_tipoalm_sap'),
 						'id_one_table'  => array('id_clasif'),
 						'id_many_table' => array('id_tipo'),
 						//'conditions'    => array('tipo_op' => 'tipo_op')

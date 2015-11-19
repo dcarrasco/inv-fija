@@ -40,7 +40,7 @@ class Tipoalmacen_sap extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_tiposalm_sap'),
+				'model_tabla'        => $this->config->item('bd_tiposalm_sap'),
 				'model_label'        => 'Tipo Almac&eacute;n',
 				'model_label_plural' => 'Tipos de Almac&eacute;n',
 				'model_order_by'     => 'tipo_op, tipo',
@@ -85,7 +85,7 @@ class Tipoalmacen_sap extends ORM_Model {
 					'tipo'           => 'has_many',
 					'relation'       => array(
 						'model'         => 'almacen_sap',
-						'join_table'    => $this->CI->config->item('bd_tipoalmacen_sap'),
+						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
 						'id_one_table'  => array('id_tipo'),
 						'id_many_table' => array('centro', 'cod_almacen'),
 						//'conditions'    => array('tipo_op' => 'tipo_op')
@@ -127,7 +127,7 @@ class Tipoalmacen_sap extends ORM_Model {
 	 */
 	public function get_combo_tiposalm($tipo_op = '')
 	{
-		$arr_result = $this->CI->db
+		$arr_result = $this->db
 			->select('id_tipo as llave, tipo as valor')
 			->order_by('tipo')
 			->where('tipo_op', $tipo_op)

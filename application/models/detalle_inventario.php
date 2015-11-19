@@ -40,7 +40,7 @@ class Detalle_inventario extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_detalle_inventario'),
+				'model_tabla'        => $this->config->item('bd_detalle_inventario'),
 				'model_label'        => 'Detalle inventario',
 				'model_label_plural' => 'Detalles inventario',
 				'model_order_by'     => 'id',
@@ -296,7 +296,7 @@ class Detalle_inventario extends ORM_Model {
 	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
 	{
 		//determina la cantidad de registros
-		$total_rows = $this->CI->db
+		$total_rows = $this->db
 			->where('id_inventario', $id_inventario)
 			->where(($ocultar_regularizadas === 1)
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
@@ -307,7 +307,7 @@ class Detalle_inventario extends ORM_Model {
 		// recupera el detalle de registros
 		$per_page = 50;
 
-		$arr_detalles = $this->CI->db
+		$arr_detalles = $this->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
 			->where('id_inventario', $id_inventario)
 			->where(($ocultar_regularizadas === 1)
@@ -318,7 +318,7 @@ class Detalle_inventario extends ORM_Model {
 			->get($this->get_model_tabla())
 			->result_array();
 
-		$this->CI->load->library('pagination');
+		$this->load->library('pagination');
 		$cfg_pagination = array(
 			'uri_segment' => 4,
 			'num_links'   => 5,
@@ -341,13 +341,13 @@ class Detalle_inventario extends ORM_Model {
 
 			'per_page'    => $per_page,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->CI->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
+			'base_url'    => site_url($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
-		$this->CI->pagination->initialize($cfg_pagination);
+		$this->pagination->initialize($cfg_pagination);
 
 		$model_all = array();
 		foreach($arr_detalles as $registro)
@@ -357,7 +357,7 @@ class Detalle_inventario extends ORM_Model {
 		}
 		$this->set_model_all($model_all);
 
-		return $this->CI->pagination->create_links();
+		return $this->pagination->create_links();
 	}
 
 	// --------------------------------------------------------------------

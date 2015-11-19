@@ -40,7 +40,7 @@ class Centro extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_centros'),
+				'model_tabla'        => $this->config->item('bd_centros'),
 				'model_label'        => 'Centro',
 				'model_label_plural' => 'Centros',
 				'model_order_by'     => 'centro',

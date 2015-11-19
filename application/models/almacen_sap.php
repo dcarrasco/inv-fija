@@ -40,7 +40,7 @@ class Almacen_sap extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_almacenes_sap'),
+				'model_tabla'        => $this->config->item('bd_almacenes_sap'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'centro, cod_almacen',
@@ -96,7 +96,7 @@ class Almacen_sap extends ORM_Model {
 					'tipo'           => 'has_many',
 					'relation'       => array(
 						'model'         => 'tipoalmacen_sap',
-						'join_table'    => $this->CI->config->item('bd_tipoalmacen_sap'),
+						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
 						'id_one_table'  => array('centro','cod_almacen'),
 						'id_many_table' => array('id_tipo'),
 					),
@@ -144,13 +144,13 @@ class Almacen_sap extends ORM_Model {
 		}
 		else
 		{
-			$arr_result = $this->CI->db
+			$arr_result = $this->db
 				->select("a.centro + '~' + a.cod_almacen as llave", FALSE)
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
 				->from($this->get_model_tabla() . ' a')
-				->join($this->CI->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
+				->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
 				->where_in('ta.id_tipo', explode('~', $filtro))
 				->get()->result_array();
 
@@ -167,24 +167,24 @@ class Almacen_sap extends ORM_Model {
 	 */
 	public function almacenes_no_ingresados()
 	{
-		$alm_movil = $this->CI->db
+		$alm_movil = $this->db
 			->distinct()
 			->select('s.centro, s.cod_bodega')
-			->from($this->CI->config->item('bd_stock_movil') . ' s')
-			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_movil') . ')', NULL, FALSE)
+			->from($this->config->item('bd_stock_movil') . ' s')
+			->join($this->config->item('bd_almacenes_sap') . ' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from ' . $this->config->item('bd_stock_movil') . ')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.cod_bodega')
 			->get()
 			->result_array();
 
-		$alm_fija = $this->CI->db
+		$alm_fija = $this->db
 			->distinct()
 			->select('s.centro, s.almacen as cod_bodega')
-			->from($this->CI->config->item('bd_stock_fija') . ' s')
-			->join($this->CI->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->CI->config->item('bd_stock_fija') . ')', NULL, FALSE)
+			->from($this->config->item('bd_stock_fija') . ' s')
+			->join($this->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from ' . $this->config->item('bd_stock_fija') . ')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.almacen')

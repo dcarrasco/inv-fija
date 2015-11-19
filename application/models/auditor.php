@@ -40,7 +40,7 @@ class Auditor extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_auditores'),
+				'model_tabla'        => $this->config->item('bd_auditores'),
 				'model_label'        => 'Auditor',
 				'model_label_plural' => 'Auditores',
 				'model_order_by'     => 'nombre',

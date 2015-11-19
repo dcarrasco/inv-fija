@@ -40,7 +40,7 @@ class Proveedor extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_proveedores'),
+				'model_tabla'        => $this->config->item('bd_proveedores'),
 				'model_label'        => 'Proveedor',
 				'model_label_plural' => 'Proveedores',
 				'model_order_by'     => 'des_proveedor',

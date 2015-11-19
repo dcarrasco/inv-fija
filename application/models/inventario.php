@@ -40,7 +40,7 @@ class Inventario extends ORM_Model {
 
 		$arr_config = array(
 			'modelo' => array(
-				'model_tabla'        => $this->CI->config->item('bd_inventarios'),
+				'model_tabla'        => $this->config->item('bd_inventarios'),
 				'model_label'        => 'Inventario',
 				'model_label_plural' => 'Inventarios',
 				'model_order_by'     => 'nombre',
@@ -110,7 +110,7 @@ class Inventario extends ORM_Model {
 
 		if ($this->activo)
 		{
-			$this->CI->db
+			$this->db
 				->where('id <>', (int) $this->id)
 				->update($this->get_model_tabla(), array('activo' => 0));
 		}
@@ -155,9 +155,9 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_max_hoja_inventario()
 	{
-		$registro = $this->CI->db
+		$registro = $this->db
 			->select('max(hoja) as max_hoja')
-			->get_where($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id))
+			->get_where($this->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id))
 			->row();
 
 		return ($registro->max_hoja);
@@ -173,7 +173,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function borrar_detalle_inventario()
 	{
-		$this->CI->db->delete($this->CI->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id));
+		$this->db->delete($this->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id));
 	}
 
 
@@ -278,7 +278,7 @@ class Inventario extends ORM_Model {
 			if (is_numeric($stock_sap) AND is_numeric($hoja))
 			{
 				return (array(
-					$this->CI->security->get_csrf_token_name() => $this->CI->security->get_csrf_hash(),
+					$this->security->get_csrf_token_name() => $this->security->get_csrf_hash(),
 					'id'                 => 0,
 					'id_inventario'      => $this->id,
 					'hoja'               => $hoja,
