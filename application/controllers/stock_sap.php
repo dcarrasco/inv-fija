@@ -132,11 +132,11 @@ class Stock_sap extends CI_Controller {
 		{
 			// recupera tabla de stock de la BD o del cache
 			$tabla_stock = cached_query(
-				'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar),
-				$stock,
-				'get_stock',
-				array($arr_mostrar, $arr_filtrar)
-			);
+								'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar),
+								$stock,
+								'get_stock',
+								array($arr_mostrar, $arr_filtrar)
+							);
 
 			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
 			{
@@ -199,16 +199,16 @@ class Stock_sap extends CI_Controller {
 		$stock = new Stock_sap_movil_model();
 
 		$detalle_series = cached_query(
-			'detalle_series'.$centro.$almacen.$material.$lote,
-			$stock,
-			'get_detalle_series',
-			array($centro, $almacen, $material, $lote)
-		);
+								'detalle_series'.$centro.$almacen.$material.$lote,
+								$stock,
+								'get_detalle_series',
+								array($centro, $almacen, $material, $lote)
+							);
 
 		$data = array(
-			'detalle_series' => $detalle_series,
-			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
-		);
+					'detalle_series' => $detalle_series,
+					'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+				);
 
 		app_render_view('stock_sap/detalle_series', $data);
 	}
