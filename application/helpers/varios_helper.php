@@ -403,6 +403,32 @@ if ( ! function_exists('fmt_hora'))
 }
 
 // --------------------------------------------------------------------
+if ( ! function_exists('cached_query'))
+{
+	function cached_query($cache_id = '', $object = NULL, $method = '', $params = array())
+	{
+		$ci =& get_instance();
+
+		if ( ! method_exists($object, $method))
+		{
+			log_message('error', 'cached_query: Metodo "'.$method.'"" no existe en objeto "'.get_class($object).'".');
+			return NULL;
+		}
+
+		$cache_id = hash('md5', $cache_id);
+
+		if ( ! $result = $ci->cache->get($cache_id))
+		{
+			$result = call_user_func_array(array($object, $method), $params);
+			$ci->cache->save($cache_id, $result, 300);
+		}
+
+		return $result;
+	}
+}
+
+
+// --------------------------------------------------------------------
 
 if ( ! function_exists('genera_captcha_word'))
 {
