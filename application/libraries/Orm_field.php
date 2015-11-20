@@ -218,12 +218,12 @@ class Orm_field {
 	{
 		if ($this->tipo === 'has_one')
 		{
-			return $this->relation['data']->get_model_label();
+			return $this->relation['model']->get_model_label();
 		}
 
 		if ($this->tipo === 'has_many')
 		{
-			return $this->relation['data']->get_model_label_plural();
+			return $this->relation['model']->get_model_label_plural();
 		}
 
 		return $this->label;
@@ -445,7 +445,6 @@ class Orm_field {
 			$dropdown_conditions = array_key_exists('conditions', $this->relation)
 				? array('conditions' => $this->relation['conditions'])
 				: array();
-				dbg($this->relation);
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
@@ -481,13 +480,13 @@ class Orm_field {
 
 		if ($this->tipo === 'has_one')
 		{
-			return (string) $this->relation['data'];
+			return (string) $this->relation['model'];
 		}
 
 		if ($this->tipo === 'has_many')
 		{
 			$campo = '<ul class="formatted_has_many">';
-			foreach ($this->relation['data']->get_model_all() as $obj_modelo)
+			foreach ($this->relation['data'] as $obj_modelo)
 			{
 				$campo .= '<li>'.$obj_modelo.'</li>';
 			}

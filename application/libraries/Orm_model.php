@@ -108,13 +108,6 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $model_all;
-
-	/**
-	 * Arreglo de registros recuperados de la BD
-	 *
-	 * @var array
-	 */
 	private $fields_values = array();
 
 	/**
@@ -148,7 +141,6 @@ class Orm_model implements IteratorAggregate {
 		$this->model_tabla  = $this->model_nombre;
 		$this->model_label  = $this->model_nombre;
 		$this->model_label_plural = $this->model_label . 's';
-		$this->model_all = new Collection();
 		$this->fields_relation_objects = new Collection();
 	}
 
@@ -361,28 +353,6 @@ class Orm_model implements IteratorAggregate {
 	}
 
 	/**
-	 * Recupera arreglo con instancias del modelo, usado al recuperar
-	 * un conjunto de valores del modelo desde la base de datos
-	 *
-	 * @return array Arreglo con instancias del modelo
-	 */
-	public function get_model_all()
-	{
-		return $this->model_all;
-	}
-
-	/**
-	 * Fija el valor del arreglo con instancias del modelo
-	 *
-	 * @param  array $model_all Arreglo con instancias del modelo
-	 * @return void
-	 */
-	public function set_model_all($model_all = array())
-	{
-		$this->model_all = $model_all;
-	}
-
-	/**
 	 * Recupera los objetos que son las relaciones del campo indicado (1:n o n:m)
 	 *
 	 * @param  string $campo Nombre del campo a recuperar sus relaciones
@@ -393,7 +363,7 @@ class Orm_model implements IteratorAggregate {
 		$model_fields = $this->model_fields;
 		$relation = $model_fields[$campo]->get_relation();
 
-		return $relation['data'];
+		return $relation['model'];
 	}
 
 	/**
@@ -937,7 +907,7 @@ class Orm_model implements IteratorAggregate {
 					$model_relacionado->find_id($this->$nombre_campo, FALSE);
 				}
 
-				$arr_props_relation['data'] = $model_relacionado;
+				$arr_props_relation['model'] = $model_relacionado;
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->model_got_relations = TRUE;
 			}
@@ -975,7 +945,8 @@ class Orm_model implements IteratorAggregate {
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 
-				$arr_props_relation['data'] = $model_relacionado;
+				$arr_props_relation['model'] = $model_relacionado;
+				$arr_props_relation['data'] = $model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->fields_values[$nombre_campo] = $arr_where;
 				$this->model_got_relations = TRUE;

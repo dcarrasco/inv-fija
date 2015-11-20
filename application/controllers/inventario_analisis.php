@@ -321,10 +321,9 @@ class Inventario_analisis extends CI_Controller {
 		for ($hoja = $hoja_desde; $hoja <= $hoja_hasta; $hoja++)
 		{
 			$detalle = new Detalle_inventario;
-			$detalle->find('all', array('conditions' => array('id_inventario' => $this->_id_inventario, 'hoja' => $hoja)));
 
 			$data = array(
-				'datos_hoja'        => $detalle->get_model_all(),
+				'datos_hoja'        => $detalle->find('all', array('conditions' => array('id_inventario' => $this->_id_inventario, 'hoja' => $hoja))),
 				'oculta_stock_sap'  => $oculta_stock_sap,
 				'hoja'              => $hoja,
 				'nombre_inventario' => $this->_nombre_inventario,

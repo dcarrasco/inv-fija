@@ -210,11 +210,31 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @param  integer $id_inventario ID inventario a rescatar
 	 * @param  integer $hoja          Numero de la hoja a rescatar
-	 * @return none
+	 * @return Collection             Registros de detalle inventario
 	 */
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		$this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
+		return $this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve registros de inventario de una hoja específica
+	 *
+	 * @param  integer $id_inventario ID inventario a rescatar
+	 * @param  integer $hoja          Numero de la hoja a rescatar
+	 * @return Collection             Registros de detalle inventario
+	 */
+	public function get_auditor_hoja($id_inventario = 0, $hoja = 0)
+	{
+		return $this->db
+			->select_max('auditor')
+			->where('id_inventario', $id_inventario)
+			->where('hoja', $hoja)
+			->get($this->get_model_tabla())
+			->row()
+			->auditor;
 	}
 
 	// --------------------------------------------------------------------
@@ -233,27 +253,6 @@ class Detalle_inventario extends ORM_Model {
 			$relacion = $all_fields['auditor']->get_relation();
 
 			return $relacion['data']->nombre;
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera ID del auditor
-	 *
-	 * @return integer ID del auditor
-	 */
-	public function get_id_auditor()
-	{
-		if (count($this->get_model_all()) > 0)
-		{
-			$arr_detalles = $this->get_model_all();
-
-			return $arr_detalles[0]->auditor;
-		}
-		else
-		{
-			return 0;
 		}
 	}
 
@@ -551,11 +550,11 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  integer ID del usuario que está modificando los datos
 	 * @return integer Cantidad de registros modificados
 	 */
-	public function update_digitacion($id_usr = 0)
+	public function update_digitacion($id_inventario = 0, $hoja = 0, $id_usr = 0)
 	{
 		$cant_modif = 0;
 
-		foreach($this->get_model_all() as $linea_detalle)
+		foreach($this->get_hoja($id_inventario, $hoja) as $linea_detalle)
 		{
 			$linea_detalle->fill(array(
 				'digitador'          => $id_usr,
