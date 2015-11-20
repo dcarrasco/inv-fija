@@ -83,11 +83,10 @@ class ORM_Controller extends CI_Controller {
 		$filtro = $this->input->post('filtro') ? $this->input->post('filtro') : $filtro;
 		$modelo->set_model_filtro($filtro);
 
-		$modelo->list_paginated($pagina);
-
 		$data = array(
 			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 			'modelo'      => $modelo,
+			'modelos'     => $modelo->list_paginated($pagina),
 			'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
 			'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
 		);

@@ -523,6 +523,10 @@ function orm_models_autoload($class)
 	{
 		include_once(APPPATH.'controllers/'.strtolower($class).'.php');
 	}
+	else if (file_exists(APPPATH.'libraries/'.strtolower($class).'.php'))
+	{
+		include_once(APPPATH.'libraries/'.strtolower($class).'.php');
+	}
 }
 
 spl_autoload_register('orm_models_autoload');
