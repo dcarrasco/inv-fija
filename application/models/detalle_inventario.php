@@ -29,6 +29,15 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Detalle_inventario extends ORM_Model {
 
 	/**
+	 * Define la cantidad de registros por página para los ajustes
+	 *
+	 * @var integer
+	 */
+	private $per_page_ajustes = 50;
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @param  string $id_detalle Identificador del detalle de inventario
@@ -220,11 +229,11 @@ class Detalle_inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve registros de inventario de una hoja específica
+	 * Devuelve ID del auditor de una hoja específica
 	 *
 	 * @param  integer $id_inventario ID inventario a rescatar
 	 * @param  integer $hoja          Numero de la hoja a rescatar
-	 * @return Collection             Registros de detalle inventario
+	 * @return integer                ID auditor
 	 */
 	public function get_auditor_hoja($id_inventario = 0, $hoja = 0)
 	{
@@ -265,15 +274,7 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_nombre_digitador()
 	{
-		if(count($this->get_model_all()) > 0)
-		{
-			$arr_detalles = $this->get_model_all();
-			$all_fields = $arr_detalles[0]->get_model_fields();
-			$relacion = $all_fields['digitador']->get_relation();
-
-			return $relacion['data']->nombre;
-		}
-		else if ($this->digitador !== 0)
+		if ($this->digitador !== 0)
 		{
 			return $this->digitador;
 		}
@@ -286,13 +287,44 @@ class Detalle_inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recuoera las lineas de detalle del inventario para ajustar
+	 * Recupera las lineas de detalle del inventario para ajustar
+	 * @param  integer $id_inventario         ID del inventario a consultar
+	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
+	 * @param  integer $pagina                Pagina a mostrar
+	 * @return Collection                     Arreglo con el detalle de los registros
+	 */
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
+	{
+		$arr_detalles = $this->db
+			->order_by('catalogo, lote, centro, almacen, ubicacion')
+			->where('id_inventario', $id_inventario)
+			->where(($ocultar_regularizadas === 1)
+				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
+				: 'stock_fisico - stock_sap <> 0',
+				NULL, FALSE)
+			->limit($this->per_page_ajustes, $pagina)
+			->get($this->get_model_tabla())
+			->result_array();
+
+		$detalles_collection = new Collection();
+		foreach($arr_detalles as $linea_detalle)
+		{
+			$detalles_collection->add_item(new Detalle_inventario($linea_detalle));
+		}
+
+		return $detalles_collection;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera paginación de las lineas de detalle del inventario para ajustar
 	 * @param  integer $id_inventario         ID del inventario a consultar
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
 	 * @param  integer $pagina                Pagina a mostrar
 	 * @return array                          Arreglo con el detalle de los registros
 	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
+	public function get_pagination_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
 	{
 		//determina la cantidad de registros
 		$total_rows = $this->db
@@ -303,21 +335,8 @@ class Detalle_inventario extends ORM_Model {
 				NULL, FALSE)
 			->count_all_results($this->get_model_tabla());
 
-		// recupera el detalle de registros
-		$per_page = 50;
-
-		$arr_detalles = $this->db
-			->order_by('catalogo, lote, centro, almacen, ubicacion')
-			->where('id_inventario', $id_inventario)
-			->where(($ocultar_regularizadas === 1)
-				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
-				: 'stock_fisico - stock_sap <> 0',
-				NULL, FALSE)
-			->limit($per_page, $pagina)
-			->get($this->get_model_tabla())
-			->result_array();
-
 		$this->load->library('pagination');
+
 		$cfg_pagination = array(
 			'uri_segment' => 4,
 			'num_links'   => 5,
@@ -338,23 +357,16 @@ class Detalle_inventario extends ORM_Model {
 			'num_tag_open'    => '<li>',
 			'num_tag_close'   => '</li>',
 
-			'per_page'    => $per_page,
+			'per_page'    => $this->per_page_ajustes,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
 			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo (' . (int)($total_rows / $per_page) . ')',
+			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->per_page_ajustes) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
-		$this->pagination->initialize($cfg_pagination);
 
-		$model_all = array();
-		foreach($arr_detalles as $registro)
-		{
-			$detalle_inventario = new Detalle_inventario($registro);
-			array_push($model_all, $detalle_inventario);
-		}
-		$this->set_model_all($model_all);
+		$this->pagination->initialize($cfg_pagination);
 
 		return $this->pagination->create_links();
 	}
@@ -366,13 +378,13 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @return array Arreglo con reglas de validación
 	 */
-	public function get_validation_ajustes()
+	public function get_validation_ajustes(Collection $data_collection)
 	{
 		$arr_validation = array();
 
-		if (count($this->get_model_all()))
+		if ($data_collection->length())
 		{
-			foreach($this->get_model_all() as $linea_detalle)
+			foreach($data_collection as $linea_detalle)
 			{
 				array_push($arr_validation, array(
 					'field' => 'stock_ajuste_'.$linea_detalle->id,
@@ -397,13 +409,13 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @return array Arreglo con reglas de validación
 	 */
-	public function get_validation_digitacion()
+	public function get_validation_digitacion(Collection $data_collection)
 	{
 		$arr_validation = array();
 
-		if (count($this->get_model_all()))
+		if ($data_collection->length() > 0)
 		{
-			foreach($this->get_model_all() as $linea_detalle)
+			foreach($data_collection as $linea_detalle)
 			{
 				array_push($arr_validation, array(
 					'field' => 'stock_fisico_'.$linea_detalle->id,
@@ -472,6 +484,7 @@ class Detalle_inventario extends ORM_Model {
 	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
 	{
 		$ci =& get_instance();
+
 		// recupera el inventario activo
 		$inventario = new Inventario;
 		$id_inventario = $inventario->get_id_inventario_activo();
@@ -484,7 +497,7 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$this->find_id($id_detalle);
 		}
-		$id_auditor = $this->get_id_auditor();
+		$id_auditor = $this->get_auditor_hoja($id_inventario, $hoja);
 
 		$this->fill(array(
 			'id'                 => (int) $id_detalle,
@@ -520,11 +533,11 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @return integer Cantidad de registros modificados
 	 */
-	public function update_ajustes()
+	public function update_ajustes(Collection $data_collection)
 	{
 		$cant_modif = 0;
 
-		foreach($this->get_model_all() as $linea_detalle)
+		foreach($data_collection as $linea_detalle)
 		{
 			if ( (int) set_value('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste OR
 				trim(set_value('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste) )

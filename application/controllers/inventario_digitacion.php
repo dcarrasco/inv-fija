@@ -84,11 +84,13 @@ class Inventario_digitacion extends CI_Controller {
 		$inventario->get_inventario_activo();
 
 		$nuevo_detalle_inventario = new Detalle_inventario;
-		$nuevo_detalle_inventario->get_relation_fields();
+		//$nuevo_detalle_inventario->get_relation_fields();
 
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
+		$hoja_detalle_inventario = $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
+dbg($detalle_inventario);
 
 		if ($this->input->post('formulario') === 'buscar')
 		{
@@ -99,13 +101,13 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
-			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion());
+			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion($hoja_detalle_inventario));
 		}
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'detalle_inventario' => $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja),
+				'detalle_inventario' => $hoja_detalle_inventario,
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
 				'combo_auditores'    => $detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'),
@@ -233,7 +235,6 @@ class Inventario_digitacion extends CI_Controller {
 		$detalle_inventario->get_relation_fields();
 		$detalle_inventario->hoja = $hoja;
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
-		$id_auditor = $detalle_inventario->get_id_auditor();
 
 		$detalle_inventario->get_validation_editar();
 
@@ -263,6 +264,7 @@ class Inventario_digitacion extends CI_Controller {
 				set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 			}
 
+			log_message('debug', 'Class: Inventario_digitacion; Metodo: editar; Query: '.$this->db->last_query());
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
 

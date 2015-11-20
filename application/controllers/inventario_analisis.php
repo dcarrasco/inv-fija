@@ -133,18 +133,19 @@ class Inventario_analisis extends CI_Controller {
 
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
-		$links_paginas = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_regularizadas, $pagina);
+		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_regularizadas, $pagina);
+		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_regularizadas, $pagina);
 
 		if ($this->input->post('formulario') === 'ajustes')
 		{
-			$this->form_validation->set_rules($detalle_ajustes->get_validation_ajustes());
+			$this->form_validation->set_rules($detalle_ajustes->get_validation_ajustes($detalles));
 		}
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
 				'inventario'            => $this->_id_inventario.' - '.$this->_nombre_inventario,
-				'detalle_ajustes'       => $detalle_ajustes,
+				'detalle_ajustes'       => $detalles,
 				'ocultar_regularizadas' => $ocultar_regularizadas,
 				'pag'                   => $pagina,
 				'links_paginas'         => $links_paginas,
@@ -156,7 +157,7 @@ class Inventario_analisis extends CI_Controller {
 		{
 			if ($this->input->post('formulario') === 'ajustes')
 			{
-				$cant_modif = $detalle_ajustes->update_ajustes();
+				$cant_modif = $detalle_ajustes->update_ajustes($detalles);
 				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
 					: '');
 			}
