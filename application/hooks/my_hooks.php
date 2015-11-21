@@ -59,7 +59,7 @@ class MY_Hooks {
 		}
 
 		// log información
-		log_message('debug', 'Request User: ' . $ci->session->user . ', URI: '. $ci->uri->uri_string());
+		log_message('debug', 'REQUEST USER: ' . $ci->session->user . ', URI: '. $ci->uri->uri_string());
 	}
 
 }
