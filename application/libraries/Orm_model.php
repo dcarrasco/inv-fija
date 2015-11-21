@@ -122,7 +122,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $fields_relation_objects;
+	private $fields_relation_objects = NULL;
 
 
 	/**
@@ -780,8 +780,8 @@ class Orm_model implements IteratorAggregate {
 
 				if ($recupera_relation)
 				{
-					dbg('******************************');
 					$obj_modelo->_recuperar_relation_fields($this->fields_relation_objects);
+					$this->_add_relation_fields($obj_modelo);
 				}
 
 				$results_collection->add_item($obj_modelo);
@@ -885,10 +885,8 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return void
 	 */
-	private function _recuperar_relation_fields(&$relation_collection)
+	private function _recuperar_relation_fields($relations_collection = NULL)
 	{
-		dbg($relation_collection);
-
 		foreach ($this->model_fields as $nombre_campo => $obj_campo)
 		{
 			if($obj_campo->get_tipo() === 'has_one')
@@ -899,17 +897,17 @@ class Orm_model implements IteratorAggregate {
 
 				// si el objeto a recuperar existe en el arreglo $relations_collection,
 				// recupera el objeto del arreglo y no va a buscarlo a la BD
-				if ($this->fields_relation_objects->key_exists($nombre_campo) AND $this->fields_relation_objects->item($nombre_campo)->key_exists($this->{$nombre_campo}))
+				if ($relations_collection AND
+					$relations_collection->key_exists($nombre_campo) AND
+					$relations_collection->item($nombre_campo)->key_exists($this->{$nombre_campo})
+				)
 				{
-					$model_relacionado = $this->fields_relation_objects->item($nombre_campo)->item($this->{$nombre_campo});
+					$model_relacionado = $relations_collection->item($nombre_campo)->item($this->{$nombre_campo});
 				}
 				else
 				{
 					$model_relacionado = new $class_relacionado();
 					$model_relacionado->find_id($this->$nombre_campo, FALSE);
-
-					// agrega modelo recuperado en fields_relation_objects
-					$this->_add_relation_fields($nombre_campo, $this->{$nombre_campo}, $model_relacionado);
 				}
 
 				$arr_props_relation['model'] = $model_relacionado;
@@ -957,26 +955,28 @@ class Orm_model implements IteratorAggregate {
 				$this->model_got_relations = TRUE;
 			}
 		}
-		dbg('FINALIZA RECUPERAR RELATION FIELDS');
-		dbg($this);
 	}
 
 	// --------------------------------------------------------------------
 
-	private function _add_relation_fields($nombre_campo = '', $id_modelo = '', $modelo_relacion)
+	private function _add_relation_fields($obj_model)
 	{
-		if ( ! $this->fields_relation_objects->key_exists($nombre_campo))
+		foreach($obj_model->get_model_fields() as $campo => $obj_campo)
 		{
-			$this->fields_relation_objects->add_item(new Collection(), $nombre_campo);
-		}
+			$relation_model = $obj_campo->get_relation();
+			if (array_key_exists('model', $relation_model))
+			{
+				if ( ! $this->fields_relation_objects->key_exists($campo))
+				{
+					$this->fields_relation_objects->add_item(new Collection(), $campo);
+				}
 
-		if ( ! $this->fields_relation_objects->item($nombre_campo)->key_exists($id_modelo))
-		{
-			$this->fields_relation_objects->item($nombre_campo)->add_item($modelo_relacion, $id_modelo);
+				if ( ! $this->fields_relation_objects->item($campo)->key_exists($obj_model->{$campo}))
+				{
+					$this->fields_relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
+				}
+			}
 		}
-
-		dbg('objeto agregado');
-		dbg($this->fields_relation_objects);
 	}
 
 	// --------------------------------------------------------------------
