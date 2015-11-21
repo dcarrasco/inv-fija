@@ -39,7 +39,9 @@
 	<?php $this->load->view('common/app_menu_modulo') ?>
 	<div class="tab-content">
 	<div class="tab-pane active">
+<?php endif; ?>
 
+<?php if ( ! $vista_login): ?>
 	<!-- ============================== MENSAJE ALERTA ============================== -->
 	<?php echo (isset($msg_alerta) AND $msg_alerta !== '') ? $msg_alerta : ''; ?>
 <?php endif; ?>

@@ -90,7 +90,6 @@ class Inventario_digitacion extends CI_Controller {
 		$detalle_inventario = new Detalle_inventario;
 		$hoja_detalle_inventario = $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
-dbg($detalle_inventario);
 
 		if ($this->input->post('formulario') === 'buscar')
 		{
@@ -146,17 +145,15 @@ dbg($detalle_inventario);
 		$inventario->get_inventario_activo();
 
 		$detalle_inventario = new Detalle_inventario;
-		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
-
-		$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
+		//$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'detalle_inventario' => $detalle_inventario,
+				'detalle_inventario' => $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
-				'id_auditor'         => $detalle_inventario->get_id_auditor(),
+				'id_auditor'         => $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
 			);

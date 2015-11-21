@@ -249,25 +249,6 @@ class Detalle_inventario extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera nombre del auditor
-	 *
-	 * @return string Nombre del auditor
-	 */
-	public function get_nombre_auditor()
-	{
-		if (count($this->get_model_all()) > 0)
-		{
-			$arr_detalles = $this->get_model_all();
-			$all_fields = $arr_detalles[0]->get_model_fields();
-			$relacion = $all_fields['auditor']->get_relation();
-
-			return $relacion['data']->nombre;
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Recupera nombre del digitador
 	 *
 	 * @return integer ID digitador

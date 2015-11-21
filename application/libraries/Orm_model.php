@@ -963,17 +963,19 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach($obj_model->get_model_fields() as $campo => $obj_campo)
 		{
-			$relation_model = $obj_campo->get_relation();
-			if (array_key_exists('model', $relation_model))
+			if ($obj_campo->get_tipo() === 'has_one')
 			{
-				if ( ! $this->fields_relation_objects->key_exists($campo))
+				$relation_model = $obj_campo->get_relation();
+				if (array_key_exists('model', $relation_model))
 				{
-					$this->fields_relation_objects->add_item(new Collection(), $campo);
-				}
-
-				if ( ! $this->fields_relation_objects->item($campo)->key_exists($obj_model->{$campo}))
-				{
-					$this->fields_relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
+					if ( ! $this->fields_relation_objects->key_exists($campo))
+					{
+						$this->fields_relation_objects->add_item(new Collection(), $campo);
+					}
+					if ( ! $this->fields_relation_objects->item($campo)->key_exists($obj_model->{$campo}))
+					{
+						$this->fields_relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
+					}
 				}
 			}
 		}
