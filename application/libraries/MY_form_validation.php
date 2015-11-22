@@ -25,6 +25,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  *
  * Note that this update should be used with the
  * form_validation library introduced in CI 1.7.0
+ *
+ * @category CodeIgniter
+ * @package  InventarioFija
+ * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @license  MIT License
+ * @link     localhost:1520
  */
 class MY_Form_validation extends CI_Form_validation {
 
@@ -91,3 +97,5 @@ class MY_Form_validation extends CI_Form_validation {
 
 
 }
+/* End of file MY_form_validation.php */
+/* Location: ./application/libraries/MY_form_validation.php */

@@ -102,8 +102,6 @@ class Stock_config extends ORM_Controller {
 	}
 
 
-
-
 }
 /* End of file stock_config.php */
 /* Location: ./application/controllers/stock_config.php */

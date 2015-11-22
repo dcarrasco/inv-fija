@@ -580,6 +580,5 @@ class Orm_field {
 
 
 }
-
-/* End of file orm_model.php */
-/* Location: ./application/libraries/orm_model.php */
+/* End of file orm_field.php */
+/* Location: ./application/libraries/orm_field.php */

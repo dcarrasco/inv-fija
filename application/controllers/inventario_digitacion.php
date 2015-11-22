@@ -133,6 +133,13 @@ class Inventario_digitacion extends CI_Controller {
 	}
 
 	// --------------------------------------------------------------------
+	/**
+	 * Pantalla de visualización de una hoja de inventario
+	 * para dispositivos móviles
+	 *
+	 * @param  integer $hoja Hoja a desplegar
+	 * @return void
+	 */
 	public function hoja_mobile($hoja = 0)
 	{
 		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
@@ -164,6 +171,14 @@ class Inventario_digitacion extends CI_Controller {
 	}
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Pantalla de ingreso de valores de inventario para dispositivos móviles
+	 *
+	 * @param  integer $hoja        Hoja a desplegar
+	 * @param  integer $id_registro ID del registro de detalle de inventario
+	 * @return void
+	 */
 	public function ingreso_mobile($hoja = 0, $id_registro = NULL)
 	{
 		if ( ! $id_registro)

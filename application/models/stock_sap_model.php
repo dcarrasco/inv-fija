@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class stock_sap_model extends CI_Model {
+class Stock_sap_model extends CI_Model {
 
 	/**
 	 * Constructor de la clase
@@ -48,10 +48,9 @@ class stock_sap_model extends CI_Model {
 	/**
 	 * Recupera stock fijo o movil
 	 *
-	 * @param  string $tipo_op Indicador del tipo de operación
-	 * @param  array  $mostrar Arreglo con campos a mostrar
-	 * @param  array  $filtrar Arreglo con campos a filtrar
-	 * @return array           Arreglo con stock
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con campos a filtrar
+	 * @return array          Arreglo con stock
 	 */
 	public function get_stock($mostrar = array(), $filtrar = array())
 	{
@@ -60,7 +59,15 @@ class stock_sap_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function _format_table_stock($arr_result = array(), $mostrar = array(), $filtrar = array())
+	/**
+	 * Crea la tabla del reporte de stock
+	 *
+	 * @param  array $arr_result Resultado de la query de stock
+	 * @param  array $mostrar    Campos a mostrar en el reporte
+	 * @param  array $filtrar    Filtros de datos del reporte
+	 * @return string            HTML de la tabla del reporte
+	 */
+	protected function format_table_stock($arr_result = array(), $mostrar = array(), $filtrar = array())
 	{
 		$campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS', 'VAL_cantidad', 'monto');
 		$campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS','VAL_cantidad', 'monto');
@@ -147,8 +154,8 @@ class stock_sap_model extends CI_Model {
 	/**
 	 * Recupera stock en transito, operación fija y/o movil
 	 *
-	 * @param  array  $mostrar Arreglo con campos a mostrar
-	 * @param  array  $filtrar Arreglo con filtros a aplicar
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con filtros a aplicar
 	 * @return array           Stock en transito
 	 */
 	public function get_stock_transito($mostrar = array(), $filtrar = array())
@@ -219,13 +226,13 @@ class stock_sap_model extends CI_Model {
 	/**
 	 * Genera reporte de stock con clasificacion de almacens
 	 *
+	 * @param  string  $tipo_op      Indica el tipo de operación (MOVIL o FIJO)
 	 * @param  array   $fechas       Fechas a proceosar
 	 * @param  boolean $borrar_datos Indicador si el reporte se generar desde cero o se recupera
 	 * @return array                 Arreglo con el reporte
 	 */
 	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = NULL, $borrar_datos = FALSE)
 	{
-
 		$arr_result = array();
 
 		if ($fechas)
@@ -268,12 +275,12 @@ class stock_sap_model extends CI_Model {
 		{
 			foreach ($result_fecha as $registro)
 			{
-				if (! in_array($registro['fecha_stock'], $arr_fechas))
+				if ( ! in_array($registro['fecha_stock'], $arr_fechas))
 				{
 					array_push($arr_fechas, $registro['fecha_stock']);
 				}
 
-				if (! array_key_exists($registro['orden'], $arr_final))
+				if ( ! array_key_exists($registro['orden'], $arr_final))
 				{
 					$arr_final[$registro['orden']] = array();
 				}
@@ -310,9 +317,8 @@ class stock_sap_model extends CI_Model {
 	/**
 	 * Inserta registros del reporte de stock por clasificacion en tabla resumen
 	 *
-	 * @param  string $tipo_op Indicador de operación (fijo o movil)
-	 * @param  string $fecha   Fecha del reporte a generar
-	 * @return boolean         Indicador de exito o fallo de la query
+	 * @param  string $fecha Fecha del reporte a generar
+	 * @return boolean       Indicador de exito o fallo de la query
 	 */
 	private function _genera_reporte_clasificacion($fecha = NULL)
 	{

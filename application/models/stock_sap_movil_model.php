@@ -369,7 +369,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 			$arr_result = $arr_stock;
 		}
 
-		return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
+		return $this->format_table_stock($arr_result, $mostrar, $filtrar);
 	}
 
 	// --------------------------------------------------------------------
@@ -377,9 +377,9 @@ class Stock_sap_movil_model extends Stock_sap_model {
 	/**
 	 * Recupera stock en transito, operación fija y/o movil
 	 *
-	 * @param  array  $mostrar Arreglo con campos a mostrar
-	 * @param  array  $filtrar Arreglo con filtros a aplicar
-	 * @return array           Stock en transito
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con filtros a aplicar
+	 * @return array          Stock en transito
 	 */
 	public function get_stock_transito($mostrar = array(), $filtrar = array())
 	{
@@ -472,7 +472,6 @@ class Stock_sap_movil_model extends Stock_sap_model {
 	/**
 	 * Inserta registros del reporte de stock por clasificacion en tabla resumen
 	 *
-	 * @param  string $tipo_op Indicador de operación (fijo o movil)
 	 * @param  string $fecha   Fecha del reporte a generar
 	 * @return boolean         Indicador de exito o fallo de la query
 	 */

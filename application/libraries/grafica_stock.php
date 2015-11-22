@@ -208,6 +208,5 @@ class Grafica_stock {
 
 
 }
-
 /* libraries grafica_stock.php */
 /* Location: ./application/libraries/grafica_stock.php */

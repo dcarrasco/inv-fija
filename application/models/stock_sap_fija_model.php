@@ -156,7 +156,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 
 		$arr_result = $this->db->get()->result_array();
 
-		return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
+		return $this->format_table_stock($arr_result, $mostrar, $filtrar);
 	}
 
 	// --------------------------------------------------------------------
@@ -232,7 +232,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 
 			$arr_result = $this->db->get()->result_array();
 
-			return $this->_format_table_stock($arr_result, $mostrar, $filtrar);
+			return $this->format_table_stock($arr_result, $mostrar, $filtrar);
 		}
 
 	}
@@ -262,8 +262,8 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	/**
 	 * Inserta registros del reporte de stock por clasificacion en tabla resumen
 	 *
-	 * @param  string $fecha   Fecha del reporte a generar
-	 * @return boolean         Indicador de exito o fallo de la query
+	 * @param  string $fecha Fecha del reporte a generar
+	 * @return boolean       Indicador de exito o fallo de la query
 	 */
 	private function _genera_reporte_clasificacion($fecha = NULL)
 	{

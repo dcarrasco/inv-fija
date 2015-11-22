@@ -35,6 +35,12 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Constructor
+	 *
+	 * @param array $items Arreglo inicial para poblar la colección
+	 * @return  void
+	 **/
 	public function __construct($items = NULL)
 	{
 		if (is_array($items))
@@ -82,6 +88,12 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Borra un item
+	 *
+	 * @param  mixed $llave ID o llave del item a borrar
+	 * @return void
+	 */
 	public function delete_item($llave = NULL)
 	{
 		if ($this->key_exists($llave))
@@ -92,6 +104,12 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve un item de la colección
+	 *
+	 * @param  mixed $llave ID o llave para recuperar el item
+	 * @return mixed        Item de la coleccion
+	 */
 	public function item($llave)
 	{
 		if ($this->key_exists($llave))
@@ -102,6 +120,11 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve el conjunto de ID o llaves de la coleccion
+	 *
+	 * @return array IDs o llaves de la coleccion
+	 */
 	public function keys()
 	{
 		return array_keys($this->_items);
@@ -109,6 +132,11 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve la cantidad de itemes de la coleccion
+	 *
+	 * @return integer Cantidad de itemes
+	 */
 	public function length()
 	{
 		return count($this->_items);
@@ -116,6 +144,12 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Indica si existe o no un ID o llave en la colección
+	 *
+	 * @param  mixed $llave ID o llave a buscar
+	 * @return boolean        Indica si existe o no el ID o llave
+	 */
 	public function key_exists($llave)
 	{
 		return isset($this->_items[$llave]);
@@ -124,6 +158,5 @@ class Collection implements IteratorAggregate {
 
 
 }
-
-/* End of file orm_model.php */
+/* End of file collection.php */
 /* Location: ./application/libraries/collection.php */

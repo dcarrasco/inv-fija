@@ -357,7 +357,8 @@ class Detalle_inventario extends ORM_Model {
 	/**
 	 * Devuelve arreglo validación de un conjunto de lineas de detalle
 	 *
-	 * @return array Arreglo con reglas de validación
+	 * @param  Collection $data_collection Colección de objetos con el conjunto de datos a validar
+	 * @return array                       Arreglo con reglas de validación
 	 */
 	public function get_validation_ajustes(Collection $data_collection)
 	{
@@ -388,7 +389,8 @@ class Detalle_inventario extends ORM_Model {
 	/**
 	 * Devuelve arreglo validación de un conjunto de lineas de detalle
 	 *
-	 * @return array Arreglo con reglas de validación
+	 * @param  Collection $data_collection Colección de objetos con el conjunto de datos a validar
+	 * @return array                       Arreglo con reglas de validación
 	 */
 	public function get_validation_digitacion(Collection $data_collection)
 	{
@@ -512,6 +514,7 @@ class Detalle_inventario extends ORM_Model {
 	 * Actualiza cantidades y observaciones de un conjunto de lineas de detalle
 	 * de acuerdo a información del POST
 	 *
+	 * @param  Collection $data_collection Colección de objetos con el conjunto de datos
 	 * @return integer Cantidad de registros modificados
 	 */
 	public function update_ajustes(Collection $data_collection)
@@ -541,8 +544,10 @@ class Detalle_inventario extends ORM_Model {
 	 * Actualiza un conjunto de lineas de detalle
 	 * de acuerdo a información del POST
 	 *
-	 * @param  integer ID del usuario que está modificando los datos
-	 * @return integer Cantidad de registros modificados
+	 * @param  integer $id_inventario ID del inventario a actualizar
+	 * @param  integer $hoja          Numero de la hoja con los datos a actualizar
+	 * @param  integer $id_usr        ID del usuario que está modificando los datos
+	 * @return integer                Cantidad de registros modificados
 	 */
 	public function update_digitacion($id_inventario = 0, $hoja = 0, $id_usr = 0)
 	{

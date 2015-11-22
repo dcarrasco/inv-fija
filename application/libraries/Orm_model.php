@@ -1301,7 +1301,5 @@ class Orm_model implements IteratorAggregate {
 
 
 }
-
-
 /* End of file orm_model.php */
 /* Location: ./application/libraries/orm_model.php */

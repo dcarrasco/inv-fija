@@ -106,6 +106,5 @@ class Migration extends CI_Controller {
 
 
 }
-
 /* End of file migration.php */
 /* Location: ./application/controllers/migration.php */
