@@ -129,5 +129,5 @@ class Adminbd_logs extends CI_Controller {
 
 
 }
-/* End of file Adminbd_queries.php */
-/* Location: ./application/controllers/Adminbd_queries.php */
+/* End of file adminbd_logs.php */
+/* Location: ./application/controllers/adminbd_logs.php */

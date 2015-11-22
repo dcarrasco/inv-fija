@@ -31,105 +31,98 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var  string
 	 */
-	private $model_nombre = '';
+	private $_model_nombre = '';
 
 	/**
 	 * Clase del modelo
 	 *
 	 * @var  string
 	 */
-	private $model_class = '';
+	private $_model_class = '';
 
 	/**
 	 * Tabla de la BD donde se almacena el modelo
 	 *
 	 * @var  string
 	 */
-	private $model_tabla = '';
+	private $_model_tabla = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
 	 */
-	private $model_label = '';
+	private $_model_label = '';
 
 	/**
 	 * Nombre (etiqueta) del modelo (plural)
 	 *
 	 * @var string
 	 */
-	private $model_label_plural = '';
+	private $_model_label_plural = '';
 
 	/**
 	 * Campos para ordenar el modelo cuando se recupera de la BD
 	 *
 	 * @var string
 	 */
-	private $model_order_by = '';
+	private $_model_order_by = '';
 
 	/**
 	 * Campos que conforman la llave (id) del modelo
 	 *
 	 * @var array
 	 */
-	private $model_campo_id = array();
+	private $_model_campo_id = array();
 
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
 	 *
 	 * @var boolean
 	 */
-	private $model_got_relations = FALSE;
+	private $_model_got_relations = FALSE;
 
 	/**
 	 * Cantidad de registros por pagina
 	 *
 	 * @var integer
 	 */
-	private $model_page_results = 12;
+	private $_model_page_results = 12;
 
 	/**
 	 * Filtro para buscar resultados
 	 *
 	 * @var string
 	 */
-	private $model_filtro = '';
-
-	/**
-	 * Arreglo con los campos del modelo
-	 *
-	 * @var array
-	 */
-	private $model_fields = array();
-
-	/**
-	 * Arreglo de registros recuperados de la BD
-	 *
-	 * @var array
-	 */
-	private $model_all = array();
-
-	/**
-	 * Arreglo de registros recuperados de la BD
-	 *
-	 * @var array
-	 */
-	private $fields_values = array();
-
-	/**
-	 * Arreglo temporal de objetos recuperados de la BD
-	 *
-	 * @var array
-	 */
-	private $fields_relation_objects = array();
+	private $_model_filtro = '';
 
 	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
 	 */
-	private $separador_campos = '~';
+	private $_separador_campos = '~';
+
+	/**
+	 * Arreglo de registros recuperados de la BD
+	 *
+	 * @var array
+	 */
+	private $_fields_values = array();
+
+	/**
+	 * Arreglo con los campos del modelo
+	 *
+	 * @var array
+	 */
+	private $_model_fields = array();
+
+	/**
+	 * Arreglo temporal de objetos recuperados de la BD
+	 *
+	 * @var array
+	 */
+	private $_fields_relation_objects = NULL;
 
 
 	/**
@@ -143,11 +136,12 @@ class Orm_model implements IteratorAggregate {
 	{
 		$this->lang->load('orm');
 
-		$this->model_class  = get_class($this);
-		$this->model_nombre = strtolower($this->model_class);
-		$this->model_tabla  = $this->model_nombre;
-		$this->model_label  = $this->model_nombre;
-		$this->model_label_plural = $this->model_label . 's';
+		$this->_model_class  = get_class($this);
+		$this->_model_nombre = strtolower($this->_model_class);
+		$this->_model_tabla  = $this->_model_nombre;
+		$this->_model_label  = $this->_model_nombre;
+		$this->_model_label_plural = $this->_model_label . 's';
+		$this->_fields_relation_objects = new Collection();
 	}
 
 	/**
@@ -169,7 +163,7 @@ class Orm_model implements IteratorAggregate {
 			$this->_config_campos($param['campos']);
 		}
 
-		$this->model_campo_id = $this->_determina_campo_id();
+		$this->_model_campo_id = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
 	}
 
@@ -185,9 +179,9 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function __get($campo)
 	{
-		if (array_key_exists($campo, $this->fields_values))
+		if (array_key_exists($campo, $this->_fields_values))
 		{
-			return $this->fields_values[$campo];
+			return $this->_fields_values[$campo];
 		}
 		else
 		{
@@ -208,7 +202,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function getIterator()
 	{
-		return new ArrayIterator($this->fields_values);
+		return new ArrayIterator($this->_fields_values);
 	}
 
 	// --------------------------------------------------------------------
@@ -223,7 +217,9 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach ($arr_config as $campo => $propiedad)
 		{
-			if (isset($campo))
+			$campo = (substr($campo, 0, 1) !== '_' ? '_' : '').$campo;
+
+			if (isset($this->$campo))
 			{
 				$this->$campo = $propiedad;
 			}
@@ -242,10 +238,10 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach ($arr_config as $campo => $propiedad)
 		{
-			$propiedad['tabla_bd'] = $this->model_tabla;
+			$propiedad['tabla_bd'] = $this->_model_tabla;
 			$obj_field = new ORM_Field($campo, $propiedad);
-			$this->model_fields[$campo] = $obj_field;
-			$this->fields_values[$campo] = NULL;
+			$this->_model_fields[$campo] = $obj_field;
+			$this->_fields_values[$campo] = NULL;
 		}
 	}
 
@@ -263,7 +259,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_nombre()
 	{
-		return $this->model_nombre;
+		return $this->_model_nombre;
 	}
 
 	/**
@@ -273,7 +269,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_tabla()
 	{
-		return $this->model_tabla;
+		return $this->_model_tabla;
 	}
 
 	/**
@@ -283,7 +279,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_label()
 	{
-		return $this->model_label;
+		return $this->_model_label;
 	}
 
 	/**
@@ -291,10 +287,9 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return string Etiqueta del modelo en plural
 	 */
-
 	public function get_model_label_plural()
 	{
-		return $this->model_label_plural;
+		return $this->_model_label_plural;
 	}
 
 	/**
@@ -304,7 +299,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_campo_id()
 	{
-		return $this->model_campo_id;
+		return $this->_model_campo_id;
 	}
 
 	/**
@@ -314,7 +309,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_page_results()
 	{
-		return $this->model_page_results;
+		return $this->_model_page_results;
 	}
 
 	/**
@@ -324,7 +319,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_fields()
 	{
-		return $this->model_fields;
+		return $this->_model_fields;
 	}
 
 	/**
@@ -334,7 +329,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_filtro()
 	{
-		return ($this->model_filtro === '_') ? '' : $this->model_filtro;
+		return ($this->_model_filtro === '_') ? '' : $this->_model_filtro;
 	}
 
 	/**
@@ -345,7 +340,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function set_model_filtro($filtro = '')
 	{
-		$this->model_filtro = $filtro;
+		$this->_model_filtro = $filtro;
 	}
 
 	/**
@@ -359,28 +354,6 @@ class Orm_model implements IteratorAggregate {
 	}
 
 	/**
-	 * Recupera arreglo con instancias del modelo, usado al recuperar
-	 * un conjunto de valores del modelo desde la base de datos
-	 *
-	 * @return array Arreglo con instancias del modelo
-	 */
-	public function get_model_all()
-	{
-		return $this->model_all;
-	}
-
-	/**
-	 * Fija el valor del arreglo con instancias del modelo
-	 *
-	 * @param  array $model_all Arreglo con instancias del modelo
-	 * @return void
-	 */
-	public function set_model_all($model_all = array())
-	{
-		$this->model_all = $model_all;
-	}
-
-	/**
 	 * Recupera los objetos que son las relaciones del campo indicado (1:n o n:m)
 	 *
 	 * @param  string $campo Nombre del campo a recuperar sus relaciones
@@ -388,10 +361,10 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_relation_object($campo = '')
 	{
-		$model_fields = $this->model_fields;
+		$model_fields = $this->_model_fields;
 		$relation = $model_fields[$campo]->get_relation();
 
-		return $relation['data'];
+		return $relation['model'];
 	}
 
 	/**
@@ -401,7 +374,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_fields_values()
 	{
-		return $this->fields_values;
+		return $this->_fields_values;
 	}
 
 
@@ -417,7 +390,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		$arr_key = array();
 
-		foreach ($this->model_fields as $nombre_campo => $obj_campo)
+		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
 		{
 			if ($obj_campo->get_es_id())
 			{
@@ -439,12 +412,12 @@ class Orm_model implements IteratorAggregate {
 	{
 		$arr_id = array();
 
-		foreach ($this->model_campo_id as $campo)
+		foreach ($this->_model_campo_id as $campo)
 		{
 			array_push($arr_id, $this->{$campo});
 		}
 
-		$model_id = implode($this->separador_campos, $arr_id);
+		$model_id = implode($this->_separador_campos, $arr_id);
 
 		return ($model_id === '') ? NULL : $model_id;
 	}
@@ -462,7 +435,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function valida_form()
 	{
-		foreach ($this->model_fields as $nombre_campo => $obj_campo)
+		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
 		{
 			$this->set_validation_rules_field($nombre_campo);
 		}
@@ -475,19 +448,20 @@ class Orm_model implements IteratorAggregate {
 	/**
 	 * Genera la regla de validación para un campo, de acuerdo a la definición del campo
 	 *
-	 * @param string $campo Nombre del campo
+	 * @param  string $campo Nombre del campo
+	 * @return void
 	 */
 	public function set_validation_rules_field($campo = '')
 	{
-		$field = $this->model_fields[$campo];
+		$field = $this->_model_fields[$campo];
 
 		$reglas = 'trim';
 		$reglas .= ($field->get_es_obligatorio() AND ! $field->get_es_autoincrement()) ? '|required' : '';
 		$reglas .= ($field->get_tipo() === 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === 'real') ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['. $this->model_tabla . '.' . $field->get_nombre_bd() . '.' .
-				implode($this->separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
+			? '|edit_unique['. $this->_model_tabla . '.' . $field->get_nombre_bd() . '.' .
+				implode($this->_separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
 			: '';
 
 		$campo_rules = $campo;
@@ -557,7 +531,7 @@ class Orm_model implements IteratorAggregate {
 	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '')
 	{
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
-		$arr_relation = $this->model_fields[$campo]->get_relation();
+		$arr_relation = $this->_model_fields[$campo]->get_relation();
 
 		if (array_key_exists('conditions', $arr_relation))
 		{
@@ -571,10 +545,10 @@ class Orm_model implements IteratorAggregate {
 					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
 				}
 			}
-			$this->model_fields[$campo]->set_relation($arr_relation);
+			$this->_model_fields[$campo]->set_relation($arr_relation);
 		}
 
-		return $this->model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic);
+		return $this->_model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic);
 	}
 
 	// --------------------------------------------------------------------
@@ -587,14 +561,14 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_label_field($campo = '')
 	{
-		$tipo = $this->model_fields[$campo]->get_tipo();
+		$tipo = $this->_model_fields[$campo]->get_tipo();
 
-		if (($tipo === 'has_one' OR $tipo === 'has_many') AND ! $this->model_got_relations)
+		if (($tipo === 'has_one' OR $tipo === 'has_many') AND ! $this->_model_got_relations)
 		{
 			$this->_recuperar_relation_fields();
 		}
 
-		return $this->model_fields[$campo]->get_label();
+		return $this->_model_fields[$campo]->get_label();
 	}
 
 	// --------------------------------------------------------------------
@@ -607,7 +581,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_texto_ayuda_field($campo = '')
 	{
-		return $this->model_fields[$campo]->get_texto_ayuda();
+		return $this->_model_fields[$campo]->get_texto_ayuda();
 	}
 
 	// --------------------------------------------------------------------
@@ -621,7 +595,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_valor_field($campo = '', $formatted = TRUE)
 	{
-		return ( ! $formatted) ? $this->$campo : $this->model_fields[$campo]->get_formatted_value($this->$campo);
+		return ( ! $formatted) ? $this->$campo : $this->_model_fields[$campo]->get_formatted_value($this->$campo);
 	}
 
 	// --------------------------------------------------------------------
@@ -634,7 +608,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_es_obligatorio_field($campo = '')
 	{
-		return $this->model_fields[$campo]->get_es_obligatorio();
+		return $this->_model_fields[$campo]->get_es_obligatorio();
 	}
 
 	// --------------------------------------------------------------------
@@ -660,7 +634,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_mostrar_lista($campo = '')
 	{
-		return $this->model_fields[$campo]->get_mostrar_lista();
+		return $this->_model_fields[$campo]->get_mostrar_lista();
 	}
 
 	// --------------------------------------------------------------------
@@ -673,7 +647,7 @@ class Orm_model implements IteratorAggregate {
 	public function crea_links_paginas()
 	{
 		$this->load->library('pagination');
-		$total_rows = $this->find('count', array('filtro' => $this->model_filtro), FALSE);
+		$total_rows = $this->find('count', array('filtro' => $this->_model_filtro), FALSE);
 
 		$cfg_pagination = array(
 			'uri_segment'     => 5,
@@ -693,16 +667,16 @@ class Orm_model implements IteratorAggregate {
 			'num_tag_open'    => '<li>',
 			'num_tag_close'   => '</li>',
 
-			'per_page'    => $this->model_page_results,
+			'per_page'    => $this->_model_page_results,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url(
 				$this->router->class . '/' .
 				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
 				$this->get_model_nombre() . '/' .
-				$this->model_filtro . '/'
+				$this->_model_filtro . '/'
 			),
 			'first_link'  => $this->lang->line('orm_pag_first'),
-			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->model_page_results + 1) . ')',
+			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->_model_page_results + 1) . ')',
 			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
 			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
 		);
@@ -780,7 +754,7 @@ class Orm_model implements IteratorAggregate {
 
 		if ($tipo === 'first')
 		{
-			$registro = $this->db->get($this->model_tabla)->row_array();
+			$registro = $this->db->get($this->_model_tabla)->row_array();
 			$this->fill_from_array($registro);
 
 			if ($recupera_relation)
@@ -792,33 +766,36 @@ class Orm_model implements IteratorAggregate {
 		}
 		else if ($tipo === 'all')
 		{
-			if ($this->model_order_by !== '')
+			$results_collection = new Collection();
+
+			if ($this->_model_order_by !== '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->db->order_by($this->_model_order_by);
 			}
 
-			$registros = $this->db->get($this->model_tabla)->result_array();
+			$registros = $this->db->get($this->_model_tabla)->result_array();
 
 			foreach ($registros as $registro)
 			{
-				$obj_modelo = new $this->model_class();
+				$obj_modelo = new $this->_model_class();
 				$obj_modelo->fill_from_array($registro);
 
 				if ($recupera_relation)
 				{
-					$obj_modelo->_recuperar_relation_fields($this->fields_relation_objects);
-					$this->_add_relation_field_data($obj_modelo->_get_relation_field_data_to_array());
+					$obj_modelo->_recuperar_relation_fields($this->_fields_relation_objects);
+					$this->_add_relation_fields($obj_modelo);
 				}
-				array_push($this->model_all, $obj_modelo);
+
+				$results_collection->add_item($obj_modelo);
 			}
 
-			return $registros;
+			return $results_collection;
 		}
 		else if ($tipo === 'count')
 		{
 			return $this->db
 				->select('count(*) as cant')
-				->get($this->model_tabla)
+				->get($this->_model_tabla)
 				->row()
 				->cant;
 		}
@@ -826,16 +803,16 @@ class Orm_model implements IteratorAggregate {
 		{
 			$arr_list = array();
 
-			if ($this->model_order_by !== '')
+			if ($this->_model_order_by !== '')
 			{
-				$this->db->order_by($this->model_order_by);
+				$this->db->order_by($this->_model_order_by);
 			}
 
-			$registros = $this->db->get($this->model_tabla)->result_array();
+			$registros = $this->db->get($this->_model_tabla)->result_array();
 
 			foreach ($registros as $registro)
 			{
-				$obj_modelo = new $this->model_class();
+				$obj_modelo = new $this->_model_class();
 				$obj_modelo->fill_from_array($registro);
 				$arr_list[$obj_modelo->get_model_id()] = (string) $obj_modelo;
 			}
@@ -857,11 +834,11 @@ class Orm_model implements IteratorAggregate {
 	{
 		$arr_condiciones = array();
 
-		if (count($this->model_campo_id) === 1)
+		if (count($this->_model_campo_id) === 1)
 		{
-			foreach ($this->model_campo_id as $campo_id)
+			foreach ($this->_model_campo_id as $campo_id)
 			{
-				$tipo_id = $this->model_fields[$campo_id]->get_tipo();
+				$tipo_id = $this->_model_fields[$campo_id]->get_tipo();
 
 				if ($tipo_id === 'id' OR $tipo_id === 'int')
 				{
@@ -875,9 +852,9 @@ class Orm_model implements IteratorAggregate {
 		}
 		else
 		{
-			$arr_val_id = explode($this->separador_campos, $id_modelo);
+			$arr_val_id = explode($this->_separador_campos, $id_modelo);
 
-			foreach ($this->model_campo_id as $indice => $campo_id)
+			foreach ($this->_model_campo_id as $indice => $campo_id)
 			{
 				$arr_condiciones[$campo_id] = is_null($id_modelo) ? '' : $arr_val_id[$indice];
 			}
@@ -896,9 +873,9 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function list_paginated($offset = 0)
 	{
-		$this->find('all', array(
-			'filtro' => $this->model_filtro,
-			'limit'  => $this->model_page_results,
+		return $this->find('all', array(
+			'filtro' => $this->_model_filtro,
+			'limit'  => $this->_model_page_results,
 			'offset' => $offset
 		));
 	}
@@ -908,12 +885,12 @@ class Orm_model implements IteratorAggregate {
 	/**
 	 * Recupera los modelos dependientes (de las relaciones has_one y has_many)
 	 *
-	 * @param  array $arr_obj Arreglo de objetos recuperados anteriormente (evita hacer queries repetidas)
+	 * @param  Collection $relations_collection Coleccion de relacion donde se busca la relacion
 	 * @return void
 	 */
-	private function _recuperar_relation_fields($arr_obj = array())
+	private function _recuperar_relation_fields($relations_collection = NULL)
 	{
-		foreach ($this->model_fields as $nombre_campo => $obj_campo)
+		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
 		{
 			if($obj_campo->get_tipo() === 'has_one')
 			{
@@ -921,11 +898,14 @@ class Orm_model implements IteratorAggregate {
 				$arr_props_relation = $obj_campo->get_relation();
 				$class_relacionado = $arr_props_relation['model'];
 
-				// si el objeto a recuperar existe en el arreglo $arr_obj,
+				// si el objeto a recuperar existe en el arreglo $relations_collection,
 				// recupera el objeto del arreglo y no va a buscarlo a la BD
-				if (array_key_exists($nombre_campo, $arr_obj) AND array_key_exists($this->$nombre_campo, $arr_obj[$nombre_campo]))
+				if ($relations_collection AND
+					$relations_collection->key_exists($nombre_campo) AND
+					$relations_collection->item($nombre_campo)->key_exists($this->{$nombre_campo})
+				)
 				{
-					$model_relacionado = $arr_obj[$nombre_campo][$this->$nombre_campo];
+					$model_relacionado = $relations_collection->item($nombre_campo)->item($this->{$nombre_campo});
 				}
 				else
 				{
@@ -933,9 +913,9 @@ class Orm_model implements IteratorAggregate {
 					$model_relacionado->find_id($this->$nombre_campo, FALSE);
 				}
 
-				$arr_props_relation['data'] = $model_relacionado;
-				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
-				$this->model_got_relations = TRUE;
+				$arr_props_relation['model'] = $model_relacionado;
+				$this->_model_fields[$nombre_campo]->set_relation($arr_props_relation);
+				$this->_model_got_relations = TRUE;
 			}
 			else if ($obj_campo->get_tipo() === 'has_many')
 			{
@@ -946,7 +926,7 @@ class Orm_model implements IteratorAggregate {
 				$arr_where = array();
 				$arr_id_one_table = $arr_props_relation['id_one_table'];
 
-				foreach ($this->model_campo_id as $campo_id)
+				foreach ($this->_model_campo_id as $campo_id)
 				{
 					$arr_where[array_shift($arr_id_one_table)] = $this->$campo_id;
 				}
@@ -971,64 +951,45 @@ class Orm_model implements IteratorAggregate {
 
 				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
 
-				$arr_props_relation['data'] = $model_relacionado;
-				$this->model_fields[$nombre_campo]->set_relation($arr_props_relation);
-				$this->fields_values[$nombre_campo] = $arr_where;
-				$this->model_got_relations = TRUE;
+				$arr_props_relation['model'] = $model_relacionado;
+				$arr_props_relation['data'] = $model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
+				$this->_model_fields[$nombre_campo]->set_relation($arr_props_relation);
+				$this->_fields_values[$nombre_campo] = $arr_where;
+				$this->_model_got_relations = TRUE;
 			}
 		}
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera los datos de las relaciones y los devuelve como arreglo
+	 * Agrega a las relaciones del objeto actual,
+	 * las relaciones del objeto pasado como parametro
 	 *
-	 * @return array  Arreglo con los objetos recuperados
+	 * @param  mixed $obj_model Objeto del cual se sacan las relaciones
+	 * @return void
 	 */
-	private function _get_relation_field_data_to_array()
+	private function _add_relation_fields($obj_model)
 	{
-		$arr_relation = array();
-
-		foreach ($this->model_fields as $nombre_campo => $obj_campo)
+		foreach($obj_model->get_model_fields() as $campo => $obj_campo)
 		{
-			if($obj_campo->get_tipo() === 'has_one')
+			if ($obj_campo->get_tipo() === 'has_one')
 			{
-				$arr_relation[$nombre_campo][$this->$nombre_campo]=$this->get_relation_object($nombre_campo);
-			}
-		}
-
-		return $arr_relation;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera los datos de las relaciones y los devuelve como arreglo
-	 *
-	 * @return nada
-	 */
-	private function _add_relation_field_data($arr = array())
-	{
-		foreach ($arr as $campo => $arr_valores)
-		{
-			if (! array_key_exists($campo, $this->fields_relation_objects))
-			{
-				$this->fields_relation_objects[$campo] = array();
-			}
-
-			foreach ($arr_valores as $key => $obj)
-			{
-				if (! array_key_exists($key, $this->fields_relation_objects[$campo]))
+				$relation_model = $obj_campo->get_relation();
+				if (array_key_exists('model', $relation_model))
 				{
-					$this->fields_relation_objects[$campo][$key] = $obj;
+					if ( ! $this->_fields_relation_objects->key_exists($campo))
+					{
+						$this->_fields_relation_objects->add_item(new Collection(), $campo);
+					}
+					if ( ! $this->_fields_relation_objects->item($campo)->key_exists($obj_model->{$campo}))
+					{
+						$this->_fields_relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
+					}
 				}
 			}
 		}
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -1052,11 +1013,11 @@ class Orm_model implements IteratorAggregate {
 				// CONCAT_WS es especifico para MYSQL
 				$lista_campos = implode(',', $arr_campos);
 
-				return 'CONCAT_WS(\'' . $this->separador_campos . '\',' . $lista_campos . ')';
+				return 'CONCAT_WS(\'' . $this->_separador_campos . '\',' . $lista_campos . ')';
 			}
 			else
 			{
-				$lista_campos = implode(' + \'' . $this->separador_campos . '\' + ', $arr_campos);
+				$lista_campos = implode(' + \'' . $this->_separador_campos . '\' + ', $arr_campos);
 
 				return $lista_campos;
 			}
@@ -1094,7 +1055,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		if ($arr_data AND count($arr_data) > 0)
 		{
-			foreach ($this->model_fields as $nombre_campo => $obj_campo)
+			foreach ($this->_model_fields as $nombre_campo => $obj_campo)
 			{
 				if (array_key_exists($nombre_campo, $arr_data))
 				{
@@ -1102,18 +1063,18 @@ class Orm_model implements IteratorAggregate {
 
 					if ($tipo_campo === 'id' OR $tipo_campo === 'boolean' OR $tipo_campo === 'int')
 					{
-						$this->fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
+						$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 					}
 					else if ($tipo_campo === 'datetime')
 					{
 						if ($arr_data[$nombre_campo] !== '')
 						{
-							$this->fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
+							$this->_fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
 						}
 					}
 					else
 					{
-						$this->fields_values[$nombre_campo] = $arr_data[$nombre_campo];
+						$this->_fields_values[$nombre_campo] = $arr_data[$nombre_campo];
 					}
 				}
 			}
@@ -1148,7 +1109,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		$arr_like = array();
 
-		foreach ($this->model_fields as $nombre => $campo)
+		foreach ($this->_model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() === 'char')
 			{
@@ -1178,7 +1139,7 @@ class Orm_model implements IteratorAggregate {
 			$this->_put_filtro($filtro);
 		}
 
-		return $this->db->count_all_results($this->model_tabla);
+		return $this->db->count_all_results($this->_model_tabla);
 	}
 
 
@@ -1200,7 +1161,7 @@ class Orm_model implements IteratorAggregate {
 		$es_auto_id   = FALSE;
 		$es_insert    = FALSE;
 
-		foreach ($this->model_fields as $nombre => $campo)
+		foreach ($this->_model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id() AND $campo->get_es_autoincrement())
 			{
@@ -1229,7 +1190,7 @@ class Orm_model implements IteratorAggregate {
 		}
 		else
 		{
-			$es_insert = ($this->db->get_where($this->model_tabla, $data_where)->num_rows() === 0);
+			$es_insert = ($this->db->get_where($this->_model_tabla, $data_where)->num_rows() === 0);
 		}
 
 		// NUEVO REGISTRO
@@ -1237,13 +1198,13 @@ class Orm_model implements IteratorAggregate {
 		{
 			if ( ! $es_auto_id)
 			{
-				$this->db->insert($this->model_tabla, array_merge($data_where, $data_update));
+				$this->db->insert($this->_model_tabla, array_merge($data_where, $data_update));
 			}
 			else
 			{
-				$this->db->insert($this->model_tabla, $data_update);
+				$this->db->insert($this->_model_tabla, $data_update);
 
-				foreach ($this->model_campo_id as $campo_id)
+				foreach ($this->_model_campo_id as $campo_id)
 				{
 					$data_where[$campo_id] = $this->db->insert_id();
 					$this->{$campo_id} = $this->db->insert_id();
@@ -1254,12 +1215,12 @@ class Orm_model implements IteratorAggregate {
 		else
 		{
 			$this->db->where($data_where);
-			$this->db->update($this->model_tabla, $data_update);
+			$this->db->update($this->_model_tabla, $data_update);
 		}
 
 		// Revisa todos los campos en busqueda de relaciones has_many,
 		// para actualizar la tabla relacionada
-		foreach ($this->model_fields as $nombre => $campo)
+		foreach ($this->_model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() === 'has_many')
 			{
@@ -1286,7 +1247,7 @@ class Orm_model implements IteratorAggregate {
 						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
 					}
 
-					$arr_many_valores = explode($this->separador_campos, $valor_campo);
+					$arr_many_valores = explode($this->_separador_campos, $valor_campo);
 
 					foreach ($relation['id_many_table'] as $id_many)
 					{
@@ -1310,7 +1271,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		$data_where = array();
 
-		foreach ($this->model_fields as $nombre => $campo)
+		foreach ($this->_model_fields as $nombre => $campo)
 		{
 			if ($campo->get_es_id())
 			{
@@ -1318,9 +1279,9 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		$this->db->delete($this->model_tabla, $data_where);
+		$this->db->delete($this->_model_tabla, $data_where);
 
-		foreach ($this->model_fields as $nombre => $campo)
+		foreach ($this->_model_fields as $nombre => $campo)
 		{
 			if ($campo->get_tipo() === 'has_many')
 			{
@@ -1337,579 +1298,8 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 	}
-}
-
-
-
-
-
-// **********************************************************************************************************
-// **********************************************************************************************************
-// **********************************************************************************************************
-// **********************************************************************************************************
-
-/**
- * Clase que modela un campo
- *
- *
- * @category	Controller
- * @author		dcr
- * @link
- */
-class ORM_Field {
-
-	/**
-	 * Nombre del campo
-	 *
-	 * @var  string
-	 */
-	private $nombre = '';
-
-	/**
-	 * Nombre del tabla del campo
-	 *
-	 * @var  string
-	 */
-	private $tabla_bd = '';
-
-	/**
-	 * Nombre del campo en la tabla
-	 *
-	 * @var  string
-	 */
-	private $nombre_bd = '';
-
-	/**
-	 * Nombre del campo (etiqueta)
-	 *
-	 * @var  string
-	 */
-	private $label = '';
-
-	/**
-	 * Texto de ayuda del campo
-	 *
-	 * @var  string
-	 */
-	private $texto_ayuda = '';
-
-	/**
-	 * Valor por defecto del campo
-	 *
-	 * @var  string
-	 */
-	private $default = '';
-
-	/**
-	 * Indica si el campo se muestra en la listado
-	 *
-	 * @var  boolean
-	 */
-	private $mostrar_lista = TRUE;
-
-	/**
-	 * Tipo del campo
-	 *
-	 * @var  string
-	 */
-	private $tipo = 'char';
-
-	/**
-	 * Largo del campo
-	 *
-	 * @var  string
-	 */
-	private $largo = 10;
-
-	/**
-	 * Cantidad de decimales del campo
-	 *
-	 * @var  string
-	 */
-	private $decimales = 2;
-
-	/**
-	 * Cantidad de decimales del campo
-	 *
-	 * @var  string
-	 */
-	private $formato = null;
-
-	/**
-	 * Lista de los valores válidos para el campo
-	 *
-	 * @var  array
-	 */
-	private $choices = array();
-
-	/**
-	 * Arreglo con los datos de la relación
-	 *
-	 * @var  array
-	 */
-	private $relation = array();
-
-	/**
-	 * Indica si el campo es ID
-	 *
-	 * @var  boolean
-	 */
-	private $es_id = FALSE;
-
-	/**
-	 * Indica si el campo es obligatorio
-	 *
-	 * @var  boolean
-	 */
-	private $es_obligatorio = FALSE;
-
-	/**
-	 * Indica si el valor del campo debe ser único
-	 *
-	 * @var  boolean
-	 */
-	private $es_unico = FALSE;
-
-	/**
-	 * Indica si el campo es auto-incremental
-	 *
-	 * @var  boolean
-	 */
-	private $es_autoincrement = FALSE;
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Contructor
-	 *
-	 * @param  string $nombre Nombre del campo
-	 * @param  array  $param  Parametros de construccion
-	 * @return void
-	 **/
-	public function __construct($nombre = '', $param = array())
-	{
-		$this->nombre    = $nombre;
-		$this->nombre_bd = $nombre;
-		$this->label     = $nombre;
-
-		if (is_array($param))
-		{
-			foreach ($param as $llave => $valor)
-			{
-				if (isset($llave))
-				{
-					$this->$llave = $valor;
-				}
-			}
-		}
-
-		if ($this->tipo === 'int' AND $this->default === '')
-		{
-			$this->default = 0;
-		}
-
-		if ($this->tipo === 'has_one')
-		{
-			$this->es_obligatorio = TRUE;
-		}
-
-		if ($this->tipo === 'datetime')
-		{
-			$this->largo = 20;
-		}
-
-		if ($nombre === 'id')
-		{
-			$this->tipo  = 'id';
-			$this->largo = 10;
-
-			$this->es_id            = TRUE;
-			$this->es_obligatorio   = TRUE;
-			$this->es_unico         = TRUE;
-			$this->es_autoincrement = TRUE;
-		}
-	}
-
-	/**
-	 * Recupera el tipo de datos del campo
-	 *
-	 * @return string Tipo de datos del campo
-	 */
-	public function get_tipo()
-	{
-		return $this->tipo;
-	}
-
-	/**
-	 * Recupera la etiqueta del campo
-	 *
-	 * @return string Etiqueta del campo
-	 */
-	public function get_label()
-	{
-		if ($this->tipo === 'has_one')
-		{
-			return $this->relation['data']->get_model_label();
-		}
-
-		if ($this->tipo === 'has_many')
-		{
-			return $this->relation['data']->get_model_label_plural();
-		}
-
-		return $this->label;
-	}
-
-	/**
-	 * Recupera el nombre campo en la base de datos
-	 *
-	 * @return string Nombre del campo en la base de datos
-	 */
-	public function get_nombre_bd()
-	{
-		return $this->nombre_bd;
-	}
-
-	/**
-	 * Recupera indicador de mostrar o no el campo en una lista
-	 *
-	 * @return boolean Indica si mostrar o no el campo en una lista
-	 */
-	public function get_mostrar_lista()
-	{
-		return $this->mostrar_lista;
-	}
-
-	/**
-	 * Recupera indicador si el campo es ID
-	 *
-	 * @return boolean Indicador de campo ID
-	 */
-	public function get_es_id()
-	{
-		return $this->es_id;
-	}
-
-	/**
-	 * Recupera indicador si el campo tiene valores unicos
-	 *
-	 * @return boolean Indicador de campo con valores unicos
-	 */
-	public function get_es_unico()
-	{
-		return $this->es_unico;
-	}
-
-	/**
-	 * Recupera indicador si el campo es obligatorio
-	 *
-	 * @return boolean Indicador de campo obligatorio
-	 */
-	public function get_es_obligatorio()
-	{
-		return $this->es_obligatorio;
-	}
-
-	/**
-	 * Recupera indicador si el campo es auto-incremental
-	 *
-	 * @return boolean Indicador de campo auto-incremental
-	 */
-	public function get_es_autoincrement()
-	{
-		return $this->es_autoincrement;
-	}
-
-	/**
-	 * Recupera texto de ayuda del campo
-	 *
-	 * @return string Texto de ayuda del campo
-	 */
-	public function get_texto_ayuda()
-	{
-		return $this->texto_ayuda;
-	}
-
-	/**
-	 * Recuperalas relaciones del campo
-	 *
-	 * @return array Relaciones del campo
-	 */
-	public function get_relation()
-	{
-		return $this->relation;
-	}
-
-	/**
-	 * Fija las relaciones del campo
-	 *
-	 * @param  array $arr_relation Arreglo de relaciones
-	 * @return void
-	 */
-	public function set_relation($arr_relation)
-	{
-		$this->relation = $arr_relation;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera el elemento de formulario para el campo
-	 *
-	 * @param  string  $valor          Valor a desplegar en el elemento de formulario
-	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
-	 * @param  string  $clase_adic     Clases adicionales para la construccion del formulario
-	 * @return string                  Elemento de formulario
-	 */
-	public function form_field($valor = '', $filtra_activos = FALSE, $clase_adic = '')
-	{
-		$ci =& get_instance();
-
-		$id_prefix  = 'id_';
-
-		$valor_field = ($valor === '' AND $this->default !== '') ? $this->default : $valor;
-		$valor_field = set_value($this->nombre, $valor_field);
-
-		$arr_param = array(
-			'name'      => $this->nombre,
-			'id'        => $id_prefix . $this->nombre,
-			'class'     => 'form-control '.$clase_adic,
-			'value'     => $valor_field,
-			'maxlength' => $this->largo,
-			'size'      => $this->largo,
-		);
-
-		if ($this->tipo === 'id'
-			OR ($this->es_id AND $valor_field !== '' AND $valor_field !== NULL)
-			OR ($this->es_id AND $this->es_autoincrement))
-		{
-			$param_adic = ' id="'.$id_prefix.$this->nombre.'"';
-
-			$form = '<p class="form-control-static">'.$valor_field.'</p>';
-			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
-
-			return $form;
-		}
-
-		if ( ! empty($this->choices))
-		{
-			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
-
-			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
-		}
-
-		if ($this->tipo === 'char' AND $this->largo >= 100)
-		{
-			unset($arr_param['size']);
-			$arr_param['cols'] = '50';
-			$arr_param['rows'] = '5';
-
-			return form_textarea($arr_param);
-		}
-
-		if ($this->tipo === 'char' OR $this->tipo === 'datetime')
-		{
-			return form_input($arr_param);
-		}
-
-		if ($this->tipo === 'int')
-		{
-			return form_number($arr_param);
-		}
-
-		if ($this->tipo === 'password')
-		{
-			return form_password($arr_param);
-		}
-
-		if ($this->tipo === 'real')
-		{
-			$arr_param['size'] = $this->largo + $this->decimales + 1;
-
-			return form_input($arr_param);
-		}
-
-		if ($this->tipo === 'boolean')
-		{
-			$form = '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_1">';
-			$form .= form_radio($this->nombre, 1, ($valor_field === '1') ? TRUE : FALSE, 'id='.$id_prefix.$this->nombre.'_1');
-			$form .= $ci->lang->line('orm_radio_yes');
-			$form .= '</label>';
-
-			$form .= '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_0">';
-			$form .= form_radio($this->nombre, 0, ($valor_field === '1') ? FALSE : TRUE, 'id='.$id_prefix.$this->nombre.'_0');
-			$form .= $ci->lang->line('orm_radio_no');
-			$form .= '</label>';
-
-			return $form;
-		}
-
-		if ($this->tipo === 'has_one')
-		{
-			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo();
-
-			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
-
-			$dropdown_conditions = array_key_exists('conditions', $this->relation)
-				? array('conditions' => $this->relation['conditions'])
-				: array();
-
-			$form = form_dropdown(
-				$this->nombre,
-				$modelo_rel->find('list', $dropdown_conditions, FALSE),
-				$valor_field,
-				$param_adic
-			);
-
-			return $form;
-		}
-
-		if ($this->tipo === 'has_many')
-		{
-			$nombre_rel_modelo = $this->relation['model'];
-			$modelo_rel = new $nombre_rel_modelo();
-
-			$param_adic = ' id="'.$id_prefix.$this->nombre.'" size="7" class="form-control '.$clase_adic.'"';
-
-			$dropdown_conditions = array_key_exists('conditions', $this->relation)
-				? array('conditions' => $this->relation['conditions'])
-				: array();
-
-			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
-			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = $ci->input->post($this->nombre) ? $ci->input->post($this->nombre) : $valor_field;
-
-			$form = form_multiselect(
-				$this->nombre.'[]',
-				$modelo_rel->find('list', $dropdown_conditions, FALSE),
-				$opciones,
-				$param_adic
-			);
-
-			return $form;
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el valor, formateado de acuerdo al tipo del campo
-	 *
-	 * @param  [type] $valor Valor a desplegar
-	 * @return string        Valor formateado
-	 */
-	public function get_formatted_value($valor)
-	{
-		$ci =& get_instance();
-
-		if ($this->tipo === 'boolean')
-		{
-			return ($valor === 1) ? $ci->lang->line('orm_radio_yes') : $ci->lang->line('orm_radio_no');
-		}
-
-		if ($this->tipo === 'has_one')
-		{
-			return (string) $this->relation['data'];
-		}
-
-		if ($this->tipo === 'has_many')
-		{
-			$campo = '<ul class="formatted_has_many">';
-			foreach ($this->relation['data']->get_model_all() as $obj_modelo)
-			{
-				$campo .= '<li>'.$obj_modelo.'</li>';
-			}
-			$campo .= '</ul>';
-
-			return $campo;
-		}
-
-		if (count($this->choices) > 0)
-		{
-			return $this->choices[$valor];
-		}
-
-		if ($this->formato)
-		{
-			if ($this->formato === 'monto,2')
-			{
-				return fmt_monto($valor, 'UN', '$', 2);
-			}
-			else
-			{
-				return 'XX'.$valor.'XX';
-			}
-		}
-
-		return $valor;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve los atributos para construir el campo en la base de datos
-	 *
-	 * @return array Configuración del campo para construirlo en la base de datos
-	 */
-	public function get_bd_attrib()
-	{
-		if ($this->tipo === 'id')
-		{
-			return array(
-				'type'           => 'INT',
-				'constraint'     => $this->largo,
-				'auto_increment' => $this->es_autoincrement,
-				'null'           => $this->es_obligatorio,
-			);
-		}
-		else if ($this->tipo === 'char')
-		{
-			return array(
-				'type'       => 'VARCHAR',
-				'constraint' => $this->largo,
-				'default'    => $this->default,
-				'null'       => $this->es_obligatorio,
-			);
-		}
-		else if ($this->tipo === 'text')
-		{
-			return array(
-				'type'       => 'TEXT',
-				'constraint' => $this->largo,
-				'default'    => $this->default,
-				'null'       => $this->es_obligatorio,
-			);
-		}
-		else if ($this->tipo === 'integer')
-		{
-			return array(
-				'type'       => 'INT',
-				'constraint' => $this->largo,
-				'default'    => $this->default,
-				'null'       => $this->es_obligatorio,
-			);
-		}
-		else if ($this->tipo === 'boolean')
-		{
-			return array(
-				'type'       => 'BIT',
-				'null'       => $this->es_obligatorio,
-			);
-		}
-		else if ($this->tipo === 'datetime')
-		{
-			$bd_attrib = array(
-				'type'       => 'DATETIME',
-				'null'       => $this->es_obligatorio,
-			);
-		}
-	}
 
 
 }
-
 /* End of file orm_model.php */
 /* Location: ./application/libraries/orm_model.php */

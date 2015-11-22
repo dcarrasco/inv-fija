@@ -84,14 +84,12 @@ class Inventario_digitacion extends CI_Controller {
 		$inventario->get_inventario_activo();
 
 		$nuevo_detalle_inventario = new Detalle_inventario;
-		$nuevo_detalle_inventario->get_relation_fields();
+		//$nuevo_detalle_inventario->get_relation_fields();
 
 		//$this->benchmark->mark('detalle_inventario_start');
 		$detalle_inventario = new Detalle_inventario;
-		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
+		$hoja_detalle_inventario = $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
-
-		$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
 
 		if ($this->input->post('formulario') === 'buscar')
 		{
@@ -102,16 +100,17 @@ class Inventario_digitacion extends CI_Controller {
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
-			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion());
+			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion($hoja_detalle_inventario));
 		}
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'detalle_inventario' => $detalle_inventario,
+				'detalle_inventario' => $hoja_detalle_inventario,
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
-				'id_auditor'         => $detalle_inventario->get_id_auditor(),
+				'combo_auditores'    => $detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'),
+				'id_auditor'         => $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
 			);
@@ -123,7 +122,7 @@ class Inventario_digitacion extends CI_Controller {
 			if ($this->input->post('formulario') === 'inventario')
 			{
 				$id_usuario_login  = $this->acl_model->get_id_usr();
-				$cant_modif = $detalle_inventario->update_digitacion($id_usuario_login);
+				$cant_modif = $detalle_inventario->update_digitacion($inventario->get_id_inventario_activo(), $hoja, $id_usuario_login);
 
 				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 			}
@@ -134,6 +133,13 @@ class Inventario_digitacion extends CI_Controller {
 	}
 
 	// --------------------------------------------------------------------
+	/**
+	 * Pantalla de visualización de una hoja de inventario
+	 * para dispositivos móviles
+	 *
+	 * @param  integer $hoja Hoja a desplegar
+	 * @return void
+	 */
 	public function hoja_mobile($hoja = 0)
 	{
 		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
@@ -146,17 +152,15 @@ class Inventario_digitacion extends CI_Controller {
 		$inventario->get_inventario_activo();
 
 		$detalle_inventario = new Detalle_inventario;
-		$detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
-
-		$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
+		//$detalle_inventario->auditor = $detalle_inventario->get_id_auditor();
 
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'detalle_inventario' => $detalle_inventario,
+				'detalle_inventario' => $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
-				'id_auditor'         => $detalle_inventario->get_id_auditor(),
+				'id_auditor'         => $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
 			);
@@ -167,6 +171,14 @@ class Inventario_digitacion extends CI_Controller {
 	}
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Pantalla de ingreso de valores de inventario para dispositivos móviles
+	 *
+	 * @param  integer $hoja        Hoja a desplegar
+	 * @param  integer $id_registro ID del registro de detalle de inventario
+	 * @return void
+	 */
 	public function ingreso_mobile($hoja = 0, $id_registro = NULL)
 	{
 		if ( ! $id_registro)
@@ -235,7 +247,6 @@ class Inventario_digitacion extends CI_Controller {
 		$detalle_inventario->get_relation_fields();
 		$detalle_inventario->hoja = $hoja;
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
-		$id_auditor = $detalle_inventario->get_id_auditor();
 
 		$detalle_inventario->get_validation_editar();
 
@@ -265,6 +276,7 @@ class Inventario_digitacion extends CI_Controller {
 				set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 			}
 
+			log_message('debug', 'Class: Inventario_digitacion; Metodo: editar; Query: '.$this->db->last_query());
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
 

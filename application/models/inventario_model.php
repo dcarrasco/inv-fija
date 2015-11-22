@@ -26,6 +26,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Inventario_model extends CI_Model {
 
+	/**
+	 * Reglas de validación para los reportes
+	 *
+	 * @var array
+	 */
 	public $reportes_validation = array(
 		array(
 			'field' => 'inv_activo',
@@ -59,7 +64,6 @@ class Inventario_model extends CI_Model {
 		),
 	);
 
-
 	/**
 	 * Constructor de la clase
 	 *
@@ -69,7 +73,6 @@ class Inventario_model extends CI_Model {
 	{
 		parent::__construct();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -86,7 +89,6 @@ class Inventario_model extends CI_Model {
 			->row()
 			->id;
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -124,6 +126,7 @@ class Inventario_model extends CI_Model {
 	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
+	 * @param  string  $param1        Parámetros adicionales
 	 * @return array                  arreglo con el detalle del reporte
 	 */
 	public function get_reporte($reporte = '', $id_inventario = 0, $orden_campo = NULL, $orden_tipo = 'ASC',

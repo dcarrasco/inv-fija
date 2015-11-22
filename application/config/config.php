@@ -207,7 +207,7 @@ $config['directory_trigger'] = 'd';
 | your log files will fill up very fast.
 |
 */
-$config['log_threshold'] = 1;
+$config['log_threshold'] = (ENVIRONMENT === 'production') ? 1 : 2;
 
 /*
 |--------------------------------------------------------------------------
@@ -522,6 +522,10 @@ function orm_models_autoload($class)
 	else if (file_exists(APPPATH.'controllers/'.strtolower($class).'.php'))
 	{
 		include_once(APPPATH.'controllers/'.strtolower($class).'.php');
+	}
+	else if (file_exists(APPPATH.'libraries/'.strtolower($class).'.php'))
+	{
+		include_once(APPPATH.'libraries/'.strtolower($class).'.php');
 	}
 }
 

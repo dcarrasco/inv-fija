@@ -144,9 +144,9 @@ if ( ! function_exists('app_render_view'))
 	/**
 	 * Render vista
 	 *
-	 * @param  mixed  $vista    Nombre o arreglo de nombre de la(s) vista(s) a dibujar
-	 * @param  array  $datos    Arreglo con parámetros de datos a dibujar
-	 * @param  array  $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
+	 * @param  mixed $vista    Nombre o arreglo de nombre de la(s) vista(s) a dibujar
+	 * @param  array $datos    Arreglo con parámetros de datos a dibujar
+	 * @param  array $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
 	 * @return void
 	 */
 	function app_render_view($vista = NULL, $datos = array(), $arr_menu = array())
@@ -198,7 +198,7 @@ if ( ! function_exists('print_message'))
 				$texto_tipo = 'ALERTA';
 				$img_tipo = 'warning-sign';
 			}
-			else if ($tipo === 'danger' or $tipo === 'error')
+			else if ($tipo === 'danger' OR $tipo === 'error')
 			{
 				$texto_tipo = 'ERROR';
 				$img_tipo = 'exclamation-sign';
@@ -405,6 +405,16 @@ if ( ! function_exists('fmt_hora'))
 // --------------------------------------------------------------------
 if ( ! function_exists('cached_query'))
 {
+	/**
+	 * Ejecuta una función de un modelo (query) o devuelve el resultado
+	 * almacenado en el cache.
+	 *
+	 * @param  string $cache_id ID o identificador unico de la función y sus parámetros
+	 * @param  mixed  $object   Objeto o modelo que contiene la función a ejecutar
+	 * @param  string $method   Nombre de la función o método a ejecutar
+	 * @param  array  $params   Arreglo con los parámetros de la función a ejecutar
+	 * @return mixed            Resultado de la función
+	 */
 	function cached_query($cache_id = '', $object = NULL, $method = '', $params = array())
 	{
 		$ci =& get_instance();
@@ -563,11 +573,6 @@ if ( ! function_exists('genera_captcha_word'))
 		return $diccionario[array_rand($diccionario)];
 	}
 }
-
-// --------------------------------------------------------------------
-
-
-
 
 
 }

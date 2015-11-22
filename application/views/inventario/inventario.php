@@ -41,7 +41,7 @@
 			<label>
 				<?php echo $this->lang->line('inventario_auditor'); ?>
 			</label>
-			<?php echo $detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'); ?>
+			<?php echo $combo_auditores; ?>
 			<?php echo form_error('auditor');?>
 		</div>
 	</div>
@@ -87,7 +87,7 @@
 		<tbody>
 			<?php $sum_sap = 0; $sum_fisico = 0;?>
 			<?php $tab_index = 10; ?>
-			<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
+			<?php foreach ($detalle_inventario as $linea_det): ?>
 				<tr>
 					<td class="text-center" nowrap>
 						<?php echo $linea_det->get_valor_field('ubicacion'); ?>

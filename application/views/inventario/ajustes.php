@@ -45,7 +45,7 @@
 			<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
 			<?php $tab_index = 10; ?>
 			<?php $cat_ant = ''; ?>
-			<?php foreach ($detalle_ajustes->get_model_all() as $detalle): ?>
+			<?php foreach ($detalle_ajustes as $detalle): ?>
 				<?php if ($cat_ant != $detalle->catalogo AND $cat_ant != ''): ?>
 					<tr class="active">
 						<td></td>

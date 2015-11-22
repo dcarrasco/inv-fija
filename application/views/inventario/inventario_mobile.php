@@ -60,7 +60,7 @@
 		<tbody>
 			<?php $sum_sap = 0; $sum_fisico = 0;?>
 			<?php $tab_index = 10; ?>
-			<?php foreach ($detalle_inventario->get_model_all() as $linea_det): ?>
+			<?php foreach ($detalle_inventario as $linea_det): ?>
 				<tr>
 					<td class="text-center" nowrap><?php echo anchor('inventario_digitacion/ingreso_mobile/'.$hoja.'/'.$linea_det->id,$linea_det->get_valor_field('ubicacion')); ?></td>
 					<td class="text-center"><?php echo $linea_det->catalogo; ?></td>

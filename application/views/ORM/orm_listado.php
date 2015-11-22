@@ -35,7 +35,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($modelo->get_model_all() as $o): ?>
+			<?php foreach ($modelos as $o): ?>
 				<tr>
 					<?php foreach ($o as $campo => $valor): ?>
 						<?php if ($o->get_mostrar_lista($campo)): ?>

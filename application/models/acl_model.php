@@ -649,9 +649,9 @@ class Acl_model extends CI_Model {
 	/**
 	 * Genera el hash de una password
 	 *
-	 * @param  string $password  password
-	 * @param  string $salt      salt para mayor seguridad
-	 * @return string            Hash de la password
+	 * @param  string $password password
+	 * @param  string $salt     salt para mayor seguridad
+	 * @return string           Hash de la password
 	 */
 	private function _hash_password($password = '', $salt = '')
 	{
