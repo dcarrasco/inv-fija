@@ -19,17 +19,15 @@ if ( ! function_exists('dbg'))
 	/**
 	 * Debug de varianbles
 	 *
-	 * @param  mixed $item Elemento a revisar
 	 * @return void
 	 */
-	function dbg($item)
+	function dbg()
 	{
-		//echo '<pre style="font-family: courier, font-size: 8px">';
-		//$dump = print_r($item, TRUE);
-		//echo gettype($item) . ' : ' . $dump;
-		//echo '</pre><hr>';
 		ini_set('xdebug.var_display_max_depth', '6');
-		var_dump($item);
+		foreach (func_get_args() as $item)
+		{
+			var_dump($item);
+		}
 	}
 }
 
@@ -41,12 +39,14 @@ if ( ! function_exists('dbg_die'))
 	/**
 	 * Debug de variables y para la ejecución del programa
 	 *
-	 * @param  mixed $item Elemento a revisar
 	 * @return void
 	 */
-	function dd($item)
+	function dd()
 	{
-		dbg($item);
+		foreach (func_get_args() as $item)
+		{
+			var_dump($item);
+		}
 		die();
 	}
 }
