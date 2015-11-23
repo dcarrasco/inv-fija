@@ -14,6 +14,7 @@ $config['bd_inventarios']        = 'fija_inventarios';
 $config['bd_tipos_inventario']   = 'fija_tipos_inventario';
 $config['bd_detalle_inventario'] = 'fija_detalle_inventario';
 $config['bd_catalogos']          = 'fija_catalogos';
+$config['bd_catalogos_fotos']    = 'fija_catalogos_fotos';
 $config['bd_centros']            = 'fija_centros';
 $config['bd_unidades']           = 'fija_unidades';
 $config['bd_auditores']          = 'fija_auditores';

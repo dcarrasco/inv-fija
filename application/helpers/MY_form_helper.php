@@ -362,3 +362,33 @@ if ( ! function_exists('form_color'))
 }
 
 // ------------------------------------------------------------------------
+
+/**
+ * HTML5 Picture Field
+ *
+ * Identical to the input function but adds the "search" type
+ * Falls back to a standard input field of type "text"
+ *
+ * @access	public
+ * @param	mixed
+ * @param	string
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('form_picture'))
+{
+	function form_picture($data = '', $value = '', $extra = '')
+	{
+		if ( ! is_array($data))
+		{
+			$data = array('name' => $data);
+		}
+
+		$data['type'] = 'file';
+		$data['accept'] = 'image/*;';
+		$data['capture'] = 'camera';
+		return form_input($data, $value, $extra);
+	}
+}
+
+// ------------------------------------------------------------------------

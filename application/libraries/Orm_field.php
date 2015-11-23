@@ -394,6 +394,11 @@ class Orm_field {
 			return form_password($arr_param);
 		}
 
+		if ($this->_tipo === 'picture')
+		{
+			return form_picture($arr_param);
+		}
+
 		if ($this->_tipo === 'real')
 		{
 			$arr_param['size'] = $this->_largo + $this->_decimales + 1;
