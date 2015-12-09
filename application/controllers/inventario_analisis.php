@@ -324,7 +324,7 @@ class Inventario_analisis extends CI_Controller {
 			$detalle = new Detalle_inventario;
 
 			$data = array(
-				'datos_hoja'        => $detalle->find('all', array('conditions' => array('id_inventario' => $this->_id_inventario, 'hoja' => $hoja))),
+				'datos_hoja'        => $detalle->get_hoja($this->_id_inventario, $hoja),
 				'oculta_stock_sap'  => $oculta_stock_sap,
 				'hoja'              => $hoja,
 				'nombre_inventario' => $this->_nombre_inventario,

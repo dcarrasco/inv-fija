@@ -752,6 +752,11 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
+		if (array_key_exists('order_by', $param))
+		{
+			$this->db->order_by($param['order_by']);
+		}
+
 		if ($tipo === 'first')
 		{
 			$registro = $this->db->get($this->_model_tabla)->row_array();
@@ -768,7 +773,7 @@ class Orm_model implements IteratorAggregate {
 		{
 			$results_collection = new Collection();
 
-			if ($this->_model_order_by !== '')
+			if ($this->_model_order_by !== '' AND ! array_key_exists('order_by', $param))
 			{
 				$this->db->order_by($this->_model_order_by);
 			}
@@ -803,7 +808,7 @@ class Orm_model implements IteratorAggregate {
 		{
 			$arr_list = array();
 
-			if ($this->_model_order_by !== '')
+			if ($this->_model_order_by !== '' AND ! array_key_exists('order_by', $param))
 			{
 				$this->db->order_by($this->_model_order_by);
 			}

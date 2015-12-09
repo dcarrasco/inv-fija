@@ -223,7 +223,10 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		return $this->find('all', array('conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja)));
+		return $this->find('all', array(
+			'conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja),
+			'order_by'   => 'ubicacion, catalogo, id'
+		));
 	}
 
 	// --------------------------------------------------------------------
