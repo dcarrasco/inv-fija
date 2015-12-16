@@ -10,12 +10,7 @@ class Migration_agrega_HU extends CI_Migration {
 		// ***************************************************************************
 		echo "Agregando columna a tabla 'fija_detalle_inventario'... ";
 		$fields = array(
-			'HU' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '20',
-					'null'       => FALSE,
-					'default'    => '',
-				),
+			'HU' => array('type' => 'VARCHAR', 'constraint' => '20', 'null' => FALSE, 'default' => ''),
 		);
 		$this->dbforge->add_column('fija_detalle_inventario', $fields);
 		echo "OK<br/>";

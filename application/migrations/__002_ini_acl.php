@@ -9,47 +9,20 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA ACL_APP
 		// ***************************************************************************
 		echo "Creando tabla 'acl_app'... ";
-		$fields = array(
-			'id' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'auto_increment' => TRUE,
-				),
-			'app' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'descripcion' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'orden' => array(
-					'type'       => 'INT',
-					//'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => 0,
-				),
-			'url' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '100',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'icono' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
+		$this->dbforge->add_field(
+			array(
+				'id'          => array('type' => 'BIGINT', 'null' => FALSE, 'auto_increment' => TRUE),
+				'app'         => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default' => ''),
+				'descripcion' => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default' => ''),
+				'orden'       => array('type' => 'INT', 'null' => FALSE, 'default' => 0),
+				'url'         => array('type' => 'VARCHAR', 'constraint' => '100', 'null' => FALSE, 'default' => ''),
+				'icono'       => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default' => ''),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('acl_app');
+
 		echo "OK<br/>";
 
 
@@ -57,59 +30,22 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA ACL_MODULO
 		// ***************************************************************************
 		echo "Creando tabla 'acl_modulo'... ";
-		$fields = array(
-			'id' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'auto_increment' => TRUE,
-				),
-			'id_app' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
-			'modulo' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'descripcion' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '100',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'orden' => array(
-					'type'       => 'INT',
-					//'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => 0,
-				),
-			'url' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '100',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'icono' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'llave_modulo' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '20',
-					'null'       => FALSE,
-					'default'    => '',
-				),
+		$this->dbforge->add_field(
+			array(
+				'id'           => array('type' => 'BIGINT', 'null' => FALSE, 'auto_increment' => TRUE),
+				'id_app'       => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0),
+				'modulo'       => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default'  => ''),
+				'descripcion'  => array('type' => 'VARCHAR', 'constraint' => '100', 'null' => FALSE, 'default'  => ''),
+				'orden'        => array('type' => 'INT', 'null' => FALSE, 'default'  => 0),
+				'url'          => array('type' => 'VARCHAR', 'constraint' => '100', 'null' => FALSE, 'default'  => ''),
+				'icono'        => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default'  => ''),
+				'llave_modulo' => array('type' => 'VARCHAR', 'constraint' => '20', 'null' => FALSE, 'default'  => ''),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('acl_modulo');
+
 		echo "OK<br/>";
 
 
@@ -117,33 +53,16 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA ACL_ROL
 		// ***************************************************************************
 		echo "Creando tabla 'acl_rol'... ";
-		$fields = array(
-			'id' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'auto_increment' => TRUE,
-				),
-			'id_app' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
-			'rol' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'descripcion' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '100',
-					'null'       => FALSE,
-					'default'    => '',
-				),
+
+		$this->dbforge->add_field(
+			array(
+				'id'          => array('type' => 'BIGINT', 'null' => FALSE, 'auto_increment' => TRUE),
+				'id_app'      => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0),
+				'rol'         => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default' => ''),
+				'descripcion' => array('type' => 'VARCHAR', 'constraint' => '100', 'null' => FALSE, 'default' => ''),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('acl_rol');
 		echo "OK<br/>";
@@ -153,21 +72,14 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA ACL_ROL_MODULO
 		// ***************************************************************************
 		echo "Creando tabla 'acl_rol_modulo'... ";
-		$fields = array(
-			'id_rol' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
-			'id_modulo' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
+
+		$this->dbforge->add_field(
+			array(
+				'id_rol'    => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0,),
+				'id_modulo' => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0,),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id_rol', TRUE);
 		$this->dbforge->add_key('id_modulo', TRUE);
 		$this->dbforge->create_table('acl_rol_modulo');
@@ -178,21 +90,14 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA ACL_USUARIO_ROL
 		// ***************************************************************************
 		echo "Creando tabla 'acl_usuario_rol'... ";
-		$fields = array(
-			'id_usuario' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
-			'id_rol' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'default'        => 0,
-				),
+
+		$this->dbforge->add_field(
+			array(
+				'id_usuario' => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0),
+				'id_rol'     => array('type' => 'BIGINT', 'null' => FALSE, 'default' => 0,),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id_usuario', TRUE);
 		$this->dbforge->add_key('id_rol', TRUE);
 		$this->dbforge->create_table('acl_usuario_rol');
@@ -203,51 +108,19 @@ class Migration_ini_acl extends CI_Migration {
 		// TABLA FIJA_USUARIOS
 		// ***************************************************************************
 		echo "Creando tabla 'fija_usuarios'... ";
-		$fields = array(
-			'id' => array(
-					'type'           => 'BIGINT',
-					//'constraint'     => '10',
-					'null'           => FALSE,
-					'auto_increment' => TRUE,
-				),
-			'nombre' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '50',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'tipo' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '10',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'activo' => array(
-					'type'       => 'TINYINT',
-					//'constraint' => '1',
-					'null'       => FALSE,
-					'default'    => 0,
-				),
-			'usr' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '30',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'pwd' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '40',
-					'null'       => FALSE,
-					'default'    => '',
-				),
-			'correo' => array(
-					'type'       => 'VARCHAR',
-					'constraint' => '40',
-					'null'       => FALSE,
-					'default'    => '',
-				),
+
+		$this->dbforge->add_field(
+			array(
+				'id'     => array('type' => 'BIGINT', 'null' => FALSE, 'auto_increment' => TRUE),
+				'nombre' => array('type' => 'VARCHAR', 'constraint' => '50', 'null' => FALSE, 'default' => ''),
+				'tipo'   => array('type' => 'VARCHAR', 'constraint' => '10', 'null' => FALSE, 'default' => ''),
+				'activo' => array('type' => 'TINYINT', 'null' => FALSE, 'default' => 0),
+				'usr'    => array('type' => 'VARCHAR', 'constraint' => '30', 'null' => FALSE, 'default' => ''),
+				'pwd'    => array('type' => 'VARCHAR', 'constraint' => '40', 'null' => FALSE, 'default' => ''),
+				'correo' => array('type' => 'VARCHAR', 'constraint' => '40', 'null' => FALSE, 'default' => ''),
+			)
 		);
-		$this->dbforge->add_field($fields);
+
 		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('fija_usuarios');
 		echo "OK<br/>";
