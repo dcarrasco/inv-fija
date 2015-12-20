@@ -1,11 +1,11 @@
 <IfModule mod_rewrite.c>
   Options +FollowSymLinks
   RewriteEngine On
-  RewriteBase /inv-fija/
+  RewriteBase /
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteCond $1 !^(index\.php|captcha|images|robots\.txt|css|javascripts|audio)
-  RewriteRule ^(.*)$ /inv-fija/index.php?/$1 [L]
+  RewriteRule ^(.*)$ /index.php?/$1 [L]
 </IfModule>
 
 

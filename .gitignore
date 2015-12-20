@@ -1,6 +1,5 @@
 .DS_Store
 upload/
 cache/
-index.php
 application/logs/
 img/captcha
