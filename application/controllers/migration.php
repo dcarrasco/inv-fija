@@ -34,6 +34,9 @@ class Migration extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->load->library('migration');
+		$this->output->enable_profiler(FALSE);
 	}
 
 	// --------------------------------------------------------------------
@@ -43,11 +46,39 @@ class Migration extends CI_Controller {
 	 *
 	 * @return  void
 	 */
-	public function migrate()
+	public function index()
 	{
-		$this->load->library('migration');
+		$this->_print_help();
+		//$this->find();
+	}
 
-		if ( ! $this->migration->current())
+	// --------------------------------------------------------------------
+
+	private function _print_help()
+	{
+		$tab = '    ';
+		echo PHP_EOL;
+		echo 'Modo de uso'.PHP_EOL;
+		echo $tab.'php index.php migration _comando_ [param1]'.PHP_EOL;
+		echo PHP_EOL;
+		echo $tab.'Comandos'.PHP_EOL;
+		echo $tab.'find          '.$tab.'Despliega listado de migraciones disponibles'.PHP_EOL;
+		echo $tab.'latest        '.$tab.'Actualiza a la última versión disponibles'.PHP_EOL;
+		echo $tab.'migrate_config'.$tab.'Actualiza a la version definida en config/migration.php -> migration_version'.PHP_EOL;
+		echo $tab.'version [ver] '.$tab.'Actualiza a la version especificada en [ver]'.PHP_EOL;
+		echo PHP_EOL;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Migra la BD a la ultima version
+	 *
+	 * @return  void
+	 */
+	public function migrate_config()
+	{
+		if ( config_item('migration_version')!==0 AND ! $this->migration->current())
 		{
 			show_error($this->migration->error_string());
 		}
@@ -63,8 +94,6 @@ class Migration extends CI_Controller {
 	 */
 	public function version($version = -1)
 	{
-		$this->load->library('migration');
-
 		if ($version > -1)
 		{
 			$this->migration->version($version);
@@ -74,33 +103,25 @@ class Migration extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Ejecuta varia acciones de migracion
+	 * Lista migraciones
 	 *
-	 * @param  string $command Comando a ejecutar
-	 * @param  mixed  $param1  Parametro para el comando
 	 * @return void
 	 */
-	public function commands($command = '', $param1 = NULL)
+	public function find()
 	{
-		$this->load->library('migration');
+		dbg($this->migration->find_migrations());
+	}
 
-		if ($command === 'find')
-		{
-			dbg($this->migration->find_migrations());
-		}
-		else if ($command === 'current')
-		{
-			dbg($this->migration->current());
-		}
-		else if ($command === 'latest')
-		{
-			dbg($this->migration->latest());
-		}
-		else if ($command === 'version')
-		{
-			dbg($this->migration->version($param1));
-		}
+	// --------------------------------------------------------------------
 
+	/**
+	 * Ejecuta migracions hasta la última
+	 *
+	 * @return void
+	 */
+	public function latest()
+	{
+		dbg($this->migration->latest());
 		dbg($this->migration->error_string());
 	}
 
