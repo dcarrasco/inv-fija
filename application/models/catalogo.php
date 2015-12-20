@@ -80,6 +80,12 @@ class Catalogo extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'default'        => 0
 				),
+				'foto' => array(
+					'label'          => 'Foto del material',
+					'tipo'           => 'picture',
+					'texto_ayuda'    => 'Foto o imagen del material.',
+					'es_obligatorio' => FALSE,
+				),
 			),
 		);
 

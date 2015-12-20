@@ -52,7 +52,6 @@ class Inventario_config extends ORM_Controller {
 			'auditor'         => array('url' => $this->router->class . '/listado/auditor/', 'texto' => 'Auditores'),
 			'familia'         => array('url' => $this->router->class . '/listado/familia', 'texto' => 'Familias'),
 			'catalogo'        => array('url' => $this->router->class . '/listado/catalogo', 'texto' => 'Materiales'),
-			'catalogo_foto'   => array('url' => $this->router->class . '/listado/catalogo_foto', 'texto' => 'Fotos Materiales'),
 			'tipo_inventario' => array('url' => $this->router->class . '/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
 			'inventario'      => array('url' => $this->router->class . '/listado/inventario', 'texto' => 'Inventarios'),
 			'tipo_ubicacion'  => array('url' => $this->router->class . '/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
