@@ -1,5 +1,5 @@
 .DS_Store
 upload/
-cache/
+application/cache/
 application/logs/
-img/captcha
+public/img/captcha
