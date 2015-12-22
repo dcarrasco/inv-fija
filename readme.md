@@ -41,3 +41,37 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 * JQuery 2.1.4
 * Bootstrap 3.3.5
 * JqPlot 1.0.8
+
+## Auditoría
+
+* __vuln-001-0110/2015__ Cierre puertos
+* __vuln-002-0110/2015__ Credenciales en texto claro
+	* https
+* __vuln-003-0110/2015__ Acceso a listado de directorios
+	* Apache: httpd.conf
+		* Directory App
+			* Option -Indexes
+* __vuln-004-0110/2015__ Mensajes de error db
+	* En config\database.php
+		* db_debug => false
+* __vuln-005-0110/2015__ Información técnica
+	* Apache: httpd.conf
+		* Directory/
+			* Order Deny,Allow
+			* Deny from all
+			* Options None
+			* Allow Override None
+		* Directory App
+			* Order Allow,Deny
+			* Allow from all
+* __vuln-008-0110/2015__ Clickjacking
+	* En .htaccess
+		*<IfModule mod_headers.c>
+			* Header always append X-Frame-Options SAMEORIGIN
+		* </ifModule>
+* __vuln-009-0110/2015__ Cookies sesion
+	* cookies http-only
+* __vuln-010-0110/2015__ Cookies sesion
+	* Apache: httpd.conf
+		* Agregar
+			* TraceEnable off
