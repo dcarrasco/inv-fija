@@ -105,12 +105,12 @@ $db['default'] = array(
 );
 
 $db['dcr'] = array(
-	'dsn'	=> '',
-	'hostname' => 'tcp:127.0.0.1,1500',
+	'dsn'	=> 'sqlsrv:Server=127.0.0.1,1500;Database=BD_inventario',
+	'hostname' => 'localhost',
 	'username' => 'invfija',
 	'password' => 'fijainv2014!',
 	'database' => 'BD_inventario',
-	'dbdriver' => 'sqlsrv',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
