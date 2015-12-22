@@ -66,9 +66,9 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 			* Allow from all
 * __vuln-008-0110/2015__ Clickjacking
 	* En .htaccess
-		*<IfModule mod_headers.c>
+		* \<IfModule mod_headers.c>
 			* Header always append X-Frame-Options SAMEORIGIN
-		* </ifModule>
+		* \</ifModule>
 * __vuln-009-0110/2015__ Cookies sesion
 	* cookies http-only
 * __vuln-010-0110/2015__ Cookies sesion
