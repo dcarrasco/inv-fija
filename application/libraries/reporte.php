@@ -165,7 +165,7 @@ class Reporte {
 		// --- TOTALES ---
 		$ci->table->add_row($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
 
-		return $ci->table->generate() . $script;
+		return $ci->table->generate().' '.$script;
 	}
 
 
@@ -352,19 +352,21 @@ class Reporte {
 	 */
 	private function _reporte_linea_subtotal($arr_linea = array(), $arr_campos = array(), &$arr_totales = array(), &$subtotal_ant = NULL)
 	{
+		$ci =& get_instance();
+
 		$campo_subtotal = $this->_get_campo_subtotal($arr_campos);
 
 		// si el subtotal anterior no es nulo, se deben imprimir linea de subtotales
 		if ($subtotal_ant !== '***init***')
 		{
-			$this->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
+			$ci->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
 
 			// agrega linea en blanco
-			$this->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
+			$ci->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
 		}
 
 		// agrega linea con titulo del subtotal
-		$this->table->add_row(array(
+		$ci->table->add_row(array(
 			'data' => '<span class="glyphicon glyphicon-minus-sign"></span> <strong>'.$arr_linea[$campo_subtotal].'</strong>',
 			'colspan' => count($arr_campos) + 1,
 		));
