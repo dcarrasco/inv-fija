@@ -504,15 +504,17 @@ class Orm_model implements IteratorAggregate {
 		if ($campo !== '')
 		{
 			$data = array(
+				'form_label'    => form_label(
+										ucfirst($this->get_label_field($campo)) . ($this->get_es_obligatorio_field($campo) ? ' <span class="text-danger">*</span>' : ''),
+										'id_'.$campo,
+										array('class' => 'control-label col-sm-4')
+									),
 				'item_error'    => form_has_error($campo) ? 'has-error' : $item_error,
-				'item_label'    => ucfirst($this->get_label_field($campo)),
-				'item_required' => $this->get_es_obligatorio_field($campo),
-				'item_id'       => 'id_'.$campo,
 				'item_form'     => $this->print_form_field($campo),
 				'item_help'     => $this->get_texto_ayuda_field($campo),
 			);
 
-			return ($this->load->view('orm/form_item', $data, TRUE));
+			return $this->parser->parse('orm/form_item', $data, TRUE);
 		}
 	}
 

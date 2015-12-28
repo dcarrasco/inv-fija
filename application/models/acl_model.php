@@ -204,11 +204,12 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_user_firstname()
 	{
-		$nombre = $this->db
+		$row = $this->db
 			->where('usr', $this->get_user())
 			->get($this->config->item('bd_usuarios'))
-			->row()
-			->nombre;
+			->row();
+
+		$nombre = $row ? $row->nombre : '';
 
 		return strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 	}

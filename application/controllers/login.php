@@ -117,11 +117,10 @@ class Login extends CI_Controller {
 			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
 			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
-			'arr_vistas'   => array('ACL/login'),
 			'vista_login'  => TRUE,
 		);
 
-		$this->load->view('common/app_layout', $data);
+		app_render_view('ACL/login', $data);
 	}
 
 
@@ -186,7 +185,7 @@ class Login extends CI_Controller {
 			'vista_login'  => TRUE,
 		);
 
-		$this->load->view('common/app_layout', $data);
+		app_render_view('ACL/cambio_password', $data);
 	}
 
 

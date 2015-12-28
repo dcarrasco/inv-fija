@@ -8,6 +8,16 @@
 | Listado con las tablas del sistema
 |
 */
+$config['app_nombre'] = 'Inventario Fija';
+
+/*
+|--------------------------------------------------------------------------
+| Tablas del sistema
+|--------------------------------------------------------------------------
+|
+| Listado con las tablas del sistema
+|
+*/
 // Inventarios
 $config['bd_usuarios']           = 'fija_usuarios';
 $config['bd_inventarios']        = 'fija_inventarios';

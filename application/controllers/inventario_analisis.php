@@ -144,6 +144,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
+				'menu_modulo'           => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 				'inventario'            => $this->_id_inventario.' - '.$this->_nombre_inventario,
 				'detalle_ajustes'       => $detalles,
 				'ocultar_regularizadas' => $ocultar_regularizadas,
@@ -151,7 +152,7 @@ class Inventario_analisis extends CI_Controller {
 				'links_paginas'         => $links_paginas,
 			);
 
-			app_render_view('inventario/ajustes', $data, $this->_arr_menu);
+			app_render_view('inventario/ajustes', $data);
 		}
 		else
 		{
@@ -223,6 +224,7 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
+			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
 			'upload_error'      => $upload_error,
@@ -236,7 +238,7 @@ class Inventario_analisis extends CI_Controller {
 			'link_inventario'   => 'inventario',
 		);
 
-		app_render_view('inventario/sube_stock', $data, $this->_arr_menu);
+		app_render_view('inventario/sube_stock', $data);
 
 	}
 
@@ -275,6 +277,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
+				'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 				'inventario_id'     => $this->_id_inventario,
 				'inventario_nombre' => $this->_nombre_inventario,
 				'max_hoja'          => $inventario->get_max_hoja_inventario(),
@@ -283,7 +286,7 @@ class Inventario_analisis extends CI_Controller {
 				'link_inventario'   => 'inventario',
 			);
 
-			app_render_view('inventario/imprime_inventario', $data, $this->_arr_menu);
+			app_render_view('inventario/imprime_inventario', $data);
 		}
 		else
 		{
@@ -356,12 +359,13 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
+			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 			'msg_alerta'       => '',
 			'update_status'    => $update_status,
 			'cant_actualizada' => $cant_actualizada,
 		);
 
-		app_render_view('inventario/actualiza_precios', $data, $this->_arr_menu);
+		app_render_view('inventario/actualiza_precios', $data);
 
 	}
 

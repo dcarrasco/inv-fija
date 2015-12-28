@@ -49,6 +49,11 @@ class Collection implements IteratorAggregate {
 		}
 	}
 
+	public function __toString()
+	{
+		return '';
+	}
+
 	// --------------------------------------------------------------------
 
 	/**

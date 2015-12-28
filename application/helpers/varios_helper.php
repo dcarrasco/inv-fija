@@ -24,6 +24,7 @@ if ( ! function_exists('dbg'))
 	function dbg()
 	{
 		ini_set('xdebug.var_display_max_depth', '6');
+		ini_set('xdebug.var_display_max_data', '1024');
 		foreach (func_get_args() as $item)
 		{
 			var_dump($item);
@@ -72,40 +73,44 @@ if ( ! function_exists('menu_app'))
 		$app_ant = '';
 		$app_sel = '';
 
-		foreach($arr_modulos as $modulo)
+		if (count($arr_modulos) > 0)
 		{
-			if ($modulo['app'] !== $app_ant AND $app_ant !== '')
+			foreach($arr_modulos as $modulo)
 			{
-				array_push($arr_apps, array(
-					'selected' => $app_sel,
-					'icono'    => $modulo_ant['app_icono'],
-					'app'      => $modulo_ant['app'],
-					'modulos'  => $arr_mods
+				if ($modulo['app'] !== $app_ant AND $app_ant !== '')
+				{
+					array_push($arr_apps, array(
+						'selected' => $app_sel,
+						'icono'    => $modulo_ant['app_icono'],
+						'app'      => $modulo_ant['app'],
+						'modulos'  => $arr_mods
+					));
+					$arr_mods = array();
+					$app_sel = '';
+				}
+
+				if ($ci->uri->segment(1) === $modulo['url'])
+				{
+					$app_sel = 'active';
+				}
+
+				array_push($arr_mods, array(
+					'modulo_url'      => site_url($modulo['url']),
+					'modulo_icono'    => $modulo['modulo_icono'],
+					'modulo_nombre'   => $modulo['modulo'],
+					'modulo_selected' => ($modulo['url'] === $ci->uri->segment(1)) ? 'active' : '',
 				));
-				$arr_mods = array();
-				$app_sel = '';
-			}
 
-			if ($ci->uri->segment(1) === $modulo['url'])
-			{
-				$app_sel = 'active';
+				$app_ant = $modulo['app'];
+				$modulo_ant = $modulo;
 			}
-
-			array_push($arr_mods, array(
-				'url'    => $modulo['url'],
-				'icono'  => $modulo['modulo_icono'],
-				'modulo' => $modulo['modulo']
+			array_push($arr_apps, array(
+				'selected' => $app_sel,
+				'icono'    => $modulo_ant['app_icono'],
+				'app'      => $modulo_ant['app'],
+				'modulos'  => $arr_mods
 			));
-
-			$app_ant = $modulo['app'];
-			$modulo_ant = $modulo;
 		}
-		array_push($arr_apps, array(
-			'selected' => $app_sel,
-			'icono'    => $modulo_ant['app_icono'],
-			'app'      => $modulo_ant['app'],
-			'modulos'  => $arr_mods
-		));
 
 		return $arr_apps;
 	}
@@ -139,6 +144,40 @@ if ( ! function_exists('titulo_modulo'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('menu_modulo'))
+{
+	/**
+	 * Reestructura arreglo menu modulo para ser usado en parser
+	 *
+	 * @param  array  $menu         Menu del módulo
+	 * @param  string $mod_selected Módulo seleccionado
+	 * @return array                Arreglo reestructurado
+	 */
+	function menu_modulo($menu = array(), $mod_selected = '')
+	{
+		$arr_menu_modulo = array();
+
+		$mod_selected = array_key_exists('mod_selected', $menu) ? $menu['mod_selected'] : $mod_selected;
+
+		if (array_key_exists('menu', $menu))
+		{
+			foreach ($menu['menu'] as $modulo => $val)
+			{
+				array_push($arr_menu_modulo, array(
+					'menu_key'      => $modulo,
+					'menu_url'      => site_url($val['url']),
+					'menu_nombre'   => $val['texto'],
+					'menu_selected' => ($modulo === $mod_selected) ? 'active' : '',
+				));
+			}
+
+		}
+
+		return $arr_menu_modulo;
+	}
+}
+// --------------------------------------------------------------------
+
 if ( ! function_exists('app_render_view'))
 {
 	/**
@@ -149,8 +188,9 @@ if ( ! function_exists('app_render_view'))
 	 * @param  array $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
 	 * @return void
 	 */
-	function app_render_view($vista = NULL, $datos = array(), $arr_menu = array())
+	function app_render_view($vista = NULL, $datos = array())
 	{
+
 		if ( ! $vista)
 		{
 			return;
@@ -159,16 +199,37 @@ if ( ! function_exists('app_render_view'))
 		// carga objeto global CI
 		$ci =& get_instance();
 
-		if (count($arr_menu) > 0)
+		if (array_key_exists('menu_modulo', $datos))
 		{
-			$datos['menu_modulo'] = array('menu' => $arr_menu, 'mod_selected' => basename($vista));
+			$datos['menu_modulo'] = menu_modulo($datos['menu_modulo'], is_string($vista) ? basename($vista) : '');
 		}
 
-		$datos['msg_alerta'] = $ci->session->flashdata('msg_alerta');
-		$datos['arr_vistas'] = is_array($vista) ? $vista : array($vista);
-		$datos['vista_login'] = FALSE;
+		$vista_login = isset($datos['vista_login']) ? $datos['vista_login']: FALSE;
 
-		$ci->load->view('common/app_layout', $datos);
+		//
+		$datos['msg_alerta']   = $ci->session->flashdata('msg_alerta');
+		$datos['vista_login']  = $vista_login;
+		$datos['app_nombre']   = $ci->config->item('app_nombre') . (ENVIRONMENT !== 'production' ? '- DEV' : '');
+		$datos['base_url']     = base_url();
+		$datos['js_base_url']  = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
+		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
+
+		$datos['titulo_modulo']   = titulo_modulo();
+		$datos['navbar_menu']     = $vista_login ? array() : menu_app();
+		$datos['logout_url']      = site_url('login/logout');
+		$datos['user_firstname']  = $ci->acl_model->get_user_firstname();
+
+		$datos['app_navbar']      = $ci->parser->parse('common/app_navbar', $datos, TRUE);
+		$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : '';
+
+		$datos['arr_vistas'] = array();
+		$vista = is_array($vista) ? $vista : array($vista);
+		foreach ($vista as $v)
+		{
+			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($v, $datos, TRUE)));
+		}
+
+		$ci->parser->parse('common/app_layout', $datos);
 	}
 }
 
@@ -216,7 +277,7 @@ if ( ! function_exists('print_message'))
 				'mensaje'    => $mensaje,
 			);
 
-			return $ci->load->view('common/alert', $arr_datos_view, TRUE);
+			return $ci->parser->parse('common/alert', $arr_datos_view, TRUE);
 		}
 	}
 }

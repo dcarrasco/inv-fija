@@ -2,8 +2,7 @@
 	<div class="container">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">
-				<!-- <img src="<?php echo base_url(); ?>img/TEL-logo_neg1.jpg" height="35"> -->
-				<?php echo titulo_modulo(); ?>
+				{titulo_modulo}
 			</a>
 
 			<button class="navbar-toggle" data-toggle="collapse" data-target=".navMenuCollapse">
@@ -16,35 +15,31 @@
 
 		<div class="collapse navbar-collapse navMenuCollapse">
 			<ul class="nav navbar-nav navbar-right">
-				<?php foreach(menu_app() as $app_item): ?>
-				<li class="dropdown <?php echo $app_item['selected']; ?>">
+				{navbar_menu}
+				<li class="dropdown {selected}">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="<?php echo $app_item['icono']; ?>"></span>
-						<?php echo $app_item['app']; ?>
-						<b class="caret"></b>
+						<span class="{icono}"></span> {app} <b class="caret"></b>
 					</a>
 
 					<ul class="dropdown-menu">
-						<?php foreach($app_item['modulos'] as $modulo_item): ?>
-							<li <?php echo ($modulo_item['url'] == $this->uri->segment(1)) ? 'class="active"' : ''; ?>>
-								<a href="<?php echo site_url($modulo_item['url']); ?>">
-									<span class="<?php echo $modulo_item['icono']; ?>"></span>
-									<?php echo $modulo_item['modulo']; ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
+						{modulos}
+						<li class="{modulo_selected}">
+							<a href="{modulo_url}">
+								<span class="{modulo_icono}"></span> {modulo_nombre}
+							</a>
+						</li>
+						{/modulos}
 					</ul>
 				</li>
-				<?php endforeach; ?>
+				{/navbar_menu}
 
 				<li>
-					<a href="<?php echo site_url('login/logout'); ?>">
-						<span class="glyphicon glyphicon-off"></span>
-						Logout <?php echo $this->acl_model->get_user_firstname(); ?>
+					<a href="{logout_url}">
+						<span class="glyphicon glyphicon-off"></span> Logout {user_firstname}
 					</a>
 				</li>
 
 			</ul>
 		</div>
 	</div>
-</nav>
+</nav> <!-- NAVBAR-->
