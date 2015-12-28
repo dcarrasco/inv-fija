@@ -5,7 +5,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Inventario Fija</title>
+	<title>
+		Inventario Fija
+		<?php echo (ENVIRONMENT !== 'production') ? '- DEV' : ''; ?>
+	</title>
+
 	<link rel="icon" href="<?php echo base_url(); ?>img/favicon.png" type="image/png" />
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="<?php echo base_url(); ?>img/favicon-152.png">
 
