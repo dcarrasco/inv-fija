@@ -49,26 +49,29 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 	* https
 * __vuln-003-0110/2015__ Acceso a listado de directorios
 	* Apache: httpd.conf
-		* Directory App
+		* `<Directory "app_path">`
 			* `Option -Indexes`
+		* `</Directory>`
 * __vuln-004-0110/2015__ Mensajes de error db
 	* En config\database.php
 		* `db_debug => false`
 * __vuln-005-0110/2015__ Información técnica
 	* Apache: httpd.conf
-		* `Directory/`
+		* `<Directory />`
 			* `Order Deny,Allow`
 			* `Deny from all`
 			* `Options None`
 			* `Allow Override None`
-		* `Directory App`
+		* `</Directory>`
+		* `<Directory "app_path">`
 			* `Order Allow,Deny`
 			* `Allow from all`
+		* `</Directory>`
 * __vuln-008-0110/2015__ Clickjacking
 	* En .htaccess
-		* `\<IfModule mod_headers.c>`
+		* `<IfModule mod_headers.c>`
 			* `Header always append X-Frame-Options SAMEORIGIN`
-		* `\</ifModule>`
+		* `</ifModule>`
 * __vuln-009-0110/2015__ Cookies sesion
 	* cookies http-only
 * __vuln-010-0110/2015__ Cookies sesion
