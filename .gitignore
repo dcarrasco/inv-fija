@@ -3,3 +3,4 @@ upload/
 application/cache/
 application/logs/
 public/img/captcha
+vendor

@@ -1,3 +1,6 @@
+{% extends 'common/app_layout.php' %}
+
+{% block content %}
 <div class="row hidden-print">
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="col-md-3">
@@ -69,3 +72,4 @@ $(document).ready(function() {
 	}
 });
 </script>
+{% endblock %}

@@ -219,17 +219,23 @@ if ( ! function_exists('app_render_view'))
 		$datos['logout_url']      = site_url('login/logout');
 		$datos['user_firstname']  = $ci->acl_model->get_user_firstname();
 
-		$datos['app_navbar']      = $ci->parser->parse('common/app_navbar', $datos, TRUE);
-		$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : '';
+		// $datos['app_navbar']      = $ci->parser->parse('common/app_navbar', $datos, TRUE);
+		//$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : '';
 
-		$datos['arr_vistas'] = array();
-		$vista = is_array($vista) ? $vista : array($vista);
-		foreach ($vista as $v)
-		{
-			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($v, $datos, TRUE)));
-		}
+		$datos['show_navbar'] = ! $vista_login;
+		$datos['show_menu_modulo'] = ! $vista_login AND  isset($datos['app_menu_modulo']);
 
-		$ci->parser->parse('common/app_layout', $datos);
+		//$ci->parser->parse('common/app_layout', $datos);
+
+		$loader = new Twig_Loader_Filesystem('../application/views');
+		$twig = new Twig_Environment($loader, array(
+			'autoescape' => false,
+		));
+
+//dbg($datos);
+
+		$ci->output->set_output($twig->render($vista.'.php', $datos));
+
 	}
 }
 

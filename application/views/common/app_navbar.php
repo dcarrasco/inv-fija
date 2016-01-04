@@ -2,7 +2,7 @@
 	<div class="container">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">
-				{titulo_modulo}
+				{{ titulo_modulo }}
 			</a>
 
 			<button class="navbar-toggle" data-toggle="collapse" data-target=".navMenuCollapse">
@@ -15,27 +15,27 @@
 
 		<div class="collapse navbar-collapse navMenuCollapse">
 			<ul class="nav navbar-nav navbar-right">
-				{navbar_menu}
-				<li class="dropdown {selected}">
+				{% for menu in navbar_menu %}
+				<li class="dropdown {{menu.selected}}">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="{icono}"></span> {app} <b class="caret"></b>
+						<span class="{{menu.icono}}"></span> {{menu.app}} <b class="caret"></b>
 					</a>
 
 					<ul class="dropdown-menu">
-						{modulos}
-						<li class="{modulo_selected}">
-							<a href="{modulo_url}">
-								<span class="{modulo_icono}"></span> {modulo_nombre}
+						{% for modulo in menu.modulos %}
+						<li class="{{modulo.modulo_selected}}">
+							<a href="{{modulo.modulo_url}}">
+								<span class="{{modulo.modulo_icono}}"></span> {{modulo.modulo_nombre}}
 							</a>
 						</li>
-						{/modulos}
+						{% endfor %}
 					</ul>
 				</li>
-				{/navbar_menu}
+				{% endfor %}
 
 				<li>
-					<a href="{logout_url}">
-						<span class="glyphicon glyphicon-off"></span> Logout {user_firstname}
+					<a href="{{logout_url}}">
+						<span class="glyphicon glyphicon-off"></span> Logout {{user_firstname}}
 					</a>
 				</li>
 
