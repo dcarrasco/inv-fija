@@ -1,7 +1,3 @@
-<div class="msg-alerta cf ac">
-	<?php echo ($msg_alerta == '') ? '' : '<p class="msg-alerta round">' . $msg_alerta . '</p>' ?>
-</div>
-
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>

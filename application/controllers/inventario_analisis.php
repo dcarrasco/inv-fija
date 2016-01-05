@@ -360,7 +360,6 @@ class Inventario_analisis extends CI_Controller {
 
 		$data = array(
 			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
-			'msg_alerta'       => '',
 			'update_status'    => $update_status,
 			'cant_actualizada' => $cant_actualizada,
 		);

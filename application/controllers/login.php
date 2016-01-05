@@ -63,8 +63,6 @@ class Login extends CI_Controller {
 	 */
 	public function login()
 	{
-		$msg_alerta = $this->session->flashdata('msg_alerta');
-
 		$this->acl_model->delete_old_captchas();
 
 		// si el usuario ya está logueado, redireccionar a la app
@@ -107,13 +105,12 @@ class Login extends CI_Controller {
 				redirect($this->acl_model->get_redirect_app());
 			}
 
-			$msg_alerta = print_message($this->lang->line('login_error_usr_pwd'), 'danger');
+			set_message($this->lang->line('login_error_usr_pwd'), 'danger');
 		}
 
 		$captcha_img  = $this->acl_model->get_captcha_img(set_value('usr'));
 
 		$data = array(
-			'msg_alerta'   => $msg_alerta,
 			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
 			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
@@ -151,8 +148,6 @@ class Login extends CI_Controller {
 	{
 		$this->form_validation->set_rules($this->acl_model->change_password_validation);
 
-		$msg_alerta = '';
-
 		if ( ! $this->acl_model->tiene_clave($this->input->post('usr')))
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
@@ -162,7 +157,7 @@ class Login extends CI_Controller {
 		{
 			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{
-				$msg_alerta = print_message($this->lang->line('login_error_usr_pwd'), 'danger');
+				set_message($this->lang->line('login_error_usr_pwd'), 'danger');
 			}
 
 			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
@@ -176,13 +171,12 @@ class Login extends CI_Controller {
 		$usuario = set_value('usr', $usr_param);
 
 		$data = array(
-			'msg_alerta'        => $msg_alerta,
 			'usr'               => $usuario,
 			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
-			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
-			'arr_vistas'   => array('ACL/cambio_password'),
-			'vista_login'  => TRUE,
+			'extra_styles'      => '<style type="text/css">body {margin-top: 40px;}</style>',
+			'arr_vistas'        => array('ACL/cambio_password'),
+			'vista_login'       => TRUE,
 		);
 
 		app_render_view('ACL/cambio_password', $data);
