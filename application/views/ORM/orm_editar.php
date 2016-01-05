@@ -1,5 +1,6 @@
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
+
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 		<fieldset>
 			<legend>
@@ -42,5 +43,5 @@
 		</fieldset>
 		<?php echo form_close(); ?>
 
-	</div>
-</div>
+	</div> <!-- DIV   class="col-md-8 col-md-offset-2 well" -->
+</div> <!-- DIV   class="row" -->

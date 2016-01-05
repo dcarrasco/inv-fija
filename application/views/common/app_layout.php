@@ -30,21 +30,20 @@
 <body>
 
 <?php if ( ! $vista_login): ?>
-	<!-- ============================== NAVBAR ============================== -->
 	{app_navbar}
 <?php endif; ?>
 
 <div class="container">
 
-<?php if ( ! $vista_login AND isset($app_menu_modulo)): ?>
+<?php if (isset($app_menu_modulo)): ?>
 	<!-- ============================== MENU MODULO ============================== -->
 	{app_menu_modulo}
+	<!-- ============================== /MENU MODULO ============================== -->
 	<div class="tab-content">
 	<div class="tab-pane active">
 <?php endif; ?>
 
 <?php if ( ! $vista_login): ?>
-	<!-- ============================== MENSAJE ALERTA ============================== -->
 	{msg_alerta}
 <?php endif; ?>
 
@@ -52,13 +51,14 @@
 {arr_vistas}
 	{vista}
 {/arr_vistas}
+<!-- ============================== /MODULOS APP ============================== -->
 
-<?php if ( ! $vista_login AND isset($menu_modulo)): ?>
-	</div> <!-- DIV class="tab-content" -->
-	</div> <!-- DIV class="tab-pane"    -->
+<?php if (isset($app_menu_modulo)): ?>
+	</div> <!-- DIV   class="tab-content" -->
+	</div> <!-- DIV   class="tab-pane"    -->
 <?php endif; ?>
 
-</div> <!-- DIV principal de la aplicacion class="container"-->
+</div> <!-- DIV principal de la aplicacion   class="container"-->
 
 </body>
 </html>
