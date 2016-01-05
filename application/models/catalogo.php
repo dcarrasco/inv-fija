@@ -71,7 +71,7 @@ class Catalogo extends ORM_Model {
 					'texto_ayuda'    => 'Valor PMP del material',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => FALSE,
-					'formato'        => 'monto,2',
+					'formato'        => 'monto,1',
 				),
 				'es_seriado' => array(
 					'label'          => 'Material seriado',

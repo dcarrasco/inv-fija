@@ -101,7 +101,7 @@ class Orm_field {
 	 *
 	 * @var  string
 	 */
-	private $_formato = NULL;
+	private $_formato = '';
 
 	/**
 	 * Lista de los valores válidos para el campo
@@ -509,9 +509,15 @@ class Orm_field {
 
 		if ($this->_formato)
 		{
-			if ($this->_formato === 'monto,2')
+			list($tipo_formato, $dec_formato) = explode(',', $this->_formato);
+
+			if ($tipo_formato === 'monto')
 			{
-				return fmt_monto($valor, 'UN', '$', 2);
+				return fmt_monto($valor, 'UN', '$', (int) $dec_formato);
+			}
+			elseif ($tipo_formato === 'cantidad')
+			{
+				return fmt_cantidad($valor, (int) $dec_formato);
 			}
 			else
 			{
