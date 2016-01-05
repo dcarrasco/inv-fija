@@ -144,7 +144,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'menu_modulo'           => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+				'menu_modulo'           => array('menu' => $this->_arr_menu, 'mod_selected' => 'ajustes'),
 				'inventario'            => $this->_id_inventario.' - '.$this->_nombre_inventario,
 				'detalle_ajustes'       => $detalles,
 				'ocultar_regularizadas' => $ocultar_regularizadas,
@@ -224,7 +224,7 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'sube_stock'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
 			'upload_error'      => $upload_error,
@@ -277,7 +277,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+				'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'imprime_inventario'),
 				'inventario_id'     => $this->_id_inventario,
 				'inventario_nombre' => $this->_nombre_inventario,
 				'max_hoja'          => $inventario->get_max_hoja_inventario(),
@@ -359,7 +359,7 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => 'actualiza_precios'),
 			'update_status'    => $update_status,
 			'cant_actualizada' => $cant_actualizada,
 		);
