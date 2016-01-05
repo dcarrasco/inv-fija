@@ -124,19 +124,17 @@ class Orm_Controller extends CI_Controller {
 			if ($this->input->post('grabar'))
 			{
 				$modelo->grabar();
-				$mensaje = sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo);
+				set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
 			}
 			else if ($this->input->post('borrar'))
 			{
 				$modelo->borrar();
-				$mensaje = sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo);
+				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 			}
 
-			set_message($mensaje);
 			redirect($this->router->class . '/listado/' . $nombre_modelo);
 		}
 	}
-
 
 
 }
