@@ -261,6 +261,7 @@ if ( ! function_exists('print_message'))
 			}
 			else if ($tipo === 'danger' OR $tipo === 'error')
 			{
+				$tipo = 'danger';
 				$texto_tipo = 'ERROR';
 				$img_tipo = 'exclamation-sign';
 			}

@@ -63,6 +63,7 @@ $lang['inventario_report_save']                   = 'Guardar ajustes';
 $lang['inventario_upload_label_inventario'] = 'Inventario';
 $lang['inventario_upload_label_file']       = 'Archivo';
 $lang['inventario_upload_label_password']   = 'Clave administrador';
+$lang['inventario_upload_error']            = 'Se produjo un error tratar de subir el archivo de inventario.';
 $lang['inventario_upload_warning_line1']    = 'ADVERTENCIA';
 $lang['inventario_upload_warning_line2']    = 'Al subir un archivo se eliminar&aacute;n <strong>TODOS</strong> los registros asociados al inventario';
 $lang['inventario_upload_status_OK']        = 'Registros cargados OK:';

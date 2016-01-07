@@ -188,10 +188,10 @@ class Inventario_analisis extends CI_Controller {
 
 		if ($this->input->post('formulario') === 'upload')
 		{
-			if ($this->input->post('password') === 'logistica2012')
+			if ($this->input->post('upload_password') === 'logistica2012')
 			{
 				$upload_config = array(
-					'upload_path'   => './upload/',
+					'upload_path'   => '../upload/',
 					'allowed_types' => 'txt|cvs',
 					'max_size'      => '2000',
 					'file_name'     => 'sube_stock.txt',
@@ -201,7 +201,7 @@ class Inventario_analisis extends CI_Controller {
 
 				if ( ! $this->upload->do_upload('upload_file'))
 				{
-					$upload_error = '<br><div class="error round">' . $this->upload->display_errors() . '</div>';
+					set_message($this->lang->line('inventario_upload_error'), 'danger');
 				}
 				else
 				{
@@ -227,7 +227,6 @@ class Inventario_analisis extends CI_Controller {
 			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'sube_stock'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
-			'upload_error'      => $upload_error,
 			'script_carga'      => $script_carga,
 			'show_script_carga' => $show_script_carga,
 			'regs_ok'           => $regs_ok,

@@ -40,7 +40,7 @@
 					<?php echo $this->lang->line('inventario_upload_label_password'); ?>
 				</label>
 				<div class="col-sm-8">
-					<?php echo form_password('password', '', 'class="form-control"'); ?>
+					<?php echo form_password('upload_password', '', 'class="form-control"'); ?>
 				</div>
 			</div>
 			<?php endif; ?>
@@ -51,7 +51,6 @@
 					Progreso
 				</label>
 				<div class="col-sm-8">
-					<?php echo $upload_error; ?>
 					<?php echo $msj_error; ?>
 					<div id="progreso_carga">
 						<div class="progress">
