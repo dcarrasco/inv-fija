@@ -168,6 +168,7 @@ if ( ! function_exists('menu_modulo'))
 					'menu_url'      => site_url($val['url']),
 					'menu_nombre'   => $val['texto'],
 					'menu_selected' => ($modulo === $mod_selected) ? 'active' : '',
+					'menu_icon'     => array_key_exists('icon', $val) ? $val['icon'] : NULL,
 				));
 			}
 

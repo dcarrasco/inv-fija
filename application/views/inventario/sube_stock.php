@@ -24,6 +24,7 @@
 					<div class="alert alert-danger">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 						<p><strong>
+							<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;
 							<?php echo $this->lang->line('inventario_upload_warning_line1'); ?>
 						</strong></p>
 						<p>

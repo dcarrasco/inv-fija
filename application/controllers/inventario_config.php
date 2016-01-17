@@ -47,18 +47,59 @@ class Inventario_config extends ORM_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
-			'auditor'         => array('url' => $this->router->class . '/listado/auditor/', 'texto' => 'Auditores'),
-			'familia'         => array('url' => $this->router->class . '/listado/familia', 'texto' => 'Familias'),
-			'catalogo'        => array('url' => $this->router->class . '/listado/catalogo', 'texto' => 'Materiales'),
-			'tipo_inventario' => array('url' => $this->router->class . '/listado/tipo_inventario', 'texto' => 'Tipos de inventario'),
-			'inventario'      => array('url' => $this->router->class . '/listado/inventario', 'texto' => 'Inventarios'),
-			'tipo_ubicacion'  => array('url' => $this->router->class . '/listado/tipo_ubicacion', 'texto' => 'Tipos Ubicacion'),
-			'ubicaciones'     => array('url' => $this->router->class . '/ubicacion_tipo_ubicacion', 'texto' => 'Ubicaciones'),
-			'centro'          => array('url' => $this->router->class . '/listado/centro', 'texto' => 'Centros'),
-			'almacen'         => array('url' => $this->router->class . '/listado/almacen', 'texto' => 'Almacenes'),
-			'unidad_medida'   => array('url' => $this->router->class . '/listado/unidad_medida', 'texto' => 'Unidades de medida'),
+			'auditor' => array(
+				'url'   => $this->router->class . '/listado/auditor/',
+				'texto' => $this->lang->line('inventario_config_menu_auditores'),
+				'icon'  => 'glyphicon glyphicon-user',
+			),
+			'familia' => array(
+				'url'   => $this->router->class . '/listado/familia',
+				'texto' => $this->lang->line('inventario_config_menu_familias'),
+				'icon'  => 'glyphicon glyphicon-th',
+			),
+			'catalogo' => array(
+				'url'   => $this->router->class . '/listado/catalogo',
+				'texto' => $this->lang->line('inventario_config_menu_materiales'),
+				'icon'  => 'glyphicon glyphicon-barcode',
+			),
+			'tipo_inventario' => array(
+				'url'   => $this->router->class . '/listado/tipo_inventario',
+				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
+				'icon'  => 'glyphicon glyphicon-th',
+			),
+			'inventario' => array(
+				'url'   => $this->router->class . '/listado/inventario',
+				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
+				'icon'  => 'glyphicon glyphicon-list-alt',
+			),
+			'tipo_ubicacion' => array(
+				'url'   => $this->router->class . '/listado/tipo_ubicacion',
+				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
+				'icon'  => 'glyphicon glyphicon-th',
+			),
+			'ubicaciones' => array(
+				'url'   => $this->router->class . '/ubicacion_tipo_ubicacion',
+				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
+				'icon'  => 'glyphicon glyphicon-map-marker',
+			),
+			'centro' => array(
+				'url'   => $this->router->class . '/listado/centro',
+				'texto' => $this->lang->line('inventario_config_menu_centros'),
+				'icon'  => 'glyphicon glyphicon-th',
+			),
+			'almacen' => array(
+				'url'   => $this->router->class . '/listado/almacen',
+				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
+				'icon'  => 'glyphicon glyphicon-home',
+			),
+			'unidad_medida' => array(
+				'url'   => $this->router->class . '/listado/unidad_medida',
+				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
+				'icon'  => 'glyphicon glyphicon-scale',
+			),
 		);
 	}
 

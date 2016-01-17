@@ -47,12 +47,29 @@ class Acl_config extends ORM_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->lang->load('acl');
 
 		$this->arr_menu = array(
-			'usuario'        => array('url' => $this->router->class . '/listado/usuario', 'texto' => 'Usuarios'),
-			'app'            => array('url' => $this->router->class . '/listado/app', 'texto' => 'Aplicaciones'),
-			'rol'            => array('url' => $this->router->class . '/listado/rol', 'texto' => 'Roles'),
-			'modulo'         => array('url' => $this->router->class . '/listado/modulo', 'texto' => 'Modulos'),
+			'usuario' => array(
+				'url'   => $this->router->class . '/listado/usuario',
+				'texto' => $this->lang->line('acl_config_menu_usuarios'),
+				'icon'  => 'glyphicon glyphicon-user',
+			),
+			'app' => array(
+				'url'   => $this->router->class . '/listado/app',
+				'texto' => $this->lang->line('acl_config_menu_aplicaciones'),
+				'icon'  => 'glyphicon glyphicon-modal-window',
+			),
+			'rol' => array(
+				'url'   => $this->router->class . '/listado/rol',
+				'texto' => $this->lang->line('acl_config_menu_roles'),
+				'icon'  => 'glyphicon glyphicon-equalizer',
+			),
+			'modulo' => array(
+				'url'   => $this->router->class . '/listado/modulo',
+				'texto' => $this->lang->line('acl_config_menu_modulos'),
+				'icon'  => 'glyphicon glyphicon-list-alt',
+			),
 		);
 
 	}

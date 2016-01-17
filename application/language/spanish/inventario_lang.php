@@ -1,6 +1,17 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
+$lang['inventario_config_menu_auditores']         = 'Auditores';
+$lang['inventario_config_menu_familias']          = 'Familias';
+$lang['inventario_config_menu_materiales']        = 'Materiales';
+$lang['inventario_config_menu_tipos_inventarios'] = 'Tipos de inventario';
+$lang['inventario_config_menu_inventarios']       = 'Inventarios';
+$lang['inventario_config_menu_tipo_ubicacion']    = 'Tipo Ubicaci&oacute;n';
+$lang['inventario_config_menu_ubicaciones']       = 'Ubicaciones';
+$lang['inventario_config_menu_centros']           = 'Centros';
+$lang['inventario_config_menu_almacenes']         = 'Almacenes';
+$lang['inventario_config_menu_unidades_medida']   = 'Unidades de medida';
+
 $lang['inventario_menu_reporte_hoja']      = 'Hoja';
 $lang['inventario_menu_reporte_mat']       = 'Material';
 $lang['inventario_menu_reporte_faltante']  = 'Faltante-Sobrante';
