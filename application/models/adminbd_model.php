@@ -43,9 +43,6 @@ class Adminbd_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->_db_object = $this->load->database('adminbd', TRUE);
-
 	}
 
 	// --------------------------------------------------------------------
@@ -57,8 +54,9 @@ class Adminbd_model extends CI_Model {
 	 */
 	public function get_running_queries()
 	{
-		$arr_final = array();
+		$this->_db_object = $this->load->database('adminbd', TRUE);
 
+		$arr_final = array();
 		$arr_users = array();
 		$arr_users_tmp = $this->_db_object
 			->query('sp_who2 "active"')
@@ -91,6 +89,65 @@ class Adminbd_model extends CI_Model {
 		}
 
 		return $arr_final;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera listado de tablas del sistema para exportar
+	 *
+	 * @return array Listado de tablas
+	 */
+	public function get_table_list()
+	{
+		$blacklist = array(
+			'bd_usuarios',
+			'bd_app',
+			'bd_modulos',
+			'bd_rol',
+			'bd_usuario_rol',
+			'bd_rol_modulo',
+			'bd_captcha',
+			'bd_pcookies',
+		);
+
+		$arr_list = array();
+		foreach($this->config->config as $index => $value)
+		{
+			if (strpos($index, 'bd_') !== FALSE AND ! in_array($index, $blacklist))
+			{
+				$arr_list[urlencode($value)] = $index;
+			}
+		}
+		asort($arr_list);
+
+		return $arr_list;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera listado de campos de una tabla
+	 *
+	 * @param  string $tabla Nombre de la tabla
+	 * @return array         Listado de campos
+	 */
+	public function get_fields_list($tabla = '')
+	{
+		if ( ! $this->db->table_exists($tabla))
+		{
+			return array();
+		}
+
+		$arr_list = array();
+		foreach ($this->db->list_fields($tabla) as $campo)
+		{
+			$arr_list[$campo] = $campo;
+		}
+
+		return $arr_list;
 	}
 
 
