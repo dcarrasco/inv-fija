@@ -58,18 +58,22 @@ class Stock_sap extends CI_Controller {
 			'stock_movil' => array(
 				'url'   => $this->router->class . '/mostrar_stock/MOVIL',
 				'texto' => $this->lang->line('stock_sap_menu_movil'),
+				'icon'  => 'glyphicon glyphicon-phone',
 			),
 			'stock_fija' => array(
 				'url'   => $this->router->class . '/mostrar_stock/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_fijo'),
+				'icon'  => 'glyphicon glyphicon-phone-alt',
 			),
 			'transito_fija' => array(
 				'url'   => $this->router->class . '/transito/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
+				'icon'  => 'glyphicon glyphicon-send',
 			),
 			'reporte_clasif' => array(
 				'url'   => $this->router->class . '/reporte_clasif',
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
+				'icon'  => 'glyphicon glyphicon-th',
 			),
 		);
 
@@ -163,11 +167,13 @@ class Stock_sap extends CI_Controller {
 			'tipo_op'               => $tipo_op,
 			'arr_mostrar'           => $arr_mostrar,
 			'datos_grafico'         => $datos_grafico,
-			'totaliza_tipo_almacen' => (((in_array('almacen', $arr_mostrar)  OR in_array('material', $arr_mostrar)
-											OR in_array('lote', $arr_mostrar) OR in_array('tipo_stock', $arr_mostrar)
-											)
-											AND ($this->input->post('sel_tiposalm') === 'sel_tiposalm')
-											) ? TRUE : FALSE),
+			'totaliza_tipo_almacen' => ((in_array('almacen', $arr_mostrar)
+											OR in_array('material', $arr_mostrar)
+											OR in_array('lote', $arr_mostrar)
+											OR in_array('tipo_stock', $arr_mostrar))
+										AND ($this->input->post('sel_tiposalm') === 'sel_tiposalm'))
+										? TRUE
+										: FALSE,
 		);
 
 

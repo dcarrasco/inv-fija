@@ -63,18 +63,22 @@ class Stock_reporte extends CI_Controller {
 			'permanencia' => array(
 				'url'   => $this->router->class . '/listado/permanencia',
 				'texto' => $this->lang->line('stock_perm_menu_perm'),
+				'icon'  => 'glyphicon glyphicon-hourglass',
 			),
 			'mapastock' => array(
 				'url'   => $this->router->class . '/mapastock',
 				'texto' => $this->lang->line('stock_perm_menu_mapa'),
+				'icon'  => 'glyphicon glyphicon-globe',
 				),
 			'movhist' => array(
 				'url'   => $this->router->class . '/movhist',
 				'texto' => $this->lang->line('stock_perm_menu_movs'),
+				'icon'  => 'glyphicon glyphicon-time',
 			),
 			'est03' => array(
 				'url'   => $this->router->class . '/est03',
 				'texto' => $this->lang->line('stock_perm_menu_est03'),
+				'icon'  => 'glyphicon glyphicon-refresh',
 			),
 		);
 	}
