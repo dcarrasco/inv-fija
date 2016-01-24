@@ -34,22 +34,18 @@ class MY_Hooks {
 	public function acl_hook()
 	{
 		$ci =& get_instance();
-
-		$whitelist_classes = array('login', 'migration');
-
 		$ci->load->model('acl_model');
 		$ci->config->load('inv-fija');
+
+		$whitelist_classes = array('login', 'migration');
 
 		$class = $ci->router->fetch_class();
 
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
-		if ( ! in_array($class, $whitelist_classes))
+		if ( ! in_array($class, $whitelist_classes) AND  ! $ci->acl_model->autentica_modulo($llave_modulo))
 		{
-			if ( ! $ci->acl_model->autentica_modulo($llave_modulo))
-			{
-				redirect('login/');
-			}
+			redirect('login/');
 		}
 
 		if (ENVIRONMENT !== 'production')
