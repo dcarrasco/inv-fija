@@ -2,19 +2,19 @@
 
 <?php echo form_open('','id="frm_param" class="form-horizontal hidden-print"'); ?>
 <div class="form-group">
-	<label class="control-label col-md-2 col-md-offset-2"><?php echo $this->lang->line('label_rut_retail'); ?></label>
+	<label class="control-label col-md-2 col-md-offset-2">{_label_rut_retail_}</label>
 	<div class="col-sm-6">
 		<?php echo form_dropdown('rut_retail', $combo_retail, set_value('rut_retail'), 'class="form-control"'); ?>
 	</div>
 </div>
 <div class="form-group">
-	<label class="control-label col-md-2 col-md-offset-2"><?php echo $this->lang->line('label_modelos'); ?></label>
+	<label class="control-label col-md-2 col-md-offset-2">{_label_modelos_}</label>
 	<div class="col-sm-6">
 		<?php echo form_textarea('modelos', set_value('modelos'), 'class="form-control"'); ?>
 	</div>
 </div>
 <div class="form-group">
-	<label class="control-label col-md-2 col-md-offset-2"><?php echo $this->lang->line('label_max_facturas'); ?></label>
+	<label class="control-label col-md-2 col-md-offset-2">{_label_max_facturas_}</label>
 	<div class="col-sm-6">
 		<?php echo form_dropdown('max_facturas', $combo_max_facturas, set_value('max_facturas', 5), 'class="form-control"'); ?>
 	</div>
@@ -23,7 +23,7 @@
 	<div class="col-md-6 col-md-offset-4">
 		<button type="submit" name="btn_submit" class="btn btn-primary pull-right">
 			<span class="glyphicon glyphicon-search"></span>
-			<?php echo $this->lang->line('label_submit'); ?>
+			{_label_submit_}
 		</button>
 	</div>
 </div>

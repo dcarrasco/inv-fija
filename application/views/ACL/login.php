@@ -37,7 +37,7 @@
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
-					<?php echo anchor('#', $this->lang->line('login_link_change_password'), 'id="lnk_cambio_password"'); ?>
+					<?php echo anchor('#', '{_login_link_change_password_}', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 

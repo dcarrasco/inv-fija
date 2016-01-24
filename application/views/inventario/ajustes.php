@@ -5,7 +5,7 @@
 	<div class="pull-right">
 		<?php echo anchor(
 			$this->router->class . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
-			($ocultar_regularizadas == 0) ? $this->lang->line('inventario_adjust_link_hide') : $this->lang->line('inventario_adjust_link_show')
+			($ocultar_regularizadas == 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
 		); ?>
 	</div>
 </div>

@@ -26,7 +26,7 @@
 
 	<div class="form-group pull-right">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="'. $this->lang->line('inventario_report_filter') .'" onKeyPress="return event.keyCode!=13"'); ?>
+			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
 			<div class="input-group-btn">
 				<button type="submit" class="btn btn-default" id="btn_filtrar">
 					<span class="glyphicon glyphicon-search"></span>
