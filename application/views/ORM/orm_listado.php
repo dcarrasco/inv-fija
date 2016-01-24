@@ -2,7 +2,7 @@
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
 	<div class="col-md-3">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="' . $this->lang->line('orm_filter') .'"'); ?>
+			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
 			<span class="input-group-btn">
 				<button type="submit" id="btn_filtro" class="btn btn-default">
 					<span class="glyphicon glyphicon-search"></span>

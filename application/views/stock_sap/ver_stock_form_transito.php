@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<?php echo $this->lang->line('stock_sap_panel_params'); ?>
+						{_stock_sap_panel_params_}
 					</a>
 				</div>
 				<div class="col-md-4">
@@ -22,18 +22,18 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_sap_label_dates'); ?>
+							{_stock_sap_label_dates_}
 						</label>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
-								<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
+								{_stock_sap_radio_date1_}
 							</label>
 						</div>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
+								{_stock_sap_radio_date2_}
 							</label>
 						</div>
 						<?php echo form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
@@ -43,39 +43,39 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_sap_label_mats'); ?>
+							{_stock_sap_label_mats_}
 						</label>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
-								<?php echo $this->lang->line('stock_sap_check_tipstock'); ?>
+								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
-								<?php echo $this->lang->line('stock_sap_check_mat'); ?>
+								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
-								<?php echo $this->lang->line('stock_sap_check_lotes'); ?>
+								{_stock_sap_check_lotes_}
 							</label>
 						</div>
 					</div>
 					<hr/>
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_sap_label_mostrar'); ?>
+							{_stock_sap_label_mostrar_}
 						</label>
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
-							<?php echo $this->lang->line('stock_sap_radio_cant'); ?>
+							{_stock_sap_radio_cant_}
 						</div>
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
-							<?php echo $this->lang->line('stock_sap_radio_monto'); ?>
+							{_stock_sap_radio_monto_}
 						</div>
 					</div>
 				</div>
@@ -86,11 +86,11 @@
 						<div class="pull-right">
 							<button type="submit" name="submit" class="btn btn-primary">
 								<span class="glyphicon glyphicon-list-alt"></span>
-								<?php echo $this->lang->line('stock_sap_button_report'); ?>
+								{_stock_sap_button_report_}
 							</button>
 							<button type="submit" name="excel" class="btn btn-default">
 								<span class="glyphicon glyphicon-file"></span>
-								<?php echo $this->lang->line('stock_sap_button_export'); ?>
+								{_stock_sap_button_export_}
 							</button>
 						</div>
 					</div>

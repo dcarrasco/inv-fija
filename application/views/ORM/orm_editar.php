@@ -35,7 +35,7 @@
 
 					<?php if ($modelo->get_model_id()): ?>
 					<div class="pull-left">
-						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
+						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf('{_orm_js_delete_confirm_}', strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
 							<span class="glyphicon glyphicon-trash"></span>
 							{_orm_button_delete_}
 						</button>
