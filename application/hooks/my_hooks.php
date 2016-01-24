@@ -35,6 +35,8 @@ class MY_Hooks {
 	{
 		$ci =& get_instance();
 
+		$whitelist_classes = array('login', 'migration');
+
 		$ci->load->model('acl_model');
 		$ci->config->load('inv-fija');
 
@@ -42,7 +44,7 @@ class MY_Hooks {
 
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
-		if ($class !== 'login' AND $class !== 'migration')
+		if ( ! in_array($class, $whitelist_classes))
 		{
 			if ( ! $ci->acl_model->autentica_modulo($llave_modulo))
 			{
@@ -52,9 +54,9 @@ class MY_Hooks {
 
 		if (ENVIRONMENT !== 'production')
 		{
-			if (! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE)
+			if ( ! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE)
 			{
-				$ci->output->enable_profiler(TRUE);
+				// $ci->output->enable_profiler(TRUE);
 			}
 		}
 
