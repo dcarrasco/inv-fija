@@ -61,7 +61,7 @@ $lang['inventario_adjust_msg_save']  = '%d linea(s) modificadas correctamente.';
 $lang['inventario_adjust_link_hide'] = 'Ocultar lineas regularizadas';
 $lang['inventario_adjust_link_show'] = 'Mostrar lineas regularizadas';
 
-$lang['inventario_report_filter']                 = 'Texto a filtrar...';
+$lang['inventario_report_filter']                 = 'Buscar texto...';
 $lang['inventario_report_check_ocultar_regs']     = 'Ocultar registros sin diferencias';
 $lang['inventario_report_check_incluir_ajustes']  = 'Incluir ajustes de inventario';
 $lang['inventario_report_check_incluir_familias'] = 'Incluir familias de productos';
@@ -71,9 +71,12 @@ $lang['inventario_report_label_sobrante']         = 'Sobrante';
 $lang['inventario_report_label_OK']               = 'OK';
 $lang['inventario_report_save']                   = 'Guardar ajustes';
 
+$lang['inventario_upload_label_fieldset']   = 'Subir archivo de stock';
 $lang['inventario_upload_label_inventario'] = 'Inventario';
 $lang['inventario_upload_label_file']       = 'Archivo';
 $lang['inventario_upload_label_password']   = 'Clave administrador';
+$lang['inventario_upload_label_format']     = 'Formato del archivo';
+$lang['inventario_upload_label_progress']   = 'Progreso';
 $lang['inventario_upload_error']            = 'Se produjo un error tratar de subir el archivo de inventario.';
 $lang['inventario_upload_warning_line1']    = 'ADVERTENCIA';
 $lang['inventario_upload_warning_line2']    = 'Al subir un archivo se eliminar&aacute;n <strong>TODOS</strong> los registros asociados al inventario';
@@ -81,23 +84,23 @@ $lang['inventario_upload_status_OK']        = 'Registros cargados OK:';
 $lang['inventario_upload_status_error']     = 'Registros con error:';
 $lang['inventario_upload_button_load']      = 'Ejecutar carga';
 $lang['inventario_upload_button_upload']    = 'Subir archivo';
-$lang['inventario_upload_format_file']      = "Formato del archivo:
-	Archivo de texto
-	Extension .txt
-	Campos separados por tabulación
+$lang['inventario_upload_format_file']      = "Archivo de texto
+Extension .txt
+Campos separados por tabulación
 
-	Campos
-			Ubicacion
-			[HU - eliminada]
-			Catalogo
-			Descripcion catalogo
-			Lote
-			Centro
-			Almacen
-			Unidad de medida
-			Stock SAP
-			Hoja";
+Campos
+		Ubicacion
+		[HU - eliminada]
+		Catalogo
+		Descripcion catalogo
+		Lote
+		Centro
+		Almacen
+		Unidad de medida
+		Stock SAP
+		Hoja";
 
+$lang['inventario_print_label_legend']       = 'Imprimir inventario';
 $lang['inventario_print_label_inventario']   = 'Inventario';
 $lang['inventario_print_label_page_from']    = 'P&aacute;gina desde';
 $lang['inventario_print_label_page_to']      = 'P&aacute;gina hasta';

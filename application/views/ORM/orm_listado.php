@@ -14,7 +14,7 @@
 	<div class="col-md-9 text-right">
 		<a href="<?php echo $url_editar; ?>" class="btn btn-primary" id="btn_mostrar_agregar">
 			<span class="glyphicon glyphicon-plus-sign"></span>
-			<?php echo $this->lang->line('orm_button_new'); ?> <?php echo strtolower($modelo->get_model_label()); ?>
+			{_orm_button_new_} <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
 	<?php echo form_close(''); ?>
@@ -43,9 +43,9 @@
 						<?php endif; ?>
 					<?php endforeach; ?>
 					<td class="text-center">
-						<a href="<?php echo $url_editar . '/' . $o->get_model_id(); ?>" class="">
+						<a href="{url_editar}/<?php echo $o->get_model_id(); ?>" class="">
 							<!-- <span class="glyphicon glyphicon-edit"></span> -->
-							<?php echo $this->lang->line('orm_link_edit'); ?>
+							{_orm_link_edit_}
 						</a>
 					</td>
 				</tr>

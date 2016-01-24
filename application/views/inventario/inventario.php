@@ -1,64 +1,53 @@
-<?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form"'); ?>
+<div class="row well">
+<?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form" class="form-inline"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
-<div class="row">
 
-	<div class="col-md-5">
-		<div class="form-group">
-			<label>
-				<?php echo $this->lang->line('inventario_inventario'); ?>
-			</label>
-			<p class="form-control-static"><?php echo $nombre_inventario; ?></p>
-		</div>
+	{validation_errors}
+
+	<div class="form-group col-md-4">
+		<label>{_inventario_report_label_inventario_}</label>
+		<p class="form-control-static">{nombre_inventario}</p>
 	</div>
 
-	<div class="col-md-2">
-		<div class="form-group <?php echo form_has_error('hoja'); ?>">
-			<label>
-				<?php echo $this->lang->line('inventario_page'); ?>
-			</label>
+	<div class="form-group <?php echo form_has_error('hoja'); ?>">
+		<label class="control-label">{_inventario_page_}</label>
+
+		<div class="input-group col-md-7">
 			<div class="input-group">
 				<span class="input-group-btn">
 					<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
 						<span class="glyphicon glyphicon-search"></span>
 					</a>
 				</span>
-				<input type="text" name="hoja" value="<?php echo $hoja; ?>" maxlength="10" id="id_hoja" class="form-control input-sm">
+				<input type="text" name="hoja" value="{hoja}" maxlength="10" id="id_hoja" class="form-control input-sm">
 				<span class="input-group-btn">
-					<a href="<?php echo $link_hoja_ant; ?>" class="btn btn-default btn-sm" id="btn_hoja_ant">
+					<a href="{link_hoja_ant}" class="btn btn-default btn-sm" id="btn_hoja_ant">
 						<span class="glyphicon glyphicon-chevron-left"></span>
 					</a>
-					<a href="<?php echo $link_hoja_sig; ?>" class="btn btn-default btn-sm" id="btn_hoja_sig">
+					<a href="{link_hoja_sig}" class="btn btn-default btn-sm" id="btn_hoja_sig">
 						<span class="glyphicon glyphicon-chevron-right"></span>
 					</a>
 				</span>
 			</div>
-			<?php echo form_error('hoja');?>
 		</div>
 	</div>
 
-	<div class="col-md-3">
-		<div class="form-group <?php echo form_has_error('auditor'); ?>">
-			<label>
-				<?php echo $this->lang->line('inventario_auditor'); ?>
-			</label>
-			<?php echo $combo_auditores; ?>
-			<?php echo form_error('auditor');?>
+	<div class="form-group <?php echo form_has_error('auditor'); ?>">
+		<label class="control-label">{_inventario_auditor_}</label>
+		{combo_auditores}
+	</div>
+
+	<div class="form-group pull-right">
+		<div class="input-group">
+			<a href="<?php echo site_url($this->router->class.'/editar/'.$hoja.'/'.$id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
+				<span class="glyphicon glyphicon-plus-sign"></span>
+				{_inventario_button_new_line_}
+			</a>
 		</div>
 	</div>
 
-	<div class="col-md-2">
-		<div class="form-group">
-			<label>&nbsp;</label>
-			<div class="input-group">
-				<a href="<?php echo site_url($this->router->class . '/editar/' . $hoja . '/' . $id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
-					<span class="glyphicon glyphicon-plus-sign"></span>
-					<?php echo $this->lang->line('inventario_button_new_line'); ?>
-				</a>
-			</div>
-		</div>
-	</div>
-</div>
 <?php echo form_close(); ?>
+</div>
 
 
 <div id="formulario_digitador">
@@ -66,22 +55,20 @@
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>
 	<?php echo form_hidden('auditor', $id_auditor); ?>
-	<?php //echo form_error('sel_digitador'); ?>
-	<?php //echo form_error('sel_auditor'); ?>
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
 			<tr>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_material'); ?></th>
-				<th><?php echo $this->lang->line('inventario_digit_th_descripcion'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_lote'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_centro'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_almacen'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_UM'); ?></th>
-				<th class="text-right" nowrap><?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?></th>
-				<th class="text-right"><?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_HU'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_observacion'); ?></th>
+				<th class="text-center">{_inventario_digit_th_ubicacion_}</th>
+				<th class="text-center">{_inventario_digit_th_material_}</th>
+				<th class="text-left">{_inventario_digit_th_descripcion_}</th>
+				<th class="text-center">{_inventario_digit_th_lote_}</th>
+				<th class="text-center">{_inventario_digit_th_centro_}</th>
+				<th class="text-center">{_inventario_digit_th_almacen_}</th>
+				<th class="text-center">{_inventario_digit_th_UM_}</th>
+				<th class="text-right" nowrap>{_inventario_digit_th_cant_sap_}</th>
+				<th class="text-right">{_inventario_digit_th_cant_fisica_}</th>
+				<th class="text-center">{_inventario_digit_th_HU_}</th>
+				<th class="text-center">{_inventario_digit_th_observacion_}</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -108,22 +95,40 @@
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
 					<td class="text-center"><?php echo $linea_det->catalogo; ?></td>
-					<td><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
+					<td class="text_left"><?php echo $linea_det->get_valor_field('descripcion'); ?></td>
 					<td class="text-center"><?php echo $linea_det->get_valor_field('lote'); ?></td>
 					<td class="text-center"><?php echo $linea_det->get_valor_field('centro'); ?></td>
 					<td class="text-center"><?php echo $linea_det->get_valor_field('almacen'); ?></td>
 					<td class="text-center"><?php echo $linea_det->um; ?></td>
 					<td class="text-right"><?php echo fmt_cantidad($linea_det->stock_sap); ?></td>
 					<td class="text-center col-md-1">
-						<?php echo form_input('stock_fisico_' . $linea_det->id, set_value('stock_fisico_' . $linea_det->id, $linea_det->stock_fisico), 'class="input-sm form-control text-right" tabindex="' . $tab_index . '"'); ?>
-						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
+						<div class="form-group <?php echo form_has_error('stock_fisico_'.$linea_det->id); ?>">
+							<?php echo form_input(
+								'stock_fisico_'.$linea_det->id,
+								set_value('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
+								'class="input-sm form-control text-right" tabindex="'.$tab_index.'"'
+							); ?>
+							<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
+						</div>
 					</td>
 					<td class="text-center col-md-1">
-						<?php echo form_input('hu_' . $linea_det->id, set_value('hu_' . $linea_det->id, $linea_det->hu), 'class="input-sm form-control" tabindex="' . $tab_index . '"'); ?>
-						<?php echo form_error('hu_' . $linea_det->id); ?>
+						<div class="form-group <?php echo form_has_error('hu_'.$linea_det->id); ?>">
+							<?php echo form_input(
+								'hu_'.$linea_det->id,
+								set_value('hu_'.$linea_det->id, $linea_det->hu),
+								'class="input-sm form-control" tabindex="'.($tab_index+100).'"'
+							); ?>
+							<?php echo form_error('hu_'.$linea_det->id); ?>
+						</div>
 					</td>
 					<td class="text-center">
-						<?php echo form_input('observacion_' . $linea_det->id, set_value('observacion_' . $linea_det->id, $linea_det->observacion), 'class="input-sm form-control" maxlength="100" tabindex="' . ($tab_index + 100) . '"'); ?>
+						<div class="form-group <?php echo form_has_error('observacion_'.$linea_det->id); ?>">
+							<?php echo form_input(
+								'observacion_'.$linea_det->id,
+								set_value('observacion_'.$linea_det->id, $linea_det->observacion),
+								'class="input-sm form-control" maxlength="100" tabindex="'.($tab_index + 200).'"'
+							); ?>
+						</div>
 					</td>
 				</tr>
 				<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>
@@ -149,7 +154,7 @@
 					<div class="text-right">
 						<a href="#" class="btn btn-primary" id="btn_guardar">
 							<span class="glyphicon glyphicon-ok"></span>
-							<?php echo $this->lang->line('inventario_digit_button_save_page'); ?>
+							{_inventario_digit_button_save_page_}
 						</a>
 					</div>
 				</td>
@@ -160,4 +165,4 @@
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 
-<script type="text/javascript" src="<?php echo base_url(); ?>js/view_inventario.js"></script>
+<script type="text/javascript" src="{base_url}js/view_inventario.js"></script>

@@ -1,11 +1,11 @@
-<?php echo $tabla_stock ?>
+{tabla_stock}
 
 <?php if ($datos_grafico): ?>
 <div class="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<a href="#panel_graficos" class="accordion-toggle" data-toggle="collapse">
-				<?php echo $this->lang->line('stock_sap_panel_graph'); ?>
+				{_stock_sap_panel_graph_}
 			</a>
 		</div>
 		<div class="panel-body collapse" id="panel_graficos">
@@ -52,12 +52,12 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.barRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.pointLabels.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.canvasTextRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/jqplot/jqplot.canvasAxisLabelRenderer.min.js"></script>
-<script type="text/javascript" src="<?php echo base_url(); ?>js/view_stock_datos.js"></script>
+<script type="text/javascript" src="{base_url}js/jqplot/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="{base_url}js/jqplot/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="{base_url}js/jqplot/jqplot.pointLabels.min.js"></script>
+<script type="text/javascript" src="{base_url}js/jqplot/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="{base_url}js/jqplot/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<script type="text/javascript" src="{base_url}js/view_stock_datos.js"></script>
 
 <script language="javascript">
 	var data_grafico = {

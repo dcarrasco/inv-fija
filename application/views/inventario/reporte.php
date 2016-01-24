@@ -1,50 +1,47 @@
-<div class="row hidden-print">
+<div class="row well hidden-print">
 
-	<?php echo print_validation_errors(); ?>
+	{validation_errors}
 
-	<?php echo form_open('','id="frm_param" class="form-search"'); ?>
-	<div class="col-md-3">
+	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
+
+	<div class="form-group">
+		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>
+		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm "'); ?>
+	</div>
+
+	<div class="form-group">
+		<label class="checkbox-inline">
+			<?php echo form_checkbox('elim_sin_dif', '1', set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
+			{_inventario_report_check_ocultar_regs_}
+		</label>
+		<label class="checkbox-inline">
+			<?php echo form_checkbox('incl_ajustes', '1', set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
+			{_inventario_report_check_incluir_ajustes_}
+		</label>
+		<label class="checkbox-inline">
+			<?php echo form_checkbox('incl_familias', '1', set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
+			{_inventario_report_check_incluir_familias_}
+		</label>
+	</div>
+
+	<div class="form-group pull-right">
 		<div class="input-group input-group-sm">
 			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="'. $this->lang->line('inventario_report_filter') .'" onKeyPress="return event.keyCode!=13"'); ?>
-			<span class="input-group-btn">
-				<button type="submit" class="btn btn-default" id="btn_filtrar"><span class="glyphicon glyphicon-search"></span></button>
-			</span>
+			<div class="input-group-btn">
+				<button type="submit" class="btn btn-default" id="btn_filtrar">
+					<span class="glyphicon glyphicon-search"></span>
+				</button>
+			</div>
 		</div>
 	</div>
 
-	<div class="col-md-4 col-md-offset-1">
-		<div class="checkbox">
-			<label>
-				<?php echo form_checkbox('elim_sin_dif', '1',set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
-				<?php echo $this->lang->line('inventario_report_check_ocultar_regs'); ?>
-			</label>
-		</div>
-		<div class="checkbox">
-			<label>
-				<?php echo form_checkbox('incl_ajustes', '1',set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
-				<?php echo $this->lang->line('inventario_report_check_incluir_ajustes'); ?>
-			</label>
-		</div>
-		<div class="checkbox">
-			<label>
-				<?php echo form_checkbox('incl_familias', '1',set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
-				<?php echo $this->lang->line('inventario_report_check_incluir_familias'); ?>
-			</label>
-		</div>
-	</div>
-
-	<div class="col-md-4">
-		<?php echo $this->lang->line('inventario_report_label_inventario'); ?>
-		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
-
-	</div>
 	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
 	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 	<?php echo form_close(); ?>
 </div>
 
 <div>
-	<?php echo $reporte; ?>
+	{reporte}
 </div> <!-- fin content-module-main -->
 
 

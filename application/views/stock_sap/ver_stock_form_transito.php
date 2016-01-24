@@ -17,7 +17,7 @@
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
 
-				<?php echo print_validation_errors(); ?>
+				{validation_errors}
 
 				<div class="col-md-4">
 					<div class="form-group">
@@ -103,4 +103,4 @@
 </div> <!-- panel-group -->
 <?php echo form_close(); ?>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>js/ver_stock_form.js"></script>
+<script type="text/javascript" src="{base_url}js/ver_stock_form.js"></script>

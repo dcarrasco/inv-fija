@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<?php echo $this->lang->line('stock_sap_panel_params'); ?>
+						{_stock_sap_panel_params_}
 					</a>
 				</div>
 			</div>
@@ -16,23 +16,21 @@
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
 
-				<?php echo print_validation_errors(); ?>
+				{validation_errors}
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('stock_sap_label_dates'); ?>
-						</label>
+						<label>{_stock_sap_label_dates_}</label>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
-								<?php echo $this->lang->line('stock_sap_radio_date1'); ?>
+								{_stock_sap_radio_date1_}
 							</label>
 						</div>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-								<?php echo $this->lang->line('stock_sap_radio_date2'); ?>
+								{_stock_sap_radio_date2_}
 							</label>
 						</div>
 						<?php echo form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
@@ -41,19 +39,17 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('stock_sap_label_alm'); ?>
-						</label>
+						<label>{_stock_sap_label_alm_}</label>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
-								<?php echo $this->lang->line('stock_sap_radio_alm1'); ?>
+								{_stock_sap_radio_alm1_}
 							</label>
 						</div>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
-								<?php echo $this->lang->line('stock_sap_radio_alm2'); ?>
+								{_stock_sap_radio_alm2_}
 							</label>
 						</div>
 						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
@@ -61,7 +57,7 @@
 							<div class="checkbox">
 								<label>
 									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
-									<?php echo $this->lang->line('stock_sap_check_show_alm'); ?>
+									{_stock_sap_check_show_alm_}
 								</label>
 							</div>
 						</div>
@@ -70,9 +66,7 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('stock_sap_label_mats'); ?>
-						</label>
+						<label>{_stock_sap_label_mats_}</label>
 
 						<!--
 						<div class="checkbox">
@@ -84,19 +78,19 @@
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
-								<?php echo $this->lang->line('stock_sap_check_mat'); ?>
+								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
-								<?php echo $this->lang->line('stock_sap_check_lotes'); ?>
+								{_stock_sap_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
-								<?php echo $this->lang->line('stock_sap_check_tipstock'); ?>
+								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 
@@ -104,15 +98,15 @@
 						<div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?>
-								<?php echo $this->lang->line('stock_sap_radio_equipos'); ?>
+								{_stock_sap_radio_equipos_}
 							</div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?>
-								<?php echo $this->lang->line('stock_sap_radio_sim'); ?>
+								{_stock_sap_radio_sim_}
 							</div>
 							<div class="checkbox-inline">
 								<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?>
-								<?php echo $this->lang->line('stock_sap_radio_otros'); ?>
+								{_stock_sap_radio_otros_}
 							</div>
 						</div>
 						<?php endif; ?>
@@ -122,14 +116,14 @@
 					<!--
 					<hr/>
 					<div class="form-group">
-						<?php echo $this->lang->line('stock_sap_label_mostrar'); ?>
+						{_stock_sap_label_mostrar_}
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
-							<?php echo $this->lang->line('stock_sap_radio_cant'); ?>
+							{_stock_sap_radio_cant_}
 						</div>
 						<div class="radio-inline">
 							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
-							<?php echo $this->lang->line('stock_sap_radio_monto'); ?>
+							{_stock_sap_radio_monto_}
 						</div>
 					</div>
 					-->
@@ -138,11 +132,11 @@
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-list-alt"></span>
-							<?php echo $this->lang->line('stock_sap_button_report'); ?>
+							{_stock_sap_button_report_}
 						</button>
 						<button type="submit" name="excel" value="excel" class="btn btn-default">
 							<span class="glyphicon glyphicon-file"></span>
-							<?php echo $this->lang->line('stock_sap_button_export'); ?>
+							{_stock_sap_button_export_}
 						</button>
 					</div>
 
@@ -155,4 +149,4 @@
 
 <?php echo form_close(); ?>
 
-<script type="text/javascript" src="<?php echo base_url(); ?>js/ver_stock_form.js"></script>
+<script type="text/javascript" src="{base_url}js/ver_stock_form.js"></script>

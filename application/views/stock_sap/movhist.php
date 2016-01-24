@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<?php echo $this->lang->line('stock_movhist_panel_params'); ?>
+						{_stock_movhist_panel_params_}
 					</a>
 				</div>
 			</div>
@@ -14,19 +14,19 @@
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
 
-				<?php echo print_validation_errors(); ?>
+				{validation_errors}
 
 				<div class="col-md-2">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_movhist_label_dates'); ?>
+							{_stock_movhist_label_dates_}
 						</label>
 
 						<div class="input-group">
 							<?php echo form_dropdown('tipo_fecha', $combo_tipo_fecha, $this->input->post('tipo_fecha'), 'class="form-control"'); ?>
 							<div class="input-group-btn">
 								<button id="filtro_tipo_fecha" class="btn btn-default" type="button">
-									<?php echo $this->lang->line('stock_movhist_button_filter'); ?>
+									{_stock_movhist_button_filter_}
 								</button>
 							</div>
 						</div>
@@ -38,7 +38,7 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_movhist_label_movs'); ?>
+							{_stock_movhist_label_movs_}
 						</label>
 
 						<?php echo form_multiselect('cmv[]', $combo_cmv, $this->input->post('cmv'), 'size="10" class="form-control"'); ?>
@@ -48,14 +48,14 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_movhist_label_alm'); ?>
+							{_stock_movhist_label_alm_}
 						</label>
 
 						<div class="input-group">
 							<?php echo form_dropdown('tipo_alm', $combo_tipo_alm, $this->input->post('tipo_alm'), 'class="form-control"'); ?>
 							<div class="input-group-btn">
 								<button id="filtro_tipo_alm" class="btn btn-default" type="button">
-									<?php echo $this->lang->line('stock_movhist_button_filter'); ?>
+									{_stock_movhist_button_filter_}
 								</button>
 							</div>
 						</div>
@@ -65,12 +65,12 @@
 						<div class="text-right">
 							<div class="radio-inline">
 								<?php echo form_radio('tipo_cruce_alm', 'alm',set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
-								<?php echo $this->lang->line('stock_movhist_radio_alm'); ?>
+								{_stock_movhist_radio_alm_}
 							</div>
 
 							<div class="radio-inline">
 								<?php echo form_radio('tipo_cruce_alm', 'rec',set_radio('tipo_cruce_alm', 'rec')); ?>
-								<?php echo $this->lang->line('stock_movhist_radio_rec'); ?>
+								{_stock_movhist_radio_rec_}
 							</div>
 						</div>
 					</div>
@@ -79,14 +79,14 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_movhist_label_mats'); ?>
+							{_stock_movhist_label_mats_}
 						</label>
 
 						<div class="input-group">
 						<?php echo form_dropdown('tipo_mat', $combo_tipo_mat, $this->input->post('tipo_mat'), 'class="form-control"'); ?>
 							<div class="input-group-btn">
 								<button id="filtro_tipo_mat" class="btn btn-default" type="button">
-									<?php echo $this->lang->line('stock_movhist_button_filter'); ?>
+									{_stock_movhist_button_filter_}
 								</button>
 							</div>
 						</div>
@@ -98,7 +98,7 @@
 				<div class="col-md-12 text-right">
 					<button type="submit" name="submit" class="btn btn-primary">
 						<span class="glyphicon glyphicon-list-alt"></span>
-						<?php echo $this->lang->line('stock_movhist_button_report'); ?>
+						{_stock_movhist_button_report_}
 					</button>
 				</div>
 
@@ -108,9 +108,9 @@
 </div>
 <?php echo form_close(); ?>
 
-<div>
-	<?php echo $reporte; ?>
-</div> <!-- fin content-module-main -->
+<div> <!-- *************** REPORTE *************** -->
+	{reporte}
+</div> <!-- *************** /REPORTE *************** -->
 
 <script type="text/javascript">
 $(document).ready(function() {

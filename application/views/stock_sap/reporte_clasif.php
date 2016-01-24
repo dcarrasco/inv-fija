@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<?php echo $this->lang->line('stock_sap_panel_params'); ?>
+						{_stock_sap_panel_params_}
 					</a>
 				</div>
 			</div>
@@ -18,7 +18,7 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_clasif_label_tipoop'); ?>
+							{_stock_clasif_label_tipoop_}
 						</label>
 						<?php echo form_dropdown('operacion', $combo_operacion, $tipo_op,'id="select_operacion" class="form-control"'); ?>
 					</div>
@@ -27,7 +27,7 @@
 				<div class="col-md-3">
 					<div class="form-group">
 						<label>
-							<?php echo $this->lang->line('stock_clasif_label_fechas'); ?>
+							{_stock_clasif_label_fechas_}
 						</label>
 						<?php echo form_multiselect('fechas[]', $combo_fechas, $fechas,'size="10" id="select_fecha" class="form-control"'); ?>
 					</div>
@@ -38,7 +38,7 @@
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('sel_borrar', 'borrar', set_radio('sel_borrar','borrar')); ?>
-								<?php echo $this->lang->line('stock_clasif_label_delete'); ?>
+								{_stock_clasif_label_delete_}
 							</label>
 						</div>
 					</div>
@@ -48,7 +48,7 @@
 					<div class="pull-right">
 						<button type="submit" id="btn_submit" name="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-list-alt"></span>
-							<?php echo $this->lang->line('stock_sap_button_report'); ?>
+							{_stock_sap_button_report_}
 						</button>
 					</div>
 				</div>

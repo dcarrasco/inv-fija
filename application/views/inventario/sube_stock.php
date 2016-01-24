@@ -4,12 +4,10 @@
 		<?php echo form_hidden('formulario','upload'); ?>
 
 		<fieldset>
-			<legend>Subir archivo de stock</legend>
+			<legend>{_inventario_upload_label_fieldset_}</legend>
 
 			<div class="form-group">
-				<label class="control-label col-sm-4">
-					<?php echo $this->lang->line('inventario_upload_label_inventario'); ?>
-				</label>
+				<label class="control-label col-sm-4">{_inventario_upload_label_inventario_}</label>
 				<div class="col-sm-8">
 					<p class="form-control-static"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></p>
 				</div>
@@ -17,19 +15,16 @@
 
 			<?php if (!$show_script_carga): ?>
 			<div class="form-group">
-				<label class="control-label col-sm-4">
-					<?php echo $this->lang->line('inventario_upload_label_file'); ?>
-				</label>
+				<label class="control-label col-sm-4">{_inventario_upload_label_file_}</label>
 				<div class="col-sm-8">
 					<div class="alert alert-danger">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 						<p><strong>
 							<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;
-							<?php echo $this->lang->line('inventario_upload_warning_line1'); ?>
+							{_inventario_upload_warning_line1_}
 						</strong></p>
 						<p>
-							<?php echo $this->lang->line('inventario_upload_warning_line2'); ?>
-							"<?php echo $inventario_nombre?>"
+							{_inventario_upload_warning_line2_} "{inventario_nombre}".
 						</p>
 					</div>
 					<?php echo form_upload('upload_file', '', 'class="form-control" accept=".txt,.csv"'); ?>
@@ -37,9 +32,7 @@
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-4">
-					<?php echo $this->lang->line('inventario_upload_label_password'); ?>
-				</label>
+				<label class="control-label col-sm-4">{_inventario_upload_label_password_}</label>
 				<div class="col-sm-8">
 					<?php echo form_password('upload_password', '', 'class="form-control"'); ?>
 				</div>
@@ -48,21 +41,19 @@
 
 			<?php if ($show_script_carga): ?>
 			<div class="form-group">
-				<label class="control-label col-sm-4">
-					Progreso
-				</label>
+				<label class="control-label col-sm-4">{_inventario_upload_label_progress_}</label>
 				<div class="col-sm-8">
-					<?php echo $msj_error; ?>
+					{msj_error}
 					<div id="progreso_carga">
 						<div class="progress">
 							<div class="progress-bar" role="progressbar" style="width: 0%;"></div>
 						</div>
 						<div id="status_progreso1">
-							<?php echo $this->lang->line('inventario_upload_status_OK'); ?>
-							<span id="reg_actual">0</span> / <?php echo ($regs_ok); ?>
+							{_inventario_upload_status_OK_}
+							<span id="reg_actual">0</span> / {regs_ok}
 						</div>
 						<div id="status_progreso2">
-							<?php echo $this->lang->line('inventario_upload_status_error'); ?>
+							{_inventario_upload_status_error_}
 							<span id="reg_error">0</span>
 						</div>
 					</div>
@@ -77,23 +68,22 @@
 					<?php if ($show_script_carga): ?>
 						<button class="btn btn-primary pull-right" id="ejecuta_carga">
 							<span class="glyphicon glyphicon-play"></span>
-							<?php echo $this->lang->line('inventario_upload_button_load'); ?>
+							{_inventario_upload_button_load_}
 						</button>
 					<?php else: ?>
 					<button type="submit" name="submit" class="btn btn-primary pull-right" id="btn_guardar">
 						<span class="glyphicon glyphicon-upload"></span>
-						<?php echo $this->lang->line('inventario_upload_button_upload'); ?>
+						{_inventario_upload_button_upload_}
 					</button>
 					<?php endif; ?>
 				</div>
 			</div>
 
 			<div class="form-group">
-				<label class="control-label col-sm-4">
-				</label>
+				<label class="control-label col-sm-4">{_inventario_upload_label_format_}</label>
 				<div class="col-sm-8">
 					<pre>
-<?php echo $this->lang->line('inventario_upload_format_file'); ?>
+{_inventario_upload_format_file_}
 					</pre>
 				</div>
 			</div>
@@ -192,7 +182,7 @@ $(document).ready(function() {
 		}
 	})
 
-	<?php echo $script_carga; ?>
+	{script_carga}
 
 });
 </script>

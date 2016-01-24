@@ -209,6 +209,7 @@ if ( ! function_exists('app_render_view'))
 
 		//
 		$datos['msg_alerta']      = $ci->session->flashdata('msg_alerta');
+		$datos['validation_errors'] = print_validation_errors();
 		$datos['vista_login']     = $vista_login;
 		$datos['app_nombre']      = $ci->config->item('app_nombre') . (ENVIRONMENT !== 'production' ? '- DEV' : '');
 		$datos['base_url']        = base_url();
@@ -306,7 +307,7 @@ if ( ! function_exists('set_message'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('print_validation_erros'))
+if ( ! function_exists('print_validation_errors'))
 {
 	/**
 	 * Imprime errores de validacion
@@ -324,6 +325,8 @@ if ( ! function_exists('print_validation_erros'))
 		{
 			return print_message('<ul>'.validation_errors().'</ul>', 'danger');
 		}
+
+		return NULL;
 	}
 }
 
@@ -370,7 +373,16 @@ if ( ! function_exists('form_has_error'))
 	 */
 	function form_has_error($form_field = '')
 	{
-		return (bool) (form_error($form_field) !== '');
+		$ci =& get_instance();
+		if (count($ci->input->post()) === 0)
+		{
+			return '';
+		}
+		else
+		{
+			return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
+		}
+
 	}
 }
 

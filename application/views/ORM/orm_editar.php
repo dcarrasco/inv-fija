@@ -4,10 +4,15 @@
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 		<fieldset>
 			<legend>
-				<?php echo ($modelo->get_model_id() ? 'Editar ' : 'Crear ') . $modelo->get_model_label() ?>
+				<?php if ($modelo->get_model_id()): ?>
+					{_orm_title_edit_}
+				<?php else: ?>
+					{_orm_title_create_}
+				<?php endif ?>
+				<?php echo $modelo->get_model_label() ?>
 			</legend>
 
-			<?php echo print_validation_errors(); ?>
+			{validation_errors}
 
 			<?php foreach ($modelo as $campo => $valor): ?>
 				<?php echo $modelo->form_item($campo); ?>
@@ -20,11 +25,11 @@
 					<div class="pull-right">
 						<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
 							<span class="glyphicon glyphicon-ok"></span>
-							<?php echo $this->lang->line('orm_button_save'); ?>
+							{_orm_button_save_}
 						</button>
 						<a href="<?php echo $link_cancelar; ?>" class="btn btn-default">
 							<span class="glyphicon glyphicon-ban-circle"></span>
-							<?php echo $this->lang->line('orm_button_cancel'); ?>
+							{_orm_button_cancel_}
 						</a>
 					</div>
 
@@ -32,7 +37,7 @@
 					<div class="pull-left">
 						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
 							<span class="glyphicon glyphicon-trash"></span>
-							<?php echo $this->lang->line('orm_button_delete'); ?>
+							{_orm_button_delete_}
 						</button>
 					</div>
 					<?php endif; ?>

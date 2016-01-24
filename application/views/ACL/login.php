@@ -2,9 +2,7 @@
 
 	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<h2>
-				<?php echo $this->lang->line('login_form_title'); ?>
-			</h2>
+			<h2>{_login_form_title_}</h2>
 		</div>
 
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
@@ -12,7 +10,7 @@
 		</div>
 
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<?php echo print_validation_errors(); ?>
+			{validation_errors}
 		</div>
 
 		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
@@ -21,19 +19,17 @@
 
 		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('usr') ? 'has-error' : ''; ?>">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('usr'); ?>">
 				<label class="control-label" for="usr">
-					<?php echo $this->lang->line('login_input_user'); ?>
+					{_login_input_user_}
 				</label>
 				<div class="controls">
 					<?php echo form_input('usr', set_value('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
 				</div>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('pwd') ? 'has-error' : ''; ?>">
-				<label class="control-label" for="pwd">
-					<?php echo $this->lang->line('login_input_password'); ?>
-				</label>
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('pwd'); ?>">
+				<label class="control-label" for="pwd">{_login_input_password_}</label>
 				<div class="controls">
 					<?php echo form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
 				</div>
@@ -46,15 +42,13 @@
 			</div>
 
 			<?php if ($usar_captcha): ?>
-				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('catpcha') ? 'has-error' : ''; ?>">
-					<label class="control-label" for="pwd">
-						<?php echo $this->lang->line('login_input_captcha'); ?>
-					</label>
+				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?php echo form_has_error('catpcha'); ?>">
+					<label class="control-label" for="pwd">{_login_input_captcha_}</label>
 					<div class="controls">
 						<?php echo form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
 					</div>
 					<div class="controls">
-						<?php echo $captcha_img; ?>
+						{captcha_img}
 					</div>
 				</div>
 			<?php endif ?>
@@ -63,7 +57,7 @@
 				<div class="checkbox">
 					<label>
 						<?php echo form_checkbox('remember_me', 'remember', set_checkbox('remember_me', 'remember', FALSE)); ?>
-						<?php echo $this->lang->line('login_check_remember_me'); ?>
+						{_login_check_remember_me_}
 					</label>
 				</div>
 			</div>
@@ -75,7 +69,7 @@
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-success">
-						<?php echo $this->lang->line('login_button_login'); ?>
+						{_login_button_login_}
 						<span class="glyphicon glyphicon-play"></span>
 					</button>
 				</div>

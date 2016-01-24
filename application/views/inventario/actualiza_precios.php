@@ -11,9 +11,9 @@
 		<?php endif; ?>
 		<div class="form-group">
 			<div class="col-sm-12 text-center">
-				<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir" <?php echo $update_status; ?>>
+				<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir" {update_status}>
 					<span class="glyphicon glyphicon-refresh"></span>
-					<?php echo $this->lang->line('inventario_act_precios_button'); ?>
+					{_inventario_act_precios_button_}
 				</button>
 			</div>
 		</div>

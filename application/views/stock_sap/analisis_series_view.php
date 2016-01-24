@@ -1,24 +1,21 @@
-<div class="row">
-	<?php //echo $menu_configuracion; ?>
-</div>
-
 <?php echo form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default hidden-print">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_params'); ?>
+			<span class="glyphicon glyphicon-filter"></span>
+			{_stock_analisis_params_}
 		</a>
 	</div>
 
 	<div class="panel-collapse collapse in" id="form_param">
 		<div class="panel-body">
 
-			<?php echo print_validation_errors(); ?>
+			{validation_errors}
 
 			<div class="col-md-4">
 				<div class="form-group">
 					<label>
-						<?php echo $this->lang->line('stock_analisis_label_series'); ?>
+						{_stock_analisis_label_series_}
 					</label>
 					<?php echo form_textarea(array(
 							'id' => 'series',
@@ -34,49 +31,49 @@
 			<div class="col-md-4">
 				<div class="form-group">
 					<label>
-						<?php echo $this->lang->line('stock_analisis_label_reports'); ?>
+						{_stock_analisis_label_reports_}
 					</label>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_mov', 'show', set_checkbox('show_mov', 'show', TRUE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_movimientos'); ?>
+							{_stock_analisis_check_movimientos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('ult_mov', 'show', set_checkbox('ult_mov', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_filtrar_ultmov'); ?>
+							{_stock_analisis_check_filtrar_ultmov_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_despachos', 'show', set_checkbox('show_despachos', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_despachos'); ?>
+							{_stock_analisis_check_despachos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_stock_sap', 'show', set_checkbox('show_stock_sap', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_stock_sap'); ?>
+							{_stock_analisis_check_stock_sap_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_stock_scl', 'show', set_checkbox('show_stock_scl', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_stock_scl'); ?>
+							{_stock_analisis_check_stock_scl_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_trafico'); ?>
+							{_stock_analisis_check_trafico_}
 							(<?php echo anchor($this->router->class . '/trafico_por_mes',$this->lang->line('stock_analisis_link_detalle_trafico')); ?>)
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
 							<?php echo form_checkbox('show_gdth', 'show', set_checkbox('show_gdth', 'show', FALSE)); ?>
-							<?php echo $this->lang->line('stock_analisis_check_gestor'); ?>
+							{_stock_analisis_check_gestor_}
 						</label>
 					</div>
 				</div>
@@ -86,11 +83,11 @@
 				<div class="pull-right">
 					<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
 						<span class="glyphicon glyphicon-list-alt"></span>
-						<?php echo $this->lang->line('stock_analisis_button_query'); ?>
+						{_stock_analisis_button_query_}
 					</button>
 					<button name="excel" class="btn btn-default" id="boton-reset">
 						<span class="glyphicon glyphicon-refresh"></span>
-						<?php echo $this->lang->line('stock_analisis_button_reset'); ?>
+						{_stock_analisis_button_reset_}
 					</button>
 				</div>
 			</div>
@@ -105,7 +102,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_movimientos'); ?>
+			{_stock_analisis_title_movimientos_}
 		</a>
 	</div>
 
@@ -121,7 +118,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_despachos" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_despachos'); ?>
+			{_stock_analisis_title_despachos_}
 		</a>
 	</div>
 
@@ -137,7 +134,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_stock_sap" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_stock_sap'); ?>
+			{_stock_analisis_title_stock_sap_}
 		</a>
 	</div>
 
@@ -153,7 +150,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_stock_scl" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_stock_scl'); ?>
+			{_stock_analisis_title_stock_scl_}
 		</a>
 	</div>
 
@@ -169,7 +166,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_trafico" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_trafico'); ?>
+			{_stock_analisis_title_trafico_}
 		</a>
 	</div>
 
@@ -186,7 +183,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_gdth" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_analisis_title_gestor'); ?>
+			{_stock_analisis_title_gestor_}
 		</a>
 	</div>
 

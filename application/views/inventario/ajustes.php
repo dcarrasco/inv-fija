@@ -1,7 +1,6 @@
 <div>
 	<div class="pull-left">
-		<strong>Inventario</strong>
-		<?php echo $inventario; ?>
+		<strong>Inventario</strong> {inventario}
 	</div>
 	<div class="pull-right">
 		<?php echo anchor(
@@ -14,32 +13,32 @@
 
 
 <div>
-	<?php echo form_open($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/' . $pag . '/' . time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'.$pag.'/'.time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
 	<table class="table table-hover table-condensed reporte table-fixed-header">
 
-		<!-- encabezado -->
+		<!-- ENCABEZADO -->
 		<thead class="header">
 			<tr>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_material'); ?></th>
-				<th><?php echo $this->lang->line('inventario_digit_th_descripcion'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_lote'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_centro'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_almacen'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_ubicacion'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_hoja'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_UM'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_sap'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_fisica'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_cant_ajuste'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_dif'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_tipo_dif'); ?></th>
-				<th class="text-center"><?php echo $this->lang->line('inventario_digit_th_observacion_ajuste'); ?></th>
+				<th class="text-center">{_inventario_digit_th_material_}</th>
+				<th class="text-left">{_inventario_digit_th_descripcion_}</th>
+				<th class="text-center">{_inventario_digit_th_lote_}</th>
+				<th class="text-center">{_inventario_digit_th_centro_}</th>
+				<th class="text-center">{_inventario_digit_th_almacen_}</th>
+				<th class="text-center">{_inventario_digit_th_ubicacion_}</th>
+				<th class="text-center">{_inventario_digit_th_hoja_}</th>
+				<th class="text-center">{_inventario_digit_th_UM_}</th>
+				<th class="text-center">{_inventario_digit_th_cant_sap_}</th>
+				<th class="text-center">{_inventario_digit_th_cant_fisica_}</th>
+				<th class="text-center">{_inventario_digit_th_cant_ajuste_}</th>
+				<th class="text-center">{_inventario_digit_th_dif_}</th>
+				<th class="text-center">{_inventario_digit_th_tipo_dif_}</th>
+				<th class="text-center">{_inventario_digit_th_observacion_ajuste_}</th>
 			</tr>
 		</thead>
 
-		<!-- cuerpo -->
+		<!-- CUERPO -->
 		<tbody>
 			<?php $sum_sap = 0; $sum_fisico = 0; $sum_ajuste = 0; ?>
 			<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
@@ -56,10 +55,10 @@
 						<td></td>
 						<td></td>
 						<td></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, true); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, true); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, true); ?></strong></td>
-						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, true); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, TRUE); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, TRUE); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, TRUE); ?></strong></td>
+						<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, TRUE); ?></strong></td>
 						<td></td>
 						<td></td>
 					</tr>
@@ -71,7 +70,7 @@
 
 				<tr>
 					<td class="text-center"><?php echo ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
-					<td><?php echo ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
+					<td class="text-left"><?php echo ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
 					<td class="text-center"><?php echo $detalle->lote; ?></td>
 					<td class="text-center"><?php echo $detalle->centro; ?></td>
 					<td class="text-center"><?php echo $detalle->almacen; ?></td>
@@ -82,8 +81,8 @@
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
 					<td class="text-center"><?php echo fmt_cantidad($detalle->stock_fisico); ?></td>
 					<td>
-						<?php echo form_input('stock_ajuste_' . $detalle->id, set_value('stock_ajuste_' . $detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="' . $tab_index . '"'); ?>
-						<?php echo form_error('stock_ajuste_' . $detalle->id); ?>
+						<?php echo form_input('stock_ajuste_'.$detalle->id, set_value('stock_ajuste_'.$detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="'.$tab_index.'"'); ?>
+						<?php echo form_error('stock_ajuste_'.$detalle->id); ?>
 					</td>
 					<td class="text-center">
 						<?php echo fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>
@@ -92,22 +91,22 @@
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
 							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-question-sign"></span>
-								<?php echo $this->lang->line('inventario_report_label_sobrante'); ?>
+								{_inventario_report_label_sobrante_}
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
 							<button class="btn btn-default btn-sm btn-danger" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-remove"></span>
-								<?php echo $this->lang->line('inventario_report_label_faltante'); ?>
+								{_inventario_report_label_faltante_}
 							</button>
 						<?php else: ?>
 							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
 								<span class="glyphicon glyphicon-ok"></span>
-								<?php echo $this->lang->line('inventario_report_label_OK'); ?>
+								{_inventario_report_label_OK'_}
 							</button>
 						<?php endif; ?>
 					</td>
 					<td class="text-center">
-						<?php echo form_input('observacion_' . $detalle->id, set_value('observacion_' . $detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="' . ($tab_index + 10000) . '"'); ?>
+						<?php echo form_input('observacion_'.$detalle->id, set_value('observacion_'.$detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="'.($tab_index + 10000).'"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $detalle->stock_sap; $sum_fisico += $detalle->stock_fisico; $sum_ajuste += $detalle->stock_ajuste?>
@@ -126,10 +125,10 @@
 				<td></td>
 				<td></td>
 				<td></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, true); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, true); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, true); ?></strong></td>
-				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, true); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_sap, 0, TRUE); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico, 0, TRUE); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_ajuste, 0, TRUE); ?></strong></td>
+				<td class="text-center"><strong><?php echo fmt_cantidad($subtot_fisico - $subtot_sap + $subtot_ajuste, 0, TRUE); ?></strong></td>
 				<td></td>
 				<td></td>
 			</tr>
@@ -158,13 +157,13 @@
 				<td>
 					<button type="submit" class="btn btn-primary">
 						<span class="glyphicon glyphicon-ok-sign"></span>
-						<?php echo $this->lang->line('inventario_report_save'); ?>
+						{_inventario_report_save_}
 					</button>
 				</td>
 			</tr>
 		</tfoot>
 	</table>
-	<script type="text/javascript" src="<?php echo base_url(); ?>js/reporte.js"></script>
+	<script type="text/javascript" src="{base_url}js/reporte.js"></script>
 	<?php echo form_close(); ?>
 </div><!-- fin content-module-main-principal -->
 

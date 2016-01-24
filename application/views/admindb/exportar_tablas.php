@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<?php echo $this->lang->line('adminbd_exportar_params'); ?>
+						{_adminbd_exportar_params_}
 					</a>
 				</div>
 			</div>
@@ -15,27 +15,21 @@
 		<div class="panel-collapse collapse in" id="form_param">
 			<div class="panel-body">
 
-				<?php echo print_validation_errors(); ?>
+				{validation_errors}
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('adminbd_exportar_label_tables'); ?>
-						</label>
+						<label>{_adminbd_exportar_label_tables_}</label>
 						<?php echo form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="select_tabla" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('adminbd_exportar_label_fields'); ?>
-						</label>
+						<label>{_adminbd_exportar_label_fields_}</label>
 						<?php echo form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="select_campo" size="7" class="form-control"'); ?>
 
-						<label>
-							<?php echo $this->lang->line('adminbd_exportar_label_fields_filter'); ?>
-						</label>
+						<label>{_adminbd_exportar_label_fields_filter_}</label>
 						<?php echo form_input('filtro', $this->input->post('filtro'),'id="filtro_campo" class="form-control"'); ?>
 					</div>
 				</div>
@@ -44,7 +38,7 @@
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
 							<span class="glyphicon glyphicon-cloud-download"></span>
-							<?php echo $this->lang->line('adminbd_exportar_button_submit'); ?>
+							{_adminbd_exportar_button_submit_}
 						</button>
 					</div>
 

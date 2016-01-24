@@ -2,7 +2,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_gestor_panel_params'); ?>
+			{_stock_gestor_panel_params_}
 		</a>
 	</div>
 
@@ -14,13 +14,13 @@
 						<div class="radio-inline">
 							<label>
 								<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
-								<?php echo $this->lang->line('stock_gestor_radio_deco'); ?>
+								{_stock_gestor_radio_deco_}
 							</label>
 						</div>
 						<div class="radio-inline">
 							<label>
 								<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
-								<?php echo $this->lang->line('stock_gestor_radio_cliente'); ?>
+								{_stock_gestor_radio_cliente_}
 							</label>
 						</div>
 						<?php echo form_textarea(array(
@@ -36,21 +36,19 @@
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							<?php echo $this->lang->line('stock_gestor_label_report'); ?>
-						</label>
+						<label>{_stock_gestor_label_report_}</label>
 
 						<div>
 							<div class="radio-inline">
 								<label>
 									<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
-									<?php echo $this->lang->line('stock_gestor_radio_log_complete'); ?>
+									{_stock_gestor_radio_log_complete_}
 								</label>
 							</div>
 							<div class="radio-inline">
 								<label>
 									<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
-									<?php echo $this->lang->line('stock_gestor_radio_log_ultdeco'); ?>
+									{_stock_gestor_radio_log_ultdeco_}
 								</label>
 							</div>
 						</div>
@@ -58,25 +56,23 @@
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
-								<?php echo $this->lang->line('stock_gestor_check_filter_last_mov'); ?>
+								{_stock_gestor_check_filter_last_mov_}
 							</label>
 						</div>
 
-						<label>
-							<?php echo $this->lang->line('stock_gestor_label_typeop'); ?>
-						</label>
+						<label>{_stock_gestor_label_typeop_}</label>
 
 						<div>
 							<div class="checkbox-inline">
 								<label>
 									<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
-									<?php echo $this->lang->line('stock_gestor_check_alta'); ?>
+									{_stock_gestor_check_alta_}
 								</label>
 							</div>
 							<div class="checkbox-inline">
 								<label>
 									<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
-									<?php echo $this->lang->line('stock_gestor_check_baja'); ?>
+									{_stock_gestor_check_baja_}
 								</label>
 							</div>
 						</div>
@@ -87,11 +83,11 @@
 					<div class="form-group pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
 							<span class="glyphicon glyphicon-list-alt"></span>
-							<?php echo $this->lang->line('stock_gestor_button_report'); ?>
+							{_stock_gestor_button_report_}
 						</button>
 						<button name="excel" class="btn btn-default" id="boton-reset">
 							<span class="glyphicon glyphicon-refresh"></span>
-							<?php echo $this->lang->line('stock_gestor_button_reset'); ?>
+							{_stock_gestor_button_reset_}
 						</button>
 					</div>
 				</div>
@@ -106,7 +102,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
-			<?php echo $this->lang->line('stock_gestor_panel_log'); ?>
+			{_stock_gestor_panel_log_}
 		</a>
 	</div>
 

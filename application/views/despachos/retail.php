@@ -1,4 +1,4 @@
-<?php echo print_validation_errors(); ?>
+{validation_errors}
 
 <?php echo form_open('','id="frm_param" class="form-horizontal hidden-print"'); ?>
 <div class="form-group">
