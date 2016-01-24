@@ -1,15 +1,15 @@
 <div class="row well">
+{validation_errors}
+
 <?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form" class="form-inline"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
 
-	{validation_errors}
-
-	<div class="form-group col-md-4">
+	<div class="form-group col-md-3">
 		<label>{_inventario_report_label_inventario_}</label>
 		<p class="form-control-static">{nombre_inventario}</p>
 	</div>
 
-	<div class="form-group <?php echo form_has_error('hoja'); ?>">
+	<div class="form-group col-md-3">
 		<label class="control-label">{_inventario_page_}</label>
 
 		<div class="input-group col-md-7">
@@ -32,18 +32,16 @@
 		</div>
 	</div>
 
-	<div class="form-group <?php echo form_has_error('auditor'); ?>">
+	<div class="form-group col-md-3">
 		<label class="control-label">{_inventario_auditor_}</label>
 		{combo_auditores}
 	</div>
 
 	<div class="form-group pull-right">
-		<div class="input-group">
-			<a href="<?php echo site_url($this->router->class.'/editar/'.$hoja.'/'.$id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
-				<span class="glyphicon glyphicon-plus-sign"></span>
-				{_inventario_button_new_line_}
-			</a>
-		</div>
+		<a href="<?php echo site_url($this->router->class.'/editar/'.$hoja.'/'.$id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
+			<span class="glyphicon glyphicon-plus-sign"></span>
+			{_inventario_button_new_line_}
+		</a>
 	</div>
 
 <?php echo form_close(); ?>
@@ -102,33 +100,27 @@
 					<td class="text-center"><?php echo $linea_det->um; ?></td>
 					<td class="text-right"><?php echo fmt_cantidad($linea_det->stock_sap); ?></td>
 					<td class="text-center col-md-1">
-						<div class="form-group <?php echo form_has_error('stock_fisico_'.$linea_det->id); ?>">
-							<?php echo form_input(
-								'stock_fisico_'.$linea_det->id,
-								set_value('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
-								'class="input-sm form-control text-right" tabindex="'.$tab_index.'"'
-							); ?>
-							<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
-						</div>
+						<?php echo form_input(
+							'stock_fisico_'.$linea_det->id,
+							set_value('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
+							'class="input-sm form-control text-right" tabindex="'.$tab_index.'"'
+						); ?>
+						<?php echo form_error('stock_fisico_' . $linea_det->id); ?>
 					</td>
 					<td class="text-center col-md-1">
-						<div class="form-group <?php echo form_has_error('hu_'.$linea_det->id); ?>">
-							<?php echo form_input(
-								'hu_'.$linea_det->id,
-								set_value('hu_'.$linea_det->id, $linea_det->hu),
-								'class="input-sm form-control" tabindex="'.($tab_index+100).'"'
-							); ?>
-							<?php echo form_error('hu_'.$linea_det->id); ?>
-						</div>
+						<?php echo form_input(
+							'hu_'.$linea_det->id,
+							set_value('hu_'.$linea_det->id, $linea_det->hu),
+							'class="input-sm form-control" tabindex="'.($tab_index+100).'"'
+						); ?>
+						<?php echo form_error('hu_'.$linea_det->id); ?>
 					</td>
 					<td class="text-center">
-						<div class="form-group <?php echo form_has_error('observacion_'.$linea_det->id); ?>">
-							<?php echo form_input(
-								'observacion_'.$linea_det->id,
-								set_value('observacion_'.$linea_det->id, $linea_det->observacion),
-								'class="input-sm form-control" maxlength="100" tabindex="'.($tab_index + 200).'"'
-							); ?>
-						</div>
+						<?php echo form_input(
+							'observacion_'.$linea_det->id,
+							set_value('observacion_'.$linea_det->id, $linea_det->observacion),
+							'class="input-sm form-control" maxlength="100" tabindex="'.($tab_index + 200).'"'
+						); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $linea_det->stock_sap; $sum_fisico += $linea_det->stock_fisico;?>

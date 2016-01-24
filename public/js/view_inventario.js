@@ -26,6 +26,7 @@ $(document).ready(function() {
 
 	$('#agr_filtrar').blur(function () {
 		actualizaMateriales($('#agr_filtrar').val());
+		$('#agr_material').focus();
 	});
 
 	function actualizaMateriales(filtro) {

@@ -496,10 +496,15 @@ class Orm_model implements IteratorAggregate {
 	 * @param  string $campo Nombre del campo para devolver el elemento de formulario
 	 * @return string        Formulario
 	 */
-	public function form_item($campo = '')
+	public function form_item($campo = '', $show_help = TRUE)
 	{
 		$formulario_enviado = (boolean) (count($this->input->post()) !== 0);
-		$item_error = $formulario_enviado ? '' : '';
+
+		$field_error = NULL;
+		if ($formulario_enviado)
+		{
+			$field_error = (form_has_error($campo) === 'has-error') ? TRUE : FALSE;
+		}
 
 		if ($campo !== '')
 		{
@@ -509,9 +514,10 @@ class Orm_model implements IteratorAggregate {
 										'id_'.$campo,
 										array('class' => 'control-label col-sm-4')
 									),
-				'item_error'    => form_has_error($campo) ? 'has-error' : $item_error,
-				'item_form'     => $this->print_form_field($campo),
-				'item_help'     => $this->get_texto_ayuda_field($campo),
+				'item_error'    => form_has_error($campo),
+				'item-feedback' => is_null($field_error) ? '' : 'has-feedback',
+				'item_form'     => $this->print_form_field($campo, FALSE, '', $field_error),
+				'item_help'     => $show_help ? $this->get_texto_ayuda_field($campo) : '',
 			);
 
 			return $this->parser->parse('orm/form_item', $data, TRUE);
@@ -528,9 +534,10 @@ class Orm_model implements IteratorAggregate {
 	 * @param  string  $campo          Nombre del campo
 	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @param  string  $clase_adic     Clases adicionales para construir el formulario
+	 * @param  mixed   $field_error    Indica si el campo tiene error o no
 	 * @return string                  Elemento de formulario
 	 */
-	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '')
+	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '', $field_error = NULL)
 	{
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->_model_fields[$campo]->get_relation();
@@ -550,7 +557,7 @@ class Orm_model implements IteratorAggregate {
 			$this->_model_fields[$campo]->set_relation($arr_relation);
 		}
 
-		return $this->_model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic);
+		return $this->_model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic, $field_error);
 	}
 
 	// --------------------------------------------------------------------

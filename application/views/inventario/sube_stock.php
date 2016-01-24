@@ -2,8 +2,8 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
 		<?php echo form_hidden('formulario','upload'); ?>
-
 		<fieldset>
+
 			<legend>{_inventario_upload_label_fieldset_}</legend>
 
 			<div class="form-group">
@@ -90,6 +90,7 @@
 
 		</fieldset>
 		<?php echo form_close(); ?>
+
 	</div>
 </div>
 

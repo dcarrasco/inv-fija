@@ -331,9 +331,10 @@ class Orm_field {
 	 * @param  string  $valor          Valor a desplegar en el elemento de formulario
 	 * @param  boolean $filtra_activos Indica si se mostraran sólo los valores activos
 	 * @param  string  $clase_adic     Clases adicionales para la construccion del formulario
+	 * @param  mixed   $field_error    Indica si el campo tiene error o no
 	 * @return string                  Elemento de formulario
 	 */
-	public function form_field($valor = '', $filtra_activos = FALSE, $clase_adic = '')
+	public function form_field($valor = '', $filtra_activos = FALSE, $clase_adic = '', $field_error = NULL)
 	{
 		$ci =& get_instance();
 
@@ -350,6 +351,12 @@ class Orm_field {
 			'maxlength' => $this->_largo,
 			'size'      => $this->_largo,
 		);
+		$status_feedback = '';
+		if ( ! is_null($field_error))
+		{
+			$icon_feedback = $field_error ? 'remove' : 'ok';
+			$status_feedback = '<span class="glyphicon glyphicon-'.$icon_feedback.' form-control-feedback" aria-hidden="true"></span>';
+		}
 
 		if ($this->_tipo === 'id'
 			OR ($this->_es_id AND $valor_field !== '' AND $valor_field !== NULL)
@@ -376,34 +383,34 @@ class Orm_field {
 			$arr_param['cols'] = '50';
 			$arr_param['rows'] = '5';
 
-			return form_textarea($arr_param);
+			return form_textarea($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'char' OR $this->_tipo === 'datetime')
 		{
-			return form_input($arr_param);
+			return form_input($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'int')
 		{
-			return form_number($arr_param);
+			return form_number($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'password')
 		{
-			return form_password($arr_param);
+			return form_password($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'picture')
 		{
-			return form_picture($arr_param);
+			return form_picture($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'real')
 		{
 			$arr_param['size'] = $this->_largo + $this->_decimales + 1;
 
-			return form_input($arr_param);
+			return form_input($arr_param).$status_feedback;
 		}
 
 		if ($this->_tipo === 'boolean')

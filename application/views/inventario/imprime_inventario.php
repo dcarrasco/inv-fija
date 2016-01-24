@@ -2,8 +2,8 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('','class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','imprime'); ?>
-
 		<fieldset>
+
 			<legend>{_inventario_print_label_legend_}</legend>
 
 			{validation_errors}

@@ -2,31 +2,13 @@
 	<div class="col-md-8 col-md-offset-2 well">
 
 		<?php echo form_open('', 'class="form-horizontal" role="form"')?>
-
 		<fieldset>
+
 		<legend>{_inventario_form_new_}</legend>
 
 		{validation_errors}
 
-		<div class="form-group <?php echo form_has_error('ubicacion'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('ubicacion'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('ubicacion'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('ubicacion'); ?>
-			</div>
-		</div>
-
-		<!--  20130624 DCR: ELIMINA CAMPO HU
-		<div class="col-md-6">
-			<label class="control-label">
-				<?php //echo $detalle_inventario->get_label_field('hu'); ?>
-				<?php //echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
-			</label>
-			<?php //echo detalle_inventario->print_form_field('hu'); ?>
-		</div>
-		-->
+		<?php echo $detalle_inventario->form_item('ubicacion', FALSE); ?>
 
 		<div class="form-group <?php echo form_has_error('catalogo'); ?>">
 			<label class="control-label col-sm-4">
@@ -35,7 +17,7 @@
 			</label>
 			<div class="col-sm-3">
 				<div class="input-group">
-					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar"'); ?>
+					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
 					<span class="input-group-btn">
 						<div class="btn btn-default">
 							<span class="glyphicon glyphicon-search"></span>
@@ -48,75 +30,19 @@
 			</div>
 		</div>
 
-		<div class="form-group <?php echo form_has_error('lote'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('lote'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('lote'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('lote'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('lote', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('um'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('um'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('um'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('um'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('um', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('centro'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('centro'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('centro'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('centro'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('centro', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('almacen'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('almacen'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('almacen'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('almacen'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('almacen', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('stock_fisico'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('stock_fisico'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('stock_fisico'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('stock_fisico', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('hu'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('hu'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('hu'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('hu', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('observacion'); ?>">
-			<label class="control-label col-sm-4">
-				<?php echo $detalle_inventario->get_label_field('observacion'); ?>
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
-			</label>
-			<div class="col-sm-8">
-				<?php echo $detalle_inventario->print_form_field('observacion'); ?>
-			</div>
-		</div>
+		<?php echo $detalle_inventario->form_item('observacion', FALSE); ?>
 
 		<div class="form-group">
 			<label class="control-label col-sm-4">
@@ -148,6 +74,7 @@
 				</div>
 			</div>
 		</div>
+
 		</fieldset>
 		<?php echo form_close(); ?>
 	</div> <!-- fin content-module-main-agregar -->

@@ -3,6 +3,7 @@
 
 		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 		<fieldset>
+
 			<legend>
 				<?php if ($modelo->get_model_id()): ?>
 					{_orm_title_edit_}

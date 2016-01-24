@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-$lang['orm_filter']        = 'Texto a filtrar...';
+$lang['orm_filter']        = 'Buscar texto...';
 $lang['orm_button_new']    = 'Agregar';
 $lang['orm_link_edit']     = 'editar';
 $lang['orm_button_save']   = 'Guardar';

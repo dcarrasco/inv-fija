@@ -1,4 +1,4 @@
-<div class="form-group {item_error}">
+<div class="form-group {item_error} {item-feedback}">
 	{form_label}
 	<div class="col-sm-8">
 		{item_form}
