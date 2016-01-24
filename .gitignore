@@ -2,5 +2,5 @@
 upload/
 application/cache/
 application/logs/
-public/img/captcha
+public/img/captcha/
 vendor/
