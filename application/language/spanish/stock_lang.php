@@ -59,6 +59,7 @@ $lang['stock_sap_radio_cant']     = 'cantidad';
 $lang['stock_sap_radio_monto']    = 'monto';
 $lang['stock_sap_button_report']  = 'Reporte';
 $lang['stock_sap_button_export']  = 'Exportar a Excel ...';
+$lang['stock_sap_label_mostrar_mat'] = 'Mostrar tipo de material';
 
 $lang['stock_perm_panel_params']  = 'Par&aacute;metros consulta';
 $lang['stock_perm_panel_date']    = 'Fecha reporte';

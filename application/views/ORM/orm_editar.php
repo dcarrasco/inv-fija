@@ -28,7 +28,7 @@
 							<span class="glyphicon glyphicon-ok"></span>
 							{_orm_button_save_}
 						</button>
-						<a href="<?php echo $link_cancelar; ?>" class="btn btn-default">
+						<a href="{link_cancelar}" class="btn btn-default" role="button">
 							<span class="glyphicon glyphicon-ban-circle"></span>
 							{_orm_button_cancel_}
 						</a>

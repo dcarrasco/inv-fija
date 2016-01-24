@@ -9,7 +9,7 @@
 			<div class="form-group">
 				<label class="control-label col-sm-4">{_inventario_upload_label_inventario_}</label>
 				<div class="col-sm-8">
-					<p class="form-control-static"><?php echo $inventario_id . ' - ' . $inventario_nombre; ?></p>
+					<p class="form-control-static">{inventario_id} - {inventario_nombre}</p>
 				</div>
 			</div>
 

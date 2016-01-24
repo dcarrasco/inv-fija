@@ -1,6 +1,6 @@
 <div class="row hidden-print">
 	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
-	<div class="col-md-3">
+	<div class="col-md-3 col-sm-5 col-xs-6">
 		<div class="input-group input-group-sm">
 			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
 			<span class="input-group-btn">
@@ -11,8 +11,8 @@
 		</div>
 	</div>
 
-	<div class="col-md-9 text-right">
-		<a href="<?php echo $url_editar; ?>" class="btn btn-primary" id="btn_mostrar_agregar">
+	<div class="col-md-9 col-sm-7 col-xs-6 text-right">
+		<a href="{url_editar}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
 			<span class="glyphicon glyphicon-plus-sign"></span>
 			{_orm_button_new_} <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>

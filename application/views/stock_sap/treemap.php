@@ -48,8 +48,8 @@
 	google.setOnLoadCallback(drawChart2);
 
 	var data = {
-		cantidad: <?php echo $treemap_data_cantidad ?>,
-		valor: <?php echo $treemap_data_valor ?>
+		cantidad: {treemap_data_cantidad},
+		valor: {treemap_data_valor}
 	};
 
 	$('input[name="sel_centro"]').click(function() {

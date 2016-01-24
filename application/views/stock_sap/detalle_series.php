@@ -1,7 +1,7 @@
 <div class="content-module">
 
 	<div class="content-module-main">
-		<?php echo $detalle_series ?>
+		{detalle_series}
 	</div> <!-- fin content-module-main -->
 
 	<div class="content-module-footer cf">

@@ -26,11 +26,12 @@
 
 	<div class="form-group pull-right">
 		<div class="input-group input-group-sm">
-			<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
-			<div class="input-group-btn">
-				<button type="submit" class="btn btn-default" id="btn_filtrar">
+			<div class="input-group">
+				<span class="input-group-addon" id="btn_filtrar">
 					<span class="glyphicon glyphicon-search"></span>
-				</button>
+
+				</span>
+				<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
 			</div>
 		</div>
 	</div>
@@ -87,10 +88,10 @@ $(document).ready(function() {
 			});
 			$('tr.not_found').hide();
 			$('#filtrar_material').addClass('search_found');
-			$('#btn_filtrar').removeClass('btn-default').addClass('btn-primary');
+			$('#btn_filtrar').addClass('search_found');
 		} else {
 			$('#filtrar_material').removeClass('search_found');
-			$('#btn_filtrar').removeClass('btn-primary').addClass('btn-default');
+			$('#btn_filtrar').removeClass('search_found');
 			$('tr.not_found').show();
 			$('tr.not_found').removeClass('not_found');
 		}

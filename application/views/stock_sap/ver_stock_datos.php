@@ -12,20 +12,20 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div>
-						<strong>Mostrar tipo de material</strong>
+						<strong>{_stock_sap_label_mostrar_mat_}</strong>
 					</div>
 					<div>
 						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo', 'equipos'), 'id="sel_graph_tipo_equipos"'); ?>
-							Equipos
+							{_stock_sap_radio_equipos_}
 						</label>
 						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo', 'simcard'), 'id="sel_graph_tipo_simcard"'); ?>
-							Simcard
+							{_stock_sap_radio_sim_}
 						</label>
 						<label class="checkbox-inline">
 							<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo', 'otros'), 'id="sel_graph_tipo_otros"'); ?>
-							Otros
+							{_stock_sap_radio_otros_}
 						</label>
 					</div>
 					<div>

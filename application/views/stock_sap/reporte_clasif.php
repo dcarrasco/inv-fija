@@ -124,12 +124,12 @@ google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(drawChart);
 
 function drawChart() {
-	var data = google.visualization.arrayToDataTable(<?php echo $reporte_js; ?>);
+	var data = google.visualization.arrayToDataTable({reporte_js});
 
 	var options = {
-	title: 'Stock <?php echo $tipo_op; ?>',
+	title: 'Stock {tipo_op}',
 	pieHole: 0.6,
-	slices: <?php echo $js_slices; ?>,
+	slices: {js_slices},
 	};
 
 	var chart = new google.visualization.PieChart(document.getElementById('donutchart'));

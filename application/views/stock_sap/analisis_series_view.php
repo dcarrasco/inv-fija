@@ -17,14 +17,7 @@
 					<label>
 						{_stock_analisis_label_series_}
 					</label>
-					<?php echo form_textarea(array(
-							'id' => 'series',
-							'name' => 'series',
-							'rows' => '10',
-							'cols' => '30',
-							'value' => set_value('series'),
-							'class' => 'form-control',
-						)); ?>
+					<?php echo form_textarea('series', set_value('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
 				</div>
 			</div>
 
@@ -108,7 +101,7 @@
 
 	<div class="panel-body collapse in" id="tabla_movimientos">
 		<div class="accordion-inner" style="overflow: auto">
-			<?php echo $hist ?>
+			{hist}
 		</div>
 	</div>
 </div>
@@ -124,7 +117,7 @@
 
 	<div class="panel-body collapse in" id="tabla_despachos">
 		<div class="accordion-inner" style="overflow: auto">
-			<?php echo $desp ?>
+			{desp}
 		</div>
 	</div>
 </div>
@@ -140,7 +133,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_sap">
 		<div class="accordion-inner" style="overflow: auto">
-			<?php echo $stock ?>
+			{stock}
 		</div>
 	</div>
 </div>
@@ -156,7 +149,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_scl">
 		<div class="accordion-inner" style="overflow: auto">
-			<?php echo $stock_scl ?>
+			{stock_scl}
 		</div>
 	</div>
 </div>
@@ -172,7 +165,7 @@
 
 	<div class="panel-body collapse in" id="tabla_trafico">
 		<div class="accordion-inner" style="overflow: auto">
-			<?php echo $trafico ?>
+			{trafico}
 		</div>
 	</div>
 </div>
