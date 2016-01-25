@@ -36,9 +36,7 @@
 <div class="container">
 
 <?php if (isset($app_menu_modulo)): ?>
-	<!-- ============================== MENU MODULO ============================== -->
 	{app_menu_modulo}
-	<!-- ============================== /MENU MODULO ============================== -->
 	<div class="tab-content">
 	<div class="tab-pane active">
 <?php endif; ?>
