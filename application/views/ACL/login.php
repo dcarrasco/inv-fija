@@ -9,12 +9,12 @@
 			<hr>
 		</div>
 
-		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+		<div class="col-md-12">
 			{validation_errors}
 		</div>
 
-		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<?php echo (isset($msg_alerta) and $msg_alerta !== '') ? $msg_alerta : ''; ?>
+		<div class="col-md-12">
+			{msg_alerta}
 		</div>
 
 		<?php echo form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
