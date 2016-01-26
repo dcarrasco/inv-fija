@@ -33,6 +33,19 @@ class Adminbd_model extends CI_Model {
 	 */
 	private $_db_object;
 
+	/**
+	 * Reglas de validación formulario exportar tablas
+	 *
+	 * @var array
+	 */
+	public $validation_exportar_tablas = array(
+		array(
+			'field' => 'tabla',
+			'label' => 'Tabla',
+			'rules' => 'required',
+		),
+	);
+
 	// --------------------------------------------------------------------
 
 	/**

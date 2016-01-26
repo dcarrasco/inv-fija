@@ -72,16 +72,18 @@ class Adminbd_exportartablas extends CI_Controller {
 	public function exportar()
 	{
 		$this->load->dbutil();
-
 		$result_string = '';
-		if ($this->input->post('tabla'))
+
+		// reglas de validacion formulario
+		$this->form_validation->set_rules($this->adminbd_model->validation_exportar_tablas);
+
+		if ($this->form_validation->run() === TRUE)
 		{
 			if ($this->db->table_exists($this->input->post('tabla')))
 			{
 				if ($this->input->post('campo') AND $this->input->post('filtro'))
 				{
 					$this->db->where($this->input->post('campo'), $this->input->post('filtro'));
-
 				}
 
 				$result = $this->db->get($this->input->post('tabla'));
