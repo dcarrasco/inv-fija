@@ -53,8 +53,8 @@
 	<?php echo form_hidden('formulario','inventario'); ?>
 	<?php echo form_hidden('hoja', $hoja); ?>
 	<?php echo form_hidden('auditor', $id_auditor); ?>
-	<table class="table table-striped table-hover table-condensed">
-		<thead>
+	<table class="table table-striped table-hover table-condensed table-fixed-header">
+		<thead class="header">
 			<tr>
 				<th class="text-center">{_inventario_digit_th_ubicacion_}</th>
 				<th class="text-center">{_inventario_digit_th_material_}</th>
@@ -158,3 +158,5 @@
 </div><!-- fin content-module-main-principal -->
 
 <script type="text/javascript" src="{base_url}js/view_inventario.js"></script>
+<script type="text/javascript" src="{base_url}js/reporte.js"></script>
+
