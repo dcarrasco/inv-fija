@@ -33,7 +33,7 @@
 				<label class="control-label col-sm-4">{_inventario_print_label_options_}</label>
 				<div class="col-sm-8">
 					<label class="checkbox-inline">
-						<?php echo form_checkbox('oculta_stock_sap', 'oculta_stock_sap', set_checkbox('oculta_stock_sap','oculta_stock_sap', FALSE)); ?>
+						<?php echo form_checkbox('oculta_stock_sap', 'oculta_stock_sap', set_value('oculta_stock_sap')); ?>
 						{_inventario_print_check_hide_columns_}
 					</label>
 				</div>

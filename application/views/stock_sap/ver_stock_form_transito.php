@@ -47,19 +47,19 @@
 						</label>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
+								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
 								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
+								<?php echo form_checkbox('material', 'material', set_value('material')); ?>
 								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
+								<?php echo form_checkbox('lote', 'lote', set_value('lote')); ?>
 								{_stock_sap_check_lotes_}
 							</label>
 						</div>

@@ -56,7 +56,7 @@
 						<div id="show_tiposalm">
 							<div class="checkbox">
 								<label>
-									<?php echo form_checkbox('almacen', 'almacen', set_checkbox('almacen', 'almacen')); ?>
+									<?php echo form_checkbox('almacen', 'almacen', set_value('almacen')); ?>
 									{_stock_sap_check_show_alm_}
 								</label>
 							</div>
@@ -77,56 +77,40 @@
 
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('material', 'material', set_checkbox('material', 'material')); ?>
+								<?php echo form_checkbox('material', 'material', set_value('material')); ?>
 								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('lote', 'lote', set_checkbox('lote', 'lote')); ?>
+								<?php echo form_checkbox('lote', 'lote', set_value('lote')); ?>
 								{_stock_sap_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_checkbox('tipo_stock', 'tipo_stock')); ?>
+								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
 								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 
-						<?php if($tipo_op == 'MOVIL'): ?>
+						<?php if ($tipo_op === 'MOVIL'): ?>
 						<div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_checkbox('tipo_stock_equipos', 'tipo_stock_equipos',TRUE))?>
+								<?php echo form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_value('tipo_stock_equipos', TRUE)); ?>
 								{_stock_sap_radio_equipos_}
 							</div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_checkbox('tipo_stock_simcard', 'tipo_stock_simcard',TRUE))?>
+								<?php echo form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_value('tipo_stock_simcard', TRUE)); ?>
 								{_stock_sap_radio_sim_}
 							</div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_checkbox('tipo_stock_otros', 'tipo_stock_otros',TRUE))?>
+								<?php echo form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_value('tipo_stock_otros', TRUE)); ?>
 								{_stock_sap_radio_otros_}
 							</div>
 						</div>
 						<?php endif; ?>
 					</div>
-
-
-					<!--
-					<hr/>
-					<div class="form-group">
-						{_stock_sap_label_mostrar_}
-						<div class="radio-inline">
-							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
-							{_stock_sap_radio_cant_}
-						</div>
-						<div class="radio-inline">
-							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
-							{_stock_sap_radio_monto_}
-						</div>
-					</div>
-					-->
 
 					<hr/>
 					<div class="pull-right">

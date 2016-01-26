@@ -28,44 +28,44 @@
 					</label>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_mov', 'show', set_checkbox('show_mov', 'show', TRUE)); ?>
+							<?php echo form_checkbox('show_mov', 'show', set_value('show_mov', TRUE)); ?>
 							{_stock_analisis_check_movimientos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('ult_mov', 'show', set_checkbox('ult_mov', 'show', FALSE)); ?>
+							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
 							{_stock_analisis_check_filtrar_ultmov_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_despachos', 'show', set_checkbox('show_despachos', 'show', FALSE)); ?>
+							<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos')); ?>
 							{_stock_analisis_check_despachos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_stock_sap', 'show', set_checkbox('show_stock_sap', 'show', FALSE)); ?>
+							<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap')); ?>
 							{_stock_analisis_check_stock_sap_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_stock_scl', 'show', set_checkbox('show_stock_scl', 'show', FALSE)); ?>
+							<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl')); ?>
 							{_stock_analisis_check_stock_scl_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_trafico', 'show', set_checkbox('show_trafico', 'show', FALSE)); ?>
+							<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico')); ?>
 							{_stock_analisis_check_trafico_}
 							(<?php echo anchor($this->router->class.'/trafico_por_mes', '{_stock_analisis_link_detalle_trafico_}'); ?>)
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_gdth', 'show', set_checkbox('show_gdth', 'show', FALSE)); ?>
+							<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth')); ?>
 							{_stock_analisis_check_gestor_}
 						</label>
 					</div>

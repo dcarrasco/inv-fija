@@ -55,7 +55,7 @@
 
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov'))?>
+								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
 								{_stock_gestor_check_filter_last_mov_}
 							</label>
 						</div>

@@ -11,15 +11,15 @@
 
 	<div class="form-group">
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('elim_sin_dif', '1', set_checkbox('elim_sin_dif','1', FALSE), 'id="elim_sin_dif"'); ?>
+			<?php echo form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
 		</label>
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('incl_ajustes', '1', set_checkbox('incl_ajustes','1', FALSE), 'id="incl_ajustes"'); ?>
+			<?php echo form_checkbox('incl_ajustes', '1', set_value('incl_ajustes'), 'id="incl_ajustes"'); ?>
 			{_inventario_report_check_incluir_ajustes_}
 		</label>
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('incl_familias', '1', set_checkbox('incl_familias','1', FALSE), 'id="incl_familias"'); ?>
+			<?php echo form_checkbox('incl_familias', '1', set_value('incl_familias'), 'id="incl_familias"'); ?>
 			{_inventario_report_check_incluir_familias_}
 		</label>
 	</div>

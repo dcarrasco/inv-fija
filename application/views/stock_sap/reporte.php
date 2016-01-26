@@ -69,19 +69,19 @@
 
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_almacen', '1', set_checkbox('incl_almacen','1', FALSE), 'id="incl_almacen"') ?>
+								<?php echo form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
 								{_stock_perm_check_alm_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_lote', '1', set_checkbox('incl_lote','1', FALSE), 'id="incl_lote"') ?>
+								<?php echo form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
 								{_stock_perm_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_modelos', '1', set_checkbox('incl_modelos','1', FALSE), 'id="incl_modelos"') ?>
+								<?php echo form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
 								{_stock_perm_check_modelos_}
 							</label>
 						</div>
