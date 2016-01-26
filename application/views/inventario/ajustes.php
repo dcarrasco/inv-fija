@@ -1,18 +1,18 @@
-<div>
-	<div class="pull-left">
-		<strong>Inventario</strong> {inventario}
+<div class="row well">
+	<div class="col-md-6">
+		<strong>{_inventario_inventario_}:</strong> {inventario}
 	</div>
-	<div class="pull-right">
-		<?php echo anchor(
-			$this->router->class . '/ajustes/' . (($ocultar_regularizadas == 0) ? '1' : '0') . '/' . $pag . '/' . time(),
-			($ocultar_regularizadas == 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
-		); ?>
+	<div class="col-md-6">
+		<div class="pull-right">
+			<?php echo anchor(
+				$this->router->class.'/ajustes/'.(($ocultar_regularizadas == 0) ? '1' : '0').'/'.$pag.'/'.time(),
+				($ocultar_regularizadas == 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
+			); ?>
+		</div>
 	</div>
 </div>
-<hr/>
 
-
-<div>
+<div class="row">
 	<?php echo form_open($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'.$pag.'/'.time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
