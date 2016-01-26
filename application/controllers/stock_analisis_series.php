@@ -70,7 +70,14 @@ class Stock_analisis_series extends CI_Controller {
 
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
-		$datos = array();
+		$datos = array(
+			'hist'      => '',
+			'desp'      => '',
+			'stock'     => '',
+			'stock_scl' => '',
+			'trafico'   => '',
+			'log_gdth'  => array(),
+		);
 
 		$this->form_validation->set_rules($this->analisis_series_model->validation_analisis);
 

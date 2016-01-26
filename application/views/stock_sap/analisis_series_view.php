@@ -13,8 +13,8 @@
 			{validation_errors}
 
 			<div class="col-md-4">
-				<div class="form-group">
-					<label>
+				<div class="form-group <?php echo form_has_error('series'); ?>">
+					<label class="control-label">
 						{_stock_analisis_label_series_}
 					</label>
 					<?php echo form_textarea('series', set_value('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
