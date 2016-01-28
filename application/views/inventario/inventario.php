@@ -19,7 +19,7 @@
 						<span class="glyphicon glyphicon-search"></span>
 					</a>
 				</span>
-				<input type="text" name="hoja" value="{hoja}" maxlength="10" id="id_hoja" class="form-control input-sm">
+				<?php echo form_input('hoja', '{hoja}', 'maxlength="10" id="id_hoja" class="form-control input-sm"'); ?>
 				<span class="input-group-btn">
 					<a href="{link_hoja_ant}" class="btn btn-default btn-sm" id="btn_hoja_ant">
 						<span class="glyphicon glyphicon-chevron-left"></span>

@@ -32,7 +32,7 @@
 			<p class="col-xs-3"><strong>{_inventario_digit_th_centro_}</strong></p>
 			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('centro'); ?></p>
 
-			<p class="col-xs-3	"><strong>{_inventario_digit_th_almacen_}</strong></p>
+			<p class="col-xs-3"><strong>{_inventario_digit_th_almacen_}</strong></p>
 			<p class="col-xs-3"><?php echo $detalle_inventario->get_valor_field('almacen'); ?></p>
 		</div>
 
@@ -47,7 +47,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
 			</label>
 			<div class="col-xs-9">
-				<input type="number" name="stock_fisico" value="<?php echo set_value('stock_fisico', $detalle_inventario->stock_fisico) == 0 ? '' : set_value('stock_fisico', $detalle_inventario->stock_fisico) ?>" id="id_stock_fisico" class="form-control">
+				<?php echo form_number('stock_fisico', set_value('stock_fisico', ($detalle_inventario->stock_fisico == 0) ? '' : $detalle_inventario->stock_fisico), 'id="id_stock_fisico" class="form-control"'); ?>
 			</div>
 		</div>
 
@@ -57,7 +57,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('hu'); ?>
 			</label>
 			<div class="col-xs-9">
-				<input type="number" name="hu" value="<?php echo set_value('hu', $detalle_inventario->hu) ?>" id="id_hu" class="form-control">
+				<?php echo form_number('hu', set_value('hu', $detalle_inventario->hu), 'id="id_hu" class="form-control"'); ?>
 			</div>
 		</div>
 
@@ -67,7 +67,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('observacion'); ?>
 			</label>
 			<div class="col-xs-9">
-				<input type="text" name="observacion" value="<?php echo set_value('observacion', $detalle_inventario->observacion) ?>" id="id_observacion" class="form-control">
+				<?php echo form_input('observacion', set_value('observacion', $detalle_inventario->observacion), 'id="id_observacion" class="form-control"'); ?>
 			</div>
 		</div>
 
