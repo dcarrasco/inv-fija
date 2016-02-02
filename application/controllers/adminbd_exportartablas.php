@@ -31,7 +31,7 @@ class Adminbd_exportartablas extends CI_Controller {
 	 *
 	 * @var  string
 	 */
-	public $llave_modulo = '9js7j6809pt43&%j00';
+	public $llave_modulo = '9js7j6809pt43j01';
 
 	// --------------------------------------------------------------------
 

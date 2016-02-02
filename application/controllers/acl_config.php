@@ -53,22 +53,22 @@ class Acl_config extends ORM_Controller {
 			'usuario' => array(
 				'url'   => $this->router->class . '/listado/usuario',
 				'texto' => $this->lang->line('acl_config_menu_usuarios'),
-				'icon'  => 'glyphicon glyphicon-user',
+				'icon'  => 'user',
 			),
 			'app' => array(
 				'url'   => $this->router->class . '/listado/app',
 				'texto' => $this->lang->line('acl_config_menu_aplicaciones'),
-				'icon'  => 'glyphicon glyphicon-modal-window',
+				'icon'  => 'folder-o',
 			),
 			'rol' => array(
 				'url'   => $this->router->class . '/listado/rol',
 				'texto' => $this->lang->line('acl_config_menu_roles'),
-				'icon'  => 'glyphicon glyphicon-equalizer',
+				'icon'  => 'server',
 			),
 			'modulo' => array(
 				'url'   => $this->router->class . '/listado/modulo',
 				'texto' => $this->lang->line('acl_config_menu_modulos'),
-				'icon'  => 'glyphicon glyphicon-list-alt',
+				'icon'  => 'list-alt',
 			),
 		);
 

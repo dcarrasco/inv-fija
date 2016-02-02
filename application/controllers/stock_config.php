@@ -53,37 +53,37 @@ class Stock_config extends ORM_Controller {
 			'almacen_sap' => array(
 				'url'   => $this->router->class . '/listado/almacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_alm'),
-				'icon'  => 'glyphicon glyphicon-home',
+				'icon'  => 'home',
 			),
 			'tipoalmacen_sap' => array(
 				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_tipalm'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'clasifalmacen_sap' => array(
 				'url'   => $this->router->class . '/listado/clasifalmacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_clasifalm'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'tipo_clasifalm' => array(
 				'url'   => $this->router->class . '/listado/tipo_clasifalm',
 				'texto' => $this->lang->line('stock_config_menu_tipo_clasifalm'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'proveedor' => array(
 				'url'   => $this->router->class . '/listado/proveedor',
 				'texto' => $this->lang->line('stock_config_menu_proveedores'),
-				'icon'  => 'glyphicon glyphicon-shopping-cart',
+				'icon'  => 'shopping-cart',
 			),
 			'usuario_sap' => array(
 				'url'   => $this->router->class . '/listado/usuario_sap',
 				'texto' => $this->lang->line('stock_config_menu_usuarios_sap'),
-				'icon'  => 'glyphicon glyphicon-user',
+				'icon'  => 'user',
 			),
 			'almacenes_no_ingresados' => array(
 				'url'   => $this->router->class . '/almacenes_no_ingresados',
 				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),
-				'icon'  => 'glyphicon glyphicon-home',
+				'icon'  => 'home',
 			),
 		);
 	}

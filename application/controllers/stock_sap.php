@@ -58,22 +58,22 @@ class Stock_sap extends CI_Controller {
 			'stock_movil' => array(
 				'url'   => $this->router->class . '/mostrar_stock/MOVIL',
 				'texto' => $this->lang->line('stock_sap_menu_movil'),
-				'icon'  => 'glyphicon glyphicon-phone',
+				'icon'  => 'mobile',
 			),
 			'stock_fija' => array(
 				'url'   => $this->router->class . '/mostrar_stock/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_fijo'),
-				'icon'  => 'glyphicon glyphicon-phone-alt',
+				'icon'  => 'phone',
 			),
 			'transito_fija' => array(
 				'url'   => $this->router->class . '/transito/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
-				'icon'  => 'glyphicon glyphicon-send',
+				'icon'  => 'send',
 			),
 			'reporte_clasif' => array(
 				'url'   => $this->router->class . '/reporte_clasif',
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 		);
 
@@ -300,16 +300,16 @@ class Stock_sap extends CI_Controller {
 	 */
 	public function reporte_clasif()
 	{
-		$this->load->model('stock_sap_model');
-
 		$tipo_op = set_value('operacion', 'FIJA');
 		$fechas = set_value('fechas', NULL);
 		$borrar_datos = set_value('sel_borrar') === 'borrar';
 
 		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
-		$combo_fechas = $this->stock_sap_model->get_combo_fechas($tipo_op);
 
-		$reporte = $this->stock_sap_model->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
+		$combo_fechas = $stock->get_combo_fechas();
+
+		$reporte = $stock->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
 
 		$arrjs_reporte = array();
 		$js_slices     = array();
@@ -327,7 +327,7 @@ class Stock_sap extends CI_Controller {
 				'menu'         => $this->_arr_menu,
 				'mod_selected' => 'reporte_clasif',
 			),
-			'combo_fechas' => $combo_fechas['ultimodia'],
+			'combo_fechas'    => $combo_fechas['ultimodia'],
 			'combo_operacion' => $combo_operacion,
 			'url_reporte'     => site_url($this->_arr_menu['reporte_clasif']['url']),
 			'tipo_op'         => $tipo_op,
