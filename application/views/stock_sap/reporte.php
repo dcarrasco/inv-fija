@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<span class="glyphicon glyphicon-filter"></span>
+						<span class="fa fa-filter"></span>
 						{_stock_perm_panel_params_}
 					</a>
 				</div>
@@ -91,7 +91,7 @@
 
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
-								<span class="glyphicon glyphicon-list-alt"></span>
+								<span class="fa fa-search"></span>
 								{_stock_perm_button_report_}
 							</button>
 						</div>

@@ -37,7 +37,7 @@
 				<div class="col-md-4">
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
-							<span class="glyphicon glyphicon-cloud-download"></span>
+							<span class="fa fa-cloud-download"></span>
 							{_adminbd_exportar_button_submit_}
 						</button>
 					</div>

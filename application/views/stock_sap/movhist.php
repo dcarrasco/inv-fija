@@ -5,7 +5,7 @@
 			<div class="row">
 				<div class="col-md-6">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<span class="glyphicon glyphicon-filter"></span>
+						<span class="fa fa-filter"></span>
 						{_stock_movhist_panel_params_}
 					</a>
 				</div>
@@ -98,7 +98,7 @@
 
 				<div class="col-md-12 text-right">
 					<button type="submit" name="submit" class="btn btn-primary">
-						<span class="glyphicon glyphicon-list-alt"></span>
+						<span class="fa fa-search"></span>
 						{_stock_movhist_button_report_}
 					</button>
 				</div>

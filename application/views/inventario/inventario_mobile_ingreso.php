@@ -72,7 +72,7 @@
 		</div>
 
 		<button type="submit" name="accion" value="agregar" class="btn btn-primary col-xs-12">
-			<span class="glyphicon glyphicon-ok"></span>
+			<span class="fa fa-check"></span>
 			{_inventario_form_new_button_edit_}
 		</button>
 

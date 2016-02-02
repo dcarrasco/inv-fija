@@ -20,7 +20,7 @@
 					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
 					<span class="input-group-btn">
 						<div class="btn btn-default">
-							<span class="glyphicon glyphicon-search"></span>
+							<span class="fa fa-search"></span>
 						</div>
 					</span>
 				</div>
@@ -52,7 +52,7 @@
 				<?php if ($id): ?>
 				<div class="pull-left">
 					<button type="submit" name="accion" value="borrar" class="btn btn-danger">
-						<span class="glyphicon glyphicon-trash"></span>
+						<span class="fa fa-trash-o"></span>
 						{_inventario_form_new_button_delete_}
 					</button>
 				</div>
@@ -60,7 +60,7 @@
 
 				<div class="pull-right">
 					<button type="submit" name="accion" value="agregar" class="btn btn-primary">
-						<span class="glyphicon glyphicon-ok"></span>
+						<span class="fa fa-check"></span>
 						<?php if ( ! $id): ?>
 							{_inventario_form_new_button_add_}
 						<?php else: ?>
@@ -68,7 +68,7 @@
 						<?php endif; ?>
 					</button>
 					<a href="<?php echo site_url($this->router->class.'/ingreso/'.$hoja); ?>" class="btn btn-default">
-						<span class="glyphicon glyphicon-ban-circle"></span>
+						<span class="fa fa-ban"></span>
 						{_inventario_form_new_button_cancel_}
 					</a>
 				</div>

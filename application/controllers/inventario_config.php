@@ -143,8 +143,8 @@ class Inventario_config extends ORM_Controller {
 
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo',
-			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
+			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 		);
 		$this->pagination->initialize($config_pagination);
 

@@ -2,7 +2,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-			<span class="glyphicon glyphicon-filter"></span>
+			<span class="fa fa-filter"></span>
 			{_stock_gestor_panel_params_}
 		</a>
 	</div>
@@ -83,11 +83,11 @@
 				<div class="col-md-4">
 					<div class="form-group pull-right">
 						<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-							<span class="glyphicon glyphicon-list-alt"></span>
+							<span class="fa fa-search"></span>
 							{_stock_gestor_button_report_}
 						</button>
 						<button name="excel" class="btn btn-default" id="boton-reset">
-							<span class="glyphicon glyphicon-refresh"></span>
+							<span class="fa fa-refresh"></span>
 							{_stock_gestor_button_reset_}
 						</button>
 					</div>

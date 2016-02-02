@@ -686,8 +686,8 @@ class Orm_model implements IteratorAggregate {
 			),
 			'first_link'  => $this->lang->line('orm_pag_first'),
 			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->_model_page_results + 1) . ')',
-			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
+			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 		);
 
 		$this->pagination->initialize($cfg_pagination);

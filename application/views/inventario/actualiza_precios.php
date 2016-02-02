@@ -12,7 +12,7 @@
 		<div class="form-group">
 			<div class="col-sm-12 text-center">
 				<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir" {update_status}>
-					<span class="glyphicon glyphicon-refresh"></span>
+					<span class="fa fa-refresh"></span>
 					{_inventario_act_precios_button_}
 				</button>
 			</div>

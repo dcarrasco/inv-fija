@@ -56,7 +56,7 @@
 				<div class="pull-right">
 					<div class="controls">
 						<button type="submit" name="btn_submit" class="btn btn-primary">
-							<span class="glyphicon glyphicon-lock"></span> {_login_button_change_password_}
+							<span class="fa fa-lock"></span> {_login_button_change_password_}
 						</button>
 					</div>
 				</div>

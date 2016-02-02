@@ -2,7 +2,7 @@
 <div class="panel panel-default hidden-print">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-			<span class="glyphicon glyphicon-filter"></span>
+			<span class="fa fa-filter"></span>
 			{_stock_analisis_params_}
 		</a>
 	</div>
@@ -75,11 +75,11 @@
 			<div class="col-md-4">
 				<div class="pull-right">
 					<button type="submit" name="submit" class="btn btn-primary" id="boton-submit">
-						<span class="glyphicon glyphicon-list-alt"></span>
+						<span class="fa fa-search"></span>
 						{_stock_analisis_button_query_}
 					</button>
 					<button name="excel" class="btn btn-default" id="boton-reset">
-						<span class="glyphicon glyphicon-refresh"></span>
+						<span class="fa fa-refresh"></span>
 						{_stock_analisis_button_reset_}
 					</button>
 				</div>

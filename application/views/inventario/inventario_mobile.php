@@ -15,16 +15,16 @@
 			<div class="input-group">
 				<span class="input-group-btn">
 					<a href="#" class="btn btn-default btn-sm" id="btn_buscar">
-						<span class="glyphicon glyphicon-search"></span>
+						<span class="fa fa-search"></span>
 					</a>
 				</span>
 				<?php echo form_input('hoja', '{hoja}', 'maxlength="10" id="id_hoja" class="form-control input-sm"'); ?>
 				<span class="input-group-btn">
 					<a href="{link_hoja_ant}" class="btn btn-default btn-sm" id="btn_hoja_ant">
-						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="fa fa-chevron-left"></span>
 					</a>
 					<a href="{link_hoja_sig}" class="btn btn-default btn-sm" id="btn_hoja_sig">
-						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="fa fa-chevron-right"></span>
 					</a>
 				</span>
 			</div>
@@ -88,7 +88,7 @@
 			<label>&nbsp;</label>
 			<div class="input-group">
 				<a href="<?php echo site_url($this->router->class.'/editar/'.$hoja.'/'.$id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
-					<span class="glyphicon glyphicon-plus-sign"></span>
+					<span class="fa fa-plus-circle"></span>
 					{_inventario_button_new_line_}
 				</a>
 			</div>

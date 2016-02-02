@@ -51,7 +51,7 @@
 					<div class="col-md-4">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
-								<span class="glyphicon glyphicon-list-alt"></span>
+								<span class="fa fa-search"></span>
 								Reporte
 							</button>
 						</div>
