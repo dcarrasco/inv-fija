@@ -16,13 +16,13 @@
 			{navbar_menu}
 				<li class="dropdown {selected}">
 					<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-						<span class="{icono}"></span> {app} <b class="caret"></b>
+						<span class="fa fa-{icono} fa-fw"></span> {app} <b class="caret"></b>
 					</a>
 
 					<ul class="dropdown-menu">
 						{modulos}
 						<li class="{modulo_selected}">
-							<a href="{modulo_url}"><span class="{modulo_icono}"></span> {modulo_nombre}</a>
+							<a href="{modulo_url}"><span class="fa fa-{modulo_icono} fa-fw"></span> {modulo_nombre}</a>
 						</li>
 						{/modulos}
 					</ul>
@@ -30,7 +30,7 @@
 			{/navbar_menu}
 				<li>
 					<a href="{logout_url}">
-						<span class="glyphicon glyphicon-off"></span> Logout {user_firstname}
+						<span class="fa fa-power-off fa-fw"></span> Logout {user_firstname}
 					</a>
 				</li>
 
