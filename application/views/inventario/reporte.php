@@ -3,13 +3,15 @@
 	{validation_errors}
 
 	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
+	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
+	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 
-	<div class="form-group">
+	<div class="form-group col-md-4">
 		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>
-		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm "'); ?>
+		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 	</div>
 
-	<div class="form-group">
+	<div class="form-group col-md-6">
 		<label class="checkbox-inline">
 			<?php echo form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
@@ -24,7 +26,7 @@
 		</label>
 	</div>
 
-	<div class="form-group pull-right">
+	<div class="form-group col-md-2">
 		<div class="input-group input-group-sm">
 			<div class="input-group">
 				<span class="input-group-addon" id="btn_filtrar">
@@ -35,9 +37,6 @@
 			</div>
 		</div>
 	</div>
-
-	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 	<?php echo form_close(); ?>
 </div>
 
