@@ -7,6 +7,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
+						<span class="glyphicon glyphicon-filter"></span>
 						{_stock_sap_panel_params_}
 					</a>
 				</div>

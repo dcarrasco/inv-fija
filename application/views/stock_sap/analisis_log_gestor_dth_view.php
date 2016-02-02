@@ -2,6 +2,7 @@
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
+			<span class="glyphicon glyphicon-filter"></span>
 			{_stock_gestor_panel_params_}
 		</a>
 	</div>
