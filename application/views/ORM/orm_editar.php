@@ -25,11 +25,11 @@
 				<div class="col-sm-8">
 					<div class="pull-right">
 						<button type="submit" class="btn btn-primary" name="grabar" value="grabar">
-							<span class="glyphicon glyphicon-ok"></span>
+							<span class="fa fa-check"></span>
 							{_orm_button_save_}
 						</button>
 						<a href="{link_cancelar}" class="btn btn-default" role="button">
-							<span class="glyphicon glyphicon-ban-circle"></span>
+							<span class="fa fa-ban"></span>
 							{_orm_button_cancel_}
 						</a>
 					</div>
@@ -37,7 +37,7 @@
 					<?php if ($modelo->get_model_id()): ?>
 					<div class="pull-left">
 						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf('{_orm_js_delete_confirm_}', strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
-							<span class="glyphicon glyphicon-trash"></span>
+							<span class="fa fa-trash-o"></span>
 							{_orm_button_delete_}
 						</button>
 					</div>

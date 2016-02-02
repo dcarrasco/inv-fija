@@ -72,22 +72,22 @@ class Inventario_analisis extends CI_Controller {
 			'ajustes' => array(
 				'url'   => $this->router->class . '/ajustes',
 				'texto' => $this->lang->line('inventario_menu_ajustes'),
-				'icon'  => 'glyphicon glyphicon-wrench'
+				'icon'  => 'wrench'
 			),
 			'sube_stock' => array(
 				'url'   => $this->router->class . '/sube_stock',
 				'texto' => $this->lang->line('inventario_menu_upload'),
-				'icon'  => 'glyphicon glyphicon-upload'
+				'icon'  => 'cloud-upload'
 			),
 			'imprime_inventario' => array(
 				'url'   => $this->router->class . '/imprime_inventario',
 				'texto' => $this->lang->line('inventario_menu_print'),
-				'icon'  => 'glyphicon glyphicon-print'
+				'icon'  => 'print'
 			),
 			'actualiza_precios' => array(
 				'url'   => $this->router->class . '/actualiza_precios',
 				'texto' => $this->lang->line('inventario_menu_act_precios'),
-				'icon'  => 'glyphicon glyphicon-usd'
+				'icon'  => 'usd'
 			),
 		);
 

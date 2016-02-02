@@ -59,32 +59,32 @@ class Inventario_reportes extends CI_Controller {
 			'hoja' => array(
 				'url'   => $this->router->class . '/listado/hoja',
 				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
-				'icon'  => 'glyphicon glyphicon-list-alt'
+				'icon'  => 'file-text-o'
 			),
 			'material' => array(
 				'url'   => $this->router->class . '/listado/material',
 				'texto' => $this->lang->line('inventario_menu_reporte_mat'),
-				'icon'  => 'glyphicon glyphicon-barcode'
+				'icon'  => 'barcode'
 			),
 			'material_faltante' => array(
 				'url'   => $this->router->class . '/listado/material_faltante',
 				'texto' => $this->lang->line('inventario_menu_reporte_faltante'),
-				'icon'  => 'glyphicon glyphicon-tasks'
+				'icon'  => 'tasks'
 			),
 			'ubicacion' => array(
 				'url'   => $this->router->class . '/listado/ubicacion' ,
 				'texto' => $this->lang->line('inventario_menu_reporte_ubicacion'),
-				'icon'  => 'glyphicon glyphicon-map-marker'
+				'icon'  => 'map-marker'
 			),
 			'tipos_ubicacion' => array(
 				'url'   => $this->router->class . '/listado/tipos_ubicacion',
 				'texto' => $this->lang->line('inventario_menu_reporte_tip_ubic'),
-				'icon'  => 'glyphicon glyphicon-th'
+				'icon'  => 'th'
 			),
 			'ajustes' => array(
 				'url'   => $this->router->class . '/listado/ajustes',
 				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
-				'icon'  => 'glyphicon glyphicon-wrench'
+				'icon'  => 'wrench'
 			),
 		);
 	}

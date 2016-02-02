@@ -22,7 +22,7 @@
 <div class="form-group">
 	<div class="col-md-6 col-md-offset-4">
 		<button type="submit" name="btn_submit" class="btn btn-primary pull-right">
-			<span class="glyphicon glyphicon-search"></span>
+			<span class="fa fa-search"></span>
 			{_label_submit_}
 		</button>
 	</div>

@@ -40,11 +40,11 @@
 				<div class="col-md-4">
 					<div class="form-group pull-right">
 						<button type="submit" name="btn_submit" class="btn btn-primary" id="boton-submit">
-							<span class="glyphicon glyphicon-list-alt"></span>
+							<span class="fa fa-search"></span>
 							Consultar
 						</button>
 						<a href="<?php echo $this->router->class; ?>" class="btn btn-default">
-							<span class="glyphicon glyphicon-chevron-left"></span>
+							<span class="fa fa-chevron-left"></span>
 							Volver
 						</a>
 					</div>

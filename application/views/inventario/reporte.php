@@ -6,12 +6,12 @@
 	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
 	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 
-	<div class="form-group col-md-4">
+	<div class="form-group col-md-5">
 		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>
 		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 	</div>
 
-	<div class="form-group col-md-6">
+	<div class="form-group col-md-5">
 		<label class="checkbox-inline">
 			<?php echo form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
@@ -30,7 +30,7 @@
 		<div class="input-group input-group-sm">
 			<div class="input-group">
 				<span class="input-group-addon" id="btn_filtrar">
-					<span class="glyphicon glyphicon-search"></span>
+					<span class="fa fa-search"></span>
 
 				</span>
 				<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>

@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="text-right">
 		<a href="#" class="btn btn-primary" id="btn_mostrar_agregar">
-			<span class="glyphicon glyphicon-plus-sign"></span>
+			<span class="fa fa-plus-circle"></span>
 			Agregar ubicacion
 		</a>
 	</div>
@@ -33,7 +33,7 @@
 		<div class="row">
 			<div class="pull-right">
 				<a href="#" class="btn btn-primary" id="btn_agregar">
-					<span class="glyphicon glyphicon-ok"></span>
+					<span class="fa fa-check"></span>
 					Agregar
 				</a>
 			</div>
@@ -74,7 +74,7 @@
 					</td>
 					<td>
 						<a href="#" class="btn btn-default btn-sm" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
-							<span class="glyphicon glyphicon-trash"></span>
+							<span class="fa fa-trash"></span>
 						</a>
 					</td>
 				</tr>
@@ -90,7 +90,7 @@
 
 	<div class="pull-right">
 		<a href="#" class="btn btn-primary" id="btn_guardar">
-			<span class="glyphicon glyphicon-ok"></span>
+			<span class="fa fa-check"></span>
 			Guardar
 		</a>
 	</div> <!-- fin content-module-footer -->

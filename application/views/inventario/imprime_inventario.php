@@ -44,7 +44,7 @@
 				</label>
 				<div class="col-sm-8">
 					<button name="submit" type="submit" class="btn btn-primary pull-right" id="btn_imprimir">
-						<span class="glyphicon glyphicon-print"></span>
+						<span class="fa fa-print"></span>
 						{_inventario_print_button_print_}
 					</button>
 				</div>

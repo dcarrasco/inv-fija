@@ -7,7 +7,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<span class="glyphicon glyphicon-filter"></span>
+						<span class="fa fa-filter"></span>
 						{_stock_sap_panel_params_}
 					</a>
 				</div>
@@ -116,11 +116,11 @@
 					<hr/>
 					<div class="pull-right">
 						<button type="submit" name="submit" class="btn btn-primary">
-							<span class="glyphicon glyphicon-list-alt"></span>
+							<span class="fa fa-search"></span>
 							{_stock_sap_button_report_}
 						</button>
 						<button type="submit" name="excel" value="excel" class="btn btn-default">
-							<span class="glyphicon glyphicon-file"></span>
+							<span class="fa fa-file-text-o"></span>
 							{_stock_sap_button_export_}
 						</button>
 					</div>

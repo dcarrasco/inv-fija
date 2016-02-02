@@ -367,7 +367,7 @@ class Reporte {
 
 		// agrega linea con titulo del subtotal
 		$ci->table->add_row(array(
-			'data' => '<span class="glyphicon glyphicon-minus-sign"></span> <strong>'.$arr_linea[$campo_subtotal].'</strong>',
+			'data' => '<span class="fa fa-minus-circle"></span> <strong>'.$arr_linea[$campo_subtotal].'</strong>',
 			'colspan' => count($arr_campos) + 1,
 		));
 

@@ -70,7 +70,7 @@
 				<div class="pull-right">
 					<button type="submit" name="btn_submit" class="btn btn-success">
 						{_login_button_login_}
-						<span class="glyphicon glyphicon-play"></span>
+						<span class="fa fa-play"></span>
 					</button>
 				</div>
 			</div>

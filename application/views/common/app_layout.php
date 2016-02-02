@@ -11,6 +11,7 @@
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="{base_url}img/favicon-152.png">
 
 	<link rel="stylesheet" href="{base_url}css/bootstrap.min.css" />
+	<link rel="stylesheet" href="{base_url}css/font-awesome.min.css" />
 	<link rel="stylesheet" href="{base_url}css/fix_bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="{base_url}css/jquery.jqplot.min.css" />
 

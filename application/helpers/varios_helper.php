@@ -136,7 +136,7 @@ if ( ! function_exists('titulo_modulo'))
 		{
 			if($modulo['url'] === $ci->uri->segment(1))
 			{
-				return '<span class="' . $modulo['modulo_icono'] . ' "></span>&nbsp;&nbsp;' . $modulo['modulo'];
+				return '<i class="fa fa-'.$modulo['modulo_icono'].' fa-fw"></i> ' . $modulo['modulo'];
 			}
 		}
 	}

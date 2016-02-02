@@ -20,7 +20,7 @@
 					<div class="alert alert-danger">
 						<button type="button" class="close" data-dismiss="alert">&times;</button>
 						<p><strong>
-							<span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;&nbsp;
+							<span class="fa fa-exclamation-circle"></span>
 							{_inventario_upload_warning_line1_}
 						</strong></p>
 						<p>
@@ -67,12 +67,12 @@
 				<div class="col-sm-8">
 					<?php if ($show_script_carga): ?>
 						<button class="btn btn-primary pull-right" id="ejecuta_carga">
-							<span class="glyphicon glyphicon-play"></span>
+							<span class="fa fa-play"></span>
 							{_inventario_upload_button_load_}
 						</button>
 					<?php else: ?>
 					<button type="submit" name="submit" class="btn btn-primary pull-right" id="btn_guardar">
-						<span class="glyphicon glyphicon-upload"></span>
+						<span class="fa fa-cloud-upload"></span>
 						{_inventario_upload_button_upload_}
 					</button>
 					<?php endif; ?>

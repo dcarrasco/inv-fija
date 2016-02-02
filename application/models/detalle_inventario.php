@@ -346,8 +346,8 @@ class Detalle_inventario extends ORM_Model {
 			'base_url'    => site_url($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->per_page_ajustes) . ')',
-			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
+			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 		);
 
 		$this->pagination->initialize($cfg_pagination);

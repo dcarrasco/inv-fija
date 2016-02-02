@@ -5,7 +5,7 @@
 			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
 			<span class="input-group-btn">
 				<button type="submit" id="btn_filtro" class="btn btn-default">
-					<span class="glyphicon glyphicon-search"></span>
+					<span class="fa fa-search"></span>
 				</button>
 			</span>
 		</div>
@@ -13,7 +13,7 @@
 
 	<div class="col-md-9 col-sm-7 col-xs-6 text-right">
 		<a href="{url_editar}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
-			<span class="glyphicon glyphicon-plus-sign"></span>
+			<span class="fa fa-plus-circle"></span>
 			{_orm_button_new_} <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
 	</div>
@@ -44,7 +44,7 @@
 					<?php endforeach; ?>
 					<td class="text-center">
 						<a href="{url_editar}/<?php echo $o->get_model_id(); ?>" class="">
-							<!-- <span class="glyphicon glyphicon-edit"></span> -->
+							<!-- <span class="fa fa-edit"></span> -->
 							{_orm_link_edit_}
 						</a>
 					</td>

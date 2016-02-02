@@ -6,7 +6,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
-						<span class="glyphicon glyphicon-filter"></span>
+						<span class="fa fa-filter"></span>
 						{_stock_sap_panel_params_}
 					</a>
 				</div>
@@ -48,7 +48,7 @@
 				<div class="col-md-3">
 					<div class="pull-right">
 						<button type="submit" id="btn_submit" name="submit" class="btn btn-primary">
-							<span class="glyphicon glyphicon-list-alt"></span>
+							<span class="fa fa-search"></span>
 							{_stock_sap_button_report_}
 						</button>
 					</div>

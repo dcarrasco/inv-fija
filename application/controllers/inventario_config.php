@@ -53,52 +53,52 @@ class Inventario_config extends ORM_Controller {
 			'auditor' => array(
 				'url'   => $this->router->class . '/listado/auditor/',
 				'texto' => $this->lang->line('inventario_config_menu_auditores'),
-				'icon'  => 'glyphicon glyphicon-user',
+				'icon'  => 'user',
 			),
 			'familia' => array(
 				'url'   => $this->router->class . '/listado/familia',
 				'texto' => $this->lang->line('inventario_config_menu_familias'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'catalogo' => array(
 				'url'   => $this->router->class . '/listado/catalogo',
 				'texto' => $this->lang->line('inventario_config_menu_materiales'),
-				'icon'  => 'glyphicon glyphicon-barcode',
+				'icon'  => 'barcode',
 			),
 			'tipo_inventario' => array(
 				'url'   => $this->router->class . '/listado/tipo_inventario',
 				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'inventario' => array(
 				'url'   => $this->router->class . '/listado/inventario',
 				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
-				'icon'  => 'glyphicon glyphicon-list-alt',
+				'icon'  => 'list',
 			),
 			'tipo_ubicacion' => array(
 				'url'   => $this->router->class . '/listado/tipo_ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'ubicaciones' => array(
 				'url'   => $this->router->class . '/ubicacion_tipo_ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
-				'icon'  => 'glyphicon glyphicon-map-marker',
+				'icon'  => 'map-marker',
 			),
 			'centro' => array(
 				'url'   => $this->router->class . '/listado/centro',
 				'texto' => $this->lang->line('inventario_config_menu_centros'),
-				'icon'  => 'glyphicon glyphicon-th',
+				'icon'  => 'th',
 			),
 			'almacen' => array(
 				'url'   => $this->router->class . '/listado/almacen',
 				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
-				'icon'  => 'glyphicon glyphicon-home',
+				'icon'  => 'home',
 			),
 			'unidad_medida' => array(
 				'url'   => $this->router->class . '/listado/unidad_medida',
 				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
-				'icon'  => 'glyphicon glyphicon-scale',
+				'icon'  => 'balance-scale',
 			),
 		);
 	}
@@ -143,8 +143,8 @@ class Inventario_config extends ORM_Controller {
 
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo',
-			'prev_link'   => '<span class="glyphicon glyphicon-chevron-left"></span>',
-			'next_link'   => '<span class="glyphicon glyphicon-chevron-right"></span>',
+			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
+			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 		);
 		$this->pagination->initialize($config_pagination);
 

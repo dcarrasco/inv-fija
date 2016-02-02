@@ -90,17 +90,17 @@
 					<td class="text-center">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
 							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
-								<span class="glyphicon glyphicon-question-sign"></span>
+								<span class="fa fa-question-circle"></span>
 								{_inventario_report_label_sobrante_}
 							</button>
 						<?php elseif (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) < 0): ?>
 							<button class="btn btn-default btn-sm btn-danger" style="white-space: nowrap;">
-								<span class="glyphicon glyphicon-remove"></span>
+								<span class="fa fa-remove"></span>
 								{_inventario_report_label_faltante_}
 							</button>
 						<?php else: ?>
 							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
-								<span class="glyphicon glyphicon-ok"></span>
+								<span class="fa fa-check"></span>
 								{_inventario_report_label_OK'_}
 							</button>
 						<?php endif; ?>
@@ -156,7 +156,7 @@
 				<td></td>
 				<td>
 					<button type="submit" class="btn btn-primary">
-						<span class="glyphicon glyphicon-ok-sign"></span>
+						<span class="fa fa-check-circle"></span>
 						{_inventario_report_save_}
 					</button>
 				</td>
