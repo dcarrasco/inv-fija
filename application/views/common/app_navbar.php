@@ -1,6 +1,6 @@
 <!-- ============================== NAVBAR ============================== -->
 <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-	<div class="container">
+	<div class="container-fluid">
 
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">{titulo_modulo}</a>

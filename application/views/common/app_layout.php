@@ -33,7 +33,7 @@
 	{app_navbar}
 <?php endif; ?>
 
-<div class="container">
+<div class="container-fluid">
 
 <?php if (isset($app_menu_modulo)): ?>
 	{app_menu_modulo}
