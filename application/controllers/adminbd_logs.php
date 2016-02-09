@@ -107,16 +107,7 @@ class Adminbd_logs extends CI_Controller {
 	 */
 	private function _show_file($archivo = '', $menu = '')
 	{
-		$log_file = array();
-
-		if (file_exists($archivo))
-		{
-			$log_file = file($archivo);
-		}
-		else
-		{
-			$log_file = array('--- Archivo no encontrado ---');
-		}
+		$log_file = file_exists($archivo) ? file($archivo) : array('--- Archivo no encontrado ---');
 
 		$datos = array(
 			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $menu),
