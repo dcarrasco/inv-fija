@@ -51,10 +51,12 @@ class Adminbd_logs extends CI_Controller {
 			'borra_log' => array(
 				'url'   => $this->router->class . '/borra_log',
 				'texto' => $this->lang->line('adminbd_log_menu_borra'),
+				'icon'  => 'database',
 			),
 			'indices' => array(
 				'url'   => $this->router->class . '/indices',
 				'texto' => $this->lang->line('adminbd_log_menu_indices'),
+				'icon'  => 'database',
 			),
 		);
 	}
