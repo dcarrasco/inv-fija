@@ -125,6 +125,8 @@ class Orm_model implements IteratorAggregate {
 	private $_fields_relation_objects = NULL;
 
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor
 	 *
@@ -143,6 +145,8 @@ class Orm_model implements IteratorAggregate {
 		$this->_model_label_plural = $this->_model_label . 's';
 		$this->_fields_relation_objects = new Collection();
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Configuración del modelo
@@ -262,6 +266,8 @@ class Orm_model implements IteratorAggregate {
 		return $this->_model_nombre;
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera el nombre de la tabla del modelo en la base de datos
 	 *
@@ -271,6 +277,8 @@ class Orm_model implements IteratorAggregate {
 	{
 		return $this->_model_tabla;
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera la etiqueta del modelo
@@ -282,6 +290,8 @@ class Orm_model implements IteratorAggregate {
 		return $this->_model_label;
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera la etiqueta del modelo en plural
 	 *
@@ -291,6 +301,8 @@ class Orm_model implements IteratorAggregate {
 	{
 		return $this->_model_label_plural;
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera los nombres de los campos que son el ID del modelo
@@ -302,6 +314,8 @@ class Orm_model implements IteratorAggregate {
 		return $this->_model_campo_id;
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera la cantidad de registros que componen una página
 	 *
@@ -311,6 +325,8 @@ class Orm_model implements IteratorAggregate {
 	{
 		return $this->_model_page_results;
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera los campos del modelo
@@ -322,6 +338,8 @@ class Orm_model implements IteratorAggregate {
 		return $this->_model_fields;
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera el valor del filtro a utilizar para recuperar datos del modelo
 	 *
@@ -331,6 +349,8 @@ class Orm_model implements IteratorAggregate {
 	{
 		return ($this->_model_filtro === '_') ? '' : $this->_model_filtro;
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Fija el valor del filtro a utilizar para recuperar datos del modelo
@@ -343,6 +363,8 @@ class Orm_model implements IteratorAggregate {
 		$this->_model_filtro = $filtro;
 	}
 
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera los campos que se usarán para listar el modelo
 	 *
@@ -352,6 +374,8 @@ class Orm_model implements IteratorAggregate {
 	{
 		return $this->campos_listado;
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera los objetos que son las relaciones del campo indicado (1:n o n:m)
@@ -366,6 +390,8 @@ class Orm_model implements IteratorAggregate {
 
 		return $relation['model'];
 	}
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Recupera los valores de los campos del modelo
@@ -460,15 +486,15 @@ class Orm_model implements IteratorAggregate {
 		$reglas .= ($field->get_tipo() === 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === 'real') ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['. $this->_model_tabla . '.' . $field->get_nombre_bd() . '.' .
-				implode($this->_separador_campos, $this->get_model_campo_id()) . '.' . $this->get_model_id() . ']'
+			? '|edit_unique['.$this->_model_tabla.'.'.$field->get_nombre_bd().'.'.
+				implode($this->_separador_campos, $this->get_model_campo_id()).'.'.$this->get_model_id().']'
 			: '';
 
 		$campo_rules = $campo;
 		if ($field->get_tipo() === 'has_many')
 		{
 			$reglas = 'trim';
-			$campo_rules = $campo . '[]';
+			$campo_rules = $campo.'[]';
 		}
 
 		$this->form_validation->set_rules($campo_rules, ucfirst($this->get_label_field($campo)), $reglas);
@@ -498,7 +524,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function form_item($campo = '', $show_help = TRUE)
 	{
-		$formulario_enviado = (boolean) (count($this->input->post()) !== 0);
+		$formulario_enviado = (boolean) ($this->input->method() === 'post');
 
 		$field_error = NULL;
 		if ($formulario_enviado)
