@@ -100,13 +100,23 @@ class Inventario_model extends CI_Model {
 	public function get_combo_inventarios()
 	{
 		$arr_rs = $this->db
-			->select('id as llave')
-			->select('nombre as valor')
-			->order_by('nombre ASC')
-			->get($this->config->item('bd_inventarios'))
-			->result_array();
+			->from($this->config->item('bd_inventarios').' a')
+			->join($this->config->item('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
+			->order_by('desc_tipo_inventario, nombre')
+			->get()->result_array();
 
-		return form_array_format($arr_rs, 'Seleccione un inventario...');
+		$arr_combo = array();
+		foreach($arr_rs as $item)
+		{
+			if ( ! array_key_exists($item['desc_tipo_inventario'], $arr_combo))
+			{
+				$arr_combo[$item['desc_tipo_inventario']] = array();
+			}
+
+			$arr_combo[$item['desc_tipo_inventario']][$item['id']] = $item['nombre'];
+		}
+
+		return $arr_combo;
 	}
 
 
