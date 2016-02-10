@@ -85,43 +85,48 @@ class Stock_analisis_series extends CI_Controller {
 		{
 			$series = set_value('series');
 
+			$analisis_model = new analisis_series_model;
+			$gestor_model   = new log_gestor_model;
+
 			$arr_reportes = array(
-				'show_mov'       => '$this->analisis_series_model->get_historia',
-				'show_despachos' => '$this->analisis_series_model->get_despacho',
-				'show_stock_sap' => '$this->analisis_series_model->get_stock_sap',
-				'show_stock_scl' => '$this->analisis_series_model->get_stock_scl',
-				'show_trafico'   => '$this->analisis_series_model->get_trafico',
+				'show_mov' => array(
+					'class'  => $analisis_model,
+					'method' => 'get_historia',
+					'params' => array($series),
+				),
+				'show_despachos' => array(
+					'class'  => $analisis_model,
+					'method' => 'get_despacho',
+					'params' => array($series),
+				),
+				'show_stock_sap' => array(
+					'class'  => $analisis_model,
+					'method' => 'get_stock_sap',
+					'params' => array($series),
+				),
+				'show_stock_scl' => array(
+					'class'  => $analisis_model,
+					'method' => 'get_stock_scl',
+					'params' => array($series),
+				),
+				'show_trafico' => array(
+					'class'  => $analisis_model,
+					'method' => 'get_trafico',
+					'params' => array($series),
+				),
+				'show_gdth' => array(
+					'class'  => $gestor_model,
+					'method' => 'get_log',
+					'params' => array($series, 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE),
+				),
 			);
 
-			if ($this->input->post('show_mov') === 'show')
+			foreach ($arr_reportes as $input => $reporte)
 			{
-				$datos['hist'] = $this->analisis_series_model->get_historia($series);
-			}
-
-			if ($this->input->post('show_despachos') === 'show')
-			{
-				$datos['desp'] = $this->analisis_series_model->get_despacho($series);
-			}
-
-			if ($this->input->post('show_stock_sap') === 'show')
-			{
-				$datos['stock'] = $this->analisis_series_model->get_stock_sap($series);
-			}
-
-			if ($this->input->post('show_stock_scl') === 'show')
-			{
-				$datos['stock_scl'] = $this->analisis_series_model->get_stock_scl($series);
-			}
-
-			if ($this->input->post('show_trafico') === 'show')
-			{
-				$datos['trafico'] = $this->analisis_series_model->get_trafico($series);
-			}
-
-			if ($this->input->post('show_gdth') === 'show')
-			{
-				$this->load->model('log_gestor_model');
-				$datos['log_gdth'] = $this->log_gestor_model->get_log($series, 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE);
+				if ($this->input->post($input) === 'show')
+				{
+					$datos['datos_'.$input] = call_user_func_array(array($reporte['class'], $reporte['method']), $reporte['params']);
+				}
 			}
 		}
 		app_render_view('stock_sap/analisis_series_view', $datos);
