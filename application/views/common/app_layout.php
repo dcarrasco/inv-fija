@@ -5,7 +5,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>{app_nombre}</title>
+	<title>{app_title}</title>
 
 	<link rel="icon" href="{base_url}img/favicon.png" type="image/png" />
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="{base_url}img/favicon-152.png">
@@ -30,7 +30,7 @@
 
 <body>
 
-<?php if ( ! $vista_login): ?>
+<?php if ( ! $is_vista_login): ?>
 	{app_navbar}
 <?php endif; ?>
 
@@ -42,7 +42,7 @@
 	<div class="tab-pane active">
 <?php endif; ?>
 
-<?php if ( ! $vista_login): ?>
+<?php if ( ! $is_vista_login): ?>
 	{msg_alerta}
 <?php endif; ?>
 

@@ -207,23 +207,26 @@ if ( ! function_exists('app_render_view'))
 
 		$vista_login = isset($datos['vista_login']) ? $datos['vista_login']: FALSE;
 
-		//
-		$datos['msg_alerta']      = $ci->session->flashdata('msg_alerta');
-		$datos['validation_errors'] = print_validation_errors();
-		$datos['vista_login']     = $vista_login;
-		$datos['app_nombre']      = $ci->config->item('app_nombre') . (ENVIRONMENT !== 'production' ? '- DEV' : '');
-		$datos['base_url']        = base_url();
-		$datos['js_base_url']     = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
-		$datos['extra_styles']    = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
+		// titulos y variables generales
+		$datos['app_title']    = $ci->config->item('app_nombre') . (ENVIRONMENT !== 'production' ? '- DEV' : '');
+		$datos['base_url']     = base_url();
+		$datos['js_base_url']  = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
+		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
 
-		$datos['titulo_modulo']   = titulo_modulo();
+		// navegación
+		$datos['is_vista_login']  = $vista_login;
 		$datos['navbar_menu']     = $vista_login ? array() : menu_app();
+		$datos['titulo_modulo']   = titulo_modulo();
 		$datos['logout_url']      = site_url('login/logout');
 		$datos['user_firstname']  = $ci->acl_model->get_user_firstname();
-
 		$datos['app_navbar']      = $ci->parser->parse('common/app_navbar', $datos, TRUE);
 		$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : NULL;
 
+		// otros
+		$datos['msg_alerta']      = $ci->session->flashdata('msg_alerta');
+		$datos['validation_errors'] = print_validation_errors();
+
+		// vistas
 		$datos['arr_vistas'] = array();
 		$vista = is_array($vista) ? $vista : array($vista);
 		foreach ($vista as $v)
@@ -231,7 +234,7 @@ if ( ! function_exists('app_render_view'))
 			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($v, $datos, TRUE)));
 		}
 
-		$ci->parser->parse('common/app_layout', $datos);
+		return $ci->parser->parse('common/app_layout', $datos);
 	}
 }
 
