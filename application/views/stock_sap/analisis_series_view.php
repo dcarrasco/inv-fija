@@ -101,7 +101,7 @@
 
 	<div class="panel-body collapse in" id="tabla_movimientos">
 		<div class="accordion-inner" style="overflow: auto">
-			{hist}
+			{datos_show_mov}
 		</div>
 	</div>
 </div>
@@ -117,7 +117,7 @@
 
 	<div class="panel-body collapse in" id="tabla_despachos">
 		<div class="accordion-inner" style="overflow: auto">
-			{desp}
+			{datos_show_despachos}
 		</div>
 	</div>
 </div>
@@ -133,7 +133,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_sap">
 		<div class="accordion-inner" style="overflow: auto">
-			{stock}
+			{datos_show_stock_sap}
 		</div>
 	</div>
 </div>
@@ -149,7 +149,7 @@
 
 	<div class="panel-body collapse in" id="tabla_stock_scl">
 		<div class="accordion-inner" style="overflow: auto">
-			{stock_scl}
+			{datos_show_stock_scl}
 		</div>
 	</div>
 </div>
@@ -165,7 +165,7 @@
 
 	<div class="panel-body collapse in" id="tabla_trafico">
 		<div class="accordion-inner" style="overflow: auto">
-			{trafico}
+			{datos_show_trafico}
 		</div>
 	</div>
 </div>
@@ -183,7 +183,7 @@
 	<div class="panel-body collapse in" id="tabla_gdth">
 		<div class="accordion-inner" style="overflow: auto">
 			<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">
-			<?php foreach($log_gdth as $serie_gdth): ?>
+			<?php foreach($datos_show_gdth as $serie_gdth): ?>
 				<tr>
 					<th>id</th>
 					<th>fecha</th>
