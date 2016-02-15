@@ -59,6 +59,7 @@ $config['bd_stock_movil_fechas']   = 'bd_logistica..stock_scl_fechas';
 $config['bd_stock_fija']           = 'bd_logistica..bd_stock_sap_fija';
 $config['bd_stock_fija_fechas']    = 'bd_logistica..bd_stock_sap_fija_fechas';
 $config['bd_movimientos_sap']      = 'bd_logistica..mov_hist';
+$config['bd_movimientos_sap_fija'] = 'bd_logistica..bd_movmb51_fija';
 $config['bd_resmovimientos_sap']   = 'bd_logistica..mov_hist_res01';
 $config['bd_cmv_sap']              = 'bd_logistica..cp_cmv';
 $config['bd_fechas_sap']           = 'bd_logistica..cp_fechas';

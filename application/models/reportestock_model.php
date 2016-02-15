@@ -1031,7 +1031,20 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_reporte_movhist($config = array())
 	{
-		$param_ok = $config['fechas'] AND $config['cmv'] AND $config['almacenes'] AND $config['materiales'];
+		$param_ok = $config['fechas'] AND $config['cmv'] AND $config['almacenes'] AND $config['materiales'] AND $config['tipo_alm'];
+
+		$tipo_op = in_array($config['tipo_alm'], array('MOVIL-TIPOALM', 'MOVIL-ALM')) ? 'MOVIL' : 'FIJA';
+
+		$mov_fecha  = ($tipo_op === 'MOVIL') ? 'fecha' : 'fecha_contabilizacion';
+		$mov_cmv    = ($tipo_op === 'MOVIL') ? 'cmv' : 'codigo_movimiento';
+		$mov_mat    = ($tipo_op === 'MOVIL') ? 'codigo_sap' : 'material';
+		$mov_centro = ($tipo_op === 'MOVIL') ? 'ce' : 'centro';
+		$mov_alm    = ($tipo_op === 'MOVIL') ? 'alm' : 'almacen';
+		$mov_rec    = ($tipo_op === 'MOVIL') ? 'rec' : 'proveedor';
+		$mov_ndoc   = ($tipo_op === 'MOVIL') ? 'n_doc' : 'documento_material';
+		$mov_cant   = ($tipo_op === 'MOVIL') ? 'cantidad' : 'cantidad';
+		$tabla_mat  = ($tipo_op === 'MOVIL') ? 'bd_materiales2_sap' : 'bd_catalogos';
+		$mov_mat2   = ($tipo_op === 'MOVIL') ? 'codigo_sap' : 'catalogo';
 
 		$arr_reporte = array();
 
@@ -1046,18 +1059,18 @@ class Reportestock_model extends CI_Model {
 		{
 			$arr_filtro_almacenes = array(
 				'MOVIL-TIPOALM' => 't.id_tipo',
-				'MOVIL-ALM'     => "m.ce+'-'+m.alm",
+				'MOVIL-ALM'     => "m.$mov_centro+'~'+m.$mov_alm",
 				'FIJA-TIPOALM'  => 't.id_tipo',
-				'FIJA-ALM'      => "m.ce+'-'+m.alm",
+				'FIJA-ALM'      => "m.$mov_centro+'~'+m.$mov_alm",
 			);
 		}
 		else
 		{
 			$arr_filtro_almacenes = array(
 				'MOVIL-TIPOALM' => 't.id_tipo',
-				'MOVIL-ALM'     => "m.ce+'-'+m.rec",
+				'MOVIL-ALM'     => "m.$mov_centro+'-'+m.rec",
 				'FIJA-TIPOALM'  => 't.id_tipo',
-				'FIJA-ALM'      => "m.ce+'-'+m.rec",
+				'FIJA-ALM'      => "m.$mov_centro+'-'+m.rec",
 			);
 		}
 
@@ -1068,29 +1081,49 @@ class Reportestock_model extends CI_Model {
 			'MATERIAL' => 'm.codigo_sap',
 		);
 
+
 		if ($param_ok)
 		{
 			$this->db->limit(1000);
+			$this->db->select('f.fecha2 as fecha');
+			$this->db->select('m.'.$mov_cmv.' as cmv');
+			$this->db->select('m.'.$mov_centro.' as ce');
+			$this->db->select('m.'.$mov_alm.' as alm');
+			$this->db->select('m.'.$mov_rec.' as rec');
+			$this->db->select('m.'.$mov_ndoc.' as n_doc');
+			$this->db->select('m.lote as lote');
+			$this->db->select('m.'.$mov_mat.' as codigo_sap');
+			$this->db->select('m.'.$mov_cant.' as cantidad');
 
-			$this->db->from($this->config->item('bd_resmovimientos_sap') . ' as m');
-			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.fecha=f.fecha');
-			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.cmv=c.cmv');
-			$this->db->join($this->config->item('bd_materiales2_sap') . ' as mat', 'm.codigo_sap=mat.codigo_sap');
 
-			if ($config['tipo_cruce_alm'] === 'alm')
+			if ($tipo_op === 'MOVIL')
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.alm=a.cod_almacen');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.alm=t.cod_almacen');
+				$this->db->from($this->config->item('bd_resmovimientos_sap') . ' as m');
 			}
 			else
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.ce=a.centro and m.rec=a.cod_almacen');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.ce=t.centro and m.rec=t.cod_almacen');
+				$this->db->from($this->config->item('bd_movimientos_sap_fija') . ' as m');
+			}
+
+
+			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.'.$mov_fecha.'=f.fecha');
+			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.'.$mov_cmv.'=c.cmv');
+			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', '', FALSE);
+
+			if ($config['tipo_cruce_alm'] === 'alm')
+			{
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_alm.'=a.cod_almacen');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_alm.'=t.cod_almacen');
+			}
+			else
+			{
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_rec.'=a.cod_almacen');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_rec.'=t.cod_almacen');
 			}
 
 
 			$this->db->where_in($arr_filtro_fechas[$config['tipo_fecha']], $config['fechas']);
-			$this->db->where_in('m.cmv', $config['cmv']);
+			$this->db->where_in('m.'.$mov_cmv.'', $config['cmv']);
 			$this->db->where_in($arr_filtro_almacenes[$config['tipo_alm']], $config['almacenes']);
 			$this->db->where_in($arr_filtro_materiales[$config['tipo_mat']], $config['materiales']);
 
