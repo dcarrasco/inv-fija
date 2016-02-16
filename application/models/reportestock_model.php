@@ -1038,13 +1038,16 @@ class Reportestock_model extends CI_Model {
 		$mov_fecha  = ($tipo_op === 'MOVIL') ? 'fecha' : 'fecha_contabilizacion';
 		$mov_cmv    = ($tipo_op === 'MOVIL') ? 'cmv' : 'codigo_movimiento';
 		$mov_mat    = ($tipo_op === 'MOVIL') ? 'codigo_sap' : 'material';
+		$mov_desmat = ($tipo_op === 'MOVIL') ? 'texto_breve_material' : 'texto_material';
 		$mov_centro = ($tipo_op === 'MOVIL') ? 'ce' : 'centro';
 		$mov_alm    = ($tipo_op === 'MOVIL') ? 'alm' : 'almacen';
 		$mov_rec    = ($tipo_op === 'MOVIL') ? 'rec' : 'proveedor';
 		$mov_ndoc   = ($tipo_op === 'MOVIL') ? 'n_doc' : 'documento_material';
+		$mov_ref    = ($tipo_op === 'MOVIL') ? 'referencia' : 'referencia';
 		$mov_cant   = ($tipo_op === 'MOVIL') ? 'cantidad' : 'cantidad';
 		$tabla_mat  = ($tipo_op === 'MOVIL') ? 'bd_materiales2_sap' : 'bd_catalogos';
 		$mov_mat2   = ($tipo_op === 'MOVIL') ? 'codigo_sap' : 'catalogo';
+		$mov_user   = ($tipo_op === 'MOVIL') ? 'usuario' : 'usuario';
 
 		$arr_reporte = array();
 
@@ -1091,9 +1094,13 @@ class Reportestock_model extends CI_Model {
 			$this->db->select('m.'.$mov_alm.' as alm');
 			$this->db->select('m.'.$mov_rec.' as rec');
 			$this->db->select('m.'.$mov_ndoc.' as n_doc');
+			$this->db->select('m.'.$mov_ref.' as ref');
 			$this->db->select('m.lote as lote');
 			$this->db->select('m.'.$mov_mat.' as codigo_sap');
+			$this->db->select('m.'.$mov_desmat.' as des_material');
 			$this->db->select('m.'.$mov_cant.' as cantidad');
+			$this->db->select('m.'.$mov_user.' as usuario');
+			$this->db->select('u.nom_usuario as nom_usuario');
 
 
 			if ($tipo_op === 'MOVIL')
@@ -1108,6 +1115,7 @@ class Reportestock_model extends CI_Model {
 
 			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.'.$mov_fecha.'=f.fecha');
 			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.'.$mov_cmv.'=c.cmv');
+			$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'm.'.$mov_user.'=u.usuario');
 			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', '', FALSE);
 
 			if ($config['tipo_cruce_alm'] === 'alm')
