@@ -195,11 +195,12 @@ $(document).ready(function() {
 			success: function(data) {
 				var items = [];
 
+				/*
 				$.each(data, function(key, val) {
 					items.push('<option value="' + key + '">' + val + '</option>');
 				});
+				 */
 
-				/*
 				var values = [];
 				for (var i in data) {
 					values.push({key: i, value: data[i]})
@@ -209,8 +210,6 @@ $(document).ready(function() {
 				$.each(values, function(key, val) {
 					items.push('<option value="' + val.key + '">' + val.value + '</option>');
 				});
-
-				 */
 
 				elem.empty().append(items.join(''));
 			},
