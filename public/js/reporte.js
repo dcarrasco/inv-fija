@@ -2,6 +2,8 @@
 
 $(document).ready(function () {
 
+    $('[data-toggle="tooltip"]').tooltip();
+
     // ENCABEZADOS
     $('table.reporte th span').css('cursor', 'pointer');
 

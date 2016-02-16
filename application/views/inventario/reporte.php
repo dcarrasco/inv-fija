@@ -65,8 +65,6 @@ $(document).ready(function() {
 		$('form').submit();
 	});
 
-	$('[data-toggle="tooltip"]').tooltip();
-
 	$('#filtrar_material').keyup(function (event) {
 		var a_buscar = $('#filtrar_material').val().toUpperCase();
 

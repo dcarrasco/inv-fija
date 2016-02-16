@@ -222,36 +222,7 @@ class Stock_reporte extends CI_Controller {
 			'materiales'     => $this->input->post('materiales'),
 		);
 
-		$arr_campos = array();
-		$arr_campos['fecha']        = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cmv']          = array('titulo' => 'CMov', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['ce']           = array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['alm']          = array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['rec']          = array('titulo' => 'Dest', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['n_doc']        = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['ref']          = array('titulo' => 'Ref', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['codigo_sap']   = array('titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['des_material'] = array('titulo' => 'Desc material', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cantidad']     = array('titulo' => 'Cantidad', 'class' => '', 'tipo' => 'numero');
-		$arr_campos['usuario']      = array('titulo' => 'Usuario', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['nom_usuario']  = array('titulo' => 'Nom usuario', 'class' => '', 'tipo' => 'texto');
-
-		$orden_campo     = set_value('order_by');
-		$orden_tipo      = set_value('order_sort');
-		$new_orden_tipo  = $orden_tipo === 'ASC' ? 'DESC' : 'ASC';
-		$arr_link_campos = array();
-		$arr_link_sort   = array();
-		$arr_img_orden   = array();
-		foreach ($arr_campos as $campo => $valor)
-		{
-			$arr_campos[$campo]['order_by']  = ($campo === $orden_campo) ? $new_orden_tipo : 'ASC';
-			$arr_campos[$campo]['img_orden'] = ($campo === $orden_campo)
-				? ' <span class="text-muted glyphicon ' .
-					(($arr_campos[$campo]['order_by'] === 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
-					'" ></span>'
-				: '';
-		}
+		$arr_campos = $this->reportestock_model->get_campos_reporte_movhist();
 
 		$data = array(
 			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => 'movhist'),

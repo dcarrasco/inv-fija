@@ -1020,6 +1020,35 @@ class Reportestock_model extends CI_Model {
 		return form_array_format($arr_combo);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos del reporte movhist
+	 *
+	 * @return array Arreglo de campos
+	 */
+	public function get_campos_reporte_movhist()
+	{
+		$arr_campos = array();
+
+		$arr_campos['fecha']        = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['cmv']          = array('titulo' => 'CMov', 'class' => 'text-center', 'tipo' => 'texto');
+		$arr_campos['ce']           = array('titulo' => 'Centro', 'class' => 'text-center', 'tipo' => 'texto');
+		$arr_campos['alm']          = array('titulo' => 'Almacen', 'class' => 'text-center', 'tipo' => 'texto');
+		$arr_campos['rec']          = array('titulo' => 'Dest', 'class' => 'text-center', 'tipo' => 'texto');
+		$arr_campos['n_doc']        = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['ref']          = array('titulo' => 'Ref', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['codigo_sap']   = array('titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['des_material'] = array('titulo' => 'Desc material', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['cantidad']     = array('titulo' => 'Cantidad', 'class' => 'text-right', 'tipo' => 'numero');
+		$arr_campos['usuario']      = array('titulo' => 'Usuario', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['nom_usuario']  = array('titulo' => 'Nom usuario', 'class' => '', 'tipo' => 'texto');
+
+		$this->reporte->set_order_campos($arr_campos, 'fecha');
+
+		return $arr_campos;
+	}
 
 	// --------------------------------------------------------------------
 

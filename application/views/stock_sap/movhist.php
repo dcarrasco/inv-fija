@@ -1,4 +1,7 @@
 <?php echo form_open('','id="frm_param"'); ?>
+<?php echo form_hidden('order_by', set_value('order_by','')); ?>
+<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+
 <div class="accordion" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -65,12 +68,12 @@
 
 						<div class="text-right">
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_cruce_alm', 'alm',set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
+								<?php echo form_radio('tipo_cruce_alm', 'alm', set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
 								{_stock_movhist_radio_alm_}
 							</div>
 
 							<div class="radio-inline">
-								<?php echo form_radio('tipo_cruce_alm', 'rec',set_radio('tipo_cruce_alm', 'rec')); ?>
+								<?php echo form_radio('tipo_cruce_alm', 'rec', set_radio('tipo_cruce_alm', 'rec')); ?>
 								{_stock_movhist_radio_rec_}
 							</div>
 						</div>

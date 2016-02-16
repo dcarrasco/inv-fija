@@ -113,6 +113,35 @@ class Reporte {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Agrega elementos relacionados al ordenamiento al arreglo de campos
+	 *
+	 * @param array &$arr_campos   Arreglo de campos del reporte
+	 * @param string $campo_default Campo default en caso que no venga informado
+	 */
+	public function set_order_campos(&$arr_campos, $campo_default = '')
+	{
+		$new_orden_tipo  = (set_value('order_sort', 'ASC') === 'ASC') ? 'DESC' : 'ASC';
+
+		foreach ($arr_campos as $campo => $valor)
+		{
+			$arr_campos[$campo]['order_by'] = ($campo === set_value('order_by', $campo_default)) ? $new_orden_tipo : 'ASC';
+
+			$arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
+			$arr_tipo_icono_texto  = array('link', 'texto');
+			$tipo_icono = 'amount';
+			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
+			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
+
+			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
+
+			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', $campo_default)
+				? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Imprime reporte
 	 *
 	 * @param  array $arr_campos Arreglo con los campos del reporte
