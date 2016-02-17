@@ -4,7 +4,7 @@
 <?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form" class="form-inline"'); ?>
 <?php echo form_hidden('formulario','buscar'); ?>
 
-	<div class="form-group col-md-3">
+	<div class="form-group col-md-4">
 		<label>{_inventario_report_label_inventario_}</label>
 		<p class="form-control-static">{nombre_inventario}</p>
 	</div>
@@ -37,7 +37,7 @@
 		{combo_auditores}
 	</div>
 
-	<div class="form-group pull-right">
+	<div class="form-group col-md-2 pull-right">
 		<a href="<?php echo site_url($this->router->class.'/editar/'.$hoja.'/'.$id_auditor) ?>" id="btn_mostrar_agregar" class="btn btn-default pull-right">
 			<span class="fa fa-plus-circle"></span>
 			{_inventario_button_new_line_}
