@@ -201,6 +201,11 @@ class Stock_reporte extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega reporte de movimientos
+	 *
+	 * @return void
+	 */
 	public function movhist()
 	{
 		$this->form_validation->set_rules($this->reportestock_model->movhist_validation);
@@ -211,7 +216,7 @@ class Stock_reporte extends CI_Controller {
 		$param_tipo_mat       = set_value('tipo_mat', 'TIPO');
 		$param_tipo_cruce_alm = set_value('tipo_cruce_alm', 'alm');
 
-		$config_reporte = array(
+		$datos_reporte = $this->reportestock_model->get_reporte_movhist(array(
 			'tipo_fecha'     => $param_tipo_fecha,
 			'fechas'         => $this->input->post('fechas'),
 			'cmv'            => $this->input->post('cmv'),
@@ -220,7 +225,7 @@ class Stock_reporte extends CI_Controller {
 			'tipo_cruce_alm' => $param_tipo_cruce_alm,
 			'tipo_mat'       => $param_tipo_mat,
 			'materiales'     => $this->input->post('materiales'),
-		);
+		));
 
 		$arr_campos = $this->reportestock_model->get_campos_reporte_movhist();
 
@@ -233,7 +238,7 @@ class Stock_reporte extends CI_Controller {
 			'combo_almacenes'  => $this->reportestock_model->get_combo_almacenes($param_tipo_alm),
 			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
 			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
-			'reporte'          => $this->reporte->genera_reporte($arr_campos, $this->reportestock_model->get_reporte_movhist($config_reporte)),
+			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_reporte),
 		);
 
 		app_render_view('stock_sap/movhist', $data);
