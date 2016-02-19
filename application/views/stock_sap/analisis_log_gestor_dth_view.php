@@ -12,18 +12,14 @@
 			<div class="row">
 				<div class="col-md-4">
 					<div class="form-group">
-						<div class="radio-inline">
-							<label>
-								<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
-								{_stock_gestor_radio_deco_}
-							</label>
-						</div>
-						<div class="radio-inline">
-							<label>
-								<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
-								{_stock_gestor_radio_cliente_}
-							</label>
-						</div>
+						<label class="radio-inline">
+							<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
+							{_stock_gestor_radio_deco_}
+						</label>
+						<label class="radio-inline">
+							<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
+							{_stock_gestor_radio_cliente_}
+						</label>
 						<?php echo form_textarea(array(
 								'id' => 'series',
 								'name' => 'series',
@@ -40,18 +36,14 @@
 						<label>{_stock_gestor_label_report_}</label>
 
 						<div>
-							<div class="radio-inline">
-								<label>
-									<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
-									{_stock_gestor_radio_log_complete_}
-								</label>
-							</div>
-							<div class="radio-inline">
-								<label>
-									<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
-									{_stock_gestor_radio_log_ultdeco_}
-								</label>
-							</div>
+							<label class="radio-inline">
+								<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
+								{_stock_gestor_radio_log_complete_}
+							</label>
+							<label class="radio-inline">
+								<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
+								{_stock_gestor_radio_log_ultdeco_}
+							</label>
 						</div>
 
 						<div class="checkbox">
@@ -64,18 +56,14 @@
 						<label>{_stock_gestor_label_typeop_}</label>
 
 						<div>
-							<div class="checkbox-inline">
-								<label>
-									<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
-									{_stock_gestor_check_alta_}
-								</label>
-							</div>
-							<div class="checkbox-inline">
-								<label>
-									<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
-									{_stock_gestor_check_baja_}
-								</label>
-							</div>
+							<label class="checkbox-inline">
+								<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+								{_stock_gestor_check_alta_}
+							</label>
+							<label class="checkbox-inline">
+								<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+								{_stock_gestor_check_baja_}
+							</label>
 						</div>
 					</div>
 				</div>
