@@ -21,8 +21,8 @@
 				{validation_errors}
 
 				<div class="col-md-2">
-					<div class="form-group">
-						<label>
+					<div class="form-group <?php echo form_has_error('fechas[]')?>">
+						<label class="control-label">
 							{_stock_movhist_label_dates_}
 						</label>
 
@@ -34,14 +34,15 @@
 								</button>
 							</div>
 						</div>
+						<?php echo form_hidden('tipo_fecha_filtro', set_value('tipo_fecha_filtro')) ?>
 
 						<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'), 'size="8" class="form-control"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-3">
-					<div class="form-group">
-						<label>
+					<div class="form-group <?php echo form_has_error('cmv[]')?>">
+						<label class="control-label">
 							{_stock_movhist_label_movs_}
 						</label>
 
@@ -50,8 +51,8 @@
 				</div>
 
 				<div class="col-md-3">
-					<div class="form-group">
-						<label>
+					<div class="form-group <?php echo form_has_error('almacenes[]')?>">
+						<label class="control-label">
 							{_stock_movhist_label_alm_}
 						</label>
 
@@ -81,8 +82,8 @@
 				</div>
 
 				<div class="col-md-4">
-					<div class="form-group">
-						<label>
+					<div class="form-group <?php echo form_has_error('materiales[]')?>">
+						<label class="control-label">
 							{_stock_movhist_label_mats_}
 						</label>
 
@@ -127,7 +128,7 @@ $(document).ready(function() {
 
 	$('select[name="tipo_alm"]').change(function (event) {
 		var url = url_ajax + 'movhist_ajax_almacenes/' + $(this).val();
-		actualizaCombo($('select[name="almacenes[]"]'), url);
+		actualizaComboOrden($('select[name="almacenes[]"]'), url);
 	});
 
 	$('select[name="tipo_mat"]').change(function (event) {
@@ -140,6 +141,8 @@ $(document).ready(function() {
 			sel_fechas = $('select[name="fechas[]"]'),
 			val_tipo_fecha = sel_tipo_fecha.val(),
 			val_fechas = sel_fechas.val();
+
+		$('input[name="tipo_fecha_filtro"]').val(JSON.stringify(sel_fechas.val()));
 
 		if (val_fechas !== null && val_tipo_fecha !== 'DIA')
 		{
@@ -195,13 +198,24 @@ $(document).ready(function() {
 			success: function(data) {
 				var items = [];
 
-				/*
 				$.each(data, function(key, val) {
 					items.push('<option value="' + key + '">' + val + '</option>');
 				});
-				 */
 
+				elem.empty().append(items.join(''));
+			},
+		});
+	}
+
+	function actualizaComboOrden(elem, url) {
+		$.ajax({
+			dataType: "json",
+			url: url,
+			async: false,
+			success: function(data) {
+				var items = [];
 				var values = [];
+
 				for (var i in data) {
 					values.push({key: i, value: data[i]})
 				}

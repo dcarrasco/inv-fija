@@ -118,7 +118,7 @@ class Reportestock_model extends CI_Model {
 		array(
 			'field' => 'almacenes[]',
 			'label' => 'Almacenes',
-			'rules' => 'trim|required'
+			'rules' => 'trim'
 		),
 		array(
 			'field' => 'materiales',
@@ -1116,7 +1116,7 @@ class Reportestock_model extends CI_Model {
 
 		if ($param_ok)
 		{
-			$this->db->limit(1000);
+			$this->db->limit(5000);
 			$this->db->select('f.fecha2 as fecha');
 			$this->db->select('m.'.$mov_cmv.' as cmv');
 			$this->db->select('m.'.$mov_centro.' as ce');
@@ -1142,20 +1142,20 @@ class Reportestock_model extends CI_Model {
 			}
 
 
-			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.'.$mov_fecha.'=f.fecha');
-			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.'.$mov_cmv.'=c.cmv');
-			$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'm.'.$mov_user.'=u.usuario');
-			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', '', FALSE);
+			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.'.$mov_fecha.'=f.fecha','LEFT');
+			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.'.$mov_cmv.'=c.cmv','LEFT');
+			$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'm.'.$mov_user.'=u.usuario','LEFT');
+			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', 'LEFT', FALSE);
 
 			if ($config['tipo_cruce_alm'] === 'alm')
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_alm.'=a.cod_almacen');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_alm.'=t.cod_almacen');
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_alm.'=a.cod_almacen','LEFT');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_alm.'=t.cod_almacen','LEFT');
 			}
 			else
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_rec.'=a.cod_almacen');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_rec.'=t.cod_almacen');
+				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_rec.'=a.cod_almacen','LEFT');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_rec.'=t.cod_almacen','LEFT');
 			}
 
 
