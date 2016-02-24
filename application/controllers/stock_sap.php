@@ -179,8 +179,8 @@ class Stock_sap extends CI_Controller {
 
 		if ($this->input->post('excel'))
 		{
-			$this->load->view('stock_sap/ver_stock_encab_excel', $data);
-			$this->load->view('stock_sap/ver_stock_datos', $data);
+			$this->parser->parse('stock_sap/ver_stock_encab_excel', $data);
+			$this->parser->parse('stock_sap/ver_stock_datos', $data);
 		}
 		else
 		{
