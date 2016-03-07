@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="es">
 <head>
+	<!-- ************* APP-DINAMICS *************  -->
+	<script>
+	window['adrum-start-time']= new Date().getTime();
+	window['adrum-app-key'] = 'bddbld01nrsk';
+	</script>
+	<script src="{base_url}js/adrum.js"></script>
+	<!-- ************* APP-DINAMICS *************  -->
+
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,14 +26,6 @@
 	<script type="text/javascript" src="{base_url}js/jquery.js"></script>
 	<script type="text/javascript" src="{base_url}js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="{base_url}js/jquery.jqplot.min.js"></script>
-
-	<!-- ************* APP-DINAMICS *************  -->
-	<script>
-	window['adrum-start-time']= new Date().getTime();
-	window['adrum-app-key'] = 'inv-fija';
-	</script>
-	<script src="{base_url}js/adrum.js"></script>
-	<!-- ************* APP-DINAMICS *************  -->
 
 	<script type="text/javascript">
 		var js_base_url = "{js_base_url}";
