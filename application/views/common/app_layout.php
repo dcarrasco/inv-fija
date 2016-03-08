@@ -4,7 +4,7 @@
 	<!-- ************* APP-DINAMICS *************  -->
 	<script>
 	window['adrum-start-time']= new Date().getTime();
-	window['adrum-app-key'] = 'bddbld01nrsk';
+	window['adrum-app-key'] = 'AD-AAB-AAB-VPZ';
 	</script>
 	<script src="{base_url}js/adrum.js"></script>
 	<!-- ************* APP-DINAMICS *************  -->
