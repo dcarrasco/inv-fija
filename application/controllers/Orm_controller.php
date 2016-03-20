@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Orm_Controller extends CI_Controller {
+class Orm_controller extends CI_Controller {
 
 	/**
 	 * Llave de identificación del módulo
