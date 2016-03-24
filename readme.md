@@ -37,7 +37,7 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 
 * PHP 5.3.x
 * SQL Server / MySQL
-* Codeigniter 3.0.2
+* Codeigniter 3.0.6
 * JQuery 2.1.4
 * Bootstrap 3.3.5
 * JqPlot 1.0.8
