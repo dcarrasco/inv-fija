@@ -243,7 +243,7 @@ class Orm_model implements IteratorAggregate {
 		foreach ($arr_config as $campo => $propiedad)
 		{
 			$propiedad['tabla_bd'] = $this->_model_tabla;
-			$obj_field = new ORM_Field($campo, $propiedad);
+			$obj_field = new Orm_field($campo, $propiedad);
 			$this->_model_fields[$campo] = $obj_field;
 			$this->_fields_values[$campo] = NULL;
 		}
