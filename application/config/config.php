@@ -516,17 +516,17 @@ $config['proxy_ips'] = '';
  */
 function orm_models_autoload($class)
 {
-	if (file_exists(APPPATH.'models/'.strtolower($class).'.php'))
+	if (file_exists(APPPATH.'models/'.$class.'.php'))
 	{
-		include_once(APPPATH.'models/'.strtolower($class).'.php');
+		include_once(APPPATH.'models/'.$class.'.php');
 	}
-	else if (file_exists(APPPATH.'controllers/'.strtolower($class).'.php'))
+	else if (file_exists(APPPATH.'controllers/'.$class.'.php'))
 	{
-		include_once(APPPATH.'controllers/'.strtolower($class).'.php');
+		include_once(APPPATH.'controllers/'.$class.'.php');
 	}
-	else if (file_exists(APPPATH.'libraries/'.strtolower($class).'.php'))
+	else if (file_exists(APPPATH.'libraries/'.$class.'.php'))
 	{
-		include_once(APPPATH.'libraries/'.strtolower($class).'.php');
+		include_once(APPPATH.'libraries/'.$class.'.php');
 	}
 }
 

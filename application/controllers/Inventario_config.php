@@ -26,7 +26,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Inventario_config extends ORM_Controller {
+class Inventario_config extends Orm_controller {
 
 	/**
 	 * Llave de identificación del módulo
