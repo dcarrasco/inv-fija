@@ -1230,7 +1230,8 @@ class Orm_model implements IteratorAggregate {
 		}
 		else
 		{
-			$es_insert = ($this->db->get_where($this->_model_tabla, $data_where)->num_rows() === 0);
+			$es_insert = ($this->db->get_where($this->_model_tabla, $data_where)->row() === NULL)
+							OR ($this->db->get_where($this->_model_tabla, $data_where)->num_rows() === 0)
 		}
 
 		// NUEVO REGISTRO
