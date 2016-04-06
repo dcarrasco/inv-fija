@@ -83,12 +83,12 @@ if (ENVIRONMENT == 'development-mac')
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
+	'hostname' => 'sirio',
 	'username' => 'invfija',
 	'password' => 'fijainv2014!',
 	'database' => 'BD_inventario',
-	'dbdriver' => 'sqlsrv',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
@@ -171,12 +171,12 @@ $db['mac-sirio'] = array(
 );
 
 $db['adminbd'] = array(
-	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
+	'hostname' => 'sirio',
 	'username' => 'patripio',
 	'password' => 'movi.2015.logistica',
 	'database' => 'BD_inventario',
-	'dbdriver' => 'sqlsrv',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
