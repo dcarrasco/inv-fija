@@ -56,6 +56,18 @@ class Reporte {
 			case 'link':
 							return anchor($arr_param_campo['href'] . $valor, $valor);
 							break;
+			case 'link_registro':
+							$arr_link = array();
+							foreach ($arr_param_campo['href_registros'] as $campos_link)
+							{
+								$valor_registro = $campos_link === 'fecha'
+									? str_replace('.', '', $registro[$campos_link])
+									: $registro[$campos_link];
+								array_push($arr_link, $valor_registro);
+							}
+
+							return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
+							break;
 			case 'link_detalle_series':
 							$id_tipo        = array_key_exists('id_tipo', $registro) ? $registro['id_tipo'] : '';
 							$centro         = array_key_exists('centro', $registro) ? $registro['centro'] : '';

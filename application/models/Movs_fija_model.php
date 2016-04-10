@@ -66,10 +66,11 @@ class Movs_fija_model extends CI_Model {
 	/**
 	 * Devuelve los consumos realizados en TOA
 	 *
-	 * @param  string  $usuario  usuario
-	 * @param  string  $password clave
-	 * @param  boolean $remember Indica si el usuario será recordado
-	 * @return boolean           TRUE si se loguea al usuario, FALSE si no
+	 * @param  string $tipo_reporte Tipo de reporte a desplegar
+	 * @param  string $fecha        Fecha de los datos del reporte
+	 * @param  string $orden_campo  Campo para ordenar el resultado
+	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
+	 * @return string               Reporte
 	 */
 	public function consumos_toa($tipo_reporte = 'detalle', $fecha = NULL, $orden_campo = '', $orden_tipo = 'ASC')
 	{
@@ -148,6 +149,7 @@ class Movs_fija_model extends CI_Model {
 				->select('a.referencia')
 				->select('c.empresa')
 				->select('a.cliente')
+				->select("'ver detalle' as texto_link")
 				->select('b.tecnico')
 				->select_sum('(-a.cantidad_en_um)', 'cant')
 				->select_sum('(-a.importe_ml)', 'monto')
@@ -170,6 +172,7 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 			$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('fecha','referencia'));
 			$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -182,6 +185,7 @@ class Movs_fija_model extends CI_Model {
 				->select('convert(varchar(20), fecha_contabilizacion, 102) as fecha')
 				->select('material')
 				->select('texto_material')
+				->select("'ver peticiones' as texto_link")
 				->select_sum('(-cantidad_en_um)', 'cant')
 				->select_sum('(-importe_ml)', 'monto')
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
@@ -197,6 +201,7 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['texto_material'] = array('titulo' => 'Desc material', 'tipo' => 'texto');
 			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/material', 'href_registros' => array('fecha','material'));
 			$this->reporte->set_order_campos($arr_campos, 'material');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -209,6 +214,7 @@ class Movs_fija_model extends CI_Model {
 				->select('convert(varchar(20), fecha_contabilizacion, 102) as fecha')
 				->select('valor')
 				->select('lote')
+				->select("'ver peticiones' as texto_link")
 				->select_sum('(-cantidad_en_um)', 'cant')
 				->select_sum('(-importe_ml)', 'monto')
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
@@ -224,6 +230,7 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['lote']  = array('titulo' => 'Lote', 'tipo' => 'texto');
 			$arr_campos['cant']  = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto'] = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/lote', 'href_registros' => array('fecha','lote'));
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -238,6 +245,7 @@ class Movs_fija_model extends CI_Model {
 				->select('lote')
 				->select('material')
 				->select('texto_material')
+				->select("'ver peticiones' as texto_link")
 				->select_sum('(-cantidad_en_um)', 'cant')
 				->select_sum('(-importe_ml)', 'monto')
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
@@ -257,6 +265,7 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['texto_material'] = array('titulo' => 'Desc material', 'tipo' => 'texto');
 			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/lote-material', 'href_registros' => array('fecha','lote','material'));
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -270,6 +279,7 @@ class Movs_fija_model extends CI_Model {
 				->select('codigo_movimiento')
 				->select('texto_movimiento')
 				->select('elemento_pep')
+				->select("'ver peticiones' as texto_link")
 				->select_sum('(-cantidad_en_um)', 'cant')
 				->select_sum('(-importe_ml)', 'monto')
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
@@ -287,6 +297,7 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['elemento_pep']      = array('titulo' => 'PEP', 'tipo' => 'texto');
 			$arr_campos['cant']              = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']             = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/pep', 'href_registros' => array('fecha','codigo_movimiento', 'elemento_pep'));
 			$this->reporte->set_order_campos($arr_campos, 'codigo_movimiento');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -300,6 +311,7 @@ class Movs_fija_model extends CI_Model {
 				->select('c.empresa')
 				->select('a.cliente')
 				->select('b.tecnico')
+				->select("'ver peticiones' as texto_link")
 				->select_sum('(-a.cantidad_en_um)', 'cant')
 				->select_sum('(-a.importe_ml)', 'monto')
 				->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
@@ -319,11 +331,142 @@ class Movs_fija_model extends CI_Model {
 			$arr_campos['tecnico'] = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tecnicos', 'href_registros' => array('fecha','cliente'));
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
 		}
+	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera peticiones dados argumentos de busqueda
+	 *
+	 * @param  string $tipo_reporte Tipo de reporte a buscar
+	 * @param  string $param1       Primer parametro
+	 * @param  string $param2       Segundo parametro
+	 * @param  string $param3       Tercer parametro
+	 * @return string               Reporte con las peticiones encontradas
+	 */
+	public function peticiones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL)
+	{
+		if ( ! $tipo_reporte)
+		{
+			return '';
+		}
+
+		$arr_data = array();
+
+		$this->db
+			->where('fecha_contabilizacion', $param1)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo);
+
+		if ($tipo_reporte === 'material')
+		{
+			$this->db->where('material', $param2);
+		}
+		elseif ($tipo_reporte === 'lote')
+		{
+			$this->db->where('lote', $param2);
+		}
+		elseif ($tipo_reporte === 'lote-material')
+		{
+			$this->db->where('lote', $param2);
+			$this->db->where('material', $param3);
+		}
+		elseif ($tipo_reporte === 'pep')
+		{
+			$this->db->where('codigo_movimiento', $param2);
+			$this->db->where('elemento_pep', $param3);
+		}
+		elseif ($tipo_reporte === 'tecnicos')
+		{
+			$this->db->where('cliente', $param2);
+		}
+
+		$arr_data = $this->db
+			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.referencia')
+			->select('c.empresa')
+			->select('a.cliente')
+			->select('b.tecnico')
+			->select("'ver detalle' as texto_link")
+			->select_sum('(-a.cantidad_en_um)', 'cant')
+			->select_sum('(-a.importe_ml)', 'monto')
+			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.referencia')
+			->group_by('c.empresa')
+			->group_by('a.cliente')
+			->group_by('b.tecnico')
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			->order_by('a.referencia', 'ASC')
+			->get()->result_array();
+
+		$arr_campos = array();
+		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'texto');
+		$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
+		$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
+		$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
+		$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+		$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('fecha','referencia'));
+		$this->reporte->set_order_campos($arr_campos, 'referencia');
+
+		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera datos de detalle de una peticion
+	 *
+	 * @param  string $fecha    Fecha de la peticion
+	 * @param  string $peticion ID de la peticion
+	 * @return array            Detalle de la peticion
+	 */
+	public function detalle_peticion_toa($fecha = NULL, $peticion = NULL)
+	{
+		if ( ! $fecha OR ! $peticion)
+		{
+			return array();
+		}
+
+		return $this->db
+			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.referencia')
+			->select('c.empresa')
+			->select('a.cliente')
+			->select('b.tecnico')
+			->select('a.codigo_movimiento')
+			->select('a.texto_movimiento')
+			->select('a.elemento_pep')
+			->select('a.documento_material')
+			->select('a.centro')
+			->select('a.material')
+			->select('a.texto_material')
+			->select('a.lote')
+			->select('a.valor')
+			->select('a.umb')
+			->select('(-a.cantidad_en_um) as cant', FALSE)
+			->select('(-a.importe_ml) as monto', FALSE)
+			->select('a.usuario')
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			//->order_by($orden_campo, $orden_tipo)
+			->where('fecha_contabilizacion', $fecha)
+			->where('referencia', $peticion)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->order_by('material')
+			->get()->result_array();
 
 	}
 
