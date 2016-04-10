@@ -74,12 +74,52 @@ class Toa_consumos extends CI_Controller {
 			'combo_fechas'   => $stock_sap_fija->get_data_combo_fechas(),
 			'combo_reportes' => $this->movs_fija_model->tipos_reporte_consumo,
 			'reporte'        => $this->movs_fija_model->consumos_toa($this->input->post('sel_reporte'), $this->input->post('fecha'), $this->input->post('order_by'), $this->input->post('order_sort')),
-			);
+		);
 
 		app_render_view('toa/consumos', $datos);
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega listado de peticiones de acuerdo a un criterio
+	 *
+	 * @param  string $tipo_reporte Tipo de reporte
+	 * @param  mixed  $param1       Primer parametro de filtro
+	 * @param  mixed  $param2       Segundo parametro de filtro
+	 * @param  mixed  $param3       Tercer parametro de filtro
+	 * @return void
+	 */
+	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL)
+	{
+		$datos = array(
+			'reporte' => $this->movs_fija_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3),
+		);
+
+		app_render_view('toa/peticiones', $datos);
+
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle de una peticion
+	 *
+	 * @param  string $fecha    Fecha de la peticion
+	 * @param  string $peticion Identificador de la peticion
+	 * @return void
+	 */
+	public function detalle_peticion($fecha = NULL, $peticion = NULL)
+	{
+		$datos = array(
+			'reporte' => $this->movs_fija_model->detalle_peticion_toa($fecha, $peticion),
+		);
+
+		app_render_view('toa/detalle_peticion', $datos);
+
+	}
 
 
 }
