@@ -57,9 +57,9 @@
 						<th class="text-center">unidad</th>
 						<th class="text-center">cantidad</th>
 						<th class="text-center">monto</th>
-						<th class="text-center">Mov SAP</th>
+						<th class="text-center">mov SAP</th>
 						<th class="text-center">PEP</th>
-						<th class="text-center">Doc SAP</th>
+						<th class="text-center">doc SAP</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -73,8 +73,8 @@
 						<td class="text-center"><?php echo $linea_detalle['lote']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['valor']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['umb']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['cant']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['monto']; ?></td>
+						<td class="text-center"><?php echo fmt_cantidad($linea_detalle['cant']); ?></td>
+						<td class="text-center"><?php echo fmt_monto($linea_detalle['monto']); ?></td>
 						<td class="text-center"><?php echo $linea_detalle['codigo_movimiento']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['elemento_pep']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['documento_material']; ?></td>
