@@ -229,6 +229,11 @@ class Reporte {
 		// recorre cada uno de los campos generando la celda de encabezado
 		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
 		{
+			if ( ! array_key_exists('class', $arr_param_campo))
+			{
+				$arr_param_campo['class'] = '';
+			}
+
 			$arr_celda = array(
 				'data' =>
 					'<span '.
