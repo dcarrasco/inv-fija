@@ -1,5 +1,5 @@
 <div class="accordion">
-	<?php echo form_open('','id="frm_param"'); ?>
+	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
 	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
 	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
 	<div class="panel panel-default">
@@ -17,21 +17,26 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-4">
-						<div class="form_group">
-							<label>{_consumo_fechas_}</label>
-							<?php echo form_dropdown('fecha', $combo_fechas, $this->input->post('fecha'), 'class="form-control"'); ?>
-						</div>
-					</div>
-
-					<div class="col-md-4">
+					<div class="col-md-5">
 						<div class="form_group">
 							<label>{_consumo_reporte_}</label>
 							<?php echo form_dropdown('sel_reporte', $combo_reportes, $this->input->post('sel_reporte'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-4">
+					<div class="col-md-5">
+						<div class="form_group">
+							<label>{_consumo_fechas_}</label>
+							<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es">
+								<?php echo form_input('fecha', $this->input->post('fecha'), 'class="form-control"'); ?>
+								<div class="input-group-addon">
+									<i class="fa fa-calendar"></i>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-2">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>
@@ -50,4 +55,3 @@
 <div class="content-module-main">
 {reporte}
 </div> <!-- fin content-module-main -->
-
