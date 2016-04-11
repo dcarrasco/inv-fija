@@ -68,9 +68,9 @@ class Empresa_toa extends ORM_Model {
 
 		$this->config_model($arr_config);
 
-		if ($id_empres)
+		if ($id_empresa)
 		{
-			$this->fill($id_empres);
+			$this->fill($id_empresa);
 		}
 	}
 
