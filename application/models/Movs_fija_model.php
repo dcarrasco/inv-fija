@@ -485,7 +485,7 @@ class Movs_fija_model extends CI_Model {
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			//->order_by($orden_campo, $orden_tipo)
-			->where('fecha_contabilizacion', $fecha)
+			//->where('fecha_contabilizacion', $fecha)
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
@@ -801,11 +801,61 @@ class Movs_fija_model extends CI_Model {
 		$arr_campos['des_almacen']        = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
 		$arr_campos['cant']               = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 		$arr_campos['monto']              = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-		$arr_campos['texto_link']         = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('fecha','documento_material'));
+		$arr_campos['texto_link']         = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/detalle_asignacion', 'href_registros' => array('fecha','documento_material'));
 		$this->reporte->set_order_campos($arr_campos, 'documento_material');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera datos de detalle de una peticion
+	 *
+	 * @param  string $fecha    Fecha de la peticion
+	 * @param  string $peticion ID de la peticion
+	 * @return array            Detalle de la peticion
+	 */
+	public function detalle_asignacion_toa($fecha = NULL, $peticion = NULL)
+	{
+		if ( ! $fecha OR ! $peticion)
+		{
+			return array();
+		}
+
+		return $this->db
+			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.referencia')
+			->select('c.empresa')
+			->select('a.cliente')
+			->select('b.tecnico')
+			->select('a.codigo_movimiento')
+			->select('a.texto_movimiento')
+			->select('a.elemento_pep')
+			->select('a.documento_material')
+			->select('a.centro')
+			->select('a.material')
+			->select('a.texto_material')
+			->select('a.lote')
+			->select('a.valor')
+			->select('a.umb')
+			->select('(-a.cantidad_en_um) as cant', FALSE)
+			->select('(-a.importe_ml) as monto', FALSE)
+			->select('a.usuario')
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			//->order_by($orden_campo, $orden_tipo)
+			->where('fecha_contabilizacion', $fecha)
+			->where('documento_material', $peticion)
+			->where_in('codigo_movimiento', $this->movimientos_asignaciones)
+			->where_in('centro', $this->centros_consumo)
+			->order_by('material')
+			->get()->result_array();
+
+	}
+
 
 
 

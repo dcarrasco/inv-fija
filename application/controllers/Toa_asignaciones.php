@@ -108,13 +108,13 @@ class Toa_asignaciones extends CI_Controller {
 	 * @param  string $peticion Identificador de la peticion
 	 * @return void
 	 */
-	public function detalle_peticion($fecha = NULL, $peticion = NULL)
+	public function detalle_asignacion($fecha = NULL, $peticion = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->movs_fija_model->detalle_peticion_toa($fecha, $peticion),
+			'reporte' => $this->movs_fija_model->detalle_asignacion_toa($fecha, $peticion),
 		);
 
-		app_render_view('toa/detalle_peticion', $datos);
+		app_render_view('toa/detalle_asignacion', $datos);
 
 	}
 
