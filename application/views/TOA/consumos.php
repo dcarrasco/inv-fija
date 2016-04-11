@@ -27,7 +27,7 @@
 					<div class="col-md-5">
 						<div class="form_group">
 							<label>{_consumo_fechas_}</label>
-							<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es">
+							<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true">
 								<?php echo form_input('fecha', $this->input->post('fecha'), 'class="form-control"'); ?>
 								<div class="input-group-addon">
 									<i class="fa fa-calendar"></i>
