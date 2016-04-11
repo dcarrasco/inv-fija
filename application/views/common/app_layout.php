@@ -11,12 +11,16 @@
 	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="{base_url}img/favicon-152.png">
 
 	<link rel="stylesheet" href="{base_url}css/bootstrap.min.css" />
+	<link rel="stylesheet" href="{base_url}css/bootstrap-datepicker3.min.css" />
 	<link rel="stylesheet" href="{base_url}css/font-awesome.min.css" />
 	<link rel="stylesheet" href="{base_url}css/fix_bootstrap.css" />
 	<link rel="stylesheet" type="text/css" href="{base_url}css/jquery.jqplot.min.css" />
 
 	<script type="text/javascript" src="{base_url}js/jquery.js"></script>
+	<script type="text/javascript" src="{base_url}js/moment.min.js"></script>
 	<script type="text/javascript" src="{base_url}js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="{base_url}js/bootstrap-datepicker.min.js"></script>
+	<script type="text/javascript" src="{base_url}js/locales/bootstrap-datepicker.es.js"></script>
 	<script type="text/javascript" src="{base_url}js/jquery.jqplot.min.js"></script>
 
 	<script type="text/javascript">
