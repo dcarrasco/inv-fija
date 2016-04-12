@@ -70,7 +70,7 @@ class Toa_asignaciones extends CI_Controller {
 	{
 		$datos = array(
 			'combo_reportes' => $this->movs_fija_model->tipos_reporte_asignaciones,
-			'reporte'        => $this->movs_fija_model->asignaciones_toa($this->input->post('sel_reporte'), $this->input->post('fecha'), $this->input->post('order_by'), $this->input->post('order_sort')),
+			'reporte'        => $this->movs_fija_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
