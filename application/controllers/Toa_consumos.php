@@ -73,7 +73,7 @@ class Toa_consumos extends CI_Controller {
 		$datos = array(
 			'combo_fechas'   => $stock_sap_fija->get_data_combo_fechas(),
 			'combo_reportes' => $this->movs_fija_model->tipos_reporte_consumo,
-			'reporte'        => $this->movs_fija_model->consumos_toa($this->input->post('sel_reporte'), $this->input->post('fecha'), $this->input->post('order_by'), $this->input->post('order_sort')),
+			'reporte'        => $this->movs_fija_model->consumos_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);

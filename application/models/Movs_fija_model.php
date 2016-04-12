@@ -31,7 +31,7 @@ class Movs_fija_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_consumo = array('Z35', 'Z45');
+	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41');
 
 	/**
 	 * Movimientos validos de asignaciones TOA
@@ -489,7 +489,7 @@ class Movs_fija_model extends CI_Model {
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->order_by('material')
+			->order_by('a.codigo_movimiento, a.material')
 			->get()->result_array();
 
 	}
