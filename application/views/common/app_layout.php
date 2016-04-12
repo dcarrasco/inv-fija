@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="es">
 <head>
+	<!-- ************* APP-DINAMICS *************  -->
+	<script>
+	window['adrum-start-time']= new Date().getTime();
+	window['adrum-app-key'] = 'AD-AAB-AAB-VPZ';
+	</script>
+	<script src="{base_url}js/adrum.js"></script>
+	<!-- ************* APP-DINAMICS *************  -->
+
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
