@@ -1,4 +1,4 @@
-<div class="accordion">
+<div class="accordion hidden-print">
 	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
 	<div class="panel panel-default">
 
@@ -55,20 +55,23 @@
 <div class="content-module-main">
 <?php $i = 0; ?>
 <?php if ($control): ?>
-	<table class="table table-bordered reporte">
+	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $id_tecnico => $datos): ?>
 		<?php if ($i == 0): ?>
 			<tr>
 				<th></th>
 				<th>T&eacute;cnico</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
-					<th class="text-center"><?php echo $dia_act; ?></th>
+					<th class="text-center">
+						<?php echo $this->movs_fija_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+						<?php echo $dia_act; ?>
+					</th>
 				<?php endforeach; ?>
 			</tr>
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted"><?php echo $i+1; ?></td>
-			<td><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
+			<td style="white-space: nowrap;"><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'success' : ''; ?>">
 						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>

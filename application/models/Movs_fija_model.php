@@ -99,6 +99,16 @@ class Movs_fija_model extends CI_Model {
 		'detalle'       => 'Detalle todos los registros',
 	);
 
+	public $dias_de_la_semana = array(
+		'0' => 'Do',
+		'1' => 'Lu',
+		'2' => 'Ma',
+		'3' => 'Mi',
+		'4' => 'Ju',
+		'5' => 'Vi',
+		'6' => 'Sa',
+	);
+
 	/**
 	 * Constructor de la clase
 	 *
