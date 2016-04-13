@@ -132,11 +132,25 @@ class Reporte {
 	 */
 	public function set_order_campos(&$arr_campos, $campo_default = '')
 	{
-		$new_orden_tipo  = (set_value('order_sort', 'ASC') === 'ASC') ? 'DESC' : 'ASC';
+		$CI =& get_instance();
+
+		$order_sort = $CI->input->post_get('order_sort');
+		if ($order_sort === NULL)
+		{
+			$order_sort = 'ASC';
+		}
+
+		$order_by = $CI->input->post_get('order_by');
+		if ($order_by === NULL)
+		{
+			$order_by = $campo_default;
+		}
+
+		$new_orden_tipo  = ($order_sort === 'ASC') ? 'DESC' : 'ASC';
 
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_campos[$campo]['order_by'] = ($campo === set_value('order_by', $campo_default)) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['order_by'] = ($campo === $order_by) ? $new_orden_tipo : 'ASC';
 
 			$arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
 			$arr_tipo_icono_texto  = array('link', 'texto');
@@ -146,8 +160,7 @@ class Reporte {
 
 			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
 
-			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', $campo_default)
-				? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
+			$arr_campos[$campo]['img_orden'] = ($campo === $order_by) ? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
 		}
 	}
 
