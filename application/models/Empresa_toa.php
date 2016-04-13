@@ -43,7 +43,7 @@ class Empresa_toa extends ORM_Model {
 				'model_tabla'        => $this->config->item('bd_empresas_toa'),
 				'model_label'        => 'Empresa TOA',
 				'model_label_plural' => 'Empresas TOA',
-				'model_order_by'     => 'id_empresa',
+				'model_order_by'     => 'empresa',
 			),
 			'campos' => array(
 				'id_empresa' => array(

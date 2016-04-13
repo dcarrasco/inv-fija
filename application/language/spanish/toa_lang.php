@@ -9,5 +9,9 @@ $lang['consumo_btn_reporte'] = 'Reporte';
 $lang['toa_config_menu_tecnico'] = 'T&eacute;cnicos';
 $lang['toa_config_menu_empresa'] = 'Empresas';
 
+$lang['toa_controles_tecnicos']      = 'Actuaciones T&eacute;cnicos';
+$lang['controles_tecnicos_empresas'] = 'Empresa contratista';
+$lang['controles_tecnicos_meses']    = 'Mes';
+
 /* End of file toa_lang.php */
 /* Location: ./application/language/spanish/toa_lang.php */

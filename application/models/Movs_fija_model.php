@@ -857,6 +857,64 @@ class Movs_fija_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	public function control_tecnicos($empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$dias_mes = array(1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31, 6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
+		$mes = (int) substr($anomes, 4, 2);
+		$ano = (int) substr($anomes, 0, 4);
+
+		$dias_mes['2'] = (($ano%4 == 0 AND $ano%100 != 0) OR $ano%400 == 0 ) ? 29 : 28;
+
+		$arr_dias = array();
+		for($i = 1; $i <= $dias_mes[$mes]; $i++)
+		{
+			$indice_dia = (string) 100+$i;
+			$indice_dia = substr($indice_dia, 1, 2);
+			$arr_dias[$indice_dia] = NULL;
+		}
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = (string) (($mes == 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
+
+		$datos = $this->db
+			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.cliente')
+			->select_sum('(-a.cantidad_en_um)', 'cant')
+			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.cliente')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			->get()->result_array();
+
+
+		$tecnicos = new Tecnico_toa();
+		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
+
+		foreach ($matriz as $id_tecnico => $nombre)
+		{
+			$matriz[$id_tecnico] = array('nombre' => $nombre, 'actuaciones' => $arr_dias);
+		}
+
+		foreach ($datos as $registro)
+		{
+			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['cant'];
+		}
+
+		return $matriz;
+	}
 
 
 
