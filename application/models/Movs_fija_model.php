@@ -772,6 +772,10 @@ class Movs_fija_model extends CI_Model {
 			->select('a.centro')
 			->select('a.almacen')
 			->select('d.des_almacen')
+			->select('a.material')
+			->select('a.texto_material')
+			->select('a.valor')
+			->select('a.lote')
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
@@ -783,6 +787,10 @@ class Movs_fija_model extends CI_Model {
 			->group_by('a.centro')
 			->group_by('a.almacen')
 			->group_by('d.des_almacen')
+			->group_by('a.material')
+			->group_by('a.texto_material')
+			->group_by('a.valor')
+			->group_by('a.lote')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
@@ -799,6 +807,10 @@ class Movs_fija_model extends CI_Model {
 		$arr_campos['centro']             = array('titulo' => 'Centro', 'tipo' => 'texto');
 		$arr_campos['almacen']            = array('titulo' => 'Almac&eacute;n', 'tipo' => 'texto');
 		$arr_campos['des_almacen']        = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
+		$arr_campos['material']           = array('titulo' => 'Material', 'tipo' => 'texto');
+		$arr_campos['texto_material']     = array('titulo' => 'Desc Material', 'tipo' => 'texto');
+		$arr_campos['lote']               = array('titulo' => 'Lote', 'tipo' => 'texto');
+		$arr_campos['valor']              = array('titulo' => 'Valor', 'tipo' => 'texto');
 		$arr_campos['cant']               = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 		$arr_campos['monto']              = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 		$arr_campos['texto_link']         = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/detalle_asignacion', 'href_registros' => array('fecha','documento_material'));
