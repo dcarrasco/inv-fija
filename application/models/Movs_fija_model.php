@@ -34,11 +34,35 @@ class Movs_fija_model extends CI_Model {
 	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41');
 
 	/**
+	 * Combo movimientos validos de consumo TOA
+	 *
+	 * @var array
+	 */
+	public $combo_movimientos_consumo = array(
+		''    => 'Todos los movimientos',
+		'Z35' => 'Z35 Consumo CAPEX TOA',
+		'Z45' => 'Z45 Consumo OPEX TOA',
+		'Z39' => 'Z39 Consumo Promedio CAPEX TOA',
+		'Z41' => 'Z45 Consumo Promedio OPEX TOA'
+	);
+
+	/**
 	 * Movimientos validos de asignaciones TOA
 	 *
 	 * @var array
 	 */
 	public $movimientos_asignaciones = array('Z31', 'Z32');
+
+	/**
+	 * Combo movimientos validos de asignacion TOA
+	 *
+	 * @var array
+	 */
+	public $combo_movimientos_asignacion = array(
+		''    => 'Todos los movimientos',
+		'Z31' => 'Z31 Asig stock tecnico TOA',
+		'Z32' => 'Z32 Anula asig stock tecnico TOA',
+	);
 
 	/**
 	 * Centros validos de consumos TOA
@@ -908,7 +932,7 @@ class Movs_fija_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function control_tecnicos($empresa = NULL, $anomes = NULL)
+	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -919,6 +943,11 @@ class Movs_fija_model extends CI_Model {
 
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		if ($filtro_trx OR $filtro_trx !== '')
+		{
+			$this->db->where('codigo_movimiento', $filtro_trx);
+		}
 
 		$query = $this->db
 			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
@@ -960,7 +989,7 @@ class Movs_fija_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function control_asignaciones($empresa = NULL, $anomes = NULL)
+	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -971,6 +1000,11 @@ class Movs_fija_model extends CI_Model {
 
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		if ($filtro_trx OR $filtro_trx !== '')
+		{
+			$this->db->where('codigo_movimiento', $filtro_trx);
+		}
 
 		$datos = $this->db
 			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)

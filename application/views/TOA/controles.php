@@ -15,17 +15,24 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
 							<?php echo form_dropdown('empresa', $combo_empresas, $this->input->get('empresa'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-5">
+					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
 							<?php echo form_dropdown('mes', $combo_meses, $this->input->get('mes'), 'class="form-control"'); ?>
+						</div>
+					</div>
+
+					<div class="col-md-3">
+						<div class="form_group">
+							<label>{_controles_tecnicos_filtro_trx_}</label>
+							<?php echo form_dropdown('filtro_trx', $combo_filtro_trx, $this->input->get('filtro_trx'), 'class="form-control"'); ?>
 						</div>
 					</div>
 

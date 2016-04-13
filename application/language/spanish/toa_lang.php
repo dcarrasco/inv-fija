@@ -13,6 +13,8 @@ $lang['toa_controles_tecnicos']      = 'Actuaciones T&eacute;cnicos';
 $lang['toa_controles_asignaciones']  = 'Asignaciones a t&eacute;cnicos';
 $lang['controles_tecnicos_empresas'] = 'Empresa contratista';
 $lang['controles_tecnicos_meses']    = 'Mes';
+$lang['controles_tecnicos_filtro_trx'] = 'Filtro transaccion';
+
 
 /* End of file toa_lang.php */
 /* Location: ./application/language/spanish/toa_lang.php */

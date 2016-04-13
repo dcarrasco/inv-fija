@@ -105,7 +105,8 @@ class Toa_controles extends CI_Controller {
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
 			'combo_empresas'  => $empresa->find('list'),
 			'combo_meses'     => $combo_meses,
-			'control'         => $this->movs_fija_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes')),
+			'combo_filtro_trx' => $this->movs_fija_model->combo_movimientos_consumo,
+			'control'         => $this->movs_fija_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
 			'anomes'          => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_consumos/ver_peticiones/tecnicos',
 		);
@@ -140,7 +141,8 @@ class Toa_controles extends CI_Controller {
 			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas' => $empresa->find('list'),
 			'combo_meses'    => $combo_meses,
-			'control'        => $this->movs_fija_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes')),
+			'combo_filtro_trx' => $this->movs_fija_model->combo_movimientos_asignacion,
+			'control'        => $this->movs_fija_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
 			'anomes'         => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
 		);
