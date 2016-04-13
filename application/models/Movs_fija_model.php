@@ -53,7 +53,7 @@ class Movs_fija_model extends CI_Model {
 	 * @var array
 	 */
 	public $tipos_reporte_consumo = array(
-		'orden_at'      => 'N&uacute;mero petici&oacute;n',
+		'peticion'      => 'N&uacute;mero petici&oacute;n',
 		'material'      => 'Materiales',
 		'lote'          => 'Lotes',
 		'lote-material' => 'Lotes y materiales',
@@ -138,7 +138,7 @@ class Movs_fija_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
 			$arr_campos = array();
@@ -164,7 +164,7 @@ class Movs_fija_model extends CI_Model {
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
 		}
-		else if ($tipo_reporte === 'orden_at')
+		else if ($tipo_reporte === 'peticion')
 		{
 			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
 
@@ -185,7 +185,7 @@ class Movs_fija_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
 			$arr_campos = array();
@@ -215,7 +215,7 @@ class Movs_fija_model extends CI_Model {
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
 				->group_by('material')
 				->group_by('texto_material')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -244,7 +244,7 @@ class Movs_fija_model extends CI_Model {
 				->group_by('convert(varchar(20), fecha_contabilizacion, 102)')
 				->group_by('valor')
 				->group_by('lote')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -277,7 +277,7 @@ class Movs_fija_model extends CI_Model {
 				->group_by('lote')
 				->group_by('material')
 				->group_by('texto_material')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -310,7 +310,7 @@ class Movs_fija_model extends CI_Model {
 				->group_by('codigo_movimiento')
 				->group_by('texto_movimiento')
 				->group_by('elemento_pep')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -345,7 +345,7 @@ class Movs_fija_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				//->order_by($orden_campo, $orden_tipo)
+				->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
 			$arr_campos = array();
