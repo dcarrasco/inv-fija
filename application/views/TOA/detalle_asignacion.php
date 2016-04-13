@@ -50,6 +50,7 @@
 					<tr>
 						<th class="text-center">n</th>
 						<th class="text-center">centro</th>
+						<th class="text-center">almacen</th>
 						<th class="text-center">cod mat</th>
 						<th class="text-left">material</th>
 						<th class="text-center">lote</th>
@@ -68,6 +69,7 @@
 					<tr>
 						<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['centro']; ?></td>
+						<td class="text-center"><?php echo $linea_detalle['almacen']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['material']; ?></td>
 						<td class="text-left"><?php echo $linea_detalle['texto_material']; ?></td>
 						<td class="text-center"><?php echo $linea_detalle['lote']; ?></td>

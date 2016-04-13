@@ -847,13 +847,14 @@ class Movs_fija_model extends CI_Model {
 			->select('a.elemento_pep')
 			->select('a.documento_material')
 			->select('a.centro')
+			->select('a.almacen')
 			->select('a.material')
 			->select('a.texto_material')
 			->select('a.lote')
 			->select('a.valor')
 			->select('a.umb')
-			->select('(-a.cantidad_en_um) as cant', FALSE)
-			->select('(-a.importe_ml) as monto', FALSE)
+			->select('(a.cantidad_en_um) as cant', FALSE)
+			->select('(a.importe_ml) as monto', FALSE)
 			->select('a.usuario')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
@@ -863,7 +864,7 @@ class Movs_fija_model extends CI_Model {
 			->where('documento_material', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_asignaciones)
 			->where_in('centro', $this->centros_consumo)
-			->order_by('material')
+			->order_by('material, cantidad_en_um')
 			->get()->result_array();
 
 	}
@@ -908,7 +909,6 @@ class Movs_fija_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get()->result_array();
 
 
