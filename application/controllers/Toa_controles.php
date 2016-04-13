@@ -59,6 +59,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_tecnicos'),
 				'icon'  => 'user'
 			),
+			'asignaciones' => array(
+				'url'   => $this->router->class . '/asignaciones',
+				'texto' => $this->lang->line('toa_controles_asignaciones'),
+				'icon'  => 'archive'
+			),
 		);
 	}
 
@@ -77,11 +82,11 @@ class Toa_controles extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Despliega detalle del log del gestor DTH
+	 * Despliega detalle de las actuaciones de los técnicos
 	 *
 	 * @return void
 	 */
-	public function tecnicos($empresa = NULL, $mes = NULL)
+	public function tecnicos()
 	{
 		$empresa = new Empresa_toa();
 		$stock_sap_fija = new Stock_sap_fija_model();
@@ -97,11 +102,47 @@ class Toa_controles extends CI_Controller {
 		}
 
 		$datos = array(
-			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
+			'combo_empresas'  => $empresa->find('list'),
+			'combo_meses'     => $combo_meses,
+			'control'         => $this->movs_fija_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes')),
+			'anomes'          => $this->input->get('mes'),
+			'url_detalle_dia' => 'toa_consumos/ver_peticiones/tecnicos',
+		);
+
+		app_render_view('toa/controles', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle de las asignaciones de material a los técnicos
+	 *
+	 * @return void
+	 */
+	public function asignaciones()
+	{
+		$empresa = new Empresa_toa();
+		$stock_sap_fija = new Stock_sap_fija_model();
+
+		for ($anno = 2016; $anno <= 2030; $anno++)
+		{
+			for ($mes = 1; $mes <= 12; $mes++)
+			{
+				$id_annomes = (string) $anno*100+$mes;
+				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
+				$combo_meses[$id_annomes] = $annomes;
+			}
+		}
+
+		$datos = array(
+			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas' => $empresa->find('list'),
 			'combo_meses'    => $combo_meses,
-			'control'        => $this->movs_fija_model->control_tecnicos(set_value('empresa'), set_value('mes')),
-			'anomes'         => set_value('mes'),
+			'control'        => $this->movs_fija_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes')),
+			'anomes'         => $this->input->get('mes'),
+			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
 		);
 
 		app_render_view('toa/controles', $datos);

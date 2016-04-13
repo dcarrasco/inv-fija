@@ -1,7 +1,5 @@
 <div class="accordion">
-	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
-	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -20,14 +18,14 @@
 					<div class="col-md-5">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
-							<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('empresa', $combo_empresas, $this->input->get('empresa'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-5">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
-							<?php echo form_dropdown('mes', $combo_meses, set_value('mes'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('mes', $combo_meses, $this->input->get('mes'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -66,7 +64,7 @@
 			<td><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'success' : ''; ?>">
-						<?php echo $cant_act ? anchor('toa_consumos/ver_peticiones/tecnicos/'.$anomes.$dia_act.'/'.$id_tecnico, $cant_act) : ''; ?>
+						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
 					</td>
 				<?php endforeach; ?>
 
