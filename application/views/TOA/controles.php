@@ -63,7 +63,7 @@
 				<th>T&eacute;cnico</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
-						<?php echo $this->movs_fija_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
 						<?php echo $dia_act; ?>
 					</th>
 				<?php endforeach; ?>

@@ -1,6 +1,4 @@
-<div class="content-module-main">
-
-<div class="row">
+<div>
 	<div class="col-md-10 col-md-offset-1 well">
 
 	<?php $nlinea = 0; $sum_cant = 0; $sum_monto = 0; ?>
@@ -44,9 +42,10 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="col-md-12">
 	<fieldset>
 		<legend>Detalle materiales</legend>
+	</fieldset>
 
 		<table class="table table-striped reporte">
 			<thead>
@@ -105,9 +104,3 @@
 			</tfoot>
 			</tbody>
 		</table>
-
-	</fieldset>
-</div>
-
-</div> <!-- fin content-module-main -->
-

@@ -43,7 +43,7 @@ class Toa_consumos extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('movs_fija_model');
+		$this->load->model('toa_model');
 		$this->lang->load('toa');
 	}
 
@@ -72,8 +72,8 @@ class Toa_consumos extends CI_Controller {
 
 		$datos = array(
 			'combo_fechas'   => $stock_sap_fija->get_data_combo_fechas(),
-			'combo_reportes' => $this->movs_fija_model->tipos_reporte_consumo,
-			'reporte'        => $this->movs_fija_model->consumos_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
+			'combo_reportes' => $this->toa_model->tipos_reporte_consumo,
+			'reporte'        => $this->toa_model->consumos_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
@@ -94,7 +94,7 @@ class Toa_consumos extends CI_Controller {
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->movs_fija_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3),
+			'reporte' => $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3),
 		);
 
 		app_render_view('toa/peticiones', $datos);
@@ -114,10 +114,10 @@ class Toa_consumos extends CI_Controller {
 	public function detalle_peticion($fecha = NULL, $peticion = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->movs_fija_model->detalle_peticion_toa($fecha, $peticion),
+			'reporte' => $this->toa_model->detalle_peticion_toa($fecha, $peticion),
 		);
 
-		app_render_view('toa/detalle_asignacion', $datos);
+		app_render_view('toa/detalle_peticion', $datos);
 
 	}
 
