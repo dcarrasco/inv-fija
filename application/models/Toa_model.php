@@ -99,6 +99,11 @@ class Toa_model extends CI_Model {
 		'detalle'       => 'Detalle todos los registros',
 	);
 
+	/**
+	 * Dias de la semana
+	 *
+	 * @var array
+	 */
 	public $dias_de_la_semana = array(
 		'0' => 'Do',
 		'1' => 'Lu',
@@ -107,10 +112,6 @@ class Toa_model extends CI_Model {
 		'4' => 'Ju',
 		'5' => 'Vi',
 		'6' => 'Sa',
-	);
-
-	public $tipos_almacen_bucle = array(
-		'DOM' => array(243,246),
 	);
 
 	/**
@@ -1074,7 +1075,8 @@ class Toa_model extends CI_Model {
 			->from($this->config->item('bd_almacenes_sap').' a')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.cod_almacen=c.cod_almacen', 'left')
 			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
-			->where_in('d.id_tipo', $this->tipos_almacen_bucle[$empresa])
+			->join($this->config->item('bd_empresas_toa_tiposalm').' e', 'd.id_tipo=e.id_tipo', 'left')
+			->where_in('e.id_empresa', $empresa)
 			->get()->result_array();
 
 		$stock = $this->db
@@ -1089,9 +1091,10 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
 			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
+			->join($this->config->item('bd_empresas_toa_tiposalm').' e', 'd.id_tipo=e.id_tipo', 'left')
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
-			->where_in('d.id_tipo', $this->tipos_almacen_bucle[$empresa])
+			->where('e.id_empresa', $empresa)
 			->group_by('convert(varchar(20), a.fecha_stock, 102)')
 			->group_by('d.tipo')
 			->group_by('a.centro')

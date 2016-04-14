@@ -88,6 +88,7 @@ $config['bd_despachos_pack']       = 'bd_logistica..despachos_sap_res01_pack';
 // TOA
 $config['bd_tecnicos_toa']         = 'toa_tecnicos';
 $config['bd_empresas_toa']         = 'toa_empresas';
+$config['bd_empresas_toa_tiposalm'] = 'toa_empresas_tiposalm';
 
 
 /* End of file inv-fija.php */
