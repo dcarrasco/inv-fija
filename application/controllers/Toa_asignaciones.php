@@ -43,7 +43,7 @@ class Toa_asignaciones extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('movs_fija_model');
+		$this->load->model('toa_model');
 		$this->lang->load('toa');
 	}
 
@@ -69,8 +69,8 @@ class Toa_asignaciones extends CI_Controller {
 	public function asignaciones()
 	{
 		$datos = array(
-			'combo_reportes' => $this->movs_fija_model->tipos_reporte_asignaciones,
-			'reporte'        => $this->movs_fija_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
+			'combo_reportes' => $this->toa_model->tipos_reporte_asignaciones,
+			'reporte'        => $this->toa_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
@@ -91,7 +91,7 @@ class Toa_asignaciones extends CI_Controller {
 	public function ver_asignaciones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->movs_fija_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3),
+			'reporte' => $this->toa_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3),
 		);
 
 		app_render_view('toa/peticiones', $datos);
@@ -111,7 +111,7 @@ class Toa_asignaciones extends CI_Controller {
 	public function detalle_asignacion($fecha = NULL, $peticion = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->movs_fija_model->detalle_asignacion_toa($fecha, $peticion),
+			'reporte' => $this->toa_model->detalle_asignacion_toa($fecha, $peticion),
 		);
 
 		app_render_view('toa/detalle_asignacion', $datos);

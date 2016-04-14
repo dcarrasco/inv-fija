@@ -50,7 +50,7 @@ class Toa_controles extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('movs_fija_model');
+		$this->load->model('toa_model');
 		$this->lang->load('toa');
 
 		$this->_arr_menu = array(
@@ -63,6 +63,11 @@ class Toa_controles extends CI_Controller {
 				'url'   => $this->router->class . '/asignaciones',
 				'texto' => $this->lang->line('toa_controles_asignaciones'),
 				'icon'  => 'archive'
+			),
+			'stock' => array(
+				'url'   => $this->router->class . '/stock',
+				'texto' => $this->lang->line('toa_controles_stock'),
+				'icon'  => 'signal'
 			),
 		);
 	}
@@ -105,8 +110,8 @@ class Toa_controles extends CI_Controller {
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
 			'combo_empresas'  => $empresa->find('list'),
 			'combo_meses'     => $combo_meses,
-			'combo_filtro_trx' => $this->movs_fija_model->combo_movimientos_consumo,
-			'control'         => $this->movs_fija_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
+			'combo_filtro_trx' => $this->toa_model->combo_movimientos_consumo,
+			'control'         => $this->toa_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
 			'anomes'          => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_consumos/ver_peticiones/tecnicos',
 		);
@@ -141,13 +146,47 @@ class Toa_controles extends CI_Controller {
 			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas' => $empresa->find('list'),
 			'combo_meses'    => $combo_meses,
-			'combo_filtro_trx' => $this->movs_fija_model->combo_movimientos_asignacion,
-			'control'        => $this->movs_fija_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
+			'combo_filtro_trx' => $this->toa_model->combo_movimientos_asignacion,
+			'control'        => $this->toa_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
 			'anomes'         => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
 		);
 
 		app_render_view('toa/controles', $datos);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega stock de la contrata
+	 *
+	 * @return void
+	 */
+	public function stock()
+	{
+		$empresa = new Empresa_toa();
+		$stock_sap_fija = new Stock_sap_fija_model();
+
+		for ($anno = 2016; $anno <= 2030; $anno++)
+		{
+			for ($mes = 1; $mes <= 12; $mes++)
+			{
+				$id_annomes = (string) $anno*100+$mes;
+				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
+				$combo_meses[$id_annomes] = $annomes;
+			}
+		}
+
+		$datos = array(
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
+			'combo_empresas'  => $empresa->find('list'),
+			'combo_meses'     => $combo_meses,
+			'stock_almacenes' => $this->toa_model->stock_almacenes($this->input->get('empresa'), $this->input->get('mes')),
+			'anomes'          => $this->input->get('mes'),
+			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
+		);
+
+		app_render_view('toa/controles_stock', $datos);
 	}
 
 

@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Movs_fija_model extends CI_Model {
+class Toa_model extends CI_Model {
 
 	/**
 	 * Movimientos validos de consumos TOA
@@ -107,6 +107,10 @@ class Movs_fija_model extends CI_Model {
 		'4' => 'Ju',
 		'5' => 'Vi',
 		'6' => 'Sa',
+	);
+
+	public $tipos_almacen_bucle = array(
+		'DOM' => array(243,246),
 	);
 
 	/**
@@ -1048,8 +1052,74 @@ class Movs_fija_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
 
+	public function stock_almacenes($empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$almacenes = $this->db
+			->select('d.tipo')
+			->select('a.centro')
+			->select('a.cod_almacen')
+			->select('a.des_almacen')
+			->from($this->config->item('bd_almacenes_sap').' a')
+			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.cod_almacen=c.cod_almacen', 'left')
+			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
+			->where_in('d.id_tipo', $this->tipos_almacen_bucle[$empresa])
+			->get()->result_array();
+
+		$stock = $this->db
+			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('d.tipo')
+			->select('a.centro')
+			->select('a.almacen')
+			->select('b.des_almacen')
+			->select_sum('a.cantidad', 'cant')
+			->select_sum('a.valor', 'valor')
+			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
+			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
+			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where_in('d.id_tipo', $this->tipos_almacen_bucle[$empresa])
+			->group_by('convert(varchar(20), a.fecha_stock, 102)')
+			->group_by('d.tipo')
+			->group_by('a.centro')
+			->group_by('a.almacen')
+			->group_by('b.des_almacen')
+			->get()->result_array();
+
+		$matriz = array();
+
+		foreach ($almacenes as $almacen)
+		{
+			$matriz[$almacen['centro'].$almacen['cod_almacen']] = array(
+				'tipo'        => $almacen['tipo'],
+				'centro'      => $almacen['centro'],
+				'cod_almacen' => $almacen['cod_almacen'],
+				'des_almacen' => $almacen['des_almacen'],
+				'actuaciones' => $arr_dias
+			);
+		}
+
+		foreach ($stock as $registro)
+		{
+			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['valor'];
+		}
+
+		return $matriz;
+	}
 
 }
-/* End of file Movs_fija_model.php */
-/* Location: ./application/models/Movs_fija_model.php */
+/* End of file Toa_model.php */
+/* Location: ./application/models/Toa_model.php */
