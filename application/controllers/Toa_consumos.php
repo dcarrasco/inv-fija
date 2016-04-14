@@ -117,7 +117,7 @@ class Toa_consumos extends CI_Controller {
 			'reporte' => $this->movs_fija_model->detalle_peticion_toa($fecha, $peticion),
 		);
 
-		app_render_view('toa/detalle_asignacion', $datos);
+		app_render_view('toa/detalle_peticion', $datos);
 
 	}
 

@@ -63,6 +63,14 @@ class Tecnico_toa extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
+				'rut' => array(
+					'label'          => 'RUT del t&eacute;cnico',
+					'tipo'           => 'char',
+					'largo'          => 20,
+					'texto_ayuda'    => 'RUT del t&eacute;cnico. Sin puntos, con guion y d&iacute;gito verificador (en min&uacute;scula). M&aacute;ximo 50 caracteres.',
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE
+				),
 				'id_empresa' => array(
 					'tipo'           => 'has_one',
 					'relation'       => array(

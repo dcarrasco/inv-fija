@@ -507,6 +507,7 @@ class Movs_fija_model extends CI_Model {
 			->select('a.elemento_pep')
 			->select('a.documento_material')
 			->select('a.centro')
+			->select('a.almacen')
 			->select('a.material')
 			->select('a.texto_material')
 			->select('a.lote')
