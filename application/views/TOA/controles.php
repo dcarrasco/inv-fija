@@ -53,11 +53,12 @@
 </div>
 
 <div class="content-module-main">
-<?php $i = 0; ?>
+<?php $i = 0; $tot_col = array();?>
 <?php if ($control): ?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $id_tecnico => $datos): ?>
 		<?php if ($i == 0): ?>
+			<thead>
 			<tr>
 				<th></th>
 				<th>T&eacute;cnico</th>
@@ -65,22 +66,40 @@
 					<th class="text-center">
 						<?php echo $this->movs_fija_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
 						<?php echo $dia_act; ?>
+						<?php $tot_col[$dia_act] = 0; ?>
 					</th>
 				<?php endforeach; ?>
+				<th>Tot Mes</th>
 			</tr>
+			</thead>
+			<tbody>
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted"><?php echo $i+1; ?></td>
 			<td style="white-space: nowrap;"><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
+				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'success' : ''; ?>">
 						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
+						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; ?>
 					</td>
 				<?php endforeach; ?>
-
+				<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
 		</tr>
 		<?php $i += 1; ?>
 	<?php endforeach; ?>
+	</tbody>
+	<tfoot>
+		<tr>
+			<th></th>
+			<th></th>
+			<?php $tot_lin = 0; ?>
+			<?php foreach ($tot_col as $dia_act => $total): ?>
+				<th class="text-center"><?php echo fmt_cantidad($total); ?><?php $tot_lin += $total ?></th>
+			<?php endforeach; ?>
+			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+		</tr>
+	</tfoot>
 </table>
 <?php endif ?>
 
