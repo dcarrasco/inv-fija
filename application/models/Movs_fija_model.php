@@ -117,6 +117,7 @@ class Movs_fija_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load->helper('date');
 	}
 
 	// --------------------------------------------------------------------
@@ -909,19 +910,14 @@ class Movs_fija_model extends CI_Model {
 
 	private function _get_arr_dias($anomes = NULL)
 	{
-		$dias_mes = array(1 => 31, 2 => 28, 3 => 31, 4 => 30, 5 => 31, 6 => 30, 7 => 31, 8 => 31, 9 => 30, 10 => 31, 11 => 30, 12 => 31);
-
 		$mes = (int) substr($anomes, 4, 2);
 		$ano = (int) substr($anomes, 0, 4);
 
-		$dias_mes['2'] = (($ano%4 == 0 AND $ano%100 != 0) OR $ano%400 == 0 ) ? 29 : 28;
-
 		$arr_dias = array();
 
-		for($i = 1; $i <= $dias_mes[$mes]; $i++)
+		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
-			$indice_dia = (string) 100+$i;
-			$indice_dia = substr($indice_dia, 1, 2);
+			$indice_dia = (strlen($i) === 1) ? '0'.$i : $i;
 			$arr_dias[$indice_dia] = NULL;
 		}
 
