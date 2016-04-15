@@ -22,7 +22,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
 							<?php echo form_dropdown('mes', $combo_meses, $this->input->get('mes'), 'class="form-control"'); ?>
@@ -36,7 +36,14 @@
 						</div>
 					</div>
 
-					<div class="col-md-2">
+					<div class="col-md-3">
+						<div class="form_group">
+							<label>{_controles_tecnicos_dato_desplegar_}</label>
+							<?php echo form_dropdown('dato', $combo_dato_desplegar, $this->input->get('dato'), 'class="form-control"'); ?>
+						</div>
+					</div>
+
+					<div class="col-md-1">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>

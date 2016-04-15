@@ -15,6 +15,7 @@ $lang['toa_controles_stock']         = 'Stock Bucles';
 $lang['controles_tecnicos_empresas'] = 'Empresa contratista';
 $lang['controles_tecnicos_meses']    = 'Mes';
 $lang['controles_tecnicos_filtro_trx'] = 'Filtro transaccion';
+$lang['controles_tecnicos_dato_desplegar'] = 'Datos a desplegar';
 
 
 /* End of file toa_lang.php */

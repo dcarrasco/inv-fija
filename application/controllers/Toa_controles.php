@@ -96,22 +96,13 @@ class Toa_controles extends CI_Controller {
 		$empresa = new Empresa_toa();
 		$stock_sap_fija = new Stock_sap_fija_model();
 
-		for ($anno = 2016; $anno <= 2030; $anno++)
-		{
-			for ($mes = 1; $mes <= 12; $mes++)
-			{
-				$id_annomes = (string) $anno*100+$mes;
-				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
-				$combo_meses[$id_annomes] = $annomes;
-			}
-		}
-
 		$datos = array(
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
 			'combo_empresas'  => $empresa->find('list'),
-			'combo_meses'     => $combo_meses,
+			'combo_meses'     => $this->toa_model->get_combo_meses(),
 			'combo_filtro_trx' => $this->toa_model->combo_movimientos_consumo,
-			'control'         => $this->toa_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
+			'control'         => $this->toa_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx'), $this->input->get('dato')),
 			'anomes'          => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_consumos/ver_peticiones/tecnicos',
 		);
@@ -132,22 +123,13 @@ class Toa_controles extends CI_Controller {
 		$empresa = new Empresa_toa();
 		$stock_sap_fija = new Stock_sap_fija_model();
 
-		for ($anno = 2016; $anno <= 2030; $anno++)
-		{
-			for ($mes = 1; $mes <= 12; $mes++)
-			{
-				$id_annomes = (string) $anno*100+$mes;
-				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
-				$combo_meses[$id_annomes] = $annomes;
-			}
-		}
-
 		$datos = array(
 			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas' => $empresa->find('list'),
-			'combo_meses'    => $combo_meses,
+			'combo_meses'      => $this->toa_model->get_combo_meses(),
 			'combo_filtro_trx' => $this->toa_model->combo_movimientos_asignacion,
-			'control'        => $this->toa_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx')),
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
+			'control'        => $this->toa_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx'), $this->input->get('dato')),
 			'anomes'         => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
 		);
@@ -167,20 +149,10 @@ class Toa_controles extends CI_Controller {
 		$empresa = new Empresa_toa();
 		$stock_sap_fija = new Stock_sap_fija_model();
 
-		for ($anno = 2016; $anno <= 2030; $anno++)
-		{
-			for ($mes = 1; $mes <= 12; $mes++)
-			{
-				$id_annomes = (string) $anno*100+$mes;
-				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
-				$combo_meses[$id_annomes] = $annomes;
-			}
-		}
-
 		$datos = array(
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
 			'combo_empresas'  => $empresa->find('list'),
-			'combo_meses'     => $combo_meses,
+			'combo_meses'     => $this->toa_model->get_combo_meses(),
 			'stock_almacenes' => $this->toa_model->stock_almacenes($this->input->get('empresa'), $this->input->get('mes')),
 			'anomes'          => $this->input->get('mes'),
 			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',

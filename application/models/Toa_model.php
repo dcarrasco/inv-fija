@@ -115,6 +115,31 @@ class Toa_model extends CI_Model {
 	);
 
 	/**
+	 * Combo de unidades reporte control tecnicos
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_consumo = array(
+		'peticiones' => 'Cantidad de peticiones',
+		'unidades'   => 'Suma de unidades',
+		'monto'      => 'Suma de montos'
+	);
+
+	/**
+	 * Combo de unidades reporte control tecnicos
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_asignacion = array(
+		'asignaciones' => 'Cantidad de asignaciones',
+		'unidades'     => 'Suma de unidades',
+		'monto'        => 'Suma de montos'
+	);
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return  void
@@ -944,7 +969,25 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
+	public function get_combo_meses()
+	{
+		for ($anno = 2016; $anno <= 2030; $anno++)
+		{
+			for ($mes = 1; $mes <= 12; $mes++)
+			{
+				$id_annomes = (string) $anno*100+$mes;
+				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
+				$combo_meses[$id_annomes] = $annomes;
+			}
+		}
+
+		return $combo_meses;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -966,6 +1009,7 @@ class Toa_model extends CI_Model {
 			->select('a.cliente')
 			->select('a.referencia')
 			->select_sum('(-a.cantidad_en_um)', 'cant')
+			->select_sum('(-a.importe_ml)', 'monto')
 			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
 			->group_by('a.cliente')
 			->group_by('a.referencia')
@@ -978,7 +1022,13 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->get_compiled_select();
 
-		$query = 'select q1.fecha, q1.cliente, count(q1.referencia) as cant_ref from ('.$query.') q1 group by q1.fecha, q1.cliente order by q1.cliente, q1.fecha';
+		$arr_dato_desplegar = array(
+			'peticiones' => 'count(q1.referencia)',
+			'unidades'   => 'sum(q1.cant)',
+			'monto'      => 'sum(q1.monto)'
+		);
+
+		$query = 'select q1.fecha, q1.cliente, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.cliente order by q1.cliente, q1.fecha';
 
 		$datos = $this->db->query($query)->result_array();
 
@@ -992,7 +1042,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($datos as $registro)
 		{
-			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['cant_ref'];
+			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
@@ -1001,7 +1051,7 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
+	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -1018,14 +1068,11 @@ class Toa_model extends CI_Model {
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
 
-		$datos = $this->db
+		$this->db
 			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
 			->select('a.cliente')
-			->select('a.referencia')
-			->select_sum('a.cantidad_en_um', 'cant')
 			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
 			->group_by('a.cliente')
-			->group_by('a.referencia')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('b.id_empresa', $empresa)
@@ -1033,8 +1080,22 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->where('almacen', NULL)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->get()->result_array();
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE);
+
+		if ($dato_desplegar === 'unidades')
+		{
+			$this->db->select_sum('a.cantidad_en_um', 'dato');
+		}
+		elseif ($dato_desplegar === 'monto')
+		{
+			$this->db->select_sum('a.importe_ml', 'dato');
+		}
+		else
+		{
+			$this->db->select('count(*) as dato', FALSE);
+		}
+
+		$datos = $this->db->get()->result_array();
 
 		$tecnicos = new Tecnico_toa();
 		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
@@ -1046,7 +1107,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($datos as $registro)
 		{
-			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['cant'];
+			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
