@@ -122,18 +122,28 @@ class Toa_model extends CI_Model {
 	public $combo_unidades_consumo = array(
 		'peticiones' => 'Cantidad de peticiones',
 		'unidades'   => 'Suma de unidades',
-		'monto'      => 'Suma de montos'
+		'monto'      => 'Suma de montos',
 	);
 
 	/**
-	 * Combo de unidades reporte control tecnicos
+	 * Combo de unidades reporte control asignaciones
 	 *
 	 * @var array
 	 */
 	public $combo_unidades_asignacion = array(
 		'asignaciones' => 'Cantidad de asignaciones',
 		'unidades'     => 'Suma de unidades',
-		'monto'        => 'Suma de montos'
+		'monto'        => 'Suma de montos',
+	);
+
+	/**
+	 * Combo de unidades reporte control stock
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_stock = array(
+		'monto'        => 'Suma de montos',
+		'unidades'     => 'Suma de unidades',
 	);
 
 
@@ -1116,7 +1126,7 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function stock_almacenes($empresa = NULL, $anomes = NULL)
+	public function stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -1140,14 +1150,12 @@ class Toa_model extends CI_Model {
 			->where_in('e.id_empresa', $empresa)
 			->get()->result_array();
 
-		$stock = $this->db
+		$this->db
 			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
 			->select('d.tipo')
 			->select('a.centro')
 			->select('a.almacen')
 			->select('b.des_almacen')
-			->select_sum('a.cantidad', 'cant')
-			->select_sum('a.valor', 'valor')
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
@@ -1160,8 +1168,18 @@ class Toa_model extends CI_Model {
 			->group_by('d.tipo')
 			->group_by('a.centro')
 			->group_by('a.almacen')
-			->group_by('b.des_almacen')
-			->get()->result_array();
+			->group_by('b.des_almacen');
+
+		if ($dato_desplegar === 'unidades')
+		{
+			$this->db->select_sum('a.cantidad', 'dato');
+		}
+		else
+		{
+			$this->db->select_sum('a.valor', 'dato');
+		}
+
+		$stock = $this->db->get()->result_array();
 
 		$matriz = array();
 
@@ -1172,16 +1190,70 @@ class Toa_model extends CI_Model {
 				'centro'      => $almacen['centro'],
 				'cod_almacen' => $almacen['cod_almacen'],
 				'des_almacen' => $almacen['des_almacen'],
-				'actuaciones' => $arr_dias
+				'actuaciones' => $arr_dias,
 			);
 		}
 
 		foreach ($stock as $registro)
 		{
-			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['valor'];
+			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function detalle_stock_almacen($fecha = NULL, $centro_almacen = NULL)
+	{
+		if ( ! $fecha OR ! $centro_almacen)
+		{
+			return NULL;
+		}
+
+		list($centro, $almacen) = explode('-', $centro_almacen);
+
+		$arr_data = $this->db
+			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('d.tipo')
+			->select('a.centro')
+			->select('a.almacen')
+			->select('b.des_almacen')
+			->select('a.material')
+			->select('e.descripcion')
+			->select('a.lote')
+			->select('a.umb')
+			->select('a.estado')
+			->select('a.cantidad')
+			->select('a.valor')
+			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
+			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
+			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
+			->join($this->config->item('bd_catalogos').' e', 'a.material collate Latin1_General_CI_AS = e.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->where('a.fecha_stock=', $fecha)
+			->where('a.centro', $centro)
+			->where('a.almacen', $almacen)
+			->where('d.es_sumable', 1)
+			->get()->result_array();
+
+		$arr_campos = array();
+		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['tipo']        = array('titulo' => 'Tipo Almac&eacute;n', 'tipo' => 'texto');
+		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
+		$arr_campos['almacen']     = array('titulo' => 'Almac&eacute;n', 'tipo' => 'texto');
+		$arr_campos['des_almacen'] = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
+		$arr_campos['material']    = array('titulo' => 'Material', 'tipo' => 'texto');
+		$arr_campos['descripcion'] = array('titulo' => 'Desc Material', 'tipo' => 'texto');
+		$arr_campos['lote']        = array('titulo' => 'Lote', 'tipo' => 'texto');
+		$arr_campos['umb']         = array('titulo' => 'Unidad', 'tipo' => 'texto');
+		$arr_campos['estado']      = array('titulo' => 'Estado', 'tipo' => 'texto');
+		$arr_campos['cantidad']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+		$arr_campos['valor']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$this->reporte->set_order_campos($arr_campos, 'material');
+
+		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
 }

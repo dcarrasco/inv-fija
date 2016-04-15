@@ -147,18 +147,35 @@ class Toa_controles extends CI_Controller {
 	public function stock()
 	{
 		$empresa = new Empresa_toa();
-		$stock_sap_fija = new Stock_sap_fija_model();
 
 		$datos = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
-			'combo_empresas'  => $empresa->find('list'),
-			'combo_meses'     => $this->toa_model->get_combo_meses(),
-			'stock_almacenes' => $this->toa_model->stock_almacenes($this->input->get('empresa'), $this->input->get('mes')),
-			'anomes'          => $this->input->get('mes'),
-			'url_detalle_dia' => 'toa_asignaciones/ver_asignaciones/tecnicos',
+			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
+			'combo_empresas'       => $empresa->find('list'),
+			'combo_meses'          => $this->toa_model->get_combo_meses(),
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
+			'stock_almacenes'      => $this->toa_model->stock_almacenes($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('dato')),
+			'anomes'               => $this->input->get('mes'),
+			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 		);
 
 		app_render_view('toa/controles_stock', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega stock de la contrata
+	 *
+	 * @return void
+	 */
+	public function detalle_stock($fecha = NULL, $centro_almacen = NULL)
+	{
+		$datos = array(
+			'reporte' => $this->toa_model->detalle_stock_almacen($fecha, $centro_almacen),
+		);
+
+		app_render_view('toa/peticiones', $datos);
 	}
 
 

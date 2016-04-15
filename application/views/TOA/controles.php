@@ -1,5 +1,5 @@
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
+	<?php echo form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -36,14 +36,14 @@
 						</div>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_dato_desplegar_}</label>
 							<?php echo form_dropdown('dato', $combo_dato_desplegar, $this->input->get('dato'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-1">
+					<div class="col-md-2">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>

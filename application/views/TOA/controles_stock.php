@@ -1,5 +1,5 @@
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
+	<?php echo form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -15,21 +15,28 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
 							<?php echo form_dropdown('empresa', $combo_empresas, $this->input->get('empresa'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-4">
+					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
 							<?php echo form_dropdown('mes', $combo_meses, $this->input->get('mes'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-2">
+					<div class="col-md-3">
+						<div class="form_group">
+							<label>{_controles_tecnicos_dato_desplegar_}</label>
+							<?php echo form_dropdown('dato', $combo_dato_desplegar, $this->input->get('dato'), 'class="form-control"'); ?>
+						</div>
+					</div>
+
+					<div class="col-md-3">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>
@@ -76,7 +83,8 @@
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<td class="text-center <?php echo $valor ? 'success' : ''; ?>">
-					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], fmt_monto($valor, 'MM')) : ''; ?>
+					<?php $valor_desplegar = $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
+					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar) : ''; ?>
 				</td>
 			<?php endforeach; ?>
 		</tr>
