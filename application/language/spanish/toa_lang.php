@@ -12,6 +12,7 @@ $lang['toa_config_menu_empresa'] = 'Empresas';
 $lang['toa_controles_tecnicos']      = 'Actuaciones T&eacute;cnicos';
 $lang['toa_controles_asignaciones']  = 'Asignaciones a t&eacute;cnicos';
 $lang['toa_controles_stock']         = 'Stock Bucles';
+$lang['toa_controles_stock_tecnicos'] = 'Stock T&eacute;cnicos';
 $lang['controles_tecnicos_empresas'] = 'Empresa contratista';
 $lang['controles_tecnicos_meses']    = 'Mes';
 $lang['controles_tecnicos_filtro_trx'] = 'Filtro transaccion';

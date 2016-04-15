@@ -1256,6 +1256,115 @@ class Toa_model extends CI_Model {
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
+
+	// --------------------------------------------------------------------
+
+	public function stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$tecnicos = new Tecnico_toa();
+		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
+
+		$arr_tecnicos = array();
+		foreach ($matriz as $id_tecnico => $tecnico)
+		{
+			array_push($arr_tecnicos, (string) $id_tecnico);
+		}
+
+		$this->db
+			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.acreedor')
+			->from($this->config->item('bd_stock_fija').' a')
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where_in('a.acreedor', $arr_tecnicos)
+			->group_by('convert(varchar(20), a.fecha_stock, 102)')
+			->group_by('a.acreedor');
+
+		if ($dato_desplegar === 'unidades')
+		{
+			$this->db->select_sum('a.cantidad', 'dato');
+		}
+		else
+		{
+			$this->db->select_sum('a.valor', 'dato');
+		}
+
+		$stock = $this->db->get()->result_array();
+
+		foreach ($matriz as $id_tecnico => $tecnico)
+		{
+			$matriz[$id_tecnico] = array(
+				'tecnico'     => $tecnico,
+				'actuaciones' => $arr_dias,
+			);
+		}
+
+		foreach ($stock as $registro)
+		{
+			$matriz[$registro['acreedor']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
+		}
+
+		return $matriz;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function detalle_stock_tecnico($fecha = NULL, $id_tecnico = NULL)
+	{
+		if ( ! $fecha OR ! $id_tecnico)
+		{
+			return NULL;
+		}
+
+		$arr_data = $this->db
+			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.centro')
+			->select('a.acreedor')
+			->select('b.tecnico')
+			->select('a.material')
+			->select('c.descripcion')
+			->select('a.lote')
+			->select('a.umb')
+			->select('a.estado')
+			->select('a.cantidad')
+			->select('a.valor')
+			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_catalogos').' c', 'a.material collate Latin1_General_CI_AS = c.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->where('a.fecha_stock=', $fecha)
+			->where('a.acreedor', $id_tecnico)
+			->order_by('material, lote')
+			->get()->result_array();
+
+		$arr_campos = array();
+		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
+		$arr_campos['acreedor']    = array('titulo' => 'Cod T&eacute;cnico', 'tipo' => 'texto');
+		$arr_campos['tecnico']     = array('titulo' => 'Nombre T&eacute;cnico', 'tipo' => 'texto');
+		$arr_campos['material']    = array('titulo' => 'Material', 'tipo' => 'texto');
+		$arr_campos['descripcion'] = array('titulo' => 'Desc Material', 'tipo' => 'texto');
+		$arr_campos['lote']        = array('titulo' => 'Lote', 'tipo' => 'texto');
+		$arr_campos['umb']         = array('titulo' => 'Unidad', 'tipo' => 'texto');
+		$arr_campos['estado']      = array('titulo' => 'Estado', 'tipo' => 'texto');
+		$arr_campos['cantidad']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+		$arr_campos['valor']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$this->reporte->set_order_campos($arr_campos, 'material');
+
+		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+	}
+
+
 }
 /* End of file Toa_model.php */
 /* Location: ./application/models/Toa_model.php */

@@ -69,6 +69,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_stock'),
 				'icon'  => 'signal'
 			),
+			'stock_tecnicos' => array(
+				'url'   => $this->router->class . '/stock_tecnicos',
+				'texto' => $this->lang->line('toa_controles_stock_tecnicos'),
+				'icon'  => 'truck'
+			),
 		);
 	}
 
@@ -165,7 +170,32 @@ class Toa_controles extends CI_Controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Despliega stock de la contrata
+	 * Despliega stock de los tecnicos de la contrata
+	 *
+	 * @return void
+	 */
+	public function stock_tecnicos()
+	{
+		$empresa = new Empresa_toa();
+
+		$datos = array(
+			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock_tecnicos'),
+			'combo_empresas'       => $empresa->find('list'),
+			'combo_meses'          => $this->toa_model->get_combo_meses(),
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
+			'stock_tecnicos'       => $this->toa_model->stock_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('dato')),
+			'anomes'               => $this->input->get('mes'),
+			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
+		);
+
+		app_render_view('toa/controles_stock_tecnicos', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle stock de la contrata
 	 *
 	 * @return void
 	 */
@@ -173,6 +203,23 @@ class Toa_controles extends CI_Controller {
 	{
 		$datos = array(
 			'reporte' => $this->toa_model->detalle_stock_almacen($fecha, $centro_almacen),
+		);
+
+		app_render_view('toa/peticiones', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle stock del tecnico de la contrata
+	 *
+	 * @return void
+	 */
+	public function detalle_stock_tecnico($fecha = NULL, $id_tecnico = NULL)
+	{
+		$datos = array(
+			'reporte' => $this->toa_model->detalle_stock_tecnico($fecha, $id_tecnico),
 		);
 
 		app_render_view('toa/peticiones', $datos);
