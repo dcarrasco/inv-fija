@@ -83,6 +83,7 @@ class Toa_model extends CI_Model {
 		'lote-material' => 'Lotes y materiales',
 		'pep'           => 'PEP',
 		'tecnicos'      => 'T&eacute;cnicos',
+		'tipo-trabajo'  => 'Tipo de trabajo',
 		'detalle'       => 'Detalle todos los registros',
 	);
 
@@ -432,6 +433,32 @@ class Toa_model extends CI_Model {
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tecnicos', 'href_registros' => array('fecha','cliente'));
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
+
+			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		}
+		else if ($tipo_reporte === 'tipo-trabajo')
+		{
+			$orden_campo = ($orden_campo === '') ? 'carta_porte' : $orden_campo;
+
+			$arr_data = $this->db
+				->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+				->select('a.carta_porte')
+				->select("'ver peticiones' as texto_link")
+				->select_sum('(-a.cantidad_en_um)', 'cant')
+				->select_sum('(-a.importe_ml)', 'monto')
+				->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+				->group_by('a.carta_porte')
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->order_by($orden_campo, $orden_tipo)
+				->get()->result_array();
+
+			$arr_campos = array();
+			$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'texto');
+			$arr_campos['carta_porte'] = array('titulo' => 'Tipo de trabajo', 'tipo' => 'texto');
+			$arr_campos['cant']        = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']  = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tipo_trabajo', 'href_registros' => array('fecha','carta_porte'));
+			$this->reporte->set_order_campos($arr_campos, 'carta_porte');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
 		}
