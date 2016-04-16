@@ -247,6 +247,7 @@ class Toa_model extends CI_Model {
 			$arr_data = $this->db
 				->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
 				->select('a.referencia')
+				->select('a.carta_porte')
 				->select('c.empresa')
 				->select('a.cliente')
 				->select("'ver detalle' as texto_link")
@@ -255,18 +256,21 @@ class Toa_model extends CI_Model {
 				->select_sum('(-a.importe_ml)', 'monto')
 				->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
 				->group_by('a.referencia')
+				->group_by('a.vale_acomp')
+				->group_by('a.carta_porte')
 				->group_by('c.empresa')
 				->group_by('a.cliente')
 				->group_by('b.tecnico')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
 				->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
 			$arr_campos = array();
 			$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'texto');
 			$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'texto');
+			$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 			$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
 			$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 			$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
@@ -516,6 +520,7 @@ class Toa_model extends CI_Model {
 		$arr_data = $this->db
 			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
 			->select('a.referencia')
+			->select('a.carta_porte')
 			->select('c.empresa')
 			->select('a.cliente')
 			->select('b.tecnico')
@@ -524,18 +529,20 @@ class Toa_model extends CI_Model {
 			->select_sum('(-a.importe_ml)', 'monto')
 			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
 			->group_by('a.referencia')
+			->group_by('a.carta_porte')
 			->group_by('c.empresa')
 			->group_by('a.cliente')
 			->group_by('b.tecnico')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
 
 		$arr_campos = array();
 		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'texto');
 		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'texto');
+		$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 		$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
 		$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 		$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
