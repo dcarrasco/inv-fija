@@ -110,6 +110,13 @@ table .header-fixed {
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false); /* IE6-9 */
 }
 
+.rotate-table-header {
+	-webkit-transform: rotate(270deg);
+	   -moz-transform: rotate(270deg);
+	    -ms-transform: rotate(270deg);
+	     -o-transform: rotate(270deg);
+	transform: rotate(270deg);
+}
 
 @media print {
 	html, body, input, select, option, form, .form-control, .btn {

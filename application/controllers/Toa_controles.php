@@ -64,6 +64,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_asignaciones'),
 				'icon'  => 'archive'
 			),
+			'materiales' => array(
+				'url'   => $this->router->class . '/materiales',
+				'texto' => $this->lang->line('toa_controles_materiales'),
+				'icon'  => 'file-text-o'
+			),
 			'stock' => array(
 				'url'   => $this->router->class . '/stock',
 				'texto' => $this->lang->line('toa_controles_stock'),
@@ -223,6 +228,33 @@ class Toa_controles extends CI_Controller {
 		);
 
 		app_render_view('toa/peticiones', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle stock del tecnico de la contrata
+	 *
+	 * @return void
+	 */
+	public function materiales()
+	{
+		$empresa = new Empresa_toa();
+		$tipo_trabajo = new Tipo_trabajo_toa();
+
+		$datos = array(
+			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
+			'combo_empresas'       => $empresa->find('list'),
+			'combo_meses'          => $this->toa_model->get_combo_meses(),
+			'combo_tipos_trabajo'  => $tipo_trabajo->find('list'),
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
+			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('tipo_trabajo'), $this->input->get('dato')),
+			'anomes'               => $this->input->get('mes'),
+			'url_detalle_dia'      => 'toa_consumos/detalle_peticion',
+		);
+
+		app_render_view('toa/controles_materiales_tipo_trabajo', $datos);
 	}
 
 

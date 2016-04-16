@@ -60,6 +60,11 @@ class Toa_config extends Orm_controller {
 				'texto' => $this->lang->line('toa_config_menu_empresa'),
 				'icon'  => 'home',
 			),
+			'tipo_trabajo_toa' => array(
+				'url'   => $this->router->class . '/listado/tipo_trabajo_toa',
+				'texto' => $this->lang->line('toa_config_menu_tipo_trabajo'),
+				'icon'  => 'television',
+			),
 		);
 	}
 

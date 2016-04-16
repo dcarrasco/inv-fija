@@ -147,6 +147,16 @@ class Toa_model extends CI_Model {
 		'unidades'     => 'Suma de unidades',
 	);
 
+	/**
+	 * Combo de unidades reporte control materiales por tipo de trabajo
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_materiales_tipo_trabajo = array(
+		'unidades'     => 'Suma de unidades',
+		'monto'        => 'Suma de montos',
+	);
+
 
 	// --------------------------------------------------------------------
 
@@ -1401,6 +1411,97 @@ class Toa_model extends CI_Model {
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
+
+	// --------------------------------------------------------------------
+
+	public function materiales_tipos_trabajo($empresa = NULL, $anomes = NULL, $tipo_trabajo = NULL, $dato_desplegar = 'unidad')
+	{
+		if ( ! $empresa OR ! $anomes OR ! $tipo_trabajo)
+		{
+			return NULL;
+		}
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$arr_referencias = $this->db
+			->distinct()
+			->select('a.referencia')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('a.vale_acomp', $empresa)
+			->where('a.carta_porte', $tipo_trabajo)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->order_by('referencia')
+			->get()->result_array();
+
+		$arr_materiales = $this->db
+			->distinct()
+			->select('a.material')
+			->select('a.texto_material')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('a.vale_acomp', $empresa)
+			->where('a.carta_porte', $tipo_trabajo)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->order_by('material')
+			->get()->result_array();
+
+		$this->db
+			->select('a.referencia')
+			->select('a.material')
+			->select('convert(varchar(20), a.fecha_contabilizacion, 112) as fecha', FALSE)
+			->group_by('a.referencia')
+			->group_by('a.material')
+			->group_by('convert(varchar(20), a.fecha_contabilizacion, 112)')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('a.vale_acomp', $empresa)
+			->where('a.carta_porte', $tipo_trabajo)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->order_by('referencia, material');
+
+			if ($dato_desplegar === 'monto')
+			{
+				$this->db->select_sum('(-a.importe_ml)', 'dato');
+			}
+			else
+			{
+				$this->db->select_sum('(-a.cantidad_en_um)', 'dato');
+			}
+
+			$arr_data = $this->db->get()->result_array();
+			$matriz = array();
+
+			foreach($arr_referencias as $referencia)
+			{
+				$matriz[$referencia['referencia']] = array();
+
+				foreach($arr_materiales as $material)
+				{
+					$matriz[$referencia['referencia']][$material['material']] = array(
+						'texto_material' => $material['texto_material'],
+						'fecha' => NULL,
+						'dato' => NULL,
+					);
+				}
+			}
+
+			foreach($arr_data as $registro)
+			{
+				$matriz[$registro['referencia']][$registro['material']]['dato'] = $registro['dato'];
+				$matriz[$registro['referencia']][$registro['material']]['fecha'] = $registro['fecha'];
+			}
+
+		return $matriz;
+	}
 
 }
 /* End of file Toa_model.php */
