@@ -43,6 +43,7 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 * JqPlot 1.0.8
 * Bootstrap Datepicker 1.6.0 (en github eternicode/bootstrap-datepicker)
 
+
 ## Auditoría
 
 * __vuln-001-0110/2015__ Cierre puertos
