@@ -82,11 +82,11 @@
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted"><?php echo $i+1; ?></td>
-			<td style="white-space: nowrap;"><?php echo $referencia; ?></td>
+			<td style="white-space: nowrap;"><?php echo anchor($url_detalle_dia.'/'.$referencia, $referencia); ?></td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($arr_referencia as $material => $arr_material): ?>
 					<td class="text-center <?php echo $arr_material['dato'] ? 'success' : ''; ?>">
-						<?php echo $arr_material['dato'] ? anchor($url_detalle_dia.'/'.$referencia, fmt_cantidad($arr_material['dato'])) : ''; ?>
+						<?php echo $arr_material['dato'] ? fmt_cantidad($arr_material['dato']) : ''; ?>
 						<?php $tot_lin += $arr_material['dato']; $tot_col[$material] += $arr_material['dato']; ?>
 					</td>
 				<?php endforeach; ?>
