@@ -205,6 +205,7 @@ class Toa_model extends CI_Model {
 			$arr_data = $this->db
 				->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
 				->select('a.referencia')
+				->select('a.carta_porte')
 				->select('c.empresa')
 				->select('a.cliente')
 				->select('b.tecnico')
@@ -223,13 +224,14 @@ class Toa_model extends CI_Model {
 				->select('a.usuario')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
 				->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
 			$arr_campos = array();
 			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'texto');
 			$arr_campos['referencia']         = array('titulo' => 'Numero Peticion', 'tipo' => 'texto');
+			$arr_campos['carta_porte']        = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 			$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
 			$arr_campos['cliente']            = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 			$arr_campos['tecnico']            = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
@@ -285,8 +287,8 @@ class Toa_model extends CI_Model {
 			$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 			$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 			$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('fecha','referencia'));
+			$arr_campos['monto']      = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('referencia'));
 			$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -344,7 +346,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['lote']  = array('titulo' => 'Lote', 'tipo' => 'texto');
 			$arr_campos['cant']  = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto'] = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/lote', 'href_registros' => array('fecha','lote'));
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/lote', 'href_registros' => array('fecha','lote'));
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -411,7 +413,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['elemento_pep']      = array('titulo' => 'PEP', 'tipo' => 'texto');
 			$arr_campos['cant']              = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']             = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/pep', 'href_registros' => array('fecha','codigo_movimiento', 'elemento_pep'));
+			$arr_campos['texto_link']        = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/pep', 'href_registros' => array('fecha','codigo_movimiento', 'elemento_pep'));
 			$this->reporte->set_order_campos($arr_campos, 'codigo_movimiento');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -445,7 +447,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['tecnico'] = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tecnicos', 'href_registros' => array('fecha','cliente'));
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tecnicos', 'href_registros' => array('fecha','cliente'));
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -527,6 +529,11 @@ class Toa_model extends CI_Model {
 			$this->db->where('cliente', $param2);
 		}
 
+		elseif ($tipo_reporte === 'tipo_trabajo')
+		{
+			$this->db->where('carta_porte', $param2);
+		}
+
 		$arr_data = $this->db
 			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
 			->select('a.referencia')
@@ -557,8 +564,8 @@ class Toa_model extends CI_Model {
 		$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 		$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 		$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-		$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-		$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('fecha','referencia'));
+		$arr_campos['monto']      = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('referencia'));
 		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -574,9 +581,9 @@ class Toa_model extends CI_Model {
 	 * @param  string $peticion ID de la peticion
 	 * @return array            Detalle de la peticion
 	 */
-	public function detalle_peticion_toa($fecha = NULL, $peticion = NULL)
+	public function detalle_peticion_toa($peticion = NULL)
 	{
-		if ( ! $fecha OR ! $peticion)
+		if ( ! $peticion)
 		{
 			return array();
 		}
@@ -607,14 +614,11 @@ class Toa_model extends CI_Model {
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
-			//->order_by($orden_campo, $orden_tipo)
-			//->where('fecha_contabilizacion', $fecha)
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->order_by('a.codigo_movimiento, a.material')
 			->get()->result_array();
-
 	}
 
 
@@ -751,7 +755,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['lote']  = array('titulo' => 'Lote', 'tipo' => 'texto');
 			$arr_campos['cant']  = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto'] = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote', 'href_registros' => array('fecha','lote'));
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote', 'href_registros' => array('fecha','lote'));
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -830,7 +834,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['des_almacen'] = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
 			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos', 'href_registros' => array('fecha','cliente'));
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos', 'href_registros' => array('fecha','cliente'));
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -989,7 +993,6 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->order_by('material, cantidad_en_um')
 			->get()->result_array();
-
 	}
 
 
