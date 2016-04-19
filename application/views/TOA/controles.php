@@ -60,11 +60,11 @@
 </div>
 
 <div class="content-module-main">
-<?php $i = 0; $tot_col = array();?>
+<?php $num_lin = 0; $tot_col = array(); $count_col = array();?>
 <?php if ($control): ?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $id_tecnico => $datos): ?>
-		<?php if ($i == 0): ?>
+		<?php if ($num_lin == 0): ?>
 			<thead>
 			<tr>
 				<th></th>
@@ -73,27 +73,29 @@
 					<th class="text-center">
 						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
 						<?php echo $dia_act; ?>
-						<?php $tot_col[$dia_act] = 0; ?>
+						<?php $tot_col[$dia_act] = 0; $count_col[$dia_act] = 0; ?>
 					</th>
 				<?php endforeach; ?>
+				<?php $count_col['total'] = 0; ?>
 				<th>Tot Mes</th>
 			</tr>
 			</thead>
 			<tbody>
 		<?php endif; ?>
 		<tr>
-			<td class="text-muted"><?php echo $i+1; ?></td>
+			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
 			<td style="white-space: nowrap;"><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
-					<td class="text-center <?php echo $cant_act ? 'success' : ''; ?>">
+					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
 						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
-						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; ?>
+						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; $count_col[$dia_act] += $cant_act ? 1 : 0;?>
 					</td>
 				<?php endforeach; ?>
 				<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+				<?php $count_col['total'] += $tot_lin ? 1 : 0;?>
 		</tr>
-		<?php $i += 1; ?>
+		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
 	</tbody>
 	<tfoot>
@@ -105,6 +107,15 @@
 				<th class="text-center"><?php echo fmt_cantidad($total); ?><?php $tot_lin += $total ?></th>
 			<?php endforeach; ?>
 			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+		</tr>
+		<tr>
+			<th></th>
+			<th></th>
+			<?php $tot_lin = 0; ?>
+			<?php foreach ($count_col as $dia_act => $count): ?>
+				<?php $porcentaje = $count / $num_lin; ?>
+				<th class="text-center <?php echo $this->toa_model->clase_cumplimiento_consumos($porcentaje) ?>"><?php echo fmt_cantidad(100*$porcentaje, 0, TRUE); ?>%</th>
+			<?php endforeach; ?>
 		</tr>
 	</tfoot>
 </table>

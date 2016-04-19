@@ -1394,6 +1394,21 @@ class Toa_model extends CI_Model {
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
+	// --------------------------------------------------------------------
+
+	public function clase_cumplimiento_consumos($porcentaje_cumplimiento = 0)
+	{
+		if ($porcentaje_cumplimiento >= 0.9)
+		{
+			return 'success';
+		}
+		elseif ($porcentaje_cumplimiento >= 0.6)
+		{
+			return 'warning';
+		}
+
+		return 'danger';
+	}
 
 }
 /* End of file Toa_model.php */
