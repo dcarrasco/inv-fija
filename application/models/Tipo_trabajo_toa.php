@@ -87,6 +87,24 @@ class Tipo_trabajo_toa extends ORM_Model {
 		return (string) $this->id_tipo;
 	}
 
+	public function mostrar_info()
+	{
+		$descripcion_trabajo = '';
+
+		if (strlen($this->id_tipo) === 10 AND in_array(substr($this->id_tipo, 0, 1), array('A', '-', 'M', 'B', 'T')))
+		{
+			$descripcion_trabajo  = '<dl class="dl-horizontal">';
+			$descripcion_trabajo .= "<dt>BA</dt><dd>".substr($this->id_tipo, 0, 2)."</dd>";
+			$descripcion_trabajo .= "<dt>STB</dt><dd>".substr($this->id_tipo, 2, 2)."</dd>";
+			$descripcion_trabajo .= "<dt>DTH</dt><dd>".substr($this->id_tipo, 4, 2)."</dd>";
+			$descripcion_trabajo .= "<dt>VDSL</dt><dd>".substr($this->id_tipo, 6, 2)."</dd>";
+			$descripcion_trabajo .= "<dt>IPTV</dt><dd>".substr($this->id_tipo, 8, 2)."</dd>";
+			$descripcion_trabajo .= '</dl>';
+		}
+
+		return (string) $this->id_tipo.$descripcion_trabajo;
+	}
+
 }
 /* End of file Tipo_trabajo_toa.php */
 /* Location: ./application/models/Tipo_trabajo_toa.php */

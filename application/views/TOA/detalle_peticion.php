@@ -43,7 +43,7 @@
 				<label class="control-label col-sm-2">Tipo de trabajo</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['carta_porte']; ?>
+						<?php $tt = new Tipo_trabajo_toa($linea_detalle['carta_porte']); echo $tt->mostrar_info(); ?>
 					</p>
 				</div>
 			</div>
