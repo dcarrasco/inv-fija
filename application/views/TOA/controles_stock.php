@@ -58,17 +58,20 @@
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_almacenes as $id_alm => $datos): ?>
 		<?php if ($i == 0): ?>
-			<tr>
-				<th></th>
-				<th>Tipo Almac&eacute;n</th>
-				<th>Almac&eacute;n</th>
-				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
-					<th class="text-center">
-						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
-						<?php echo $dia_act; ?>
-					</th>
-				<?php endforeach; ?>
-			</tr>
+			<thead>
+				<tr class="active">
+					<th></th>
+					<th>Tipo Almac&eacute;n</th>
+					<th>Almac&eacute;n</th>
+					<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
+						<th class="text-center">
+							<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+							<?php echo $dia_act; ?>
+						</th>
+					<?php endforeach; ?>
+				</tr>
+			</thead>
+			<tbody>
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted">
@@ -82,7 +85,7 @@
 				<?php echo $datos['des_almacen']?>
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
-				<td class="text-center <?php echo $valor ? 'success' : ''; ?>">
+				<td class="text-center <?php echo $valor ? 'info' : ''; ?>">
 					<?php $valor_desplegar = $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
 					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar) : ''; ?>
 				</td>
@@ -90,6 +93,7 @@
 		</tr>
 		<?php $i += 1; ?>
 	<?php endforeach; ?>
+		</tbody>
 </table>
 <?php endif ?>
 

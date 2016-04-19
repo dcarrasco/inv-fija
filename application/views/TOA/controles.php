@@ -66,7 +66,7 @@
 	<?php foreach ($control as $id_tecnico => $datos): ?>
 		<?php if ($num_lin == 0): ?>
 			<thead>
-			<tr>
+			<tr class="active">
 				<th></th>
 				<th>T&eacute;cnico</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
@@ -99,7 +99,7 @@
 	<?php endforeach; ?>
 	</tbody>
 	<tfoot>
-		<tr>
+		<tr class="active">
 			<th></th>
 			<th></th>
 			<?php $tot_lin = 0; ?>
@@ -108,7 +108,7 @@
 			<?php endforeach; ?>
 			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
 		</tr>
-		<tr>
+		<tr class="active">
 			<th></th>
 			<th></th>
 			<?php $tot_lin = 0; ?>
