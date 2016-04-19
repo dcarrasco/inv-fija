@@ -79,7 +79,7 @@ class Adminbd_model extends CI_Model {
 		{
 			if (trim($registro['Login']) !== 'sa' AND trim($registro['Login']) !== '')
 			{
-				if (trim($registro['Login']) !== 'patripio' OR trim($registro['ProgramName']) !== 'Apache HTTP Server')
+				if ( ! (trim($registro['Login']) === 'patripio' AND trim($registro['ProgramName']) === 'PHP freetds'))
 				{
 					$arr_users[trim($registro['SPID'])] = $registro;
 				}

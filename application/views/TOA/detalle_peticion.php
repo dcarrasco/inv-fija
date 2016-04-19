@@ -56,7 +56,7 @@
 		<legend>Detalle materiales</legend>
 	</fieldset>
 
-		<table class="table table-striped reporte">
+		<table class="table table-striped table-hover table-condensed reporte">
 			<thead>
 				<tr>
 					<th class="text-center">n</th>

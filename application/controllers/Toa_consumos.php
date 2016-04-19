@@ -111,10 +111,10 @@ class Toa_consumos extends CI_Controller {
 	 * @param  string $peticion Identificador de la peticion
 	 * @return void
 	 */
-	public function detalle_peticion($fecha = NULL, $peticion = NULL)
+	public function detalle_peticion($peticion = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->toa_model->detalle_peticion_toa($fecha, $peticion),
+			'reporte' => $this->toa_model->detalle_peticion_toa($peticion),
 		);
 
 		app_render_view('toa/detalle_peticion', $datos);
