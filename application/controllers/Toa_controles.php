@@ -54,8 +54,8 @@ class Toa_controles extends CI_Controller {
 		$this->lang->load('toa');
 
 		$this->_arr_menu = array(
-			'tecnicos' => array(
-				'url'   => $this->router->class . '/tecnicos',
+			'consumos' => array(
+				'url'   => $this->router->class . '/consumos',
 				'texto' => $this->lang->line('toa_controles_tecnicos'),
 				'icon'  => 'user'
 			),
@@ -91,7 +91,7 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function index()
 	{
-		return $this->tecnicos();
+		return $this->consumos();
 	}
 
 	// --------------------------------------------------------------------
@@ -101,13 +101,13 @@ class Toa_controles extends CI_Controller {
 	 *
 	 * @return void
 	 */
-	public function tecnicos()
+	public function consumos()
 	{
 		$empresa = new Empresa_toa();
 		$stock_sap_fija = new Stock_sap_fija_model();
 
 		$datos = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'consumos'),
 			'combo_empresas'  => $empresa->find('list'),
 			'combo_filtro_trx' => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
