@@ -1029,24 +1029,6 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	public function get_combo_meses()
-	{
-		for ($anno = 2016; $anno <= 2030; $anno++)
-		{
-			for ($mes = 1; $mes <= 12; $mes++)
-			{
-				$id_annomes = (string) $anno*100+$mes;
-				$annomes    = substr($id_annomes, 0, 4).'-'.substr($id_annomes, 4, 2);
-				$combo_meses[$id_annomes] = $annomes;
-			}
-		}
-
-		return $combo_meses;
-	}
-
-
-	// --------------------------------------------------------------------
-
 	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
 	{
 		if ( ! $empresa OR ! $anomes)

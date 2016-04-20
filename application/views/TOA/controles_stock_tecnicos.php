@@ -25,7 +25,7 @@
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
-							<?php echo form_dropdown('mes', $combo_meses, $this->input->get('mes'), 'class="form-control"'); ?>
+							<?php echo form_month('mes', $this->input->get('mes'), 'class="form-control"'); ?>
 						</div>
 					</div>
 

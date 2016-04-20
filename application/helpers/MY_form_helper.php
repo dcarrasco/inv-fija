@@ -167,9 +167,9 @@ if ( ! function_exists('form_range'))
  * @param	string
  * @return	string
  */
-if ( ! function_exists('form_date'))
+if ( ! function_exists('form_date_browser'))
 {
-	function form_date($data = '', $value = '', $extra = '')
+	function form_date_browser($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
 		{
@@ -197,9 +197,9 @@ if ( ! function_exists('form_date'))
  * @param	string
  * @return	string
  */
-if ( ! function_exists('form_month'))
+if ( ! function_exists('form_month_browser'))
 {
-	function form_month($data = '', $value = '', $extra = '')
+	function form_month_browser($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
 		{
@@ -388,6 +388,84 @@ if ( ! function_exists('form_picture'))
 		$data['accept'] = 'image/*;';
 		$data['capture'] = 'camera';
 		return form_input($data, $value, $extra);
+	}
+}
+
+
+// ------------------------------------------------------------------------
+
+/**
+ * Bootstrap Date Field
+ *
+ * @access	public
+ * @param	mixed
+ * @param	string
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('form_date'))
+{
+	function form_date($data = '', $value = '', $extra = '')
+	{
+		if ( ! is_array($data))
+		{
+			$data = array('name' => $data);
+		}
+
+		return '<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true">'.form_input($data, $value, $extra).'<div class="input-group-addon"><i class="fa fa-calendar"></i></div></div>';
+
+	}
+}
+
+
+// ------------------------------------------------------------------------
+
+/**
+ * Bootstrap Month Field
+ *
+ * @access	public
+ * @param	mixed
+ * @param	string
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('form_month'))
+{
+	function form_month($data = '', $value = '', $extra = '')
+	{
+		if ( ! is_array($data))
+		{
+			$data = array('name' => $data);
+		}
+
+		return '<div class="input-group date" data-provide="datepicker" data-date-min-view-mode="1" data-date-language="es" data-date-autoclose="true" data-date-format="yyyymm">'.form_input($data, $value, $extra).'<div class="input-group-addon"><i class="fa fa-calendar"></i></div></div>';
+
+	}
+}
+
+
+// ------------------------------------------------------------------------
+
+/**
+ * Bootstrap Date Field
+ *
+ * @access	public
+ * @param	mixed
+ * @param	string
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('form_date_range'))
+{
+	function form_date_range($data = '', $value = '', $extra = '')
+	{
+		if ( ! is_array($data))
+		{
+			$data = array('name' => $data);
+		}
+
+		return '<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true">'.form_input($data, $value, $extra).'<div class="input-group-addon"><i class="fa fa-calendar"></i></div></div>';
+
 	}
 }
 

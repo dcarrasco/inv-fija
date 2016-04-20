@@ -109,7 +109,6 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'tecnicos'),
 			'combo_empresas'  => $empresa->find('list'),
-			'combo_meses'     => $this->toa_model->get_combo_meses(),
 			'combo_filtro_trx' => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'control'         => $this->toa_model->control_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx'), $this->input->get('dato')),
@@ -136,7 +135,6 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas' => $empresa->find('list'),
-			'combo_meses'      => $this->toa_model->get_combo_meses(),
 			'combo_filtro_trx' => $this->toa_model->combo_movimientos_asignacion,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
 			'control'        => $this->toa_model->control_asignaciones($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx'), $this->input->get('dato')),
@@ -161,7 +159,6 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
 			'combo_empresas'       => $empresa->find('list'),
-			'combo_meses'          => $this->toa_model->get_combo_meses(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'stock_almacenes'      => $this->toa_model->stock_almacenes($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('dato')),
 			'anomes'               => $this->input->get('mes'),
@@ -186,7 +183,6 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock_tecnicos'),
 			'combo_empresas'       => $empresa->find('list'),
-			'combo_meses'          => $this->toa_model->get_combo_meses(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'stock_tecnicos'       => $this->toa_model->stock_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('dato')),
 			'anomes'               => $this->input->get('mes'),
@@ -246,7 +242,6 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
 			'combo_empresas'       => $empresa->find('list'),
-			'combo_meses'          => $this->toa_model->get_combo_meses(),
 			'combo_tipos_trabajo'  => $tipo_trabajo->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
 			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('tipo_trabajo'), $this->input->get('dato')),
