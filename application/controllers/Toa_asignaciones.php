@@ -70,7 +70,7 @@ class Toa_asignaciones extends CI_Controller {
 	{
 		$datos = array(
 			'combo_reportes' => $this->toa_model->tipos_reporte_asignaciones,
-			'reporte'        => $this->toa_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha'), $this->input->get('order_by'), $this->input->get('order_sort')),
+			'reporte'        => $this->toa_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha_desde'), $this->input->get('fecha_hasta'), $this->input->get('order_by'), $this->input->get('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
@@ -86,12 +86,13 @@ class Toa_asignaciones extends CI_Controller {
 	 * @param  mixed  $param1       Primer parametro de filtro
 	 * @param  mixed  $param2       Segundo parametro de filtro
 	 * @param  mixed  $param3       Tercer parametro de filtro
+	 * @param  mixed  $param4       Cuarto parametro de filtro
 	 * @return void
 	 */
-	public function ver_asignaciones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL)
+	public function ver_asignaciones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
 		$datos = array(
-			'reporte' => $this->toa_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3),
+			'reporte' => $this->toa_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3, $param4),
 		);
 
 		app_render_view('toa/peticiones', $datos);

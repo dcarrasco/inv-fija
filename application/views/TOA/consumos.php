@@ -27,7 +27,7 @@
 					<div class="col-md-5">
 						<div class="form_group">
 							<label>{_consumo_fechas_}</label>
-							<?php echo form_date('fecha', $this->input->get('fecha'), 'class="form-control"'); ?>
+							<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
 						</div>
 					</div>
 

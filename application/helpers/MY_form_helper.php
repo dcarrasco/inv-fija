@@ -457,15 +457,32 @@ if ( ! function_exists('form_month'))
  */
 if ( ! function_exists('form_date_range'))
 {
-	function form_date_range($data = '', $value = '', $extra = '')
+	function form_date_range($data_desde = '', $value_desde = '', $data_hasta = '', $value_hasta = '', $extra = '')
 	{
-		if ( ! is_array($data))
+		$js = '<script>$(document).ready(function() {$(\'input[name="'.$data_desde.'"]\').on(\'changeDate\', function(e) {var fecha_desde = $(\'input[name="'.$data_desde.'"]\').val();$(\'input[name="'.$data_hasta.'"]\').val(fecha_desde).datepicker({startDate:fecha_desde});})	});</script>';
+		$str_desde = "Desde";
+		$str_hasta = "Hasta";
+
+		if ( ! is_array($data_desde))
 		{
-			$data = array('name' => $data);
+			$data_desde = array('name' => $data_desde);
 		}
 
-		return '<div class="input-group date" data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true">'.form_input($data, $value, $extra).'<div class="input-group-addon"><i class="fa fa-calendar"></i></div></div>';
+		if ( ! is_array($data_hasta))
+		{
+			$data_hasta = array('name' => $data_hasta);
+		}
 
+		$extra .= ' data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true"';
+
+		$form_item = '<div class="input-group input-daterange">';
+		$form_item .= '<span class="input-group-addon">'.$str_desde.'</span>';
+		$form_item .= form_input($data_desde, $value_desde, $extra);
+		$form_item .= '<span class="input-group-addon">'.$str_hasta.'</span>';
+		$form_item .= form_input($data_hasta, $value_hasta, $extra);
+		$form_item .= '</div>'.$js;
+
+		return $form_item;
 	}
 }
 

@@ -2,7 +2,7 @@
 
 
 $lang['consumo_parametros']  = 'Par&aacute;metros consulta';
-$lang['consumo_fechas']      = 'Seleccionar fecha';
+$lang['consumo_fechas']      = 'Seleccionar rango fechas';
 $lang['consumo_reporte']     = 'Seleccionar reporte';
 $lang['consumo_btn_reporte'] = 'Reporte';
 
