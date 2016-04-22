@@ -67,8 +67,16 @@
 		<?php if ($num_lin== 0): ?>
 			<thead>
 			<tr class="active">
-				<th></th>
-				<th>Petici&oacute;n</th>
+				<th rowspan="2"></th>
+				<th rowspan="2">Petici&oacute;n</th>
+				<?php foreach ($arr_referencia as $material => $arr_material): ?>
+					<th class="text-center ">
+						<?php echo $arr_material['desc_tip_material']; ?>
+					</th>
+				<?php endforeach; ?>
+				<th rowspan="2">Total</th>
+			</tr>
+			<tr class="active">
 				<?php foreach ($arr_referencia as $material => $arr_material): ?>
 					<th class="text-center ">
 						<?php echo $material; ?> - <?php echo $arr_material['texto_material']; ?>
@@ -76,7 +84,6 @@
 					</th>
 				<?php endforeach; ?>
 				<?php $count_col['total'] = 0; ?>
-				<th>Total</th>
 			</tr>
 			</thead>
 			<tbody>

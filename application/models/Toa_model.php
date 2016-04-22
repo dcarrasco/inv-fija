@@ -1407,6 +1407,7 @@ class Toa_model extends CI_Model {
 			->distinct()
 			->select('a.material')
 			->select('a.texto_material')
+			->select('c.desc_tip_material')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
@@ -1414,7 +1415,9 @@ class Toa_model extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->order_by('material')
+			->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material collate Latin1_General_CI_AS=b.id_catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
+			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
 
 		$this->db
@@ -1453,6 +1456,7 @@ class Toa_model extends CI_Model {
 				{
 					$matriz[$referencia['referencia']][$material['material']] = array(
 						'texto_material' => $material['texto_material'],
+						'desc_tip_material' => $material['desc_tip_material'],
 						'fecha' => NULL,
 						'dato' => NULL,
 					);
