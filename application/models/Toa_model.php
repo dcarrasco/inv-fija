@@ -1390,18 +1390,28 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
+		if ($tipo_trabajo !== '*')
+		{
+			$this->db->where('a.carta_porte', $tipo_trabajo);
+		}
+
 		$arr_referencias = $this->db
 			->distinct()
 			->select('a.referencia')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
-			->where('a.carta_porte', $tipo_trabajo)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->order_by('referencia')
 			->get()->result_array();
+
+
+		if ($tipo_trabajo !== '*')
+		{
+			$this->db->where('a.carta_porte', $tipo_trabajo);
+		}
 
 		$arr_materiales = $this->db
 			->distinct()
@@ -1412,7 +1422,6 @@ class Toa_model extends CI_Model {
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
-			->where('a.carta_porte', $tipo_trabajo)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
@@ -1420,6 +1429,11 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
+
+		if ($tipo_trabajo !== '*')
+		{
+			$this->db->where('a.carta_porte', $tipo_trabajo);
+		}
 
 		$this->db
 			->select('a.referencia')
@@ -1431,7 +1445,6 @@ class Toa_model extends CI_Model {
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
-			->where('a.carta_porte', $tipo_trabajo)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')

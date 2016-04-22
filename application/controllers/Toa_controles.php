@@ -242,7 +242,7 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
 			'combo_empresas'       => $empresa->find('list'),
-			'combo_tipos_trabajo'  => $tipo_trabajo->find('list'),
+			'combo_tipos_trabajo'  => array_merge(array('*' => 'Todos'), $tipo_trabajo->find('list')),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
 			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('tipo_trabajo'), $this->input->get('dato')),
 			'anomes'               => $this->input->get('mes'),
