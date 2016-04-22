@@ -80,11 +80,22 @@ class Catalogo extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'default'        => 0
 				),
-				'foto' => array(
-					'label'          => 'Foto del material',
-					'tipo'           => 'picture',
-					'texto_ayuda'    => 'Foto o imagen del material.',
-					'es_obligatorio' => FALSE,
+				// 'foto' => array(
+				// 	'label'          => 'Foto del material',
+				// 	'tipo'           => 'picture',
+				// 	'texto_ayuda'    => 'Foto o imagen del material.',
+				// 	'es_obligatorio' => FALSE,
+				// ),
+				'tip_material' => array(
+					'tipo'           => 'has_many',
+					'relation'       => array(
+						'model'         => 'Tip_material_trabajo_toa',
+						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
+						'id_one_table'  => array('id_catalogo'),
+						'id_many_table' => array('id_tip_material_trabajo'),
+						//'conditions'    => array('id_app' => '@field_value:id_app'),
+					),
+					'texto_ayuda'    => 'Tipo de material TOA.',
 				),
 			),
 		);

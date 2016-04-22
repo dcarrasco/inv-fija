@@ -86,10 +86,12 @@ $config['bd_pmp']                  = 'bd_planificacion..ca_stock_sap_04';
 $config['bd_despachos_pack']       = 'bd_logistica..despachos_sap_res01_pack';
 
 // TOA
-$config['bd_tecnicos_toa']         = 'toa_tecnicos';
-$config['bd_empresas_toa']         = 'toa_empresas';
-$config['bd_empresas_toa_tiposalm'] = 'toa_empresas_tiposalm';
-$config['bd_tipos_trabajo_toa']    = 'toa_tipos_trabajo';
+$config['bd_tecnicos_toa']             = 'toa_tecnicos';
+$config['bd_empresas_toa']             = 'toa_empresas';
+$config['bd_empresas_toa_tiposalm']    = 'toa_empresas_tiposalm';
+$config['bd_tipos_trabajo_toa']        = 'toa_tipos_trabajo';
+$config['bd_tip_material_trabajo_toa'] = 'toa_tip_material_trabajo';
+$config['bd_catalogo_tip_material_toa'] = 'toa_catalogo_tip_material';
 
 
 /* End of file inv-fija.php */
