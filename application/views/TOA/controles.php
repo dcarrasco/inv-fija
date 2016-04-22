@@ -88,7 +88,7 @@
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
-						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
+						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
 						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; $count_col[$dia_act] += $cant_act ? 1 : 0;?>
 					</td>
 				<?php endforeach; ?>
