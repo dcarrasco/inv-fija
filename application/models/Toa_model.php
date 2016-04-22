@@ -1408,6 +1408,7 @@ class Toa_model extends CI_Model {
 			->select('a.material')
 			->select('a.texto_material')
 			->select('c.desc_tip_material')
+			->select('c.color')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
@@ -1455,10 +1456,11 @@ class Toa_model extends CI_Model {
 				foreach($arr_materiales as $material)
 				{
 					$matriz[$referencia['referencia']][$material['material']] = array(
-						'texto_material' => $material['texto_material'],
+						'texto_material'    => $material['texto_material'],
 						'desc_tip_material' => $material['desc_tip_material'],
-						'fecha' => NULL,
-						'dato' => NULL,
+						'color'             => $material['color'],
+						'fecha'             => NULL,
+						'dato'              => NULL,
 					);
 				}
 			}

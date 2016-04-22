@@ -66,15 +66,15 @@
 	<?php foreach ($materiales_tipos_trabajo as $referencia => $arr_referencia): ?>
 		<?php if ($num_lin== 0): ?>
 			<thead>
-			<tr class="active">
-				<th rowspan="2"></th>
-				<th rowspan="2">Petici&oacute;n</th>
+			<tr>
+				<th rowspan="2" class="active"></th>
+				<th rowspan="2" class="active">Petici&oacute;n</th>
 				<?php foreach ($arr_referencia as $material => $arr_material): ?>
-					<th class="text-center ">
+					<th class="text-center <?php echo $arr_material['color'] ?>">
 						<?php echo $arr_material['desc_tip_material']; ?>
 					</th>
 				<?php endforeach; ?>
-				<th rowspan="2">Total</th>
+				<th rowspan="2" class="active">Total</th>
 			</tr>
 			<tr class="active">
 				<?php foreach ($arr_referencia as $material => $arr_material): ?>
@@ -93,7 +93,8 @@
 			<td style="white-space: nowrap;"><?php echo anchor($url_detalle_dia.'/'.$referencia, $referencia); ?></td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($arr_referencia as $material => $arr_material): ?>
-					<td class="text-center <?php echo $arr_material['dato'] ? 'info' : ''; ?>">
+					<?php $class =  $arr_material['dato'] ? ($arr_material['color'] ? $arr_material['color'] : 'info') : ''; ?>
+					<td class="text-center <?php echo $class; ?>">
 						<?php echo $arr_material['dato'] ? fmt_cantidad($arr_material['dato']) : ''; ?>
 						<?php $tot_lin += $arr_material['dato']; $tot_col[$material] += $arr_material['dato']; $count_col[$material] += $arr_material['dato'] ? 1 : 0;?>
 					</td>
