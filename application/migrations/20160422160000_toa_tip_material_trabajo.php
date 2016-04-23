@@ -18,7 +18,7 @@ class Migration_toa_tip_material_trabajo extends CI_Migration {
 				'color'             => array('type' => 'VARCHAR', 'constraint' => '20', 'null' => TRUE),
 			)
 		);
-		$this->dbforge->add_key('id_tip_material', TRUE);
+		$this->dbforge->add_key('id', TRUE);
 		$this->dbforge->create_table('toa_tip_material_trabajo');
 
 		echo 'OK'.PHP_EOL;
