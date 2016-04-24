@@ -18,80 +18,87 @@ $config['app_nombre'] = 'Inventario Fija';
 | Listado con las tablas del sistema
 |
 */
+
+// Nombres de las bases de datos
+define('BD_INVENTARIO', 'bd_inventario..');
+define('BD_LOGISTICA', 'bd_logistica..');
+define('BD_CONTROLES', 'bd_controles..');
+define('BD_PLANIFICACION', 'bd_planificacion..');
+
 // Inventarios
-$config['bd_usuarios']           = 'fija_usuarios';
-$config['bd_inventarios']        = 'fija_inventarios';
-$config['bd_tipos_inventario']   = 'fija_tipos_inventario';
-$config['bd_detalle_inventario'] = 'fija_detalle_inventario';
-$config['bd_catalogos']          = 'fija_catalogos';
-$config['bd_catalogos_fotos']    = 'fija_catalogos_fotos';
-$config['bd_centros']            = 'fija_centros';
-$config['bd_unidades']           = 'fija_unidades';
-$config['bd_auditores']          = 'fija_auditores';
-$config['bd_almacenes']          = 'fija_almacenes';
-$config['bd_familias']           = 'fija_familias';
-$config['bd_tipo_ubicacion']     = 'fija_tipo_ubicacion';
-$config['bd_ubic_tipoubic']      = 'fija_ubicacion_tipo_ubicacion';
+$config['bd_usuarios']           = BD_INVENTARIO.'fija_usuarios';
+$config['bd_inventarios']        = BD_INVENTARIO.'fija_inventarios';
+$config['bd_tipos_inventario']   = BD_INVENTARIO.'fija_tipos_inventario';
+$config['bd_detalle_inventario'] = BD_INVENTARIO.'fija_detalle_inventario';
+$config['bd_catalogos']          = BD_INVENTARIO.'fija_catalogos';
+$config['bd_catalogos_fotos']    = BD_INVENTARIO.'fija_catalogos_fotos';
+$config['bd_centros']            = BD_INVENTARIO.'fija_centros';
+$config['bd_unidades']           = BD_INVENTARIO.'fija_unidades';
+$config['bd_auditores']          = BD_INVENTARIO.'fija_auditores';
+$config['bd_almacenes']          = BD_INVENTARIO.'fija_almacenes';
+$config['bd_familias']           = BD_INVENTARIO.'fija_familias';
+$config['bd_tipo_ubicacion']     = BD_INVENTARIO.'fija_tipo_ubicacion';
+$config['bd_ubic_tipoubic']      = BD_INVENTARIO.'fija_ubicacion_tipo_ubicacion';
 
 // ACL
-$config['bd_app']         = 'acl_app';
-$config['bd_modulos']     = 'acl_modulo';
-$config['bd_rol']         = 'acl_rol';
-$config['bd_usuario_rol'] = 'acl_usuario_rol';
-$config['bd_rol_modulo']  = 'acl_rol_modulo';
-$config['bd_captcha']     = 'ci_captcha';
-$config['bd_pcookies']    = 'fija_pcookies';
+$config['bd_app']         = BD_INVENTARIO.'acl_app';
+$config['bd_modulos']     = BD_INVENTARIO.'acl_modulo';
+$config['bd_rol']         = BD_INVENTARIO.'acl_rol';
+$config['bd_usuario_rol'] = BD_INVENTARIO.'acl_usuario_rol';
+$config['bd_rol_modulo']  = BD_INVENTARIO.'acl_rol_modulo';
+$config['bd_captcha']     = BD_INVENTARIO.'ci_captcha';
+$config['bd_pcookies']    = BD_INVENTARIO.'fija_pcookies';
 
 // Stock
-$config['bd_almacenes_sap']        = 'bd_logistica..cp_almacenes';
-$config['bd_tipoalmacen_sap']      = 'bd_logistica..cp_tipos_almacenes';
-$config['bd_tiposalm_sap']         = 'bd_logistica..cp_tiposalm';
-$config['bd_clasifalm_sap']        = 'bd_logistica..cp_clasifalm';
-$config['bd_clasif_tipoalm_sap']   = 'bd_logistica..cp_clasif_tipoalm';
-$config['bd_tipo_clasifalm_sap']   = 'bd_logistica..cp_tipo_clasifalm';
-$config['bd_reporte_clasif']       = 'bd_logistica..cp_reporte_clasificacion';
-$config['bd_proveedores']          = 'bd_logistica..cp_proveedores';
-$config['bd_permanencia']          = 'bd_logistica..cp_permanencia';
-$config['bd_permanencia_fija']     = 'bd_logistica..perm_series_consumo_fija';
-$config['bd_stock_movil']          = 'bd_logistica..stock_scl';
-$config['bd_stock_movil_res01']    = 'bd_logistica..stock_scl_res01';
-$config['bd_stock_movil_fechas']   = 'bd_logistica..stock_scl_fechas';
-$config['bd_stock_fija']           = 'bd_logistica..bd_stock_sap_fija';
-$config['bd_stock_fija_fechas']    = 'bd_logistica..bd_stock_sap_fija_fechas';
-$config['bd_movimientos_sap']      = 'bd_logistica..mov_hist';
-$config['bd_movimientos_sap_fija'] = 'bd_logistica..bd_movmb51_fija';
-$config['bd_resmovimientos_sap']   = 'bd_logistica..mov_hist_res01';
-$config['bd_cmv_sap']              = 'bd_logistica..cp_cmv';
-$config['bd_fechas_sap']           = 'bd_logistica..cp_fechas';
-$config['bd_usuarios_sap']         = 'bd_logistica..cp_usuarios';
-$config['bd_despachos_sap']        = 'bd_logistica..despachos_sap';
-$config['bd_materiales_sap']       = 'bd_logistica..al_articulos';
-$config['bd_materiales2_sap']      = 'bd_logistica..cp_materiales_sap';
-$config['bd_stock_seriado_sap']    = 'bd_logistica..bd_stock_sap';
-$config['bd_stock_seriado_sap_03'] = 'bd_logistica..bd_stock_03';
-$config['bd_stock_scl']            = 'bd_logistica..bd_stock_scl';
-$config['bd_al_bodegas']           = 'bd_logistica..al_bodegas';
-$config['bd_al_tipos_bodegas']     = 'bd_logistica..al_tipos_bodegas';
-$config['bd_al_tipos_stock']       = 'bd_logistica..al_tipos_stock';
-$config['bd_al_estados']           = 'bd_logistica..al_estados';
-$config['bd_al_usos']              = 'bd_logistica..al_usos';
-$config['bd_trafico_mes']          = 'bd_logistica..trafico_mes';
-$config['bd_trafico_abocelamist']  = 'bd_controles..trafico_abocelamist';
-$config['bd_trafico_clientes']     = 'bd_controles..trafico_clientes';
-$config['bd_trafico_causabaja']    = 'bd_controles..trafico_causabaja';
-$config['bd_trafico_dias_proc']    = 'bd_controles..trafico_dias_procesados';
-$config['bd_pmp']                  = 'bd_planificacion..ca_stock_sap_04';
+$config['bd_almacenes_sap']        = BD_LOGISTICA.'cp_almacenes';
+$config['bd_tipoalmacen_sap']      = BD_LOGISTICA.'cp_tipos_almacenes';
+$config['bd_tiposalm_sap']         = BD_LOGISTICA.'cp_tiposalm';
+$config['bd_clasifalm_sap']        = BD_LOGISTICA.'cp_clasifalm';
+$config['bd_clasif_tipoalm_sap']   = BD_LOGISTICA.'cp_clasif_tipoalm';
+$config['bd_tipo_clasifalm_sap']   = BD_LOGISTICA.'cp_tipo_clasifalm';
+$config['bd_reporte_clasif']       = BD_LOGISTICA.'cp_reporte_clasificacion';
+$config['bd_proveedores']          = BD_LOGISTICA.'cp_proveedores';
+$config['bd_permanencia']          = BD_LOGISTICA.'cp_permanencia';
+$config['bd_permanencia_fija']     = BD_LOGISTICA.'perm_series_consumo_fija';
+$config['bd_stock_movil']          = BD_LOGISTICA.'stock_scl';
+$config['bd_stock_movil_res01']    = BD_LOGISTICA.'stock_scl_res01';
+$config['bd_stock_movil_fechas']   = BD_LOGISTICA.'stock_scl_fechas';
+$config['bd_stock_fija']           = BD_LOGISTICA.'bd_stock_sap_fija';
+$config['bd_stock_fija_fechas']    = BD_LOGISTICA.'bd_stock_sap_fija_fechas';
+$config['bd_movimientos_sap']      = BD_LOGISTICA.'mov_hist';
+$config['bd_movimientos_sap_fija'] = BD_LOGISTICA.'bd_movmb51_fija';
+$config['bd_resmovimientos_sap']   = BD_LOGISTICA.'mov_hist_res01';
+$config['bd_cmv_sap']              = BD_LOGISTICA.'cp_cmv';
+$config['bd_fechas_sap']           = BD_LOGISTICA.'cp_fechas';
+$config['bd_usuarios_sap']         = BD_LOGISTICA.'cp_usuarios';
+$config['bd_despachos_sap']        = BD_LOGISTICA.'despachos_sap';
+$config['bd_materiales_sap']       = BD_LOGISTICA.'al_articulos';
+$config['bd_materiales2_sap']      = BD_LOGISTICA.'cp_materiales_sap';
+$config['bd_stock_seriado_sap']    = BD_LOGISTICA.'bd_stock_sap';
+$config['bd_stock_seriado_sap_03'] = BD_LOGISTICA.'bd_stock_03';
+$config['bd_stock_scl']            = BD_LOGISTICA.'bd_stock_scl';
+$config['bd_al_bodegas']           = BD_LOGISTICA.'al_bodegas';
+$config['bd_al_tipos_bodegas']     = BD_LOGISTICA.'al_tipos_bodegas';
+$config['bd_al_tipos_stock']       = BD_LOGISTICA.'al_tipos_stock';
+$config['bd_al_estados']           = BD_LOGISTICA.'al_estados';
+$config['bd_al_usos']              = BD_LOGISTICA.'al_usos';
+$config['bd_trafico_mes']          = BD_LOGISTICA.'trafico_mes';
+$config['bd_trafico_abocelamist']  = BD_CONTROLES.'trafico_abocelamist';
+$config['bd_trafico_clientes']     = BD_CONTROLES.'trafico_clientes';
+$config['bd_trafico_causabaja']    = BD_CONTROLES.'trafico_causabaja';
+$config['bd_trafico_dias_proc']    = BD_CONTROLES.'trafico_dias_procesados';
+$config['bd_pmp']                  = BD_PLANIFICACION.'ca_stock_sap_04';
 
 // Despachos
-$config['bd_despachos_pack']       = 'bd_logistica..despachos_sap_res01_pack';
+$config['bd_despachos_pack']       = BD_LOGISTICA.'despachos_sap_res01_pack';
 
 // TOA
-$config['bd_tecnicos_toa']             = 'toa_tecnicos';
-$config['bd_empresas_toa']             = 'toa_empresas';
-$config['bd_empresas_toa_tiposalm']    = 'toa_empresas_tiposalm';
-$config['bd_tipos_trabajo_toa']        = 'toa_tipos_trabajo';
-$config['bd_tip_material_trabajo_toa'] = 'toa_tip_material_trabajo';
-$config['bd_catalogo_tip_material_toa'] = 'toa_catalogo_tip_material';
+$config['bd_tecnicos_toa']              = BD_INVENTARIO.'toa_tecnicos';
+$config['bd_empresas_toa']              = BD_INVENTARIO.'toa_empresas';
+$config['bd_empresas_toa_tiposalm']     = BD_INVENTARIO.'toa_empresas_tiposalm';
+$config['bd_tipos_trabajo_toa']         = BD_INVENTARIO.'toa_tipos_trabajo';
+$config['bd_tip_material_trabajo_toa']  = BD_INVENTARIO.'toa_tip_material_trabajo';
+$config['bd_catalogo_tip_material_toa'] = BD_INVENTARIO.'toa_catalogo_tip_material';
 
 
 /* End of file inv-fija.php */
