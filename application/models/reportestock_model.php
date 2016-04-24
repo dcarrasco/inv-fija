@@ -148,12 +148,13 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_fecha_reporte()
 	{
-		return $this->db
+		return fmt_fecha($this->db
 			->distinct()
-			->select('convert(varchar(20), fecha_stock, 102) as fecha_stock', FALSE)
+			->select('fecha_stock')
 			->get($this->config->item('bd_permanencia'))
 			->row()
-			->fecha_stock;
+			->fecha_stock
+		);
 	}
 
 
@@ -825,10 +826,10 @@ class Reportestock_model extends CI_Model {
 		else if ($tipo_fecha === 'DIA')
 		{
 			$this->db->distinct()
-				->select('convert(varchar(8), fecha, 112) as llave')
-				->select('convert(varchar(8), fecha, 112) as valor')
+				->select('fecha as llave')
+				->select('fecha as valor')
 				->from($this->config->item('bd_fechas_sap'))
-				->order_by('convert(varchar(8), fecha, 112) ASC');
+				->order_by('fecha', 'ASC');
 
 			if ($filtro !== '')
 			{
