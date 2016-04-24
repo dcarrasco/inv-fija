@@ -70,13 +70,17 @@
 						<label>
 							{_stock_sap_label_mostrar_}
 						</label>
-						<div class="radio-inline">
-							<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
-							{_stock_sap_radio_cant_}
+						<div class="radio">
+							<label>
+								<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
+								{_stock_sap_radio_cant_}
+							</label>
 						</div>
-						<div class="radio-inline">
-							<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
-							{_stock_sap_radio_monto_}
+						<div class="radio">
+							<label>
+								<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
+								{_stock_sap_radio_monto_}
+							</label>
 						</div>
 					</div>
 				</div>
