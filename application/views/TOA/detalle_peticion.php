@@ -18,7 +18,7 @@
 				<label class="control-label col-sm-2">Fecha</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['fecha']; ?>
+						<?php echo fmt_fecha($linea_detalle['fecha']); ?>
 					</p>
 				</div>
 			</div>

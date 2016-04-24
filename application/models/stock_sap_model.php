@@ -71,6 +71,7 @@ class Stock_sap_model extends CI_Model {
 	{
 		$campos_sumables = array('LU','BQ','CC','TT','OT','total','EQUIPOS','SIMCARD','OTROS','cantidad','VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS', 'VAL_cantidad', 'monto');
 		$campos_montos   = array('VAL_LU','VAL_BQ','VAL_CC','VAL_TT','VAL_OT','VAL_total','VAL_EQUIPOS','VAL_SIMCARD','VAL_OTROS','VAL_cantidad', 'monto');
+		$campos_fechas   = array('fecha_stock');
 		$totales = array();
 
 		$num_reg = 0;
@@ -117,7 +118,7 @@ class Stock_sap_model extends CI_Model {
 				}
 				else
 				{
-					$data = $valor;
+					$data = in_array($campo, $campos_fechas) ? fmt_fecha($valor) : $valor;
 				}
 
 				array_push($arr_linea, array(

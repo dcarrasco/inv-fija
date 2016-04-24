@@ -8,30 +8,30 @@
 		<fieldset>
 			<legend>Detalle petici&oacute;n</legend>
 
-			<div class="form-group">
-				<label class="control-label col-sm-2">Documento Material</label>
-				<div class="col-sm-4">
+			<div class="form-group row">
+				<label class="control-label col-md-2">Documento Material</label>
+				<div class="col-md-4">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['documento_material']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Fecha</label>
-				<div class="col-sm-4">
+				<label class="control-label col-md-2">Fecha</label>
+				<div class="col-md-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['fecha']; ?>
+						<?php echo fmt_fecha($linea_detalle['fecha']); ?>
 					</p>
 				</div>
 			</div>
 
-			<div class="form-group">
-				<label class="control-label col-sm-2">Empresa</label>
-				<div class="col-sm-4">
+			<div class="form-group row">
+				<label class="control-label col-md-2">Empresa</label>
+				<div class="col-md-4">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['empresa']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">T&eacute;cnico</label>
-				<div class="col-sm-4">
+				<label class="control-label col-md-2">T&eacute;cnico</label>
+				<div class="col-md-4">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cliente']; ?> -
 						<?php echo $linea_detalle['tecnico']; ?>

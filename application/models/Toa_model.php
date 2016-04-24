@@ -204,7 +204,7 @@ class Toa_model extends CI_Model {
 			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
 
 			$arr_data = $this->db
-				->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+				->select('a.fecha_contabilizacion as fecha')
 				->select('a.referencia')
 				->select('a.carta_porte')
 				->select('c.empresa')
@@ -230,7 +230,7 @@ class Toa_model extends CI_Model {
 				->get()->result_array();
 
 			$arr_campos = array();
-			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'texto');
+			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 			$arr_campos['referencia']         = array('titulo' => 'Numero Peticion', 'tipo' => 'texto');
 			$arr_campos['carta_porte']        = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 			$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
@@ -517,7 +517,7 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_data = $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.referencia')
 			->select('a.carta_porte')
 			->select('c.empresa')
@@ -526,7 +526,7 @@ class Toa_model extends CI_Model {
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.fecha_contabilizacion')
 			->group_by('a.referencia')
 			->group_by('a.carta_porte')
 			->group_by('c.empresa')
@@ -539,7 +539,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 		$arr_campos = array();
-		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'texto');
 		$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 		$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
@@ -571,7 +571,7 @@ class Toa_model extends CI_Model {
 		}
 
 		return $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.referencia')
 			->select('c.empresa')
 			->select('a.cliente')
@@ -639,7 +639,7 @@ class Toa_model extends CI_Model {
 			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
 
 			$arr_data = $this->db
-				->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+				->select('a.fecha_contabilizacion as fecha')
 				->select('a.referencia')
 				->select('c.empresa')
 				->select('a.cliente')
@@ -664,7 +664,7 @@ class Toa_model extends CI_Model {
 				->get()->result_array();
 
 			$arr_campos = array();
-			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'texto');
+			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 			$arr_campos['referencia']         = array('titulo' => 'Numero Peticion', 'tipo' => 'texto');
 			$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
 			$arr_campos['cliente']            = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
@@ -856,7 +856,7 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_data = $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.documento_material')
 			->select('c.empresa')
 			->select('a.cliente')
@@ -871,7 +871,7 @@ class Toa_model extends CI_Model {
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.fecha_contabilizacion')
 			->group_by('a.documento_material')
 			->group_by('c.empresa')
 			->group_by('a.cliente')
@@ -891,7 +891,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 		$arr_campos = array();
-		$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 		$arr_campos['documento_material'] = array('titulo' => 'Documento SAP', 'tipo' => 'texto');
 		$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
 		$arr_campos['cliente']            = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
@@ -929,7 +929,7 @@ class Toa_model extends CI_Model {
 		}
 
 		return $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.referencia')
 			->select('c.empresa')
 			->select('a.cliente')
@@ -1012,12 +1012,12 @@ class Toa_model extends CI_Model {
 		}
 
 		$query = $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.cliente')
 			->select('a.referencia')
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.fecha_contabilizacion')
 			->group_by('a.cliente')
 			->group_by('a.referencia')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
@@ -1049,7 +1049,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($datos as $registro)
 		{
-			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
+			$matriz[$registro['cliente']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
@@ -1076,9 +1076,9 @@ class Toa_model extends CI_Model {
 		}
 
 		$this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 102) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->select('a.cliente')
-			->group_by('convert(varchar(20), a.fecha_contabilizacion, 102)')
+			->group_by('a.fecha_contabilizacion')
 			->group_by('a.cliente')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
@@ -1114,7 +1114,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($datos as $registro)
 		{
-			$matriz[$registro['cliente']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
+			$matriz[$registro['cliente']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
@@ -1148,7 +1148,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 		$this->db
-			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.fecha_stock as fecha')
 			->select('d.tipo')
 			->select('a.centro')
 			->select('a.almacen')
@@ -1161,7 +1161,7 @@ class Toa_model extends CI_Model {
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
 			->where('e.id_empresa', $empresa)
-			->group_by('convert(varchar(20), a.fecha_stock, 102)')
+			->group_by('a.fecha_stock')
 			->group_by('d.tipo')
 			->group_by('a.centro')
 			->group_by('a.almacen')
@@ -1193,7 +1193,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($stock as $registro)
 		{
-			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
+			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
@@ -1212,7 +1212,7 @@ class Toa_model extends CI_Model {
 		list($centro, $almacen) = explode('-', $centro_almacen);
 
 		$arr_data = $this->db
-			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.fecha_stock as fecha')
 			->select('d.tipo')
 			->select('a.centro')
 			->select('a.almacen')
@@ -1236,7 +1236,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 		$arr_campos = array();
-		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 		$arr_campos['tipo']        = array('titulo' => 'Tipo Almac&eacute;n', 'tipo' => 'texto');
 		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
 		$arr_campos['almacen']     = array('titulo' => 'Almac&eacute;n', 'tipo' => 'texto');
@@ -1278,13 +1278,13 @@ class Toa_model extends CI_Model {
 		}
 
 		$this->db
-			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.fecha_stock as fecha')
 			->select('a.acreedor')
 			->from($this->config->item('bd_stock_fija').' a')
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
 			->where_in('a.acreedor', $arr_tecnicos)
-			->group_by('convert(varchar(20), a.fecha_stock, 102)')
+			->group_by('a.fecha_stock')
 			->group_by('a.acreedor');
 
 		if ($dato_desplegar === 'unidades')
@@ -1308,7 +1308,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($stock as $registro)
 		{
-			$matriz[$registro['acreedor']]['actuaciones'][substr($registro['fecha'], 8, 2)] = $registro['dato'];
+			$matriz[$registro['acreedor']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;
@@ -1325,7 +1325,7 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_data = $this->db
-			->select('convert(varchar(20), a.fecha_stock, 102) as fecha', FALSE)
+			->select('a.fecha_stock as fecha')
 			->select('a.centro')
 			->select('a.acreedor')
 			->select('b.tecnico')
@@ -1345,7 +1345,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 		$arr_campos = array();
-		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'texto');
+		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
 		$arr_campos['acreedor']    = array('titulo' => 'Cod T&eacute;cnico', 'tipo' => 'texto');
 		$arr_campos['tecnico']     = array('titulo' => 'Nombre T&eacute;cnico', 'tipo' => 'texto');
@@ -1438,10 +1438,10 @@ class Toa_model extends CI_Model {
 		$this->db
 			->select('a.referencia')
 			->select('a.material')
-			->select('convert(varchar(20), a.fecha_contabilizacion, 112) as fecha', FALSE)
+			->select('a.fecha_contabilizacion as fecha')
 			->group_by('a.referencia')
 			->group_by('a.material')
-			->group_by('convert(varchar(20), a.fecha_contabilizacion, 112)')
+			->group_by('a.fecha_contabilizacion')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
 			->where('a.fecha_contabilizacion<', $fecha_hasta)
 			->where('a.vale_acomp', $empresa)
@@ -1481,7 +1481,7 @@ class Toa_model extends CI_Model {
 			foreach($arr_data as $registro)
 			{
 				$matriz[$registro['referencia']][$registro['material']]['dato'] = $registro['dato'];
-				$matriz[$registro['referencia']][$registro['material']]['fecha'] = $registro['fecha'];
+				$matriz[$registro['referencia']][$registro['material']]['fecha'] = fmt_fecha($registro['fecha']);
 			}
 
 		return $matriz;

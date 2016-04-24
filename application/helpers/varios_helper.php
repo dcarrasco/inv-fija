@@ -481,6 +481,47 @@ if ( ! function_exists('fmt_hora'))
 }
 
 // --------------------------------------------------------------------
+
+if ( ! function_exists('fmt_fecha'))
+{
+	/**
+	 * Devuelve una fecha de la BD formateada para desplegar
+	 *
+	 * @param  string $fecha   Fecha a formatear
+	 * @param  string $formato Formato a devolver
+	 * @return string          Fecha formateada segun formato
+	 */
+	function fmt_fecha($fecha = NULL, $formato = 'Y-m-d')
+	{
+		if ( ! $fecha)
+		{
+			return;
+		}
+
+		if (strlen($fecha) === 8)
+		{
+			$fecha = substr($fecha, 0, 4).'/'.substr($fecha, 4, 2).'/'.substr($fecha, 6, 2);
+		}
+
+		return nice_date($fecha, $formato);
+	}
+}
+
+if ( ! function_exists('fmt_fecha_db'))
+{
+	/**
+	 * Devuelve una fecha del usuario para consultar en la BD
+	 *
+	 * @param  string $fecha Fecha a formatear
+	 * @return string        Fecha formateada segun formato
+	 */
+	function fmt_fecha_db($fecha = NULL)
+	{
+		return fmt_fecha($fecha, 'Ymd');
+	}
+}
+
+// --------------------------------------------------------------------
 if ( ! function_exists('cached_query'))
 {
 	/**

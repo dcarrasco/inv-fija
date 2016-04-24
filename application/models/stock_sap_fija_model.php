@@ -53,8 +53,8 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		// fecha stock
 		if (in_array('fecha', $mostrar))
 		{
-			$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-			$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
+			$this->db->select('s.fecha_stock');
+			$this->db->group_by('s.fecha_stock');
 			$this->db->order_by('fecha_stock');
 		}
 
@@ -177,8 +177,8 @@ class Stock_sap_fija_model extends Stock_sap_model {
 			// fecha stock
 			if (in_array('fecha', $mostrar))
 			{
-				$this->db->select('convert(varchar(20), s.fecha_stock, 102) as fecha_stock', FALSE);
-				$this->db->group_by('convert(varchar(20), s.fecha_stock, 102)', FALSE);
+				$this->db->select('s.fecha_stock');
+				$this->db->group_by('s.fecha_stock');
 				$this->db->order_by('fecha_stock');
 			}
 
@@ -247,11 +247,18 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	public function get_data_combo_fechas()
 	{
 		$arr_result = $this->db
-			->select('convert(varchar(20), fecha_stock, 112) as llave', FALSE)
-			->select('convert(varchar(20), fecha_stock, 102) as valor', FALSE)
-			->order_by('llave', 'desc')
+			->select('fecha_stock')
+			->order_by('fecha_stock', 'desc')
 			->get($this->config->item('bd_stock_fija_fechas'))
 			->result_array();
+
+		foreach ($arr_result as $indice => $arr_fecha)
+		{
+			$arr_result[$indice] = array(
+				'llave' => fmt_fecha_db($arr_fecha['fecha_stock']),
+				'valor' => fmt_fecha($arr_fecha['fecha_stock']),
+			);
+		}
 
 		return form_array_format($arr_result);
 	}

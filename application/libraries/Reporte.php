@@ -53,6 +53,9 @@ class Reporte {
 			case 'texto':
 							return $valor;
 							break;
+			case 'fecha':
+							return fmt_fecha($valor);
+							break;
 			case 'link':
 							return anchor($arr_param_campo['href'] . $valor, $valor);
 							break;
@@ -61,7 +64,7 @@ class Reporte {
 							foreach ($arr_param_campo['href_registros'] as $campos_link)
 							{
 								$valor_registro = $campos_link === 'fecha'
-									? str_replace('.', '', $registro[$campos_link])
+									? fmt_fecha_db($registro[$campos_link])
 									: $registro[$campos_link];
 								array_push($arr_link, $valor_registro);
 							}
