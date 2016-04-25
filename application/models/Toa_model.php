@@ -408,26 +408,31 @@ class Toa_model extends CI_Model {
 		{
 			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
 
-			$arr_data = $this->db
+			$query = $this->db
 				->select('c.empresa')
 				->select('a.cliente')
 				->select('b.tecnico')
-				->select("'ver peticiones' as texto_link")
+				->select('a.referencia')
 				->select_sum('(-a.cantidad_en_um)', 'cant')
 				->select_sum('(-a.importe_ml)', 'monto')
 				->group_by('c.empresa')
 				->group_by('a.cliente')
 				->group_by('b.tecnico')
+				->group_by('a.referencia')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				->order_by($orden_campo, $orden_tipo)
-				->get()->result_array();
+				->get_compiled_select();
+
+			$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by q1.empresa, q1.cliente';
+
+			$arr_data = $this->db->query($query)->result_array();
 
 			$arr_campos = array();
 			$arr_campos['empresa'] = array('titulo' => 'Empresa', 'tipo' => 'texto');
 			$arr_campos['cliente'] = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 			$arr_campos['tecnico'] = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
+			$arr_campos['referencia'] = array('titulo' => 'Peticiones', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('cliente'));
@@ -439,18 +444,23 @@ class Toa_model extends CI_Model {
 		{
 			$orden_campo = ($orden_campo === '') ? 'carta_porte' : $orden_campo;
 
-			$arr_data = $this->db
+			$query = $this->db
 				->select('a.carta_porte')
-				->select("'ver peticiones' as texto_link")
+				->select('a.referencia')
 				->select_sum('(-a.cantidad_en_um)', 'cant')
 				->select_sum('(-a.importe_ml)', 'monto')
 				->group_by('a.carta_porte')
+				->group_by('a.referencia')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->order_by($orden_campo, $orden_tipo)
-				->get()->result_array();
+				->get_compiled_select();
+
+			$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by q1.carta_porte';
+
+			$arr_data = $this->db->query($query)->result_array();
 
 			$arr_campos = array();
 			$arr_campos['carta_porte'] = array('titulo' => 'Tipo de trabajo', 'tipo' => 'texto');
+			$arr_campos['referencia']  = array('titulo' => 'Peticiones', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['cant']        = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 			$arr_campos['texto_link']  = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tipo_trabajo/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('carta_porte'));
@@ -517,7 +527,7 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_data = $this->db
-			->select('a.fecha_contabilizacion as fecha')
+			->select('min(a.fecha_contabilizacion) as fecha')
 			->select('a.referencia')
 			->select('a.carta_porte')
 			->select('c.empresa')
@@ -526,7 +536,6 @@ class Toa_model extends CI_Model {
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('a.fecha_contabilizacion')
 			->group_by('a.referencia')
 			->group_by('a.carta_porte')
 			->group_by('c.empresa')
