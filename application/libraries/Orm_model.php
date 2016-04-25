@@ -486,8 +486,8 @@ class Orm_model implements IteratorAggregate {
 		$reglas .= ($field->get_tipo() === 'int')  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === 'real') ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['.$this->_model_tabla.'.'.$field->get_nombre_bd().'.'.
-				implode($this->_separador_campos, $this->get_model_campo_id()).'.'.$this->get_model_id().']'
+			? '|edit_unique['.$this->_model_tabla.':'.$field->get_nombre_bd().':'.
+				implode($this->_separador_campos, $this->get_model_campo_id()).':'.$this->get_model_id().']'
 			: '';
 
 		$campo_rules = $campo;

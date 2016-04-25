@@ -56,10 +56,12 @@ class MY_Form_validation extends CI_Form_validation {
 	 */
 	function edit_unique($value, $params)
 	{
+		dbg($value);
+		dbg($params);
 		$ci =& get_instance();
 		$ci->form_validation->set_message('edit_unique', 'El valor %s ya está en uso.');
 
-		list($table, $column, $id_field, $current_id) = explode('.', $params);
+		list($table, $column, $id_field, $current_id) = explode(':', $params);
 
 		// si el id es numerico, cambia a formato numérico
 		$current_id = is_numeric($current_id) ? (int) $current_id : $current_id;
