@@ -50,9 +50,9 @@ class MY_Hooks {
 
 		if (ENVIRONMENT !== 'production')
 		{
-			if ( ! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE)
+			if ( ! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE AND ! $ci->input->is_cli_request())
 			{
-				// $ci->output->enable_profiler(TRUE);
+				$ci->output->enable_profiler(TRUE);
 			}
 		}
 
