@@ -56,8 +56,6 @@ class MY_Form_validation extends CI_Form_validation {
 	 */
 	function edit_unique($value, $params)
 	{
-		dbg($value);
-		dbg($params);
 		$ci =& get_instance();
 		$ci->form_validation->set_message('edit_unique', 'El valor %s ya está en uso.');
 
