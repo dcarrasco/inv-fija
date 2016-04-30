@@ -15,6 +15,7 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
+
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
@@ -22,7 +23,7 @@
 						</div>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
 							<?php echo form_month('mes', $this->input->get('mes'), 'class="form-control"'); ?>
@@ -36,7 +37,14 @@
 						</div>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-2">
+						<div class="form_group">
+							<label>{_controles_tecnicos_mostrar_}</label>
+							<?php echo form_dropdown('mostrar', $combo_dato_mostrar, $this->input->get('mostrar'), 'class="form-control"'); ?>
+						</div>
+					</div>
+
+					<div class="col-md-2">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>
@@ -57,6 +65,8 @@
 <?php if ($stock_tecnicos): ?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_tecnicos as $id_tecnico => $datos): ?>
+	<?php if ($datos['con_datos'] > 0 OR $this->input->get('mostrar') === 'todos'): ?>
+
 		<?php if ($num_lin == 0): ?>
 			<thead>
 				<tr class="active">
@@ -89,6 +99,7 @@
 			<?php endforeach; ?>
 		</tr>
 		<?php $num_lin += 1; ?>
+	<?php endif ?>
 	<?php endforeach; ?>
 	</tbody>
 	<tfoot>

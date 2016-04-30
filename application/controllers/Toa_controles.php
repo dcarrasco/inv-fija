@@ -184,6 +184,7 @@ class Toa_controles extends CI_Controller {
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock_tecnicos'),
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
+			'combo_dato_mostrar'   => $this->toa_model->combo_mostrar_stock_tecnicos,
 			'stock_tecnicos'       => $this->toa_model->stock_tecnicos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('dato')),
 			'anomes'               => $this->input->get('mes'),
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',

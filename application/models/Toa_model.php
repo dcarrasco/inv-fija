@@ -157,6 +157,16 @@ class Toa_model extends CI_Model {
 		'monto'        => 'Suma de montos',
 	);
 
+	/**
+	 * Combo para mostrar todos los tecnivos o solo los con datos
+	 *
+	 * @var array
+	 */
+	public $combo_mostrar_stock_tecnicos = array(
+		'todos' => 'Todos los t&eacute;cnicos',
+		'datos' => 'S&oacute;lo con datos',
+	);
+
 
 	// --------------------------------------------------------------------
 
@@ -1318,6 +1328,16 @@ class Toa_model extends CI_Model {
 		foreach ($stock as $registro)
 		{
 			$matriz[$registro['acreedor']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
+		}
+
+		foreach ($matriz as $id_tecnico => $tecnico)
+		{
+			$con_datos = 0;
+			foreach ($tecnico['actuaciones'] as $dia => $dato)
+			{
+				$con_datos += $dato;
+			}
+			$matriz[$id_tecnico]['con_datos'] = $con_datos;
 		}
 
 		return $matriz;
