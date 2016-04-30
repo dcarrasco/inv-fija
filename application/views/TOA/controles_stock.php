@@ -53,11 +53,11 @@
 </div>
 
 <div class="content-module-main">
-<?php $i = 0; ?>
+<?php $num_lin = 0; $tot_col = array();?>
 <?php if ($stock_almacenes): ?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_almacenes as $id_alm => $datos): ?>
-		<?php if ($i == 0): ?>
+		<?php if ($num_lin == 0): ?>
 			<thead>
 				<tr class="active">
 					<th></th>
@@ -68,6 +68,7 @@
 							<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
 							<?php echo $dia_act; ?>
 						</th>
+					<?php $tot_col[$dia_act] = 0; ?>
 					<?php endforeach; ?>
 				</tr>
 			</thead>
@@ -75,7 +76,7 @@
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted">
-				<?php echo $i+1; ?>
+				<?php echo $num_lin + 1; ?>
 			</td>
 			<td style="white-space: nowrap;">
 				<?php echo $datos['tipo']; ?>
@@ -89,11 +90,22 @@
 					<?php $valor_desplegar = $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
 					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar) : ''; ?>
 				</td>
+			<?php $tot_col[$dia_act] += $valor;?>
 			<?php endforeach; ?>
 		</tr>
-		<?php $i += 1; ?>
+		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
-		</tbody>
+	</tbody>
+	<tfoot>
+		<tr class="active">
+			<th></th>
+			<th></th>
+			<th></th>
+			<?php foreach ($tot_col as $dia_act => $valor): ?>
+				<th class="text-center"><?php echo $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
+			<?php endforeach; ?>
+		</tr>
+	</tfoot>
 </table>
 <?php endif ?>
 
