@@ -138,6 +138,16 @@ class Toa_model extends CI_Model {
 	);
 
 	/**
+	 * Combo de unidades reporte control materiales consumidos
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_materiales_consumidos = array(
+		'unidades' => 'Suma de unidades',
+		'monto'    => 'Suma de montos',
+	);
+
+	/**
 	 * Combo de unidades reporte control stock
 	 *
 	 * @var array
@@ -187,7 +197,8 @@ class Toa_model extends CI_Model {
 	 * Devuelve los consumos realizados en TOA
 	 *
 	 * @param  string $tipo_reporte Tipo de reporte a desplegar
-	 * @param  string $fecha        Fecha de los datos del reporte
+	 * @param  string $fecha_desde  Fecha desde de los datos del reporte
+	 * @param  string $fecha_hasta  Fecha hasta de los datos del reporte
 	 * @param  string $orden_campo  Campo para ordenar el resultado
 	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
 	 * @return string               Reporte
@@ -578,7 +589,6 @@ class Toa_model extends CI_Model {
 	/**
 	 * Recupera datos de detalle de una peticion
 	 *
-	 * @param  string $fecha    Fecha de la peticion
 	 * @param  string $peticion ID de la peticion
 	 * @return array            Detalle de la peticion
 	 */
@@ -629,7 +639,7 @@ class Toa_model extends CI_Model {
 	 * Devuelve las asignaciones realizados en TOA
 	 *
 	 * @param  string $tipo_reporte Tipo de reporte a desplegar
-	 * @param  string $fecha _desde Fecha de los datos del reporte
+	 * @param  string $fecha_desde  Fecha de los datos del reporte
 	 * @param  string $fecha_hasta  Fecha de los datos del reporte
 	 * @param  string $orden_campo  Campo para ordenar el resultado
 	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
@@ -982,6 +992,12 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve arreglo con dias del mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return array          Arreglo con dias del mes (llaves en formato DD)
+	 */
 	private function _get_arr_dias($anomes = NULL)
 	{
 		$mes = (int) substr($anomes, 4, 2);
@@ -1001,6 +1017,12 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve la fecha más un mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return string         Fecha más un mes (formato YYYYMMDD)
+	 */
 	private function _get_fecha_hasta($anomes = NULL)
 	{
 		$mes = (int) substr($anomes, 4, 2);
@@ -1013,6 +1035,15 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve matriz de consumos de técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
 	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
 	{
 		if ( ! $empresa OR ! $anomes)
@@ -1077,6 +1108,15 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve matriz de asignaciones a técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
 	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones')
 	{
 		if ( ! $empresa OR ! $anomes)
@@ -1142,6 +1182,101 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve matriz de materiales consumidos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
+	public function materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades')
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		if ($filtro_trx OR $filtro_trx !== '')
+		{
+			$this->db->where('codigo_movimiento', $filtro_trx);
+		}
+
+		$this->db
+			->select('a.fecha_contabilizacion as fecha')
+			->select('a.material')
+			->select('c.descripcion')
+			->select('e.desc_tip_material')
+			->select('e.color')
+			->group_by('a.fecha_contabilizacion')
+			->group_by('a.material')
+			->group_by('c.descripcion')
+			->group_by('e.desc_tip_material')
+			->group_by('e.color')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			// ->where('almacen', NULL)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_catalogos').' c', 'a.material collate Latin1_General_CI_AS = c.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material collate Latin1_General_CI_AS = d.id_catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left');
+
+		if ($dato_desplegar === 'monto')
+		{
+			$this->db->select_sum('(-a.importe_ml)', 'dato');
+		}
+		else
+		{
+			$this->db->select_sum('(-a.cantidad_en_um)', 'dato');
+		}
+
+		$datos = $this->db->get()->result_array();
+
+		$matriz = array();
+		foreach ($datos as $registro)
+		{
+			if ( ! array_key_exists($registro['material'], $matriz))
+			{
+				$matriz[$registro['desc_tip_material'].$registro['material']] = array(
+					'material'     => $registro['material'],
+					'descripcion'  => $registro['descripcion'],
+					'tip_material' => $registro['desc_tip_material'],
+					'color'        => $registro['color'],
+					'actuaciones'  => $arr_dias,
+				);
+			}
+		}
+		ksort($matriz);
+
+		foreach ($datos as $registro)
+		{
+			$matriz[$registro['desc_tip_material'].$registro['material']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
+		}
+
+		return $matriz;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve matriz de stock de empresas contratistas por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
 	public function stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		if ( ! $empresa OR ! $anomes)
@@ -1221,6 +1356,13 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve reporte con el stock de un almacén para una fecha
+	 *
+	 * @param  string $fecha          Fecha a consultar, formato YYYYMMDD
+	 * @param  string $centro_almacen Centro-Almacen a consultar
+	 * @return string                 Reporte
+	 */
 	public function detalle_stock_almacen($fecha = NULL, $centro_almacen = NULL)
 	{
 		if ( ! $fecha OR ! $centro_almacen)
@@ -1275,6 +1417,15 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	/**
+	 * Devuelve matriz de stock de técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
 	public function stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		if ( ! $empresa OR ! $anomes)
@@ -1341,6 +1492,13 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve reporte con el stock de un técnico para una fecha
+	 *
+	 * @param  string $fecha      Fecha a consultar, formato YYYYMMDD
+	 * @param  string $id_tecnico ID del técnico a consultar
+	 * @return string             Reporte
+	 */
 	public function detalle_stock_tecnico($fecha = NULL, $id_tecnico = NULL)
 	{
 		if ( ! $fecha OR ! $id_tecnico)
@@ -1387,6 +1545,12 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve la clase pintar el cumplimiento diario
+	 *
+	 * @param  integer $porcentaje_cumplimiento % de cumplimiento
+	 * @return string                           Clase
+	 */
 	public function clase_cumplimiento_consumos($porcentaje_cumplimiento = 0)
 	{
 		if ($porcentaje_cumplimiento >= 0.9)
@@ -1403,6 +1567,15 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve matriz de materiales por tipos de trabajo
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
 	public function materiales_tipos_trabajo($empresa = NULL, $anomes = NULL, $tipo_trabajo = NULL, $dato_desplegar = 'unidad')
 	{
 		if ( ! $empresa OR ! $anomes OR ! $tipo_trabajo)
@@ -1512,5 +1685,6 @@ class Toa_model extends CI_Model {
 	}
 
 }
+
 /* End of file Toa_model.php */
 /* Location: ./application/models/Toa_model.php */

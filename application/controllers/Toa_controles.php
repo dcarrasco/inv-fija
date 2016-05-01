@@ -64,6 +64,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_asignaciones'),
 				'icon'  => 'archive'
 			),
+			'materiales_consumidos' => array(
+				'url'   => $this->router->class . '/materiales_consumidos',
+				'texto' => $this->lang->line('toa_controles_materiales_consumidos'),
+				'icon'  => 'tv'
+			),
 			'materiales' => array(
 				'url'   => $this->router->class . '/materiales',
 				'texto' => $this->lang->line('toa_controles_materiales'),
@@ -143,6 +148,31 @@ class Toa_controles extends CI_Controller {
 		);
 
 		app_render_view('toa/controles', $datos);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega detalle de los materiales consumidos
+	 *
+	 * @return void
+	 */
+	public function materiales_consumidos()
+	{
+		$empresa = new Empresa_toa();
+		$stock_sap_fija = new Stock_sap_fija_model();
+
+		$datos = array(
+			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales_consumidos'),
+			'combo_empresas' => $empresa->find('list'),
+			'combo_filtro_trx' => $this->toa_model->combo_movimientos_consumo,
+			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
+			'control'        => $this->toa_model->materiales_consumidos($this->input->get('empresa'), $this->input->get('mes'), $this->input->get('filtro_trx'), $this->input->get('dato')),
+			'anomes'         => $this->input->get('mes'),
+			'url_detalle_dia' => 'toa_consumos/ver_peticiones/material',
+		);
+
+		app_render_view('toa/control_materiales_consumidos', $datos);
 	}
 
 	// --------------------------------------------------------------------

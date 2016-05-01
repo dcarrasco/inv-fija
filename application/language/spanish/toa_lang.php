@@ -13,6 +13,7 @@ $lang['toa_config_menu_tipo_material_trabajo'] = 'Tipos de material trabajo';
 
 $lang['toa_controles_tecnicos']      = 'Actuaciones T&eacute;cnicos';
 $lang['toa_controles_asignaciones']  = 'Asignaciones a t&eacute;cnicos';
+$lang['toa_controles_materiales_consumidos']  = 'Materiales consumidos';
 $lang['toa_controles_materiales']    = 'Materiales por tipo trabajo';
 $lang['toa_controles_stock']         = 'Stock Bucles';
 $lang['toa_controles_stock_tecnicos'] = 'Stock T&eacute;cnicos';
