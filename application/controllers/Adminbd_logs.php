@@ -83,7 +83,7 @@ class Adminbd_logs extends CI_Controller {
 	 */
 	public function borra_log()
 	{
-		$this->_show_file('c:\util\mantencion\log_borra_log.log', 'borra_log');
+		$this->_show_file('../upload/log_borra_log.log', 'borra_log');
 	}
 
 	// --------------------------------------------------------------------
@@ -95,7 +95,7 @@ class Adminbd_logs extends CI_Controller {
 	 */
 	public function indices()
 	{
-		$this->_show_file('c:\util\mantencion\log_indices_bd_logistica.log', 'indices');
+		$this->_show_file('../upload/log_indices_bd_logistica.log', 'indices');
 	}
 
 	// --------------------------------------------------------------------
