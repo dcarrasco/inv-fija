@@ -59,11 +59,6 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_tecnicos'),
 				'icon'  => 'user'
 			),
-			'asignaciones' => array(
-				'url'   => $this->router->class . '/asignaciones',
-				'texto' => $this->lang->line('toa_controles_asignaciones'),
-				'icon'  => 'archive'
-			),
 			'materiales_consumidos' => array(
 				'url'   => $this->router->class . '/materiales_consumidos',
 				'texto' => $this->lang->line('toa_controles_materiales_consumidos'),
@@ -73,6 +68,11 @@ class Toa_controles extends CI_Controller {
 				'url'   => $this->router->class . '/materiales',
 				'texto' => $this->lang->line('toa_controles_materiales'),
 				'icon'  => 'file-text-o'
+			),
+			'asignaciones' => array(
+				'url'   => $this->router->class . '/asignaciones',
+				'texto' => $this->lang->line('toa_controles_asignaciones'),
+				'icon'  => 'archive'
 			),
 			'stock' => array(
 				'url'   => $this->router->class . '/stock',
