@@ -78,7 +78,7 @@ if (ENVIRONMENT == 'development')
 }
 if (ENVIRONMENT == 'development-mac')
 {
-	$active_group = 'mac';
+	$active_group = 'mac-sirio';
 }
 $query_builder = TRUE;
 
@@ -149,12 +149,12 @@ $db['mac'] = array(
 );
 
 $db['mac-sirio'] = array(
-	'dsn'	=> '',
+	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
 	'hostname' => 'sirio',
 	'username' => 'invfija',
 	'password' => 'fijainv2014!',
 	'database' => 'BD_inventario',
-	'dbdriver' => 'mssql',
+	'dbdriver' => 'pdo',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

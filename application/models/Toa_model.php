@@ -1290,19 +1290,14 @@ class Toa_model extends CI_Model {
 		$tecnicos = new Tecnico_toa();
 		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
 
-		$arr_tecnicos = array();
-		foreach ($matriz as $id_tecnico => $tecnico)
-		{
-			array_push($arr_tecnicos, (string) $id_tecnico);
-		}
-
 		$this->db
 			->select('a.fecha_stock as fecha')
 			->select('a.acreedor')
 			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
-			->where_in('a.acreedor', $arr_tecnicos)
+			->where('b.id_empresa', $empresa)
 			->group_by('a.fecha_stock')
 			->group_by('a.acreedor');
 
