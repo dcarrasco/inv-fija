@@ -31,6 +31,21 @@ class Migration_toa_ubicaciones extends CI_Migration {
 		$this->dbforge->add_key('id_empresa', TRUE);
 		$this->dbforge->create_table('toa_empresas_ciudades');
 
+		echo "Agrega tabla 'toa_empresas_ciudades_almacenes'...".PHP_EOL;
+		$this->dbforge->add_field(
+			array(
+				'id_ciudad'   => array('type' => 'BIGINT', 'null' => FALSE),
+				'id_empresa'  => array('type' => 'VARCHAR', 'constraint' => '20', 'null' => FALSE),
+				'centro'      => array('type' => 'VARCHAR', 'constraint' => '10', 'null' => FALSE),
+				'cod_almacen' => array('type' => 'VARCHAR', 'constraint' => '10', 'null' => FALSE),
+			)
+		);
+		$this->dbforge->add_key('id_ciudad', TRUE);
+		$this->dbforge->add_key('id_empresa', TRUE);
+		$this->dbforge->add_key('centro', TRUE);
+		$this->dbforge->add_key('cod_almacen', TRUE);
+		$this->dbforge->create_table('toa_empresas_ciudades_almacenes');
+
 		echo 'OK'.PHP_EOL;
 	}
 
@@ -43,8 +58,9 @@ class Migration_toa_ubicaciones extends CI_Migration {
 	{
 		echo "Elimina tabla 'toa_ciudades', 'toa_empresas_ciudades'... ".PHP_EOL;
 
-		$this->dbforge->drop_table('toa_ciudades');
-		$this->dbforge->drop_table('toa_empresas_ciudades');
+		$this->dbforge->drop_table('toa_ciudades', TRUE);
+		$this->dbforge->drop_table('toa_empresas_ciudades', TRUE);
+		$this->dbforge->drop_table('toa_empresas_ciudades_almacenes', TRUE);
 
 		echo 'OK'.PHP_EOL;
 	}
