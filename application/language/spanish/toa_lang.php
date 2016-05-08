@@ -10,6 +10,8 @@ $lang['toa_config_menu_tecnico'] = 'T&eacute;cnicos';
 $lang['toa_config_menu_empresa'] = 'Empresas';
 $lang['toa_config_menu_tipo_trabajo'] = 'Tipos de trabajo';
 $lang['toa_config_menu_tipo_material_trabajo'] = 'Tipos de material trabajo';
+$lang['toa_config_menu_ciudad'] = 'Ciudades';
+$lang['toa_config_menu_empresa_ciudad'] = 'Empresas-Ciudades';
 
 $lang['toa_controles_tecnicos']      = 'Actuaciones T&eacute;cnicos';
 $lang['toa_controles_asignaciones']  = 'Asignaciones a t&eacute;cnicos';

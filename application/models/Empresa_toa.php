@@ -74,6 +74,17 @@ class Empresa_toa extends ORM_Model {
 					),
 					'texto_ayuda'    => 'Tipos de almacen asociados a empresa TOA.',
 				),
+				'ciudades' => array(
+					'tipo'           => 'has_many',
+					'relation'       => array(
+						'model'         => 'ciudad_toa',
+						'join_table'    => $this->config->item('bd_empresas_ciudades_toa'),
+						'id_one_table'  => array('id_empresa'),
+						'id_many_table' => array('id_ciudad'),
+						//'conditions'    => array('id_app' => '@field_value:id_app'),
+					),
+					'texto_ayuda'    => 'Ciudades asociados a empresa TOA.',
+				),
 			),
 		);
 

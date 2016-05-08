@@ -70,6 +70,16 @@ class Toa_config extends Orm_controller {
 				'texto' => $this->lang->line('toa_config_menu_tipo_material_trabajo'),
 				'icon'  => 'object-group',
 			),
+			'ciudad_toa' => array(
+				'url'   => $this->router->class . '/listado/ciudad_toa',
+				'texto' => $this->lang->line('toa_config_menu_ciudad'),
+				'icon'  => 'map-marker',
+			),
+			'empresa_ciudad_toa' => array(
+				'url'   => $this->router->class . '/listado/empresa_ciudad_toa',
+				'texto' => $this->lang->line('toa_config_menu_empresa_ciudad'),
+				'icon'  => 'map-marker',
+			),
 		);
 	}
 

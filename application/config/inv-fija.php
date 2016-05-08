@@ -95,7 +95,9 @@ $config['bd_despachos_pack']       = BD_LOGISTICA.'despachos_sap_res01_pack';
 // TOA
 $config['bd_tecnicos_toa']              = BD_INVENTARIO.'toa_tecnicos';
 $config['bd_empresas_toa']              = BD_INVENTARIO.'toa_empresas';
+$config['bd_ciudades_toa']              = BD_INVENTARIO.'toa_ciudades';
 $config['bd_empresas_toa_tiposalm']     = BD_INVENTARIO.'toa_empresas_tiposalm';
+$config['bd_empresas_ciudades_toa']     = BD_INVENTARIO.'toa_empresas_ciudades';
 $config['bd_tipos_trabajo_toa']         = BD_INVENTARIO.'toa_tipos_trabajo';
 $config['bd_tip_material_trabajo_toa']  = BD_INVENTARIO.'toa_tip_material_trabajo';
 $config['bd_catalogo_tip_material_toa'] = BD_INVENTARIO.'toa_catalogo_tip_material';
