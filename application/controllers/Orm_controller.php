@@ -81,6 +81,8 @@ class Orm_controller extends CI_Controller {
 		$modelo = new $nombre_modelo;
 
 		$filtro = $this->input->post('filtro') ? $this->input->post('filtro') : $filtro;
+		$filtro = urldecode($filtro);
+
 		$modelo->set_model_filtro($filtro);
 
 		$data = array(
