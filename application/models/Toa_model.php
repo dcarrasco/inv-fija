@@ -1061,6 +1061,7 @@ class Toa_model extends CI_Model {
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
 
+/*
 		$query = $this->db
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.cliente')
@@ -1088,6 +1089,35 @@ class Toa_model extends CI_Model {
 		$query = 'select q1.fecha, q1.cliente, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.cliente order by q1.cliente, q1.fecha';
 
 		$datos = $this->db->query($query)->result_array();
+*/
+
+		if ($dato_desplegar === 'unidades')
+		{
+			$this->db->select_sum('cant', 'dato');
+		}
+		else if ($dato_desplegar === 'monto')
+		{
+			$this->db->select_sum('monto', 'dato');
+		}
+		else
+		{
+			$this->db->select_sum('1', 'dato');
+		}
+
+		$datos = $this->db
+			->select('a.fecha')
+			->select('a.tecnico')
+			->group_by('a.fecha')
+			->group_by('a.tecnico')
+			->where('a.fecha>=', $fecha_desde)
+			->where('a.fecha<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			// ->where_in('codigo_movimiento', $this->movimientos_consumo)
+			// ->where_in('centro', $this->centros_consumo)
+			->from($this->config->item('bd_peticiones_sap').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->get()->result_array();
+
 
 		$tecnicos = new Tecnico_toa();
 		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
@@ -1099,7 +1129,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($datos as $registro)
 		{
-			$matriz[$registro['cliente']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
+			$matriz[$registro['tecnico']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
 		}
 
 		return $matriz;

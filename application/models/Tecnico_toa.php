@@ -78,6 +78,13 @@ class Tecnico_toa extends ORM_Model {
 					),
 					'texto_ayuda'    => 'Empresa a la que pertenece el t&eacute;cnico.',
 				),
+				'id_ciudad' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model' => 'Ciudad_toa',
+					),
+					'texto_ayuda'    => 'Ciudad a la que pertenece el t&eacute;cnico.',
+				),
 			),
 		);
 

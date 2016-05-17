@@ -94,6 +94,7 @@ $config['bd_pmp']                  = BD_PLANIFICACION.'ca_stock_sap_04';
 $config['bd_despachos_pack']       = BD_LOGISTICA.'despachos_sap_res01_pack';
 
 // TOA
+$config['bd_peticiones_sap']            = BD_TOA.'toa_peticiones_sap';
 $config['bd_tecnicos_toa']              = BD_TOA.'toa_tecnicos';
 $config['bd_empresas_toa']              = BD_TOA.'toa_empresas';
 $config['bd_ciudades_toa']              = BD_TOA.'toa_ciudades';
