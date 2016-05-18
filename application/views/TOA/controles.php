@@ -68,6 +68,7 @@
 			<thead>
 			<tr class="active">
 				<th></th>
+				<th>Ciudad</th>
 				<th>T&eacute;cnico</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
@@ -84,7 +85,11 @@
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
-			<td style="white-space: nowrap;"><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?></td>
+			<td class="text-center"><?php echo $datos['ciudad']; ?></td>
+			<td style="white-space: nowrap;">
+				<?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?>
+				(<?php echo $datos['rut'] ?>)
+			</td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
@@ -102,6 +107,7 @@
 		<tr class="active">
 			<th></th>
 			<th></th>
+			<th></th>
 			<?php $tot_lin = 0; ?>
 			<?php foreach ($tot_col as $dia_act => $total): ?>
 				<th class="text-center"><?php echo fmt_cantidad($total); ?><?php $tot_lin += $total ?></th>
@@ -109,6 +115,7 @@
 			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
 		</tr>
 		<tr class="active">
+			<th></th>
 			<th></th>
 			<th></th>
 			<?php $tot_lin = 0; ?>

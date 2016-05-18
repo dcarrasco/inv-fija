@@ -1115,17 +1115,25 @@ class Toa_model extends CI_Model {
 			// ->where_in('codigo_movimiento', $this->movimientos_consumo)
 			// ->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_peticiones_sap').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
 			->get()->result_array();
 
 
 		$tecnicos = new Tecnico_toa();
-		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
 
-		foreach ($matriz as $id_tecnico => $nombre)
+		$matriz = array();
+		foreach ($arr_tecnicos as $tecnico)
 		{
-			$matriz[$id_tecnico] = array('nombre' => $nombre, 'actuaciones' => $arr_dias);
+			$matriz[$tecnico->id_tecnico] = array(
+				'nombre' => $tecnico->tecnico,
+				'rut' => $tecnico->rut,
+				'ciudad' => (string) $tecnico->get_relation_object('id_ciudad'),
+				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+				'actuaciones' => $arr_dias
+			);
 		}
+		uasort($matriz, array($this, '_sort_matriz_control_tecnicos'));
 
 		foreach ($datos as $registro)
 		{
@@ -1135,6 +1143,20 @@ class Toa_model extends CI_Model {
 		return $matriz;
 	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Criterio para ordenar matriz de técnicos por ciudad
+	 *
+	 * @param  array $a Primer elemento a comparar
+	 * @param  array $b Segundo elemento a comparar
+	 * @return int      Comparación
+	 */
+	private function _sort_matriz_control_tecnicos($a, $b)
+	{
+		return $a['orden_ciudad'] > $b['orden_ciudad'];
+	}
 
 	// --------------------------------------------------------------------
 
