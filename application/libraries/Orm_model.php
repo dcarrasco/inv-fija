@@ -385,6 +385,11 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_relation_object($campo = '')
 	{
+		if ( ! $campo)
+		{
+			return NULL;
+		}
+
 		$model_fields = $this->_model_fields;
 		$relation = $model_fields[$campo]->get_relation();
 
