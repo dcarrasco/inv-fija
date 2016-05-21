@@ -630,24 +630,27 @@ class Toa_model extends CI_Model {
 
 		foreach ($arr_data as $registro)
 		{
-			$center_x += $registro['acoord_x'];
-			$center_y += $registro['acoord_y'];
+			if ($registro['acoord_x'] !== '0.00000' AND $registro['acoord_y'] !== '0.00000')
+			{
+				$center_x += $registro['acoord_x'];
+				$center_y += $registro['acoord_y'];
 
-			$arreglo_ubic .= $i > 0 ? ',' : '';
-			$arreglo_ubic .= '[';
-			$arreglo_ubic .= "'".$registro['referencia']."'";
-			$arreglo_ubic .= ','.$registro['acoord_y'];
-			$arreglo_ubic .= ','.$registro['acoord_x'];
-			$arreglo_ubic .= ','.$i;
-			$arreglo_ubic .= ']';
+				$arreglo_ubic .= $i > 0 ? ',' : '';
+				$arreglo_ubic .= '[';
+				$arreglo_ubic .= "'".$registro['referencia']."'";
+				$arreglo_ubic .= ','.$registro['acoord_y'];
+				$arreglo_ubic .= ','.$registro['acoord_x'];
+				$arreglo_ubic .= ','.$i;
+				$arreglo_ubic .= ']';
 
-			$arreglo_ruta .= $i > 0 ? ',' : '';
-			$arreglo_ruta .= '{';
-			$arreglo_ruta .= 'lat: '.$registro['acoord_y'];
-			$arreglo_ruta .= ',lng: '.$registro['acoord_x'];
-			$arreglo_ruta .= '}';
+				$arreglo_ruta .= $i > 0 ? ',' : '';
+				$arreglo_ruta .= '{';
+				$arreglo_ruta .= 'lat: '.$registro['acoord_y'];
+				$arreglo_ruta .= ',lng: '.$registro['acoord_x'];
+				$arreglo_ruta .= '}';
 
-			$i += 1;
+				$i += 1;
+			}
 		}
 
 		$arreglo_ubic .= ']';
