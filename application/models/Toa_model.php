@@ -630,7 +630,7 @@ class Toa_model extends CI_Model {
 
 		foreach ($arr_data as $registro)
 		{
-			if ($registro['acoord_x'] !== '0.00000' AND $registro['acoord_y'] !== '0.00000')
+			if ($registro['acoord_x'] !== '0.00000' AND $registro['acoord_y'] !== '0.00000' AND $registro['acoord_x'] !== $registro['acoord_y'])
 			{
 				$center_x += $registro['acoord_x'];
 				$center_y += $registro['acoord_y'];
