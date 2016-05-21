@@ -10,8 +10,17 @@
 		var ubic = new google.maps.LatLng(centro_y, centro_x),
 		    map = new google.maps.Map(document.getElementById('map_canvas'), {
 				center: ubic,
-				zoom: 14
+				zoom: 11
+			}),
+			rutas = new google.maps.Polyline({
+				path: ruta,
+				strokeColor: '#FF5555',
+				strokeOpacity: 0.5,
+				strokeWeight: 3
 			});
+
+		rutas.setMap(map);
+
 		for (var i = 0; i < ubicaciones.length; i++) {
 			var ubic = ubicaciones[i];
 			marker = new google.maps.Marker({
@@ -21,7 +30,6 @@
 				zIndex: ubic[3]
 			});
 		}
-		//marker.setMap(map);
 	}
 </script>
 
