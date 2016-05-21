@@ -90,8 +90,11 @@ class Toa_consumos extends CI_Controller {
 	 */
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
+		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
+
 		$datos = array(
-			'reporte' => $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4),
+			'reporte' => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
+			'arr_makers' => $this->toa_model->arreglo_markers_google_maps($datos_peticiones),
 		);
 
 		app_render_view('toa/peticiones', $datos);

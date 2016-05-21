@@ -502,7 +502,7 @@ class Toa_model extends CI_Model {
 	 * @param  string $param2       Segundo parametro
 	 * @param  string $param3       Tercer parametro
 	 * @param  string $param4       Cuarto parametro
-	 * @return string               Reporte con las peticiones encontradas
+	 * @return array                Arreglo con las peticiones encontradas
 	 */
 	public function peticiones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
@@ -547,13 +547,15 @@ class Toa_model extends CI_Model {
 			$this->db->where('carta_porte', $param3);
 		}
 
-		$arr_data = $this->db
+		return $this->db
 			->select('min(a.fecha_contabilizacion) as fecha')
 			->select('a.referencia')
 			->select('a.carta_porte')
 			->select('c.empresa')
 			->select('a.cliente')
 			->select('b.tecnico')
+			->select('d.acoord_x')
+			->select('d.acoord_y')
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
@@ -562,11 +564,30 @@ class Toa_model extends CI_Model {
 			->group_by('c.empresa')
 			->group_by('a.cliente')
 			->group_by('b.tecnico')
+			->group_by('d.acoord_x')
+			->group_by('d.acoord_y')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera reporte de peticiones
+	 *
+	 * @param  string $arr_data Arreglo con datos a desplegar
+	 * @return string               Reporte con las peticiones encontradas
+	 */
+	public function reporte_peticiones_toa($arr_data = NULL)
+	{
+		if ( ! $arr_data)
+		{
+			return NULL;
+		}
 
 		$arr_campos = array();
 		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'fecha');
@@ -581,6 +602,46 @@ class Toa_model extends CI_Model {
 		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera arreglo javascript con data de posiciones
+	 *
+	 * @param  string $arr_data Arreglo con datos a desplegar
+	 * @return string               Reporte con las peticiones encontradas
+	 */
+	public function arreglo_markers_google_maps($arr_data = NULL)
+	{
+		if ( ! $arr_data)
+		{
+			return NULL;
+		}
+
+		$center_x = 0;
+		$center_y = 0;
+
+		$i = 0;
+		$arreglo_js = 'var ubicaciones = [';
+		foreach ($arr_data as $registro)
+		{
+			$center_x += $registro['acoord_x'];
+			$center_y += $registro['acoord_y'];
+
+			$arreglo_js .= $i > 0 ? ',' : '';
+			$arreglo_js .= '[';
+			$arreglo_js .= "'".$registro['referencia']."'";
+			$arreglo_js .= ','.$registro['acoord_y'];
+			$arreglo_js .= ','.$registro['acoord_x'];
+			$arreglo_js .= ','.$i;
+			$arreglo_js .= ']';
+			$i += 1;
+		}
+		$arreglo_js .= '], centro_x='.$center_x/$i.', centro_y='.$center_y/$i.';';
+
+		return $arreglo_js;
 	}
 
 
