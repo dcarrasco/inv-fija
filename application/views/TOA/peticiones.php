@@ -11,7 +11,8 @@
 		    map = new google.maps.Map(document.getElementById('map_canvas'), {
 				center: ubic,
 				zoom: 11
-			});
+			}),
+			bounds = new google.maps.LatLngBounds();
 /*
 		var rutas = new google.maps.Polyline({
 				path: ruta,
@@ -30,7 +31,11 @@
 				title: 'Petición: ' + ubic[0],
 				zIndex: ubic[3]
 			});
+			bounds.extend(marker.position);
 		}
+
+		map.fitBounds(bounds);
+
 	}
 </script>
 
