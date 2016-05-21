@@ -1,7 +1,7 @@
 <div class="content-module-main">
 {reporte}
 <div id="map_canvas" style="height: 400px"></div>
-</div>
+<hr/>
 </div> <!-- fin content-module-main -->
 
 <script>
