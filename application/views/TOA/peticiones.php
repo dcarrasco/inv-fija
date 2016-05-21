@@ -11,8 +11,9 @@
 		    map = new google.maps.Map(document.getElementById('map_canvas'), {
 				center: ubic,
 				zoom: 11
-			}),
-			rutas = new google.maps.Polyline({
+			});
+/*
+		var rutas = new google.maps.Polyline({
 				path: ruta,
 				strokeColor: '#FF5555',
 				strokeOpacity: 0.5,
@@ -20,7 +21,7 @@
 			});
 
 		rutas.setMap(map);
-
+*/
 		for (var i = 0; i < ubicaciones.length; i++) {
 			var ubic = ubicaciones[i];
 			marker = new google.maps.Marker({
