@@ -4,7 +4,7 @@
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<a href="#map-panel" class="accordion-toggle" data-toggle="collapse" aria-expanded="true">
-				<span class="fa fa-map-pin"></span>
+				<span class="fa fa-map-marker"></span>
 				Mapa
 			</a>
 		</div>
