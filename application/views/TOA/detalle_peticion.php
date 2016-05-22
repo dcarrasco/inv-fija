@@ -6,28 +6,26 @@
 	<?php $acoord_y = $linea_detalle['acoord_y']; ?>
 	<?php $cname    = $linea_detalle['cname']; ?>
 
-	<div class="col-md-6 well form-horizontal">
+	<div class="col-md-8 well form-horizontal">
 		<fieldset>
-			<legend>
-				Detalle Cliente
-			</legend>
+			<legend>Cliente</legend>
 
-			<div class="form-group">
-				<label class="control-label col-sm-1">RUT</label>
-				<div class="col-sm-3">
+			<div class="form-group-sm">
+				<label class="control-label col-sm-2">RUT</label>
+				<div class="col-sm-4">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['customer_number']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2">Nombre</label>
-				<div class="col-sm-6">
+				<div class="col-sm-4">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cname']; ?>
 					</p>
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">Tel&eacute;fono</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -42,7 +40,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">e-mail</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -57,7 +55,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">Agencia</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -72,17 +70,9 @@
 				</div>
 			</div>
 
-			<div class="form-group">
-			<div id="map_canvas" style="height: 300px"></div>
-			</div>
+			<legend>Petici&oacute;n</legend>
 
-		</fieldset>
-	</div>
-
-	<div class="col-md-6 well form-horizontal">
-		<fieldset>
-			<legend>Detalle petici&oacute;n</legend>
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">ID Petici&oacute;n</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -97,7 +87,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">Empresa</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -113,7 +103,7 @@
 				</div>
 			</div>
 
-			<div class="form-group">
+			<div class="form-group-sm">
 				<label class="control-label col-sm-2">Tipo de trabajo</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
@@ -124,6 +114,9 @@
 		</fieldset>
 	</div>
 
+	<div class="col-md-4">
+		<div id="map_canvas" style="height: 360px"></div>
+	</div>
 </div>
 
 <div class="col-md-12">
