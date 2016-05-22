@@ -95,6 +95,7 @@ class Toa_consumos extends CI_Controller {
 		$datos = array(
 			'reporte' => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
 			'arr_makers' => $this->toa_model->arreglo_markers_google_maps($datos_peticiones),
+			'link_detalle' => site_url($this->router->class.'/detalle_peticion/')
 		);
 
 		app_render_view('toa/peticiones', $datos);

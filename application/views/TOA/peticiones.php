@@ -1,6 +1,6 @@
 <div class="content-module-main">
 {reporte}
-<div id="map_canvas" style="height: 400px"></div>
+<div id="map_canvas" style="height: 500px"></div>
 <hr/>
 </div> <!-- fin content-module-main -->
 
@@ -25,16 +25,25 @@
 */
 		for (var i = 0; i < ubicaciones.length; i++) {
 			var ubic = ubicaciones[i];
-			marker = new google.maps.Marker({
+			var marker = new google.maps.Marker({
 				position: {lat: ubic[1], lng: ubic[2]},
 				map: map,
 				title: 'Petición: ' + ubic[0],
 				zIndex: ubic[3]
 			});
+
+			/*
+			marker.addListener('click', function() {
+				window.location.href = "<?php echo $link_detalle ?>/"+ubic[0];
+			});
+			*/
+
 			bounds.extend(marker.position);
 		}
 
-		map.fitBounds(bounds);
+		if (ubicaciones.length > 1) {
+			map.fitBounds(bounds);
+		}
 
 	}
 </script>
