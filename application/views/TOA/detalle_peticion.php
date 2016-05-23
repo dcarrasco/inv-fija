@@ -70,6 +70,17 @@
 				</div>
 			</div>
 
+			<div class="form-group-sm">
+				<label class="control-label col-sm-2">Tecnolog&iacute;as</label>
+				<div class="col-sm-4">
+					<p class="form-control-static">
+						<span class="label label-default">BA</span><span class="label label-info"><?php echo $linea_detalle['XA_BROADBAND_TECHNOLOGY']; ?></span>
+						<span class="label label-default">STB</span><span class="label label-info"><?php echo $linea_detalle['XA_TELEPHONE_TECHNOLOGY']; ?></span>
+						<span class="label label-default">TV</span><span class="label label-info"><?php echo $linea_detalle['XA_TV_TECHNOLOGY']; ?></span>
+					</p>
+				</div>
+			</div>
+
 			<legend>Petici&oacute;n</legend>
 
 			<div class="form-group-sm">
@@ -110,12 +121,19 @@
 						<?php $tt = new Tipo_trabajo_toa($linea_detalle['carta_porte']); echo $tt->mostrar_info(); ?>
 					</p>
 				</div>
+				<label class="control-label col-sm-2">Origen Peticion</label>
+				<div class="col-sm-4">
+					<p class="form-control-static">
+						<?php echo $linea_detalle['XA_CHANNEL_ORIGIN']; ?>
+					</p>
+				</div>
 			</div>
+
 		</fieldset>
 	</div>
 
 	<div class="col-md-4">
-		<div id="map_canvas" style="height: 360px"></div>
+		<div id="map_canvas" style="height: 400px"></div>
 	</div>
 </div>
 
