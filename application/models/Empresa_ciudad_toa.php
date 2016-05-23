@@ -48,6 +48,8 @@ class Empresa_ciudad_toa extends ORM_Model {
 			'campos' => array(
 				'id_empresa' => array(
 					'tipo'           =>  'has_one',
+					'es_id'          => TRUE,
+					'es_obligatorio' => TRUE,
 					'relation'       => array(
 						'model' => 'empresa_toa'
 					),
@@ -55,6 +57,8 @@ class Empresa_ciudad_toa extends ORM_Model {
 				),
 				'id_ciudad' => array(
 					'tipo'           =>  'has_one',
+					'es_id'          => TRUE,
+					'es_obligatorio' => TRUE,
 					'relation'       => array(
 						'model' => 'ciudad_toa'
 					),
