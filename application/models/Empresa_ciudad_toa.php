@@ -71,7 +71,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 						'join_table'    => $this->config->item('bd_empresas_ciudades_almacenes_toa'),
 						'id_one_table'  => array('id_empresa', 'id_ciudad'),
 						'id_many_table' => array('centro', 'cod_almacen'),
-						//'conditions'    => array('tipo_op' => 'tipo_op')
+						'conditions'    => array('centro' => array('CH32','CH33'))
 					),
 					'texto_ayuda'    => 'Almacenes asociados a la empresa - ciudad.',
 				),

@@ -579,7 +579,7 @@ class Orm_model implements IteratorAggregate {
 			{
 				// si encontramos un valor que comience por @filed_value,
 				// se reemplaza por el valor del campo en el objeto
-				if (strpos($cond_value, '@field_value') === 0)
+				if ( ! is_array($cond_value) AND strpos($cond_value, '@field_value') === 0)
 				{
 					$arr_field_value = explode(':', $cond_value);
 					$arr_relation['conditions'][$cond_key] = $this->{$arr_field_value[1]};
