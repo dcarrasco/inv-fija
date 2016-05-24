@@ -1053,7 +1053,7 @@ class Orm_model implements IteratorAggregate {
 		}
 		else
 		{
-			if (ENVIRONMENT === 'development-mac')
+			if ($this->db->dbdriver === 'mysqli')
 			{
 				// CONCAT_WS es especifico para MYSQL
 				$lista_campos = implode(',', $arr_campos);
