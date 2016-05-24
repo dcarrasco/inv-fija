@@ -1573,18 +1573,30 @@ class Toa_model extends CI_Model {
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
 		$tecnicos = new Tecnico_toa();
-		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
+
+		$matriz = array();
+		foreach ($arr_tecnicos as $tecnico)
+		{
+			$matriz[$tecnico->id_tecnico] = array(
+				'tecnico'     => $tecnico->tecnico,
+				'rut'         => $tecnico->rut,
+				'actuaciones' => $arr_dias,
+			);
+		}
 
 		$this->db
 			->select('a.fecha_stock as fecha')
 			->select('a.acreedor')
+			->select('b.rut')
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
 			->where('b.id_empresa', $empresa)
 			->group_by('a.fecha_stock')
-			->group_by('a.acreedor');
+			->group_by('a.acreedor')
+			->group_by('b.rut');
 
 		if ($dato_desplegar === 'unidades')
 		{
@@ -1596,14 +1608,6 @@ class Toa_model extends CI_Model {
 		}
 
 		$stock = $this->db->get()->result_array();
-
-		foreach ($matriz as $id_tecnico => $tecnico)
-		{
-			$matriz[$id_tecnico] = array(
-				'tecnico'     => $tecnico,
-				'actuaciones' => $arr_dias,
-			);
-		}
 
 		foreach ($stock as $registro)
 		{

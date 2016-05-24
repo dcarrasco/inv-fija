@@ -89,6 +89,7 @@
 			</td>
 			<td style="white-space: nowrap;">
 				<?php echo $id_tecnico.' - '.$datos['tecnico']; ?>
+				(<?php echo fmt_rut($datos['rut']); ?>)
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<td class="text-center <?php echo $valor ? 'info' : ''; ?>">
