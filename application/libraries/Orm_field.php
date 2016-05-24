@@ -364,7 +364,9 @@ class Orm_field {
 		{
 			$param_adic = ' id="'.$id_prefix.$this->_nombre.'"';
 
-			$form = '<p class="form-control-static">'.$valor_field.'</p>';
+			$valor_desplegar = ($this->_tipo === 'has_one') ? (string) $this->_relation['model'] : $valor_field;
+
+			$form = '<p class="form-control-static">'.$valor_desplegar.'</p>';
 			$form .= form_hidden($this->_nombre, $valor_field, $param_adic);
 
 			return $form;
