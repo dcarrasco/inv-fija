@@ -539,7 +539,16 @@ if ( ! function_exists('fmt_rut'))
 		{
 			return NULL;
 		}
-		list($rut, $dv) = explode('-', $rut);
+
+		if (strpos($rut, '-') === FALSE)
+		{
+			$dv  = substr($rut, strlen($rut) - 1, 1);
+			$rut = substr($rut, 0, strlen($rut) - 1);
+		}
+		else
+		{
+			list($rut, $dv) = explode('-', $rut);
+		}
 
 		return fmt_cantidad($rut).'-'.strtoupper($dv);
 	}

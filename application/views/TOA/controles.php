@@ -88,7 +88,7 @@
 			<td class="text-center"><?php echo $datos['ciudad']; ?></td>
 			<td style="white-space: nowrap;">
 				<?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?>
-				(<?php echo $datos['rut'] ?>)
+				(<?php echo fmt_rut($datos['rut']); ?>)
 			</td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
