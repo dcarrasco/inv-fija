@@ -46,8 +46,14 @@ class Ciudad_toa extends ORM_Model {
 				'model_order_by'     => 'orden',
 			),
 			'campos' => array(
-				'id' => array(
-					'tipo'   => 'id',
+				'id_ciudad' => array(
+					'label'          => 'ID de la ciudad',
+					'tipo'           => 'char',
+					'largo'          => 5,
+					'texto_ayuda'    => 'ID de la ciudad. M&aacute;ximo 50 caracteres.',
+					'es_id'          => TRUE,
+					'es_obligatorio' => TRUE,
+					'es_unico'       => TRUE,
 				),
 				'ciudad' => array(
 					'label'          => 'Nombre de la ciudad',
