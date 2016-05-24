@@ -93,13 +93,11 @@ class Tipo_trabajo_toa extends ORM_Model {
 
 		if (strlen($this->id_tipo) === 10 AND in_array(substr($this->id_tipo, 0, 1), array('A', '-', 'M', 'B', 'T')))
 		{
-			$descripcion_trabajo  = '';
-			$descripcion_trabajo .= '<span class="label label-default">BA</span><span class="label label-info">'.substr($this->id_tipo, 0, 2)."</span>";
-			$descripcion_trabajo .= '<span class="label label-default">STB</span><span class="label label-info">'.substr($this->id_tipo, 2, 2)."</span>";
-			$descripcion_trabajo .= '<span class="label label-default">DTH</span><span class="label label-info">'.substr($this->id_tipo, 4, 2)."</span>";
-			$descripcion_trabajo .= '<span class="label label-default">VDSL</span><span class="label label-info">'.substr($this->id_tipo, 6, 2)."</span>";
-			$descripcion_trabajo .= '<span class="label label-default">IPTV</span><span class="label label-info">'.substr($this->id_tipo, 8, 2)."</span>";
-			$descripcion_trabajo .= '';
+			$descripcion_trabajo = '<span class="label label-default">BA</span><span class="label label-info">'.substr($this->id_tipo, 0, 2)."</span>";
+			$descripcion_trabajo .= ' <span class="label label-default">STB</span><span class="label label-info">'.substr($this->id_tipo, 2, 2)."</span>";
+			$descripcion_trabajo .= ' <span class="label label-default">DTH</span><span class="label label-info">'.substr($this->id_tipo, 4, 2)."</span>";
+			$descripcion_trabajo .= ' <span class="label label-default">VDSL</span><span class="label label-info">'.substr($this->id_tipo, 6, 2)."</span>";
+			$descripcion_trabajo .= ' <span class="label label-default">IPTV</span><span class="label label-info">'.substr($this->id_tipo, 8, 2)."</span>";
 		}
 
 		return (string) ($descripcion_trabajo === '') ? $this->id_tipo : $descripcion_trabajo;
