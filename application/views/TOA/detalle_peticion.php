@@ -14,7 +14,7 @@
 				<label class="control-label col-sm-2">RUT</label>
 				<div class="col-sm-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['customer_number']; ?>
+						<?php echo fmt_rut($linea_detalle['customer_number']); ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2">Nombre</label>

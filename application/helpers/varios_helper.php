@@ -507,6 +507,8 @@ if ( ! function_exists('fmt_fecha'))
 	}
 }
 
+// --------------------------------------------------------------------
+
 if ( ! function_exists('fmt_fecha_db'))
 {
 	/**
@@ -522,6 +524,29 @@ if ( ! function_exists('fmt_fecha_db'))
 }
 
 // --------------------------------------------------------------------
+
+if ( ! function_exists('fmt_rut'))
+{
+	/**
+	 * Formatea un RUT
+	 *
+	 * @param  string $rut RUT a formatear
+	 * @return string      RUT formateado segun formato
+	 */
+	function fmt_rut($rut = NULL)
+	{
+		if ( ! $rut)
+		{
+			return NULL;
+		}
+		list($rut, $dv) = explode('-', $rut);
+
+		return fmt_cantidad($rut).'-'.strtoupper($dv);
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('cached_query'))
 {
 	/**
