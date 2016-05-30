@@ -238,7 +238,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_config arreglo con la configuración de los campos del modelo
 	 * @return nada
 	 */
-	private function _config_campos($arr_config = array())
+	protected function _config_campos($arr_config = array())
 	{
 		foreach ($arr_config as $campo => $propiedad)
 		{

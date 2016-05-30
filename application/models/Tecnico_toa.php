@@ -94,6 +94,8 @@ class Tecnico_toa extends ORM_Model {
 		{
 			$this->fill($id_tecnico);
 		}
+
+		$this->get_ciudades_tecnico();
 	}
 
 
@@ -108,6 +110,38 @@ class Tecnico_toa extends ORM_Model {
 	{
 		return (string) $this->tecnico;
 	}
+
+	// --------------------------------------------------------------------
+	public function get_ciudades_tecnico()
+	{
+		if ($this->id_empresa)
+		{
+			$arr_ciudades = array();
+
+			$empresa_ciudad = new Empresa_ciudad_toa;
+			$listado_empresa_ciudad = $empresa_ciudad->find('all', array('conditions' => array('id_empresa' => $this->id_empresa)));
+
+			foreach($listado_empresa_ciudad as $obj_empresa_ciudad)
+			{
+				array_push($arr_ciudades, $obj_empresa_ciudad->id_ciudad);
+			}
+
+			$arr_config_ciudad = array(
+				'id_ciudad' => array(
+					'tipo'           => 'has_one',
+					'relation'       => array(
+						'model'      => 'Ciudad_toa',
+						'conditions' => array('id_ciudad' => $arr_ciudades),
+					),
+					'texto_ayuda'    => 'Ciudad a la que pertenece el t&eacute;cnico.',
+				),
+			);
+
+			$this->_config_campos($arr_config_ciudad);
+			$this->get_relation_fields();
+		}
+	}
+
 
 }
 /* End of file tecnico_toa.php */
