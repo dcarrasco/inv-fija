@@ -77,6 +77,7 @@ class Tecnico_toa extends ORM_Model {
 						'model' => 'empresa_toa',
 					),
 					'texto_ayuda'    => 'Empresa a la que pertenece el t&eacute;cnico.',
+					'onchange'       => "\$.get('".site_url('toa_config/get_select_ciudad')."'+'/'+\$('#id_id_empresa').val(), function(data){\$('#id_id_ciudad').html(data);});",
 				),
 				'id_ciudad' => array(
 					'tipo'           => 'has_one',
@@ -116,15 +117,8 @@ class Tecnico_toa extends ORM_Model {
 	{
 		if ($this->id_empresa)
 		{
-			$arr_ciudades = array();
-
 			$empresa_ciudad = new Empresa_ciudad_toa;
-			$listado_empresa_ciudad = $empresa_ciudad->find('all', array('conditions' => array('id_empresa' => $this->id_empresa)));
-
-			foreach($listado_empresa_ciudad as $obj_empresa_ciudad)
-			{
-				array_push($arr_ciudades, $obj_empresa_ciudad->id_ciudad);
-			}
+			$arr_ciudades = $empresa_ciudad->arr_ciudades_por_empresa($this->id_empresa);
 
 			$arr_config_ciudad = array(
 				'id_ciudad' => array(

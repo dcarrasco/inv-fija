@@ -487,3 +487,61 @@ if ( ! function_exists('form_date_range'))
 }
 
 // ------------------------------------------------------------------------
+
+/**
+ * Devuelve conjunto de <option> para ser usado en un <select>
+ *
+ * @access	public
+ * @param	mixed
+ * @param	mixed
+ * @return	string
+ */
+if ( ! function_exists('form_print_options'))
+{
+	function form_print_options($options = array(), $selected = array())
+	{
+		if ( ! $options)
+		{
+			return;
+		}
+
+
+		is_array($options) OR $options = array($options);
+		is_array($selected) OR $selected = array($selected);
+
+		$form = '';
+
+		foreach ($options as $key => $val)
+		{
+			$key = (string) $key;
+
+			if (is_array($val))
+			{
+				if (empty($val))
+				{
+					continue;
+				}
+
+				$form .= '<optgroup label="'.$key."\">\n";
+
+				foreach ($val as $optgroup_key => $optgroup_val)
+				{
+					$sel = in_array($optgroup_key, $selected) ? ' selected="selected"' : '';
+					$form .= '<option value="'.html_escape($optgroup_key).'"'.$sel.'>'
+						.(string) $optgroup_val."</option>\n";
+				}
+
+				$form .= "</optgroup>\n";
+			}
+			else
+			{
+				$form .= '<option value="'.html_escape($key).'"'
+					.(in_array($key, $selected) ? ' selected="selected"' : '').'>'
+					.(string) $val."</option>\n";
+			}
+		}
+
+		return $form;
+	}
+}
+

@@ -83,6 +83,15 @@ class Toa_config extends Orm_controller {
 		);
 	}
 
+	public function get_select_ciudad($id_empresa = NULL)
+	{
+		$empresa_ciudad = new Empresa_ciudad_toa;
+		$ciudad = new Ciudad_toa;
+
+		$this->output
+			->set_content_type('text')
+			->set_output(form_print_options($ciudad->find('list', array('conditions' => array('id_ciudad' => $empresa_ciudad->arr_ciudades_por_empresa($id_empresa))))));
+	}
 
 
 }

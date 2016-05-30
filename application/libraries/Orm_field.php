@@ -76,6 +76,13 @@ class Orm_field {
 	private $_mostrar_lista = TRUE;
 
 	/**
+	 * Indica si imprime un script en el evento de cambio del elemento del formulario
+	 *
+	 * @var  string
+	 */
+	private $_onchange = '';
+
+	/**
 	 * Tipo del campo
 	 *
 	 * @var  string
@@ -436,6 +443,7 @@ class Orm_field {
 			$modelo_rel = new $nombre_rel_modelo();
 
 			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" class="form-control '.$clase_adic.'"';
+			$param_adic .= ($this->_onchange !== '') ? ' onchange="'.$this->_onchange.'"' : '';
 
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
 				? array('conditions' => $this->_relation['conditions'])
@@ -457,6 +465,7 @@ class Orm_field {
 			$modelo_rel = new $nombre_rel_modelo();
 
 			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" size="7" class="form-control '.$clase_adic.'"';
+
 
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
 				? array('conditions' => $this->_relation['conditions'])

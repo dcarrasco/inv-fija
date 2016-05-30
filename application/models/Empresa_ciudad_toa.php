@@ -99,6 +99,24 @@ class Empresa_ciudad_toa extends ORM_Model {
 		return (string) $this->id_empresa;
 	}
 
+
+	public function arr_ciudades_por_empresa($id_empresa = NULL)
+	{
+		$arr_ciudades = array();
+
+		if ($id_empresa)
+		{
+			$listado_empresa_ciudad = $this->find('all', array('conditions' => array('id_empresa' => $id_empresa)));
+
+			foreach($listado_empresa_ciudad as $obj_empresa_ciudad)
+			{
+				array_push($arr_ciudades, $obj_empresa_ciudad->id_ciudad);
+			}
+		}
+
+		return $arr_ciudades;
+	}
+
 }
 /* End of file empresa_toa.php */
 /* Location: ./application/models/empresa_toa.php */
