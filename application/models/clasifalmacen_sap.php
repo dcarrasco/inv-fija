@@ -114,6 +114,7 @@ class Clasifalmacen_sap extends ORM_Model {
 						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
+					'onchange'       => "\$('#id_tiposalm').html('');\$.get('".site_url('stock_config/get_select_tipoalmacen')."'+'/'+\$('#id_tipo_op').val(), function(data){\$('#id_tiposalm').html(data);});",
 				),
 				'tiposalm' => array(
 					'tipo'           => 'has_many',
@@ -122,7 +123,7 @@ class Clasifalmacen_sap extends ORM_Model {
 						'join_table'    => $this->config->item('bd_clasif_tipoalm_sap'),
 						'id_one_table'  => array('id_clasif'),
 						'id_many_table' => array('id_tipo'),
-						//'conditions'    => array('tipo_op' => 'tipo_op')
+						'conditions'    => array('tipo_op' => '@field_value:tipo_op:MOVIL')
 					),
 					'texto_ayuda'    => 'Tipos de almac&eacute;n asociados a la clasificaci&oacute;n.',
 				),
