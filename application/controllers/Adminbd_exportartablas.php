@@ -113,14 +113,9 @@ class Adminbd_exportartablas extends CI_Controller {
 	 */
 	public function ajax_campos($tabla = '')
 	{
-		$select_campos = '';
-
-		foreach ($this->adminbd_model->get_fields_list($tabla) as $llave => $valor)
-		{
-			$select_campos .= "<option value=\"{$llave}\">{$valor}</option>";
-		}
-
-		$this->output->set_content_type('text')->set_output($select_campos);
+		$this->output
+			->set_content_type('text')
+			->set_output(form_print_options($this->adminbd_model->get_fields_list($tabla)));
 	}
 
 

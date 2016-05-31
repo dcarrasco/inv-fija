@@ -130,6 +130,7 @@ class Adminbd_model extends CI_Model {
 		{
 			if (strpos($index, 'bd_') !== FALSE AND ! in_array($index, $blacklist))
 			{
+				$value = substr($value, strpos($value, '..')+2, strlen($value));
 				$arr_list[urlencode($value)] = $index;
 			}
 		}
