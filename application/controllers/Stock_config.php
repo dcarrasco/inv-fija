@@ -109,6 +109,24 @@ class Stock_config extends Orm_controller {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve <option> para poblar <select> con tipos de almacen
+	 *
+	 * @param  string $tipo_op Tipo de operación a filtrar
+	 * @return void
+	 */
+	public function get_select_tipoalmacen($tipo_op = '')
+	{
+		$tipoalm = new Tipoalmacen_sap;
+
+		$this->output
+			->set_content_type('text')
+			->set_output(form_print_options($tipoalm->get_combo_tiposalm($tipo_op)));
+	}
+
+
 }
 /* End of file stock_config.php */
 /* Location: ./application/controllers/stock_config.php */
