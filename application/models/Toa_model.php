@@ -693,6 +693,7 @@ class Toa_model extends CI_Model {
 			->select('a.almacen')
 			->select('a.material')
 			->select('a.texto_material')
+			->select('a.serie_toa')
 			->select('a.lote')
 			->select('a.valor')
 			->select('a.umb')
