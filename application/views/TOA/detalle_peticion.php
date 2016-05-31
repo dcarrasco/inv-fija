@@ -192,6 +192,7 @@
 				<th></th>
 				<th></th>
 				<th></th>
+				<th></th>
 				<th class="text-center"><?php echo fmt_cantidad($sum_cant) ?></th>
 				<th class="text-center"><?php echo fmt_monto($sum_monto); ?></th>
 				<th></th>
