@@ -77,7 +77,7 @@ class Tecnico_toa extends ORM_Model {
 						'model' => 'empresa_toa',
 					),
 					'texto_ayuda'    => 'Empresa a la que pertenece el t&eacute;cnico.',
-					'onchange'       => "\$.get('".site_url('toa_config/get_select_ciudad')."'+'/'+\$('#id_id_empresa').val(), function(data){\$('#id_id_ciudad').html(data);});",
+					'onchange'       => "\$('#id_id_ciudad').html('');\$.get('".site_url('toa_config/get_select_ciudad')."'+'/'+\$('#id_id_empresa').val(), function(data){\$('#id_id_ciudad').html(data);});",
 				),
 				'id_ciudad' => array(
 					'tipo'           => 'has_one',
