@@ -73,6 +73,7 @@ class Tipoalmacen_sap extends ORM_Model {
 						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
+					'onchange'       => "\$('#id_almacenes').html('');\$.get('".site_url('stock_config/get_select_almacen')."'+'/'+\$('#id_tipo_op').val(), function(data){\$('#id_almacenes').html(data);});",
 				),
 				'es_sumable' => array(
 					'label'          => 'Es sumable',
@@ -88,7 +89,7 @@ class Tipoalmacen_sap extends ORM_Model {
 						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
 						'id_one_table'  => array('id_tipo'),
 						'id_many_table' => array('centro', 'cod_almacen'),
-						//'conditions'    => array('tipo_op' => 'tipo_op')
+						'conditions'    => array('tipo_op' => '@field_value:tipo_op:MOVIL')
 					),
 					'texto_ayuda'    => 'Tipos asociados al almac&eacute;n.',
 				),
