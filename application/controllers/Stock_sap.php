@@ -357,15 +357,9 @@ class Stock_sap extends CI_Controller {
 		// recupera combo fechas de la BD o del cache
 		$arr_fechas = cached_query('combo_fechas'.$tipo_op, $stock, 'get_combo_fechas', array());
 
-		$arr_fechas2 = array();
-		foreach ($arr_fechas[$tipo_fecha] as $llave => $valor)
-		{
-			array_push($arr_fechas2, '<option value="' . $llave . '">' . $valor . '</option>');
-		}
-
 		$this->output
 			->set_content_type('text')
-			->set_output(implode('', $arr_fechas2));
+			->set_output(form_print_options($arr_fechas[$tipo_fecha]));
 	}
 
 
@@ -388,15 +382,9 @@ class Stock_sap extends CI_Controller {
 			? cached_query('combo_tiposalm'.$tipo_op, $tipoalmacen_sap, 'get_combo_tiposalm', array($tipo_op))
 			: cached_query('combo_almacenes'.$tipo_op, $almacen_sap, 'get_combo_almacenes', array($tipo_op));
 
-		$arr_output = array();
-		foreach ($arr_almacenes as $llave => $valor)
-		{
-			array_push($arr_output, '<option value="' . $llave . '">' . $valor . '</option>');
-		}
-
 		$this->output
 			->set_content_type('text')
-			->set_output(implode('', $arr_output));
+			->set_output(form_print_options($arr_almacenes));
 	}
 
 
