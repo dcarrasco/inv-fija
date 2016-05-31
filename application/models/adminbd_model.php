@@ -168,6 +168,8 @@ class Adminbd_model extends CI_Model {
 			$arr_list[$campo] = $campo;
 		}
 
+		$this->db->query('use '.$this->db->database);
+
 		return $arr_list;
 	}
 
