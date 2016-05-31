@@ -74,30 +74,40 @@ class Adminbd_exportartablas extends CI_Controller {
 		$this->load->dbutil();
 		$result_string = '';
 
+		$base_datos = '';
+		$tabla = $this->input->post('tabla');
+
+		if (strpos($tabla, '..') !== FALSE)
+		{
+			list($base_datos, $tabla) = explode('..', $tabla);
+			$this->db->query('use '.$base_datos);
+		}
+
 		// reglas de validacion formulario
 		$this->form_validation->set_rules($this->adminbd_model->validation_exportar_tablas);
 
 		if ($this->form_validation->run() === TRUE)
 		{
-			if ($this->db->table_exists($this->input->post('tabla')))
+			if ($this->db->table_exists($tabla))
 			{
 				if ($this->input->post('campo') AND $this->input->post('filtro'))
 				{
 					$this->db->where($this->input->post('campo'), $this->input->post('filtro'));
 				}
 
-				$result = $this->db->get($this->input->post('tabla'));
-				$result_string = $this->dbutil->csv_from_result($result);
+				$result_string = $this->dbutil->csv_from_result($this->db->get($tabla));
 			}
 		}
 
 		$data = array(
 			'combo_tablas' => $this->adminbd_model->get_table_list(),
-			'combo_campos' => $this->input->post('tabla')
-								? $this->adminbd_model->get_fields_list($this->input->post('tabla'))
+			'combo_campos' => $tabla
+								? $this->adminbd_model->get_fields_list($tabla)
 								: array(),
 			'result_string' => $result_string,
 		);
+
+		$this->db->query('use '.$this->db->database);
 
 		app_render_view('admindb/exportar_tablas', $data);
 	}
