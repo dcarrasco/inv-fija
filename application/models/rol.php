@@ -55,6 +55,7 @@ class Rol extends ORM_Model {
 						'model' => 'app',
 					),
 					'texto_ayuda'    => 'Aplicaci&oacute;n a la que pertenece el rol.',
+					'onchange'       => "\$('#id_modulo').html('');\$.get('".site_url('acl_config/get_select_modulo')."'+'/'+\$('#id_id_app').val(), function(data){\$('#id_modulo').html(data);});",
 				),
 				'rol' => array(
 					'label'          => 'Rol',
@@ -77,7 +78,7 @@ class Rol extends ORM_Model {
 						'join_table'    => 'acl_rol_modulo',
 						'id_one_table'  => array('id_rol'),
 						'id_many_table' => array('id_modulo'),
-						//'conditions'    => array('id_app' => '@field_value:id_app'),
+						'conditions'    => array('id_app' => '@field_value:id_app:NULL'),
 					),
 					'texto_ayuda'    => 'M&oacute;dulos del rol.',
 				),

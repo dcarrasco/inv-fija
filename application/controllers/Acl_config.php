@@ -75,6 +75,24 @@ class Acl_config extends Orm_controller {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve <option> para poblar <select> con tipos de almacen
+	 *
+	 * @param  string $id_app ID de la app para filtrar modulos a desplegar
+	 * @return void
+	 */
+	public function get_select_modulo($id_app = '')
+	{
+		$modulo = new modulo;
+
+		$this->output
+			->set_content_type('text')
+			->set_output(form_print_options($modulo->find('list', array('conditions' => array('id_app' => $id_app)))));
+	}
+
+
 }
 /* End of file acl_config.php */
 /* Location: ./application/controllers/acl_config.php */
