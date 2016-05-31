@@ -130,7 +130,6 @@ class Adminbd_model extends CI_Model {
 		{
 			if (strpos($index, 'bd_') !== FALSE AND ! in_array($index, $blacklist))
 			{
-				$value = substr($value, strpos($value, '..')+2, strlen($value));
 				$arr_list[urlencode($value)] = $index;
 			}
 		}
@@ -150,6 +149,14 @@ class Adminbd_model extends CI_Model {
 	 */
 	public function get_fields_list($tabla = '')
 	{
+		$base_datos = '';
+
+		if (strpos($tabla, '..') !== FALSE)
+		{
+			list($base_datos, $tabla) = explode('..', $tabla);
+			$this->db->query('use '.$base_datos);
+		}
+
 		if ( ! $this->db->table_exists($tabla))
 		{
 			return array();
