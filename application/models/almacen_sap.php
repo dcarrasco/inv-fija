@@ -91,11 +91,7 @@ class Almacen_sap extends ORM_Model {
 							'FIJA'  => 'Operaci&oacute;n Fija'
 						),
 						'es_obligatorio' => TRUE,
-<<<<<<< Updated upstream
-						'onchange'       => "\$('#id_tipos').html('');\$.get('".site_url('stock_config/get_select_tipoalmacen')."'+'/'+\$('#id_tipo_op').val(), function(data){\$('#id_tipos').html(data);});",
-=======
 						'onchange'       => form_onchange('tipo_op', 'tipos', 'stock_config/get_select_tipoalmacen'),
->>>>>>> Stashed changes
 				),
 				'tipos' => array(
 					'tipo'           => 'has_many',
