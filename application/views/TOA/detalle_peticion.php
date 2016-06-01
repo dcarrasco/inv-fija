@@ -11,14 +11,14 @@
 			<legend>Cliente</legend>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">RUT</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">RUT</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo fmt_rut($linea_detalle['customer_number']); ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Nombre</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Nombre</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cname']; ?>
 					</p>
@@ -26,14 +26,14 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">Tel&eacute;fono</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Tel&eacute;fono</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cphone']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Celular</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Celular</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['ccell']; ?>
 					</p>
@@ -41,14 +41,14 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">e-mail</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">e-mail</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cemail']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Direcci&oacute;n</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Direcci&oacute;n</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['caddress']; ?>
 					</p>
@@ -56,14 +56,14 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">Agencia</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Agencia</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['XA_ORIGINAL_AGENCY']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Ciudad</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Ciudad</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['ccity']; ?>
 					</p>
@@ -71,8 +71,8 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">Tecnolog&iacute;as</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Tecnolog&iacute;as</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<span class="label label-default">BA</span><span class="label label-info"><?php echo $linea_detalle['XA_BROADBAND_TECHNOLOGY']; ?></span>
 						<span class="label label-default">STB</span><span class="label label-info"><?php echo $linea_detalle['XA_TELEPHONE_TECHNOLOGY']; ?></span>
@@ -84,14 +84,14 @@
 			<legend>Petici&oacute;n</legend>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">ID Petici&oacute;n</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">ID Petici&oacute;n</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['referencia']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Fecha</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Fecha</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo fmt_fecha($linea_detalle['fecha']); ?>
 					</p>
@@ -99,14 +99,14 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">Empresa</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Empresa</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['empresa']; ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">T&eacute;cnico</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">T&eacute;cnico</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['cliente']; ?> -
 						<?php echo $linea_detalle['tecnico']; ?>
@@ -115,14 +115,14 @@
 			</div>
 
 			<div class="form-group-sm">
-				<label class="control-label col-sm-2">Tipo de trabajo</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Tipo de trabajo</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php $tt = new Tipo_trabajo_toa($linea_detalle['carta_porte']); echo $tt->mostrar_info(); ?>
 					</p>
 				</div>
-				<label class="control-label col-sm-2">Origen Peticion</label>
-				<div class="col-sm-4">
+				<label class="control-label col-sm-2 col-xs-3">Origen Peticion</label>
+				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
 						<?php echo $linea_detalle['XA_CHANNEL_ORIGIN']; ?>
 					</p>
