@@ -545,3 +545,35 @@ if ( ! function_exists('form_print_options'))
 	}
 }
 
+// ------------------------------------------------------------------------
+
+/**
+ * Devuelve js para onchange
+ *
+ * @access	public
+ * @param	mixed
+ * @param	mixed
+ * @return	string
+ */
+if ( ! function_exists('form_onchange'))
+{
+	function form_onchange($elem_orig = '', $elem_dest = '', $controller = '')
+	{
+		$form_elem_prefix = '#id_';
+
+		$elem_orig = $form_elem_prefix.$elem_orig;
+		$elem_dest = $form_elem_prefix.$elem_dest;
+
+		$script_js = '';
+		if ($elem_orig)
+		{
+			// limpia elem destino
+			$script_js .= "\$('$elem_dest').html('');";
+
+			// recupera opciones
+			$script_js .= "\$.get('".site_url($controller)."'+'/'+\$('$elem_orig').val(), function(data){\$('$elem_dest').html(data);});";
+		}
+
+		return $script_js;
+	}
+}

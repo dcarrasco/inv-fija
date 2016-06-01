@@ -73,7 +73,7 @@ class Tipoalmacen_sap extends ORM_Model {
 						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
-					'onchange'       => "\$('#id_almacenes').html('');\$.get('".site_url('stock_config/get_select_almacen')."'+'/'+\$('#id_tipo_op').val(), function(data){\$('#id_almacenes').html(data);});",
+					'onchange'       => form_onchange('tipo_op', 'almacenes', 'stock_config/get_select_almacen'),
 				),
 				'es_sumable' => array(
 					'label'          => 'Es sumable',

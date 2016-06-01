@@ -55,7 +55,7 @@ class Rol extends ORM_Model {
 						'model' => 'app',
 					),
 					'texto_ayuda'    => 'Aplicaci&oacute;n a la que pertenece el rol.',
-					'onchange'       => "\$('#id_modulo').html('');\$.get('".site_url('acl_config/get_select_modulo')."'+'/'+\$('#id_id_app').val(), function(data){\$('#id_modulo').html(data);});",
+					'onchange'       => form_onchange('id_app', 'modulo', 'acl_config/get_select_modulo'),
 				),
 				'rol' => array(
 					'label'          => 'Rol',

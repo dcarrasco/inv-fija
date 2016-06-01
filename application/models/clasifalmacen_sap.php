@@ -114,7 +114,7 @@ class Clasifalmacen_sap extends ORM_Model {
 						'FIJA'  => 'Operaci&oacute;n Fija'
 					),
 					'es_obligatorio' => TRUE,
-					'onchange'       => "\$('#id_tiposalm').html('');\$.get('".site_url('stock_config/get_select_tipoalmacen')."'+'/'+\$('#id_tipo_op').val(), function(data){\$('#id_tiposalm').html(data);});",
+					'onchange'       => form_onchange('tipo_op', 'tiposalm', 'stock_config/get_select_tipoalmacen'),
 				),
 				'tiposalm' => array(
 					'tipo'           => 'has_many',
