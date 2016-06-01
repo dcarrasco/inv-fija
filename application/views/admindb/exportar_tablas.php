@@ -20,14 +20,14 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_tables_}</label>
-						<?php echo form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="select_tabla" size="10" class="form-control"'); ?>
+						<?php echo form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="id_select_tabla" size="10" class="form-control" onchange="'.form_onchange('select_tabla', 'select_campo', 'adminbd_exportartablas/ajax_campos').'"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_fields_}</label>
-						<?php echo form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="select_campo" size="7" class="form-control"'); ?>
+						<?php echo form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="id_select_campo" size="7" class="form-control"'); ?>
 
 						<label>{_adminbd_exportar_label_fields_filter_}</label>
 						<?php echo form_input('filtro', $this->input->post('filtro'),'id="filtro_campo" class="form-control"'); ?>
@@ -53,17 +53,3 @@
 <pre>
 {result_string}
 </pre>
-
-<script language="javascript">
-
-$(document).ready(function() {
-	$('#select_tabla').click(function (event) {
-		tabla = $('#select_tabla').val();
-
-		$('#select_campo').html('');
-		var url_datos = js_base_url + 'adminbd_exportartablas/ajax_campos/' + tabla;
-		$.get(url_datos, function (data) {$('#select_campo').html(data); });
-	});
-});
-
-</script>
