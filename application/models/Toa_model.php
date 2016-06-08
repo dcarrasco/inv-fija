@@ -31,7 +31,7 @@ class Toa_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41');
+	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
 
 	/**
 	 * Combo movimientos validos de consumo TOA
@@ -41,7 +41,9 @@ class Toa_model extends CI_Model {
 	public $combo_movimientos_consumo = array(
 		''    => 'Todos los movimientos',
 		'Z35' => 'Z35 Consumo CAPEX TOA',
+		'Z87' => 'Z87 Consumo CAPEX manual TOA',
 		'Z45' => 'Z45 Consumo OPEX TOA',
+		'Z89' => 'Z89 Consumo OPEX manual TOA',
 		'Z39' => 'Z39 Consumo Promedio CAPEX TOA',
 		'Z41' => 'Z45 Consumo Promedio OPEX TOA'
 	);
@@ -1209,18 +1211,32 @@ class Toa_model extends CI_Model {
 		foreach ($arr_tecnicos as $tecnico)
 		{
 			$matriz[$tecnico->id_tecnico] = array(
-				'nombre' => $tecnico->tecnico,
-				'rut' => $tecnico->rut,
-				'ciudad' => (string) $tecnico->get_relation_object('id_ciudad'),
+				'nombre'       => $tecnico->tecnico,
+				'rut'          => $tecnico->rut,
+				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-				'actuaciones' => $arr_dias
+				'actuaciones'  => $arr_dias
 			);
 		}
 		uasort($matriz, array($this, '_sort_matriz_control_tecnicos'));
 
+		$arr_tecnicos_con_datos = array();
 		foreach ($datos as $registro)
 		{
 			$matriz[$registro['tecnico']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
+
+			if ( ! in_array($registro['tecnico'], $arr_tecnicos_con_datos))
+			{
+				array_push($arr_tecnicos_con_datos, $registro['tecnico']);
+			}
+		}
+
+		foreach ($matriz as $tecnico => $datos_tecnico)
+		{
+			if ( ! in_array($tecnico, $arr_tecnicos_con_datos))
+			{
+				unset($matriz[$tecnico]);
+			}
 		}
 
 		return $matriz;
