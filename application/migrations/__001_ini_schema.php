@@ -137,6 +137,7 @@ class Migration_ini_schema extends CI_Migration {
 				'nombre'          => array('type' => 'VARCHAR', 'constraint' => '100', 'null' => FALSE, 'default' => ''),
 				'activo'          => array('type' => 'TINYINT', 'null' => FALSE, 'default' => 0),
 				'tipo_inventario' => array('type' => 'VARCHAR', 'constraint' => '30', 'null' => FALSE, 'default' => ''),
+			)
 		);
 
 		$this->dbforge->add_key('id', TRUE);
