@@ -40,12 +40,16 @@ class Toa_model extends CI_Model {
 	 */
 	public $combo_movimientos_consumo = array(
 		''    => 'Todos los movimientos',
-		'Z35' => 'Z35 Consumo CAPEX TOA',
-		'Z87' => 'Z87 Consumo CAPEX manual TOA',
-		'Z45' => 'Z45 Consumo OPEX TOA',
-		'Z89' => 'Z89 Consumo OPEX manual TOA',
-		'Z39' => 'Z39 Consumo Promedio CAPEX TOA',
-		'Z41' => 'Z45 Consumo Promedio OPEX TOA'
+		'Movimientos CAPEX' => array(
+			'Z35' => 'Z35 Consumo CAPEX TOA',
+			'Z87' => 'Z87 Consumo CAPEX TOA manual',
+			'Z39' => 'Z39 Consumo CAPEX TOA promedio',
+		),
+		'Movimientos OPEX' => array(
+			'Z45' => 'Z45 Consumo OPEX TOA',
+			'Z89' => 'Z89 Consumo OPEX TOA manual',
+			'Z41' => 'Z45 Consumo OPEX TOA promedio',
+		),
 	);
 
 	/**
