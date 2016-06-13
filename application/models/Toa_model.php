@@ -306,14 +306,13 @@ class Toa_model extends CI_Model {
 				->get()->result_array();
 
 			$arr_campos = array();
-			$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'texto');
+			$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'toa_consumos/detalle_peticion/');
 			$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 			$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
 			$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
 			$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
 			$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']      = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/detalle_peticion', 'href_registros' => array('referencia'));
 			$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
