@@ -1319,16 +1319,38 @@ class Toa_model extends CI_Model {
 		$datos = $this->db->get()->result_array();
 
 		$tecnicos = new Tecnico_toa();
-		$matriz = $tecnicos->find('list', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
 
-		foreach ($matriz as $id_tecnico => $nombre)
+		$matriz = array();
+		foreach ($arr_tecnicos as $tecnico)
 		{
-			$matriz[$id_tecnico] = array('nombre' => $nombre, 'actuaciones' => $arr_dias);
+			$matriz[$tecnico->id_tecnico] = array(
+				'nombre'       => $tecnico->tecnico,
+				'rut'          => $tecnico->rut,
+				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
+				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+				'actuaciones'  => $arr_dias
+			);
 		}
+		uasort($matriz, array($this, '_sort_matriz_control_tecnicos'));
 
+		$arr_tecnicos_con_datos = array();
 		foreach ($datos as $registro)
 		{
 			$matriz[$registro['cliente']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
+
+			if ( ! in_array($registro['cliente'], $arr_tecnicos_con_datos))
+			{
+				array_push($arr_tecnicos_con_datos, $registro['cliente']);
+			}
+		}
+
+		foreach ($matriz as $tecnico => $datos_tecnico)
+		{
+			if ( ! in_array($tecnico, $arr_tecnicos_con_datos))
+			{
+				unset($matriz[$tecnico]);
+			}
 		}
 
 		return $matriz;
