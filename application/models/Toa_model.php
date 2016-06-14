@@ -321,23 +321,31 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'material' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? 'desc_tip_material, material' : $orden_campo;
 
 			$arr_data = $this->db
+				->select('desc_tip_material')
 				->select('material')
 				->select('texto_material')
+				->select('ume')
 				->select("'ver peticiones' as texto_link")
 				->select_sum('(-cantidad_en_um)', 'cant')
 				->select_sum('(-importe_ml)', 'monto')
+				->group_by('desc_tip_material')
 				->group_by('material')
 				->group_by('texto_material')
+				->group_by('ume')
 				->order_by($orden_campo, $orden_tipo)
-				->get($this->config->item('bd_movimientos_sap_fija'))
-				->result_array();
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
+				->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
+				->get()->result_array();
 
 			$arr_campos = array();
+			$arr_campos['desc_tip_material'] = array('titulo' => 'Tipo material', 'tipo' => 'texto');
 			$arr_campos['material']       = array('titulo' => 'Cod material', 'tipo' => 'texto');
 			$arr_campos['texto_material'] = array('titulo' => 'Desc material', 'tipo' => 'texto');
+			$arr_campos['ume']            = array('titulo' => 'Unidad', 'tipo' => 'texto');
 			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('material'));
