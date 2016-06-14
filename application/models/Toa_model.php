@@ -87,6 +87,7 @@ class Toa_model extends CI_Model {
 		'empresas'      => 'Empresas',
 		'ciudades'      => 'Ciudades',
 		'tecnicos'      => 'T&eacute;cnicos',
+		'tip_material'  => 'Tipos de material',
 		'material'      => 'Materiales',
 		'lote'          => 'Lotes',
 		'lote-material' => 'Lotes y materiales',
@@ -316,6 +317,36 @@ class Toa_model extends CI_Model {
 			$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']      = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
 			$this->reporte->set_order_campos($arr_campos, 'referencia');
+
+			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		}
+		else if ($tipo_reporte === 'tip_material')
+		{
+			$orden_campo = ($orden_campo === '') ? 'desc_tip_material' : $orden_campo;
+
+			$arr_data = $this->db
+				->select('desc_tip_material')
+				->select('ume')
+				->select('id_tip_material_trabajo')
+				->select("'ver peticiones' as texto_link")
+				->select_sum('(-cantidad_en_um)', 'cant')
+				->select_sum('(-importe_ml)', 'monto')
+				->group_by('desc_tip_material')
+				->group_by('ume')
+				->group_by('id_tip_material_trabajo')
+				->order_by($orden_campo, $orden_tipo)
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
+				->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
+				->get()->result_array();
+
+			$arr_campos = array();
+			$arr_campos['desc_tip_material'] = array('titulo' => 'Tipo material', 'tipo' => 'texto');
+			$arr_campos['ume']            = array('titulo' => 'Unidad', 'tipo' => 'texto');
+			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/tip_material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('id_tip_material_trabajo'));
+			$this->reporte->set_order_campos($arr_campos, 'material');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
 		}
@@ -606,6 +637,10 @@ class Toa_model extends CI_Model {
 		{
 			$this->db->where('material', $param3);
 		}
+		elseif ($tipo_reporte === 'tip_material')
+		{
+			$this->db->where('id_tip_material_trabajo', $param3);
+		}
 		elseif ($tipo_reporte === 'lote')
 		{
 			$this->db->where('lote', $param3);
@@ -660,6 +695,8 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->join($this->config->item('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
+			->join($this->config->item('bd_tip_material_trabajo_toa').' f', 'e.id_tip_material_trabajo = f.id', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
 	}
