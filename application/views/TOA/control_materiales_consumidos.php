@@ -70,6 +70,7 @@
 				<th></th>
 				<th>Tipo</th>
 				<th>Material</th>
+				<th>unidad</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
 						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
@@ -86,6 +87,7 @@
 			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
 			<td><?php echo $datos['tip_material'] ?></td>
 			<td style="white-space: nowrap;"><?php echo $datos['material']; ?> - <?php echo $datos['descripcion']; ?></td>
+			<td><?php echo $datos['unidad'] ?></td>
 				<?php $tot_lin = 0; ?>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
@@ -100,6 +102,7 @@
 	</tbody>
 	<tfoot>
 		<tr class="active">
+			<th></th>
 			<th></th>
 			<th></th>
 			<th></th>

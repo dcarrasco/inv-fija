@@ -1472,11 +1472,13 @@ class Toa_model extends CI_Model {
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.material')
 			->select('c.descripcion')
+			->select('a.ume')
 			->select('e.desc_tip_material')
 			->select('e.color')
 			->group_by('a.fecha_contabilizacion')
 			->group_by('a.material')
 			->group_by('c.descripcion')
+			->group_by('a.ume')
 			->group_by('e.desc_tip_material')
 			->group_by('e.color')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
@@ -1510,6 +1512,7 @@ class Toa_model extends CI_Model {
 				$matriz[$registro['desc_tip_material'].$registro['material']] = array(
 					'material'     => $registro['material'],
 					'descripcion'  => $registro['descripcion'],
+					'unidad'       => $registro['ume'],
 					'tip_material' => $registro['desc_tip_material'],
 					'color'        => $registro['color'],
 					'actuaciones'  => $arr_dias,
