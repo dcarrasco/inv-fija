@@ -84,11 +84,13 @@ class Toa_model extends CI_Model {
 	 */
 	public $tipos_reporte_consumo = array(
 		'peticion'      => 'N&uacute;mero petici&oacute;n',
+		'empresas'      => 'Empresas',
+		'ciudades'      => 'Ciudades',
+		'tecnicos'      => 'T&eacute;cnicos',
 		'material'      => 'Materiales',
 		'lote'          => 'Lotes',
 		'lote-material' => 'Lotes y materiales',
 		'pep'           => 'PEP',
-		'tecnicos'      => 'T&eacute;cnicos',
 		'tipo-trabajo'  => 'Tipo de trabajo',
 		'detalle'       => 'Detalle todos los registros',
 	);
@@ -466,6 +468,74 @@ class Toa_model extends CI_Model {
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
 		}
+		else if ($tipo_reporte === 'ciudades')
+		{
+			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+
+			$query = $this->db
+				->select('b.id_ciudad')
+				->select('d.ciudad')
+				->select('d.orden')
+				->select('a.referencia')
+				->select_sum('(-a.cantidad_en_um)', 'cant')
+				->select_sum('(-a.importe_ml)', 'monto')
+				->group_by('b.id_ciudad')
+				->group_by('d.ciudad')
+				->group_by('d.orden')
+				->group_by('a.referencia')
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->join($this->config->item('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
+				->get_compiled_select();
+
+			$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by q1.orden';
+
+			$arr_data = $this->db->query($query)->result_array();
+
+			$arr_campos = array();
+			// $arr_campos['empresa'] = array('titulo' => 'Empresa', 'tipo' => 'texto');
+			$arr_campos['ciudad'] = array('titulo' => 'Ciudad', 'tipo' => 'texto');
+			$arr_campos['referencia'] = array('titulo' => 'Peticiones', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/ciudades/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('id_ciudad'));
+			$this->reporte->set_order_campos($arr_campos, 'empresa');
+
+			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		}
+		else if ($tipo_reporte === 'empresas')
+		{
+			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+
+			$query = $this->db
+				->select('c.empresa')
+				->select('c.id_empresa')
+				->select('a.referencia')
+				->select_sum('(-a.cantidad_en_um)', 'cant')
+				->select_sum('(-a.importe_ml)', 'monto')
+				->group_by('c.empresa')
+				->group_by('c.id_empresa')
+				->group_by('a.referencia')
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->get_compiled_select();
+
+			$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by q1.empresa';
+
+			$arr_data = $this->db->query($query)->result_array();
+
+			$arr_campos = array();
+			$arr_campos['empresa'] = array('titulo' => 'Empresa', 'tipo' => 'texto');
+			$arr_campos['referencia'] = array('titulo' => 'Peticiones', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
+			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/empresas/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('id_empresa'));
+			$this->reporte->set_order_campos($arr_campos, 'empresa');
+
+			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		}
 		else if ($tipo_reporte === 'tipo-trabajo')
 		{
 			$orden_campo = ($orden_campo === '') ? 'carta_porte' : $orden_campo;
@@ -546,7 +616,14 @@ class Toa_model extends CI_Model {
 		{
 			$this->db->where('cliente', $param3);
 		}
-
+		elseif ($tipo_reporte === 'ciudades')
+		{
+			$this->db->where('id_ciudad', $param3);
+		}
+		elseif ($tipo_reporte === 'empresas')
+		{
+			$this->db->where('vale_acomp', $param3);
+		}
 		elseif ($tipo_reporte === 'tipo_trabajo')
 		{
 			$this->db->where('carta_porte', $param3);
