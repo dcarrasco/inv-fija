@@ -571,6 +571,16 @@ if ( ! function_exists('cached_query'))
 	function cached_query($cache_id = '', $object = NULL, $method = '', $params = array())
 	{
 		$ci =& get_instance();
+		$cache_ttl = 300;
+
+		// limpia caches antiguos
+		foreach($ci->cache->cache_info() as $cache_ant_id => $cache_ant_data)
+		{
+			if ($cache_ant_data['date'] < now() - $cache_ttl AND strtolower(substr($cache_ant_data['name'], -4)) !== 'html')
+			{
+				$ci->cache->delete($cache_ant_id);
+			}
+		}
 
 		if ( ! method_exists($object, $method))
 		{
@@ -583,7 +593,7 @@ if ( ! function_exists('cached_query'))
 		if ( ! $result = $ci->cache->get($cache_id))
 		{
 			$result = call_user_func_array(array($object, $method), $params);
-			$ci->cache->save($cache_id, $result, 300);
+			$ci->cache->save($cache_id, $result, $cache_ttl);
 		}
 
 		return $result;
