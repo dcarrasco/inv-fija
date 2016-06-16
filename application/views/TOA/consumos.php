@@ -17,17 +17,19 @@
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-5">
+					<div class="col-md-4">
 						<div class="form_group">
 							<label>{_consumo_reporte_}</label>
 							<?php echo form_dropdown('sel_reporte', $combo_reportes, $this->input->get('sel_reporte'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
-					<div class="col-md-5">
+					<div class="col-md-6">
 						<div class="form_group">
-							<label>{_consumo_fechas_}</label>
-							<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+							<label class="col-md-4">{_consumo_fechas_}</label>
+							<div class="col-md-8">
+								<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+							</div>
 						</div>
 					</div>
 
