@@ -1988,6 +1988,76 @@ class Toa_model extends CI_Model {
 		return $matriz;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve matriz de consumos de técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
+	public function peticiones_empresa($empresa = NULL, $anomes = NULL, $dato_desplegar = 'peticiones')
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		if ($dato_desplegar === 'unidades')
+		{
+			$this->db->select_sum('cant', 'dato');
+		}
+		else if ($dato_desplegar === 'monto')
+		{
+			$this->db->select_sum('monto', 'dato');
+		}
+		else
+		{
+			$this->db->select_sum('1', 'dato');
+		}
+
+		$datos = $this->db
+			->select('a.fecha')
+			->group_by('a.fecha')
+			->where('a.fecha>=', $fecha_desde)
+			->where('a.fecha<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			->from($this->config->item('bd_peticiones_sap').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
+			->get()->result_array();
+
+		$arr_peticiones = $this->_get_arr_dias($anomes);
+		foreach($datos as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['dato'];
+		}
+
+		return $arr_peticiones;
+	}
+
+
+	public function gchart_data($arr = array())
+	{
+		$arrjs = "[['Dia', 'Data']";
+		foreach ($arr as $k => $v)
+		{
+
+			$arrjs .= ",['".$k."', ".(is_null($v) ? 0 : $v)."]";
+		}
+		$arrjs .= "]";
+
+		return $arrjs;
+	}
+
+
+
 }
 
 /* End of file Toa_model.php */
