@@ -74,6 +74,9 @@ class Toa_panel extends CI_Controller {
 			'combo_empresas'     => $empresa->find('list'),
 			'cant_peticiones_empresa' => $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($this->input->get('empresa'), $this->input->get('mes'))),
 			'monto_peticiones_empresa' => $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($this->input->get('empresa'), $this->input->get('mes'), 'monto')),
+			'cant_tecnicos_empresa' => $this->toa_model->gchart_data($this->toa_model->tecnicos_empresa($this->input->get('empresa'), $this->input->get('mes'))),
+			'stock_empresa' => $this->toa_model->gchart_data($this->toa_model->stock_empresa($this->input->get('empresa'), $this->input->get('mes'))),
+			'stock_tecnicos_empresa' => $this->toa_model->gchart_data($this->toa_model->stock_tecnicos_empresa($this->input->get('empresa'), $this->input->get('mes'))),
 		);
 
 		app_render_view('toa/panel_empresa', $datos);

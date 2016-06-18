@@ -2023,7 +2023,13 @@ class Toa_model extends CI_Model {
 			$this->db->select_sum('1', 'dato');
 		}
 
-		$datos = $this->db
+		$arr_peticiones = $this->_get_arr_dias($anomes);
+		foreach ($arr_peticiones as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
+		}
+
+		$datos_sap = $this->db
 			->select('a.fecha')
 			->group_by('a.fecha')
 			->where('a.fecha>=', $fecha_desde)
@@ -2033,25 +2039,233 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
 			->get()->result_array();
 
-		$arr_peticiones = $this->_get_arr_dias($anomes);
-		foreach($datos as $registro)
+		foreach($datos_sap as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['dato'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['dato'];
+		}
+
+		$datos_toa = $this->db
+			->select_sum('1', 'dato')
+			->select ('date')
+			->group_by('date')
+			->where('date>=', fmt_fecha($fecha_desde, 'Y-m-d'))
+			->where('date<', fmt_fecha($fecha_hasta, 'Y-m-d'))
+			->where('contractor_company', $empresa)
+			->where('astatus', 'complete')
+			->where('appt_number is not null')
+			->where('appt_number not like \'INC%\'')
+			->from($this->config->item('bd_peticiones_toa'))
+			->get()->result_array();
+
+		foreach($datos_toa as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['date'], 'd')]['toa'] = $registro['dato'];
 		}
 
 		return $arr_peticiones;
 	}
 
 
-	public function gchart_data($arr = array())
-	{
-		$arrjs = "[['Dia', 'Data']";
-		foreach ($arr as $k => $v)
-		{
+	// --------------------------------------------------------------------
 
-			$arrjs .= ",['".$k."', ".(is_null($v) ? 0 : $v)."]";
+	/**
+	 * Devuelve matriz de consumos de técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @return array                  Arreglo con los datos del reporte
+	 */
+	public function tecnicos_empresa($empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
 		}
-		$arrjs .= "]";
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$arr_peticiones = $this->_get_arr_dias($anomes);
+		foreach ($arr_peticiones as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = 0;
+		}
+
+		$query = $this->db
+			->distinct()
+			->select('a.fecha_contabilizacion')
+			->select('a.cliente')
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where_in('a.codigo_movimiento', $this->movimientos_consumo)
+			->where_in('a.centro', $this->centros_consumo)
+			->where('a.vale_acomp', $empresa)
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			// ->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
+			->get_compiled_select();
+
+		$query = 'select q1.fecha_contabilizacion, count(*) as tecnicos from ('.$query.') q1 group by q1.fecha_contabilizacion order by q1.fecha_contabilizacion';
+
+		$datos_sap = $this->db->query($query)->result_array();
+
+		foreach($datos_sap as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha_contabilizacion'], 'd')] = $registro['tecnicos'];
+		}
+
+		return $arr_peticiones;
+
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve matriz de stock de empresas contratistas por dia
+	 *
+	 * @param  string $empresa Empresa a consultar
+	 * @param  string $anomes  Mes a consultar, formato YYYYMM
+	 * @return array           Arreglo con los datos del reporte
+	 */
+	public function stock_empresa($empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$arr_peticiones = $this->_get_arr_dias($anomes);
+		foreach ($arr_peticiones as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = 0;
+		}
+
+		$datos_sap = $this->db
+			->select('a.fecha_stock as fecha')
+			->group_by('a.fecha_stock')
+			->select_sum('a.valor', 'stock')
+			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
+			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
+			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
+			->join($this->config->item('bd_empresas_toa_tiposalm').' e', 'd.id_tipo=e.id_tipo', 'left')
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where('e.id_empresa', $empresa)
+			->get()->result_array();
+
+		foreach($datos_sap as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['stock'];
+		}
+
+		return $arr_peticiones;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve matriz de stock de empresas contratistas por dia
+	 *
+	 * @param  string $empresa Empresa a consultar
+	 * @param  string $anomes  Mes a consultar, formato YYYYMM
+	 * @return array           Arreglo con los datos del reporte
+	 */
+	public function stock_tecnicos_empresa($empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		$arr_peticiones = $this->_get_arr_dias($anomes);
+		foreach ($arr_peticiones as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = 0;
+		}
+
+		$datos_sap = $this->db
+			->select('a.fecha_stock as fecha')
+			->group_by('a.fecha_stock')
+			->select_sum('a.valor', 'stock')
+			->from($this->config->item('bd_stock_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			->get()->result_array();
+
+		foreach($datos_sap as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['stock'];
+		}
+
+		return $arr_peticiones;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Formatea un arreglo para ser usado por Google Charts
+	 *
+	 * @param  array  $arr Arreglo a formatear
+	 * @return string
+	 */
+	public function gchart_data($arr_orig = array())
+	{
+		if ( ! $arr_orig)
+		{
+			return NULL;
+		}
+
+		$num_registro = 0;
+
+		foreach ($arr_orig as $num_dia => $valor)
+		{
+			if ($num_registro === 0)
+			{
+				$arrjs = "[['Dia'";
+				if (is_array($valor))
+				{
+					foreach($valor as $llave_valor => $valor_valor)
+					{
+						$arrjs .= ", '".$llave_valor."'";
+					}
+				}
+				else
+				{
+					$arrjs .= ", 'Data'";
+				}
+				$arrjs .= ']';
+			}
+
+			$arrjs .= ", ['".$num_dia."'";
+			if ( ! is_array($valor))
+			{
+				$valor = array($valor);
+			}
+
+			foreach ($valor as $llave_valor => $valor_valor)
+			{
+				$arrjs .= ', '.(is_null($valor_valor) ? 0 : $valor_valor);
+			}
+			$arrjs .= ']';
+			$num_registro += 1;
+		}
+
+		$arrjs .= ']';
 
 		return $arrjs;
 	}

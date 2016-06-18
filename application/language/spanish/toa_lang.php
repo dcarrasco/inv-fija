@@ -27,6 +27,8 @@ $lang['controles_tecnicos_mostrar'] = 'Mostrar t&eacute;cnicos';
 $lang['controles_tipos_trabajo'] = 'Tipos de trabajo';
 
 $lang['panel_title_peticiones'] = 'Peticiones cerradas';
+$lang['panel_title_tecnicos']   = 'T&eacute;cnicos';
+$lang['panel_title_stock']      = 'Stock';
 
 
 
