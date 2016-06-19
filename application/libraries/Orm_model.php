@@ -960,7 +960,7 @@ class Orm_model implements IteratorAggregate {
 				else
 				{
 					$model_relacionado = new $class_relacionado();
-					$model_relacionado->find_id($this->$nombre_campo, FALSE);
+					$model_relacionado->find_id($this->{$nombre_campo}, FALSE);
 				}
 
 				$arr_props_relation['model'] = $model_relacionado;
