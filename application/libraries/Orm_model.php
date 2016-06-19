@@ -541,7 +541,8 @@ class Orm_model implements IteratorAggregate {
 		{
 			$data = array(
 				'form_label'    => form_label(
-										ucfirst($this->get_label_field($campo)) . ($this->get_es_obligatorio_field($campo) ? ' <span class="text-danger">*</span>' : ''),
+										ucfirst($this->get_label_field($campo))
+										.$this->get_marca_obligatorio_field($campo),
 										'id_'.$campo,
 										array('class' => 'control-label col-sm-4')
 									),
