@@ -131,7 +131,7 @@
 	</div>
 
 	<div class="col-md-5">
-		<div id="map_canvas" style="height: 350px"></div>
+		<?php echo $google_maps; ?>
 	</div>
 </div>
 
@@ -199,19 +199,3 @@
 	</table>
 </div>
 
-<script>
-	function initMap() {
-		var ubic = new google.maps.LatLng(<?php echo $acoord_y ?>, <?php echo $acoord_x ?>),
-		    map = new google.maps.Map(document.getElementById('map_canvas'), {
-				center: ubic,
-				zoom: 14
-			}),
-			marker = new google.maps.Marker({
-				position: ubic,
-				title: '<?php echo $cname; ?>'
-			});
-		marker.setMap(map);
-	}
-</script>
-
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&callback=initMap" defer async></script>

@@ -734,65 +734,6 @@ class Toa_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Genera arreglo javascript con data de posiciones
-	 *
-	 * @param  string $arr_data Arreglo con datos a desplegar
-	 * @return string               Reporte con las peticiones encontradas
-	 */
-	public function arreglo_markers_google_maps($arr_data = NULL)
-	{
-		if ( ! $arr_data)
-		{
-			return NULL;
-		}
-
-		$center_x = 0;
-		$center_y = 0;
-
-		$i = 0;
-
-		$arreglo_ubic = '[';
-		$arreglo_ruta = '[';
-
-		foreach ($arr_data as $registro)
-		{
-			if ($registro['acoord_x'] !== '0.00000' AND $registro['acoord_y'] !== '0.00000' AND $registro['acoord_x'] !== $registro['acoord_y'])
-			{
-				$center_x += $registro['acoord_x'];
-				$center_y += $registro['acoord_y'];
-
-				$arreglo_ubic .= $i > 0 ? ',' : '';
-				$arreglo_ubic .= '[';
-				$arreglo_ubic .= "'".$registro['referencia']."'";
-				$arreglo_ubic .= ','.$registro['acoord_y'];
-				$arreglo_ubic .= ','.$registro['acoord_x'];
-				$arreglo_ubic .= ','.$i;
-				$arreglo_ubic .= ']';
-
-				$arreglo_ruta .= $i > 0 ? ',' : '';
-				$arreglo_ruta .= '{';
-				$arreglo_ruta .= 'lat: '.$registro['acoord_y'];
-				$arreglo_ruta .= ',lng: '.$registro['acoord_x'];
-				$arreglo_ruta .= '}';
-
-				$i += 1;
-			}
-		}
-
-		$arreglo_ubic .= ']';
-		$arreglo_ruta .= ']';
-
-		$arreglo_markers = 'var ubicaciones = '.$arreglo_ubic.',';
-		$arreglo_markers .= 'centro_x='.$center_x/$i.', centro_y='.$center_y/$i.', ';
-		$arreglo_markers .= 'ruta = '.$arreglo_ruta.';';
-
-		return $arreglo_markers;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Recupera datos de detalle de una peticion
 	 *
 	 * @param  string $peticion ID de la peticion

@@ -92,10 +92,26 @@ class Toa_consumos extends CI_Controller {
 	{
 		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
 
+		$this->load->library('googlemaps');
+		$this->googlemaps->initialize(array(
+			'map_css' => 'height: 350px',
+		));
+
+		if (count($datos_peticiones))
+		{
+			foreach ($datos_peticiones as $peticion)
+			{
+				$this->googlemaps->add_marker(array(
+					'lat'   => $peticion['acoord_y'],
+					'lng'   => $peticion['acoord_x'],
+					'title' => $peticion['referencia'],
+			));
+			}
+		}
+
 		$datos = array(
-			'reporte' => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
-			'arr_makers' => $this->toa_model->arreglo_markers_google_maps($datos_peticiones),
-			'link_detalle' => site_url($this->router->class.'/detalle_peticion/')
+			'reporte'      => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
+			'google_maps'  => $this->googlemaps->create_map(),
 		);
 
 		app_render_view('toa/peticiones', $datos);
@@ -114,12 +130,28 @@ class Toa_consumos extends CI_Controller {
 	 */
 	public function detalle_peticion($peticion = NULL)
 	{
+		$this->load->library('googlemaps');
+		$this->googlemaps->initialize(array(
+			'map_css' => 'height: 350px',
+		));
+
+		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
+
+		if (count($arr_peticiones))
+		{
+			$this->googlemaps->add_marker(array(
+				'lat'   => $arr_peticiones[0]['acoord_y'],
+				'lng'   => $arr_peticiones[0]['acoord_x'],
+				'title' => $arr_peticiones[0]['cname'],
+			));
+		}
+
 		$datos = array(
-			'reporte' => $this->toa_model->detalle_peticion_toa($peticion),
+			'reporte'     => $arr_peticiones,
+			'google_maps' => $this->googlemaps->create_map(),
 		);
 
 		app_render_view('toa/detalle_peticion', $datos);
-
 	}
 
 
