@@ -15,6 +15,7 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
+ * Clase que modela una interfaz para Google Maps
  *
  *
  * @category CodeIgniter
