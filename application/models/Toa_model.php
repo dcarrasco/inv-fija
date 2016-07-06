@@ -186,6 +186,24 @@ class Toa_model extends CI_Model {
 		'datos' => 'S&oacute;lo con datos',
 	);
 
+	/**
+	 * Arreglo con validación formulario panel
+	 *
+	 * @var array
+	 */
+	public $panel_validation = array(
+		array(
+			'field' => 'empresa',
+			'label' => 'Empresa',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mes',
+			'label' => 'Mes',
+			'rules' => 'required',
+		),
+	);
+
 
 	// --------------------------------------------------------------------
 

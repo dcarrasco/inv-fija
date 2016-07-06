@@ -70,14 +70,25 @@ class Toa_panel extends CI_Controller {
 	{
 		$empresa = new Empresa_toa();
 
+		$this->form_validation->set_rules($this->toa_model->panel_validation);
+
 		$datos = array(
-			'combo_empresas'     => $empresa->find('list'),
-			'cant_peticiones_empresa' => $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($this->input->get('empresa'), $this->input->get('mes'))),
-			'monto_peticiones_empresa' => $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($this->input->get('empresa'), $this->input->get('mes'), 'monto')),
-			'cant_tecnicos_empresa' => $this->toa_model->gchart_data($this->toa_model->tecnicos_empresa($this->input->get('empresa'), $this->input->get('mes'))),
-			'stock_empresa' => $this->toa_model->gchart_data($this->toa_model->stock_empresa($this->input->get('empresa'), $this->input->get('mes'))),
-			'stock_tecnicos_empresa' => $this->toa_model->gchart_data($this->toa_model->stock_tecnicos_empresa($this->input->get('empresa'), $this->input->get('mes'))),
+			'combo_empresas' => $empresa->find('list'),
+			'form_validated' => FALSE,
 		);
+
+		if ($this->form_validation->run() === TRUE)
+		{
+			$sel_empresa = set_value('empresa');
+			$sel_mes     = set_value('mes');
+
+			$datos['form_validated'] = TRUE;
+			$datos['cant_peticiones_empresa'] = $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($sel_empresa, $sel_mes));
+			$datos['monto_peticiones_empresa'] = $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($sel_empresa, $sel_mes, 'monto'));
+			$datos['cant_tecnicos_empresa'] = $this->toa_model->gchart_data($this->toa_model->tecnicos_empresa($sel_empresa, $sel_mes));
+			$datos['stock_empresa'] = $this->toa_model->gchart_data($this->toa_model->stock_empresa($sel_empresa, $sel_mes));
+			$datos['stock_tecnicos_empresa'] = $this->toa_model->gchart_data($this->toa_model->stock_tecnicos_empresa($sel_empresa, $sel_mes));
+		}
 
 		app_render_view('toa/panel_empresa', $datos);
 	}
