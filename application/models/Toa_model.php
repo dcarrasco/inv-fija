@@ -2090,7 +2090,7 @@ class Toa_model extends CI_Model {
 		$datos_sap = $this->db
 			->select('a.fecha_stock as fecha')
 			->group_by('a.fecha_stock')
-			->select_sum('a.valor', 'stock')
+			->select('sum(a.valor/1000000) as stock', FALSE)
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
@@ -2139,7 +2139,7 @@ class Toa_model extends CI_Model {
 		$datos_sap = $this->db
 			->select('a.fecha_stock as fecha')
 			->group_by('a.fecha_stock')
-			->select_sum('a.valor', 'stock')
+			->select('sum(a.valor/1000000) as stock', FALSE)
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->where('a.fecha_stock>=', $fecha_desde)

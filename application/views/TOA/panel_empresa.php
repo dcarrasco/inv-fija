@@ -179,7 +179,7 @@ function drawCharts() {
 	var options_stock = {
 		title : 'Stock Almacenes',
 		legend: {position: 'none'},
-		vAxis: {title: 'Monto', textStyle: {fontName: 'Calibri', fontSize: 10}},
+		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
@@ -191,7 +191,7 @@ function drawCharts() {
 	var options_stock_tecnicos = {
 		title : 'Stock Tecnicos',
 		legend: {position: 'none'},
-		vAxis: {title: 'Monto', textStyle: {fontName: 'Calibri', fontSize: 10}},
+		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
