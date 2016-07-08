@@ -119,13 +119,13 @@ class Toa_controles extends CI_Controller {
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
-			'anomes'               => set_value('mes'),
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['control'] = $this->toa_model->control_tecnicos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
 		}
 
@@ -153,13 +153,13 @@ class Toa_controles extends CI_Controller {
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_asignacion,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
-			'anomes'               => $this->input->get('mes'),
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['control'] = $this->toa_model->control_asignaciones(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
 		}
 
@@ -186,13 +186,13 @@ class Toa_controles extends CI_Controller {
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
-			'anomes'               => set_value('mes'),
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['control'] = $this->toa_model->materiales_consumidos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
 		}
 
@@ -217,13 +217,13 @@ class Toa_controles extends CI_Controller {
 			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
-			'anomes'               => set_value('mes'),
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['stock_almacenes'] = $this->toa_model->stock_almacenes(set_value('empresa'), set_value('mes'), set_value('dato'));
 		}
 
@@ -250,13 +250,13 @@ class Toa_controles extends CI_Controller {
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'combo_dato_mostrar'   => $this->toa_model->combo_mostrar_stock_tecnicos,
-			'anomes'               => set_value('mes'),
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['stock_tecnicos'] = $this->toa_model->stock_tecnicos(set_value('empresa'), set_value('mes'), set_value('dato'));
 		}
 		app_render_view('toa/controles_stock_tecnicos', $datos);
@@ -317,13 +317,13 @@ class Toa_controles extends CI_Controller {
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_tipos_trabajo'  => array_merge(array('*' => 'Todos'), $tipo_trabajo->find('list')),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
-			'anomes'               => $this->input->get('mes'),
 			'url_detalle_dia'      => 'toa_consumos/detalle_peticion',
 		);
 
 		if ($this->form_validation->run() === TRUE)
 		{
 			$datos['form_validated'] = TRUE;
+			$datos['anomes'] = set_value('mes');
 			$datos['materiales_tipos_trabajo'] = $this->toa_model->materiales_tipos_trabajo(set_value('empresa'), set_value('mes'), set_value('tipo_trabajo'), set_value('dato'));
 		}
 
