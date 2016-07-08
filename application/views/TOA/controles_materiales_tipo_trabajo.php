@@ -1,5 +1,7 @@
+{validation_errors}
+
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<?php echo form_open('','id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -18,28 +20,28 @@
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
-							<?php echo form_dropdown('empresa', $combo_empresas, $this->input->get('empresa'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
-							<?php echo form_month('mes', $this->input->get('mes'), 'class="form-control"'); ?>
+							<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tipos_trabajo_}</label>
-							<?php echo form_dropdown('tipo_trabajo', $combo_tipos_trabajo, $this->input->get('tipo_trabajo'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('tipo_trabajo', $combo_tipos_trabajo, set_value('tipo_trabajo'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_dato_desplegar_}</label>
-							<?php echo form_dropdown('dato', $combo_dato_desplegar, $this->input->get('dato'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -60,8 +62,8 @@
 </div>
 
 <div class="content-module-main">
-<?php $num_lin= 0; $tot_col = array(); $count_col = array();?>
-<?php if ($materiales_tipos_trabajo): ?>
+<?php if ($form_validated): ?>
+	<?php $num_lin= 0; $tot_col = array(); $count_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($materiales_tipos_trabajo as $referencia => $arr_referencia): ?>
 		<?php if ($num_lin== 0): ?>

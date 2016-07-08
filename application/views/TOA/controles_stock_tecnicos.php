@@ -1,5 +1,7 @@
+{validation_errors}
+
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<?php echo form_open('','id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -19,28 +21,28 @@
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_empresas_}</label>
-							<?php echo form_dropdown('empresa', $combo_empresas, $this->input->get('empresa'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_meses_}</label>
-							<?php echo form_month('mes', $this->input->get('mes'), 'class="form-control"'); ?>
+							<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-3">
 						<div class="form_group">
 							<label>{_controles_tecnicos_dato_desplegar_}</label>
-							<?php echo form_dropdown('dato', $combo_dato_desplegar, $this->input->get('dato'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
 					<div class="col-md-2">
 						<div class="form_group">
 							<label>{_controles_tecnicos_mostrar_}</label>
-							<?php echo form_dropdown('mostrar', $combo_dato_mostrar, $this->input->get('mostrar'), 'class="form-control"'); ?>
+							<?php echo form_dropdown('mostrar', $combo_dato_mostrar, set_value('mostrar'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -61,11 +63,11 @@
 </div>
 
 <div class="content-module-main">
-<?php $num_lin = 0; $tot_col = array();?>
-<?php if ($stock_tecnicos): ?>
+<?php if ($form_validated): ?>
+	<?php $num_lin = 0; $tot_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_tecnicos as $id_tecnico => $datos): ?>
-	<?php if ($datos['con_datos'] > 0 OR $this->input->get('mostrar') === 'todos'): ?>
+	<?php if ($datos['con_datos'] > 0 OR set_value('mostrar') === 'todos'): ?>
 
 		<?php if ($num_lin == 0): ?>
 			<thead>
@@ -93,7 +95,7 @@
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<td class="text-center <?php echo $valor ? 'info' : ''; ?>">
-					<?php $valor_desplegar = $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
+					<?php $valor_desplegar = set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
 					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, $valor_desplegar) : ''; ?>
 				</td>
 			<?php $tot_col[$dia_act] += $valor;?>
@@ -108,7 +110,7 @@
 			<th></th>
 			<th></th>
 			<?php foreach ($tot_col as $dia_act => $valor): ?>
-				<th class="text-center"><?php echo $this->input->get('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
+				<th class="text-center"><?php echo set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
 			<?php endforeach; ?>
 		</tr>
 	</tfoot>

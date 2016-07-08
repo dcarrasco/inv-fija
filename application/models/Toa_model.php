@@ -39,7 +39,7 @@ class Toa_model extends CI_Model {
 	 * @var array
 	 */
 	public $combo_movimientos_consumo = array(
-		''    => 'Todos los movimientos',
+		'*'    => 'Todos los movimientos',
 		'Movimientos CAPEX' => array(
 			'Z35' => 'Z35 Consumo CAPEX TOA',
 			'Z87' => 'Z87 Consumo CAPEX TOA manual',
@@ -65,7 +65,7 @@ class Toa_model extends CI_Model {
 	 * @var array
 	 */
 	public $combo_movimientos_asignacion = array(
-		''    => 'Todos los movimientos',
+		'*'   => 'Todos los movimientos',
 		'Z31' => 'Z31 Asig stock tecnico TOA',
 		'Z32' => 'Z32 Anula asig stock tecnico TOA',
 	);
@@ -200,6 +200,113 @@ class Toa_model extends CI_Model {
 		array(
 			'field' => 'mes',
 			'label' => 'Mes',
+			'rules' => 'required',
+		),
+	);
+
+	/**
+	 * Arreglo con validación formulario controles consumo
+	 *
+	 * @var array
+	 */
+	public $controles_consumos_validation = array(
+		array(
+			'field' => 'empresa',
+			'label' => 'Empresa',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mes',
+			'label' => 'Mes',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'filtro_trx',
+			'label' => 'Filtro transaccion',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'dato',
+			'label' => 'Dato a desplegar',
+			'rules' => 'required',
+		),
+	);
+
+	/**
+	 * Arreglo con validación formulario controles materiales
+	 *
+	 * @var array
+	 */
+	public $controles_materiales_validation = array(
+		array(
+			'field' => 'empresa',
+			'label' => 'Empresa',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mes',
+			'label' => 'Mes',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'tipo_trabajo',
+			'label' => 'Tipos de trabajo',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'dato',
+			'label' => 'Dato a desplegar',
+			'rules' => 'required',
+		),
+	);
+
+	/**
+	 * Arreglo con validación formulario controles stock empresa
+	 *
+	 * @var array
+	 */
+	public $controles_stock_empresa_validation = array(
+		array(
+			'field' => 'empresa',
+			'label' => 'Empresa',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mes',
+			'label' => 'Mes',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'dato',
+			'label' => 'Dato a desplegar',
+			'rules' => 'required',
+		),
+	);
+
+	/**
+	 * Arreglo con validación formulario controles stock tecnicos
+	 *
+	 * @var array
+	 */
+	public $controles_stock_tecnicos_validation = array(
+		array(
+			'field' => 'empresa',
+			'label' => 'Empresa',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mes',
+			'label' => 'Mes',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'dato',
+			'label' => 'Dato a desplegar',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'mostrar',
+			'label' => 'Mostrar tecnicos',
 			'rules' => 'required',
 		),
 	);
@@ -1224,7 +1331,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx OR $filtro_trx !== '')
+		if ($filtro_trx AND $filtro_trx !== '*')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -1363,7 +1470,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx OR $filtro_trx !== '')
+		if ($filtro_trx AND $filtro_trx !== '*')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -1459,7 +1566,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx OR $filtro_trx !== '')
+		if ($filtro_trx AND $filtro_trx !== '*')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
