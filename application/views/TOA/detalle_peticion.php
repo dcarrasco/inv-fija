@@ -143,7 +143,7 @@
 				<th class="text-center">item</th>
 				<th class="text-center">cod mat</th>
 				<th class="text-left">material</th>
-				<th class="text-left">serie</th>
+				<th class="text-center">serie</th>
 				<th class="text-center">centro</th>
 				<th class="text-center">lote</th>
 				<th class="text-center">valor</th>
@@ -163,7 +163,7 @@
 				<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
 				<td class="text-center"><?php echo $linea_detalle['material']; ?></td>
 				<td class="text-left"><?php echo $linea_detalle['texto_material']; ?></td>
-				<td class="text-left"><?php echo $linea_detalle['serie_toa']; ?></td>
+				<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?php echo $linea_detalle['serie_toa']; ?>"><?php echo $linea_detalle['serie_toa']; ?></a></td>
 				<td class="text-center"><?php echo $linea_detalle['centro']; ?></td>
 				<td class="text-center"><?php echo $linea_detalle['lote']; ?></td>
 				<td class="text-center"><?php echo $linea_detalle['valor']; ?></td>
@@ -199,3 +199,19 @@
 	</table>
 </div>
 
+<?php echo form_open(site_url('stock_analisis_series'), 'id=id_detalle_serie'); ?>
+<?php echo form_hidden('series', '1'); ?>
+<?php echo form_hidden('show_mov', 'show'); ?>
+<?php echo form_close(); ?>
+
+<script>
+$(document).ready(function () {
+
+$('a.detalle-serie').click(function(event) {
+	event.preventDefault();
+	$('#id_detalle_serie > input[name="series"]').val($(this).data('serie'));
+	$('#id_detalle_serie').submit();
+});
+
+});
+</script>
