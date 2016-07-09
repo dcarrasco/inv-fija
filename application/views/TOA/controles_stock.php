@@ -55,7 +55,7 @@
 </div>
 
 <div class="content-module-main">
-<?php if ($form_validated): ?>
+<?php if ($stock_almacenes): ?>
 	<?php $num_lin = 0; $tot_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_almacenes as $id_alm => $datos): ?>

@@ -62,7 +62,7 @@
 </div>
 
 <div class="content-module-main">
-<?php if ($form_validated): ?>
+<?php if ($materiales_tipos_trabajo): ?>
 	<?php $num_lin= 0; $tot_col = array(); $count_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($materiales_tipos_trabajo as $referencia => $arr_referencia): ?>

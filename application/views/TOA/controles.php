@@ -62,7 +62,7 @@
 </div>
 
 <div class="content-module-main">
-<?php if ($form_validated): ?>
+<?php if ($control): ?>
 	<?php $num_lin = 0; $tot_col = array(); $count_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $id_tecnico => $datos): ?>

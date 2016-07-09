@@ -112,22 +112,17 @@ class Toa_controles extends CI_Controller {
 		$stock_sap_fija = new Stock_sap_fija_model();
 
 		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'consumos'),
-			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
+			'anomes'               => set_value('mes'),
+			'control'              => $this->toa_model->control_tecnicos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
 		);
-
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['control'] = $this->toa_model->control_tecnicos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
-		}
 
 		app_render_view('toa/controles', $datos);
 	}
@@ -146,22 +141,17 @@ class Toa_controles extends CI_Controller {
 		$stock_sap_fija = new Stock_sap_fija_model();
 
 		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
-			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_asignacion,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
+			'anomes'               => set_value('mes'),
+			'control'              => $this->toa_model->control_asignaciones(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
 		);
-
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['control'] = $this->toa_model->control_asignaciones(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
-		}
 
 		app_render_view('toa/controles', $datos);
 	}
@@ -179,22 +169,17 @@ class Toa_controles extends CI_Controller {
 		$stock_sap_fija = new Stock_sap_fija_model();
 
 		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales_consumidos'),
-			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
+			'anomes'               => set_value('mes'),
+			'control'              => $this->toa_model->materiales_consumidos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
 		);
-
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['control'] = $this->toa_model->materiales_consumidos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato'));
-		}
 
 		app_render_view('toa/control_materiales_consumidos', $datos);
 	}
@@ -211,21 +196,16 @@ class Toa_controles extends CI_Controller {
 		$empresa = new Empresa_toa();
 
 		$this->form_validation->set_rules($this->toa_model->controles_stock_empresa_validation);
+		$this->form_validation->run();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
-			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
+			'anomes'               => set_value('mes'),
+			'stock_almacenes'      => $this->toa_model->stock_almacenes(set_value('empresa'), set_value('mes'), set_value('dato')),
 		);
-
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['stock_almacenes'] = $this->toa_model->stock_almacenes(set_value('empresa'), set_value('mes'), set_value('dato'));
-		}
 
 		app_render_view('toa/controles_stock', $datos);
 	}
@@ -243,22 +223,18 @@ class Toa_controles extends CI_Controller {
 		$empresa = new Empresa_toa();
 
 		$this->form_validation->set_rules($this->toa_model->controles_stock_tecnicos_validation);
+		$this->form_validation->run();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock_tecnicos'),
-			'form_validated'       => FALSE,
 			'combo_empresas'       => $empresa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'combo_dato_mostrar'   => $this->toa_model->combo_mostrar_stock_tecnicos,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
+			'anomes'               => set_value('mes'),
+			'stock_tecnicos'       => $this->toa_model->stock_tecnicos(set_value('empresa'), set_value('mes'), set_value('dato')),
 		);
 
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['stock_tecnicos'] = $this->toa_model->stock_tecnicos(set_value('empresa'), set_value('mes'), set_value('dato'));
-		}
 		app_render_view('toa/controles_stock_tecnicos', $datos);
 	}
 
@@ -310,22 +286,17 @@ class Toa_controles extends CI_Controller {
 		$tipo_trabajo = new Tipo_trabajo_toa();
 
 		$this->form_validation->set_rules($this->toa_model->controles_materiales_validation);
+		$this->form_validation->run();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
-			'form_validated'       => FALSE,
-			'combo_empresas'       => $empresa->find('list'),
-			'combo_tipos_trabajo'  => array_merge(array('*' => 'Todos'), $tipo_trabajo->find('list')),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
-			'url_detalle_dia'      => 'toa_consumos/detalle_peticion',
+			'menu_modulo'              => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
+			'combo_empresas'           => $empresa->find('list'),
+			'combo_tipos_trabajo'      => array_merge(array('*' => 'Todos'), $tipo_trabajo->find('list')),
+			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
+			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
+			'anomes'                   => set_value('mes'),
+			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo(set_value('empresa'), set_value('mes'), set_value('tipo_trabajo'), set_value('dato')),
 		);
-
-		if ($this->form_validation->run() === TRUE)
-		{
-			$datos['form_validated'] = TRUE;
-			$datos['anomes'] = set_value('mes');
-			$datos['materiales_tipos_trabajo'] = $this->toa_model->materiales_tipos_trabajo(set_value('empresa'), set_value('mes'), set_value('tipo_trabajo'), set_value('dato'));
-		}
 
 		app_render_view('toa/controles_materiales_tipo_trabajo', $datos);
 	}
