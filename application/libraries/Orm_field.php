@@ -357,6 +357,7 @@ class Orm_field {
 			'value'     => $valor_field,
 			'maxlength' => $this->_largo,
 			'size'      => $this->_largo,
+			'placeholder' => 'Ingrese '.strtolower($this->_label),
 		);
 		$status_feedback = '';
 		if ( ! is_null($field_error))
@@ -471,6 +472,8 @@ class Orm_field {
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
 				? array('conditions' => $this->_relation['conditions'])
 				: array();
+
+			$dropdown_conditions['opc_ini'] = FALSE;
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->_nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);

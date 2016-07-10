@@ -853,6 +853,14 @@ class Orm_model implements IteratorAggregate {
 		{
 			$arr_list = array();
 
+			if ( ! $param OR array_key_exists('opc_ini', $param))
+			{
+				if ( ! $param OR $param['opc_ini'] === TRUE)
+				{
+					$arr_list[''] = 'Seleccione '.strtolower($this->_model_label).'...';
+				}
+			}
+
 			if ($this->_model_order_by !== '' AND ! array_key_exists('order_by', $param))
 			{
 				$this->db->order_by($this->_model_order_by);

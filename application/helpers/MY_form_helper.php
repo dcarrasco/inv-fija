@@ -438,6 +438,8 @@ if ( ! function_exists('form_month'))
 			$data = array('name' => $data);
 		}
 
+		$extra .= ' placeholder="Seleccione mes"';
+
 		return '<div class="input-group date" data-provide="datepicker" data-date-min-view-mode="1" data-date-language="es" data-date-autoclose="true" data-date-format="yyyymm">'.form_input($data, $value, $extra).'<div class="input-group-addon"><i class="fa fa-calendar"></i></div></div>';
 
 	}
@@ -475,11 +477,14 @@ if ( ! function_exists('form_date_range'))
 
 		$extra .= ' data-provide="datepicker" data-date-today-highlight="true" data-date-language="es" data-date-autoclose="true"';
 
+		$extra_desde = $extra.' placeholder="Fecha desde"';
+		$extra_hasta = $extra.' placeholder="Fecha hasta"';
+
 		$form_item = '<div class="input-group input-daterange">';
 		$form_item .= '<span class="input-group-addon">'.$str_desde.'</span>';
-		$form_item .= form_input($data_desde, $value_desde, $extra);
+		$form_item .= form_input($data_desde, $value_desde, $extra_desde);
 		$form_item .= '<span class="input-group-addon">'.$str_hasta.'</span>';
-		$form_item .= form_input($data_hasta, $value_hasta, $extra);
+		$form_item .= form_input($data_hasta, $value_hasta, $extra_hasta);
 		$form_item .= '</div>'.$js;
 
 		return $form_item;
