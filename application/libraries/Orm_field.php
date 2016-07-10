@@ -363,7 +363,8 @@ class Orm_field {
 		if ( ! is_null($field_error))
 		{
 			$icon_feedback = $field_error ? 'remove' : 'ok';
-			$status_feedback = '<span class="glyphicon glyphicon-'.$icon_feedback.' form-control-feedback" aria-hidden="true"></span>';
+			$icon_color = $field_error ? '' : ' text-success';
+			$status_feedback = '<span class="glyphicon glyphicon-'.$icon_feedback.' form-control-feedback'.$icon_color.'" aria-hidden="true"></span>';
 		}
 
 		if ($this->_tipo === 'id'

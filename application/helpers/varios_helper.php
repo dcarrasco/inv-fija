@@ -383,7 +383,8 @@ if ( ! function_exists('form_has_error'))
 		}
 		else
 		{
-			return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
+			// return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
+			return (form_error($form_field) !== '') ? 'has-error' : '';
 		}
 
 	}
