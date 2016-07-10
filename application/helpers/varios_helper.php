@@ -574,11 +574,14 @@ if ( ! function_exists('cached_query'))
 		$cache_ttl = 300;
 
 		// limpia caches antiguos
-		foreach($ci->cache->cache_info() as $cache_ant_id => $cache_ant_data)
+		if (is_array($ci->cache->cache_info()))
 		{
-			if ($cache_ant_data['date'] < now() - $cache_ttl AND strtolower(substr($cache_ant_data['name'], -4)) !== 'html')
+			foreach($ci->cache->cache_info() as $cache_ant_id => $cache_ant_data)
 			{
-				$ci->cache->delete($cache_ant_id);
+				if ($cache_ant_data['date'] < now() - $cache_ttl AND strtolower(substr($cache_ant_data['name'], -4)) !== 'html')
+				{
+					$ci->cache->delete($cache_ant_id);
+				}
 			}
 		}
 
