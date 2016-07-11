@@ -71,5 +71,7 @@
 
 </div> <!-- DIV principal de la aplicacion   class="container"-->
 
+<div class="text-center text-muted"><small>&copy; 2013 &ndash; 2016</small></div>
+
 </body>
 </html>
