@@ -39,6 +39,7 @@
 				<div class="controls">
 					<?php echo form_password('pwd_new1', '','maxlength="45" class="form-control"'); ?>
 				</div>
+				<p class="help-block"><em><small>M&iacute;nimo 8 caracteres. Debe incluir may&uacute;sculas, min&uacute;sculas y n&uacute;meros.</small></em></p>
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2 <?php echo form_has_error('pwd_new2'); ?>">
