@@ -65,8 +65,11 @@
 <?php if ($control): ?>
 	<?php $num_lin = 0; $tot_col = array(); $count_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
+
 	<?php foreach ($control as $id_tecnico => $datos): ?>
+
 		<?php if ($num_lin == 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 			<tr class="active">
 				<th></th>
@@ -83,28 +86,34 @@
 				<th>Tot Mes</th>
 			</tr>
 			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
 			<tbody>
 		<?php endif; ?>
+
 		<tr>
 			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
 			<td class="text-center"><?php echo $datos['ciudad']; ?></td>
-			<td style="white-space: nowrap;">
-				<?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?>
-				(<?php echo fmt_rut($datos['rut']); ?>)
-			</td>
-				<?php $tot_lin = 0; ?>
-				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
-					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
-						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)) : ''; ?>
-						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; $count_col[$dia_act] += $cant_act ? 1 : 0;?>
-					</td>
-				<?php endforeach; ?>
-				<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
-				<?php $count_col['total'] += $tot_lin ? 1 : 0;?>
+			<td style="white-space: nowrap;"><?php echo $id_tecnico; ?> - <?php echo $datos['nombre']; ?> (<?php echo fmt_rut($datos['rut']); ?>)</td>
+
+			<?php $tot_lin = 0; ?>
+			<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
+				<?php if ($cant_act): ?>
+					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$id_tecnico, fmt_cantidad($cant_act)); ?></td>
+				<?php else: ?>
+					<td></td>
+				<?php endif ?>
+				<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; $count_col[$dia_act] += $cant_act ? 1 : 0;?>
+			<?php endforeach; ?>
+
+			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+			<?php $count_col['total'] += $tot_lin ? 1 : 0;?>
 		</tr>
 		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
 	</tbody>
+
+	<!-- PIE TABLA REPORTE -->
 	<tfoot>
 		<tr class="active">
 			<th></th>

@@ -70,6 +70,7 @@
 	<?php if ($datos['con_datos'] > 0 OR set_value('mostrar') === 'todos'): ?>
 
 		<?php if ($num_lin == 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 				<tr class="active">
 					<th></th>
@@ -83,6 +84,8 @@
 					<?php endforeach; ?>
 				</tr>
 			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
 			<tbody>
 		<?php endif; ?>
 		<tr>
@@ -94,17 +97,21 @@
 				(<?php echo fmt_rut($datos['rut']); ?>)
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
-				<td class="text-center <?php echo $valor ? 'info' : ''; ?>">
+				<?php if ($valor): ?>
 					<?php $valor_desplegar = set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
-					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, $valor_desplegar) : ''; ?>
-				</td>
-			<?php $tot_col[$dia_act] += $valor;?>
+					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, $valor_desplegar); ?></td>
+				<?php else: ?>
+					<td></td>
+				<?php endif ?>
+				<?php $tot_col[$dia_act] += $valor;?>
 			<?php endforeach; ?>
 		</tr>
 		<?php $num_lin += 1; ?>
 	<?php endif ?>
 	<?php endforeach; ?>
 	</tbody>
+
+	<!-- PIE TABLA REPORTE -->
 	<tfoot>
 		<tr class="active">
 			<th></th>

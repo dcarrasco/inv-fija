@@ -66,7 +66,9 @@
 	<?php $num_lin= 0; $tot_col = array(); $count_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($materiales_tipos_trabajo as $referencia => $arr_referencia): ?>
+
 		<?php if ($num_lin== 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 			<tr>
 				<th rowspan="2" class="active"></th>
@@ -88,21 +90,28 @@
 				<?php $count_col['total'] = 0; ?>
 			</tr>
 			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
 			<tbody>
 		<?php endif; ?>
+
 		<tr>
 			<td class="text-muted"><?php echo $num_lin+ 1; ?></td>
 			<td style="white-space: nowrap;"><?php echo anchor($url_detalle_dia.'/'.$referencia, $referencia); ?></td>
-				<?php $tot_lin = 0; ?>
-				<?php foreach ($arr_referencia as $material => $arr_material): ?>
-					<?php $class =  $arr_material['dato'] ? ($arr_material['color'] ? $arr_material['color'] : 'info') : ''; ?>
+			<?php $tot_lin = 0; ?>
+			<?php foreach ($arr_referencia as $material => $arr_material): ?>
+				<?php if ($arr_material['dato']): ?>
+					<?php $class =  $arr_material['color'] ? $arr_material['color'] : 'info'; ?>
 					<td class="text-center <?php echo $class; ?>">
-						<?php echo $arr_material['dato'] ? fmt_cantidad($arr_material['dato']) : ''; ?>
-						<?php $tot_lin += $arr_material['dato']; $tot_col[$material] += $arr_material['dato']; $count_col[$material] += $arr_material['dato'] ? 1 : 0;?>
+						<?php echo fmt_cantidad($arr_material['dato']); ?>
 					</td>
-				<?php endforeach; ?>
-				<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
-				<?php $count_col['total'] += $tot_lin ? 1 : 0;?>
+				<?php else: ?>
+					<td></td>
+				<?php endif ?>
+				<?php $tot_lin += $arr_material['dato']; $tot_col[$material] += $arr_material['dato']; $count_col[$material] += $arr_material['dato'] ? 1 : 0;?>
+			<?php endforeach; ?>
+			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+			<?php $count_col['total'] += $tot_lin ? 1 : 0;?>
 		</tr>
 		<?php $num_lin+= 1; ?>
 	<?php endforeach; ?>

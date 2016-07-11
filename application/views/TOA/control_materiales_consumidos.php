@@ -67,7 +67,9 @@
 
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $tip_mat_material => $datos): ?>
+
 		<?php if ($num_lin == 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 			<tr class="active">
 				<th></th>
@@ -84,25 +86,31 @@
 				<th>Tot Mes</th>
 			</tr>
 			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
 			<tbody>
 		<?php endif; ?>
+
 		<tr>
 			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
 			<td><?php echo $datos['tip_material'] ?></td>
 			<td style="white-space: nowrap;"><?php echo $datos['material']; ?> - <?php echo $datos['descripcion']; ?></td>
 			<td><?php echo $datos['unidad'] ?></td>
-				<?php $tot_lin = 0; ?>
-				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
-					<td class="text-center <?php echo $cant_act ? 'info' : ''; ?>">
-						<?php echo $cant_act ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$datos['material'], fmt_cantidad($cant_act)) : ''; ?>
-						<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; ?>
-					</td>
-				<?php endforeach; ?>
-				<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+			<?php $tot_lin = 0; ?>
+			<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
+				<?php if ($cant_act): ?>
+					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$datos['material'], fmt_cantidad($cant_act)); ?></td>
+				<?php else: ?>
+					<td></td>
+				<?php endif ?>
+				<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; ?>
+			<?php endforeach; ?>
+			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
 		</tr>
 		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
 	</tbody>
+	<!-- PIE TABLA REPORTE -->
 	<tfoot>
 		<tr class="active">
 			<th></th>

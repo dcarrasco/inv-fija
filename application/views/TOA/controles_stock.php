@@ -59,7 +59,9 @@
 	<?php $num_lin = 0; $tot_col = array();?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_almacenes as $id_alm => $datos): ?>
+
 		<?php if ($num_lin == 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 				<tr class="active">
 					<th></th>
@@ -74,30 +76,30 @@
 					<?php endforeach; ?>
 				</tr>
 			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
 			<tbody>
 		<?php endif; ?>
+
 		<tr>
-			<td class="text-muted">
-				<?php echo $num_lin + 1; ?>
-			</td>
-			<td style="white-space: nowrap;">
-				<?php echo $datos['tipo']; ?>
-			</td>
-			<td style="white-space: nowrap;">
-				<?php echo $datos['centro']; ?>-<?php echo $datos['cod_almacen']; ?>
-				<?php echo $datos['des_almacen']?>
-			</td>
+			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
+			<td style="white-space: nowrap;"><?php echo $datos['tipo']; ?></td>
+			<td style="white-space: nowrap;"><?php echo $datos['centro']; ?>-<?php echo $datos['cod_almacen']; ?><?php echo $datos['des_almacen']?></td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
-				<td class="text-center <?php echo $valor ? 'info' : ''; ?>">
-					<?php $valor_desplegar = set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
-					<?php echo $valor ? anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar) : ''; ?>
-				</td>
+				<?php if ($valor): ?>
+					<?php $valor_desplegar = (set_value('dato') === 'monto') ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
+					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar); ?></td>
+				<?php else: ?>
+					<td></td>
+				<?php endif ?>
 			<?php $tot_col[$dia_act] += $valor;?>
 			<?php endforeach; ?>
 		</tr>
 		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
 	</tbody>
+
+	<!-- PIE TABLA REPORTE -->
 	<tfoot>
 		<tr class="active">
 			<th></th>
