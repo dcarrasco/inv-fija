@@ -142,7 +142,7 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => set_value('mes'),
 			'control'              => $this->toa_model->control_tecnicos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
+			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2) ? $this->uri->segment(2) : 'consumos')),
 		);
 
 		app_render_view('toa/controles', $datos);
