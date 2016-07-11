@@ -39,7 +39,7 @@ class Toa_model extends CI_Model {
 	 * @var array
 	 */
 	public $combo_movimientos_consumo = array(
-		'*'    => 'Todos los movimientos',
+		'000'    => 'Todos los movimientos',
 		'Movimientos CAPEX' => array(
 			'Z35' => 'Z35 Consumo CAPEX TOA',
 			'Z87' => 'Z87 Consumo CAPEX TOA manual',
@@ -65,7 +65,7 @@ class Toa_model extends CI_Model {
 	 * @var array
 	 */
 	public $combo_movimientos_asignacion = array(
-		'*'   => 'Todos los movimientos',
+		'000'   => 'Todos los movimientos',
 		'Z31' => 'Z31 Asig stock tecnico TOA',
 		'Z32' => 'Z32 Anula asig stock tecnico TOA',
 	);
@@ -1331,7 +1331,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '*')
+		if ($filtro_trx AND $filtro_trx !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -1470,7 +1470,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '*')
+		if ($filtro_trx AND $filtro_trx !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -1566,7 +1566,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '*')
+		if ($filtro_trx AND $filtro_trx !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -1957,7 +1957,7 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($tipo_trabajo !== '*')
+		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
@@ -1975,7 +1975,7 @@ class Toa_model extends CI_Model {
 			->get()->result_array();
 
 
-		if ($tipo_trabajo !== '*')
+		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
@@ -1997,7 +1997,7 @@ class Toa_model extends CI_Model {
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
 
-		if ($tipo_trabajo !== '*')
+		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
@@ -2050,7 +2050,6 @@ class Toa_model extends CI_Model {
 				$matriz[$registro['referencia']][$registro['material']]['dato'] = $registro['dato'];
 				$matriz[$registro['referencia']][$registro['material']]['fecha'] = fmt_fecha($registro['fecha']);
 			}
-
 		return $matriz;
 	}
 

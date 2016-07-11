@@ -140,3 +140,18 @@
 <?php endif ?>
 
 </div> <!-- fin content-module-main -->
+
+<script type="text/javascript">
+$(document).ready(function () {
+
+	$('#frm_param').submit(function(e) {
+		e.preventDefault();
+		var empresa      = $('select[name="empresa"]').val() ? $('select[name="empresa"]').val() : '_',
+			mes          = $('input[name="mes"]').val() ? $('input[name="mes"]').val() : '_',
+			tipo_trabajo = $('select[name="tipo_trabajo"]').val() ? $('select[name="tipo_trabajo"]').val() : '_',
+			dato         = $('select[name="dato"]').val() ? $('select[name="dato"]').val() : '_';
+		window.location.href = '<?php echo $submit_url ?>'+'/'+empresa+'/'+mes+'/'+tipo_trabajo+'/'+dato;
+	});
+
+});
+</script>
