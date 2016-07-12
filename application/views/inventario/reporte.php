@@ -1,4 +1,4 @@
-<div class="row well hidden-print">
+<div class="col-md-12 well hidden-print">
 
 	{validation_errors}
 
@@ -45,7 +45,6 @@
 </div> <!-- fin content-module-main -->
 
 
-</div> <!-- fin content-module -->
 
 <script type="text/javascript">
 $(document).ready(function() {

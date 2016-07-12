@@ -1,8 +1,8 @@
-<div class="row well">
+<div class="col-md-12 well">
 {validation_errors}
 
 <?php echo form_open($this->router->class . '/ingreso', 'id="frm_buscar" role="form" class="form-inline"'); ?>
-<?php echo form_hidden('formulario','buscar'); ?>
+	<?php echo form_hidden('formulario','buscar'); ?>
 
 	<div class="form-group col-md-4">
 		<label>{_inventario_report_label_inventario_}</label>

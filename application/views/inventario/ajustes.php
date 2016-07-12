@@ -1,4 +1,4 @@
-<div class="row well">
+<div class="col-md-12 well">
 	<div class="col-md-6">
 		<strong>{_inventario_inventario_}:</strong> {inventario}
 	</div>
@@ -12,7 +12,7 @@
 	</div>
 </div>
 
-<div class="row">
+<div>
 	<?php echo form_open($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'.$pag.'/'.time(), 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
