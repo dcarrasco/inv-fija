@@ -23,50 +23,36 @@
 
 				{validation_errors}
 
-				<div class="col-md-4">
-					<div class="form-group">
-						<label>
-							{_stock_perm_label_alm_}
-						</label>
+				<div class="col-md-4 form-group <?php echo form_error('tipo_alm[]') ? 'has-error' : ''; ?>">
+					<label class="control-label">{_stock_perm_label_alm_}</label>
 
-						<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
+					<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 
-						<div class="pull-right">
-							<div class="radio-inline">
-								<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"'); ?>
-								{_stock_perm_radio_movil_}
-							</div>
-							<div class="radio-inline">
-								<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"'); ?>
-								{_stock_perm_radio_fija_}
-							</div>
+					<div class="pull-right">
+						<div class="radio-inline">
+							<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"'); ?>
+							{_stock_perm_radio_movil_}
+						</div>
+						<div class="radio-inline">
+							<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"'); ?>
+							{_stock_perm_radio_fija_}
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-3">
-					<div class="form-group">
-						<label>
-							{_stock_perm_label_estados_}
-						</label>
-						<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
-					</div>
+				<div class="col-md-3 form-group">
+					<label class="control-label">{_stock_perm_label_estados_}</label>
+					<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-2">
-					<div class="form-group">
-						<label>
-							{_stock_perm_label_tipmat_}
-						</label>
-						<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
-					</div>
+				<div class="col-md-2 form-group">
+					<label class="control-label">{_stock_perm_label_tipmat_}</label>
+					<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-3">
 					<div class="form-group">
-						<label>
-							{_stock_perm_label_detalle_}
-						</label>
+						<label class="control-label">{_stock_perm_label_detalle_}</label>
 
 						<div class="checkbox">
 							<label>

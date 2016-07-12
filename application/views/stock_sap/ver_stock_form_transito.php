@@ -20,32 +20,26 @@
 
 				{validation_errors}
 
-				<div class="col-md-4">
-					<div class="form-group">
+				<div class="col-md-4 form-group <?php echo form_error('fecha[]') ? 'has-error' : ''; ?>">
+					<label class="control-label">{_stock_sap_label_dates_}</label>
+					<div class="radio">
 						<label>
-							{_stock_sap_label_dates_}
+							<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
+							{_stock_sap_radio_date1_}
 						</label>
-						<div class="radio">
-							<label>
-								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
-								{_stock_sap_radio_date1_}
-							</label>
-						</div>
-						<div class="radio">
-							<label>
-								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-								{_stock_sap_radio_date2_}
-							</label>
-						</div>
-						<?php echo form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 					</div>
+					<div class="radio">
+						<label>
+							<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
+							{_stock_sap_radio_date2_}
+						</label>
+					</div>
+					<?php echo form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>
-							{_stock_sap_label_mats_}
-						</label>
+						<label class="control-label">{_stock_sap_label_mats_}</label>
 						<div class="checkbox">
 							<label>
 								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
@@ -67,9 +61,7 @@
 					</div>
 					<hr/>
 					<div class="form-group">
-						<label>
-							{_stock_sap_label_mostrar_}
-						</label>
+						<label class="control-label">{_stock_sap_label_mostrar_}</label>
 						<div class="radio">
 							<label>
 								<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>

@@ -19,55 +19,51 @@
 
 				{validation_errors}
 
-				<div class="col-md-4">
-					<div class="form-group">
-						<label>{_stock_sap_label_dates_}</label>
-						<div class="radio">
+				<div class="col-md-4 form-group <?php echo form_error('fecha[]') ? 'has-error' : '' ?>">
+					<label class="control-label">{_stock_sap_label_dates_}</label>
+					<div class="radio">
+						<label>
+							<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
+							{_stock_sap_radio_date1_}
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
+							{_stock_sap_radio_date2_}
+						</label>
+					</div>
+					<?php echo form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
+				</div>
+
+				<div class="col-md-4 form-group <?php echo form_error('almacenes[]') ? 'has-error' : '' ?>">
+					<label class="control-label">{_stock_sap_label_alm_}</label>
+					<div class="radio">
+						<label>
+							<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
+							{_stock_sap_radio_alm1_}
+						</label>
+					</div>
+					<div class="radio">
+						<label>
+							<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
+							{_stock_sap_radio_alm2_}
+						</label>
+					</div>
+					<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
+					<div id="show_tiposalm">
+						<div class="checkbox">
 							<label>
-								<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
-								{_stock_sap_radio_date1_}
+								<?php echo form_checkbox('almacen', 'almacen', set_value('almacen')); ?>
+								{_stock_sap_check_show_alm_}
 							</label>
 						</div>
-						<div class="radio">
-							<label>
-								<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
-								{_stock_sap_radio_date2_}
-							</label>
-						</div>
-						<?php echo form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
-						<label>{_stock_sap_label_alm_}</label>
-						<div class="radio">
-							<label>
-								<?php echo form_radio('sel_tiposalm', 'sel_tiposalm', set_radio('sel_tiposalm','sel_tiposalm', TRUE)); ?>
-								{_stock_sap_radio_alm1_}
-							</label>
-						</div>
-						<div class="radio">
-							<label>
-								<?php echo form_radio('sel_tiposalm', 'sel_almacenes', set_radio('sel_tiposalm','sel_almacenes')); ?>
-								{_stock_sap_radio_alm2_}
-							</label>
-						</div>
-						<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
-						<div id="show_tiposalm">
-							<div class="checkbox">
-								<label>
-									<?php echo form_checkbox('almacen', 'almacen', set_value('almacen')); ?>
-									{_stock_sap_check_show_alm_}
-								</label>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="col-md-4">
-					<div class="form-group">
-						<label>{_stock_sap_label_mats_}</label>
+						<label class="control-label">{_stock_sap_label_mats_}</label>
 
 						<!--
 						<div class="checkbox">
