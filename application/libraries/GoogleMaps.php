@@ -61,6 +61,20 @@ class Googlemaps {
 	 */
 	private $_txt_js = '';
 
+	/**
+	 * URL de la API
+	 *
+	 * @var string
+	 */
+	private $_url_js = 'https://maps.googleapis.com/maps/api/js';
+
+	/**
+	 * Llave de la API
+	 *
+	 * @var string
+	 */
+	private $_api_key = 'AIzaSyC2-4DzCBzkg6AtSNTRdEEQg2E04OtJYO0';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -100,6 +114,11 @@ class Googlemaps {
 	{
 		$function_name = 'initMap_'.$this->_map_id;
 
+		$url_js = $this->_url_js.'?';
+		$url_js .= ($this->_api_key !== '') ? 'key=AIzaSyC2-4DzCBzkg6AtSNTRdEEQg2E04OtJYO0&' : '';
+		$url_js .= 'callback='.$function_name;
+
+
 		$txt_js = '';
 		$txt_js .= '<div id="'.$this->_map_id.'" style="'.$this->_map_css.'"></div>';
 		$txt_js .= '<script>'.PHP_EOL;
@@ -117,8 +136,9 @@ class Googlemaps {
 			$txt_js .= 'map.fitBounds(bounds);'.PHP_EOL;
 		}
 
-		$txt_js .= '}'.PHP_EOL.'</script>';
-		$txt_js .= '<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false&callback='.$function_name.'" defer async></script>';
+		$txt_js .= '}'.PHP_EOL;
+		$txt_js .= '</script>'.PHP_EOL;
+		$txt_js .= '<script type="text/javascript" src="'.$url_js.'" defer async></script>';
 
 		return $txt_js;
 	}
