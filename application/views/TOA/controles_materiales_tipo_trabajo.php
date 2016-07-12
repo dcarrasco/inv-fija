@@ -1,5 +1,3 @@
-{validation_errors}
-
 <div class="accordion hidden-print">
 	<?php echo form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
@@ -16,24 +14,27 @@
 
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
+
+				{validation_errors}
+
 				<div class="row">
 					<div class="col-md-3 form_group <?php echo form_error('empresa') ? 'has-error' : '' ?>">
-						<label>{_controles_tecnicos_empresas_}</label>
+						<label class="control-label">{_controles_tecnicos_empresas_}</label>
 						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-2 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
-						<label>{_controles_tecnicos_meses_}</label>
+						<label class="control-label">{_controles_tecnicos_meses_}</label>
 						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-3 form_group <?php echo form_error('tipo_trabajo') ? 'has-error' : '' ?>">
-						<label>{_controles_tipos_trabajo_}</label>
+						<label class="control-label">{_controles_tipos_trabajo_}</label>
 						<?php echo form_dropdown('tipo_trabajo', $combo_tipos_trabajo, set_value('tipo_trabajo'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-2 form_group <?php echo form_error('dato') ? 'has-error' : '' ?>">
-						<label>{_controles_tecnicos_dato_desplegar_}</label>
+						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
 						<?php echo form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 					</div>
 
