@@ -46,7 +46,7 @@
 	{app_navbar}
 <?php endif; ?>
 
-<div class="container-fluid">
+<div class="container-fluid" id="container">
 
 <?php if (isset($app_menu_modulo)): ?>
 	{app_menu_modulo}
@@ -71,7 +71,11 @@
 
 </div> <!-- DIV principal de la aplicacion   class="container"-->
 
-<div class="text-center text-muted"><small>&copy; 2013 &ndash; 2016</small></div>
+<footer class="footer">
+	<div class="text-center text-muted">
+		<small><i class="fa fa-creative-commons"></i> 2013 &ndash; 2016</small>
+	</div>
+</footer>
 
 </body>
 </html>
