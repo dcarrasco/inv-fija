@@ -68,13 +68,13 @@
 				<th>T&eacute;cnico</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
-						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?><br>
 						<?php echo $dia_act; ?>
 						<?php $tot_col[$dia_act] = 0; $count_col[$dia_act] = 0; ?>
 					</th>
 				<?php endforeach; ?>
 				<?php $count_col['total'] = 0; ?>
-				<th>Tot Mes</th>
+				<th class="text-center">Tot Mes</th>
 			</tr>
 			</thead>
 
