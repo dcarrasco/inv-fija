@@ -1,7 +1,5 @@
-{validation_errors}
-
 <div class="accordion">
-	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
+	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
 	<div class="panel panel-default">
 
 
@@ -17,19 +15,18 @@
 
 		<div class="panel-body collapse in" id="form_param">
 			<div class="accordion-inner">
+
+				{validation_errors}
+
 				<div class="row">
-					<div class="col-md-4">
-						<div class="form_group">
-							<label>{_controles_tecnicos_empresas_}</label>
-							<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
-						</div>
+					<div class="col-md-4 form_group <?php echo form_error('empresa') ? 'has-error' : ''; ?>">
+						<label class="control-label">{_controles_tecnicos_empresas_}</label>
+						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-6">
-						<div class="form_group">
-							<label>{_controles_tecnicos_meses_}</label>
-							<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
-						</div>
+					<div class="col-md-6 form_group <?php echo form_error('mes') ? 'has-error' : ''; ?>">
+						<label class="control-label">{_controles_tecnicos_meses_}</label>
+						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-2">

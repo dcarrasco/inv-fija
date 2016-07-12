@@ -311,6 +311,29 @@ class Toa_model extends CI_Model {
 		),
 	);
 
+	/**
+	 * Arreglo con validación formulario consumos
+	 *
+	 * @var array
+	 */
+	public $consumos_validation = array(
+		array(
+			'field' => 'sel_reporte',
+			'label' => 'Reporte',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'fecha_desde',
+			'label' => 'Fecha desde',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'fecha_hasta',
+			'label' => 'Fecha hasta',
+			'rules' => 'required',
+		),
+	);
+
 
 	// --------------------------------------------------------------------
 

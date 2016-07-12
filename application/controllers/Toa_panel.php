@@ -68,12 +68,13 @@ class Toa_panel extends CI_Controller {
 	 */
 	public function panel()
 	{
-		$empresa = new Empresa_toa();
+		$empresa_toa = new Empresa_toa();
 
+		$this->form_validation->set_data($this->input->get());
 		$this->form_validation->set_rules($this->toa_model->panel_validation);
 
 		$datos = array(
-			'combo_empresas' => $empresa->find('list'),
+			'combo_empresas' => $empresa_toa->find('list'),
 			'form_validated' => FALSE,
 		);
 
