@@ -112,7 +112,7 @@ class Toa_controles extends CI_Controller {
 		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
 		$this->form_validation->run();
 
-		$empresa_toa    = new Empresa_toa();
+		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'consumos'),
@@ -246,6 +246,9 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega detalle stock de la contrata
 	 *
+	 * @param  string $fecha          Fecha del reporte de stock
+	 * @param  string $centro_almacen Centro-Almacen del reporte
+	 *
 	 * @return void
 	 */
 	public function detalle_stock($fecha = NULL, $centro_almacen = NULL)
@@ -262,6 +265,9 @@ class Toa_controles extends CI_Controller {
 
 	/**
 	 * Despliega detalle stock del tecnico de la contrata
+	 *
+	 * @param  string $fecha      Fecha del reporte de stock
+	 * @param  string $id_tecnico Tecnico del reporte
 	 *
 	 * @return void
 	 */
