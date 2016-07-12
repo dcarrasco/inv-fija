@@ -104,33 +104,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega detalle de las actuaciones de los técnicos
 	 *
-	 * @param  string $empresa    ID de la empresa a consultar
-	 * @param  string $mes        Mes a consultar (formato YYYYMM)
-	 * @param  string $filtro_trx Transacciones a consultar
-	 * @param  string $dato       Datos a consultar (Q peticiones, unidades o montos)
-	 *
 	 * @return void
 	 */
-	public function consumos($empresa = NULL, $mes = NULL, $filtro_trx = NULL, $dato = NULL)
+	public function consumos()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $filtro_trx === NULL AND $dato === NULL) ? FALSE : TRUE;
-
-		$empresa    = ($empresa === '_') ? NULL : $empresa;
-		$mes        = ($mes === '_') ? NULL : $mes;
-		$filtro_trx = ($filtro_trx === '_') ? NULL : $filtro_trx;
-		$dato       = ($dato === '_') ? NULL : $dato;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa'    => $empresa,
-				'mes'        => $mes,
-				'filtro_trx' => $filtro_trx,
-				'dato'       => $dato,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$empresa_toa    = new Empresa_toa();
 
@@ -142,7 +122,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => set_value('mes'),
 			'control'              => $this->toa_model->control_tecnicos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2) ? $this->uri->segment(2) : 'consumos')),
 		);
 
 		app_render_view('toa/controles', $datos);
@@ -154,33 +133,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega detalle de las asignaciones de material a los técnicos
 	 *
-	 * @param  string $empresa    ID de la empresa a consultar
-	 * @param  string $mes        Mes a consultar (formato YYYYMM)
-	 * @param  string $filtro_trx Transacciones a consultar
-	 * @param  string $dato       Datos a consultar (Q peticiones, unidades o montos)
-	 *
 	 * @return void
 	 */
-	public function asignaciones($empresa = NULL, $mes = NULL, $filtro_trx = NULL, $dato = NULL)
+	public function asignaciones()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $filtro_trx === NULL AND $dato === NULL) ? FALSE : TRUE;
-
-		$empresa    = ($empresa === '_') ? NULL : $empresa;
-		$mes        = ($mes === '_') ? NULL : $mes;
-		$filtro_trx = ($filtro_trx === '_') ? NULL : $filtro_trx;
-		$dato       = ($dato === '_') ? NULL : $dato;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa'    => $empresa,
-				'mes'        => $mes,
-				'filtro_trx' => $filtro_trx,
-				'dato'       => $dato,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -192,7 +151,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => set_value('mes'),
 			'control'              => $this->toa_model->control_asignaciones(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
 		);
 
 		app_render_view('toa/controles', $datos);
@@ -203,33 +161,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega detalle de los materiales consumidos
 	 *
-	 * @param  string $empresa    ID de la empresa a consultar
-	 * @param  string $mes        Mes a consultar (formato YYYYMM)
-	 * @param  string $filtro_trx Transacciones a consultar
-	 * @param  string $dato       Datos a consultar (Q peticiones, unidades o montos)
-	 *
 	 * @return void
 	 */
-	public function materiales_consumidos($empresa = NULL, $mes = NULL, $filtro_trx = NULL, $dato = NULL)
+	public function materiales_consumidos()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $filtro_trx === NULL AND $dato === NULL) ? FALSE : TRUE;
-
-		$empresa    = ($empresa === '_') ? NULL : $empresa;
-		$mes        = ($mes === '_') ? NULL : $mes;
-		$filtro_trx = ($filtro_trx === '_') ? NULL : $filtro_trx;
-		$dato       = ($dato === '_') ? NULL : $dato;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa'    => $empresa,
-				'mes'        => $mes,
-				'filtro_trx' => $filtro_trx,
-				'dato'       => $dato,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
+		$this->form_validation->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -241,7 +179,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => set_value('mes'),
 			'control'              => $this->toa_model->materiales_consumidos(set_value('empresa'), set_value('mes'), set_value('filtro_trx'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
 		);
 
 		app_render_view('toa/control_materiales_consumidos', $datos);
@@ -252,30 +189,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega stock de la contrata
 	 *
-	 * @param  string $empresa ID de la empresa a consultar
-	 * @param  string $mes     Mes a consultar (formato YYYYMM)
-	 * @param  string $dato    Datos a consultar (unidades o montos)
-	 *
 	 * @return void
 	 */
-	public function stock($empresa = NULL, $mes = NULL, $dato = NULL)
+	public function stock()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $dato === NULL) ? FALSE : TRUE;
-
-		$empresa = ($empresa === '_') ? NULL : $empresa;
-		$mes     = ($mes === '_') ? NULL : $mes;
-		$dato    = ($dato === '_') ? NULL : $dato;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa' => $empresa,
-				'mes'     => $mes,
-				'dato'    => $dato,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_stock_empresa_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_stock_empresa_validation);
+		$this->form_validation->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -286,7 +206,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 			'anomes'               => set_value('mes'),
 			'stock_almacenes'      => $this->toa_model->stock_almacenes(set_value('empresa'), set_value('mes'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
 		);
 
 		app_render_view('toa/controles_stock', $datos);
@@ -298,33 +217,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega stock de los tecnicos de la contrata
 	 *
-	 * @param  string $empresa ID de la empresa a consultar
-	 * @param  string $mes     Mes a consultar (formato YYYYMM)
-	 * @param  string $dato    Datos a consultar (Q peticiones, unidades o montos)
-	 * @param  string $mostrar Mostrar todos los técnicos o sólo aquellos con stock
-	 *
 	 * @return void
 	 */
-	public function stock_tecnicos($empresa = NULL, $mes = NULL, $dato = NULL, $mostrar = NULL)
+	public function stock_tecnicos()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $dato === NULL AND $mostrar === NULL) ? FALSE : TRUE;
-
-		$empresa = ($empresa === '_') ? NULL : $empresa;
-		$mes     = ($mes === '_') ? NULL : $mes;
-		$dato    = ($dato === '_') ? NULL : $dato;
-		$mostrar = ($mostrar === '_') ? NULL : $mostrar;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa' => $empresa,
-				'mes'     => $mes,
-				'dato'    => $dato,
-				'mostrar' => $mostrar,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_stock_tecnicos_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_stock_tecnicos_validation);
+		$this->form_validation->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -336,7 +235,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
 			'anomes'               => set_value('mes'),
 			'stock_tecnicos'       => $this->toa_model->stock_tecnicos(set_value('empresa'), set_value('mes'), set_value('dato')),
-			'submit_url'           => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
 		);
 
 		app_render_view('toa/controles_stock_tecnicos', $datos);
@@ -382,33 +280,13 @@ class Toa_controles extends CI_Controller {
 	/**
 	 * Despliega detalle stock del tecnico de la contrata
 	 *
-	 * @param  string $empresa      ID de la empresa a consultar
-	 * @param  string $mes          Mes a consultar (formato YYYYMM)
-	 * @param  string $tipo_trabajo Tipos de trabajo a desplegar
-	 * @param  string $dato         Datos a consultar (Q peticiones, unidades o montos)
-	 *
 	 * @return void
 	 */
-	public function materiales($empresa = NULL, $mes = NULL, $tipo_trabajo = NULL, $dato = NULL)
+	public function materiales()
 	{
-		$validar_form = ($empresa === NULL AND $mes === NULL AND $tipo_trabajo === NULL AND $dato === NULL) ? FALSE : TRUE;
-
-		$empresa      = ($empresa === '_') ? NULL : $empresa;
-		$mes          = ($mes === '_') ? NULL : $mes;
-		$tipo_trabajo = ($tipo_trabajo === '_') ? NULL : $tipo_trabajo;
-		$dato         = ($dato === '_') ? NULL : $dato;
-
-		if ($validar_form)
-		{
-			$this->form_validation->set_data(array(
-				'empresa'      => $empresa,
-				'mes'          => $mes,
-				'tipo_trabajo' => $tipo_trabajo,
-				'dato'         => $dato,
-			));
-			$this->form_validation->set_rules($this->toa_model->controles_materiales_validation);
-			$this->form_validation->run();
-		}
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_materiales_validation);
+		$this->form_validation->run();
 
 		$empresa_toa = new Empresa_toa();
 		$tipo_trabajo = new Tipo_trabajo_toa();
@@ -422,7 +300,6 @@ class Toa_controles extends CI_Controller {
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => set_value('mes'),
 			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo(set_value('empresa'), set_value('mes'), set_value('tipo_trabajo'), set_value('dato')),
-			'submit_url'               => base_url(array($this->uri->segment(1),$this->uri->segment(2))),
 		);
 
 		app_render_view('toa/controles_materiales_tipo_trabajo', $datos);
