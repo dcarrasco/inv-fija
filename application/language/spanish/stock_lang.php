@@ -16,6 +16,7 @@ $lang['stock_config_menu_tipo_clasifalm'] = 'Tipo clasificaci&oacute;n almacenes
 $lang['stock_config_menu_proveedores']  = 'Proveedores';
 $lang['stock_config_menu_usuarios_sap'] = 'Usuarios SAP';
 $lang['stock_config_menu_alm_no_ing']   = 'Almacenes no ingresados';
+$lang['stock_config_menu_cmv']          = 'Clases de movimiento SAP';
 
 $lang['stock_analisis_params']               = 'Par&aacute;metros consulta';
 $lang['stock_analisis_label_series']         = 'Series';

@@ -85,6 +85,11 @@ class Stock_config extends Orm_controller {
 				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),
 				'icon'  => 'home',
 			),
+			'clase_movimiento' => array(
+				'url'   => $this->router->class . '/listado/clase_movimiento',
+				'texto' => $this->lang->line('stock_config_menu_cmv'),
+				'icon'  => 'th',
+			),
 		);
 	}
 
