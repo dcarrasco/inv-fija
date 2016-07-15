@@ -34,41 +34,11 @@ class Toa_model extends CI_Model {
 	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
 
 	/**
-	 * Combo movimientos validos de consumo TOA
-	 *
-	 * @var array
-	 */
-	public $combo_movimientos_consumo = array(
-		'000'    => 'Todos los movimientos',
-		'Movimientos CAPEX' => array(
-			'Z35' => 'Z35 Consumo CAPEX TOA',
-			'Z87' => 'Z87 Consumo CAPEX TOA manual',
-			'Z39' => 'Z39 Consumo CAPEX TOA promedio',
-		),
-		'Movimientos OPEX' => array(
-			'Z45' => 'Z45 Consumo OPEX TOA',
-			'Z89' => 'Z89 Consumo OPEX TOA manual',
-			'Z41' => 'Z45 Consumo OPEX TOA promedio',
-		),
-	);
-
-	/**
 	 * Movimientos validos de asignaciones TOA
 	 *
 	 * @var array
 	 */
 	public $movimientos_asignaciones = array('Z31', 'Z32');
-
-	/**
-	 * Combo movimientos validos de asignacion TOA
-	 *
-	 * @var array
-	 */
-	public $combo_movimientos_asignacion = array(
-		'000'   => 'Todos los movimientos',
-		'Z31' => 'Z31 Asig stock tecnico TOA',
-		'Z32' => 'Z32 Anula asig stock tecnico TOA',
-	);
 
 	/**
 	 * Centros validos de consumos TOA
@@ -346,6 +316,40 @@ class Toa_model extends CI_Model {
 	{
 		parent::__construct();
 		$this->load->helper('date');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve combo con las clases de movimiento de consumo
+	 *
+	 * @return array Clases de movimiento de consumo
+	 */
+	public function get_combo_movimientos_consumo()
+	{
+		$cmv = new Clase_movimiento;
+
+		return array_merge(
+			array('000' => 'Todos los movimientos'),
+			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_consumo), 'order_by' => 'des_cmv'))
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve combo con las clases de movimiento de asignacion
+	 *
+	 * @return array Clases de movimiento de asignacion
+	 */
+	public function get_combo_movimientos_asignacion()
+	{
+		$cmv = new Clase_movimiento;
+
+		return array_merge(
+			array('000' => 'Todos los movimientos'),
+			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_asignaciones)))
+		);
 	}
 
 	// --------------------------------------------------------------------

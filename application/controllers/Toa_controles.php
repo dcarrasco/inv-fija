@@ -117,7 +117,7 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'consumos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
+			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => set_value('mes'),
@@ -146,7 +146,7 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_asignacion,
+			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_asignacion(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => set_value('mes'),
@@ -174,7 +174,7 @@ class Toa_controles extends CI_Controller {
 		$datos = array(
 			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales_consumidos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->combo_movimientos_consumo,
+			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => set_value('mes'),

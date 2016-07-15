@@ -41,8 +41,8 @@ class Clase_movimiento extends ORM_Model {
 		$arr_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_cmv_sap'),
-				'model_label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
-				'model_label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
+				'model_label'        => 'Clase de movimiento',
+				'model_label_plural' => 'Clases de movimiento',
 				'model_order_by'     => 'cmv',
 			),
 			'campos' => array(
