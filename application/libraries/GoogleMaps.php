@@ -115,7 +115,7 @@ class Googlemaps {
 		$function_name = 'initMap_'.$this->_map_id;
 
 		$url_js = $this->_url_js.'?';
-		$url_js .= ($this->_api_key !== '') ? 'key=AIzaSyC2-4DzCBzkg6AtSNTRdEEQg2E04OtJYO0&' : '';
+		$url_js .= ($this->_api_key !== '') ? 'key='.$this->_api_key.'&' : '';
 		$url_js .= 'callback='.$function_name;
 
 
