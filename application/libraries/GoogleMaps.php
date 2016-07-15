@@ -73,7 +73,7 @@ class Googlemaps {
 	 *
 	 * @var string
 	 */
-	private $_api_key = 'AIzaSyC2-4DzCBzkg6AtSNTRdEEQg2E04OtJYO0';
+	private $_api_key = 'AIzaSyDLt78yzJgaZAZNaFNvJ4RbD9pY2hSTTY0';
 
 	// --------------------------------------------------------------------
 
