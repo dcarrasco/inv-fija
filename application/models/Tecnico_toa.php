@@ -61,7 +61,7 @@ class Tecnico_toa extends ORM_Model {
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del t&eacute;cnico. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
+					// 'es_unico'       => TRUE
 				),
 				'rut' => array(
 					'label'          => 'RUT del t&eacute;cnico',
