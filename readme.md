@@ -41,7 +41,7 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 * JQuery 2.1.4
 * Bootstrap 3.3.5
 * JqPlot 1.0.8
-* Bootstrap Datepicker 1.6.0 (en github eternicode/bootstrap-datepicker)
+* Bootstrap Datepicker 1.6.1 (en github eternicode/bootstrap-datepicker)
 
 
 ## Auditoría
