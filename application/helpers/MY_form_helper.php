@@ -461,6 +461,7 @@ if ( ! function_exists('form_date_range'))
 {
 	function form_date_range($data_desde = '', $value_desde = '', $data_hasta = '', $value_hasta = '', $extra = '')
 	{
+		$js = '<script>$(document).ready(function() {$(\'input[name="'.$data_desde.'"]\').on(\'changeDate\', function(e) {var fecha_desde = $(\'input[name="'.$data_desde.'"]\').val();$(\'input[name="'.$data_hasta.'"]\').val(fecha_desde);$(\'input[name="'.$data_hasta.'"]\').datepicker(\'setStartDate\',fecha_desde);})});</script>';
 		$str_desde = "Desde";
 		$str_hasta = "Hasta";
 
