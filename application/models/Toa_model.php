@@ -1309,7 +1309,7 @@ class Toa_model extends CI_Model {
 
 		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
-			$indice_dia = (strlen($i) === 1) ? '0'.$i : $i;
+			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
 			$arr_dias[$indice_dia] = NULL;
 		}
 
@@ -2099,59 +2099,24 @@ class Toa_model extends CI_Model {
 
 		$arr_dias = $this->_get_arr_dias($anomes);
 
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = $this->_get_fecha_hasta($anomes);
-
-		if ($dato_desplegar === 'unidades')
-		{
-			$this->db->select_sum('cant', 'dato');
-		}
-		else if ($dato_desplegar === 'monto')
-		{
-			$this->db->select_sum('monto', 'dato');
-		}
-		else
-		{
-			$this->db->select_sum('1', 'dato');
-		}
-
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
 		{
 			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
 		}
 
-		$datos_sap = $this->db
-			->select('a.fecha')
-			->group_by('a.fecha')
-			->where('a.fecha>=', $fecha_desde)
-			->where('a.fecha<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			->from($this->config->item('bd_peticiones_sap').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
-			->get()->result_array();
+		$datos_sap = $this->get_resumen_panel($dato_desplegar === 'peticiones' ? 'SAP_Q_PET' : 'SAP_MONTO_PET', $empresa, $anomes);
 
 		foreach($datos_sap as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['dato'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
 		}
 
-		$datos_toa = $this->db
-			->select_sum('1', 'dato')
-			->select ('date')
-			->group_by('date')
-			->where('date>=', fmt_fecha($fecha_desde, 'Y-m-d'))
-			->where('date<', fmt_fecha($fecha_hasta, 'Y-m-d'))
-			->where('contractor_company', $empresa)
-			->where('astatus', 'complete')
-			->where('appt_number is not null')
-			->where('appt_number not like \'INC%\'')
-			->from($this->config->item('bd_peticiones_toa'))
-			->get()->result_array();
+		$datos_toa = $this->get_resumen_panel($dato_desplegar === 'peticiones' ? 'TOA_Q_PET' : 'TOA_MONTO_PET', $empresa, $anomes);
 
 		foreach($datos_toa as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['date'], 'd')]['toa'] = $registro['dato'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
 		}
 
 		return $arr_peticiones;
@@ -2176,35 +2141,22 @@ class Toa_model extends CI_Model {
 
 		$arr_dias = $this->_get_arr_dias($anomes);
 
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = $this->_get_fecha_hasta($anomes);
-
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
 		{
-			$arr_peticiones[$num_dia] = 0;
+			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
 		}
 
-		$query = $this->db
-			->distinct()
-			->select('a.fecha_contabilizacion')
-			->select('a.cliente')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where_in('a.codigo_movimiento', $this->movimientos_consumo)
-			->where_in('a.centro', $this->centros_consumo)
-			->where('a.vale_acomp', $empresa)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			// ->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
-			->get_compiled_select();
-
-		$query = 'select q1.fecha_contabilizacion, count(*) as tecnicos from ('.$query.') q1 group by q1.fecha_contabilizacion order by q1.fecha_contabilizacion';
-
-		$datos_sap = $this->db->query($query)->result_array();
-
+		$datos_sap = $this->get_resumen_panel('SAP_Q_TECNICOS', $empresa, $anomes);
 		foreach($datos_sap as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha_contabilizacion'], 'd')] = $registro['tecnicos'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
+		}
+
+		$datos_toa = $this->get_resumen_panel('TOA_Q_TECNICOS', $empresa, $anomes);
+		foreach($datos_toa as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
 		}
 
 		return $arr_peticiones;
@@ -2227,34 +2179,16 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = $this->_get_fecha_hasta($anomes);
-
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
 		{
 			$arr_peticiones[$num_dia] = 0;
 		}
 
-		$datos_sap = $this->db
-			->select('a.fecha_stock as fecha')
-			->group_by('a.fecha_stock')
-			->select('sum(a.valor/1000000) as stock', FALSE)
-			->from($this->config->item('bd_stock_fija').' a')
-			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
-			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
-			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
-			->join($this->config->item('bd_empresas_toa_tiposalm').' e', 'd.id_tipo=e.id_tipo', 'left')
-			->where('a.fecha_stock>=', $fecha_desde)
-			->where('a.fecha_stock<', $fecha_hasta)
-			->where('e.id_empresa', $empresa)
-			->get()->result_array();
-
+		$datos_sap = $this->get_resumen_panel('SAP_MONTO_STOCK_ALM', $empresa, $anomes);
 		foreach($datos_sap as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['stock'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor']/1000000;
 		}
 
 		return $arr_peticiones;
@@ -2276,34 +2210,117 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = $this->_get_fecha_hasta($anomes);
-
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
 		{
 			$arr_peticiones[$num_dia] = 0;
 		}
 
-		$datos_sap = $this->db
-			->select('a.fecha_stock as fecha')
-			->group_by('a.fecha_stock')
-			->select('sum(a.valor/1000000) as stock', FALSE)
-			->from($this->config->item('bd_stock_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->where('a.fecha_stock>=', $fecha_desde)
-			->where('a.fecha_stock<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			->get()->result_array();
-
+		$datos_sap = $this->get_resumen_panel('SAP_MONTO_STOCK_TEC', $empresa, $anomes);
 		foreach($datos_sap as $registro)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['stock'];
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor']/1000000;
 		}
 
 		return $arr_peticiones;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los datos del resumen panel
+	 *
+	 * @param  string $indicador Indicador a devolver
+	 * @param  string $empresa   ID de la empresa
+	 * @param  string $anomes    Mes de datos a devolver (formato YYYYMM)
+	 *
+	 * @return array            Arreglo con los datos
+	 */
+	public function get_resumen_panel($indicador = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $indicador OR ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		return ($this->db
+			->select('tipo')
+			->select('empresa')
+			->select('fecha')
+			->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
+			->select('valor')
+			->from($this->config->item('bd_resumen_panel_toa'))
+			->where('tipo', $indicador)
+			->where('empresa', $empresa)
+			->where('fecha>=', $fecha_desde)
+			->where('fecha<', $fecha_hasta)
+			->order_by('tipo, empresa, fecha')
+			->get()->result_array());
+	}
+
+
+	// --------------------------------------------------------------------
+
+
+	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		$arr_datos = $this->get_resumen_panel($indicador, $empresa, $anomes);
+
+		if ( ! $arr_datos)
+		{
+			return NULL;
+		}
+
+		foreach ($this->_get_arr_dias($anomes) as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = 0;
+		}
+
+		foreach($arr_datos as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor'];
+		}
+
+		return $this->gchart_data($arr_peticiones);
+
+	}
+
+	// --------------------------------------------------------------------
+
+
+	public function get_resumen_panel_gchart_2var($indicador1 = NULL, $indicador2 = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		$arr_datos1 = $this->get_resumen_panel($indicador1, $empresa, $anomes);
+		$arr_datos2 = $this->get_resumen_panel($indicador2, $empresa, $anomes);
+
+		if ( ! $arr_datos1 OR ! $arr_datos2)
+		{
+			return NULL;
+		}
+
+		foreach ($this->_get_arr_dias($anomes) as $num_dia => $valor)
+		{
+			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
+		}
+
+		foreach($arr_datos1 as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
+		}
+
+		foreach($arr_datos2 as $registro)
+		{
+			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
+		}
+
+		return $this->gchart_data($arr_peticiones);
+
 	}
 
 

@@ -55,7 +55,7 @@
 			<div class="row">
 				<div class="col-md-8">
 					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
-						{_panel_title_peticiones_}
+						{_panel_title_peticiones_total_}
 					</a>
 				</div>
 			</div>
@@ -69,6 +69,34 @@
 					</div>
 					<div class="col-md-6">
 						<div id="chart_peticiones_monto" style="width: 100%; height: 190px;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="accordion">
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
+						{_panel_title_peticiones_tipo_}
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-body collapse in" id="form_peticiones">
+			<div class="accordion-inner">
+				<div class="row">
+					<div class="col-md-6">
+						<div id="chart_peticiones_instala" style="width: 100%; height: 190px;"></div>
+					</div>
+					<div class="col-md-6">
+						<div id="chart_peticiones_repara" style="width: 100%; height: 190px;"></div>
 					</div>
 				</div>
 			</div>
@@ -161,6 +189,32 @@ function drawCharts() {
 	};
 	var chart_monto = new google.visualization.ComboChart(document.getElementById('chart_peticiones_monto'));
 	chart_monto.draw(data_monto, options_monto);
+
+
+	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_instala; ?>);
+	var options_cant = {
+		title : 'Cantidad Peticiones Instalacion',
+		//legend: {position: 'none'},
+		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		seriesType: 'bars',
+		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
+	};
+	var chart_cant = new google.visualization.ComboChart(document.getElementById('chart_peticiones_instala'));
+	chart_cant.draw(data_cant, options_cant);
+
+
+	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_repara; ?>);
+	var options_cant = {
+		title : 'Cantidad Peticiones Reparacion',
+		//legend: {position: 'none'},
+		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		seriesType: 'bars',
+		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
+	};
+	var chart_cant = new google.visualization.ComboChart(document.getElementById('chart_peticiones_repara'));
+	chart_cant.draw(data_cant, options_cant);
 
 
 

@@ -84,11 +84,13 @@ class Toa_panel extends CI_Controller {
 			$sel_mes     = set_value('mes');
 
 			$datos['form_validated'] = TRUE;
-			$datos['cant_peticiones_empresa'] = $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($sel_empresa, $sel_mes));
-			$datos['monto_peticiones_empresa'] = $this->toa_model->gchart_data($this->toa_model->peticiones_empresa($sel_empresa, $sel_mes, 'monto'));
-			$datos['cant_tecnicos_empresa'] = $this->toa_model->gchart_data($this->toa_model->tecnicos_empresa($sel_empresa, $sel_mes));
-			$datos['stock_empresa'] = $this->toa_model->gchart_data($this->toa_model->stock_empresa($sel_empresa, $sel_mes));
-			$datos['stock_tecnicos_empresa'] = $this->toa_model->gchart_data($this->toa_model->stock_tecnicos_empresa($sel_empresa, $sel_mes));
+			$datos['cant_peticiones_empresa'] = $this->toa_model->get_resumen_panel_gchart_2var('SAP_Q_PET', 'TOA_Q_PET', $sel_empresa, $sel_mes);
+			$datos['monto_peticiones_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_PET', $sel_empresa, $sel_mes);
+			$datos['cant_peticiones_instala'] = $this->toa_model->get_resumen_panel_gchart_2var('SAP_Q_PET_INSTALA', 'TOA_Q_PET_INSTALA', $sel_empresa, $sel_mes);
+			$datos['cant_peticiones_repara'] = $this->toa_model->get_resumen_panel_gchart_2var('SAP_Q_PET_REPARA', 'TOA_Q_PET_REPARA', $sel_empresa, $sel_mes);
+			$datos['cant_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart_2var('SAP_Q_TECNICOS', 'TOA_Q_TECNICOS', $sel_empresa, $sel_mes);
+			$datos['stock_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes);
+			$datos['stock_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes);
 		}
 
 		app_render_view('toa/panel_empresa', $datos);
