@@ -107,7 +107,7 @@ class Orm_controller extends CI_Controller {
 	 * @param  string $id_modelo     Identificador del modelo
 	 * @return void
 	 */
-	public function editar($nombre_modelo = '' , $id_modelo = NULL, $orm_filtro = '_', $orm_pagina = 0)
+	public function editar($nombre_modelo = '', $orm_filtro = '_', $orm_pagina = 0, $id_modelo = NULL)
 	{
 		$modelo = new $nombre_modelo($id_modelo);
 

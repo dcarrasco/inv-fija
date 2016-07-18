@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="col-md-9 col-sm-7 col-xs-6 text-right">
-		<a href="{url_editar}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
+		<a href="{url_editar}/<?php echo $orm_filtro.'/'.$orm_pagina; ?>" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
 			<span class="fa fa-plus-circle"></span>
 			{_orm_button_new_} <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
@@ -43,7 +43,7 @@
 						<?php endif; ?>
 					<?php endforeach; ?>
 					<td class="text-center">
-						<a href="{url_editar}/<?php echo $o->get_model_id().'/'.$orm_filtro.'/'.$orm_pagina; ?>" class="">
+						<a href="{url_editar}/<?php echo $orm_filtro.'/'.$orm_pagina.'/'.$o->get_model_id(); ?>" class="">
 							<!-- <span class="fa fa-edit"></span> -->
 							{_orm_link_edit_}
 						</a>
