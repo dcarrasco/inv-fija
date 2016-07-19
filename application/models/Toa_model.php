@@ -2267,56 +2267,47 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-
+	/**
+	 * Devuelve datos para poblar panel
+	 *
+	 * @param  mixed $indicador Nombre del indicador o arreglo con nombre de indicadores
+	 * @param  string $empresa  ID de la empresa
+	 * @param  string $anomes   Mes a recuperar (formato YYYYMM)
+	 * @return string           Arreglo en formato javascript
+	 */
 	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
 	{
-		$arr_datos = $this->get_resumen_panel($indicador, $empresa, $anomes);
-
-		if ( ! $arr_datos)
+		$arr_indicador = array();
+		if ( ! is_array($indicador))
 		{
-			return NULL;
+			$arr_indicador['Data'] = $indicador;
+		}
+		else
+		{
+			$arr_indicador = $indicador;
 		}
 
+		$arr_datos = array();
+		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
+		{
+			$arr_datos[$llave_indicador] = $this->get_resumen_panel($valor_indicador, $empresa, $anomes);
+		}
+
+		$arr_peticiones = array();
 		foreach ($this->_get_arr_dias($anomes) as $num_dia => $valor)
 		{
-			$arr_peticiones[$num_dia] = 0;
+			foreach ($arr_indicador as $llave_indicador => $valor_indicador)
+			{
+				$arr_peticiones[$num_dia][$llave_indicador] = 0;
+			}
 		}
 
-		foreach($arr_datos as $registro)
+		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
 		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor'];
-		}
-
-		return $this->gchart_data($arr_peticiones);
-
-	}
-
-	// --------------------------------------------------------------------
-
-
-	public function get_resumen_panel_gchart_2var($indicador1 = NULL, $indicador2 = NULL, $empresa = NULL, $anomes = NULL)
-	{
-		$arr_datos1 = $this->get_resumen_panel($indicador1, $empresa, $anomes);
-		$arr_datos2 = $this->get_resumen_panel($indicador2, $empresa, $anomes);
-
-		if ( ! $arr_datos1 OR ! $arr_datos2)
-		{
-			return NULL;
-		}
-
-		foreach ($this->_get_arr_dias($anomes) as $num_dia => $valor)
-		{
-			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
-		}
-
-		foreach($arr_datos1 as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
-		}
-
-		foreach($arr_datos2 as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
+			foreach($arr_datos[$llave_indicador] as $registro)
+			{
+				$arr_peticiones[fmt_fecha($registro['fecha'], 'd')][$llave_indicador] = $registro['valor'];
+			}
 		}
 
 		return $this->gchart_data($arr_peticiones);
