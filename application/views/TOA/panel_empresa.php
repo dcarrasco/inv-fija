@@ -54,14 +54,14 @@
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-8">
-					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
+					<a href="#peticiones-totales" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_total_}
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel-body collapse in" id="form_peticiones">
+		<div class="panel-body collapse in" id="peticiones-totales">
 			<div class="accordion-inner">
 				<div class="row">
 					<div class="col-md-6">
@@ -82,21 +82,27 @@
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-8">
-					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
+					<a href="#peticiones-asignacion" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_tipo_}
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel-body collapse in" id="form_peticiones">
+		<div class="panel-body collapse in" id="peticiones-asignacion">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div id="chart_peticiones_instala" style="width: 100%; height: 190px;"></div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-2">
+						<div id="usage_peticiones_instala" style="width: 100%; height: 190px;"></div>
+					</div>
+					<div class="col-md-4">
 						<div id="chart_peticiones_repara" style="width: 100%; height: 190px;"></div>
+					</div>
+					<div class="col-md-2">
+						<div id="usage_peticiones_repara" style="width: 100%; height: 190px;"></div>
 					</div>
 				</div>
 			</div>
@@ -110,14 +116,14 @@
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-8">
-					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
+					<a href="#tecnicos" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_tecnicos_}
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel-body collapse in" id="form_peticiones">
+		<div class="panel-body collapse in" id="tecnicos">
 			<div class="accordion-inner">
 				<div class="row">
 					<div class="col-md-6">
@@ -137,14 +143,14 @@
 		<div class="panel-heading">
 			<div class="row">
 				<div class="col-md-8">
-					<a href="#form_peticiones" class="accordion-toggle" data-toggle="collapse">
+					<a href="#stock" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_stock_}
 					</a>
 				</div>
 			</div>
 		</div>
 
-		<div class="panel-body collapse in" id="form_peticiones">
+		<div class="panel-body collapse in" id="stock">
 			<div class="accordion-inner">
 				<div class="row">
 					<div class="col-md-6">
@@ -181,7 +187,7 @@ function drawCharts() {
 	var data_monto = google.visualization.arrayToDataTable(<?php echo $monto_peticiones_empresa; ?>);
 	var options_monto = {
 		title : 'Monto Peticiones',
-		// legend: {position: 'none'},
+		legend: {position: 'none'},
 		vAxis: {title: 'Monto', textStyle: {fontName: 'Calibri', fontSize: 10}, format: '###,###'},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
@@ -198,7 +204,8 @@ function drawCharts() {
 		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
-		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
+		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}},
+		bar: {groupWidth: '80%'}
 	};
 	var chart_cant = new google.visualization.ComboChart(document.getElementById('chart_peticiones_instala'));
 	chart_cant.draw(data_cant, options_cant);
@@ -217,11 +224,10 @@ function drawCharts() {
 	chart_cant.draw(data_cant, options_cant);
 
 
-
 	var data_tecnicos = google.visualization.arrayToDataTable(<?php echo $cant_tecnicos_empresa; ?>);
 	var options_tecnicos = {
 		title : 'Cantidad Tecnicos',
-		legend: {position: 'none'},
+		//legend: {position: 'none'},
 		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
@@ -229,6 +235,7 @@ function drawCharts() {
 	};
 	var chart_tecnicos = new google.visualization.ComboChart(document.getElementById('chart_tecnicos'));
 	chart_tecnicos.draw(data_tecnicos, options_tecnicos);
+
 
 	var data_stock = google.visualization.arrayToDataTable(<?php echo $stock_empresa; ?>);
 	var options_stock = {
@@ -242,6 +249,7 @@ function drawCharts() {
 	var chart_stock = new google.visualization.ComboChart(document.getElementById('chart_stock'));
 	chart_stock.draw(data_stock, options_stock);
 
+
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $stock_tecnicos_empresa; ?>);
 	var options_stock_tecnicos = {
 		title : 'Stock Tecnicos',
@@ -253,6 +261,28 @@ function drawCharts() {
 	};
 	var chart_stock_tecnicos = new google.visualization.ComboChart(document.getElementById('chart_stock_tecnicos'));
 	chart_stock_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
+
+
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_instala; ?>);
+	var options_stock_tecnicos = {
+		title : 'Uso Instala',
+		pieHole: 0.6,
+		legend: {position: 'none'},
+		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+	};
+	var chart_usage_instala = new google.visualization.PieChart(document.getElementById('usage_peticiones_instala'));
+	chart_usage_instala.draw(data_stock_tecnicos, options_stock_tecnicos);
+
+
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_repara; ?>);
+	var options_stock_tecnicos = {
+		title : 'Uso Repara',
+		pieHole: 0.6,
+		legend: {position: 'none'},
+		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+	};
+	var chart_usage_repara = new google.visualization.PieChart(document.getElementById('usage_peticiones_repara'));
+	chart_usage_repara.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 }
 

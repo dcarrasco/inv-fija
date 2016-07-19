@@ -2318,6 +2318,59 @@ class Toa_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera la suma mensual de un indicador
+	 *
+	 * @param  string $indicador Indicador a recuperar
+	 * @param  string $empresa   ID de la empresa
+	 * @param  string $anomes    Mes a recuperar (formato YYYYMM)
+	 * @return array            Arreglo con los datos de la suma del indicador
+	 */
+	public function get_resumen_usage($indicador = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $indicador OR ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$arr_dias = $this->_get_arr_dias($anomes);
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		return $this->db
+			->select_sum('valor')
+			->from($this->config->item('bd_resumen_panel_toa'))
+			->where('tipo', $indicador)
+			->where('empresa', $empresa)
+			->where('fecha>=', $fecha_desde)
+			->where('fecha<', $fecha_hasta)
+			->get()->row_array();
+
+	}
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de uso para poblar el panel
+	 *
+	 * @param  string $indicador1 Indicador a recuperar (numerador)
+	 * @param  string $indicador2 Indicador a recuperar (denominador)
+	 * @param  string $empresa    ID de la empresa
+	 * @param  string $anomes     Mes a recuperar (formato YYYYMM)
+	 * @return string             Arreglo en formato javascript
+	 */
+	public function get_resumen_panel_usage($indicador1 = NULL, $indicador2 = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		$sum_indicador1 = $this->get_resumen_usage($indicador1, $empresa, $anomes);
+		$sum_indicador2 = $this->get_resumen_usage($indicador2, $empresa, $anomes);
+		$usage = ($sum_indicador2['valor'] === 0) ? 0 : 100*($sum_indicador1['valor']/$sum_indicador2['valor']);
+		$usage = (int) $usage;
+
+		return ($this->gchart_data(array('usa' => $usage, 'no usa' => 100 - $usage)));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Formatea un arreglo para ser usado por Google Charts
 	 *
 	 * @param  array  $arr Arreglo a formatear
@@ -2334,28 +2387,22 @@ class Toa_model extends CI_Model {
 
 		foreach ($arr_orig as $num_dia => $valor)
 		{
+			if ( ! is_array($valor))
+			{
+				$valor = array('Data' => $valor);
+			}
+
 			if ($num_registro === 0)
 			{
 				$arrjs = "[['Dia'";
-				if (is_array($valor))
+				foreach($valor as $llave_valor => $valor_valor)
 				{
-					foreach($valor as $llave_valor => $valor_valor)
-					{
-						$arrjs .= ", '".$llave_valor."'";
-					}
-				}
-				else
-				{
-					$arrjs .= ", 'Data'";
+					$arrjs .= ", '".$llave_valor."'";
 				}
 				$arrjs .= ']';
 			}
 
 			$arrjs .= ", ['".$num_dia."'";
-			if ( ! is_array($valor))
-			{
-				$valor = array($valor);
-			}
 
 			foreach ($valor as $llave_valor => $valor_valor)
 			{

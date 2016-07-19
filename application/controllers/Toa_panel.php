@@ -91,6 +91,8 @@ class Toa_panel extends CI_Controller {
 			$datos['cant_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'), $sel_empresa, $sel_mes);
 			$datos['stock_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes);
 			$datos['stock_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes);
+			$datos['usage_peticiones_instala'] = $this->toa_model->get_resumen_panel_usage('SAP_Q_PET_INSTALA', 'TOA_Q_PET_INSTALA', $sel_empresa, $sel_mes);
+			$datos['usage_peticiones_repara'] = $this->toa_model->get_resumen_panel_usage('SAP_Q_PET_REPARA', 'TOA_Q_PET_REPARA', $sel_empresa, $sel_mes);
 		}
 
 		app_render_view('toa/panel_empresa', $datos);
