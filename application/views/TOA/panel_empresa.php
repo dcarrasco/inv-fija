@@ -64,11 +64,39 @@
 		<div class="panel-body collapse in" id="peticiones-totales">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-6">
-						<div id="chart_peticiones_cant" style="width: 100%; height: 190px;"></div>
+					<div class="col-md-8 col-md-offset-1">
+						<div id="chart_peticiones_cant" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-6">
-						<div id="chart_peticiones_monto" style="width: 100%; height: 190px;"></div>
+					<div class="col-md-2">
+						<div id="proy_peticiones_cant" style="width: 100%; height: 180px;"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="accordion">
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="#peticiones-totales" class="accordion-toggle" data-toggle="collapse">
+						{_panel_title_peticiones_total_}
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-body collapse in" id="peticiones-totales">
+			<div class="accordion-inner">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-1">
+						<div id="chart_peticiones_monto" style="width: 100%; height: 180px;"></div>
+					</div>
+					<div class="col-md-2">
+						<div id="proy_peticiones_monto" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
 			</div>
@@ -92,17 +120,39 @@
 		<div class="panel-body collapse in" id="peticiones-asignacion">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-4">
-						<div id="chart_peticiones_instala" style="width: 100%; height: 190px;"></div>
+					<div class="col-md-8 col-md-offset-1">
+						<div id="chart_peticiones_instala" style="width: 100%; height: 180px;"></div>
 					</div>
 					<div class="col-md-2">
-						<div id="usage_peticiones_instala" style="width: 100%; height: 190px;"></div>
+						<div id="usage_peticiones_instala" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-4">
-						<div id="chart_peticiones_repara" style="width: 100%; height: 190px;"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="accordion">
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="#peticiones-asignacion" class="accordion-toggle" data-toggle="collapse">
+						{_panel_title_peticiones_tipo_}
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-body collapse in" id="peticiones-asignacion">
+			<div class="accordion-inner">
+				<div class="row">
+					<div class="col-md-8 col-md-offset-1">
+						<div id="chart_peticiones_repara" style="width: 100%; height: 180px;"></div>
 					</div>
 					<div class="col-md-2">
-						<div id="usage_peticiones_repara" style="width: 100%; height: 190px;"></div>
+						<div id="usage_peticiones_repara" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
 			</div>
@@ -126,10 +176,11 @@
 		<div class="panel-body collapse in" id="tecnicos">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-6">
-						<div id="chart_tecnicos" style="width: 100%; height: 190px;"></div>
+					<div class="col-md-8 col-md-offset-1">
+						<div id="chart_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-2">
+						<div id="usage_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
 			</div>
@@ -154,10 +205,10 @@
 			<div class="accordion-inner">
 				<div class="row">
 					<div class="col-md-6">
-						<div id="chart_stock" style="width: 100%; height: 190px;"></div>
+						<div id="chart_stock" style="width: 100%; height: 180px;"></div>
 					</div>
 					<div class="col-md-6">
-						<div id="chart_stock_tecnicos" style="width: 100%; height: 190px;"></div>
+						<div id="chart_stock_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
 
 				</div>
@@ -174,7 +225,7 @@ function drawCharts() {
 	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_empresa; ?>);
 	var options_cant = {
 		title : 'Cantidad Peticiones',
-		//legend: {position: 'none'},
+		legend: {position: 'none'},
 		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
@@ -204,8 +255,7 @@ function drawCharts() {
 		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
-		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}},
-		bar: {groupWidth: '80%'}
+		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
 	var chart_cant = new google.visualization.ComboChart(document.getElementById('chart_peticiones_instala'));
 	chart_cant.draw(data_cant, options_cant);
@@ -244,7 +294,7 @@ function drawCharts() {
 		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
-		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
+		series: {0: {color: '#990099'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
 	var chart_stock = new google.visualization.ComboChart(document.getElementById('chart_stock'));
 	chart_stock.draw(data_stock, options_stock);
@@ -257,7 +307,7 @@ function drawCharts() {
 		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
 		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
 		seriesType: 'bars',
-		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
+		series: {0: {color: '#990099'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
 	var chart_stock_tecnicos = new google.visualization.ComboChart(document.getElementById('chart_stock_tecnicos'));
 	chart_stock_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
@@ -283,6 +333,39 @@ function drawCharts() {
 	};
 	var chart_usage_repara = new google.visualization.PieChart(document.getElementById('usage_peticiones_repara'));
 	chart_usage_repara.draw(data_stock_tecnicos, options_stock_tecnicos);
+
+
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_cant_tecnicos; ?>);
+	var options_stock_tecnicos = {
+		title : 'Uso Tecnicos',
+		pieHole: 0.6,
+		legend: {position: 'none'},
+		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+	};
+	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('usage_tecnicos'));
+	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
+
+
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_empresa_proy; ?>);
+	var options_stock_tecnicos = {
+		title : 'Proyeccion Q Peticiones: <?php echo $proy_q_pet; ?>',
+		pieHole: 0.6,
+		legend: {position: 'none'},
+		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+	};
+	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('proy_peticiones_cant'));
+	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
+
+
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $monto_peticiones_empresa_proy; ?>);
+	var options_stock_tecnicos = {
+		title : 'Proyeccion Monto Peticiones: $ <?php echo $proy_monto_pet; ?>',
+		pieHole: 0.6,
+		legend: {position: 'none'},
+		slices: {0: {color: '#990099'}, 1: {color: 'transparent'}}
+	};
+	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('proy_peticiones_monto'));
+	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 }
 

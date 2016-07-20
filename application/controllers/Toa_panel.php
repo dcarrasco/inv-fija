@@ -74,7 +74,10 @@ class Toa_panel extends CI_Controller {
 		$this->form_validation->set_rules($this->toa_model->panel_validation);
 
 		$datos = array(
-			'combo_empresas' => $empresa_toa->find('list'),
+			'combo_empresas' => array_merge(
+				$empresa_toa->find('list'),
+				array('***' => 'Todas')
+			),
 			'form_validated' => FALSE,
 		);
 
@@ -84,15 +87,25 @@ class Toa_panel extends CI_Controller {
 			$sel_mes     = set_value('mes');
 
 			$datos['form_validated'] = TRUE;
-			$datos['cant_peticiones_empresa'] = $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_PET', 'toa' => 'TOA_Q_PET'), $sel_empresa, $sel_mes);
+			$datos['cant_peticiones_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_Q_PET', $sel_empresa, $sel_mes);
+			$datos['cant_peticiones_empresa_proy'] = $this->toa_model->get_resumen_panel_proyeccion('SAP_Q_PET', $sel_empresa, $sel_mes);
+
 			$datos['monto_peticiones_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_PET', $sel_empresa, $sel_mes);
+			$datos['monto_peticiones_empresa_proy'] = $this->toa_model->get_resumen_panel_proyeccion('SAP_MONTO_PET', $sel_empresa, $sel_mes);
+
 			$datos['cant_peticiones_instala'] = $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_PET_INSTALA', 'toa' => 'TOA_Q_PET_INSTALA'), $sel_empresa, $sel_mes);
 			$datos['cant_peticiones_repara'] = $this->toa_model->get_resumen_panel_gchart(array('sap'  => 'SAP_Q_PET_REPARA', 'toa' => 'TOA_Q_PET_REPARA'), $sel_empresa, $sel_mes);
 			$datos['cant_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'), $sel_empresa, $sel_mes);
 			$datos['stock_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes);
 			$datos['stock_tecnicos_empresa'] = $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes);
+
 			$datos['usage_peticiones_instala'] = $this->toa_model->get_resumen_panel_usage('SAP_Q_PET_INSTALA', 'TOA_Q_PET_INSTALA', $sel_empresa, $sel_mes);
 			$datos['usage_peticiones_repara'] = $this->toa_model->get_resumen_panel_usage('SAP_Q_PET_REPARA', 'TOA_Q_PET_REPARA', $sel_empresa, $sel_mes);
+			$datos['usage_cant_tecnicos'] = $this->toa_model->get_resumen_panel_usage('SAP_Q_TECNICOS', 'TOA_Q_TECNICOS', $sel_empresa, $sel_mes);
+
+			$datos['proy_q_pet'] = fmt_cantidad($this->toa_model->get_resumen_usage('SAP_Q_PET', $sel_empresa, $sel_mes)/$this->toa_model->get_resumen_panel_porcentaje_mes('SAP_Q_PET', $sel_empresa, $sel_mes));
+			$datos['proy_monto_pet'] = fmt_cantidad($this->toa_model->get_resumen_usage('SAP_MONTO_PET', $sel_empresa, $sel_mes)/$this->toa_model->get_resumen_panel_porcentaje_mes('SAP_MONTO_PET', $sel_empresa, $sel_mes));
+
 		}
 
 		app_render_view('toa/panel_empresa', $datos);

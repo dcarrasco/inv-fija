@@ -2097,8 +2097,6 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
 		{
@@ -2138,8 +2136,6 @@ class Toa_model extends CI_Model {
 		{
 			return NULL;
 		}
-
-		$arr_dias = $this->_get_arr_dias($anomes);
 
 		$arr_peticiones = $this->_get_arr_dias($anomes);
 		foreach ($arr_peticiones as $num_dia => $valor)
@@ -2244,24 +2240,42 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		return ($this->db
-			->select('tipo')
-			->select('empresa')
-			->select('fecha')
-			->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
-			->select('valor')
-			->from($this->config->item('bd_resumen_panel_toa'))
-			->where('tipo', $indicador)
-			->where('empresa', $empresa)
-			->where('fecha>=', $fecha_desde)
-			->where('fecha<', $fecha_hasta)
-			->order_by('tipo, empresa, fecha')
-			->get()->result_array());
+		if ($empresa === '***')
+		{
+			return ($this->db
+				->select('tipo')
+				->select('fecha')
+				->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
+				->select_sum('valor', 'valor')
+				->from($this->config->item('bd_resumen_panel_toa'))
+				->where('tipo', $indicador)
+				->where('fecha>=', $fecha_desde)
+				->where('fecha<', $fecha_hasta)
+				->group_by('tipo')
+				->group_by('fecha')
+				->group_by('substring(convert(varchar(20), fecha, 103),1,2)', FALSE)
+				->order_by('tipo, fecha')
+				->get()->result_array());
+		}
+		else
+		{
+			return ($this->db
+				->select('tipo')
+				->select('empresa')
+				->select('fecha')
+				->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
+				->select('valor')
+				->from($this->config->item('bd_resumen_panel_toa'))
+				->where('tipo', $indicador)
+				->where('empresa', $empresa)
+				->where('fecha>=', $fecha_desde)
+				->where('fecha<', $fecha_hasta)
+				->order_by('tipo, empresa, fecha')
+				->get()->result_array());
+		}
 	}
 
 
@@ -2270,10 +2284,10 @@ class Toa_model extends CI_Model {
 	/**
 	 * Devuelve datos para poblar panel
 	 *
-	 * @param  mixed $indicador Nombre del indicador o arreglo con nombre de indicadores
-	 * @param  string $empresa  ID de la empresa
-	 * @param  string $anomes   Mes a recuperar (formato YYYYMM)
-	 * @return string           Arreglo en formato javascript
+	 * @param  mixed  $indicador Nombre del indicador o arreglo con nombre de indicadores
+	 * @param  string $empresa   ID de la empresa
+	 * @param  string $anomes    Mes a recuperar (formato YYYYMM)
+	 * @return string            Arreglo en formato javascript
 	 */
 	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
 	{
@@ -2332,21 +2346,25 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		return $this->db
+		if ($empresa !== '***')
+		{
+			$this->db->where('empresa', $empresa);
+		}
+
+		$result = $this->db
 			->select_sum('valor')
 			->from($this->config->item('bd_resumen_panel_toa'))
 			->where('tipo', $indicador)
-			->where('empresa', $empresa)
 			->where('fecha>=', $fecha_desde)
 			->where('fecha<', $fecha_hasta)
-			->get()->row_array();
+			->get()->row();
 
+		return $result->valor;
 	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -2362,10 +2380,80 @@ class Toa_model extends CI_Model {
 	{
 		$sum_indicador1 = $this->get_resumen_usage($indicador1, $empresa, $anomes);
 		$sum_indicador2 = $this->get_resumen_usage($indicador2, $empresa, $anomes);
-		$usage = ($sum_indicador2['valor'] === 0) ? 0 : 100*($sum_indicador1['valor']/$sum_indicador2['valor']);
-		$usage = (int) $usage;
+		$usage = ($sum_indicador2 === 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
+		$usage = $usage > 100 ? 100 : (int) $usage;
 
 		return ($this->gchart_data(array('usa' => $usage, 'no usa' => 100 - $usage)));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de uso para poblar el panel
+	 *
+	 * @param  string $indicador Indicador a recuperar (numerador)
+	 * @param  string $empresa   ID de la empresa
+	 * @param  string $anomes    Mes a recuperar (formato YYYYMM)
+	 * @return string            Arreglo en formato javascript
+	 */
+	public function get_resumen_panel_porcentaje_mes($indicador = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $indicador OR ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$dias_mes = days_in_month((int) substr($anomes, 4, 2), (int) substr($anomes, 0, 4));
+
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = $this->_get_fecha_hasta($anomes);
+
+		if ($empresa !== '***')
+		{
+			$this->db->where('empresa', $empresa);
+		}
+
+		$result = $this->db
+			->select_max('fecha')
+			->from($this->config->item('bd_resumen_panel_toa'))
+			->where('tipo', $indicador)
+			->where('fecha>=', $fecha_desde)
+			->where('fecha<', $fecha_hasta)
+			->get()->row();
+
+		$dia_actual = (int) fmt_fecha($result->fecha, 'd');
+
+		return $dia_actual/$dias_mes;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de uso para poblar el panel
+	 *
+	 * @param  string $indicador Indicador a recuperar (numerador)
+	 * @param  string $empresa   ID de la empresa
+	 * @param  string $anomes    Mes a recuperar (formato YYYYMM)
+	 * @return string            Arreglo en formato javascript
+	 */
+	public function get_resumen_panel_proyeccion($indicador = NULL, $empresa = NULL, $anomes = NULL)
+	{
+		if ( ! $indicador OR ! $empresa OR ! $anomes)
+		{
+			return NULL;
+		}
+
+		$valor_indicador = $this->get_resumen_usage($indicador, $empresa, $anomes);
+		$porc_mes = $this->get_resumen_panel_porcentaje_mes($indicador, $empresa, $anomes);
+
+		return ($this->gchart_data(
+			array(
+				'actual' => $valor_indicador,
+				'proy'   => (int) ($valor_indicador/$porc_mes) - $valor_indicador
+			)
+		));
 	}
 
 	// --------------------------------------------------------------------
