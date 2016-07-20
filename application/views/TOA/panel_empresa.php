@@ -226,8 +226,8 @@ function drawCharts() {
 	var options_cant = {
 		title : 'Cantidad Peticiones',
 		legend: {position: 'none'},
-		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Arial', fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontName: 'Arial', fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -239,8 +239,8 @@ function drawCharts() {
 	var options_monto = {
 		title : 'Monto Peticiones',
 		legend: {position: 'none'},
-		vAxis: {title: 'Monto', textStyle: {fontName: 'Calibri', fontSize: 10}, format: '###,###'},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Monto', textStyle: {fontSize: 10}, format: '###,###'},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#990099'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -252,8 +252,8 @@ function drawCharts() {
 	var options_cant = {
 		title : 'Cantidad Peticiones Instalacion',
 		//legend: {position: 'none'},
-		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Cantidad', textStyle: {fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -265,8 +265,8 @@ function drawCharts() {
 	var options_cant = {
 		title : 'Cantidad Peticiones Reparacion',
 		//legend: {position: 'none'},
-		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Cantidad', textStyle: {fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -278,8 +278,8 @@ function drawCharts() {
 	var options_tecnicos = {
 		title : 'Cantidad Tecnicos',
 		//legend: {position: 'none'},
-		vAxis: {title: 'Cantidad', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Cantidad', textStyle: {fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#FF6633'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -291,8 +291,8 @@ function drawCharts() {
 	var options_stock = {
 		title : 'Stock Almacenes',
 		legend: {position: 'none'},
-		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Monto [MM$]', textStyle: {fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#990099'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -304,8 +304,8 @@ function drawCharts() {
 	var options_stock_tecnicos = {
 		title : 'Stock Tecnicos',
 		legend: {position: 'none'},
-		vAxis: {title: 'Monto [MM$]', textStyle: {fontName: 'Calibri', fontSize: 10}},
-		hAxis: {title: 'Dias', textStyle: {fontName: 'Calibri', fontSize: 8}},
+		vAxis: {title: 'Monto [MM$]', textStyle: {fontSize: 10}},
+		hAxis: {title: 'Dias', textStyle: {fontSize: 9}},
 		seriesType: 'bars',
 		series: {0: {color: '#990099'}, 1: {type: 'line', color: '#00C6DA'}}
 	};
@@ -316,7 +316,7 @@ function drawCharts() {
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_instala; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Instala',
-		pieHole: 0.6,
+		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
@@ -327,7 +327,7 @@ function drawCharts() {
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_repara; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Repara',
-		pieHole: 0.6,
+		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
@@ -338,7 +338,7 @@ function drawCharts() {
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_cant_tecnicos; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Tecnicos',
-		pieHole: 0.6,
+		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
@@ -349,7 +349,7 @@ function drawCharts() {
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_empresa_proy; ?>);
 	var options_stock_tecnicos = {
 		title : 'Proyeccion Q Peticiones: <?php echo $proy_q_pet; ?>',
-		pieHole: 0.6,
+		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
@@ -360,7 +360,7 @@ function drawCharts() {
 	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $monto_peticiones_empresa_proy; ?>);
 	var options_stock_tecnicos = {
 		title : 'Proyeccion Monto Peticiones: $ <?php echo $proy_monto_pet; ?>',
-		pieHole: 0.6,
+		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#990099'}, 1: {color: '#EEE'}}
 	};
