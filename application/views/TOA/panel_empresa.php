@@ -5,7 +5,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
 						{_consumo_parametros_}
 					</a>
@@ -19,17 +19,17 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-4 form_group <?php echo form_error('empresa') ? 'has-error' : ''; ?>">
+					<div class="col-xs-4 form_group <?php echo form_error('empresa') ? 'has-error' : ''; ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
 						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-6 form_group <?php echo form_error('mes') ? 'has-error' : ''; ?>">
+					<div class="col-xs-6 form_group <?php echo form_error('mes') ? 'has-error' : ''; ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
 						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>
@@ -53,7 +53,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#peticiones-totales" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_total_}
 					</a>
@@ -64,10 +64,10 @@
 		<div class="panel-body collapse in" id="peticiones-totales">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-1">
+					<div class="col-xs-8 col-xs-offset-1">
 						<div id="chart_peticiones_cant" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div id="proy_peticiones_cant" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
@@ -81,7 +81,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#peticiones-totales" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_total_}
 					</a>
@@ -92,10 +92,10 @@
 		<div class="panel-body collapse in" id="peticiones-totales">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-1">
+					<div class="col-xs-8 col-xs-offset-1">
 						<div id="chart_peticiones_monto" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div id="proy_peticiones_monto" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
@@ -109,7 +109,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#peticiones-asignacion" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_tipo_}
 					</a>
@@ -120,10 +120,10 @@
 		<div class="panel-body collapse in" id="peticiones-asignacion">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-1">
+					<div class="col-xs-8 col-xs-offset-1">
 						<div id="chart_peticiones_instala" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div id="usage_peticiones_instala" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
@@ -137,7 +137,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#peticiones-asignacion" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_peticiones_tipo_}
 					</a>
@@ -148,10 +148,10 @@
 		<div class="panel-body collapse in" id="peticiones-asignacion">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-1">
+					<div class="col-xs-8 col-xs-offset-1">
 						<div id="chart_peticiones_repara" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div id="usage_peticiones_repara" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
@@ -165,7 +165,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#tecnicos" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_tecnicos_}
 					</a>
@@ -176,10 +176,10 @@
 		<div class="panel-body collapse in" id="tecnicos">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-8 col-md-offset-1">
+					<div class="col-xs-8 col-xs-offset-1">
 						<div id="chart_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-2">
+					<div class="col-xs-2">
 						<div id="usage_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
 				</div>
@@ -193,7 +193,7 @@
 
 		<div class="panel-heading">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-xs-8">
 					<a href="#stock" class="accordion-toggle" data-toggle="collapse">
 						{_panel_title_stock_}
 					</a>
@@ -204,10 +204,10 @@
 		<div class="panel-body collapse in" id="stock">
 			<div class="accordion-inner">
 				<div class="row">
-					<div class="col-md-6">
+					<div class="col-xs-6">
 						<div id="chart_stock" style="width: 100%; height: 180px;"></div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-xs-6">
 						<div id="chart_stock_tecnicos" style="width: 100%; height: 180px;"></div>
 					</div>
 
@@ -318,7 +318,7 @@ function drawCharts() {
 		title : 'Uso Instala',
 		pieHole: 0.6,
 		legend: {position: 'none'},
-		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
 	var chart_usage_instala = new google.visualization.PieChart(document.getElementById('usage_peticiones_instala'));
 	chart_usage_instala.draw(data_stock_tecnicos, options_stock_tecnicos);
@@ -329,7 +329,7 @@ function drawCharts() {
 		title : 'Uso Repara',
 		pieHole: 0.6,
 		legend: {position: 'none'},
-		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
 	var chart_usage_repara = new google.visualization.PieChart(document.getElementById('usage_peticiones_repara'));
 	chart_usage_repara.draw(data_stock_tecnicos, options_stock_tecnicos);
@@ -340,7 +340,7 @@ function drawCharts() {
 		title : 'Uso Tecnicos',
 		pieHole: 0.6,
 		legend: {position: 'none'},
-		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
 	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('usage_tecnicos'));
 	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
@@ -351,7 +351,7 @@ function drawCharts() {
 		title : 'Proyeccion Q Peticiones: <?php echo $proy_q_pet; ?>',
 		pieHole: 0.6,
 		legend: {position: 'none'},
-		slices: {0: {color: '#FF6633'}, 1: {color: 'transparent'}}
+		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
 	};
 	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('proy_peticiones_cant'));
 	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
@@ -362,7 +362,7 @@ function drawCharts() {
 		title : 'Proyeccion Monto Peticiones: $ <?php echo $proy_monto_pet; ?>',
 		pieHole: 0.6,
 		legend: {position: 'none'},
-		slices: {0: {color: '#990099'}, 1: {color: 'transparent'}}
+		slices: {0: {color: '#990099'}, 1: {color: '#EEE'}}
 	};
 	var chart_usage_tecnicos = new google.visualization.PieChart(document.getElementById('proy_peticiones_monto'));
 	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
