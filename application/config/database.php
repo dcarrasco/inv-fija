@@ -72,11 +72,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $active_group = 'default';
 
-if (ENVIRONMENT == 'development')
+if (ENVIRONMENT === 'development')
 {
 	$active_group = 'dcr';
 }
-if (ENVIRONMENT == 'development-mac')
+if (ENVIRONMENT === 'development-mac')
 {
 	$active_group = 'mac-sirio';
 }
