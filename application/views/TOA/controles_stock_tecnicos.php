@@ -59,7 +59,7 @@
 	<?php foreach ($stock_tecnicos as $id_tecnico => $datos): ?>
 	<?php if ($datos['con_datos'] > 0 OR set_value('mostrar') === 'todos'): ?>
 
-		<?php if ($num_lin == 0): ?>
+		<?php if ($num_lin === 0): ?>
 			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 				<tr class="active">

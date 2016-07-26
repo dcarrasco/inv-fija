@@ -77,7 +77,7 @@
 					<td class="text-center" nowrap>
 						<?php echo $linea_det->get_valor_field('ubicacion'); ?>
 
-						<?php if ($linea_det->reg_nuevo == 'S'):?>
+						<?php if ($linea_det->reg_nuevo === 'S'):?>
 							<a href="<?php echo site_url($this->router->class . '/editar/' . $hoja . '/' . $id_auditor . '/' . $linea_det->id); ?>" class="btn btn-default btn-xs">
 								<span class="fa fa-edit"></span>
 							</a>

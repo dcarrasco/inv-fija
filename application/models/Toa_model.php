@@ -1330,7 +1330,7 @@ class Toa_model extends CI_Model {
 		$mes = (int) substr($anomes, 4, 2);
 		$ano = (int) substr($anomes, 0, 4);
 
-		return (string) (($mes == 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
+		return (string) (($mes === 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
 
 	}
 

@@ -2,7 +2,7 @@
 	<div class="col-md-8 col-md-offset-2 well">
 		<?php echo form_open('','class="form-horizontal"'); ?>
 		<?php echo form_hidden('actualizar', 'actualizar'); ?>
-		<?php if ($update_status == ' disabled'): ?>
+		<?php if ($update_status === ' disabled'): ?>
 		<div class="form-group">
 			<div class="col-sm-12 text-center">
 				<?php echo sprintf('{_inventario_act_precios_msg_}', fmt_cantidad($cant_actualizada)); ?>

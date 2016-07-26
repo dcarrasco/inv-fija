@@ -5,8 +5,8 @@
 	<div class="col-md-6">
 		<div class="pull-right">
 			<?php echo anchor(
-				$this->router->class.'/ajustes/'.(($ocultar_regularizadas == 0) ? '1' : '0').'/'.$pag.'/'.time(),
-				($ocultar_regularizadas == 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
+				$this->router->class.'/ajustes/'.(($ocultar_regularizadas === 0) ? '1' : '0').'/'.$pag.'/'.time(),
+				($ocultar_regularizadas === 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
 			); ?>
 		</div>
 	</div>

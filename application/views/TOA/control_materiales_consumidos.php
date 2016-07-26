@@ -59,7 +59,7 @@
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($control as $tip_mat_material => $datos): ?>
 
-		<?php if ($num_lin == 0): ?>
+		<?php if ($num_lin === 0): ?>
 			<!-- ENCABEZADO TABLA REPORTE -->
 			<thead>
 			<tr class="active">

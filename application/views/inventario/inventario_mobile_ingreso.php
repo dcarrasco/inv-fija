@@ -47,7 +47,7 @@
 				<?php echo $detalle_inventario->get_marca_obligatorio_field('stock_fisico'); ?>
 			</label>
 			<div class="col-xs-9">
-				<?php echo form_number('stock_fisico', set_value('stock_fisico', ($detalle_inventario->stock_fisico == 0) ? '' : $detalle_inventario->stock_fisico), 'id="id_stock_fisico" class="form-control"'); ?>
+				<?php echo form_number('stock_fisico', set_value('stock_fisico', ($detalle_inventario->stock_fisico === 0) ? '' : $detalle_inventario->stock_fisico), 'id="id_stock_fisico" class="form-control"'); ?>
 			</div>
 		</div>
 
