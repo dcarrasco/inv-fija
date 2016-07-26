@@ -7,31 +7,43 @@
 }
 
 body {
-	font-family: "TelefonicaTextRegular", "Calibri", "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
 	font-size: 14px;
 	line-height: 1.42857143;
 	color: #333;
 	background-color: #fff
 }
 
+.radio > label,
+.checkbox > label,
+label.checkbox-inline,
+label.radio-inline {
+	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
+}
+
 .btn {
-	font-family: "MovistarHeadline-Bold", "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .navbar {
-	font-family: "MovistarHeadline-Bold", "Trebuchet MS","Helvetica Neue",Helvetica,Arial,sans-serif;
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
+}
+
+table.table > thead,
+label {
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 fieldset > legend {
-	font-family: "TelefonicaHeadlineLightRegular";
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .nav-tabs, .panel-heading {
-	font-family: "MovistarHeadline-Regular";
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .well > div > h2 {
-	font-family: "MovistarHeadline-Bold";
+	font-family: "TelefonicaWeb-Regular";
 }
 
 .navbar-inverse {
@@ -145,102 +157,91 @@ body > #container { height: auto; min-height: 80%; }
 Hoja de estilos para tipografias corporativas
 ==============================================================================
 */
-
-
 @font-face {
-	font-family: 'TelefonicaHeadlineLightRegular';
+	font-family: 'TelefonicaCapWeb-Regular';
 	src: local('☺'),
-		 url('../fonts/TELEFONICAHEADLINELIGHT.eot.gz') format('embedded-opentype'),
-		 url('../fonts/TELEFONICAHEADLINELIGHT.woff') format('woff'),
-		 url('../fonts/TELEFONICAHEADLINELIGHT.otf') format('opentype'),
-		 url('../fonts/TELEFONICAHEADLINELIGHT.svg#TelefonicaHeadlineLightRegula') format('svg');
+		 url('../fonts/TelefonicaCapWeb-Regular.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaCapWeb-Regular.svg') format('svg'),
+		 url('../fonts/TelefonicaCapWeb-Regular.woff') format('woff'),
+		 url('../fonts/TelefonicaCapWeb-Regular.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'TelefonicaTextBold';
+	font-family: 'TelefonicaWeb-Light';
 	src: local('☺'),
-		 url('../fonts/TELEFONICATEXTBOLD.eot.gz') format('embedded-opentype'),
-		 url('../fonts/TELEFONICATEXTBOLD.woff') format('woff'),
-		 url('../fonts/TELEFONICATEXTBOLD.otf') format('opentype'),
-		 url('../fonts/TELEFONICATEXTBOLD.svg#TelefonicaTextBold') format('svg');
-	font-style: normal;
-}
-
-@font-face {
-	font-family: 'TelefonicaTextItalic';
-	src: local('☺'),
-		 url('../fonts/TELEFONICATEXTITALIC.eot.gz') format('embedded-opentype'),
-		 url('../fonts/TELEFONICATEXTITALIC.woff') format('woff'),
-		 url('../fonts/TELEFONICATEXTITALIC.otf') format('opentype'),
-		 url('../fonts/TELEFONICATEXTITALIC.svg#TelefonicaTextItalic') format('svg');
+		 url('../fonts/TelefonicaWeb-Light.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaWeb-Light.svg') format('svg'),
+		 url('../fonts/TelefonicaWeb-Light.woff') format('woff'),
+		 url('../fonts/TelefonicaWeb-Light.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'TelefonicaTextRegular';
+	font-family: 'TelefonicaWeb-ExtraLight';
 	src: local('☺'),
-		 url('../fonts/TELEFONICATEXTREGULAR.eot.gz') format('embedded-opentype'),
-		 url('../fonts/TELEFONICATEXTREGULAR.woff') format('woff'),
-		 url('../fonts/TELEFONICATEXTREGULAR.otf') format('opentype'),
-		 url('../fonts/TELEFONICATEXTREGULAR.svg#TelefonicaTextRegular') format('svg');
+		 url('../fonts/TelefonicaWeb-ExtraLight.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaWeb-ExtraLight.svg') format('svg'),
+		 url('../fonts/TelefonicaWeb-ExtraLight.woff') format('woff'),
+		 url('../fonts/TelefonicaWeb-ExtraLight.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'TelefonicaCap';
+	font-family: 'TelefonicaWeb-Regular';
 	src: local('☺'),
-		 url('../fonts/TELEFONICACAP.eot.gz') format('embedded-opentype'),
-		 url('../fonts/TELEFONICACAP.woff') format('woff'),
-		 url('../fonts/TELEFONICACAP.otf') format('opentype'),
-		 url('../fonts/TELEFONICACAP.svg#TelefonicaCap') format('svg');
+		 url('../fonts/TelefonicaWeb-Regular.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaWeb-Regular.svg') format('svg'),
+		 url('../fonts/TelefonicaWeb-Regular.woff') format('woff'),
+		 url('../fonts/TelefonicaWeb-Regular.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'MovistarHeadline-Regular';
+	font-family: 'TelefonicaWeb-RegularItalic';
 	src: local('☺'),
-		 url('../fonts/movistarheadline-regular-webfont.eot') format('embedded-opentype'),
-		 url('../fonts/movistarheadline-regular-webfont.svg') format('svg'),
-		 url('../fonts/movistarheadline-regular-webfont.ttf') format('truetype'),
-		 url('../fonts/movistarheadline-regular-webfont.woff') format('woff');
+		 url('../fonts/TelefonicaWeb-RegularItalic.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaWeb-RegularItalic.svg') format('svg'),
+		 url('../fonts/TelefonicaWeb-RegularItalic.woff') format('woff'),
+		 url('../fonts/TelefonicaWeb-RegularItalic.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'MovistarHeadline-Bold';
+	font-family: 'movistarheadlinebold';
 	src: local('☺'),
-		 url('../fonts/movistarheadline-bold-webfont.eot') format('embedded-opentype'),
-		 url('../fonts/movistarheadline-bold-webfont.svg') format('svg'),
-		 url('../fonts/movistarheadline-bold-webfont.ttf') format('truetype'),
-		 url('../fonts/movistarheadline-bold-webfont.woff') format('woff');
+		 url('../fonts/movistarheadlinebold.eot') format('embedded-opentype'),
+		 url('../fonts/movistarheadlinebold.svg') format('svg'),
+		 url('../fonts/movistarheadlinebold.woff') format('woff'),
+		 url('../fonts/movistarheadlinebold.ttf') format('ttf');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'MovistarText-Regular';
+	font-family: 'movistarheadlineregular';
 	src: local('☺'),
-		 url('../fonts/movistartextregular.eot') format('embedded-opentype'),
-		 url('../fonts/movistartextregular.svg') format('svg'),
-		 url('../fonts/movistartextregular.ttf') format('truetype'),
-		 url('../fonts/movistartextregular.woff') format('woff');
+		 url('../fonts/movistarheadlineregular.eot') format('embedded-opentype'),
+		 url('../fonts/movistarheadlineregular.svg') format('svg'),
+		 url('../fonts/movistarheadlineregular.woff') format('woff'),
+		 url('../fonts/movistarheadlineregular.ttf') format('ttf');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'MovistarText-Bold';
+	font-family: 'movistarmarket';
 	src: local('☺'),
-		 url('../fonts/movistartextbold.eot') format('embedded-opentype'),
-		 url('../fonts/movistartextbold.svg') format('svg'),
-		 url('../fonts/movistartextbold.ttf') format('truetype'),
-		 url('../fonts/movistartextbold.woff') format('woff');
+		 url('../fonts/movistarmarket.eot') format('embedded-opentype'),
+		 url('../fonts/movistarmarket.svg') format('svg'),
+		 url('../fonts/movistarmarket.woff') format('woff'),
+		 url('../fonts/movistarmarket.ttf') format('ttf');
 	font-weight: normal;
 	font-style: normal;
 }
+
