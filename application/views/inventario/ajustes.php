@@ -101,7 +101,7 @@
 						<?php else: ?>
 							<button class="btn btn-default btn-sm btn-success" style="white-space: nowrap;">
 								<span class="fa fa-check"></span>
-								{_inventario_report_label_OK'_}
+								{_inventario_report_label_OK_}
 							</button>
 						<?php endif; ?>
 					</td>
