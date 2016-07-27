@@ -67,12 +67,9 @@
 			</div>
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-				<div class="pull-right">
-					<button type="submit" name="btn_submit" class="btn btn-success">
-						{_login_button_login_}
-						<span class="fa fa-play"></span>
-					</button>
-				</div>
+				<button type="submit" name="btn_submit" class="btn btn-success pull-right col-md-6">
+					{_login_button_login_} &nbsp; <span class="fa fa-sign-in"></span>
+				</button>
 			</div>
 		<?php echo form_close(); ?>
 	</div>
