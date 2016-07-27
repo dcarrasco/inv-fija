@@ -63,7 +63,7 @@
 $(document).ready(function() {
 	if ($('#filtro').val() != '')
 	{
-		$('#filtro').css('background', '#d9edf7');
+		$('#filtro').addClass('search_found');
 		$('#btn_filtro').removeClass('btn-default');
 		$('#btn_filtro').addClass('btn-primary');
 	}
