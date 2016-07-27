@@ -69,6 +69,7 @@ class Modulo extends ORM_Model {
 					'tipo'           => 'char',
 					'largo'          => 100,
 					'texto_ayuda'    => 'Descripci&oacute;n del m&oacute;dulo. M&aacute;ximo 100 caracteres.',
+					'mostrar_lista'  => FALSE,
 				),
 				'orden' => array(
 					'label'          => 'Orden del m&oacute;dulo',
@@ -94,7 +95,8 @@ class Modulo extends ORM_Model {
 					'largo'          => 20,
 					'texto_ayuda'    => 'Cadena de caracteres de seguridad del m&oacute;dulo. M&aacute;ximo 20 caracteres.',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
+					'es_unico'       => TRUE,
+					'mostrar_lista'  => FALSE,
 				),
 			),
 		);
