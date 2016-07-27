@@ -83,7 +83,7 @@ class Almacen_sap extends ORM_Model {
 				),
 				'tipo_op' => array(
 						'label'          => 'Tipo operaci&oacute;n',
-						'tipo'           =>  'char',
+						'tipo'           => 'char',
 						'largo'          => 50,
 						'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
 						'choices'        => array(
