@@ -527,7 +527,7 @@ class Orm_field {
 
 		if (count($this->_choices) > 0)
 		{
-			return $this->_choices[$valor];
+			return array_key_exists($valor, $this->_choices) ? $this->_choices[$valor] : NULL;
 		}
 
 		if ($this->_formato)
