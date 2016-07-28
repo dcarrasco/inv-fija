@@ -1,6 +1,7 @@
 <!-- ============================== MENU MODULO ============================== -->
-<nav>
-	<ul class="nav nav-tabs hidden-print">
+<div class="row">
+<div class="col-md-2">
+	<ul class="nav nav-stacked nav-sidebar hidden-print">
 	{menu_modulo}
 		<li class="{menu_selected}">
 			<a href="{menu_url}">
@@ -9,5 +10,5 @@
 		</li>
 	{/menu_modulo}
 	</ul>
-</nav>
+</div>
 <!-- ============================== /MENU MODULO ============================== -->

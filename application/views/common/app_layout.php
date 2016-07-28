@@ -50,8 +50,7 @@
 
 <?php if (isset($app_menu_modulo)): ?>
 	{app_menu_modulo}
-	<div class="tab-content">
-	<div class="tab-pane active">
+	<div class="col-md-10">
 <?php endif; ?>
 
 <?php if ( ! $is_vista_login): ?>
@@ -65,8 +64,8 @@
 <!-- ============================== /MODULOS APP ============================== -->
 
 <?php if (isset($app_menu_modulo)): ?>
-	</div> <!-- DIV   class="tab-content" -->
-	</div> <!-- DIV   class="tab-pane"    -->
+	</div> <!-- DIV   class="col-md-10" -->
+	</div> <!-- DIV   class="row"    -->
 <?php endif; ?>
 
 </div> <!-- DIV principal de la aplicacion   class="container"-->

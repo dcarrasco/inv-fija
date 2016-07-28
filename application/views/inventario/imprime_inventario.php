@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-8 col-md-offset-2 well">
+	<div class="col-md-10 col-md-offset-1 well">
 		<?php echo form_open('','class="form-horizontal"'); ?>
 		<?php echo form_hidden('formulario','imprime'); ?>
 		<fieldset>
