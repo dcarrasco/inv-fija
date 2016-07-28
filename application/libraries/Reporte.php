@@ -105,17 +105,17 @@ class Reporte {
 			case 'numero_dif':
 							return '<strong>' .
 								(($valor > 0)
-									? '<p class="text-success">+'
-									: (($valor < 0) ? '<p class="text-danger">' : '')) .
-								fmt_cantidad($valor) . (($valor !== 0) ? '</p>' : '') .
+									? '<span class="text-success">+'
+									: (($valor < 0) ? '<span class="text-danger">' : '')) .
+								fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .
 								'</strong>';
 							break;
 			case 'valor_dif':
 							return '<strong>' .
 								(($valor > 0)
-									? '<p class="text-success">+'
-									: (($valor < 0) ? '<p class="text-danger">' : '')) .
-								fmt_monto($valor) . (($valor !== 0) ? '</p>' : '') .
+									? '<span class="text-success">+'
+									: (($valor < 0) ? '<span class="text-danger">' : '')) .
+								fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .
 								'</strong>';
 							break;
 			default:
