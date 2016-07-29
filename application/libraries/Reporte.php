@@ -130,8 +130,9 @@ class Reporte {
 	/**
 	 * Agrega elementos relacionados al ordenamiento al arreglo de campos
 	 *
-	 * @param array &$arr_campos   Arreglo de campos del reporte
-	 * @param string $campo_default Campo default en caso que no venga informado
+	 * @param  array  $arr_campos    Arreglo de campos del reporte
+	 * @param  string $campo_default Campo default en caso que no venga informado
+	 * @return void
 	 */
 	public function set_order_campos(&$arr_campos, $campo_default = '')
 	{
@@ -444,7 +445,6 @@ class Reporte {
 			}
 		}
 	}
-
 
 
 }
