@@ -49,6 +49,12 @@ class Collection implements IteratorAggregate {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve representación string del objeto
+	 * @return string
+	 */
 	public function __toString()
 	{
 		return '';
