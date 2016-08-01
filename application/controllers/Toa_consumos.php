@@ -83,6 +83,28 @@ class Toa_consumos extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	public function peticiones_toa($id_peticion = NULL)
+	{
+		if (! $id_peticion)
+		{
+			// Devolvemos listado de peticiones
+			return $this->ver_peticiones(
+				$this->input->get('tipo_reporte'),
+				$this->input->get('fec_ini'),
+				$this->input->get('fec_fin'),
+				$this->input->get('empresa')
+			);
+		}
+		else
+		{
+			// Devolvemos detalle de una peticion
+			return $this->detalle_peticion($id_peticion);
+		}
+
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Despliega listado de peticiones de acuerdo a un criterio
 	 *

@@ -722,7 +722,7 @@ class Toa_model extends CI_Model {
 			$arr_campos['referencia'] = array('titulo' => 'Peticiones', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
 			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_consumos/ver_peticiones/empresas/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('id_empresa'));
+			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'peticiones_toa/?tipo_reporte=empresas&fec_ini='.$fecha_desde.'&fec_fin='.$fecha_hasta.'&empresa=', 'href_registros' => array('id_empresa'));
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -869,7 +869,7 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_campos = array();
-		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'toa_consumos/detalle_peticion/');
+		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'peticiones_toa/');
 		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'fecha');
 		$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
 		$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');

@@ -69,7 +69,7 @@ class Reporte {
 								array_push($arr_link, $valor_registro);
 							}
 
-							return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
+							return anchor($arr_param_campo['href'].implode('/', $arr_link), $valor);
 							break;
 			case 'link_detalle_series':
 							$id_tipo        = array_key_exists('id_tipo', $registro) ? $registro['id_tipo'] : '';
