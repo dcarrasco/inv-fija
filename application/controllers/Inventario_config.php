@@ -51,32 +51,32 @@ class Inventario_config extends Orm_controller {
 
 		$this->arr_menu = array(
 			'auditor' => array(
-				'url'   => $this->router->class . '/listado/auditor/',
+				'url'   => 'auditores',
 				'texto' => $this->lang->line('inventario_config_menu_auditores'),
 				'icon'  => 'user',
 			),
 			'familia' => array(
-				'url'   => $this->router->class . '/listado/familia',
+				'url'   => 'familias',
 				'texto' => $this->lang->line('inventario_config_menu_familias'),
 				'icon'  => 'th',
 			),
 			'catalogo' => array(
-				'url'   => $this->router->class . '/listado/catalogo',
+				'url'   => 'catalogos',
 				'texto' => $this->lang->line('inventario_config_menu_materiales'),
 				'icon'  => 'barcode',
 			),
 			'tipo_inventario' => array(
-				'url'   => $this->router->class . '/listado/tipo_inventario',
+				'url'   => 'tipos-inventario',
 				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
 				'icon'  => 'th',
 			),
 			'inventario' => array(
-				'url'   => $this->router->class . '/listado/inventario',
+				'url'   => 'inventarios',
 				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
 				'icon'  => 'list',
 			),
 			'tipo_ubicacion' => array(
-				'url'   => $this->router->class . '/listado/tipo_ubicacion',
+				'url'   => 'tipos-ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
 				'icon'  => 'th',
 			),
@@ -86,17 +86,17 @@ class Inventario_config extends Orm_controller {
 				'icon'  => 'map-marker',
 			),
 			'centro' => array(
-				'url'   => $this->router->class . '/listado/centro',
+				'url'   => 'centros',
 				'texto' => $this->lang->line('inventario_config_menu_centros'),
 				'icon'  => 'th',
 			),
 			'almacen' => array(
-				'url'   => $this->router->class . '/listado/almacen',
+				'url'   => 'almacenes',
 				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
 				'icon'  => 'home',
 			),
 			'unidad_medida' => array(
-				'url'   => $this->router->class . '/listado/unidad_medida',
+				'url'   => 'unidades-medida',
 				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
 				'icon'  => 'balance-scale',
 			),

@@ -51,7 +51,7 @@ class Toa_config extends Orm_controller {
 
 		$this->arr_menu = array(
 			'tecnico_toa' => array(
-				'url'   => $this->router->class . '/listado/tecnico_toa',
+				'url'   => 'tecnicos_toa',
 				'texto' => $this->lang->line('toa_config_menu_tecnico'),
 				'icon'  => 'user',
 			),

@@ -1,5 +1,5 @@
 <div class="row hidden-print">
-	<?php echo form_open($url_filtro, 'class="form-search"'); ?>
+	<?php echo form_open($url_filtro, 'method="get" class="form-search"'); ?>
 	<div class="col-md-3 col-sm-5 col-xs-6">
 		<div class="input-group input-group-sm">
 			<?php echo form_input('filtro',set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="col-md-9 col-sm-7 col-xs-6 text-right">
-		<a href="{url_editar}/<?php echo $orm_filtro.'/'.$orm_pagina; ?>" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
+		<a href="{url_nuevo}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
 			<span class="fa fa-plus-circle"></span>
 			{_orm_button_new_} <?php echo strtolower($modelo->get_model_label()); ?>
 		</a>
@@ -43,7 +43,7 @@
 						<?php endif; ?>
 					<?php endforeach; ?>
 					<td class="text-center">
-						<a href="{url_editar}/<?php echo $orm_filtro.'/'.$orm_pagina.'/'.$o->get_model_id(); ?>" class="">
+						<a href="<?php echo str_replace('%id%', $o->get_model_id(), $url_editar); ?>" class="">
 							<!-- <span class="fa fa-edit"></span> -->
 							{_orm_link_edit_}
 						</a>

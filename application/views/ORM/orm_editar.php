@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
 
-		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
+		<?php echo form_open($form_url, 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 		<fieldset>
 
 			<legend>
@@ -36,7 +36,7 @@
 
 					<?php if ($modelo->get_model_id()): ?>
 					<div class="pull-left">
-						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf('{_orm_js_delete_confirm_}', strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
+						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?php echo sprintf($this->lang->line('orm_js_delete_confirm'), strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
 							<span class="fa fa-trash-o"></span>
 							{_orm_button_delete_}
 						</button>

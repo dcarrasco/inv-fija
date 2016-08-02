@@ -63,7 +63,7 @@ class Orm_controller extends CI_Controller {
 	public function index()
 	{
 		$arr_keys = array_keys($this->arr_menu);
-		$this->listado($arr_keys[0]);
+		$this->listar($arr_keys[0]);
 	}
 
 	// --------------------------------------------------------------------
@@ -72,18 +72,19 @@ class Orm_controller extends CI_Controller {
 	 * Despliega listado de los elementos de un modelo
 	 *
 	 * @param  string $nombre_modelo Modelo o entidad a desplegar
-	 * @param  string $filtro        Permite filtrar los registros a desplegar
 	 * @param  string $pagina        Numero de la pagina a desplegar
 	 * @return void
 	 */
-	public function listado($nombre_modelo = '', $filtro = '_', $pagina = 0)
+	public function listar($nombre_modelo = '', $pagina = 0)
 	{
 		$modelo = new $nombre_modelo;
 
-		$filtro = $this->input->post('filtro') ? $this->input->post('filtro') : $filtro;
+		$filtro = $this->input->get('filtro');
 		$filtro = urldecode($filtro);
 
 		$modelo->set_model_filtro($filtro);
+
+		$querystring = $this->input->get() ? '?'.http_build_query($this->input->get()) : '';
 
 		$data = array(
 			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
@@ -91,8 +92,9 @@ class Orm_controller extends CI_Controller {
 			'modelos'     => $modelo->list_paginated($pagina),
 			'orm_filtro'  => $filtro,
 			'orm_pagina'  => $pagina,
-			'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
-			'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
+			'url_filtro'  => site_url($this->uri->segment(1)),
+			'url_nuevo'   => site_url($this->uri->segment(1).'/nuevo'.$querystring),
+			'url_editar'  => site_url($this->uri->segment(1).'/%id%'.$querystring),
 		);
 
 		app_render_view('ORM/orm_listado', $data);
@@ -107,20 +109,38 @@ class Orm_controller extends CI_Controller {
 	 * @param  string $id_modelo     Identificador del modelo
 	 * @return void
 	 */
-	public function editar($nombre_modelo = '', $orm_filtro = '_', $orm_pagina = 0, $id_modelo = NULL)
+	public function mostrar($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$modelo = new $nombre_modelo($id_modelo);
+		$querystring = $this->input->get() ? '?'.http_build_query($this->input->get()) : '';
+
+		$data = array(
+			'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
+			'modelo'        => $modelo,
+			'link_cancelar' => site_url($this->uri->segment(1).$querystring),
+			'form_url'      => site_url($this->uri->segment(1).($id_modelo ? '/'.$id_modelo : '').$querystring),
+		);
+
+		app_render_view('ORM/orm_editar', $data);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Edita un elementos de un modelo
+	 *
+	 * @param  string $nombre_modelo Modelo o entidad a desplegar
+	 * @param  string $id_modelo     Identificador del modelo
+	 * @return void
+	 */
+	public function grabar($nombre_modelo = '', $id_modelo = NULL)
+	{
+		$modelo = new $nombre_modelo($id_modelo);
+		$querystring = $this->input->get() ? '?'.http_build_query($this->input->get()) : '';
 
 		if ( ! $modelo->valida_form())
 		{
-			$data = array(
-				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
-				'modelo'        => $modelo,
-				'orm_filtro'    => $orm_filtro,
-				'link_cancelar' => site_url($this->router->class.'/listado/'.$nombre_modelo.'/'.$orm_filtro.'/'.$orm_pagina),
-			);
-
-			app_render_view('ORM/orm_editar', $data);
+			return $this->mostrar($nombre_modelo, $id_modelo);
 		}
 		else
 		{
@@ -137,7 +157,7 @@ class Orm_controller extends CI_Controller {
 				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 			}
 
-			redirect($this->router->class.'/listado/'.$nombre_modelo.'/'.$orm_filtro.'/'.$orm_pagina);
+			redirect($this->uri->segment(1).$querystring);
 		}
 	}
 

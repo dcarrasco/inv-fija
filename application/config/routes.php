@@ -54,4 +54,58 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
+$route['auditores']['GET']           = 'inventario_config/listar/auditor';
+$route['auditores/nuevo']['GET']     = 'inventario_config/mostrar/auditor';
+$route['auditores/?(:any)?']['GET']  = 'inventario_config/mostrar/auditor/$1';
+$route['auditores/?(:any)?']['POST'] = 'inventario_config/grabar/auditor/$1';
+
+$route['familias']['GET']           = 'inventario_config/listar/familia';
+$route['familias/nuevo']['GET']     = 'inventario_config/mostrar/familia';
+$route['familias/?(:any)?']['GET']  = 'inventario_config/mostrar/familia/$1';
+$route['familias/?(:any)?']['POST'] = 'inventario_config/grabar/familia/$1';
+
+$route['catalogos']['GET']           = 'inventario_config/listar/catalogo';
+$route['catalogos/nuevo']['GET']     = 'inventario_config/mostrar/catalogo';
+$route['catalogos/?(:any)?']['GET']  = 'inventario_config/mostrar/catalogo/$1';
+$route['catalogos/?(:any)?']['POST'] = 'inventario_config/grabar/catalogo/$1';
+
+$route['tipos-inventario']['GET']           = 'inventario_config/listar/tipo_inventario';
+$route['tipos-inventario/nuevo']['GET']     = 'inventario_config/mostrar/tipo_inventario';
+$route['tipos-inventario/?(:any)?']['GET']  = 'inventario_config/mostrar/tipo_inventario/$1';
+$route['tipos-inventario/?(:any)?']['POST'] = 'inventario_config/grabar/tipo_inventario/$1';
+
+$route['inventarios']['GET']           = 'inventario_config/listar/inventario';
+$route['inventarios/nuevo']['GET']     = 'inventario_config/mostrar/inventario';
+$route['inventarios/?(:any)?']['GET']  = 'inventario_config/mostrar/inventario/$1';
+$route['inventarios/?(:any)?']['POST'] = 'inventario_config/grabar/inventario/$1';
+
+$route['tipos-ubicacion']['GET']           = 'inventario_config/listar/tipo_ubicacion';
+$route['tipos-ubicacion/nuevo']['GET']     = 'inventario_config/mostrar/tipo_ubicacion';
+$route['tipos-ubicacion/?(:any)?']['GET']  = 'inventario_config/mostrar/tipo_ubicacion/$1';
+$route['tipos-ubicacion/?(:any)?']['POST'] = 'inventario_config/grabar/tipo_ubicacion/$1';
+
+$route['centros']['GET']           = 'inventario_config/listar/centro';
+$route['centros/nuevo']['GET']     = 'inventario_config/mostrar/centro';
+$route['centros/?(:any)?']['GET']  = 'inventario_config/mostrar/centro/$1';
+$route['centros/?(:any)?']['POST'] = 'inventario_config/grabar/centro/$1';
+
+$route['almacenes']['GET']           = 'inventario_config/listar/almacen';
+$route['almacenes/nuevo']['GET']     = 'inventario_config/mostrar/almacen';
+$route['almacenes/?(:any)?']['GET']  = 'inventario_config/mostrar/almacen/$1';
+$route['almacenes/?(:any)?']['POST'] = 'inventario_config/grabar/almacen/$1';
+
+$route['unidades-medida']['GET']           = 'inventario_config/listar/unidad_medida';
+$route['unidades-medida/nuevo']['GET']     = 'inventario_config/mostrar/unidad_medida';
+$route['unidades-medida/?(:any)?']['GET']  = 'inventario_config/mostrar/unidad_medida/$1';
+$route['unidades-medida/?(:any)?']['POST'] = 'inventario_config/grabar/unidad_medida/$1';
+
+
+
+
 $route['peticiones_toa/?(:any)?']['GET'] = 'toa_consumos/peticiones_toa/$1';
+
+$route['tecnicos_toa']['GET']           = 'toa_config/listar/tecnico_toa';
+$route['tecnicos_toa/nuevo']['GET']     = 'toa_config/mostrar/tecnico_toa';
+$route['tecnicos_toa/?(:any)?']['GET']  = 'toa_config/mostrar/tecnico_toa/$1';
+$route['tecnicos_toa/?(:any)?']['POST'] = 'toa_config/grabar/tecnico_toa/$1';
+
