@@ -50,32 +50,32 @@ class Inventario_config extends Orm_controller {
 		$this->lang->load('inventario');
 
 		$this->arr_menu = array(
-			'auditor' => array(
+			'auditores' => array(
 				'url'   => 'auditores',
 				'texto' => $this->lang->line('inventario_config_menu_auditores'),
 				'icon'  => 'user',
 			),
-			'familia' => array(
+			'familias' => array(
 				'url'   => 'familias',
 				'texto' => $this->lang->line('inventario_config_menu_familias'),
 				'icon'  => 'th',
 			),
-			'catalogo' => array(
+			'catalogos' => array(
 				'url'   => 'catalogos',
 				'texto' => $this->lang->line('inventario_config_menu_materiales'),
 				'icon'  => 'barcode',
 			),
-			'tipo_inventario' => array(
+			'tipos-inventario' => array(
 				'url'   => 'tipos-inventario',
 				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
 				'icon'  => 'th',
 			),
-			'inventario' => array(
+			'inventarios' => array(
 				'url'   => 'inventarios',
 				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
 				'icon'  => 'list',
 			),
-			'tipo_ubicacion' => array(
+			'tipos-ubicacion' => array(
 				'url'   => 'tipos-ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
 				'icon'  => 'th',
@@ -85,17 +85,17 @@ class Inventario_config extends Orm_controller {
 				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
 				'icon'  => 'map-marker',
 			),
-			'centro' => array(
+			'centros' => array(
 				'url'   => 'centros',
 				'texto' => $this->lang->line('inventario_config_menu_centros'),
 				'icon'  => 'th',
 			),
-			'almacen' => array(
+			'almacenes' => array(
 				'url'   => 'almacenes',
 				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
 				'icon'  => 'home',
 			),
-			'unidad_medida' => array(
+			'unidades-medida' => array(
 				'url'   => 'unidades-medida',
 				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
 				'icon'  => 'balance-scale',

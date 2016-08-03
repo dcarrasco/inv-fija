@@ -63,7 +63,7 @@ class Orm_controller extends CI_Controller {
 	public function index()
 	{
 		$arr_keys = array_keys($this->arr_menu);
-		$this->listar($arr_keys[0]);
+		redirect($arr_keys[0]);
 	}
 
 	// --------------------------------------------------------------------

@@ -50,33 +50,33 @@ class Stock_config extends Orm_controller {
 		$this->lang->load('stock');
 
 		$this->arr_menu = array(
-			'almacen_sap' => array(
-				'url'   => $this->router->class . '/listado/almacen_sap',
+			'sapalmacenes' => array(
+				'url'   => 'sapalmacenes',
 				'texto' => $this->lang->line('stock_config_menu_alm'),
 				'icon'  => 'home',
 			),
-			'tipoalmacen_sap' => array(
-				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
+			'tipos-almacen-sap' => array(
+				'url'   => 'tipos-almacen-sap',
 				'texto' => $this->lang->line('stock_config_menu_tipalm'),
 				'icon'  => 'th',
 			),
-			'clasifalmacen_sap' => array(
-				'url'   => $this->router->class . '/listado/clasifalmacen_sap',
+			'clasificacion-almacenes-sap' => array(
+				'url'   => 'clasificacion-almacenes-sap',
 				'texto' => $this->lang->line('stock_config_menu_clasifalm'),
 				'icon'  => 'th',
 			),
-			'tipo_clasifalm' => array(
-				'url'   => $this->router->class . '/listado/tipo_clasifalm',
+			'tipos-clasificacion-almacen-sap' => array(
+				'url'   => 'tipos-clasificacion-almacen-sap',
 				'texto' => $this->lang->line('stock_config_menu_tipo_clasifalm'),
 				'icon'  => 'th',
 			),
-			'proveedor' => array(
-				'url'   => $this->router->class . '/listado/proveedor',
+			'proveedores' => array(
+				'url'   => 'proveedores',
 				'texto' => $this->lang->line('stock_config_menu_proveedores'),
 				'icon'  => 'shopping-cart',
 			),
-			'usuario_sap' => array(
-				'url'   => $this->router->class . '/listado/usuario_sap',
+			'usuarios-sap' => array(
+				'url'   => 'usuarios-sap',
 				'texto' => $this->lang->line('stock_config_menu_usuarios_sap'),
 				'icon'  => 'user',
 			),
@@ -85,8 +85,8 @@ class Stock_config extends Orm_controller {
 				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),
 				'icon'  => 'home',
 			),
-			'clase_movimiento' => array(
-				'url'   => $this->router->class . '/listado/clase_movimiento',
+			'clases-movimiento' => array(
+				'url'   => 'clases-movimiento',
 				'texto' => $this->lang->line('stock_config_menu_cmv'),
 				'icon'  => 'th',
 			),

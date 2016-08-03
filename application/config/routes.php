@@ -54,58 +54,50 @@ $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
 
-$route['auditores']['GET']           = 'inventario_config/listar/auditor';
-$route['auditores/nuevo']['GET']     = 'inventario_config/mostrar/auditor';
-$route['auditores/?(:any)?']['GET']  = 'inventario_config/mostrar/auditor/$1';
-$route['auditores/?(:any)?']['POST'] = 'inventario_config/grabar/auditor/$1';
 
-$route['familias']['GET']           = 'inventario_config/listar/familia';
-$route['familias/nuevo']['GET']     = 'inventario_config/mostrar/familia';
-$route['familias/?(:any)?']['GET']  = 'inventario_config/mostrar/familia/$1';
-$route['familias/?(:any)?']['POST'] = 'inventario_config/grabar/familia/$1';
 
-$route['catalogos']['GET']           = 'inventario_config/listar/catalogo';
-$route['catalogos/nuevo']['GET']     = 'inventario_config/mostrar/catalogo';
-$route['catalogos/?(:any)?']['GET']  = 'inventario_config/mostrar/catalogo/$1';
-$route['catalogos/?(:any)?']['POST'] = 'inventario_config/grabar/catalogo/$1';
+$routes_orm = array(
+	// CONFIG INVENTARIO
+	array('uri' => 'auditores',        'controller' => 'inventario_config', 'object' => 'auditor'),
+	array('uri' => 'familias',         'controller' => 'inventario_config', 'object' => 'familia'),
+	array('uri' => 'catalogos',        'controller' => 'inventario_config', 'object' => 'catalogo'),
+	array('uri' => 'tipos-inventario', 'controller' => 'inventario_config', 'object' => 'tipo_inventario'),
+	array('uri' => 'inventarios',      'controller' => 'inventario_config', 'object' => 'inventario'),
+	array('uri' => 'tipos-ubicacion',  'controller' => 'inventario_config', 'object' => 'tipo_ubicacion'),
+	array('uri' => 'centros',          'controller' => 'inventario_config', 'object' => 'centro'),
+	array('uri' => 'almacenes',        'controller' => 'inventario_config', 'object' => 'almacene'),
+	array('uri' => 'unidades-medida',  'controller' => 'inventario_config', 'object' => 'unidad_medida'),
+	// CONFIG STOCK
+	array('uri' => 'sapalmacenes',      'controller' => 'stock_config', 'object' => 'almacen_sap'),
+	array('uri' => 'tipos-almacen-sap', 'controller' => 'stock_config', 'object' => 'tipoalmacen_sap'),
+	array('uri' => 'clasificacion-almacenes-sap', 'controller' => 'stock_config', 'object' => 'clasifalmacen_sap'),
+	array('uri' => 'tipos-clasificacion-almacen-sap', 'controller' => 'stock_config', 'object' => 'tipo_clasifalm'),
+	array('uri' => 'proveedores',       'controller' => 'stock_config', 'object' => 'proveedor'),
+	array('uri' => 'usuarios-sap',      'controller' => 'stock_config', 'object' => 'usuario_sap'),
+	array('uri' => 'clases-movimiento', 'controller' => 'stock_config', 'object' => 'clase_movimiento'),
+	// CONFIG ACL
+	array('uri' => 'usuarios',     'controller' => 'acl_config', 'object' => 'usuario'),
+	array('uri' => 'aplicaciones', 'controller' => 'acl_config', 'object' => 'app'),
+	array('uri' => 'roles',        'controller' => 'acl_config', 'object' => 'rol'),
+	array('uri' => 'modulos',      'controller' => 'acl_config', 'object' => 'modulo'),
+	// CONFIG TOA
+	array('uri' => 'tecnicos-toa',          'controller' => 'toa_config', 'object' => 'tecnico_toa'),
+	array('uri' => 'empresas-toa',          'controller' => 'toa_config', 'object' => 'empresa_toa'),
+	array('uri' => 'tipos-trabajo-toa',     'controller' => 'toa_config', 'object' => 'tipo_trabajo_toa'),
+	array('uri' => 'tipos-material-trabajo-toa', 'controller' => 'toa_config', 'object' => 'tip_material_trabajo_toa'),
+	array('uri' => 'ciudades-toa',          'controller' => 'toa_config', 'object' => 'ciudad_toa'),
+	array('uri' => 'empresas-ciudades-toa', 'controller' => 'toa_config', 'object' => 'empresa_ciudad_toa'),
+);
 
-$route['tipos-inventario']['GET']           = 'inventario_config/listar/tipo_inventario';
-$route['tipos-inventario/nuevo']['GET']     = 'inventario_config/mostrar/tipo_inventario';
-$route['tipos-inventario/?(:any)?']['GET']  = 'inventario_config/mostrar/tipo_inventario/$1';
-$route['tipos-inventario/?(:any)?']['POST'] = 'inventario_config/grabar/tipo_inventario/$1';
-
-$route['inventarios']['GET']           = 'inventario_config/listar/inventario';
-$route['inventarios/nuevo']['GET']     = 'inventario_config/mostrar/inventario';
-$route['inventarios/?(:any)?']['GET']  = 'inventario_config/mostrar/inventario/$1';
-$route['inventarios/?(:any)?']['POST'] = 'inventario_config/grabar/inventario/$1';
-
-$route['tipos-ubicacion']['GET']           = 'inventario_config/listar/tipo_ubicacion';
-$route['tipos-ubicacion/nuevo']['GET']     = 'inventario_config/mostrar/tipo_ubicacion';
-$route['tipos-ubicacion/?(:any)?']['GET']  = 'inventario_config/mostrar/tipo_ubicacion/$1';
-$route['tipos-ubicacion/?(:any)?']['POST'] = 'inventario_config/grabar/tipo_ubicacion/$1';
-
-$route['centros']['GET']           = 'inventario_config/listar/centro';
-$route['centros/nuevo']['GET']     = 'inventario_config/mostrar/centro';
-$route['centros/?(:any)?']['GET']  = 'inventario_config/mostrar/centro/$1';
-$route['centros/?(:any)?']['POST'] = 'inventario_config/grabar/centro/$1';
-
-$route['almacenes']['GET']           = 'inventario_config/listar/almacen';
-$route['almacenes/nuevo']['GET']     = 'inventario_config/mostrar/almacen';
-$route['almacenes/?(:any)?']['GET']  = 'inventario_config/mostrar/almacen/$1';
-$route['almacenes/?(:any)?']['POST'] = 'inventario_config/grabar/almacen/$1';
-
-$route['unidades-medida']['GET']           = 'inventario_config/listar/unidad_medida';
-$route['unidades-medida/nuevo']['GET']     = 'inventario_config/mostrar/unidad_medida';
-$route['unidades-medida/?(:any)?']['GET']  = 'inventario_config/mostrar/unidad_medida/$1';
-$route['unidades-medida/?(:any)?']['POST'] = 'inventario_config/grabar/unidad_medida/$1';
-
+foreach ($routes_orm as $route_orm)
+{
+	$route[$route_orm['uri']]['GET']              = $route_orm['controller'].'/listar/'. $route_orm['object'];
+	$route[$route_orm['uri'].'/nuevo']['GET']     = $route_orm['controller'].'/mostrar/'.$route_orm['object'];
+	$route[$route_orm['uri'].'/?(:any)?']['GET']  = $route_orm['controller'].'/mostrar/'.$route_orm['object'].'/$1';
+	$route[$route_orm['uri'].'/?(:any)?']['POST'] = $route_orm['controller'].'/grabar/'. $route_orm['object'].'/$1';
+}
 
 
 
 $route['peticiones_toa/?(:any)?']['GET'] = 'toa_consumos/peticiones_toa/$1';
-
-$route['tecnicos_toa']['GET']           = 'toa_config/listar/tecnico_toa';
-$route['tecnicos_toa/nuevo']['GET']     = 'toa_config/mostrar/tecnico_toa';
-$route['tecnicos_toa/?(:any)?']['GET']  = 'toa_config/mostrar/tecnico_toa/$1';
-$route['tecnicos_toa/?(:any)?']['POST'] = 'toa_config/grabar/tecnico_toa/$1';
 

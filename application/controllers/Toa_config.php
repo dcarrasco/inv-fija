@@ -50,33 +50,33 @@ class Toa_config extends Orm_controller {
 		$this->lang->load('toa');
 
 		$this->arr_menu = array(
-			'tecnico_toa' => array(
-				'url'   => 'tecnicos_toa',
+			'tecnicos-toa' => array(
+				'url'   => 'tecnicos-toa',
 				'texto' => $this->lang->line('toa_config_menu_tecnico'),
 				'icon'  => 'user',
 			),
-			'empresa_toa' => array(
-				'url'   => $this->router->class . '/listado/empresa_toa',
+			'empresas-toa' => array(
+				'url'   => 'empresas-toa',
 				'texto' => $this->lang->line('toa_config_menu_empresa'),
 				'icon'  => 'home',
 			),
-			'tipo_trabajo_toa' => array(
-				'url'   => $this->router->class . '/listado/tipo_trabajo_toa',
+			'tipos-trabajo-toa' => array(
+				'url'   => 'tipos-trabajo-toa',
 				'texto' => $this->lang->line('toa_config_menu_tipo_trabajo'),
 				'icon'  => 'television',
 			),
-			'tip_material_trabajo_toa' => array(
-				'url'   => $this->router->class . '/listado/tip_material_trabajo_toa',
+			'tipos-material-trabajo-toa' => array(
+				'url'   => 'tipos-material-trabajo-toa',
 				'texto' => $this->lang->line('toa_config_menu_tipo_material_trabajo'),
 				'icon'  => 'object-group',
 			),
-			'ciudad_toa' => array(
-				'url'   => $this->router->class . '/listado/ciudad_toa',
+			'ciudades-toa' => array(
+				'url'   => 'ciudades-toa',
 				'texto' => $this->lang->line('toa_config_menu_ciudad'),
 				'icon'  => 'map-marker',
 			),
-			'empresa_ciudad_toa' => array(
-				'url'   => $this->router->class . '/listado/empresa_ciudad_toa',
+			'empresas-ciudades-toa' => array(
+				'url'   => 'empresas-ciudades-toa',
 				'texto' => $this->lang->line('toa_config_menu_empresa_ciudad'),
 				'icon'  => 'map-marker',
 			),
