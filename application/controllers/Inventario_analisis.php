@@ -205,7 +205,7 @@ class Inventario_analisis extends CI_Controller {
 
 				if ( ! $this->upload->do_upload('upload_file'))
 				{
-					set_message($this->lang->line('inventario_upload_error'), 'danger');
+					set_message($this->lang->line('inventario_upload_error').' ('.$this->upload->display_errors().')', 'danger');
 				}
 				else
 				{
