@@ -1,5 +1,6 @@
 .DS_Store
 upload/
+!upload/.gitkeep
 application/cache/
 application/logs/
 public/img/captcha/
