@@ -75,12 +75,14 @@ class Orm_controller extends CI_Controller {
 	 * @param  string $pagina        Numero de la pagina a desplegar
 	 * @return void
 	 */
-	public function listar($nombre_modelo = '', $pagina = 0)
+	public function listar($nombre_modelo = '')
 	{
 		$modelo = new $nombre_modelo;
 
 		$filtro = $this->input->get('filtro');
 		$filtro = urldecode($filtro);
+
+		$pagina = $this->input->get('per_page');
 
 		$modelo->set_model_filtro($filtro);
 

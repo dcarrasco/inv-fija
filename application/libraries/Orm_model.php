@@ -712,14 +712,11 @@ class Orm_model implements IteratorAggregate {
 			'num_tag_open'    => '<li>',
 			'num_tag_close'   => '</li>',
 
+			'reuse_query_string' => TRUE,
+			'page_query_string' => TRUE,
 			'per_page'    => $this->_model_page_results,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url(
-				$this->router->class . '/' .
-				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
-				$this->get_model_nombre() . '/' .
-				$this->_model_filtro . '/'
-			),
+			'base_url'    => site_url($this->uri->segment(1)),
 			'first_link'  => $this->lang->line('orm_pag_first'),
 			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->_model_page_results + 1) . ')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
@@ -789,7 +786,7 @@ class Orm_model implements IteratorAggregate {
 		{
 			if (array_key_exists('offset', $param))
 			{
-				$this->db->limit($param['limit'], $param['offset']);
+				$this->db->limit((int) $param['limit'], (int) $param['offset']);
 			}
 			else
 			{
