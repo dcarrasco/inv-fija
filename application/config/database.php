@@ -72,10 +72,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $active_group = 'default';
 
-if (ENVIRONMENT === 'development')
-{
-	$active_group = 'dcr';
-}
 if (ENVIRONMENT === 'development-mac')
 {
 	$active_group = 'mac-sirio';
@@ -85,28 +81,6 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
 	'hostname' => 'sirio',
-	'username' => 'invfija',
-	'password' => 'fijainv2014!',
-	'database' => 'BD_inventario',
-	'dbdriver' => 'pdo',
-	'dbprefix' => '',
-	'pconnect' => FALSE,
-	'db_debug' => (ENVIRONMENT !== 'production'),
-	'cache_on' => FALSE,
-	'cachedir' => '',
-	'char_set' => 'utf8',
-	'dbcollat' => 'utf8_general_ci',
-	'swap_pre' => '',
-	'encrypt' => FALSE,
-	'compress' => FALSE,
-	'stricton' => FALSE,
-	'failover' => array(),
-	'save_queries' => TRUE
-);
-
-$db['dcr'] = array(
-	'dsn'	=> 'sqlsrv:Server=127.0.0.1,1500;Database=BD_inventario',
-	'hostname' => 'localhost',
 	'username' => 'invfija',
 	'password' => 'fijainv2014!',
 	'database' => 'BD_inventario',
