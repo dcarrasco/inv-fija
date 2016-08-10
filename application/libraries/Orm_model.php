@@ -712,8 +712,9 @@ class Orm_model implements IteratorAggregate {
 			'num_tag_open'    => '<li>',
 			'num_tag_close'   => '</li>',
 
-			'reuse_query_string' => TRUE,
-			'page_query_string' => TRUE,
+			'reuse_query_string'   => TRUE,
+			'page_query_string'    => TRUE,
+			'query_string_segment' => 'pag',
 			'per_page'    => $this->_model_page_results,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url($this->uri->segment(1)),

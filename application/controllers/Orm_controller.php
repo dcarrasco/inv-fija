@@ -82,7 +82,7 @@ class Orm_controller extends CI_Controller {
 		$filtro = $this->input->get('filtro');
 		$filtro = urldecode($filtro);
 
-		$pagina = $this->input->get('per_page');
+		$pagina = $this->input->get('pag');
 
 		$modelo->set_model_filtro($filtro);
 
