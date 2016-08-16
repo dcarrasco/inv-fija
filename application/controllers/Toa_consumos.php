@@ -88,12 +88,7 @@ class Toa_consumos extends CI_Controller {
 		if (! $id_peticion)
 		{
 			// Devolvemos listado de peticiones
-			return $this->ver_peticiones(
-				$this->input->get('tipo_reporte'),
-				$this->input->get('fec_ini'),
-				$this->input->get('fec_fin'),
-				$this->input->get('empresa')
-			);
+			return $this->listado_peticiones($this->input->get());
 		}
 		else
 		{
@@ -109,14 +104,12 @@ class Toa_consumos extends CI_Controller {
 	 * Despliega listado de peticiones de acuerdo a un criterio
 	 *
 	 * @param  string $tipo_reporte Tipo de reporte
-	 * @param  mixed  $param1       Primer parametro de filtro
-	 * @param  mixed  $param2       Segundo parametro de filtro
-	 * @param  mixed  $param3       Tercer parametro de filtro
+	 * @param  mixed  $parametros Arreglo de parámetros
 	 * @return void
 	 */
-	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
+	public function listado_peticiones($parametros = array())
 	{
-		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
+		$datos_peticiones = $this->toa_model->peticiones_toa($parametros);
 
 		$this->load->library('googlemaps');
 		$this->googlemaps->initialize(array(
@@ -150,7 +143,6 @@ class Toa_consumos extends CI_Controller {
 	/**
 	 * Despliega detalle de una peticion
 	 *
-	 * @param  string $fecha    Fecha de la peticion
 	 * @param  string $peticion Identificador de la peticion
 	 * @return void
 	 */

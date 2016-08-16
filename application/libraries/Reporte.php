@@ -71,6 +71,29 @@ class Reporte {
 
 							return anchor($arr_param_campo['href'].implode('/', $arr_link), $valor);
 							break;
+			case 'link_get_query':
+							$arr_parameters = array();
+							foreach ($arr_param_campo['link_parameters'] as $campos_link => $valor_link)
+							{
+								if ( ! is_array($valor_link))
+								{
+									$valor_link = array('nombre' => $campos_link, 'valor' => $valor_link);
+								}
+
+								if ($valor_link['valor'] !== NULL)
+								{
+									$arr_parameters[$valor_link['nombre']] = $valor_link['valor'];
+								}
+								else
+								{
+									$arr_parameters[$valor_link['nombre']] = ($campos_link === 'fecha')
+										? fmt_fecha_db($registro[$campos_link])
+										: $registro[$campos_link];
+								}
+							}
+
+							return anchor($arr_param_campo['href'].http_build_query($arr_parameters), $valor);
+							break;
 			case 'link_detalle_series':
 							$id_tipo        = array_key_exists('id_tipo', $registro) ? $registro['id_tipo'] : '';
 							$centro         = array_key_exists('centro', $registro) ? $registro['centro'] : '';

@@ -65,7 +65,7 @@ $routes_orm = array(
 	array('uri' => 'inventarios',      'controller' => 'inventario_config', 'object' => 'inventario'),
 	array('uri' => 'tipos-ubicacion',  'controller' => 'inventario_config', 'object' => 'tipo_ubicacion'),
 	array('uri' => 'centros',          'controller' => 'inventario_config', 'object' => 'centro'),
-	array('uri' => 'almacenes',        'controller' => 'inventario_config', 'object' => 'almacene'),
+	array('uri' => 'almacenes',        'controller' => 'inventario_config', 'object' => 'almacen'),
 	array('uri' => 'unidades-medida',  'controller' => 'inventario_config', 'object' => 'unidad_medida'),
 	// CONFIG STOCK
 	array('uri' => 'sapalmacenes',      'controller' => 'stock_config', 'object' => 'almacen_sap'),
@@ -99,5 +99,5 @@ foreach ($routes_orm as $route_orm)
 
 
 
-$route['peticiones_toa/?(:any)?']['GET'] = 'toa_consumos/peticiones_toa/$1';
+$route['peticiones-toa/?(:any)?']['GET'] = 'toa_consumos/peticiones_toa/$1';
 
