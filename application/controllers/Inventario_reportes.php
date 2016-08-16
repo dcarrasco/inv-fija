@@ -120,7 +120,7 @@ class Inventario_reportes extends CI_Controller {
 
 		$view = 'listado';
 
-		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, set_value('order_by'), set_value('order_sort', 'ASC'), set_value('incl_ajustes'), set_value('elim_sin_dif'), $param1);
+		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, set_value('sort'), set_value('incl_ajustes'), set_value('elim_sin_dif'), $param1);
 		$arr_campos = $this->inventario_model->get_campos_reporte($tipo);
 
 		$data = array(

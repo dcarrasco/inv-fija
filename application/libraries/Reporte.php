@@ -138,23 +138,28 @@ class Reporte {
 	{
 		$CI =& get_instance();
 
-		$order_sort = $CI->input->post_get('order_sort');
-		if ($order_sort === NULL)
+		$sort_by = $CI->input->post_get('sort');
+
+		if ($sort_by === NULL)
 		{
-			$order_sort = 'ASC';
+			$sort_by_field = $campo_default;
+			$sort_by_order = '+';
+		}
+		else
+		{
+			if ( ! in_array(substr($sort_by, 0, 1), array('+', '-')))
+			{
+				$sort_by = '+'.$sort_by;
+			}
+			$sort_by_field = substr($sort_by, 1, strlen($sort_by));
+			$sort_by_order = substr($sort_by, 0, 1);
 		}
 
-		$order_by = $CI->input->post_get('order_by');
-		if ($order_by === NULL)
-		{
-			$order_by = $campo_default;
-		}
-
-		$new_orden_tipo  = ($order_sort === 'ASC') ? 'DESC' : 'ASC';
+		$new_orden_tipo  = ($sort_by_order === '+') ? '-' : '+';
 
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$arr_campos[$campo]['order_by'] = ($campo === $order_by) ? $new_orden_tipo : 'ASC';
+			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
 
 			$arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
 			$arr_tipo_icono_texto  = array('link', 'texto');
@@ -162,9 +167,9 @@ class Reporte {
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
 
-			$order_icon = ($arr_campos[$campo]['order_by'] === 'ASC') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
+			$order_icon = (substr($arr_campos[$campo]['sort'],0,1) === '+') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
 
-			$arr_campos[$campo]['img_orden'] = ($campo === $order_by) ? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
+			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
 		}
 	}
 
@@ -254,8 +259,7 @@ class Reporte {
 			$arr_celda = array(
 				'data' =>
 					'<span '.
-						'order_by="'.$nombre_campo.'" '.
-						'order_sort="'.$arr_param_campo['order_by'].'" '.
+						'data-sort="'.$arr_param_campo['sort'].'" '.
 						'data-toggle="tooltip" '.
 						'title="Ordenar por campo '.$arr_param_campo['titulo'].'">'.
 						$arr_param_campo['titulo'].

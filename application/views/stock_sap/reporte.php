@@ -87,8 +87,7 @@
 			</div>
 		</div>
 
-		<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-		<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+		<?php echo form_hidden('sort', set_value('sort','')); ?>
 	</div>
 </div>
 <?php echo form_close(); ?>
