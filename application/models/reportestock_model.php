@@ -231,7 +231,6 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_reporte_permanencia($config = array())
 	{
-		//dbg($config);
 		$arr_reporte = array();
 		$param_ok = $config['filtros']['tipo_alm'];
 
@@ -253,7 +252,7 @@ class Reportestock_model extends CI_Model {
 				->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left')
 				->join($this->config->item('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
 				->group_by('t.tipo, t.id_tipo')
-				->order_by($config['orden']['campo'], $config['orden']['tipo']);
+				->order_by($this->reporte->get_order_by($config['orden']));
 
 
 			// FILTROS
@@ -318,10 +317,7 @@ class Reportestock_model extends CI_Model {
 	public function get_config_reporte_permanencia()
 	{
 		return array(
-			'orden' => array(
-				'campo' => (set_value('order_by') === '') ? 'tipo' : set_value('order_by'),
-				'tipo'  => set_value('order_sort'),
-			),
+			'orden'   => (set_value('sort') === '') ? '+tipo' : set_value('sort'),
 			'filtros' => array(
 				'tipo_alm'   => set_value('tipo_alm'),
 				'estado_sap' => set_value('estado_sap'),
@@ -399,17 +395,7 @@ class Reportestock_model extends CI_Model {
 
 		}
 
-		$new_orden_tipo  = (set_value('order_sort') === 'ASC') ? 'DESC' : 'ASC';
-
-		foreach ($arr_campos as $campo => $valor)
-		{
-			$arr_campos[$campo]['order_by']  = $campo === set_value('order_by', 'tipo') ? $new_orden_tipo : 'ASC';
-			$arr_campos[$campo]['img_orden'] = $campo === set_value('order_by', 'tipo')
-				? ' <span class="text-muted glyphicon ' .
-					(($arr_campos[$campo]['order_by'] === 'ASC') ? 'glyphicon-circle-arrow-up' : 'glyphicon-circle-arrow-down') .
-					'" ></span>'
-				: '';
-		}
+		$this->reporte->set_order_campos($arr_campos, 'tipo');
 
 		return $arr_campos;
 	}
@@ -1092,18 +1078,18 @@ class Reportestock_model extends CI_Model {
 		{
 			$arr_filtro_almacenes = array(
 				'MOVIL-TIPOALM' => 't.id_tipo',
-				'MOVIL-ALM'     => "m.$mov_centro+'~'+m.$mov_alm",
+				'MOVIL-ALM'     => "m.{$mov_centro}+'~'+m.{$mov_alm}",
 				'FIJA-TIPOALM'  => 't.id_tipo',
-				'FIJA-ALM'      => "m.$mov_centro+'~'+m.$mov_alm",
+				'FIJA-ALM'      => "m.{$mov_centro}+'~'+m.{$mov_alm}",
 			);
 		}
 		else
 		{
 			$arr_filtro_almacenes = array(
 				'MOVIL-TIPOALM' => 't.id_tipo',
-				'MOVIL-ALM'     => "m.$mov_centro+'-'+m.rec",
+				'MOVIL-ALM'     => "m.{$mov_centro}+'-'+m.rec",
 				'FIJA-TIPOALM'  => 't.id_tipo',
-				'FIJA-ALM'      => "m.$mov_centro+'-'+m.rec",
+				'FIJA-ALM'      => "m.{$mov_centro}+'-'+m.rec",
 			);
 		}
 
@@ -1143,20 +1129,20 @@ class Reportestock_model extends CI_Model {
 			}
 
 
-			$this->db->join($this->config->item('bd_fechas_sap') . ' as f', 'm.'.$mov_fecha.'=f.fecha','LEFT');
-			$this->db->join($this->config->item('bd_cmv_sap') . ' as c', 'm.'.$mov_cmv.'=c.cmv','LEFT');
-			$this->db->join($this->config->item('bd_usuarios_sap') . ' as u', 'm.'.$mov_user.'=u.usuario','LEFT');
+			$this->db->join($this->config->item('bd_fechas_sap').' as f', 'm.'.$mov_fecha.'=f.fecha', 'LEFT');
+			$this->db->join($this->config->item('bd_cmv_sap').' as c', 'm.'.$mov_cmv.'=c.cmv', 'LEFT');
+			$this->db->join($this->config->item('bd_usuarios_sap').' as u', 'm.'.$mov_user.'=u.usuario', 'LEFT');
 			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', 'LEFT', FALSE);
 
 			if ($config['tipo_cruce_alm'] === 'alm')
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_alm.'=a.cod_almacen','LEFT');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_alm.'=t.cod_almacen','LEFT');
+				$this->db->join($this->config->item('bd_almacenes_sap').' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_alm.'=a.cod_almacen', 'LEFT');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap').' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_alm.'=t.cod_almacen', 'LEFT');
 			}
 			else
 			{
-				$this->db->join($this->config->item('bd_almacenes_sap') . ' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_rec.'=a.cod_almacen','LEFT');
-				$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_rec.'=t.cod_almacen','LEFT');
+				$this->db->join($this->config->item('bd_almacenes_sap').' as a', 'm.'.$mov_centro.'=a.centro and m.'.$mov_rec.'=a.cod_almacen', 'LEFT');
+				$this->db->join($this->config->item('bd_tipoalmacen_sap').' as t', 'm.'.$mov_centro.'=t.centro and m.'.$mov_rec.'=t.cod_almacen', 'LEFT');
 			}
 
 

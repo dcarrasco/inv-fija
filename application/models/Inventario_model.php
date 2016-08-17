@@ -128,8 +128,7 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por hojas
 	 * @param  string  $reporte       Nombre del reporte a ejecutar
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
-	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
+	 * @param  string  $sort_by       nombre del campo para ordenar el reporte
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @param  string  $param1        Parámetros adicionales
@@ -148,7 +147,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por hojas
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
@@ -190,7 +188,7 @@ class Inventario_model extends CI_Model {
 		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.hoja, d.nombre, a.nombre');
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
@@ -213,7 +211,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte con el detalle de una hoja
 	 * @param  integer $id_inventario ID del inventario con el cual se hará el reporte
 	 * @param  string  $orden_campo   Nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ASC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @param  integer $hoja          numero de la hoja del inventario
@@ -272,7 +269,7 @@ class Inventario_model extends CI_Model {
 			}
 		}
 
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -283,7 +280,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por materiales
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
@@ -345,7 +341,7 @@ class Inventario_model extends CI_Model {
 				$this->db->having('sum(stock_fisico - stock_sap) <> 0');
 			}
 		}
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -356,7 +352,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por materiales faltantes
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
@@ -407,7 +402,7 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->group_by('i.catalogo, i.descripcion, i.um, c.pmp');
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -418,10 +413,9 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por detalle de los materiales
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
-	 * @param  string  $catalogo      catalogo a buscar
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
+	 * @param  string  $catalogo      catalogo a buscar
 	 * @return array                  arreglo con el detalle del reporte
 	 */
 	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0', $catalogo = '')
@@ -474,7 +468,7 @@ class Inventario_model extends CI_Model {
 			}
 		}
 
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -485,7 +479,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por ubicaciones
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  Indica si mostrar o no los ajustes
 	 * @param  string  $elim_sin_dif  Indica si mostrar o no registros sin diferencias
 	 * @return array                  arreglo con el detalle del reporte
@@ -527,7 +520,7 @@ class Inventario_model extends CI_Model {
 		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.ubicacion');
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
@@ -550,7 +543,6 @@ class Inventario_model extends CI_Model {
 	 * Devuelve reporte por tipos de ubicaciones
 	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @param  string  $orden_campo   nombre del campo para ordenar el reporte
-	 * @param  string  $orden_tipo    indica si el orden es ascendente o descendente (ADC/DESC)
 	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
@@ -600,7 +592,7 @@ class Inventario_model extends CI_Model {
 
 		$this->db->group_by('t.tipo_ubicacion');
 		$this->db->group_by('d.ubicacion');
-		$this->db->order_by($this->_get_order_by($orden_campo));
+		$this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
@@ -624,7 +616,6 @@ class Inventario_model extends CI_Model {
 	 *
 	 * @param  integer $id_inventario Identificador del inventario
 	 * @param  string  $orden_campo   Campo para ordenar el reporte
-	 * @param  string  $orden_tipo    Tipo de orden (ascendente o descendente)
 	 * @param  string  $elim_sin_dif  Elimina registros sin diferencias
 	 * @return array                  Reporte de ajustes de inventario
 	 */
@@ -657,7 +648,7 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->order_by('catalogo, lote, centro, almacen, ubicacion');
-		// $this->db->order_by($this->_get_order_by($orden_campo));
+		// $this->db->order_by($this->reporte->get_order_by($orden_campo));
 
 		return $this->db->get($this->config->item('bd_detalle_inventario'))->result_array();
 	}
@@ -678,38 +669,6 @@ class Inventario_model extends CI_Model {
 	public function get_campos_reporte($reporte)
 	{
 		return call_user_func_array(array($this, 'get_campos_reporte_'.$reporte), array());
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve string de ordenamiento
-	 * @param  string $sort_by Orden en formato: +campo1, +campo2, -campo3
-	 * @return string          Orden en formato: campo1 ASC, campo2 ASC, campo3 DESC
-	 */
-	private function _get_order_by($sort_by)
-	{
-		$arr_sort_by = explode(',', $sort_by);
-		$sort_stmt = '';
-
-		$cant_sort = 0;
-		foreach($arr_sort_by as $sort)
-		{
-			if (! in_array(substr($sort, 0, 1), array('+', '-')))
-			{
-				$sort = '+'.$sort;
-			}
-
-			$sort_field = substr($sort, 1, strlen($sort));
-			$sort_order = (substr($sort, 0, 1) === '+') ? 'ASC' : 'DESC';
-
-			$sort_stmt .= ($cant_sort > 0) ? ', ' : '';
-			$sort_stmt .= $sort_field.' '.$sort_order;
-
-			$cant_sort += 1;
-		}
-
-		return $sort_stmt;
 	}
 
 	// --------------------------------------------------------------------

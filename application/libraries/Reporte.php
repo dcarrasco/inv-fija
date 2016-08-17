@@ -167,10 +167,42 @@ class Reporte {
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
 
-			$order_icon = (substr($arr_campos[$campo]['sort'],0,1) === '+') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
+			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
 
 			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
 		}
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve string de ordenamiento
+	 * @param  string $sort_by Orden en formato: +campo1, +campo2, -campo3
+	 * @return string          Orden en formato: campo1 ASC, campo2 ASC, campo3 DESC
+	 */
+	public function get_order_by($sort_by)
+	{
+		$arr_sort_by = explode(',', $sort_by);
+		$sort_stmt = '';
+
+		$cant_sort = 0;
+		foreach($arr_sort_by as $sort)
+		{
+			if ( ! in_array(substr($sort, 0, 1), array('+', '-')))
+			{
+				$sort = '+'.$sort;
+			}
+
+			$sort_field = substr($sort, 1, strlen($sort));
+			$sort_order = (substr($sort, 0, 1) === '+') ? 'ASC' : 'DESC';
+
+			$sort_stmt .= ($cant_sort > 0) ? ', ' : '';
+			$sort_stmt .= $sort_field.' '.$sort_order;
+
+			$cant_sort += 1;
+		}
+
+		return $sort_stmt;
 	}
 
 	// --------------------------------------------------------------------
