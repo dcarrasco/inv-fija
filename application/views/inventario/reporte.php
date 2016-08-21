@@ -3,8 +3,7 @@
 	{validation_errors}
 
 	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
-	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?php echo form_hidden('sort', set_value('sort','')); ?>
 
 	<div class="form-group col-md-5">
 		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>

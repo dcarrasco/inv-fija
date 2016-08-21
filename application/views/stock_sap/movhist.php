@@ -1,6 +1,5 @@
 <?php echo form_open('','id="frm_param"'); ?>
-<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
+<?php echo form_hidden('sort', set_value('sort','')); ?>
 
 <div class="accordion" id="accordion">
 	<div class="panel panel-default">
