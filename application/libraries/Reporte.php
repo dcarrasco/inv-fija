@@ -140,7 +140,7 @@ class Reporte {
 
 		$sort_by = $CI->input->post_get('sort');
 
-		if ($sort_by === NULL)
+		if ($sort_by === NULL OR $sort_by === '')
 		{
 			$sort_by_field = $campo_default;
 			$sort_by_order = '+';
