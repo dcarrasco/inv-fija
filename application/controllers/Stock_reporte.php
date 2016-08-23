@@ -215,19 +215,24 @@ class Stock_reporte extends CI_Controller {
 		$param_tipo_alm       = set_value('tipo_alm', 'MOVIL-TIPOALM');
 		$param_tipo_mat       = set_value('tipo_mat', 'TIPO');
 		$param_tipo_cruce_alm = set_value('tipo_cruce_alm', 'alm');
+		$param_sort           = set_value('sort', '+fecha');
 
-		$datos_reporte = $this->reportestock_model->get_reporte_movhist(array(
-			'tipo_fecha'     => $param_tipo_fecha,
-			'fechas'         => $this->input->post('fechas'),
-			'cmv'            => $this->input->post('cmv'),
-			'tipo_alm'       => $param_tipo_alm,
-			'almacenes'      => $this->input->post('almacenes'),
-			'tipo_cruce_alm' => $param_tipo_cruce_alm,
-			'tipo_mat'       => $param_tipo_mat,
-			'materiales'     => $this->input->post('materiales'),
-		));
-
-		$arr_campos = $this->reportestock_model->get_campos_reporte_movhist();
+		$arr_campos    = $this->reportestock_model->get_campos_reporte_movhist();
+		$datos_reporte = $this->reportestock_model->get_reporte_movhist(
+			array(
+				'filtros' => array(
+					'tipo_fecha'     => $param_tipo_fecha,
+					'fechas'         => $this->input->post('fechas'),
+					'cmv'            => $this->input->post('cmv'),
+					'tipo_alm'       => $param_tipo_alm,
+					'almacenes'      => $this->input->post('almacenes'),
+					'tipo_cruce_alm' => $param_tipo_cruce_alm,
+					'tipo_mat'       => $param_tipo_mat,
+					'materiales'     => $this->input->post('materiales'),
+				),
+				'orden' => $param_sort,
+			)
+		);
 
 		$data = array(
 			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => 'movhist'),

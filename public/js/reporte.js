@@ -9,8 +9,7 @@ $(document).ready(function () {
 
     $('table.reporte th span').click(function (event) {
         event.preventDefault();
-        $('form input[name="order_by"]').val($(this).attr('order_by'));
-        $('form input[name="order_sort"]').val($(this).attr('order_sort'));
+        $('form input[name="sort"]').val($(this).attr('data-sort'));
         $('form').submit();
     });
 

@@ -361,10 +361,9 @@ class Toa_model extends CI_Model {
 	 * @param  string $fecha_desde  Fecha desde de los datos del reporte
 	 * @param  string $fecha_hasta  Fecha hasta de los datos del reporte
 	 * @param  string $orden_campo  Campo para ordenar el resultado
-	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
 	 * @return string               Reporte
 	 */
-	public function consumos_toa($tipo_reporte = 'detalle', $fecha_desde = NULL, $fecha_hasta = NULL, $orden_campo = '', $orden_tipo = 'ASC')
+	public function consumos_toa($tipo_reporte = 'detalle', $fecha_desde = NULL, $fecha_hasta = NULL, $orden_campo = '')
 	{
 		if ( ! $tipo_reporte OR ! $fecha_desde OR ! $fecha_hasta)
 		{
@@ -379,11 +378,9 @@ class Toa_model extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo);
 
-		$orden_tipo = ($orden_tipo === '') ? 'ASC' : $orden_tipo;
-
 		if ($tipo_reporte === 'detalle')
 		{
-			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+referencia' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('a.fecha_contabilizacion as fecha')
@@ -408,7 +405,7 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->get()->result_array();
 
 			$arr_campos = array();
@@ -437,7 +434,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'peticion')
 		{
-			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+referencia' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('a.referencia')
@@ -457,7 +454,7 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->get()->result_array();
 
 			$arr_campos = array();
@@ -474,7 +471,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'tip_material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'desc_tip_material' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+desc_tip_material' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('desc_tip_material')
@@ -486,7 +483,7 @@ class Toa_model extends CI_Model {
 				->group_by('desc_tip_material')
 				->group_by('ume')
 				->group_by('id_tip_material_trabajo')
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 				->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
@@ -504,7 +501,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'desc_tip_material, material' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+desc_tip_material, +material' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('desc_tip_material')
@@ -518,7 +515,7 @@ class Toa_model extends CI_Model {
 				->group_by('material')
 				->group_by('texto_material')
 				->group_by('ume')
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 				->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
@@ -538,7 +535,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'lote')
 		{
-			$orden_campo = ($orden_campo === '') ? 'valor' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+valor, +lote' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -548,7 +545,7 @@ class Toa_model extends CI_Model {
 				->select_sum('(-importe_ml)', 'monto')
 				->group_by('valor')
 				->group_by('lote')
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -564,7 +561,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'lote-material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'valor' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+valor' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -578,7 +575,7 @@ class Toa_model extends CI_Model {
 				->group_by('lote')
 				->group_by('material')
 				->group_by('texto_material')
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -596,7 +593,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'pep')
 		{
-			$orden_campo = ($orden_campo === '') ? 'codigo_movimiento' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+codigo_movimiento' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('codigo_movimiento')
@@ -608,7 +605,7 @@ class Toa_model extends CI_Model {
 				->group_by('codigo_movimiento')
 				->group_by('texto_movimiento')
 				->group_by('elemento_pep')
-				->order_by($orden_campo, $orden_tipo)
+				->order_by($this->reporte->get_order_by($orden_campo))
 				->get($this->config->item('bd_movimientos_sap_fija'))
 				->result_array();
 
@@ -625,7 +622,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'tecnicos')
 		{
-			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+empresa, +tecnico' : $orden_campo;
 
 			$query = $this->db
 				->select('c.empresa')
@@ -643,7 +640,7 @@ class Toa_model extends CI_Model {
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->get_compiled_select();
 
-			$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by q1.empresa, q1.cliente';
+			$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by '.$this->reporte->get_order_by($orden_campo);
 
 			$arr_data = $this->db->query($query)->result_array();
 
@@ -661,7 +658,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'ciudades')
 		{
-			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+orden' : $orden_campo;
 
 			$query = $this->db
 				->select('b.id_ciudad')
@@ -680,7 +677,7 @@ class Toa_model extends CI_Model {
 				->join($this->config->item('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
 				->get_compiled_select();
 
-			$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by q1.orden';
+			$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by '.$this->reporte->get_order_by($orden_campo);
 
 			$arr_data = $this->db->query($query)->result_array();
 
@@ -697,7 +694,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'empresas')
 		{
-			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+empresa' : $orden_campo;
 
 			$query = $this->db
 				->select('c.empresa')
@@ -713,7 +710,7 @@ class Toa_model extends CI_Model {
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->get_compiled_select();
 
-			$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by q1.empresa';
+			$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by '.$this->reporte->get_order_by($orden_campo);
 
 			$arr_data = $this->db->query($query)->result_array();
 
@@ -729,7 +726,7 @@ class Toa_model extends CI_Model {
 		}
 		else if ($tipo_reporte === 'tipo-trabajo')
 		{
-			$orden_campo = ($orden_campo === '') ? 'carta_porte' : $orden_campo;
+			$orden_campo = ($orden_campo === '') ? '+carta_porte' : $orden_campo;
 
 			$query = $this->db
 				->select('a.carta_porte')
@@ -741,7 +738,7 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->get_compiled_select();
 
-			$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by q1.carta_porte';
+			$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by '.$this->reporte->get_order_by($orden_campo);
 
 			$arr_data = $this->db->query($query)->result_array();
 
