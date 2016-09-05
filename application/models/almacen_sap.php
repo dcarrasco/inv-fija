@@ -149,13 +149,13 @@ class Almacen_sap extends ORM_Model {
 		else
 		{
 			$arr_result = $this->db
-				->select("a.centro + '~' + a.cod_almacen as llave", FALSE)
+				->select("a.centro + '{$this->_separador_campos}' + a.cod_almacen as llave", FALSE)
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
 				->from($this->get_model_tabla() . ' a')
 				->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
-				->where_in('ta.id_tipo', explode('~', $filtro))
+				->where_in('ta.id_tipo', explode($this->_separador_campos, $filtro))
 				->get()->result_array();
 
 			return form_array_format($arr_result);

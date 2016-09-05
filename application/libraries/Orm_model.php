@@ -101,7 +101,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var string
 	 */
-	private $_separador_campos = '~';
+	protected $_separador_campos = '~';
 
 	/**
 	 * Arreglo de registros recuperados de la BD
