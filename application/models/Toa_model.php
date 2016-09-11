@@ -2528,7 +2528,10 @@ class Toa_model extends CI_Model {
 			->where('d.resource_name is not NULL')
 			->get()->result_array();
 
-		$this->db->insert_batch($this->config->item('bd_tecnicos_toa'), $arr_nuevos_tecnicos);
+		foreach($arr_nuevos_tecnicos as $nuevo_tecnico)
+		{
+			$this->db->insert($this->config->item('bd_tecnicos_toa'), $nuevo_tecnico);
+		}
 
 		return count($arr_nuevos_tecnicos);
 	}
