@@ -84,6 +84,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_stock_tecnicos'),
 				'icon'  => 'truck'
 			),
+			'nuevos_tecnicos' => array(
+				'url'   => $this->router->class . '/nuevos_tecnicos',
+				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
+				'icon'  => 'users'
+			),
 		);
 	}
 
@@ -313,6 +318,30 @@ class Toa_controles extends CI_Controller {
 
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Agrega nuevos técnicos
+	 *
+	 * @return void
+	 */
+	public function nuevos_tecnicos()
+	{
+		$msg_agregar = '';
+
+		if ($this->input->post('agregar'))
+		{
+			$cant_tecnicos_agregados = $this->toa_model->agrega_nuevos_tecnicos();
+			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $cant_tecnicos_agregados));
+		}
+
+		$datos = array(
+			'menu_modulo' => array('menu' => $this->_arr_menu, 'mod_selected' => 'nuevos_tecnicos'),
+			'msg_agregar' => $msg_agregar,
+		);
+
+		app_render_view('toa/controles_nuevos_tecnicos', $datos);
+	}
+
 
 }
 /* End of file Toa_controles.php */

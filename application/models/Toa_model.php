@@ -2503,6 +2503,36 @@ class Toa_model extends CI_Model {
 	}
 
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Agrega nuevos técnicos a partir de los cierres
+	 *
+	 * @return int Cantidad de técnicos agregados
+	 */
+	public function agrega_nuevos_tecnicos()
+	{
+		$arr_nuevos_tecnicos = $this->db
+			->distinct()
+			->select('a.cliente as id_tecnico')
+			->select('d.resource_name as tecnico')
+			->select('a.vale_acomp as id_empresa')
+			->select('d.resource_external_id as rut')
+			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->where('a.fecha_contabilizacion >= dateadd(day, -20, convert(date, getdate()))')
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->where('b.id_tecnico is NULL')
+			->where('d.resource_name is not NULL')
+			->get()->result_array();
+
+		$this->db->insert_batch($this->config->item('bd_tecnicos_toa'), $arr_nuevos_tecnicos);
+
+		return count($arr_nuevos_tecnicos);
+	}
+
 
 }
 
