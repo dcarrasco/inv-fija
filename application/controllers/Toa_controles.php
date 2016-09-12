@@ -327,16 +327,18 @@ class Toa_controles extends CI_Controller {
 	public function nuevos_tecnicos()
 	{
 		$msg_agregar = '';
+		$nuevos_tecnicos = $this->toa_model->nuevos_tecnicos();
 
 		if ($this->input->post('agregar'))
 		{
-			$cant_tecnicos_agregados = $this->toa_model->agrega_nuevos_tecnicos();
-			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $cant_tecnicos_agregados));
+			$this->toa_model->agrega_nuevos_tecnicos($nuevos_tecnicos);
+			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), count($nuevos_tecnicos)));
 		}
 
 		$datos = array(
-			'menu_modulo' => array('menu' => $this->_arr_menu, 'mod_selected' => 'nuevos_tecnicos'),
-			'msg_agregar' => $msg_agregar,
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'nuevos_tecnicos'),
+			'msg_agregar'     => $msg_agregar,
+			'nuevos_tecnicos' => $nuevos_tecnicos,
 		);
 
 		app_render_view('toa/controles_nuevos_tecnicos', $datos);

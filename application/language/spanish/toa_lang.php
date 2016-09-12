@@ -21,6 +21,7 @@ $lang['toa_controles_stock']                 = 'Stock Bucles';
 $lang['toa_controles_stock_tecnicos']        = 'Stock T&eacute;cnicos';
 $lang['toa_controles_nuevos_tecnicos']       = 'Agrega nuevos t&eacute;cnicos';
 $lang['toa_controles_tecnicos_agregados']    = 'Nuevos t&eacute;cnicos agregados (%d t&eacute;cnicos)';
+$lang['toa_controles_sin_tecnicos']          = 'No existen t&eacute;cnicos por agregar';
 $lang['controles_tecnicos_empresas']         = 'Empresa contratista';
 $lang['controles_tecnicos_meses']            = 'Mes';
 $lang['controles_tecnicos_filtro_trx']       = 'Filtro transaccion';

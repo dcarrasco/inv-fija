@@ -2506,13 +2506,13 @@ class Toa_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Agrega nuevos técnicos a partir de los cierres
+	 * Recupera nuevos técnicos a partir de los cierres
 	 *
-	 * @return int Cantidad de técnicos agregados
+	 * @return array Técnicos nuevos
 	 */
-	public function agrega_nuevos_tecnicos()
+	public function nuevos_tecnicos()
 	{
-		$arr_nuevos_tecnicos = $this->db
+		return $this->db
 			->distinct()
 			->select('a.cliente as id_tecnico')
 			->select('d.resource_name as tecnico')
@@ -2527,13 +2527,23 @@ class Toa_model extends CI_Model {
 			->where('b.id_tecnico is NULL')
 			->where('d.resource_name is not NULL')
 			->get()->result_array();
+	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Agrega nuevos técnicos a partir de un arreglo
+	 *
+	 * @param  array  $arr_nuevos_tecnicos Arreglo a de tecnicos a agregar
+	 * @return void
+	 */
+	public function agrega_nuevos_tecnicos($arr_nuevos_tecnicos)
+	{
 		foreach($arr_nuevos_tecnicos as $nuevo_tecnico)
 		{
 			$this->db->insert($this->config->item('bd_tecnicos_toa'), $nuevo_tecnico);
 		}
-
-		return count($arr_nuevos_tecnicos);
 	}
 
 
