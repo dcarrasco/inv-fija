@@ -188,6 +188,8 @@ class Reporte {
 		$cant_sort = 0;
 		foreach($arr_sort_by as $sort)
 		{
+			$sort = trim($sort);
+
 			if ( ! in_array(substr($sort, 0, 1), array('+', '-')))
 			{
 				$sort = '+'.$sort;
