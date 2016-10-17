@@ -89,6 +89,11 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
 				'icon'  => 'users'
 			),
+			'clientes' => array(
+				'url'   => $this->router->class . '/clientes',
+				'texto' => $this->lang->line('toa_controles_clientes'),
+				'icon'  => 'users'
+			),
 		);
 	}
 
@@ -342,6 +347,30 @@ class Toa_controles extends CI_Controller {
 		);
 
 		app_render_view('toa/controles_nuevos_tecnicos', $datos);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actuaciones por clientes
+	 *
+	 * @return void
+	 */
+	public function clientes()
+	{
+		$this->form_validation->set_data($this->input->get());
+		$this->form_validation->set_rules($this->toa_model->controles_clientes_validation);
+		$this->form_validation->run();
+
+		$datos = array(
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'clientes'),
+			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
+			'clientes'        => $this->toa_model->clientes(set_value('cliente'), set_value('fecha_desde'), set_value('fecha_hasta'), set_value('dato')),
+			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-','',set_value('fecha_desde')).'/'.str_replace('-','',set_value('fecha_hasta')).'/',
+		);
+
+		app_render_view('toa/controles_clientes', $datos);
 	}
 
 

@@ -1,0 +1,78 @@
+<div class="accordion hidden-print">
+	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<div class="panel panel-default">
+
+		<div class="panel-heading">
+			<div class="row">
+				<div class="col-md-8">
+					<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
+						{_consumo_parametros_}
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel-body collapse in" id="form_param">
+			<div class="accordion-inner">
+
+				{validation_errors}
+
+				<div class="row">
+					<div class="col-md-5 form_group <?php echo form_error('cliente') ? 'has-error' : '' ?>">
+						<label class="control-label">{_controles_clientes_}</label>
+						<?php echo form_input('cliente', set_value('cliente'), 'class="form-control"'); ?>
+					</div>
+
+					<div class="col-md-5 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
+						<label class="control-label">{_consumo_fechas_}</label>
+						<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+					</div>
+
+					<div class="col-md-2">
+						<button type="submit" class="pull-right btn btn-primary">
+							<span class="fa fa-search"></span>
+							{_consumo_btn_reporte_}
+						</button>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<?php echo form_close(); ?>
+</div>
+
+<div class="content-module-main">
+<?php if ($clientes): ?>
+	<?php $num_lin= 0; ?>
+	<table class="table table-hover table-condensed reporte">
+	<?php foreach ($clientes as $cliente): ?>
+
+		<?php if ($num_lin== 0): ?>
+			<!-- ENCABEZADO TABLA REPORTE -->
+			<thead>
+			<tr>
+				<th></th>
+				<th>Numero cliente</th>
+				<th>Nombre cliente</th>
+				<th class="text-center">Numero de peticiones</th>
+			</tr>
+			</thead>
+
+			<!-- CUERPO TABLA REPORTE -->
+			<tbody>
+		<?php endif; ?>
+
+		<tr>
+			<td class="text-muted"><?php echo $num_lin+ 1; ?></td>
+			<td><?php echo $cliente['customer_number']; ?></td>
+			<td><?php echo $cliente['cname']; ?></td>
+			<td class="text-center"><?php echo anchor($link_peticiones.$cliente['customer_number'],fmt_cantidad($cliente['cantidad'])); ?></td>
+		</tr>
+		<?php $num_lin+= 1; ?>
+	<?php endforeach; ?>
+	</tbody>
+</table>
+<?php endif ?>
+
+</div> <!-- fin content-module-main -->
