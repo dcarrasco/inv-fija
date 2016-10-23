@@ -25,7 +25,7 @@
 
 					<div class="col-md-5 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
 						<label class="control-label">{_consumo_fechas_}</label>
-						<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+						<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control" data-date-min-view-mode="1"'); ?>
 					</div>
 
 					<div class="col-md-2">
