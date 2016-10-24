@@ -1,30 +1,32 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 /**
-*
-* Author: J. A. Cuttilan
-* Last modified: 02/12/2010
-* ADDS HTML5 FORM ELEMENTS AND INPUT TYPES
-* New attributes (e.g. placeholder, required, autofocus) can be included as part of the $extra string
-*
-*/
-
-
-
-
-/**
- * HTML5 Email Field
  *
- * Identical to the input function but adds the "email" type
- * Falls back to a standard input field of type "text"
+ * Author: J. A. Cuttilan
+ * Last modified: 02/12/2010
+ * ADDS HTML5 FORM ELEMENTS AND INPUT TYPES
+ * New attributes (e.g. placeholder, required, autofocus) can be included as part of the $extra string
  *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
+ * @link      localhost:1520
  */
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+
+
 if ( ! function_exists('form_email'))
 {
+	/**
+	 * HTML5 Email Field
+	 *
+	 * Identical to the input function but adds the "email" type
+	 * Falls back to a standard input field of type "text"
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_email($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -39,20 +41,20 @@ if ( ! function_exists('form_email'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 URL Field
- *
- * Identical to the input function but adds the "url" type
- * Falls back to a standard input field of type "text"
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_url'))
 {
+	/**
+	 * HTML5 URL Field
+	 *
+	 * Identical to the input function but adds the "url" type
+	 * Falls back to a standard input field of type "text"
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_url($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -67,20 +69,20 @@ if ( ! function_exists('form_url'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Search Field
- *
- * Identical to the input function but adds the "search" type
- * Falls back to a standard input field of type "text"
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_search'))
 {
+	/**
+	 * HTML5 Search Field
+	 *
+	 * Identical to the input function but adds the "search" type
+	 * Falls back to a standard input field of type "text"
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_search($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -95,21 +97,21 @@ if ( ! function_exists('form_search'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Number Field
- *
- * Identical to the input function but adds the "number" type
- * Falls back to a standard input field of type "text"
- * Define min, max & step in $extra
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_number'))
 {
+	/**
+	 * HTML5 Number Field
+	 *
+	 * Identical to the input function but adds the "number" type
+	 * Falls back to a standard input field of type "text"
+	 * Define min, max & step in $extra
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_number($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -124,21 +126,21 @@ if ( ! function_exists('form_number'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Range Field
- *
- * Identical to the input function but adds the "range" type
- * Falls back to a standard input field of type "text"
- * Define min, max & step in $extra
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_range'))
 {
+	/**
+	 * HTML5 Range Field
+	 *
+	 * Identical to the input function but adds the "range" type
+	 * Falls back to a standard input field of type "text"
+	 * Define min, max & step in $extra
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_range($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -153,22 +155,22 @@ if ( ! function_exists('form_range'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Date Field
- *
- * Identical to the input function but adds the "date" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_date_browser'))
 {
+	/**
+	 * HTML5 Date Field
+	 *
+	 * Identical to the input function but adds the "date" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_date_browser($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -183,22 +185,22 @@ if ( ! function_exists('form_date_browser'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Month Field
- *
- * Identical to the input function but adds the "month" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_month_browser'))
 {
+	/**
+	 * HTML5 Month Field
+	 *
+	 * Identical to the input function but adds the "month" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_month_browser($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -213,22 +215,22 @@ if ( ! function_exists('form_month_browser'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Week Field
- *
- * Identical to the input function but adds the "week" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_week'))
 {
+	/**
+	 * HTML5 Week Field
+	 *
+	 * Identical to the input function but adds the "week" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_week($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -243,22 +245,22 @@ if ( ! function_exists('form_week'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Time Field
- *
- * Identical to the input function but adds the "time" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_time'))
 {
+	/**
+	 * HTML5 Time Field
+	 *
+	 * Identical to the input function but adds the "time" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_time($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -273,22 +275,22 @@ if ( ! function_exists('form_time'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 DateTime Field
- *
- * Identical to the input function but adds the "datetime" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_datetime'))
 {
+	/**
+	 * HTML5 DateTime Field
+	 *
+	 * Identical to the input function but adds the "datetime" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_datetime($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -303,22 +305,22 @@ if ( ! function_exists('form_datetime'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 DateTime-Local Field
- *
- * Identical to the input function but adds the "datetime-local" type
- * Only supported in Opera 9+ at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_datetime_local'))
 {
+	/**
+	 * HTML5 DateTime-Local Field
+	 *
+	 * Identical to the input function but adds the "datetime-local" type
+	 * Only supported in Opera 9+ at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_datetime_local($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -333,22 +335,22 @@ if ( ! function_exists('form_datetime_local'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Color Field
- *
- * Identical to the input function but adds the "datetime" type
- * Unsupported in browsers at time of writing
- * Falls back to a standard input field of type "text"
- *
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_color'))
 {
+	/**
+	 * HTML5 Color Field
+	 *
+	 * Identical to the input function but adds the "datetime" type
+	 * Unsupported in browsers at time of writing
+	 * Falls back to a standard input field of type "text"
+	 *
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_collor($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -363,20 +365,20 @@ if ( ! function_exists('form_color'))
 
 // ------------------------------------------------------------------------
 
-/**
- * HTML5 Picture Field
- *
- * Identical to the input function but adds the "search" type
- * Falls back to a standard input field of type "text"
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_picture'))
 {
+	/**
+	 * HTML5 Picture Field
+	 *
+	 * Identical to the input function but adds the "search" type
+	 * Falls back to a standard input field of type "text"
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_picture($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -394,17 +396,17 @@ if ( ! function_exists('form_picture'))
 
 // ------------------------------------------------------------------------
 
-/**
- * Bootstrap Date Field
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_date'))
 {
+	/**
+	 * Bootstrap Date Field
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_date($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -420,17 +422,17 @@ if ( ! function_exists('form_date'))
 
 // ------------------------------------------------------------------------
 
-/**
- * Bootstrap Month Field
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_month'))
 {
+	/**
+	 * Bootstrap Month Field
+	 *
+	 * @access	public
+	 * @param	mixed  $data  Nombre del elemento
+	 * @param	string $value Valor del elemento
+	 * @param	string $extra Parametros adicionales
+	 * @return	string
+	 */
 	function form_month($data = '', $value = '', $extra = '')
 	{
 		if ( ! is_array($data))
@@ -448,22 +450,25 @@ if ( ! function_exists('form_month'))
 
 // ------------------------------------------------------------------------
 
-/**
- * Bootstrap Date Field
- *
- * @access	public
- * @param	mixed
- * @param	string
- * @param	string
- * @return	string
- */
 if ( ! function_exists('form_date_range'))
 {
+	/**
+	 * Bootstrap Date Field
+	 *
+	 * @access	public
+	 * @param	mixed  $data_desde  Nombre del elemento desde
+	 * @param	string $value_desde Valor del elemento desde
+	 * @param	mixed  $data_hasta  Nombre del elemento desde
+	 * @param	string $value_hasta Valor del elemento desde
+	 * @param	string $extra       Parametros adicionales
+	 * @return	string
+	 */
 	function form_date_range($data_desde = '', $value_desde = '', $data_hasta = '', $value_hasta = '', $extra = '')
 	{
-		$js = '<script>$(document).ready(function() {$(\'input[name="'.$data_desde.'"]\').on(\'changeDate\', function(e) {var fecha_desde = $(\'input[name="'.$data_desde.'"]\').val();$(\'input[name="'.$data_hasta.'"]\').val(fecha_desde);$(\'input[name="'.$data_hasta.'"]\').datepicker(\'setStartDate\',fecha_desde);})});</script>';
-		$str_desde = "Desde";
-		$str_hasta = "Hasta";
+		$js_script = '<script>$(document).ready(function() {$(\'input[name="'.$data_desde.'"]\').on(\'changeDate\', function(e) {var fecha_desde = $(\'input[name="'.$data_desde.'"]\').val();$(\'input[name="'.$data_hasta.'"]\').val(fecha_desde);$(\'input[name="'.$data_hasta.'"]\').datepicker(\'setStartDate\',fecha_desde);})});</script>';
+
+		$str_desde = 'Desde';
+		$str_hasta = 'Hasta';
 
 		if ( ! is_array($data_desde))
 		{
@@ -485,7 +490,7 @@ if ( ! function_exists('form_date_range'))
 		$form_item .= form_input($data_desde, $value_desde, $extra_desde);
 		$form_item .= '<span class="input-group-addon">'.$str_hasta.'</span>';
 		$form_item .= form_input($data_hasta, $value_hasta, $extra_hasta);
-		$form_item .= '</div>'.$js;
+		$form_item .= '</div>'.$js_script;
 
 		return $form_item;
 	}
@@ -493,16 +498,16 @@ if ( ! function_exists('form_date_range'))
 
 // ------------------------------------------------------------------------
 
-/**
- * Devuelve conjunto de <option> para ser usado en un <select>
- *
- * @access	public
- * @param	mixed
- * @param	mixed
- * @return	string
- */
 if ( ! function_exists('form_print_options'))
 {
+	/**
+	 * Devuelve conjunto de <option> para ser usado en un <select>
+	 *
+	 * @access	public
+	 * @param	array $options  Arreglo de opciones
+	 * @param	array $selected Arreglo de elementos seleccioandos
+	 * @return	string
+	 */
 	function form_print_options($options = array(), $selected = array())
 	{
 		if ( ! $options)
@@ -510,29 +515,28 @@ if ( ! function_exists('form_print_options'))
 			return;
 		}
 
-
 		is_array($options) OR $options = array($options);
 		is_array($selected) OR $selected = array($selected);
 
 		$form = '';
 
-		foreach ($options as $key => $val)
+		foreach ($options as $options_key => $options_val)
 		{
-			$key = (string) $key;
+			$options_key = (string) $options_key;
 
-			if (is_array($val))
+			if (is_array($options_val))
 			{
-				if (empty($val))
+				if (empty($options_val))
 				{
 					continue;
 				}
 
-				$form .= '<optgroup label="'.$key."\">\n";
+				$form .= '<optgroup label="'.$options_key."\">\n";
 
-				foreach ($val as $optgroup_key => $optgroup_val)
+				foreach ($options_val as $optgroup_key => $optgroup_val)
 				{
-					$sel = in_array($optgroup_key, $selected) ? ' selected="selected"' : '';
-					$form .= '<option value="'.html_escape($optgroup_key).'"'.$sel.'>'
+					$form .= '<option value="'.html_escape($optgroup_key).'"'
+						.(in_array($optgroup_key, $selected) ? ' selected="selected"' : '').'>'
 						.(string) $optgroup_val."</option>\n";
 				}
 
@@ -540,9 +544,9 @@ if ( ! function_exists('form_print_options'))
 			}
 			else
 			{
-				$form .= '<option value="'.html_escape($key).'"'
-					.(in_array($key, $selected) ? ' selected="selected"' : '').'>'
-					.(string) $val."</option>\n";
+				$form .= '<option value="'.html_escape($options_key).'"'
+					.(in_array($options_key, $selected) ? ' selected="selected"' : '').'>'
+					.(string) $options_val."</option>\n";
 			}
 		}
 
@@ -552,16 +556,17 @@ if ( ! function_exists('form_print_options'))
 
 // ------------------------------------------------------------------------
 
-/**
- * Devuelve js para onchange
- *
- * @access	public
- * @param	mixed
- * @param	mixed
- * @return	string
- */
 if ( ! function_exists('form_onchange'))
 {
+	/**
+	 * Devuelve js para onchange
+	 *
+	 * @access	public
+	 * @param	string $elem_orig  Elemento de origen
+	 * @param	string $elem_dest  Elemento de destino
+	 * @param	string $controller Controlador
+	 * @return	string
+	 */
 	function form_onchange($elem_orig = '', $elem_dest = '', $controller = '')
 	{
 		$form_elem_prefix = '#id_';
@@ -573,12 +578,15 @@ if ( ! function_exists('form_onchange'))
 		if ($elem_orig)
 		{
 			// limpia elem destino
-			$script_js .= "\$('$elem_dest').html('');";
+			$script_js .= "\$('{$elem_dest}').html('');";
 
 			// recupera opciones
-			$script_js .= "\$.get('".site_url($controller)."'+'/'+\$('$elem_orig').val(), function(data){\$('$elem_dest').html(data);});";
+			$script_js .= "\$.get('".site_url($controller)."'+'/'+\$('{$elem_orig}').val(), function(data){\$('{$elem_dest}').html(data);});";
 		}
 
 		return $script_js;
 	}
+
 }
+/* helpers MY_form_helper.php */
+/* Location: ./application/helpers/MY_form_helper.php */
