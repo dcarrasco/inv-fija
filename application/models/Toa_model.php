@@ -31,7 +31,9 @@ class Toa_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
+	// public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
+	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z81', 'Z82', 'Z83', 'Z84');
+	// Z81 CAPEX  Z82 ANULA CAPEX  / Z83 OPEX y Z84 ANULA OPEX   Regularizaciones Manuales
 
 	/**
 	 * Movimientos validos de asignaciones TOA
@@ -1382,41 +1384,6 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '000')
-		{
-			$this->db->where('codigo_movimiento', $filtro_trx);
-		}
-
-/*
-		$query = $this->db
-			->select('a.fecha_contabilizacion as fecha')
-			->select('a.cliente')
-			->select('a.referencia')
-			->select_sum('(-a.cantidad_en_um)', 'cant')
-			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('a.fecha_contabilizacion')
-			->group_by('a.cliente')
-			->group_by('a.referencia')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_consumo)
-			->where_in('centro', $this->centros_consumo)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->get_compiled_select();
-
-		$arr_dato_desplegar = array(
-			'peticiones' => 'count(q1.referencia)',
-			'unidades'   => 'sum(q1.cant)',
-			'monto'      => 'sum(q1.monto)'
-		);
-
-		$query = 'select q1.fecha, q1.cliente, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.cliente order by q1.cliente, q1.fecha';
-
-		$datos = $this->db->query($query)->result_array();
-*/
-
 		if ($dato_desplegar === 'unidades')
 		{
 			$this->db->select_sum('cant', 'dato');
@@ -1443,6 +1410,38 @@ class Toa_model extends CI_Model {
 			->from($this->config->item('bd_peticiones_sap').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
 			->get()->result_array();
+
+		if ($filtro_trx AND $filtro_trx !== '000')
+		{
+			$query = $this->db
+				->select('a.fecha_contabilizacion as fecha')
+				->select('a.cliente as tecnico')
+				->select('a.referencia')
+				->select_sum('(-a.cantidad_en_um)', 'cant')
+				->select_sum('(-a.importe_ml)', 'monto')
+				->group_by('a.fecha_contabilizacion')
+				->group_by('a.cliente')
+				->group_by('a.referencia')
+				->where('a.fecha_contabilizacion>=', $fecha_desde)
+				->where('a.fecha_contabilizacion<', $fecha_hasta)
+				->where('b.id_empresa', $empresa)
+				->where('codigo_movimiento', $filtro_trx)
+				->where_in('centro', $this->centros_consumo)
+				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->get_compiled_select();
+
+			$arr_dato_desplegar = array(
+				'peticiones' => 'count(q1.referencia)',
+				'unidades'   => 'sum(q1.cant)',
+				'monto'      => 'sum(q1.monto)'
+			);
+
+			$query = 'select q1.fecha, q1.tecnico, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
+
+			$datos = $this->db->query($query)->result_array();
+		}
+
 
 
 		$tecnicos = new Tecnico_toa();
@@ -2605,7 +2604,7 @@ class Toa_model extends CI_Model {
 
 		if ($cliente)
 		{
-			$this->db->like('cname', $cliente);
+			$this->db->like('cname', strtoupper($cliente));
 		}
 
 		return ($this->db
