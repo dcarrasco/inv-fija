@@ -76,7 +76,7 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 		* `</ifModule>`
 * __vuln-009-0110/2015__ Cookies sesion
 	* cookies http-only
-* __vuln-010-0110/2015__ Cookies sesion
+* __vuln-010-0110/2015__ Método http trace
 	* Apache: httpd.conf
 		* Agregar
 			* `TraceEnable off`
