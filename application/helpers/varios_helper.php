@@ -23,11 +23,12 @@ if ( ! function_exists('dbg'))
 	 */
 	function dbg()
 	{
-		ini_set('xdebug.var_display_max_depth', '6');
-		ini_set('xdebug.var_display_max_data', '1024');
 		foreach (func_get_args() as $item)
 		{
-			var_dump($item);
+			echo '<pre style="font-family: consolas, courier; font-size: 9pt; background-color:#DDD;">';
+			$dump = print_r($item, true);
+			echo $dump;
+			echo '</pre><hr>';
 		}
 	}
 }
@@ -46,7 +47,10 @@ if ( ! function_exists('dbg_die'))
 	{
 		foreach (func_get_args() as $item)
 		{
-			var_dump($item);
+			echo '<pre style="font-family: consolas, courier; font-size: 9pt; background-color:#DDD;">';
+			$dump = print_r($item, true);
+			echo $dump;
+			echo '</pre><hr>';
 		}
 		die();
 	}
