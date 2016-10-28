@@ -59,7 +59,7 @@ Modulo que permite generar reportes sobre los despachos de la operación móvil
 		* `db_debug => false`
 * __vuln-005-0110/2015__ Información técnica
 	* Apache: httpd.conf
-		* `<Directory />`
+		* `<Directory "/">`
 			* `Order Deny,Allow`
 			* `Deny from all`
 			* `Options None`
