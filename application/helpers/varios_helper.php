@@ -23,12 +23,49 @@ if ( ! function_exists('dbg'))
 	 */
 	function dbg()
 	{
+		$colores_texto = array(
+			'llave_array' => 'tomato',
+			'numero'      => 'blue',
+			'texto'       => 'limegreen',
+			'boolean'     => 'rebeccapurple',
+			'array'       => 'red',
+		);
+
 		foreach (func_get_args() as $item)
 		{
-			echo '<pre style="font-family: consolas, courier; font-size: 9pt; background-color:#DDD;">';
-			$dump = print_r($item, true);
+			ob_start();
+			var_dump($item);
+			$dump = ob_get_contents();
+			ob_end_clean();
+			$dump = preg_replace(
+				array(
+					'/=>\n[ ]+/i',
+					'/\n([ ]*)/',
+					'/ /i',
+					'/\n/i',
+					'/\["([\w:\(\)\/_\-. ]*)"\]/i',
+					'/\[(\d*)\]/i',
+					'/(int|float)\(([\d\.]*)\)/i',
+					'/bool\((\w*)\)/i',
+					'/string\((\w*)\)&nbsp;\"([\w\.\-~\/%:+><\&\$#{}\[\]=;?\' ]*)\"/i',
+					'/array\(([\d\.]*)\)/i',
+				),
+				array(
+					' => ',
+					'<br/>&nbsp;',
+					'&nbsp;',
+					'<br/>',
+					'<span style="color:'.$colores_texto['llave_array'].'">["$1"]</span>',
+					'<span style="color:'.$colores_texto['llave_array'].'">[$1]</span>',
+					'<span style="color:'.$colores_texto['numero'].'"><i>$1</i>($2)</span>',
+					'<span style="color:'.$colores_texto['boolean'].'"><i>bool</i>($1)</span>',
+					'<span style="color:'.$colores_texto['texto'].'"><i>string</i>($1)&nbsp;"$2"</span>',
+					'<span style="color:'.$colores_texto['array'].'"><i>array</i>($1)</span>',
+				),
+				$dump
+			);
+			$dump = '<div style="font-family: consolas, courier; font-size: 9pt; background-color:#EEE; padding:1em;"><p>'.$dump.'</p></div><hr>';
 			echo $dump;
-			echo '</pre><hr>';
 		}
 	}
 }
@@ -45,13 +82,7 @@ if ( ! function_exists('dbg_die'))
 	 */
 	function dd()
 	{
-		foreach (func_get_args() as $item)
-		{
-			echo '<pre style="font-family: consolas, courier; font-size: 9pt; background-color:#DDD;">';
-			$dump = print_r($item, true);
-			echo $dump;
-			echo '</pre><hr>';
-		}
+		call_user_func_array('dbg', func_get_args());
 		die();
 	}
 }
