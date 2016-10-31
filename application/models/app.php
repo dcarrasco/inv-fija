@@ -47,11 +47,11 @@ class App extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'app' => array(
 					'label'          => 'Aplicaci&oacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -59,27 +59,27 @@ class App extends ORM_Model {
 				),
 				'descripcion' => array(
 					'label'          => 'Descripci&oacute;n de la Aplicaci&oacute;n',
-					'tipo'           =>  'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Breve descripcion de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'orden' => array(
 					'label'          => 'Orden de la Aplicaci&oacute;n',
-					'tipo'           =>  'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'texto_ayuda'    => 'Orden de la aplicaci&oacute;n en el menu.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'url' => array(
 					'label'          => 'Direcci&oacute;n de la Aplicaci&oacute;n',
-					'tipo'           =>  'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 100,
 					'texto_ayuda'    => 'Direcci&oacute;n web (URL) de la aplicaci&oacute;n. M&aacute;ximo 100 caracteres.',
 				),
 				'icono' => array(
 					'label'          => '&Iacute;cono de la aplicaci&oacute;n',
-					'tipo'           =>  'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del archivo del &iacute;cono de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
 				),

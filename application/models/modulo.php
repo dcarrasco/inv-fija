@@ -47,10 +47,10 @@ class Modulo extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'id_app' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'app',
 					),
@@ -58,7 +58,7 @@ class Modulo extends ORM_Model {
 				),
 				'modulo' => array(
 					'label'          => 'M&oacute;dulo',
-					'tipo'           =>  'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del m&oacute;dulo. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -66,32 +66,32 @@ class Modulo extends ORM_Model {
 				),
 				'descripcion' => array(
 					'label'          => 'Descripci&oacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 100,
 					'texto_ayuda'    => 'Descripci&oacute;n del m&oacute;dulo. M&aacute;ximo 100 caracteres.',
 					'mostrar_lista'  => FALSE,
 				),
 				'orden' => array(
 					'label'          => 'Orden del m&oacute;dulo',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'texto_ayuda'    => 'Orden del m&oacute;dulo en el men&uacute;.',
 					'es_obligatorio' => TRUE,
 				),
 				'url' => array(
 					'label'          => 'Direccion del m&oacute;dulo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Dirección web (URL) del m&oacute;dulo. M&aacute;ximo 50 caracteres.',
 				),
 				'icono' => array(
 					'label'          => '&Iacute;cono del m&oacute;dulo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre de archivo del icono del m&oacute;dulo. M&aacute;ximo 50 caracteres.',
 				),
 				'llave_modulo' => array(
 					'label'          => 'Llave del m&oacute;dulo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Cadena de caracteres de seguridad del m&oacute;dulo. M&aacute;ximo 20 caracteres.',
 					'es_obligatorio' => TRUE,

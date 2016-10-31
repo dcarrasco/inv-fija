@@ -48,7 +48,7 @@ class Usuario_sap extends ORM_Model {
 			'campos' => array(
 				'usuario' => array(
 					'label'          => 'Codigo Usuario',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'C&oacute;digo del usuario SAP. M&aacute;ximo 10 caracteres',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Usuario_sap extends ORM_Model {
 				),
 				'nom_usuario' => array(
 					'label'          => 'Nombre de usuario',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del usuario. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,

@@ -47,10 +47,10 @@ class Tipo_ubicacion extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'tipo_inventario' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'tipo_inventario'
 					),
@@ -59,7 +59,7 @@ class Tipo_ubicacion extends ORM_Model {
 				),
 				'tipo_ubicacion' => array(
 					'label'          => 'Tipo de ubicaci&oacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 30,
 					'texto_ayuda'    => 'M&aacute;ximo 30 caracteres.',
 					'es_obligatorio' => TRUE,

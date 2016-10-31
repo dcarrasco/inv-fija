@@ -47,7 +47,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 			),
 			'campos' => array(
 				'id_empresa' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'relation'       => array(
@@ -56,7 +56,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 					'texto_ayuda'    => 'Seleccione una empresa TOA.',
 				),
 				'id_ciudad' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'relation'       => array(
@@ -65,7 +65,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 					'texto_ayuda'    => 'Seleccione una Ciudad TOA.',
 				),
 				'almacenes' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'almacen_sap',
 						'join_table'    => $this->config->item('bd_empresas_ciudades_almacenes_toa'),

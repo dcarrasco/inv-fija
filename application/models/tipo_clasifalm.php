@@ -48,7 +48,7 @@ class Tipo_clasifalm extends ORM_Model {
 			'campos' => array(
 				'id_tipoclasif' => array(
 						'label'            => 'id',
-						'tipo'             => 'int',
+						'tipo'             => Orm_field::TIPO_INT,
 						'largo'            => 10,
 						'texto_ayuda'      => '',
 						'es_id'            => TRUE,
@@ -58,14 +58,14 @@ class Tipo_clasifalm extends ORM_Model {
 				),
 				'tipo' => array(
 					'label'          => 'Tipo Clasificaci&oacute;n de Almac&eacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Tipo Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'color' => array(
 					'label'          => 'Color del tipo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Color del tipo para graficar. M&aacute;ximo 20 caracteres.',
 					'es_obligatorio' => FALSE,

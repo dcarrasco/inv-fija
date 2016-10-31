@@ -48,7 +48,7 @@ class Tipo_inventario extends ORM_Model {
 			'campos' => array(
 				'id_tipo_inventario' => array(
 					'label'          => 'Tipo de inventario',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Tipo_inventario extends ORM_Model {
 				),
 				'desc_tipo_inventario' => array(
 					'label'          => 'Descripci&oacute;n tipo de inventario',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,

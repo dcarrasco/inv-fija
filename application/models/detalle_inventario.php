@@ -56,37 +56,37 @@ class Detalle_inventario extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'id_inventario' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'inventario',
 					),
 				),
 				'hoja' => array(
 					'label'          => 'Hoja',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'N&uacute;mero de la hoja usada en el inventario',
 					'es_obligatorio' => TRUE,
 				),
 				'ubicacion' => array(
 					'label'          => 'Ubicaci&oacute;n del material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Indica la posici&oacute;n del material en el almac&eacute;n.',
 					'es_obligatorio' => TRUE,
 				),
 				'hu' => array(
 					'label'          => 'HU del material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Indica la HU del material en el almac&eacute;n.',
 					'es_obligatorio' => FALSE,
 				),
 				'catalogo' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'catalogo',
 					),
@@ -94,59 +94,59 @@ class Detalle_inventario extends ORM_Model {
 				),
 				'descripcion' => array(
 					'label'          => 'Descripci&oacute;n del material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 45,
 					'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'lote' => array(
 					'label'          => 'Lote del material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Lote del material.',
 					'es_obligatorio' => TRUE,
 				),
 				'centro' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'centro'
 					),
 				),
 				'almacen' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'almacen'
 					),
 				),
 				'um' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'unidad_medida'
 					),
 				),
 				'stock_sap' => array(
 					'label'          => 'Stock SAP del material',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Stock sist&eacute;mico (SAP) del material.',
 					'es_obligatorio' => TRUE,
 				),
 				'stock_fisico' => array(
 					'label'          => 'Stock f&iacute;sico del material',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Stock f&iacute;sico (inventariado) del material.',
 					'es_obligatorio' => TRUE,
 				),
 				'digitador' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'usuario',
 					),
 					'texto_ayuda'    => 'Digitador de la hoja.',
 				),
 				'auditor' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model'      => 'auditor',
 						'conditions' => array('activo' => 1),
@@ -155,38 +155,38 @@ class Detalle_inventario extends ORM_Model {
 				),
 				'reg_nuevo' => array(
 					'label'          => 'Registro nuevo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 1,
 					'texto_ayuda'    => 'Indica si el registro es nuevo.',
 					'es_obligatorio' => TRUE,
 				),
 				'fecha_modificacion' => array(
 					'label'          => 'Fecha de modificacion',
-					'tipo'           => 'datetime',
+					'tipo'           => Orm_field::TIPO_DATETIME,
 					'texto_ayuda'    => 'Fecha de modificaci&oacute;n del registro.',
 					'es_obligatorio' => TRUE,
 				),
 				'observacion' => array(
 					'label'          => 'Observaci&oacute;n de registro',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 200,
 					'texto_ayuda'    => 'M&aacute;ximo 200 caracteres.',
 				),
 				'stock_ajuste' => array(
 					'label'          => 'Stock de ajuste del material',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'M&aacute;ximo 100 caracteres.',
 				),
 				'glosa_ajuste' => array(
 					'label'          => 'Observaci&oacute;n del ajuste',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 100,
 					'texto_ayuda'    => 'M&aacute;ximo 100 caracteres.',
 				),
 				'fecha_ajuste' => array(
 					'label'          => 'Fecha del ajuste',
-					'tipo'           => 'datetime',
+					'tipo'           => Orm_field::TIPO_DATETIME,
 					'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
 				),
 			),

@@ -47,11 +47,11 @@ class Inventario extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'nombre' => array(
 					'label'          => 'Nombre del inventario',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -59,12 +59,12 @@ class Inventario extends ORM_Model {
 				),
 				'activo' => array(
 					'label'          => 'Activo',
-					'tipo'           => 'boolean',
+					'tipo'           => Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 				),
 				'tipo_inventario' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'tipo_inventario'
 					),

@@ -48,7 +48,7 @@ class Clase_movimiento extends ORM_Model {
 			'campos' => array(
 				'cmv' => array(
 					'label'          => 'C&oacute;digo movimiento',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'C&oacute;digo del movimiento. M&aacute;ximo 10 caracteres',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Clase_movimiento extends ORM_Model {
 				),
 				'des_cmv' => array(
 					'label'          => 'Descripci&oacute;n del movimiento',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del movimiento. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
