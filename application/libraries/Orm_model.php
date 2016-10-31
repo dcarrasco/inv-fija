@@ -488,15 +488,15 @@ class Orm_model implements IteratorAggregate {
 
 		$reglas = 'trim';
 		$reglas .= ($field->get_es_obligatorio() AND ! $field->get_es_autoincrement()) ? '|required' : '';
-		$reglas .= ($field->get_tipo() === 'int')  ? '|integer' : '';
-		$reglas .= ($field->get_tipo() === 'real') ? '|numeric' : '';
+		$reglas .= ($field->get_tipo() === Orm_field::TIPO_INT)  ? '|integer' : '';
+		$reglas .= ($field->get_tipo() === Orm_field::TIPO_REAL) ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
 			? '|edit_unique['.$this->_model_tabla.':'.$field->get_nombre_bd().':'.
 				implode($this->_separador_campos, $this->get_model_campo_id()).':'.$this->get_model_id().']'
 			: '';
 
 		$campo_rules = $campo;
-		if ($field->get_tipo() === 'has_many')
+		if ($field->get_tipo() === Orm_field::TIPO_HAS_MANY)
 		{
 			$reglas = 'trim';
 			$campo_rules = $campo.'[]';
@@ -608,7 +608,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		$tipo = $this->_model_fields[$campo]->get_tipo();
 
-		if (($tipo === 'has_one' OR $tipo === 'has_many') AND ! $this->_model_got_relations)
+		if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->_model_got_relations)
 		{
 			$this->_recuperar_relation_fields();
 		}
@@ -898,7 +898,7 @@ class Orm_model implements IteratorAggregate {
 			{
 				$tipo_id = $this->_model_fields[$campo_id]->get_tipo();
 
-				if ($tipo_id === 'id' OR $tipo_id === 'int')
+				if ($tipo_id === Orm_field::TIPO_ID OR $tipo_id === Orm_field::TIPO_INT)
 				{
 					$arr_condiciones[$campo_id] = (int) $id_modelo;
 				}
@@ -950,7 +950,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
 		{
-			if($obj_campo->get_tipo() === 'has_one')
+			if($obj_campo->get_tipo() === Orm_field::TIPO_HAS_ONE)
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -975,7 +975,7 @@ class Orm_model implements IteratorAggregate {
 				$this->_model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->_model_got_relations = TRUE;
 			}
-			else if ($obj_campo->get_tipo() === 'has_many')
+			else if ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -1031,7 +1031,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		foreach($obj_model->get_model_fields() as $campo => $obj_campo)
 		{
-			if ($obj_campo->get_tipo() === 'has_one')
+			if ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_ONE)
 			{
 				$relation_model = $obj_campo->get_relation();
 				if (array_key_exists('model', $relation_model))
@@ -1119,11 +1119,13 @@ class Orm_model implements IteratorAggregate {
 				{
 					$tipo_campo = $obj_campo->get_tipo();
 
-					if ($tipo_campo === 'id' OR $tipo_campo === 'boolean' OR $tipo_campo === 'int')
+					if ($tipo_campo === Orm_field::TIPO_ID
+						OR $tipo_campo === Orm_field::TIPO_BOOLEAN
+						OR $tipo_campo === Orm_field::TIPO_INT)
 					{
 						$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 					}
-					else if ($tipo_campo === 'datetime')
+					else if ($tipo_campo === Orm_field::TIPO_DATETIME)
 					{
 						if ($arr_data[$nombre_campo] !== '')
 						{
@@ -1169,7 +1171,7 @@ class Orm_model implements IteratorAggregate {
 
 		foreach ($this->_model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() === 'char')
+			if ($campo->get_tipo() === Orm_field::TIPO_CHAR)
 			{
 				$arr_like[$nombre] = $filtro;
 			}
@@ -1232,7 +1234,7 @@ class Orm_model implements IteratorAggregate {
 			}
 			else
 			{
-				if ($campo->get_tipo() !== 'has_many')
+				if ($campo->get_tipo() !== Orm_field::TIPO_HAS_MANY)
 				{
 					$data_update[$nombre] = $this->$nombre;
 				}
@@ -1281,7 +1283,7 @@ class Orm_model implements IteratorAggregate {
 		// para actualizar la tabla relacionada
 		foreach ($this->_model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() === 'has_many')
+			if ($campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
 				$relation = $campo->get_relation();
 
@@ -1342,7 +1344,7 @@ class Orm_model implements IteratorAggregate {
 
 		foreach ($this->_model_fields as $nombre => $campo)
 		{
-			if ($campo->get_tipo() === 'has_many')
+			if ($campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
 				$relation = $campo->get_relation();
 				$arr_where_delete = array();

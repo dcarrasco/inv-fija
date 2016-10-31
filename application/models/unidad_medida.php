@@ -48,7 +48,7 @@ class Unidad_medida extends ORM_Model {
 			'campos' => array(
 				'unidad' => array(
 					'label'          => 'Unidad',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Unidad de medida. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Unidad_medida extends ORM_Model {
 				),
 				'desc_unidad' => array(
 					'label'          => 'Descripci&oacute;n unidad de medida',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,

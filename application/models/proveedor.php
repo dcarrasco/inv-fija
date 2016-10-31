@@ -48,7 +48,7 @@ class Proveedor extends ORM_Model {
 			'campos' => array(
 				'cod_proveedor' => array(
 					'label'          => 'C&oacute;digo del proveedor',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
 					'es_id' => TRUE,
@@ -57,7 +57,7 @@ class Proveedor extends ORM_Model {
 				),
 				'des_proveedor' => array(
 					'label'          => 'Nombre del proveedor',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,

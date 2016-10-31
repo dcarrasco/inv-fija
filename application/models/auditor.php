@@ -47,11 +47,11 @@ class Auditor extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'nombre' => array(
 					'label'          => 'Nombre del auditor',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -59,7 +59,7 @@ class Auditor extends ORM_Model {
 				),
 				'activo' => array(
 					'label'          => 'Activo',
-					'tipo'           =>  'boolean',
+					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 1

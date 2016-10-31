@@ -48,7 +48,7 @@ class Ciudad_toa extends ORM_Model {
 			'campos' => array(
 				'id_ciudad' => array(
 					'label'          => 'ID de la ciudad',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 5,
 					'texto_ayuda'    => 'ID de la ciudad. M&aacute;ximo 50 caracteres.',
 					'es_id'          => TRUE,
@@ -57,14 +57,14 @@ class Ciudad_toa extends ORM_Model {
 				),
 				'ciudad' => array(
 					'label'          => 'Nombre de la ciudad',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre de la ciudad. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'orden' => array(
 					'label'          => 'Orden de la ciudad',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'texto_ayuda'    => 'Orden de despliegue de la ciudad.',
 					'es_obligatorio' => TRUE,
 				),

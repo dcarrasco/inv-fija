@@ -48,7 +48,7 @@ class Almacen_sap extends ORM_Model {
 			'campos' => array(
 				'centro' => array(
 						'label'          => 'Centro',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 10,
 						'texto_ayuda'    => 'C&oacute;digo SAP del centro. M&aacute;ximo 10 caracteres.',
 						'es_id'          => TRUE,
@@ -56,7 +56,7 @@ class Almacen_sap extends ORM_Model {
 				),
 				'cod_almacen' => array(
 						'label'          => 'Almac&eacute;n',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 10,
 						'texto_ayuda'    => 'C&oacute;digo SAP del almac&eacuten. M&aacute;ximo 10 caracteres.',
 						'es_id'          => TRUE,
@@ -64,26 +64,26 @@ class Almacen_sap extends ORM_Model {
 				),
 				'des_almacen' => array(
 						'label'          => 'Descripci&oacute;n Almac&eacute;n',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 50,
 						'texto_ayuda'    => 'Descripci&oacute;n del almac&eacuten. M&aacute;ximo 50 caracteres.',
 						'es_obligatorio' => TRUE,
 				),
 				'uso_almacen' => array(
 						'label'          => 'Uso Almac&eacute;n',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 50,
 						'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
 				),
 				'responsable' => array(
 						'label'          => 'Responsable',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 50,
 						'texto_ayuda'    => 'Nombre del responsable del almac&eacuten. M&aacute;ximo 50 caracteres.',
 				),
 				'tipo_op' => array(
 						'label'          => 'Tipo operaci&oacute;n',
-						'tipo'           => 'char',
+						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 50,
 						'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
 						'choices'        => array(
@@ -94,7 +94,7 @@ class Almacen_sap extends ORM_Model {
 						'onchange'       => form_onchange('tipo_op', 'tipos', 'stock_config/get_select_tipoalmacen'),
 				),
 				'tipos' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'tipoalmacen_sap',
 						'conditions'    => array(

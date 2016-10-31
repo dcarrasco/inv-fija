@@ -47,11 +47,11 @@ class Tip_material_trabajo_toa extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'           => 'id',
+					'tipo'           => Orm_field::TIPO_ID,
 				),
 				'desc_tip_material' => array(
 					'label'          => 'Descripci&oacute;n tipo de material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del tipo de material. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -59,12 +59,12 @@ class Tip_material_trabajo_toa extends ORM_Model {
 				),
 				'color' => array(
 					'label'          => 'Color tipo material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Color o clase que identifica el tipo de material. M&aacute;ximo 50 caracteres.',
 				),
 				'tip_material' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'catalogo',
 						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),

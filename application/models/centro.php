@@ -48,7 +48,7 @@ class Centro extends ORM_Model {
 			'campos' => array(
 				'centro' => array(
 					'label'          => 'Centro',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Nombre del centro. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,

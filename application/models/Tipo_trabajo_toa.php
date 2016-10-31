@@ -48,7 +48,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 			'campos' => array(
 				'id_tipo' => array(
 					'label'          => 'Tipo de rabajo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 30,
 					'texto_ayuda'    => 'Tipo de trabajo. M&aacute;ximo 30 caracteres.',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 				),
 				'desc_tipo' => array(
 					'label'          => 'Descripci&oacute;n tipo de trabajo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del tipo de trabajo. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,

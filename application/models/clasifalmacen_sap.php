@@ -48,7 +48,7 @@ class Clasifalmacen_sap extends ORM_Model {
 			'campos' => array(
 				'id_clasif' => array(
 						'label'            => 'id',
-						'tipo'             => 'int',
+						'tipo'             => Orm_field::TIPO_INT,
 						'largo'            => 10,
 						'texto_ayuda'      => '',
 						'es_id'            => TRUE,
@@ -58,21 +58,21 @@ class Clasifalmacen_sap extends ORM_Model {
 				),
 				'clasificacion' => array(
 					'label'          => 'Clasificaci&oacute;n de Almac&eacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'orden' => array(
 					'label'          => 'Orden de la clasificaci&oacute;n',
-					'tipo'           => 'int',
+					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Orden de la clasificaci&oacute;n del almac&eacute;n.',
 					'es_obligatorio' => TRUE,
 				),
 				'dir_responsable' => array(
 					'label'          => 'Direcci&oacute;n responsable',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Seleccione la direcci&oacute;n responsable',
 					'choices'        => array(
@@ -88,7 +88,7 @@ class Clasifalmacen_sap extends ORM_Model {
 				),
 				'estado_ajuste' => array(
 					'label'          => 'Estado de ajuste materiales',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Indica confiabilidad de existencia del material.',
 					'choices'        => array(
@@ -99,14 +99,14 @@ class Clasifalmacen_sap extends ORM_Model {
 					'es_obligatorio' => TRUE,
 				),
 				'id_tipoclasif' => array(
-					'tipo'           =>  'has_one',
+					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'tipo_clasifalm'
 					),
 				),
 				'tipo_op' => array(
 					'label'          => 'Tipo operaci&oacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
 					'choices'        => array(
@@ -117,7 +117,7 @@ class Clasifalmacen_sap extends ORM_Model {
 					'onchange'       => form_onchange('tipo_op', 'tiposalm', 'stock_config/get_select_tipoalmacen'),
 				),
 				'tiposalm' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'tipoalmacen_sap',
 						'join_table'    => $this->config->item('bd_clasif_tipoalm_sap'),

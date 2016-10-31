@@ -48,7 +48,7 @@ class Tipoalmacen_sap extends ORM_Model {
 			'campos' => array(
 				'id_tipo' => array(
 						'label'            => 'id',
-						'tipo'             => 'int',
+						'tipo'             => Orm_field::TIPO_INT,
 						'largo'            => 10,
 						'texto_ayuda'      => '',
 						'es_id'            => TRUE,
@@ -58,14 +58,14 @@ class Tipoalmacen_sap extends ORM_Model {
 				),
 				'tipo' => array(
 					'label'          => 'Tipo de Almac&eacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Tipo del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 				),
 				'tipo_op' => array(
 					'label'          => 'Tipo operaci&oacute;n',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
 					'choices'        => array(
@@ -77,13 +77,13 @@ class Tipoalmacen_sap extends ORM_Model {
 				),
 				'es_sumable' => array(
 					'label'          => 'Es sumable',
-					'tipo'           => 'boolean',
+					'tipo'           => Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica si el tipo de almac&eacute;n se incluir&aacute; en la suma del stock.',
 					'es_obligatorio' => TRUE,
 					'default'        => 1,
 				),
 				'almacenes' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'almacen_sap',
 						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),

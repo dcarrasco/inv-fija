@@ -48,7 +48,7 @@ class Empresa_toa extends ORM_Model {
 			'campos' => array(
 				'id_empresa' => array(
 					'label'          => 'ID Empresa',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'ID de la empresa. M&aacute;ximo 20 caracteres.',
 					'es_id'          => TRUE,
@@ -57,14 +57,14 @@ class Empresa_toa extends ORM_Model {
 				),
 				'empresa' => array(
 					'label'          => 'Nombre de la empresa',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre de la empresa. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
 				'tipoalm' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'tipoalmacen_sap',
 						'join_table'    => $this->config->item('bd_empresas_toa_tiposalm'),
@@ -75,7 +75,7 @@ class Empresa_toa extends ORM_Model {
 					'texto_ayuda'    => 'Tipos de almacen asociados a empresa TOA.',
 				),
 				'ciudades' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'ciudad_toa',
 						'join_table'    => $this->config->item('bd_empresas_ciudades_toa'),

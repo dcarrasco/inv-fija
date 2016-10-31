@@ -47,10 +47,10 @@ class Rol extends ORM_Model {
 			),
 			'campos' => array(
 				'id' => array(
-					'tipo'   => 'id',
+					'tipo'   => Orm_field::TIPO_ID,
 				),
 				'id_app' => array(
-					'tipo'           => 'has_one',
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'relation'       => array(
 						'model' => 'app',
 					),
@@ -59,7 +59,7 @@ class Rol extends ORM_Model {
 				),
 				'rol' => array(
 					'label'          => 'Rol',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del rol. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -67,12 +67,12 @@ class Rol extends ORM_Model {
 				),
 				'descripcion' => array(
 					'label'          => 'Descripci&oacute;n del rol',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 100,
 					'texto_ayuda'    => 'Descripci&oacute;n del rol. M&aacute;ximo 100 caracteres.',
 				),
 				'modulo' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'modulo',
 						'join_table'    => 'acl_rol_modulo',

@@ -48,7 +48,7 @@ class Catalogo_foto extends ORM_Model {
 			'campos' => array(
 				'catalogo' => array(
 					'label'          => 'Cat&aacute;logo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
 					'es_id'          => TRUE,

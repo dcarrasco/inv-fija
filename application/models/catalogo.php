@@ -48,7 +48,7 @@ class Catalogo extends ORM_Model {
 			'campos' => array(
 				'catalogo' => array(
 					'label'          => 'Cat&aacute;logo',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
 					'es_id'          => TRUE,
@@ -57,7 +57,7 @@ class Catalogo extends ORM_Model {
 				),
 				'descripcion' => array(
 					'label'          => 'Descripci&oacute;n del material',
-					'tipo'           => 'char',
+					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del material. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
@@ -65,7 +65,7 @@ class Catalogo extends ORM_Model {
 				),
 				'pmp' => array(
 					'label'          => 'Precio Medio Ponderado (PMP)',
-					'tipo'           => 'real',
+					'tipo'           => Orm_field::TIPO_REAL,
 					'largo'          => 10,
 					'decimales'      => 2,
 					'texto_ayuda'    => 'Valor PMP del material',
@@ -75,7 +75,7 @@ class Catalogo extends ORM_Model {
 				),
 				'es_seriado' => array(
 					'label'          => 'Material seriado',
-					'tipo'           => 'boolean',
+					'tipo'           => Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica si el material est&aacute; seriado en el sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 0
@@ -87,7 +87,7 @@ class Catalogo extends ORM_Model {
 				// 	'es_obligatorio' => FALSE,
 				// ),
 				'tip_material' => array(
-					'tipo'           => 'has_many',
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => array(
 						'model'         => 'Tip_material_trabajo_toa',
 						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
