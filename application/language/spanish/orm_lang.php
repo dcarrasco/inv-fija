@@ -10,8 +10,10 @@ $lang['orm_button_delete'] = 'Borrar';
 $lang['orm_title_create']  = 'Crear';
 $lang['orm_title_edit']    = 'Editar';
 
-$lang['orm_radio_yes'] = 'Si';
-$lang['orm_radio_no']  = 'No';
+$lang['orm_radio_yes']   = 'Si';
+$lang['orm_radio_no']    = 'No';
+$lang['orm_placeholder'] = 'Ingrese ';
+
 
 $lang['orm_msg_save_ok']   = '%s (%s) grabado correctamente.';
 $lang['orm_msg_delete_ok'] = '%s (%s) borrado correctamente.';

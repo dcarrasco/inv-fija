@@ -364,19 +364,20 @@ class Orm_field {
 		$valor_field = set_value($this->_nombre, $valor_field);
 
 		$arr_param = array(
-			'name'      => $this->_nombre,
-			'id'        => $id_prefix . $this->_nombre,
-			'class'     => 'form-control '.$clase_adic,
-			'value'     => $valor_field,
-			'maxlength' => $this->_largo,
-			'size'      => $this->_largo,
-			'placeholder' => 'Ingrese '.strtolower($this->_label),
+			'name'        => $this->_nombre,
+			'id'          => $id_prefix . $this->_nombre,
+			'class'       => 'form-control '.$clase_adic,
+			'value'       => $valor_field,
+			'maxlength'   => $this->_largo,
+			'size'        => $this->_largo,
+			'placeholder' => $ci->lang->line('orm_placeholder').strtolower($this->_label),
 		);
+
 		$status_feedback = '';
 		if ( ! is_null($field_error))
 		{
 			$icon_feedback = $field_error ? 'remove' : 'ok';
-			$icon_color = $field_error ? '' : ' text-success';
+			$icon_color    = $field_error ? '' : ' text-success';
 			$status_feedback = '<span class="glyphicon glyphicon-'.$icon_feedback.' form-control-feedback'.$icon_color.'" aria-hidden="true"></span>';
 		}
 
@@ -582,7 +583,7 @@ class Orm_field {
 				'null'           => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === TIPO_CHAR)
+		else if ($this->_tipo === Orm_field::TIPO_CHAR)
 		{
 			return array(
 				'type'       => 'VARCHAR',
@@ -600,7 +601,7 @@ class Orm_field {
 				'null'       => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === 'integer')
+		else if ($this->_tipo === Orm_field::TIPO_INT)
 		{
 			return array(
 				'type'       => 'INT',
