@@ -40,19 +40,19 @@ if ( ! function_exists('dbg'))
 			$dump = preg_replace(
 				array(
 					'/=>\n[ ]+/i',
-					'/\n([ ]*)/',
+					'/\n/',
 					'/ /i',
 					'/\n/i',
 					'/\["([\w:\(\)\/_\-. ]*)"\]/i',
 					'/\[(\d*)\]/i',
 					'/(int|float)\(([\d\.]*)\)/i',
 					'/bool\((\w*)\)/i',
-					'/string\((\w*)\)&nbsp;\"([\w\.\-~\/%:+><\&\$#{}\[\]=;?\' ]*)\"/i',
+					'/string\((\w*)\)&nbsp;\"([\w\.\-~\/%:+><\&\$#{}\[\]=;?\' \(\)]*)\"/i',
 					'/array\(([\d\.]*)\)/i',
 				),
 				array(
 					' => ',
-					'<br/>&nbsp;',
+					'<br/>',
 					'&nbsp;',
 					'<br/>',
 					'<span style="color:'.$colores_texto['llave_array'].'">["$1"]</span>',
