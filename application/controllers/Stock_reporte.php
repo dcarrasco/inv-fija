@@ -149,24 +149,18 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function detalle()
 	{
+		$detalle_series = $this->reporte->genera_reporte(
+			$this->reportestock_model->get_campos_reporte_detalle_series(),
+			$this->reportestock_model->get_detalle_series($this->input->get())
+		);
+
 		$data = array(
 			'menu_modulo'        => array('menu' => $this->_arr_menu, 'mod_selected' => 'permanencia'),
 			'menu_configuracion' => '',
-			'detalle_series'     => $this->reportestock_model->get_detalle_series(
-				$this->input->get('id_tipo'),
-				$this->input->get('centro'),
-				$this->input->get('almacen'),
-				$this->input->get('estado_stock'),
-				$this->input->get('lote'),
-				$this->input->get('material'),
-				$this->input->get('tipo_material'),
-				$this->input->get('permanencia')
-			),
+			'detalle_series'     => $detalle_series,
 		);
 
 		app_render_view('stock_sap/detalle_series', $data);
-
-		$this->load->model('reportestock_model');
 	}
 
 

@@ -476,19 +476,42 @@ class Reportestock_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera campos de detalle de las series
+	 *
+	 * @return array            Arreglo con campos del detalle de las series
+	 */
+	public function get_campos_reporte_detalle_series()
+	{
+		$arr_campos = array(
+			'tipo'           => array('titulo' => 'Tipo Almacen', 'class' => '', 'tipo' => 'texto'),
+			'fecha_stock'    => array('titulo' => 'Fecha stock', 'class' => '', 'tipo' => 'texto'),
+			'centro'         => array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto'),
+			'almacen'        => array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto'),
+			'des_almacen'    => array('titulo' => 'Desc Almacen', 'class' => '', 'tipo' => 'texto'),
+			'material'       => array('titulo' => 'Material', 'class' => '', 'tipo' => 'texto'),
+			'des_material'   => array('titulo' => 'Desc Material', 'class' => '', 'tipo' => 'texto'),
+			'lote'           => array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto'),
+			'estado_stock'   => array('titulo' => 'Estado stock', 'class' => '', 'tipo' => 'texto'),
+			'modificado_el'  => array('titulo' => 'Modificado el', 'class' => '', 'tipo' => 'texto'),
+			'serie'          => array('titulo' => 'Serie', 'class' => '', 'tipo' => 'texto'),
+			'pmp'            => array('titulo' => 'PMP', 'class' => '', 'tipo' => 'texto'),
+			'modificado_por' => array('titulo' => 'Modificado por', 'class' => '', 'tipo' => 'texto'),
+			'nom_usuario'    => array('titulo' => 'Nombre usuario', 'class' => '', 'tipo' => 'texto'),
+		);
+		$this->reporte->set_order_campos($arr_campos, 'tipo');
+
+		return $arr_campos;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Recupera el detalle de las series
 	 *
-	 * @param  string $tipo_alm      Tipo de almacen a recuperar
-	 * @param  string $centro        Centro
-	 * @param  string $almacen       Almacén a recuperar
-	 * @param  string $estado_stock  Estado a recuperar
-	 * @param  string $lote          Lote a recuperar
-	 * @param  string $material      Material a recuperar
-	 * @param  string $tipo_material Tipo de material a recuperar
-	 * @param  string $permanencia   Permanencia a recuperar
-	 * @return array                 Arreglo con el detalle de las series
+	 * @param  array $arr_param Arreglo con parámtero de la consulta
+	 * @return array            Arreglo con el detalle de las series
 	 */
-	public function get_detalle_series($tipo_alm = '', $centro = '', $almacen = '', $estado_stock = '', $lote = '', $material = '', $tipo_material = '', $permanencia = '')
+	public function get_detalle_series($arr_param)
 	{
 		$this->db->select('t.tipo');
 		$this->db->select('s.fecha_stock');
@@ -516,93 +539,93 @@ class Reportestock_model extends CI_Model {
 		$this->db->order_by('s.almacen');
 		$this->db->order_by('s.material');
 
-		if ($tipo_alm !== '')
+		if (array_key_exists('id_tipo', $arr_param) AND $arr_param['id_tipo'] !== '')
 		{
-			$this->db->where('t.id_tipo', $tipo_alm);
+			$this->db->where('t.id_tipo', $arr_param['id_tipo']);
 		}
 
-		if ($centro !== '')
+		if (array_key_exists('centro', $arr_param) AND $arr_param['centro'] !== '')
 		{
-			$this->db->where('s.centro', $centro);
+			$this->db->where('s.centro', $arr_param['centro']);
 		}
 
-		if ($almacen !== '')
+		if (array_key_exists('almacen', $arr_param) AND $arr_param['almacen'] !== '')
 		{
-			$this->db->where('s.almacen', $almacen);
+			$this->db->where('s.almacen', $arr_param['almacen']);
 		}
 
-		if ($estado_stock !== '')
+		if (array_key_exists('estado_stock', $arr_param) AND $arr_param['estado_stock'] !== '')
 		{
-			$this->db->where('s.estado_stock', $estado_stock);
+			$this->db->where('s.estado_stock', $arr_param['estado_stock']);
 		}
 
-		if ($lote !== '')
+		if (array_key_exists('lote', $arr_param) AND $arr_param['lote'] !== '')
 		{
-			$this->db->where('s.lote', $lote);
+			$this->db->where('s.lote', $arr_param['lote']);
 		}
 
-		if ($material !== '')
+		if (array_key_exists('material', $arr_param) AND $arr_param['material'] !== '')
 		{
-			$this->db->where('s.material', $material);
+			$this->db->where('s.material', $arr_param['material']);
 		}
 
-		if ($tipo_material === 'EQUIPO')
+		if (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'EQUIPO')
 		{
 			$this->db->where_in('substring(s.material,1,2)', array('TM', 'TC', 'TO', 'PK', 'PO'));
 			$this->db->where('substring(s.material,1,8) <>', 'PKGCLOTK');
 		}
-		elseif ($tipo_material === 'SIMCARD')
+		elseif (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'SIMCARD')
 		{
 			$this->db->where("(substring(s.material,1,2) = 'TS' OR substring(s.material,1,8)='PKGCLOTK')");
 		}
-		elseif ($tipo_material === 'FIJA')
+		elseif (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'FIJA')
 		{
 			$this->db->where('substring(s.material,1,3)', '103');
 		}
 
-		if ($permanencia === 'm030')
+		if (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm030')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 30);
 		}
-		elseif ($permanencia === 'm060')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm060')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 31);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 60);
 		}
-		elseif ($permanencia === 'm090')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm090')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 61);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 90);
 		}
-		elseif ($permanencia === 'm120')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm120')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 91);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 120);
 		}
-		elseif ($permanencia === 'm180')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm180')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 121);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 180);
 		}
-		elseif ($permanencia === 'm360')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm360')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 181);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 360);
 		}
-		elseif ($permanencia === 'm720')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm720')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 361);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 720);
 		}
-		elseif ($permanencia === 'mas720')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'mas720')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 721);
 		}
-		elseif ($permanencia === 'otro')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'otro')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) IS NULL');
 		}
-		elseif ($permanencia === 'total')
+		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'total')
 		{
 		}
 

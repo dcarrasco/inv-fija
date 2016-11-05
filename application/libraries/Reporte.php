@@ -72,26 +72,16 @@ class Reporte {
 							return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
 							break;
 			case 'link_detalle_series':
-							$id_tipo        = array_key_exists('id_tipo', $registro) ? $registro['id_tipo'] : '';
-							$centro         = array_key_exists('centro', $registro) ? $registro['centro'] : '';
-							$almacen        = array_key_exists('almacen', $registro) ? $registro['almacen'] : '';
-							$lote           = array_key_exists('lote', $registro) ? $registro['lote'] : '';
-							$estado_stock   = array_key_exists('estado_stock', $registro) ? $registro['estado_stock'] : '';
-							$material       = array_key_exists('material', $registro) ? $registro['material'] : '';
-							$tipo_material  = array_key_exists('tipo_material', $registro) ? $registro['tipo_material']: '';
-							$permanencia    = $campo;
-
-							$href_param  = '?id_tipo='.$id_tipo;
-							$href_param .= '&centro='.$centro;
-							$href_param .= '&almacen='.$almacen;
-							$href_param .= '&lote='.$lote;
-							$href_param .= '&estado_stock='.$estado_stock;
-							$href_param .= '&material='.$material;
-							$href_param .= '&tipo_material='.$tipo_material;
-							$href_param .= '&permanencia='.$permanencia;
-
+							$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material');
+							$href_param = '?';
+							foreach($arr_indices as $indice)
+							{
+								$href_param .= array_key_exists($indice, $registro) ? "&{$indice}=".$registro[$indice] : '';
+							}
+							$href_param .= '&permanencia='.$campo;
 							$valor_desplegar = fmt_cantidad($valor);
-							return anchor($arr_param_campo['href'] . $href_param, $valor_desplegar === '' ? ' ' : $valor_desplegar);
+
+							return anchor($arr_param_campo['href'].$href_param, ($valor_desplegar === '') ? ' ' : $valor_desplegar);
 							break;
 			case 'numero':
 							return fmt_cantidad($valor);
