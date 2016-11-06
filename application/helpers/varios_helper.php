@@ -23,6 +23,9 @@ if ( ! function_exists('dbg'))
 	 */
 	function dbg()
 	{
+		// carga objeto global CI
+		$ci =& get_instance();
+
 		$colores_texto = array(
 			'llave_array' => 'tomato',
 			'numero'      => 'blue',
@@ -47,7 +50,7 @@ if ( ! function_exists('dbg'))
 					'/\[(\d*)\]/i',
 					'/(int|float)\(([\d\.]*)\)/i',
 					'/bool\((\w*)\)/i',
-					'/string\((\w*)\)&nbsp;\"([\w\.\-~\/%:+><\&\$#{}\[\]=;?\' \(\)]*)\"/i',
+					'/string\((\w*)\)&nbsp;\"([\w\.\-~\/%:+><\&\$#{}\[\]=;?\' \(\)\|]*)\"/i',
 					'/array\(([\d\.]*)\)/i',
 				),
 				array(
@@ -64,8 +67,8 @@ if ( ! function_exists('dbg'))
 				),
 				$dump
 			);
-			$dump = '<div style="font-family: consolas, courier; font-size: 9pt; background-color:#EEE; padding:1em;"><p>'.$dump.'</p></div><hr>';
-			echo $dump;
+
+			echo $ci->parser->parse('common/dbg.php', array('dump'=>$dump), TRUE);
 		}
 	}
 }
@@ -196,14 +199,14 @@ if ( ! function_exists('menu_modulo'))
 
 		if (array_key_exists('menu', $menu))
 		{
-			foreach ($menu['menu'] as $modulo => $val)
+			foreach ($menu['menu'] as $modulo => $valor)
 			{
 				array_push($arr_menu_modulo, array(
 					'menu_key'      => $modulo,
-					'menu_url'      => site_url($val['url']),
-					'menu_nombre'   => $val['texto'],
+					'menu_url'      => site_url($valor['url']),
+					'menu_nombre'   => $valor['texto'],
 					'menu_selected' => ($modulo === $mod_selected) ? 'active' : '',
-					'menu_icon'     => array_key_exists('icon', $val) ? $val['icon'] : NULL,
+					'menu_icon'     => array_key_exists('icon', $valor) ? $valor['icon'] : NULL,
 				));
 			}
 
@@ -219,14 +222,12 @@ if ( ! function_exists('app_render_view'))
 	/**
 	 * Render vista
 	 *
-	 * @param  mixed $vista    Nombre o arreglo de nombre de la(s) vista(s) a dibujar
-	 * @param  array $datos    Arreglo con parámetros de datos a dibujar
-	 * @param  array $arr_menu Arreglo con submenu (en caso que el módulo tenga submenu)
+	 * @param  mixed $vista Nombre o arreglo de nombre de la(s) vista(s) a dibujar
+	 * @param  array $datos Arreglo con parámetros de datos a dibujar
 	 * @return void
 	 */
 	function app_render_view($vista = NULL, $datos = array())
 	{
-
 		if ( ! $vista)
 		{
 			return;
@@ -243,7 +244,7 @@ if ( ! function_exists('app_render_view'))
 		$vista_login = isset($datos['vista_login']) ? $datos['vista_login']: FALSE;
 
 		// titulos y variables generales
-		$datos['app_title']    = $ci->config->item('app_nombre') . (ENVIRONMENT !== 'production' ? '- DEV' : '');
+		$datos['app_title']    = $ci->config->item('app_nombre').(ENVIRONMENT !== 'production' ? '- DEV' : '');
 		$datos['base_url']     = base_url();
 		$datos['js_base_url']  = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
 		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
@@ -264,9 +265,9 @@ if ( ! function_exists('app_render_view'))
 		// vistas
 		$datos['arr_vistas'] = array();
 		$vista = is_array($vista) ? $vista : array($vista);
-		foreach ($vista as $v)
+		foreach ($vista as $item_vista)
 		{
-			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($v, $datos, TRUE)));
+			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($item_vista, $datos, TRUE)));
 		}
 
 		return $ci->parser->parse('common/app_layout', $datos);
@@ -292,23 +293,23 @@ if ( ! function_exists('print_message'))
 			$ci =& get_instance();
 
 			$texto_tipo = 'INFORMACI&Oacute;N';
-			$img_tipo = 'info-sign';
+			$img_tipo   = 'info-sign';
 
 			if ($tipo === 'warning')
 			{
 				$texto_tipo = 'ALERTA';
-				$img_tipo = 'warning-sign';
+				$img_tipo   = 'warning-sign';
 			}
 			else if ($tipo === 'danger' OR $tipo === 'error')
 			{
 				$tipo = 'danger';
 				$texto_tipo = 'ERROR';
-				$img_tipo = 'exclamation-sign';
+				$img_tipo   = 'exclamation-sign';
 			}
 			else if ($tipo === 'success')
 			{
 				$texto_tipo = '&Eacute;XITO';
-				$img_tipo = 'ok-sign';
+				$img_tipo   = 'ok-sign';
 			}
 
 			$arr_datos_view = array(
@@ -569,24 +570,24 @@ if ( ! function_exists('fmt_rut'))
 	 * @param  string $rut RUT a formatear
 	 * @return string      RUT formateado segun formato
 	 */
-	function fmt_rut($rut = NULL)
+	function fmt_rut($numero_rut = NULL)
 	{
-		if ( ! $rut)
+		if ( ! $numero_rut)
 		{
 			return NULL;
 		}
 
-		if (strpos($rut, '-') === FALSE)
+		if (strpos($numero_rut, '-') === FALSE)
 		{
-			$dv  = substr($rut, strlen($rut) - 1, 1);
-			$rut = substr($rut, 0, strlen($rut) - 1);
+			$dv_rut     = substr($numero_rut, strlen($numero_rut) - 1, 1);
+			$numero_rut = substr($numero_rut, 0, strlen($numero_rut) - 1);
 		}
 		else
 		{
-			list($rut, $dv) = explode('-', $rut);
+			list($numero_rut, $dv_rut) = explode('-', $numero_rut);
 		}
 
-		return fmt_cantidad($rut).'-'.strtoupper($dv);
+		return fmt_cantidad($numero_rut).'-'.strtoupper($dv_rut);
 	}
 }
 
