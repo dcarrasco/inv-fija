@@ -114,31 +114,23 @@ class Googlemaps {
 	{
 		$function_name = 'initMap_'.$this->_map_id;
 
-		$url_js = $this->_url_js.'?';
-		$url_js .= ($this->_api_key !== '') ? 'key='.$this->_api_key.'&' : '';
-		$url_js .= 'callback='.$function_name;
+		$arr_url_param = array(
+			'key'      => $this->_api_key,
+			'callback' => $function_name,
+		);
+		$url_js = $this->_url_js.'?'.http_build_query($arr_url_param);
 
 
-		$txt_js = '';
-		$txt_js .= '<div id="'.$this->_map_id.'" style="'.$this->_map_css.'"></div>';
-		$txt_js .= '<script>'.PHP_EOL;
-		$txt_js .= 'function '.$function_name.'() {'.PHP_EOL;
-		$txt_js .= 'var map = new google.maps.Map(document.getElementById(\''.$this->_map_id.'\'), {center: {lat:0, lng:0}, zoom: '.$this->_map_zoom.'});'.PHP_EOL;
-		$txt_js .= 'var bounds = new google.maps.LatLngBounds();'.PHP_EOL;
+		$txt_js  = "<div id=\"{$this->_map_id}\" style=\"{$this->_map_css}\"></div>\n";
+		$txt_js .= "<script type=\"text/javascript\">\n";
+		$txt_js .= "function {$function_name}() {\n";
+		$txt_js .= "var map = new google.maps.Map(document.getElementById('{$this->_map_id}'), {center: {lat:0, lng:0}, zoom: {$this->_map_zoom}});\n";
+		$txt_js .= "var bounds = new google.maps.LatLngBounds();\n";
 		$txt_js .= $this->_txt_js;
-
-		if (count($this->_markers) === 1)
-		{
-			$txt_js .= 'map.setCenter(ubic_1);'.PHP_EOL;
-		}
-		else
-		{
-			$txt_js .= 'map.fitBounds(bounds);'.PHP_EOL;
-		}
-
-		$txt_js .= '}'.PHP_EOL;
-		$txt_js .= '</script>'.PHP_EOL;
-		$txt_js .= '<script type="text/javascript" src="'.$url_js.'" defer async></script>';
+		$txt_js .= (count($this->_markers) === 1) ? "map.setCenter(ubic_1);\n" : "map.fitBounds(bounds);\n";
+		$txt_js .= "}\n";
+		$txt_js .= "</script>\n";
+		$txt_js .= "<script type=\"text/javascript\" src=\"{$url_js}\" defer async></script>\n";
 
 		return $txt_js;
 	}
@@ -173,12 +165,12 @@ class Googlemaps {
 			AND $marker_config['lat'] !== $marker_config['lng'] )
 		{
 			array_push($this->_markers, $marker_config);
-
 			$n_marker = count($this->_markers);
-			$this->_txt_js .= "var ubic_$n_marker = new google.maps.LatLng(".$marker_config['lat'].", ".$marker_config['lng'].");\n";
-			$this->_txt_js .= 'var marker_'.$n_marker.' = new google.maps.Marker({position: ubic_'.$n_marker.', title:\''.$marker_config['title'].'\'});'.PHP_EOL;
-			$this->_txt_js .= 'marker_'.$n_marker.'.setMap(map);'.PHP_EOL;
-			$this->_txt_js .= 'bounds.extend(marker_'.$n_marker.'.position);'.PHP_EOL;
+
+			$this->_txt_js .= "var ubic_{$n_marker} = new google.maps.LatLng({$marker_config['lat']}, {$marker_config['lng']});\n";
+			$this->_txt_js .= "var marker_{$n_marker} = new google.maps.Marker({position: ubic_{$n_marker}, title: '{$marker_config['title']}'});\n";
+			$this->_txt_js .= "marker_{$n_marker}.setMap(map);\n";
+			$this->_txt_js .= "bounds.extend(marker_{$n_marker}.position);\n\n";
 		}
 	}
 

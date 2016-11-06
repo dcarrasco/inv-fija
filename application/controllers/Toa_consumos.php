@@ -108,7 +108,7 @@ class Toa_consumos extends CI_Controller {
 				$this->googlemaps->add_marker(array(
 					'lat'   => $peticion['acoord_y'],
 					'lng'   => $peticion['acoord_x'],
-					'title' => $peticion['referencia'],
+					'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
 			));
 			}
 		}

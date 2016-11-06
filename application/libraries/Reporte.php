@@ -51,66 +51,58 @@ class Reporte {
 		switch ($arr_param_campo['tipo'])
 		{
 			case 'texto':
-							return $valor;
-							break;
+				return $valor;
+				break;
 			case 'fecha':
-							return fmt_fecha($valor);
-							break;
+				return fmt_fecha($valor);
+				break;
 			case 'link':
-							return anchor($arr_param_campo['href'] . $valor, $valor);
-							break;
+				return anchor($arr_param_campo['href'] . $valor, $valor);
+				break;
 			case 'link_registro':
-							$arr_link = array();
-							foreach ($arr_param_campo['href_registros'] as $campos_link)
-							{
-								$valor_registro = $campos_link === 'fecha'
-									? fmt_fecha_db($registro[$campos_link])
-									: $registro[$campos_link];
-								array_push($arr_link, $valor_registro);
-							}
+				$arr_link = array();
+				foreach ($arr_param_campo['href_registros'] as $campos_link)
+				{
+					$valor_registro = ($campos_link === 'fecha') ? fmt_fecha_db($registro[$campos_link]) : $registro[$campos_link];
+					array_push($arr_link, $valor_registro);
+				}
 
-							return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
-							break;
+				return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
+				break;
 			case 'link_detalle_series':
-							$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material');
-							$href_param = '?';
-							foreach($arr_indices as $indice)
-							{
-								$href_param .= array_key_exists($indice, $registro) ? "&{$indice}=".$registro[$indice] : '';
-							}
-							$href_param .= '&permanencia='.$campo;
-							$valor_desplegar = fmt_cantidad($valor);
+				$registro['permanencia'] = $campo;
+				$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
+				$valor_desplegar = fmt_cantidad($valor);
 
-							return anchor($arr_param_campo['href'].$href_param, ($valor_desplegar === '') ? ' ' : $valor_desplegar);
-							break;
+				return anchor(
+					$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
+					($valor_desplegar === '') ? ' ' : $valor_desplegar
+				);
+				break;
 			case 'numero':
-							return fmt_cantidad($valor);
-							break;
+				return fmt_cantidad($valor);
+				break;
 			case 'valor':
-							return fmt_monto($valor);
-							break;
+				return fmt_monto($valor);
+				break;
 			case 'valor_pmp':
-							return fmt_monto($valor);
-							break;
+				return fmt_monto($valor);
+				break;
 			case 'numero_dif':
-							return '<strong>' .
-								(($valor > 0)
-									? '<span class="text-success">+'
-									: (($valor < 0) ? '<span class="text-danger">' : '')) .
-								fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .
-								'</strong>';
-							break;
+				return '<strong>' .
+					(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .
+					fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .
+					'</strong>';
+				break;
 			case 'valor_dif':
-							return '<strong>' .
-								(($valor > 0)
-									? '<span class="text-success">+'
-									: (($valor < 0) ? '<span class="text-danger">' : '')) .
-								fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .
-								'</strong>';
-							break;
+				return '<strong>' .
+					(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .
+					fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .
+					'</strong>';
+				break;
 			default:
-							return $valor;
-							break;
+				return $valor;
+				break;
 		}
 
 	}
@@ -126,9 +118,9 @@ class Reporte {
 	 */
 	public function set_order_campos(&$arr_campos, $campo_default = '')
 	{
-		$CI =& get_instance();
+		$ci =& get_instance();
 
-		$sort_by = $CI->input->post_get('sort');
+		$sort_by = $ci->input->post_get('sort');
 
 		if ($sort_by === NULL OR $sort_by === '')
 		{
@@ -157,9 +149,9 @@ class Reporte {
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
 			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
 
-			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? 'sort-'.$tipo_icono.'-desc' : 'sort-'.$tipo_icono.'-asc';
+			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-{$tipo_icono}-desc" : "sort-{$tipo_icono}-asc";
 
-			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? ' <span class="fa fa-'.$order_icon.'" ></span>' : '';
+			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
 		}
 	}
 
@@ -172,30 +164,26 @@ class Reporte {
 	 */
 	public function get_order_by($sort_by)
 	{
-		$arr_sort_by = explode(',', $sort_by);
-		$sort_stmt = '';
-
-		$cant_sort = 0;
-		foreach($arr_sort_by as $sort)
-		{
-			$sort = trim($sort);
-
-			if ( ! in_array(substr($sort, 0, 1), array('+', '-')))
-			{
-				$sort = '+'.$sort;
-			}
-
-			$sort_field = substr($sort, 1, strlen($sort));
-			$sort_order = (substr($sort, 0, 1) === '+') ? 'ASC' : 'DESC';
-
-			$sort_stmt .= ($cant_sort > 0) ? ', ' : '';
-			$sort_stmt .= $sort_field.' '.$sort_order;
-
-			$cant_sort += 1;
-		}
-
-		return $sort_stmt;
+		return implode(array_map(array($this, '_order_by'), explode(',', $sort_by)), ', ');
 	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve un string con formato "[+/-]campo" a formato "campo [ASC/DESC]"
+	 *
+	 * @param  string $sort_by Texto a cambiar el formato
+	 * @return string          Texto con formato final
+	 */
+	private function _order_by($sort_by)
+	{
+		$sort_by = ( ! in_array(substr(trim($sort_by), 0, 1), array('+', '-'))) ? '+'.trim($sort_by) : trim($sort_by);
+		$sort = substr($sort_by, 1, strlen($sort_by));
+		$sort .= (substr($sort_by, 0, 1) === '+') ? ' ASC' : ' DESC';
+
+		return $sort;
+	}
+
 
 	// --------------------------------------------------------------------
 
@@ -281,14 +269,7 @@ class Reporte {
 			}
 
 			$arr_celda = array(
-				'data' =>
-					'<span '.
-						'data-sort="'.$arr_param_campo['sort'].'" '.
-						'data-toggle="tooltip" '.
-						'title="Ordenar por campo '.$arr_param_campo['titulo'].'">'.
-						$arr_param_campo['titulo'].
-					'</span>'.
-					$arr_param_campo['img_orden'],
+				'data' => "<span data-sort=\"{$arr_param_campo['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$arr_param_campo['titulo']}\">{$arr_param_campo['titulo']}</span>{$arr_param_campo['img_orden']}",
 				'class' => $arr_param_campo === '' ? '' : $arr_param_campo['class'],
 			);
 			array_push($arr_linea_encabezado, $arr_celda);
@@ -378,7 +359,7 @@ class Reporte {
 			}
 
 			array_push($arr_linea_totales, array(
-				'data' => '<strong>'.$data.'</strong>',
+				'data' => "<strong>{$data}</strong>",
 				'class' => array_key_exists('class', $arr_param_campo) ? $arr_param_campo['class'] : ''
 			));
 		}
