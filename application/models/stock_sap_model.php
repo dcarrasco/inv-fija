@@ -27,6 +27,26 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Stock_sap_model extends CI_Model {
 
 	/**
+	 * Arreglo con validación formulario stock SAP
+	 *
+	 * @var array
+	 */
+	public $stock_sap_validation = array(
+		array(
+			'field' => 'fecha[]',
+			'label' => 'Fechas',
+			'rules' => 'required',
+		),
+		array(
+			'field' => 'almacenes[]',
+			'label' => 'Almacenes',
+			'rules' => 'required',
+		),
+	);
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return void
@@ -41,7 +61,6 @@ class Stock_sap_model extends CI_Model {
 			'table_open' => '<table class="table table-striped table-hover table-condensed reporte">',
 		));
 	}
-
 
 	// --------------------------------------------------------------------
 

@@ -169,12 +169,11 @@ if ( ! function_exists('titulo_modulo'))
 		$ci =& get_instance();
 
 		$arr_modulos = $ci->acl_model->get_user_menu();
-
 		foreach ($arr_modulos as $modulo)
 		{
 			if($modulo['url'] === $ci->uri->segment(1))
 			{
-				return '<i class="fa fa-'.$modulo['modulo_icono'].' fa-fw"></i> ' . $modulo['modulo'];
+				return "<i class=\"fa fa-{$modulo['modulo_icono']} fa-fw\"></i> {$modulo['modulo']}";
 			}
 		}
 	}
@@ -244,7 +243,7 @@ if ( ! function_exists('app_render_view'))
 		$vista_login = isset($datos['vista_login']) ? $datos['vista_login']: FALSE;
 
 		// titulos y variables generales
-		$datos['app_title']    = $ci->config->item('app_nombre').(ENVIRONMENT !== 'production' ? '- DEV' : '');
+		$datos['app_title']    = (ENVIRONMENT !== 'production' ? 'DEV - ' : '').$ci->config->item('app_nombre');
 		$datos['base_url']     = base_url();
 		$datos['js_base_url']  = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
 		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';

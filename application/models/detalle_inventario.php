@@ -258,14 +258,7 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_nombre_digitador()
 	{
-		if ($this->digitador !== 0)
-		{
-			return $this->digitador;
-		}
-		else
-		{
-			return '[nombre digitador]';
-		}
+		return ($this->digitador !== 0) ? $this->digitador : '[nombre digitador]';
 	}
 
 	// --------------------------------------------------------------------
@@ -343,9 +336,9 @@ class Detalle_inventario extends ORM_Model {
 
 			'per_page'    => $this->per_page_ajustes,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/'),
+			'base_url'    => site_url($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'),
 			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo (' . (int)($total_rows / $this->per_page_ajustes) . ')',
+			'last_link'   => 'Ultimo ('.(int)($total_rows / $this->per_page_ajustes).')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 		);

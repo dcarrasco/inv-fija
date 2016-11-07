@@ -117,30 +117,25 @@ class Stock_sap extends CI_Controller {
 				array_push($arr_mostrar, $mostrar);
 			}
 		}
-
 		$arr_filtrar = 	array();
-		foreach (array('tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $filtro)
+		foreach (array('fecha','tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $filtro)
 		{
 			$arr_filtrar[$filtro] = $this->input->post($filtro);
 		}
 
-		$arr_filtrar['fecha'] = $this->input->post('fecha');
-
-		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
-		$this->form_validation->set_rules('almacenes[]', 'Almacenes', 'required');
-
 		$tabla_stock = '';
 		$datos_grafico = array();
 
+		$this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation);
 		if ($this->form_validation->run())
 		{
 			// recupera tabla de stock de la BD o del cache
 			$tabla_stock = cached_query(
-								'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar),
-								$stock,
-								'get_stock',
-								array($arr_mostrar, $arr_filtrar)
-							);
+				'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar),
+				$stock,
+				'get_stock',
+				array($arr_mostrar, $arr_filtrar)
+			);
 
 			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
 			{
@@ -205,16 +200,16 @@ class Stock_sap extends CI_Controller {
 		$stock = new Stock_sap_movil_model();
 
 		$detalle_series = cached_query(
-								'detalle_series'.$centro.$almacen.$material.$lote,
-								$stock,
-								'get_detalle_series',
-								array($centro, $almacen, $material, $lote)
-							);
+			'detalle_series'.$centro.$almacen.$material.$lote,
+			$stock,
+			'get_detalle_series',
+			array($centro, $almacen, $material, $lote)
+		);
 
 		$data = array(
-					'detalle_series' => $detalle_series,
-					'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
-				);
+			'detalle_series' => $detalle_series,
+			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
+		);
 
 		app_render_view('stock_sap/detalle_series', $data);
 	}

@@ -377,16 +377,16 @@ class Reportestock_model extends CI_Model {
 		}
 
 		$campos_datos = array(
-			'm030' => '000-030',
-			'm060' => '031-060',
-			'm090' => '061-090',
-			'm120' => '091-120',
-			'm180' => '121-180',
-			'm360' => '181-360',
-			'm720' => '361-720',
+			'm030'   => '000-030',
+			'm060'   => '031-060',
+			'm090'   => '061-090',
+			'm120'   => '091-120',
+			'm180'   => '121-180',
+			'm360'   => '181-360',
+			'm720'   => '361-720',
 			'mas720' => '+720',
-			'otro' => 'otro',
-			'total' => 'Total',
+			'otro'   => 'otro',
+			'total'  => 'Total',
 		);
 
 		foreach ($campos_datos as $llave => $valor)
@@ -395,7 +395,7 @@ class Reportestock_model extends CI_Model {
 				'titulo' => $valor,
 				'class'  => 'text-center',
 				'tipo'   => 'link_detalle_series',
-				'href'   => $this->router->class . '/detalle',
+				'href'   => $this->router->class.'/detalle',
 			);
 
 		}
@@ -811,7 +811,7 @@ class Reportestock_model extends CI_Model {
 				->from($this->config->item('bd_fechas_sap'))
 				->order_by('anno ASC');
 		}
-		else if ($tipo_fecha === 'TRIMESTRE')
+		elseif ($tipo_fecha === 'TRIMESTRE')
 		{
 			$this->db->distinct()
 				->select("cast(anno as varchar(10)) + '-' + trimestre as llave")
@@ -824,7 +824,7 @@ class Reportestock_model extends CI_Model {
 				$this->db->where_in('anno', $arr_filtro);
 			}
 		}
-		else if ($tipo_fecha === 'MES')
+		elseif ($tipo_fecha === 'MES')
 		{
 			$this->db->distinct()
 				->select('anomes as llave')
@@ -837,7 +837,7 @@ class Reportestock_model extends CI_Model {
 				$this->db->where_in("cast(anno as varchar(10)) + '-' + trimestre", $arr_filtro);
 			}
 		}
-		else if ($tipo_fecha === 'DIA')
+		elseif ($tipo_fecha === 'DIA')
 		{
 			$this->db->distinct()
 				->select('fecha as llave')
@@ -990,7 +990,7 @@ class Reportestock_model extends CI_Model {
 				->from($this->config->item('bd_materiales2_sap'))
 				->order_by('tipo1 ASC');
 		}
-		else if ($tipo === 'MARCA')
+		elseif ($tipo === 'MARCA')
 		{
 			$this->db
 				->select('sub_marca as llave')
@@ -1003,7 +1003,7 @@ class Reportestock_model extends CI_Model {
 				$this->db->where_in('tipo1', $arr_filtro);
 			}
 		}
-		else if ($tipo === 'MODELO')
+		elseif ($tipo === 'MODELO')
 		{
 			$this->db
 				->select('sub_marcamodelo as llave')
@@ -1016,7 +1016,7 @@ class Reportestock_model extends CI_Model {
 				$this->db->where_in('sub_marca', $arr_filtro);
 			}
 		}
-		else if ($tipo === 'MATERIAL')
+		elseif ($tipo === 'MATERIAL')
 		{
 			$arr_combo = $this->db
 				->select('codigo_sap as llave')

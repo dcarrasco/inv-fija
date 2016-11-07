@@ -33,6 +33,14 @@ class MY_Hooks {
 	 */
 	public function acl_hook()
 	{
+		// redirecciona a https
+		// if ( ! isset($_SERVER['HTTPS']) OR strtolower($_SERVER['HTTPS']) !== "on")
+		// {
+		// 	$url = "https://". $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+		// 	redirect($url);
+		// 	exit;
+		// }
+
 		$ci =& get_instance();
 		$ci->load->model('acl_model');
 		$ci->config->load('inv-fija');
@@ -43,7 +51,7 @@ class MY_Hooks {
 
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
-		if ( ! in_array($class, $whitelist_classes) AND  ! $ci->acl_model->autentica_modulo($llave_modulo))
+		if ( ! in_array($class, $whitelist_classes) AND ! $ci->acl_model->autentica_modulo($llave_modulo))
 		{
 			redirect('login/');
 		}

@@ -182,10 +182,10 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->select_max('fecha_modificacion', 'fecha');
-		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_usuarios') . ' d', 'd.id = di.digitador', 'left');
-		$this->db->join($this->config->item('bd_auditores') . ' a', 'a.id = di.auditor', 'left');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
+		$this->db->from($this->config->item('bd_detalle_inventario').' di');
+		$this->db->join($this->config->item('bd_usuarios').' d', 'd.id = di.digitador', 'left');
+		$this->db->join($this->config->item('bd_auditores').' a', 'a.id = di.auditor', 'left');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo', 'left');
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.hoja, d.nombre, a.nombre');
 		$this->db->order_by($this->reporte->get_order_by($orden_campo));
@@ -251,8 +251,8 @@ class Inventario_model extends CI_Model {
 			$this->db->select('((di.stock_fisico - di.stock_sap) * c.pmp) as valor_diff');
 		}
 
-		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
+		$this->db->from($this->config->item('bd_detalle_inventario').' di');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo', 'left');
 
 		$this->db->where('di.id_inventario', $id_inventario);
 		$this->db->where('di.hoja', $hoja);
@@ -320,10 +320,10 @@ class Inventario_model extends CI_Model {
 			$this->db->select('SUM(stock_fisico * c.pmp - stock_sap * c.pmp) as sum_valor_diff', FALSE);
 		}
 		$this->db->select_max('fecha_modificacion', 'fecha');
-		$this->db->from($this->config->item('bd_detalle_inventario') . ' di');
-		$this->db->join($this->config->item('bd_catalogos') . ' c', 'c.catalogo = di.catalogo', 'left');
-		$this->db->join($this->config->item('bd_familias') . ' f', "f.codigo = substring(di.catalogo,1,5) and f.tipo='FAM'", 'left');
-		$this->db->join($this->config->item('bd_familias') . ' sf', "sf.codigo = substring(di.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
+		$this->db->from($this->config->item('bd_detalle_inventario').' di');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo', 'left');
+		$this->db->join($this->config->item('bd_familias').' f', "f.codigo = substring(di.catalogo,1,5) and f.tipo='FAM'", 'left');
+		$this->db->join($this->config->item('bd_familias').' sf', "sf.codigo = substring(di.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
 
 		$this->db->where('id_inventario', $id_inventario);
 

@@ -91,8 +91,8 @@ class Orm_controller extends CI_Controller {
 			'modelos'     => $modelo->list_paginated($pagina),
 			'orm_filtro'  => $filtro,
 			'orm_pagina'  => $pagina,
-			'url_filtro'  => site_url($this->router->class . '/listado/' . $nombre_modelo . '/'),
-			'url_editar'  => site_url($this->router->class . '/editar/'  . $nombre_modelo . '/'),
+			'url_filtro'  => site_url("{$this->router->class}/listado/{$nombre_modelo}/"),
+			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 		);
 
 		app_render_view('ORM/orm_listado', $data);
@@ -117,7 +117,7 @@ class Orm_controller extends CI_Controller {
 				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'        => $modelo,
 				'orm_filtro'    => $orm_filtro,
-				'link_cancelar' => site_url($this->router->class.'/listado/'.$nombre_modelo.'/'.$orm_filtro.'/'.$orm_pagina),
+				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}/{$orm_filtro}/{$orm_pagina}"),
 			);
 
 			app_render_view('ORM/orm_editar', $data);
@@ -137,7 +137,7 @@ class Orm_controller extends CI_Controller {
 				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 			}
 
-			redirect($this->router->class.'/listado/'.$nombre_modelo.'/'.$orm_filtro.'/'.$orm_pagina);
+			redirect("{$this->router->class}/listado/{$nombre_modelo}/{$orm_filtro}/{$orm_pagina}");
 		}
 	}
 

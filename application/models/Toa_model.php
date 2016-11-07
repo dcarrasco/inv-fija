@@ -2489,11 +2489,14 @@ class Toa_model extends CI_Model {
 	 */
 	public function gchart_data($arr_orig = array())
 	{
+
 		if ( ! $arr_orig)
 		{
 			return NULL;
 		}
 
+		$func_agrega_comillas = function($elem) {return "'".$elem."'";};
+		$func_nulos_a_cero    = function($elem) {return is_null($elem) ? 0 : $elem;};
 		$num_registro = 0;
 
 		foreach ($arr_orig as $num_dia => $valor)
@@ -2503,23 +2506,14 @@ class Toa_model extends CI_Model {
 				$valor = array('Data' => $valor);
 			}
 
+			// titulo
 			if ($num_registro === 0)
 			{
-				$arrjs = "[['Dia'";
-				foreach($valor as $llave_valor => $valor_valor)
-				{
-					$arrjs .= ", '".$llave_valor."'";
-				}
-				$arrjs .= ']';
+				$arrjs = "[['Dia', ".implode(array_map($func_agrega_comillas, array_keys($valor)), ',').']';
 			}
 
-			$arrjs .= ", ['".$num_dia."'";
-
-			foreach ($valor as $llave_valor => $valor_valor)
-			{
-				$arrjs .= ', '.(is_null($valor_valor) ? 0 : $valor_valor);
-			}
-			$arrjs .= ']';
+			// agregamos los datos del día
+			$arrjs .= ", ['{$num_dia}',".implode(array_map($func_nulos_a_cero, $valor), ',').']';
 			$num_registro += 1;
 		}
 
