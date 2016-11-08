@@ -65,7 +65,7 @@
 
 		<tr>
 			<td class="text-muted"><?php echo $num_lin+ 1; ?></td>
-			<td><?php echo $cliente['customer_number']; ?></td>
+			<td><?php echo fmt_rut($cliente['customer_number']); ?></td>
 			<td><?php echo $cliente['cname']; ?></td>
 			<td class="text-center"><?php echo anchor($link_peticiones.$cliente['customer_number'],fmt_cantidad($cliente['cantidad'])); ?></td>
 		</tr>
