@@ -2433,7 +2433,7 @@ class Toa_model extends CI_Model {
 			->where('date>=', $fecha_desde)
 			->where('date<=', $fecha_hasta)
 			->where('astatus', 'complete')
-			->where('customer_number is not', NULL)
+			->where('customer_number IS NOT NULL')
 			->group_by('customer_number')
 			->order_by('cantidad', 'desc');
 
@@ -2442,12 +2442,9 @@ class Toa_model extends CI_Model {
 			$this->db->like('cname', strtoupper($cliente));
 		}
 
-		return ($this->db
+		return $this->db
 			->get($this->config->item('bd_peticiones_toa'))
-			->result_array()
-		);
-
-
+			->result_array();
 	}
 
 
