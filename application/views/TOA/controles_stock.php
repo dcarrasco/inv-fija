@@ -77,7 +77,7 @@
 		<tr>
 			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
 			<td style="white-space: nowrap;"><?php echo $datos['tipo']; ?></td>
-			<td style="white-space: nowrap;"><?php echo $datos['centro']; ?>-<?php echo $datos['cod_almacen']; ?><?php echo $datos['des_almacen']?></td>
+			<td style="white-space: nowrap;"><?php echo $datos['centro']; ?>-<?php echo $datos['cod_almacen']; ?> <?php echo $datos['des_almacen']?></td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<?php if ($valor): ?>
 					<?php $valor_desplegar = (set_value('dato') === 'monto') ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
