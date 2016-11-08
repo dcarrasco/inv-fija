@@ -90,6 +90,7 @@ class Toa_consumos extends CI_Controller {
 	 * @param  mixed  $param1       Primer parametro de filtro
 	 * @param  mixed  $param2       Segundo parametro de filtro
 	 * @param  mixed  $param3       Tercer parametro de filtro
+	 * @param  mixed  $param4       Cuarto parametro de filtro
 	 * @return void
 	 */
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
@@ -128,7 +129,6 @@ class Toa_consumos extends CI_Controller {
 	/**
 	 * Despliega detalle de una peticion
 	 *
-	 * @param  string $fecha    Fecha de la peticion
 	 * @param  string $peticion Identificador de la peticion
 	 * @return void
 	 */
