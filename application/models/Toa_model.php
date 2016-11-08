@@ -2103,147 +2103,6 @@ class Toa_model extends CI_Model {
 		return $matriz;
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve matriz de consumos de técnicos por dia
-	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
-	 */
-	public function peticiones_empresa($empresa = NULL, $anomes = NULL, $dato_desplegar = 'peticiones')
-	{
-		if ( ! $empresa OR ! $anomes)
-		{
-			return NULL;
-		}
-
-		$arr_peticiones = $this->_get_arr_dias($anomes);
-		foreach ($arr_peticiones as $num_dia => $valor)
-		{
-			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
-		}
-
-		$datos_sap = $this->get_resumen_panel($dato_desplegar === 'peticiones' ? 'SAP_Q_PET' : 'SAP_MONTO_PET', $empresa, $anomes);
-
-		foreach($datos_sap as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
-		}
-
-		$datos_toa = $this->get_resumen_panel($dato_desplegar === 'peticiones' ? 'TOA_Q_PET' : 'TOA_MONTO_PET', $empresa, $anomes);
-
-		foreach($datos_toa as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
-		}
-
-		return $arr_peticiones;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve matriz de consumos de técnicos por dia
-	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @return array                  Arreglo con los datos del reporte
-	 */
-	public function tecnicos_empresa($empresa = NULL, $anomes = NULL)
-	{
-		if ( ! $empresa OR ! $anomes)
-		{
-			return NULL;
-		}
-
-		$arr_peticiones = $this->_get_arr_dias($anomes);
-		foreach ($arr_peticiones as $num_dia => $valor)
-		{
-			$arr_peticiones[$num_dia] = array('sap' => 0, 'toa' => 0);
-		}
-
-		$datos_sap = $this->get_resumen_panel('SAP_Q_TECNICOS', $empresa, $anomes);
-		foreach($datos_sap as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['sap'] = $registro['valor'];
-		}
-
-		$datos_toa = $this->get_resumen_panel('TOA_Q_TECNICOS', $empresa, $anomes);
-		foreach($datos_toa as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')]['toa'] = $registro['valor'];
-		}
-
-		return $arr_peticiones;
-
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve matriz de stock de empresas contratistas por dia
-	 *
-	 * @param  string $empresa Empresa a consultar
-	 * @param  string $anomes  Mes a consultar, formato YYYYMM
-	 * @return array           Arreglo con los datos del reporte
-	 */
-	public function stock_empresa($empresa = NULL, $anomes = NULL)
-	{
-		if ( ! $empresa OR ! $anomes)
-		{
-			return NULL;
-		}
-
-		$arr_peticiones = $this->_get_arr_dias($anomes);
-		foreach ($arr_peticiones as $num_dia => $valor)
-		{
-			$arr_peticiones[$num_dia] = 0;
-		}
-
-		$datos_sap = $this->get_resumen_panel('SAP_MONTO_STOCK_ALM', $empresa, $anomes);
-		foreach($datos_sap as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor']/1000000;
-		}
-
-		return $arr_peticiones;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve matriz de stock de empresas contratistas por dia
-	 *
-	 * @param  string $empresa Empresa a consultar
-	 * @param  string $anomes  Mes a consultar, formato YYYYMM
-	 * @return array           Arreglo con los datos del reporte
-	 */
-	public function stock_tecnicos_empresa($empresa = NULL, $anomes = NULL)
-	{
-		if ( ! $empresa OR ! $anomes)
-		{
-			return NULL;
-		}
-
-		$arr_peticiones = $this->_get_arr_dias($anomes);
-		foreach ($arr_peticiones as $num_dia => $valor)
-		{
-			$arr_peticiones[$num_dia] = 0;
-		}
-
-		$datos_sap = $this->get_resumen_panel('SAP_MONTO_STOCK_TEC', $empresa, $anomes);
-		foreach($datos_sap as $registro)
-		{
-			$arr_peticiones[fmt_fecha($registro['fecha'], 'd')] = $registro['valor']/1000000;
-		}
-
-		return $arr_peticiones;
-	}
-
 
 	// --------------------------------------------------------------------
 
@@ -2266,39 +2125,34 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
+		$this->db
+			->select('tipo')
+			->select('fecha')
+			->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
+			->from($this->config->item('bd_resumen_panel_toa'))
+			->where('tipo', $indicador)
+			->where('fecha>=', $fecha_desde)
+			->where('fecha<', $fecha_hasta);
+
 		if ($empresa === '***')
 		{
-			return ($this->db
-				->select('tipo')
-				->select('fecha')
-				->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
+			$this->db
 				->select_sum('valor', 'valor')
-				->from($this->config->item('bd_resumen_panel_toa'))
-				->where('tipo', $indicador)
-				->where('fecha>=', $fecha_desde)
-				->where('fecha<', $fecha_hasta)
 				->group_by('tipo')
 				->group_by('fecha')
 				->group_by('substring(convert(varchar(20), fecha, 103),1,2)', FALSE)
-				->order_by('tipo, fecha')
-				->get()->result_array());
+				->order_by('tipo, fecha');
 		}
 		else
 		{
-			return ($this->db
-				->select('tipo')
+			$this->db
 				->select('empresa')
-				->select('fecha')
-				->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
 				->select('valor')
-				->from($this->config->item('bd_resumen_panel_toa'))
-				->where('tipo', $indicador)
 				->where('empresa', $empresa)
-				->where('fecha>=', $fecha_desde)
-				->where('fecha<', $fecha_hasta)
-				->order_by('tipo, empresa, fecha')
-				->get()->result_array());
+				->order_by('tipo, empresa, fecha');
 		}
+
+		return $this->db->get()->result_array();
 	}
 
 
@@ -2314,15 +2168,7 @@ class Toa_model extends CI_Model {
 	 */
 	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
 	{
-		$arr_indicador = array();
-		if ( ! is_array($indicador))
-		{
-			$arr_indicador['Data'] = $indicador;
-		}
-		else
-		{
-			$arr_indicador = $indicador;
-		}
+		$arr_indicador = ( ! is_array($indicador)) ? array('Data' => $indicador) : $indicador;
 
 		$arr_datos = array();
 		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
@@ -2330,25 +2176,20 @@ class Toa_model extends CI_Model {
 			$arr_datos[$llave_indicador] = $this->get_resumen_panel($valor_indicador, $empresa, $anomes);
 		}
 
-		$arr_peticiones = array();
-		foreach ($this->_get_arr_dias($anomes) as $num_dia => $valor)
-		{
-			foreach ($arr_indicador as $llave_indicador => $valor_indicador)
-			{
-				$arr_peticiones[$num_dia][$llave_indicador] = 0;
-			}
-		}
+		$num_mes = (int) substr($anomes, 4, 2);
+		$num_ano = (int) substr($anomes, 0, 4);
+		$arr_indicador_vacio = array_fill_keys(array_keys($arr_indicador), 0);
+		$arr_peticiones = array_fill(1, days_in_month($num_mes, $num_ano), $arr_indicador_vacio);
 
 		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
 		{
 			foreach($arr_datos[$llave_indicador] as $registro)
 			{
-				$arr_peticiones[fmt_fecha($registro['fecha'], 'd')][$llave_indicador] = $registro['valor'];
+				$arr_peticiones[(int) $registro['dia']][$llave_indicador] = $registro['valor'];
 			}
 		}
 
 		return $this->gchart_data($arr_peticiones);
-
 	}
 
 
@@ -2484,7 +2325,7 @@ class Toa_model extends CI_Model {
 	/**
 	 * Formatea un arreglo para ser usado por Google Charts
 	 *
-	 * @param  array  $arr Arreglo a formatear
+	 * @param  array $arr_orig Arreglo a formatear
 	 * @return string
 	 */
 	public function gchart_data($arr_orig = array())
