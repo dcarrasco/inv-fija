@@ -265,6 +265,7 @@ class Toa_controles extends CI_Controller {
 	{
 		$datos = array(
 			'reporte' => $this->toa_model->detalle_stock_almacen($fecha, $centro_almacen),
+			'google_maps' => '',
 		);
 
 		app_render_view('toa/peticiones', $datos);
@@ -285,6 +286,7 @@ class Toa_controles extends CI_Controller {
 	{
 		$datos = array(
 			'reporte' => $this->toa_model->detalle_stock_tecnico($fecha, $id_tecnico),
+			'google_maps' => '',
 		);
 
 		app_render_view('toa/peticiones', $datos);
