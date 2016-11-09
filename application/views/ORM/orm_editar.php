@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
 
-		<?php echo form_open('', 'id="frm_editar" class="form-horizontal" role="form"'); ?>
+		<?php echo form_open($url_form, 'id="frm_editar" class="form-horizontal" role="form"'); ?>
 		<fieldset>
 
 			<legend>

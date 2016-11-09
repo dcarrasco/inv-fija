@@ -72,27 +72,23 @@ class Orm_controller extends CI_Controller {
 	 * Despliega listado de los elementos de un modelo
 	 *
 	 * @param  string $nombre_modelo Modelo o entidad a desplegar
-	 * @param  string $filtro        Permite filtrar los registros a desplegar
-	 * @param  string $pagina        Numero de la pagina a desplegar
 	 * @return void
 	 */
-	public function listado($nombre_modelo = '', $filtro = '_', $pagina = 0)
+	public function listado($nombre_modelo = '')
 	{
+		$filtro = $this->input->get('filtro');
+		$page   = $this->input->get('page');
+
 		$modelo = new $nombre_modelo;
-
-		$filtro = $this->input->post('filtro') ? $this->input->post('filtro') : $filtro;
-		$filtro = urldecode($filtro);
-
 		$modelo->set_model_filtro($filtro);
 
 		$data = array(
 			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 			'modelo'      => $modelo,
-			'modelos'     => $modelo->list_paginated($pagina),
+			'modelos'     => $modelo->list_paginated($page),
 			'orm_filtro'  => $filtro,
-			'orm_pagina'  => $pagina,
-			'url_filtro'  => site_url("{$this->router->class}/listado/{$nombre_modelo}/"),
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
+			'url_params'  => http_build_query($this->input->get()),
 		);
 
 		app_render_view('ORM/orm_listado', $data);
@@ -107,8 +103,9 @@ class Orm_controller extends CI_Controller {
 	 * @param  string $id_modelo     Identificador del modelo
 	 * @return void
 	 */
-	public function editar($nombre_modelo = '', $orm_filtro = '_', $orm_pagina = 0, $id_modelo = NULL)
+	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
+		$url_params = http_build_query($this->input->get());
 		$modelo = new $nombre_modelo($id_modelo);
 
 		if ( ! $modelo->valida_form())
@@ -116,8 +113,8 @@ class Orm_controller extends CI_Controller {
 			$data = array(
 				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
 				'modelo'        => $modelo,
-				'orm_filtro'    => $orm_filtro,
-				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}/{$orm_filtro}/{$orm_pagina}"),
+				'url_form'      => site_url("{$this->router->class}/editar/{$nombre_modelo}/{$id_modelo}?{$url_params}"),
+				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}?{$url_params}"),
 			);
 
 			app_render_view('ORM/orm_editar', $data);
@@ -137,7 +134,7 @@ class Orm_controller extends CI_Controller {
 				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 			}
 
-			redirect("{$this->router->class}/listado/{$nombre_modelo}/{$orm_filtro}/{$orm_pagina}");
+			redirect("{$this->router->class}/listado/{$nombre_modelo}?{$url_params}");
 		}
 	}
 

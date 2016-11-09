@@ -717,13 +717,17 @@ class Orm_model implements IteratorAggregate {
 			'base_url'    => site_url(
 				$this->router->class . '/' .
 				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
-				$this->get_model_nombre() . '/' .
-				$this->_model_filtro . '/'
+				$this->get_model_nombre()
 			),
 			'first_link'  => $this->lang->line('orm_pag_first'),
 			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->_model_page_results + 1) . ')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
+
+			'reuse_query_string'   => TRUE,
+			'page_query_string'    => TRUE,
+			'query_string_segment' => 'page',
+
 		);
 
 		$this->pagination->initialize($cfg_pagination);
