@@ -99,7 +99,7 @@ class Grafica_stock {
 						$this->_array_push_unique($arr_label_series, '{label:\'' . $registro_stock[$idx_series] . '\'}');
 					}
 				}
-				else if ($arr_param['sel_tiposalm'] === 'sel_almacenes')
+				elseif ($arr_param['sel_tiposalm'] === 'sel_almacenes')
 				{
 					$idx_series = 'cod_almacen';
 					$this->_array_push_unique($arr_label_series, '{label:\'' . $registro_stock['centro'] . '-' . $registro_stock[$idx_series] . ' ' . $registro_stock['des_almacen'] . '\'}');
@@ -137,7 +137,7 @@ class Grafica_stock {
 						$this->_array_push_unique($arr_eje_x, '\'' . $registro_stock[$idx_eje_x] . '\'');
 					}
 				}
-				else if ($arr_param['sel_tiposalm'] === 'sel_almacenes')
+				elseif ($arr_param['sel_tiposalm'] === 'sel_almacenes')
 				{
 					$idx_eje_x = 'cod_almacen';
 					$this->_array_push_unique($arr_eje_x, '\'' . $registro_stock[$idx_eje_x] . '-' . $registro_stock['des_almacen'] . '\'');

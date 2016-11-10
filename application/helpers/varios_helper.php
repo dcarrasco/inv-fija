@@ -299,13 +299,13 @@ if ( ! function_exists('print_message'))
 				$texto_tipo = 'ALERTA';
 				$img_tipo   = 'warning-sign';
 			}
-			else if ($tipo === 'danger' OR $tipo === 'error')
+			elseif ($tipo === 'danger' OR $tipo === 'error')
 			{
 				$tipo = 'danger';
 				$texto_tipo = 'ERROR';
 				$img_tipo   = 'exclamation-sign';
 			}
-			else if ($tipo === 'success')
+			elseif ($tipo === 'success')
 			{
 				$texto_tipo = '&Eacute;XITO';
 				$img_tipo   = 'ok-sign';

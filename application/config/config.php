@@ -520,11 +520,11 @@ function orm_models_autoload($class)
 	{
 		include_once(APPPATH.'models/'.$class.'.php');
 	}
-	else if (file_exists(APPPATH.'controllers/'.$class.'.php'))
+	elseif (file_exists(APPPATH.'controllers/'.$class.'.php'))
 	{
 		include_once(APPPATH.'controllers/'.$class.'.php');
 	}
-	else if (file_exists(APPPATH.'libraries/'.$class.'.php'))
+	elseif (file_exists(APPPATH.'libraries/'.$class.'.php'))
 	{
 		include_once(APPPATH.'libraries/'.$class.'.php');
 	}

@@ -204,7 +204,7 @@ class Inventario extends ORM_Model {
 			{
 				// no se procesa esta linea
 			}
-			else if ($resultado_procesa_linea === 'error')
+			elseif ($resultado_procesa_linea === 'error')
 			{
 				$count_error += 1;
 				array_push($arr_lineas_error, $num_linea);

@@ -277,11 +277,11 @@ class Stock_sap_movil_model extends Stock_sap_model {
 					{
 						$llave_total = $campo_val;
 					}
-					else if ($campo_key === 'total')
+					elseif ($campo_key === 'total')
 					{
 						$valor_total = $campo_val;
 					}
-					else if ($campo_key === 'VAL_total')
+					elseif ($campo_key === 'VAL_total')
 					{
 						$valor_monto = $campo_val;
 					}
@@ -317,7 +317,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 						$llave_total = $campo_key;
 						$valor_total = $campo_val;
 					}
-					else if ($campo_key === 'VAL_EQUIPOS' OR $campo_key === 'VAL_OTROS' OR $campo_key === 'VAL_SIMCARD')
+					elseif ($campo_key === 'VAL_EQUIPOS' OR $campo_key === 'VAL_OTROS' OR $campo_key === 'VAL_SIMCARD')
 					{
 						$llave_monto = $campo_key;
 						$valor_monto = $campo_val;

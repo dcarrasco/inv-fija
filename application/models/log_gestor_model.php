@@ -100,7 +100,7 @@ class Log_gestor_model extends CI_Model {
 			{
 				$serie = substr($serie, 0, 10);
 			}
-			else if ($tipo_serie === 'rut')
+			elseif ($tipo_serie === 'rut')
 			{
 				if (strpos($serie, '-') !== FALSE)
 				{

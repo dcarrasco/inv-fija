@@ -349,7 +349,7 @@ class Reporte {
 			{
 				$data = strtoupper($tipo).' '.$nombre_subtotal;
 			}
-			else if (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
+			elseif (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
 			{
 				$data = $this->formato_reporte($arr_totales[$tipo][$nombre_campo], $arr_param_campo);
 			}

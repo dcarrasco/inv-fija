@@ -96,7 +96,7 @@ class Inventario_digitacion extends CI_Controller {
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 		}
-		else if ($this->input->post('formulario') === 'inventario')
+		elseif ($this->input->post('formulario') === 'inventario')
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');

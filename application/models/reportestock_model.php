@@ -774,12 +774,12 @@ class Reportestock_model extends CI_Model {
 		{
 			unset($arr_tipo_fechas['ANNO']);
 		}
-		else if ($tipo_fecha === 'TRIMESTRE')
+		elseif ($tipo_fecha === 'TRIMESTRE')
 		{
 			unset($arr_tipo_fechas['ANNO']);
 			unset($arr_tipo_fechas['TRIMESTRE']);
 		}
-		else if ($tipo_fecha === 'MES')
+		elseif ($tipo_fecha === 'MES')
 		{
 			unset($arr_tipo_fechas['ANNO']);
 			unset($arr_tipo_fechas['TRIMESTRE']);
@@ -900,7 +900,7 @@ class Reportestock_model extends CI_Model {
 			unset($arr_tipos_almacen['FIJA-TIPOALM']);
 			unset($arr_tipos_almacen['FIJA-ALM']);
 		}
-		else if ($tipo_alm === 'FIJA-TIPOALM')
+		elseif ($tipo_alm === 'FIJA-TIPOALM')
 		{
 			unset($arr_tipos_almacen['MOVIL-TIPOALM']);
 			unset($arr_tipos_almacen['MOVIL-ALM']);
@@ -953,12 +953,12 @@ class Reportestock_model extends CI_Model {
 		{
 			unset($arr_tipos_material['TIPO']);
 		}
-		else if ($tipo_mat === 'MARCA')
+		elseif ($tipo_mat === 'MARCA')
 		{
 			unset($arr_tipos_material['TIPO']);
 			unset($arr_tipos_material['MARCA']);
 		}
-		else if ($tipo_mat === 'MODELO')
+		elseif ($tipo_mat === 'MODELO')
 		{
 			unset($arr_tipos_material['TIPO']);
 			unset($arr_tipos_material['MARCA']);

@@ -583,7 +583,7 @@ class Orm_field {
 				'null'           => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === Orm_field::TIPO_CHAR)
+		elseif ($this->_tipo === Orm_field::TIPO_CHAR)
 		{
 			return array(
 				'type'       => 'VARCHAR',
@@ -592,7 +592,7 @@ class Orm_field {
 				'null'       => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === 'text')
+		elseif ($this->_tipo === 'text')
 		{
 			return array(
 				'type'       => 'TEXT',
@@ -601,7 +601,7 @@ class Orm_field {
 				'null'       => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === Orm_field::TIPO_INT)
+		elseif ($this->_tipo === Orm_field::TIPO_INT)
 		{
 			return array(
 				'type'       => 'INT',
@@ -610,14 +610,14 @@ class Orm_field {
 				'null'       => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === Orm_field::TIPO_BOOLEAN)
+		elseif ($this->_tipo === Orm_field::TIPO_BOOLEAN)
 		{
 			return array(
 				'type'       => 'BIT',
 				'null'       => $this->_es_obligatorio,
 			);
 		}
-		else if ($this->_tipo === Orm_field::TIPO_DATETIME)
+		elseif ($this->_tipo === Orm_field::TIPO_DATETIME)
 		{
 			$bd_attrib = array(
 				'type'       => 'DATETIME',

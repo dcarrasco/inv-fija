@@ -154,11 +154,11 @@ class Inventario_config extends Orm_controller {
 		{
 			$this->form_validation->set_rules($this->ubicacion_model->get_validation_edit($datos_hoja));
 		}
-		else if ($this->input->post('formulario') === 'agregar')
+		elseif ($this->input->post('formulario') === 'agregar')
 		{
 			$this->form_validation->set_rules($this->ubicacion_model->get_validation_add());
 		}
-		else if ($this->input->post('formulario') === 'borrar')
+		elseif ($this->input->post('formulario') === 'borrar')
 		{
 			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
 		}
@@ -217,7 +217,7 @@ class Inventario_config extends Orm_controller {
 						: ''
 				);
 			}
-			else if ($this->input->post('formulario') === 'agregar')
+			elseif ($this->input->post('formulario') === 'agregar')
 			{
 				$count = 0;
 
@@ -234,7 +234,7 @@ class Inventario_config extends Orm_controller {
 
 				set_message('Se agregaron ' . $count . ' ubicaciones correctamente');
 			}
-			else if ($this->input->post('formulario') === 'borrar')
+			elseif ($this->input->post('formulario') === 'borrar')
 			{
 				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
 				set_message('Registro (id=' . set_value('id_borrar') . ') borrado correctamente');

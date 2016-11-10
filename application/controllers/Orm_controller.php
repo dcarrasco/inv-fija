@@ -128,7 +128,7 @@ class Orm_controller extends CI_Controller {
 				$modelo->grabar();
 				set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
 			}
-			else if ($this->input->post('borrar'))
+			elseif ($this->input->post('borrar'))
 			{
 				$modelo->borrar();
 				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));

@@ -86,12 +86,12 @@ class Analisis_series_model extends CI_Model {
 				$arr_series[$llave] = (strlen($serie_temp) === '19') ? substr($serie_temp, 1, 18) : $serie_temp;
 			}
 			// Modificaciones de formato SCL
-			else if ($tipo === 'trafico')
+			elseif ($tipo === 'trafico')
 			{
 				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
 				$arr_series[$llave] = substr($serie_temp, 0, 14) . '0';
 			}
-			else if ($tipo === 'SCL')
+			elseif ($tipo === 'SCL')
 			{
 				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
 				$arr_series[$llave] = $serie_temp;

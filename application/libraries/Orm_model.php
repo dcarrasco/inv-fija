@@ -781,9 +781,7 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		if (array_key_exists('filtro', $param))
-		{
-			if ($param['filtro'] !== '_' AND $param['filtro'] !== '')
+		if (array_key_exists('filtro', $param) AND $param['filtro'] !== '')
 			{
 				$this->_put_filtro($param['filtro']);
 			}
@@ -818,7 +816,7 @@ class Orm_model implements IteratorAggregate {
 
 			return $registro;
 		}
-		else if ($tipo === 'all')
+		elseif ($tipo === 'all')
 		{
 			$results_collection = new Collection();
 
@@ -845,7 +843,7 @@ class Orm_model implements IteratorAggregate {
 
 			return $results_collection;
 		}
-		else if ($tipo === 'count')
+		elseif ($tipo === 'count')
 		{
 			return $this->db
 				->select('count(*) as cant')
@@ -853,7 +851,7 @@ class Orm_model implements IteratorAggregate {
 				->row()
 				->cant;
 		}
-		else if ($tipo === 'list')
+		elseif ($tipo === 'list')
 		{
 			$arr_list = array();
 
@@ -984,7 +982,7 @@ class Orm_model implements IteratorAggregate {
 				$this->_model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->_model_got_relations = TRUE;
 			}
-			else if ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
+			elseif ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
 				// recupera las propiedades de la relacion
 				$arr_props_relation = $obj_campo->get_relation();
@@ -1134,7 +1132,7 @@ class Orm_model implements IteratorAggregate {
 					{
 						$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 					}
-					else if ($tipo_campo === Orm_field::TIPO_DATETIME)
+					elseif ($tipo_campo === Orm_field::TIPO_DATETIME)
 					{
 						if ($arr_data[$nombre_campo] !== '')
 						{
