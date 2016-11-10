@@ -782,9 +782,8 @@ class Orm_model implements IteratorAggregate {
 		}
 
 		if (array_key_exists('filtro', $param) AND $param['filtro'] !== '')
-			{
-				$this->_put_filtro($param['filtro']);
-			}
+		{
+			$this->_put_filtro($param['filtro']);
 		}
 
 		if (array_key_exists('limit', $param))
