@@ -76,6 +76,8 @@ class Analisis_series_model extends CI_Model {
 		$series = str_replace(' ', '', $series);
 		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
 
+		$arr_series_celular = array();
+
 		foreach ($arr_series as $llave => $valor)
 		{
 			$serie_temp = $valor;
@@ -96,7 +98,14 @@ class Analisis_series_model extends CI_Model {
 				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
 				$arr_series[$llave] = $serie_temp;
 			}
+			elseif ($tipo === 'celular')
+			{
+				$arr_series[$llave] = (strlen($valor) === '9') ? substr($valor, 1, 8) : $valor;
+				$arr_series_celular[$llave] = '9'.$arr_series[$llave];
+			}
 		}
+
+		$arr_series = ($tipo === 'celular') ? array_merge($arr_series, $arr_series_celular) : $arr_series;
 
 		return $arr_series;
 	}
@@ -415,57 +424,10 @@ class Analisis_series_model extends CI_Model {
 	 *
 	 * @param  string $series Listado de series a consultar
 	 * @param  array  $meses  Arreglo de meses a consultar
-	 * @return array          Arreglo con resultado
-	 */
-	public function get_trafico_mes($series = '', $meses = array())
-	{
-		$result = array();
-		$arr_series = $this->_series_list_to_array($series, 'SCL');
-
-		foreach ($arr_series as $serie)
-		{
-			$serie_orig = $serie;
-			$serie_cero = substr($serie, 0, 14) . '0';
-
-			foreach($meses as $mes)
-			{
-				$mes_ano = substr($mes, 0, 4);
-				$mes_mes = substr($mes, 4, 2);
-
-				$this->db->select('t.*, a.*, c.*, b.*')
-					->select('convert(varchar(20), a.fec_alta, 103) as fecha_alta', FALSE)
-					->select('convert(varchar(20), a.fec_baja, 103) as fecha_baja', FALSE)
-					->from($this->config->item('bd_trafico_mes') . ' t')
-					->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
-					->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
-					->join($this->config->item('bd_trafico_causabaja') . ' b', 'a.cod_causabaja = b.cod_causabaja', 'left')
-					//->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'imei'=> $serie, 'cod_situacion<>' => 'BAA'));
-					->where(array('ano' => $mes_ano, 'mes' => $mes_mes, 'cod_situacion<>' => 'BAA'))
-					->where_in('imei', array($serie_orig, $serie_cero))
-					->order_by('imei, fec_alta');
-
-				foreach($this->db->get()->result_array() as $registro)
-				{
-					$result[$serie][$registro['celular']][$mes] = $registro;
-				}
-			}
-		}
-
-		return $result;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera el trafico de una serie (imei/celular) para un conjunto de meses
-	 *
-	 * @param  string $series Listado de series a consultar
-	 * @param  array  $meses  Arreglo de meses a consultar
 	 * @param  string $tipo   imei o celular a consultar
 	 * @return array          Arreglo con resultado
 	 */
-	public function get_trafico_mes2($series = '', $str_meses = '', $tipo = 'imei')
+	public function get_trafico_mes($series = '', $str_meses = '', $tipo = 'imei')
 	{
 		$result = array();
 		$arr_series = array();
@@ -533,6 +495,8 @@ class Analisis_series_model extends CI_Model {
 	 */
 	private function _get_datos_comerciales($imei = '', $celular = '')
 	{
+		$celular = (strlen($celular) === 9) ? substr($celular, 1, 8) : $celular;
+
 		$maxfecha = $this->db
 			->select('max(convert(varchar(20), fec_alta, 112)) as fec_alta', FALSE)
 			->where('num_celular', $celular)

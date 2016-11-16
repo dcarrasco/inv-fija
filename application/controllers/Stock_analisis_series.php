@@ -148,7 +148,7 @@ class Stock_analisis_series extends CI_Controller {
 
 		$datos = array(
 				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
-				'datos_trafico' => $this->analisis_series_model->get_trafico_mes2($this->input->post('series'), $this->input->post('meses'), $tipo),
+				'datos_trafico' => $this->analisis_series_model->get_trafico_mes($this->input->post('series'), $this->input->post('meses'), $tipo),
 			);
 
 		app_render_view('stock_sap/analisis_series_trafico_view', $datos);
@@ -176,7 +176,7 @@ class Stock_analisis_series extends CI_Controller {
 
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->analisis_series_model->get_trafico_mes2($serie, $meses, $tipo)));
+			->set_output(json_encode($this->analisis_series_model->get_trafico_mes($serie, $meses, $tipo)));
 	}
 
 
