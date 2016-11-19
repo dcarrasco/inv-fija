@@ -336,11 +336,15 @@ class Detalle_inventario extends ORM_Model {
 
 			'per_page'    => $this->per_page_ajustes,
 			'total_rows'  => $total_rows,
-			'base_url'    => site_url($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'),
+			'base_url'    => site_url("{$this->router->class}/ajustes"),
 			'first_link'  => 'Primero',
 			'last_link'   => 'Ultimo ('.(int)($total_rows / $this->per_page_ajustes).')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
+
+			'reuse_query_string'   => TRUE,
+			'page_query_string'    => TRUE,
+			'query_string_segment' => 'page',
 		);
 
 		$this->pagination->initialize($cfg_pagination);

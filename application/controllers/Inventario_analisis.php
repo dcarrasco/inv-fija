@@ -127,18 +127,18 @@ class Inventario_analisis extends CI_Controller {
 	/**
 	 * Despliega la página de ajustes de inventarios
 	 *
-	 * @param  integer $ocultar_regularizadas Oculta los regustros que están modificados
-	 * @param  integer $pagina                Página de ajustes a desplegar
 	 * @return void
 	 */
-	public function ajustes($ocultar_regularizadas = 0, $pagina = 0)
+	public function ajustes()
 	{
 		$this->_get_datos_inventario();
+		$pagina = $this->input->get('page');
+		$ocultar_reg = $this->input->get('ocultar_reg') ? 1 : 0;
 
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
-		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_regularizadas, $pagina);
-		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_regularizadas, $pagina);
+		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
+		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
 		if ($this->input->post('formulario') === 'ajustes')
 		{
@@ -148,12 +148,13 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'menu_modulo'           => array('menu' => $this->_arr_menu, 'mod_selected' => 'ajustes'),
-				'inventario'            => $this->_id_inventario.' - '.$this->_nombre_inventario,
-				'detalle_ajustes'       => $detalles,
-				'ocultar_regularizadas' => $ocultar_regularizadas,
-				'pag'                   => $pagina,
-				'links_paginas'         => $links_paginas,
+				'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'ajustes'),
+				'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
+				'detalle_ajustes' => $detalles,
+				'ocultar_reg'     => $ocultar_reg,
+				'pag'             => $pagina,
+				'links_paginas'   => $links_paginas,
+				'url_form'        => site_url("{$this->router->class}/ajustes?".http_build_query($this->input->get())),
 			);
 
 			app_render_view('inventario/ajustes', $data);
@@ -167,7 +168,7 @@ class Inventario_analisis extends CI_Controller {
 					: '');
 			}
 
-			redirect($this->router->class . '/ajustes/' . $ocultar_regularizadas . '/' . $pagina . '/' . time());
+			redirect("{$this->router->class}/ajustes?".http_build_query($this->input->get()));
 		}
 
 	}

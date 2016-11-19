@@ -5,15 +5,15 @@
 	<div class="col-md-6">
 		<div class="pull-right">
 			<?php echo anchor(
-				$this->router->class.'/ajustes/'.(($ocultar_regularizadas === 0) ? '1' : '0').'/'.$pag.'/'.time(),
-				($ocultar_regularizadas === 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
+				"{$this->router->class}/ajustes?ocultar_reg=".(($ocultar_reg === 0) ? '1' : '0').'&page='.$pag,
+				($ocultar_reg === 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
 			); ?>
 		</div>
 	</div>
 </div>
 
 <div>
-	<?php echo form_open($this->router->class.'/ajustes/'.$ocultar_regularizadas.'/'.$pag.'/'.time(), 'id="frm_inventario"'); ?>
+	<?php echo form_open($url_form, 'id="frm_inventario"'); ?>
 	<?php echo form_hidden('formulario','ajustes'); ?>
 
 	<table class="table table-hover table-condensed reporte table-fixed-header">
