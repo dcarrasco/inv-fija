@@ -184,6 +184,8 @@ class Inventario_analisis extends CI_Controller {
 	{
 		$this->_get_datos_inventario();
 
+		$upload_path       = '../upload/';
+		$upload_file       = 'sube_stock.txt';
 		$upload_error      = '';
 		$script_carga      = '';
 		$regs_ok           = 0;
@@ -195,14 +197,14 @@ class Inventario_analisis extends CI_Controller {
 		{
 			if ($this->input->post('upload_password') === 'logistica2012')
 			{
-				$upload_config = array(
-					'upload_path'   => '../upload/',
+				unlink($upload_path.$upload_file);
+				$this->load->library('upload', array(
+					'upload_path'   => $upload_path,
 					'allowed_types' => 'txt|cvs',
 					'max_size'      => '2000',
-					'file_name'     => 'sube_stock.txt',
+					'file_name'     => $upload_file,
 					'overwrite'     => TRUE,
-				);
-				$this->load->library('upload', $upload_config);
+				));
 
 				if ( ! $this->upload->do_upload('upload_file'))
 				{
