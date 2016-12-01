@@ -1,4 +1,35 @@
 <div>
+	<?php if ( ! $reporte): ?>
+	<div class="col-md-10 col-md-offset-1 well">
+		<?php echo form_open('','class="form-horizontal"'); ?>
+		<fieldset>
+
+			<legend>{_toa_consumo_peticion_legend_}</legend>
+
+			{validation_errors}
+
+			<div class="form-group <?php echo form_has_error('pag_desde'); ?>">
+				<label class="control-label col-sm-4">{_toa_consumo_peticion_label_}</label>
+				<div class="col-sm-8">
+					<?php echo form_input('peticion', set_value('peticion'), 'class="form-control"'); ?>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-4">
+				</label>
+				<div class="col-sm-8">
+					<button name="submit" type="submit" class="btn btn-primary pull-right" id="btn_buscar">
+						<span class="fa fa-search"></span>
+						{_toa_consumo_peticion_search_button_}
+					</button>
+				</div>
+			</div>
+
+		</fieldset>
+		<?php echo form_close(); ?>
+	</div>
+	<?php else: ?>
 	<?php $nlinea = 0; $sum_cant = 0; $sum_monto = 0; ?>
 	<?php foreach ($reporte as $linea_detalle): ?>
 	<?php if ($nlinea === 0): ?>
@@ -197,6 +228,7 @@
 			</tr>
 		</tfoot>
 	</table>
+	<?php endif; ?>
 </div>
 
 <?php echo form_open(site_url('stock_analisis_series'), 'id=id_detalle_serie'); ?>

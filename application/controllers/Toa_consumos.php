@@ -139,6 +139,7 @@ class Toa_consumos extends CI_Controller {
 			'map_css' => 'height: 350px',
 		));
 
+		$peticion = ( ! $peticion) ? set_value('peticion') : $peticion;
 		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
 
 		if (count($arr_peticiones))
@@ -149,6 +150,8 @@ class Toa_consumos extends CI_Controller {
 				'title' => $arr_peticiones[0]['cname'],
 			));
 		}
+
+		set_message(($peticion AND ! $arr_peticiones) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
 
 		$datos = array(
 			'reporte'     => $arr_peticiones,
