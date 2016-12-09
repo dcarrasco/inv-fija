@@ -331,8 +331,6 @@
 							<th></th>
 							<th></th>
 							<th></th>
-							<th></th>
-							<th></th>
 							<th class="text-center"><?php echo fmt_cantidad($sum_cant) ?></th>
 						</tr>
 					</tfoot>

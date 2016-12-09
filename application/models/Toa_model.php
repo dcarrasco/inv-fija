@@ -961,16 +961,18 @@ class Toa_model extends CI_Model {
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->order_by('a.codigo_movimiento, a.material')
+			->order_by('a.material, a.codigo_movimiento')
 			->get()->result_array();
 
 		$arr_materiales_toa = $this->db
 			->where('aid', $arr_peticion_toa['aid'])
+			->order_by('XI_SAP_CODE')
 			->get($this->config->item('bd_materiales_peticiones_toa'))
 			->result_array();
 
 		$arr_materiales_vpi = $this->db
 			->where('appt_number', $arr_peticion_toa['appt_number'])
+			->order_by('ps_id')
 			->get($this->config->item('bd_peticiones_vpi'))
 			->result_array();
 
