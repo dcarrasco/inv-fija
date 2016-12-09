@@ -924,7 +924,14 @@ class Toa_model extends CI_Model {
 			return array();
 		}
 
-		return $this->db
+		$arr_peticion_toa = $this->db
+			->from($this->config->item('bd_peticiones_toa').' d')
+			->join($this->config->item('bd_empresas_toa').' c', 'd.contractor_company collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+			->where('appt_number', $peticion)
+			->where('astatus', 'complete')
+			->get()->row_array();
+
+		$arr_materiales_sap = $this->db
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.referencia')
 			->select('c.empresa')
@@ -948,16 +955,31 @@ class Toa_model extends CI_Model {
 			->select('a.vale_acomp')
 			->select('a.carta_porte')
 			->select('a.usuario')
-			->select('d.*')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->order_by('a.codigo_movimiento, a.material')
 			->get()->result_array();
+
+		$arr_materiales_toa = $this->db
+			->where('aid', $arr_peticion_toa['aid'])
+			->get($this->config->item('bd_materiales_peticiones_toa'))
+			->result_array();
+
+		$arr_materiales_vpi = $this->db
+			->where('appt_number', $arr_peticion_toa['appt_number'])
+			->get($this->config->item('bd_peticiones_vpi'))
+			->result_array();
+
+		return array(
+			'arr_peticion_toa'   => $arr_peticion_toa,
+			'arr_materiales_sap' => $arr_materiales_sap,
+			'arr_materiales_toa' => $arr_materiales_toa,
+			'arr_materiales_vpi' => $arr_materiales_vpi,
+		);
 	}
 
 

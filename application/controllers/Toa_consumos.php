@@ -142,12 +142,12 @@ class Toa_consumos extends CI_Controller {
 		$peticion = ( ! $peticion) ? set_value('peticion') : $peticion;
 		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
 
-		if (count($arr_peticiones))
+		if (count($arr_peticiones) AND count($arr_peticiones['arr_peticion_toa']))
 		{
 			$this->googlemaps->add_marker(array(
-				'lat'   => $arr_peticiones[0]['acoord_y'],
-				'lng'   => $arr_peticiones[0]['acoord_x'],
-				'title' => $arr_peticiones[0]['cname'],
+				'lat'   => $arr_peticiones['arr_peticion_toa']['acoord_y'],
+				'lng'   => $arr_peticiones['arr_peticion_toa']['acoord_x'],
+				'title' => $arr_peticiones['arr_peticion_toa']['cname'],
 			));
 		}
 
