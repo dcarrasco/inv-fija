@@ -1,4 +1,4 @@
-<?php echo form_open('','id="frm_ppal"'); ?>
+<?= form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
@@ -13,14 +13,14 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label class="radio-inline">
-							<?php echo form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
+							<?= form_radio('set_serie', 'serie_deco', set_radio('set_serie','serie_deco', TRUE));?>
 							{_stock_gestor_radio_deco_}
 						</label>
 						<label class="radio-inline">
-							<?php echo form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
+							<?= form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
 							{_stock_gestor_radio_cliente_}
 						</label>
-						<?php echo form_textarea(array(
+						<?= form_textarea(array(
 								'id' => 'series',
 								'name' => 'series',
 								'rows' => '10',
@@ -37,18 +37,18 @@
 
 						<div>
 							<label class="radio-inline">
-								<?php echo form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
+								<?= form_radio('tipo_reporte', 'log', set_radio('tipo_reporte', 'log', TRUE)); ?>
 								{_stock_gestor_radio_log_complete_}
 							</label>
 							<label class="radio-inline">
-								<?php echo form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
+								<?= form_radio('tipo_reporte', 'ultimo', set_radio('tipo_reporte', 'ultimo')); ?>
 								{_stock_gestor_radio_log_ultdeco_}
 							</label>
 						</div>
 
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
+								<?= form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
 								{_stock_gestor_check_filter_last_mov_}
 							</label>
 						</div>
@@ -57,11 +57,11 @@
 
 						<div>
 							<label class="checkbox-inline">
-								<?php echo form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+								<?= form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
 								{_stock_gestor_check_alta_}
 							</label>
 							<label class="checkbox-inline">
-								<?php echo form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+								<?= form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
 								{_stock_gestor_check_baja_}
 							</label>
 						</div>
@@ -85,7 +85,7 @@
 		</div>
 	</div>
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 
 <div class="panel panel-default">
@@ -113,16 +113,16 @@
 				</tr>
 			<?php foreach($log_serie as $reg_log): ?>
 				<tr>
-					<td><?php echo $reg_log['id_log_deco_tarjeta'] ?></td>
-					<td><?php echo $reg_log['fecha_log'] ?></td>
-					<td><span class="serie"><?php echo $reg_log['serie_deco'] ?></span></td>
-					<td><?php echo $reg_log['serie_tarjeta'] ?></td>
-					<td><?php echo $reg_log['peticion'] ?></td>
-					<td><?php echo $reg_log['estado'] ?></td>
-					<td><?php echo $reg_log['tipo_operacion_cas'] ?></td>
-					<td><?php echo $reg_log['telefono']?></td>
-					<td><?php echo $reg_log['rut'] ?></td>
-					<td><?php echo $reg_log['nombre'] ?></td>
+					<td><?= $reg_log['id_log_deco_tarjeta'] ?></td>
+					<td><?= $reg_log['fecha_log'] ?></td>
+					<td><span class="serie"><?= $reg_log['serie_deco'] ?></span></td>
+					<td><?= $reg_log['serie_tarjeta'] ?></td>
+					<td><?= $reg_log['peticion'] ?></td>
+					<td><?= $reg_log['estado'] ?></td>
+					<td><?= $reg_log['tipo_operacion_cas'] ?></td>
+					<td><?= $reg_log['telefono']?></td>
+					<td><?= $reg_log['rut'] ?></td>
+					<td><?= $reg_log['nombre'] ?></td>
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>
@@ -131,10 +131,10 @@
 	</div>
 </div>
 
-<?php echo form_open($this->router->class . '/historia', array('id' => 'frmHistoria')); ?>
-<?php echo form_hidden('series'); ?>
-<?php echo form_hidden('show_mov', 'show'); ?>
-<?php echo form_close(); ?>
+<?= form_open($this->router->class . '/historia', array('id' => 'frmHistoria')); ?>
+<?= form_hidden('series'); ?>
+<?= form_hidden('show_mov', 'show'); ?>
+<?= form_close(); ?>
 
 <script type="text/javascript">
 	$(document).ready(function () {

@@ -1,5 +1,5 @@
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<?= form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -18,24 +18,24 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-3 form_group <?php echo form_error('empresa') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_error('empresa') ? 'has-error' : '' ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
-						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
+						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_error('mes') ? 'has-error' : '' ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
-						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
+						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-3 form_group <?php echo form_error('filtro_trx') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_error('filtro_trx') ? 'has-error' : '' ?>">
 						<label class="control-label">{_controles_tecnicos_filtro_trx_}</label>
-						<?php echo form_dropdown('filtro_trx', $combo_filtro_trx, set_value('filtro_trx'), 'class="form-control"'); ?>
+						<?= form_dropdown('filtro_trx', $combo_filtro_trx, set_value('filtro_trx'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?php echo form_error('dato') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_error('dato') ? 'has-error' : '' ?>">
 						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
-						<?php echo form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
+						<?= form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-2">
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <div class="content-module-main">
@@ -69,8 +69,8 @@
 				<th>unidad</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
-						<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
-						<?php echo $dia_act; ?>
+						<?= $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+						<?= $dia_act; ?>
 						<?php $tot_col[$dia_act] = 0; ?>
 					</th>
 				<?php endforeach; ?>
@@ -83,20 +83,20 @@
 		<?php endif; ?>
 
 		<tr>
-			<td class="text-muted"><?php echo $num_lin + 1; ?></td>
-			<td><?php echo $datos['tip_material'] ?></td>
-			<td style="white-space: nowrap;"><?php echo $datos['material']; ?> - <?php echo $datos['descripcion']; ?></td>
-			<td><?php echo $datos['unidad'] ?></td>
+			<td class="text-muted"><?= $num_lin + 1; ?></td>
+			<td><?= $datos['tip_material'] ?></td>
+			<td style="white-space: nowrap;"><?= $datos['material']; ?> - <?= $datos['descripcion']; ?></td>
+			<td><?= $datos['unidad'] ?></td>
 			<?php $tot_lin = 0; ?>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 				<?php if ($cant_act): ?>
-					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$datos['material'], fmt_cantidad($cant_act)); ?></td>
+					<td class="text-center info"><?= anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$anomes.$dia_act.'/'.$datos['material'], fmt_cantidad($cant_act)); ?></td>
 				<?php else: ?>
 					<td></td>
 				<?php endif ?>
 				<?php $tot_lin += $cant_act; $tot_col[$dia_act] += $cant_act; ?>
 			<?php endforeach; ?>
-			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+			<th class="text-center"><?= fmt_cantidad($tot_lin); ?></th>
 		</tr>
 		<?php $num_lin += 1; ?>
 	<?php endforeach; ?>
@@ -110,9 +110,9 @@
 			<th></th>
 			<?php $tot_lin = 0; ?>
 			<?php foreach ($tot_col as $dia_act => $total): ?>
-				<th class="text-center"><?php echo fmt_cantidad($total); ?><?php $tot_lin += $total ?></th>
+				<th class="text-center"><?= fmt_cantidad($total); ?><?php $tot_lin += $total ?></th>
 			<?php endforeach; ?>
-			<th class="text-center"><?php echo fmt_cantidad($tot_lin); ?></th>
+			<th class="text-center"><?= fmt_cantidad($tot_lin); ?></th>
 		</tr>
 	</tfoot>
 </table>

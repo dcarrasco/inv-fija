@@ -1,4 +1,4 @@
-<?php echo form_open(); ?>
+<?= form_open(); ?>
 <div class="panel-group hidden-print" id="accordion">
 	<div class="panel panel-default">
 
@@ -20,21 +20,21 @@
 
 				{validation_errors}
 
-				<div class="col-md-4 form-group <?php echo form_error('fecha[]') ? 'has-error' : ''; ?>">
+				<div class="col-md-4 form-group <?= form_error('fecha[]') ? 'has-error' : ''; ?>">
 					<label class="control-label">{_stock_sap_label_dates_}</label>
 					<div class="radio">
 						<label>
-							<?php echo form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
+							<?= form_radio('sel_fechas', 'ultimodia', set_radio('sel_fechas','ultimodia', TRUE)); ?>
 							{_stock_sap_radio_date1_}
 						</label>
 					</div>
 					<div class="radio">
 						<label>
-							<?php echo form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
+							<?= form_radio('sel_fechas', 'todas', set_radio('sel_fechas','todas')); ?>
 							{_stock_sap_radio_date2_}
 						</label>
 					</div>
-					<?php echo form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
+					<?= form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-4">
@@ -42,19 +42,19 @@
 						<label class="control-label">{_stock_sap_label_mats_}</label>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
+								<?= form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
 								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('material', 'material', set_value('material')); ?>
+								<?= form_checkbox('material', 'material', set_value('material')); ?>
 								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('lote', 'lote', set_value('lote')); ?>
+								<?= form_checkbox('lote', 'lote', set_value('lote')); ?>
 								{_stock_sap_check_lotes_}
 							</label>
 						</div>
@@ -64,13 +64,13 @@
 						<label class="control-label">{_stock_sap_label_mostrar_}</label>
 						<div class="radio">
 							<label>
-								<?php echo form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
+								<?= form_radio('mostrar_cant_monto', 'cantidad', TRUE); ?>
 								{_stock_sap_radio_cant_}
 							</label>
 						</div>
 						<div class="radio">
 							<label>
-								<?php echo form_radio('mostrar_cant_monto', 'monto'); ?>
+								<?= form_radio('mostrar_cant_monto', 'monto'); ?>
 								{_stock_sap_radio_monto_}
 							</label>
 						</div>
@@ -98,6 +98,6 @@
 
 	</div> <!-- panel panel-default -->
 </div> <!-- panel-group -->
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 <script type="text/javascript" src="{base_url}js/ver_stock_form.js"></script>

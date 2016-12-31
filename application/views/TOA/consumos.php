@@ -1,6 +1,6 @@
 <div class="accordion">
-	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
-	<?php echo form_hidden('sort', set_value('sort','')); ?>
+	<?= form_open('','method="get" id="frm_param" class="form-inline"'); ?>
+	<?= form_hidden('sort', set_value('sort','')); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -19,15 +19,15 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-4 form_group <?php echo form_error('sel_reporte') ? 'has-error' : ''; ?>">
+					<div class="col-md-4 form_group <?= form_error('sel_reporte') ? 'has-error' : ''; ?>">
 						<label class="control-label">{_consumo_reporte_}</label>
-						<?php echo form_dropdown('sel_reporte', $combo_reportes, $this->input->get('sel_reporte'), 'class="form-control"'); ?>
+						<?= form_dropdown('sel_reporte', $combo_reportes, $this->input->get('sel_reporte'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-6 form_group <?php echo (form_error('fecha_desde') OR form_error('fecha_hasta')) ? 'has-error' : ''; ?>">
+					<div class="col-md-6 form_group <?= (form_error('fecha_desde') OR form_error('fecha_hasta')) ? 'has-error' : ''; ?>">
 						<label class="col-md-4 control-label">{_consumo_fechas_}</label>
 						<div class="col-md-8">
-							<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+							<?= form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -44,7 +44,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <div class="content-module-main">

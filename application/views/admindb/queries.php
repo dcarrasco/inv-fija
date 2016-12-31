@@ -22,20 +22,20 @@
 		<tbody>
 		<?php foreach($queries_data as $query): ?>
 			<tr>
-				<td><?php echo $query['SPID']; ?></td>
-				<td><?php echo $query['Status']; ?></td>
-				<td><?php echo $query['Login']; ?></td>
-				<td><?php echo $query['HostName']; ?></td>
-				<td><?php echo $query['DBName']; ?></td>
-				<td><?php echo $query['Command']; ?></td>
-				<td><?php echo $query['ProgramName']; ?></td>
-				<td><?php echo $query['start_time']; ?></td>
-				<td><?php echo fmt_hora($query['total_elapsed_time']/1000); ?></td>
-				<td><?php echo fmt_hora($query['cpu_time']/1000); ?></td>
-				<td><?php echo fmt_cantidad($query['DiskIO']); ?></td>
-				<td><?php echo fmt_cantidad($query['reads']); ?></td>
-				<td><?php echo fmt_cantidad($query['writes']); ?></td>
-				<td><?php echo $query['text']; ?></td>
+				<td><?= $query['SPID']; ?></td>
+				<td><?= $query['Status']; ?></td>
+				<td><?= $query['Login']; ?></td>
+				<td><?= $query['HostName']; ?></td>
+				<td><?= $query['DBName']; ?></td>
+				<td><?= $query['Command']; ?></td>
+				<td><?= $query['ProgramName']; ?></td>
+				<td><?= $query['start_time']; ?></td>
+				<td><?= fmt_hora($query['total_elapsed_time']/1000); ?></td>
+				<td><?= fmt_hora($query['cpu_time']/1000); ?></td>
+				<td><?= fmt_cantidad($query['DiskIO']); ?></td>
+				<td><?= fmt_cantidad($query['reads']); ?></td>
+				<td><?= fmt_cantidad($query['writes']); ?></td>
+				<td><?= $query['text']; ?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>

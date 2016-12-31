@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
-		<?php echo form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
-		<?php echo form_hidden('formulario','upload'); ?>
+		<?= form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
+		<?= form_hidden('formulario','upload'); ?>
 		<fieldset>
 
 			<legend>{_inventario_upload_label_fieldset_}</legend>
@@ -27,14 +27,14 @@
 							{_inventario_upload_warning_line2_} "{inventario_nombre}".
 						</p>
 					</div>
-					<?php echo form_upload('upload_file', '', 'class="form-control" accept=".txt,.csv"'); ?>
+					<?= form_upload('upload_file', '', 'class="form-control" accept=".txt,.csv"'); ?>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label class="control-label col-sm-4">{_inventario_upload_label_password_}</label>
 				<div class="col-sm-8">
-					<?php echo form_password('upload_password', '', 'class="form-control"'); ?>
+					<?= form_password('upload_password', '', 'class="form-control"'); ?>
 				</div>
 			</div>
 			<?php endif; ?>
@@ -89,7 +89,7 @@
 			</div>
 
 		</fieldset>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 
 	</div>
 </div>

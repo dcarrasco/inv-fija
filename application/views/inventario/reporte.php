@@ -2,25 +2,25 @@
 
 	{validation_errors}
 
-	<?php echo form_open('','id="frm_param" class="form-inline"'); ?>
-	<?php echo form_hidden('sort', set_value('sort','')); ?>
+	<?= form_open('','id="frm_param" class="form-inline"'); ?>
+	<?= form_hidden('sort', set_value('sort','')); ?>
 
 	<div class="form-group col-md-5">
 		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>
-		<?php echo form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
+		<?= form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 	</div>
 
 	<div class="form-group col-md-5">
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
+			<?= form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
 		</label>
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('incl_ajustes', '1', set_value('incl_ajustes'), 'id="incl_ajustes"'); ?>
+			<?= form_checkbox('incl_ajustes', '1', set_value('incl_ajustes'), 'id="incl_ajustes"'); ?>
 			{_inventario_report_check_incluir_ajustes_}
 		</label>
 		<label class="checkbox-inline">
-			<?php echo form_checkbox('incl_familias', '1', set_value('incl_familias'), 'id="incl_familias"'); ?>
+			<?= form_checkbox('incl_familias', '1', set_value('incl_familias'), 'id="incl_familias"'); ?>
 			{_inventario_report_check_incluir_familias_}
 		</label>
 	</div>
@@ -32,11 +32,11 @@
 					<span class="fa fa-search"></span>
 
 				</span>
-				<?php echo form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
+				<?= form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <div>

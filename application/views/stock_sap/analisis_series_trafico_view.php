@@ -7,11 +7,11 @@
 		</div>
 		<div class="panel-collapse collapse in" id="form_panel">
 			<div class="panel-body">
-				<?php echo form_open(''); ?>
+				<?= form_open(''); ?>
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>Series</label>
-						<?php echo form_textarea(array(
+						<?= form_textarea(array(
 								'id' => 'series',
 								'name' => 'series',
 								'rows' => '10',
@@ -20,11 +20,11 @@
 								'class' => 'form-control',
 							)); ?>
 						<label class="radio-inline">
-							<?php echo form_radio('sel_tipo', 'imei', set_radio('sel_tipo', 'imei', TRUE)); ?>
+							<?= form_radio('sel_tipo', 'imei', set_radio('sel_tipo', 'imei', TRUE)); ?>
 							IMEI
 						</label>
 						<label class="radio-inline">
-							<?php echo form_radio('sel_tipo', 'celular', set_radio('sel_tipo', 'celular')); ?>
+							<?= form_radio('sel_tipo', 'celular', set_radio('sel_tipo', 'celular')); ?>
 							Celular
 						</label>
 					</div>
@@ -33,7 +33,7 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>Meses</label>
-						<?php echo form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
+						<?= form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -43,13 +43,13 @@
 							<span class="fa fa-search"></span>
 							Consultar
 						</button>
-						<a href="<?php echo $this->router->class; ?>" class="btn btn-default">
+						<a href="<?= $this->router->class; ?>" class="btn btn-default">
 							<span class="fa fa-chevron-left"></span>
 							Volver
 						</a>
 					</div>
 				</div>
-				<?php echo form_close(); ?>
+				<?= form_close(); ?>
 			</div>
 		</div>
 	</div>
@@ -122,7 +122,7 @@
 					var serie = arr_series[i];
 					if(serie != '')
 					{
-						$.getJSON('{base_url}<?php echo $this->router->class; ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
+						$.getJSON('{base_url}<?= $this->router->class; ?>/ajax_trafico_mes/' + serie + '/' + str_meses + '/' + str_tipo, function(data) {
 							for (var i=0; i<data.length; i++)
 							{
 								var str_append = '';

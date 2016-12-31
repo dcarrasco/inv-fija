@@ -72,7 +72,7 @@
 
 <footer class="footer">
 	<div class="text-center text-muted">
-		<small><i class="fa fa-creative-commons"></i> 2013 &ndash; <?php echo date('Y'); ?></small>
+		<small><i class="fa fa-creative-commons"></i> 2013 &ndash; <?= date('Y'); ?></small>
 	</div>
 </footer>
 

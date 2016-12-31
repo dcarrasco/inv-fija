@@ -8,10 +8,10 @@
 
 	</div> <!-- fin content-module-footer -->
 
-<?php echo form_open('stock_analisis_series/historia'); ?>
-<?php echo form_hidden('series'); ?>
-<?php echo form_hidden('show_mov', 'show'); ?>
-<?php echo form_close(); ?>
+<?= form_open('stock_analisis_series/historia'); ?>
+<?= form_hidden('series'); ?>
+<?= form_hidden('show_mov', 'show'); ?>
+<?= form_close(); ?>
 
 <script>
 $(document).ready(function () {

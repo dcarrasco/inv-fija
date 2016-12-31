@@ -1,11 +1,11 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
-		<?php echo form_open('','class="form-horizontal"'); ?>
-		<?php echo form_hidden('actualizar', 'actualizar'); ?>
+		<?= form_open('','class="form-horizontal"'); ?>
+		<?= form_hidden('actualizar', 'actualizar'); ?>
 		<?php if ($update_status === ' disabled'): ?>
 		<div class="form-group">
 			<div class="col-sm-12 text-center">
-				<?php echo sprintf('{_inventario_act_precios_msg_}', fmt_cantidad($cant_actualizada)); ?>
+				<?= sprintf('{_inventario_act_precios_msg_}', fmt_cantidad($cant_actualizada)); ?>
 			</div>
 		</div>
 		<?php endif; ?>
@@ -17,6 +17,6 @@
 				</button>
 			</div>
 		</div>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 	</div>
 </div>

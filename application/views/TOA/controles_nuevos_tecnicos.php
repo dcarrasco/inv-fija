@@ -15,29 +15,29 @@
 				<tbody>
 				<?php foreach ($nuevos_tecnicos as $tecnico): ?>
 					<tr>
-						<td><?php echo $tecnico['id_tecnico']; ?></td>
-						<td><?php echo $tecnico['tecnico']; ?></td>
-						<td><?php echo $tecnico['rut']; ?></td>
-						<td><?php echo $tecnico['id_empresa']; ?></td>
+						<td><?= $tecnico['id_tecnico']; ?></td>
+						<td><?= $tecnico['tecnico']; ?></td>
+						<td><?= $tecnico['rut']; ?></td>
+						<td><?= $tecnico['id_empresa']; ?></td>
 					</tr>
 				<?php endforeach ?>
 				</tbody>
 			</table>
 
 			<?php if (empty($msg_agregar)): ?>
-				<?php echo form_open('','class="form-horizontal"'); ?>
-				<?php echo form_hidden('agregar', 'agregar'); ?>
+				<?= form_open('','class="form-horizontal"'); ?>
+				<?= form_hidden('agregar', 'agregar'); ?>
 				<div class="form-group text-right">
 					<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir" {update_status}>
 						<span class="fa fa-user-plus"></span>
 						{_toa_controles_nuevos_tecnicos_}
 					</button>
 				</div>
-				<?php echo form_close(); ?>
+				<?= form_close(); ?>
 			<?php endif ?>
 
 		<?php else: ?>
-			<?php echo print_message($this->lang->line('toa_controles_sin_tecnicos')); ?>
+			<?= print_message($this->lang->line('toa_controles_sin_tecnicos')); ?>
 		<?php endif ?>
 	</div>
 </div>

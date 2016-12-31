@@ -1,4 +1,3 @@
-
 <div class="content-module-main">
 	<table class="table table-striped table-hover table-condensed">
 		<thead>
@@ -11,8 +10,8 @@
 		<tbody>
 		<?php foreach($almacenes as $alm): ?>
 			<tr>
-				<td><?php echo $alm['centro']; ?></td>
-				<td><?php echo $alm['cod_bodega']; ?></td>
+				<td><?= $alm['centro']; ?></td>
+				<td><?= $alm['cod_bodega']; ?></td>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>

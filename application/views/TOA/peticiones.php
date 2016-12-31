@@ -10,7 +10,7 @@
 		</div>
 		<div class="panel-collapse collapse in" id="map-panel">
 			<div class="panel-body panel-collapse collapse in">
-				<?php echo $google_maps; ?>
+				<?= $google_maps; ?>
 			</div>
 		</div>
 	</div>
