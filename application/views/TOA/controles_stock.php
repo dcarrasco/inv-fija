@@ -18,17 +18,17 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-3 form_group <?= form_error('empresa') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('empresa') ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
 						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-3 form_group <?= form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
 						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-3 form_group <?= form_error('dato') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('dato') ?>">
 						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
 						<?= form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 					</div>

@@ -20,7 +20,7 @@
 
 				{validation_errors}
 
-				<div class="col-md-4 form-group <?= form_error('fecha[]') ? 'has-error' : ''; ?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('fecha[]') ?>">
 					<label class="control-label">{_stock_sap_label_dates_}</label>
 					<div class="radio">
 						<label>

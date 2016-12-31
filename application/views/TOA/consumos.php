@@ -19,7 +19,7 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-4 form_group <?= form_error('sel_reporte') ? 'has-error' : ''; ?>">
+					<div class="col-md-4 form_group <?= form_has_error_class('sel_reporte') ?>">
 						<label class="control-label">{_consumo_reporte_}</label>
 						<?= form_dropdown('sel_reporte', $combo_reportes, $this->input->get('sel_reporte'), 'class="form-control"'); ?>
 					</div>

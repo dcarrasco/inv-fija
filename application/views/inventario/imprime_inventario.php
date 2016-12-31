@@ -15,21 +15,21 @@
 				</div>
 			</div>
 
-			<div class="form-group <?= form_has_error('pag_desde'); ?>">
+			<div class="form-group <?= form_has_error_class('pag_desde'); ?>">
 				<label class="control-label col-sm-4">{_inventario_print_label_page_from_}</label>
 				<div class="col-sm-8">
 					<?= form_input('pag_desde', set_value('pag_desde',1), 'class="form-control"  maxlength="5"'); ?>
 				</div>
 			</div>
 
-			<div class="form-group <?= form_has_error('pag_hasta'); ?>">
+			<div class="form-group <?= form_has_error_class('pag_hasta'); ?>">
 				<label class="control-label col-sm-4">{_inventario_print_label_page_to_}</label>
 				<div class="col-sm-8">
 					<?= form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="form-control"  maxlength="5"'); ?>
 				</div>
 			</div>
 
-			<div class="form-group <?= form_has_error('oculta_stock_sap'); ?>">
+			<div class="form-group <?= form_has_error_class('oculta_stock_sap'); ?>">
 				<label class="control-label col-sm-4">{_inventario_print_label_options_}</label>
 				<div class="col-sm-8">
 					<label class="checkbox-inline">

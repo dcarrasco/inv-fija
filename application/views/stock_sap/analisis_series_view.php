@@ -13,7 +13,7 @@
 			{validation_errors}
 
 			<div class="col-md-4">
-				<div class="form-group <?= form_has_error('series'); ?>">
+				<div class="form-group <?= form_has_error_class('series'); ?>">
 					<label class="control-label">
 						{_stock_analisis_label_series_}
 					</label>

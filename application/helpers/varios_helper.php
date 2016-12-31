@@ -401,7 +401,7 @@ if ( ! function_exists('form_array_format'))
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('form_has_error'))
+if ( ! function_exists('form_has_error_class'))
 {
 	/**
 	 * Indica si el elemento del formulario tiene un error de validación
@@ -409,19 +409,12 @@ if ( ! function_exists('form_has_error'))
 	 * @param  string $form_field Nombre del elemento del formulario
 	 * @return bool               Indicador de error del elemento
 	 */
-	function form_has_error($form_field = '')
+	function form_has_error_class($form_field = '')
 	{
 		$ci =& get_instance();
-		if (count($ci->input->post()) === 0)
-		{
-			return '';
-		}
-		else
-		{
-			// return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
-			return (form_error($form_field) !== '') ? 'has-error' : '';
-		}
 
+		// return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
+		return (form_error($form_field) !== '') ? 'has-error' : '';
 	}
 }
 

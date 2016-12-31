@@ -23,7 +23,7 @@
 
 				{validation_errors}
 
-				<div class="col-md-4 form-group <?= form_error('tipo_alm[]') ? 'has-error' : ''; ?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('tipo_alm[]') ?>">
 					<label class="control-label">{_stock_perm_label_alm_}</label>
 
 					<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>

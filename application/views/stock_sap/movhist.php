@@ -19,7 +19,7 @@
 
 				{validation_errors}
 
-				<div class="col-md-2 form-group <?= form_has_error('fechas[]')?>">
+				<div class="col-md-2 form-group <?= form_has_error_class('fechas[]')?>">
 					<label class="control-label">{_stock_movhist_label_dates_}</label>
 
 					<div class="input-group">
@@ -35,13 +35,13 @@
 					<?= form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'), 'size="8" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-3 form-group <?= form_has_error('cmv[]')?>">
+				<div class="col-md-3 form-group <?= form_has_error_class('cmv[]')?>">
 					<label class="control-label">{_stock_movhist_label_movs_}</label>
 
 					<?= form_multiselect('cmv[]', $combo_cmv, $this->input->post('cmv'), 'size="10" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-3 form-group <?= form_has_error('almacenes[]')?>">
+				<div class="col-md-3 form-group <?= form_has_error_class('almacenes[]')?>">
 					<label class="control-label">{_stock_movhist_label_alm_}</label>
 
 					<div class="input-group">
@@ -68,7 +68,7 @@
 					</div>
 				</div>
 
-				<div class="col-md-4 form-group <?= form_has_error('materiales[]')?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('materiales[]')?>">
 					<label class="control-label">{_stock_movhist_label_mats_}</label>
 
 					<div class="input-group">

@@ -10,7 +10,7 @@
 
 		<?= $detalle_inventario->form_item('ubicacion', FALSE); ?>
 
-		<div class="form-group <?= form_has_error('catalogo'); ?>">
+		<div class="form-group <?= form_has_error_class('catalogo'); ?>">
 			<label class="control-label col-sm-4">
 				{_inventario_form_new_material_}
 				<?= $detalle_inventario->get_marca_obligatorio_field('catalogo'); ?>

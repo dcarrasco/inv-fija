@@ -18,22 +18,22 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-3 form_group <?= form_error('empresa') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('empresa') ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
 						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?= form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
 						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-3 form_group <?= form_error('filtro_trx') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('filtro_trx') ?>">
 						<label class="control-label">{_controles_tecnicos_filtro_trx_}</label>
 						<?= form_dropdown('filtro_trx', $combo_filtro_trx, set_value('filtro_trx'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?= form_error('dato') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_has_error_class('dato') ?>">
 						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
 						<?= form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 					</div>

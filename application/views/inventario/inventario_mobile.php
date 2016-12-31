@@ -10,7 +10,7 @@
 	</div>
 
 	<div class="col-xs-6">
-		<div class="form-group <?= form_has_error('hoja'); ?>">
+		<div class="form-group <?= form_has_error_class('hoja'); ?>">
 			<label>{_inventario_page_}</label>
 			<div class="input-group">
 				<span class="input-group-btn">

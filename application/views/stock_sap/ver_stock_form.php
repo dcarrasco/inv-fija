@@ -19,7 +19,7 @@
 
 				{validation_errors}
 
-				<div class="col-md-4 form-group <?= form_error('fecha[]') ? 'has-error' : '' ?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('fecha[]') ?>">
 					<label class="control-label">{_stock_sap_label_dates_}</label>
 					<div class="radio">
 						<label>
@@ -36,7 +36,7 @@
 					<?= form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-4 form-group <?= form_error('almacenes[]') ? 'has-error' : '' ?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('almacenes[]') ?>">
 					<label class="control-label">{_stock_sap_label_alm_}</label>
 					<div class="radio">
 						<label>

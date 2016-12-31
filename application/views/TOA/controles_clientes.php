@@ -18,12 +18,12 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-5 form_group <?= form_error('cliente') ? 'has-error' : '' ?>">
+					<div class="col-md-5 form_group <?= form_has_error_class('cliente') ?>">
 						<label class="control-label">{_controles_clientes_}</label>
 						<?= form_input('cliente', set_value('cliente'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-5 form_group <?= form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-5 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_consumo_fechas_}</label>
 						<?= form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control" data-date-min-view-mode="1"'); ?>
 					</div>
