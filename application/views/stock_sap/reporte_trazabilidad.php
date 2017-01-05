@@ -1,5 +1,5 @@
 <div class="accordion">
-	<?php echo form_open('','id="frm_param"'); ?>
+	<?= form_open('','id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -20,7 +20,7 @@
 							<strong>Seleccionar Almacenes</strong>
 						</div>
 						<div>
-							<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
+							<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -30,19 +30,19 @@
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
+								<?= form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
 								Mostrar almacenes
 							</div>
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
+								<?= form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
 								Mostrar materiales
 							</div>
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?php echo form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
+								<?= form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
 								Mostrar lotes
 							</div>
 						</div>
@@ -61,9 +61,9 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_hidden('order_by', set_value('order_by','')); ?>
-	<?php echo form_hidden('order_sort', set_value('order_sort','')); ?>
-	<?php echo form_close(); ?>
+	<?= form_hidden('order_by', set_value('order_by','')); ?>
+	<?= form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?= form_close(); ?>
 </div>
 
 <div class="content-module-main">
@@ -74,9 +74,9 @@
 		<thead>
 			<tr>
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-					<th <?php echo ($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-						<?php echo anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
-						<?php echo $arr_img_orden[$campo]; ?>
+					<th <?= ($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
+						<?= anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
+						<?= $arr_img_orden[$campo]; ?>
 						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] = 0; }?>
 						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] = 0; }?>
 					</th>
@@ -93,13 +93,13 @@
 						<?php if ($reg[$campo] != $subtot_ant[$campo]): ?>
 							<?php if ($subtot_ant[$campo] != ''): ?>
 								<?php foreach ($arr_campos as $c => $arr_c): ?>
-									<td <?php echo ($arr_c === '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-									<?php echo ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . fmt_cantidad($subtotales[$c]) . '</strong>' : ''; ?>
+									<td <?= ($arr_c === '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+									<?= ($arr_c['tipo']=='numero' || $arr_c['tipo']=='valor') ? '<strong>' . fmt_cantidad($subtotales[$c]) . '</strong>' : ''; ?>
 									</td>
 								<?php endforeach; ?>
 								</tr>
 								<tr>
-									<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+									<td colspan="<?= count($arr_campos); ?>" class="subtotal">&nbsp;</td>
 								</tr>
 								<tr>
 							<?php endif; ?>
@@ -107,18 +107,18 @@
 							<?php foreach ($arr_campos as $c => $arr_c): ?>
 								<?php $subtotales[$c] = 0; ?>
 							<?php endforeach; ?>
-							<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">
-								<?php echo ($arr_param_campo['tipo'] === 'subtotal')  ? $reg[$campo] : ''; ?>
+							<td colspan="<?= count($arr_campos); ?>" class="subtotal">
+								<?= ($arr_param_campo['tipo'] === 'subtotal')  ? $reg[$campo] : ''; ?>
 							</td>
 							</tr><tr>
 						<?php endif; ?>
 					<?php endif; ?>
-					<td <?php echo ($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-						<?php echo ($arr_param_campo['tipo'] === 'texto')  ? $reg[$campo] : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] === 'link')   ? anchor($arr_param_campo['href'] . $reg[$campo], $reg[$campo]) : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] === 'numero') ? fmt_cantidad($reg[$campo]) : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] === 'valor')  ? fmt_monto($reg[$campo]) : ''; ?>
-						<?php echo ($arr_param_campo['tipo'] === 'valor_pmp') ? fmt_monto($reg[$campo]) : ''; ?>
+					<td <?= ($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
+						<?= ($arr_param_campo['tipo'] === 'texto')  ? $reg[$campo] : ''; ?>
+						<?= ($arr_param_campo['tipo'] === 'link')   ? anchor($arr_param_campo['href'] . $reg[$campo], $reg[$campo]) : ''; ?>
+						<?= ($arr_param_campo['tipo'] === 'numero') ? fmt_cantidad($reg[$campo]) : ''; ?>
+						<?= ($arr_param_campo['tipo'] === 'valor')  ? fmt_monto($reg[$campo]) : ''; ?>
+						<?= ($arr_param_campo['tipo'] === 'valor_pmp') ? fmt_monto($reg[$campo]) : ''; ?>
 						<?php if ($arr_param_campo['tipo'] === 'numero' || $arr_param_campo['tipo'] === 'valor') { $totales[$campo] += $reg[$campo]; }?>
 						<?php if ($arr_param_campo['tipo'] === 'numero' || $arr_param_campo['tipo'] === 'valor') { $subtotales[$campo] += $reg[$campo]; }?>
 					</td>
@@ -130,21 +130,21 @@
 			<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 				<?php if ($arr_param_campo['tipo'] === 'subtotal'): ?>
 					<?php foreach ($arr_campos as $c => $arr_c): ?>
-						<td <?php echo ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
-						<?php echo ($arr_c['tipo'] === 'numero' || $arr_c['tipo'] === 'valor') ? '<strong>' . fmt_cantidad($subtotales[$c]) . '</strong>' : ''; ?>
+						<td <?= ($arr_c == '') ? '' : 'class="subtotal ' . $arr_c['class'] . '"' ?>>
+						<?= ($arr_c['tipo'] === 'numero' || $arr_c['tipo'] === 'valor') ? '<strong>' . fmt_cantidad($subtotales[$c]) . '</strong>' : ''; ?>
 						</td>
 					<?php endforeach; ?>
 					</tr>
 					<tr>
-						<td colspan="<?php echo count($arr_campos); ?>" class="subtotal">&nbsp;</td>
+						<td colspan="<?= count($arr_campos); ?>" class="subtotal">&nbsp;</td>
 					</tr>
 				<?php endif; ?>
 			<?php endforeach; ?>
 
 			<tr> <!-- totales -->
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
-					<td <?php echo ($arr_param_campo === '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
-						<?php echo ($arr_param_campo['tipo'] === 'numero' || $arr_param_campo['tipo'] === 'valor') ? '<strong>' . fmt_cantidad($totales[$campo]) . '</strong>' : ''; ?>
+					<td <?= ($arr_param_campo === '') ? '' : 'class="subtotal ' . $arr_param_campo['class'] . '"' ?>>
+						<?= ($arr_param_campo['tipo'] === 'numero' || $arr_param_campo['tipo'] === 'valor') ? '<strong>' . fmt_cantidad($totales[$campo]) . '</strong>' : ''; ?>
 					</td>
 				<?php endforeach; ?>
 			</tr>

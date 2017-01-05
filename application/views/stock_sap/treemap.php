@@ -1,29 +1,29 @@
 <div>
 	<div class="form-group">
-		<?php echo form_open('', array('id' => 'form_centro')); ?>
+		<?= form_open('', array('id' => 'form_centro')); ?>
 		<strong>
 			{_stock_map_label_centro_}
 		</strong>
 		<label class="radio-inline">
-			<?php echo form_radio('sel_centro', 'CL03', set_radio('sel_centro','CL03', TRUE)); ?>
+			<?= form_radio('sel_centro', 'CL03', set_radio('sel_centro','CL03', TRUE)); ?>
 			CL03
 		</label>
 		<label class="radio-inline">
-			<?php echo form_radio('sel_centro', 'CL15', set_radio('sel_centro','CL15')); ?>
+			<?= form_radio('sel_centro', 'CL15', set_radio('sel_centro','CL15')); ?>
 			CL15
 		</label>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 	</div>
 	<div class="form-group">
 		<strong>
 			{_stock_map_label_type_}
 		</strong>
 		<label class="radio-inline">
-			<?php echo form_radio('sel_treemap_type', 'cantidad', set_radio('sel_treemap_type','cantidad', TRUE)); ?>
+			<?= form_radio('sel_treemap_type', 'cantidad', set_radio('sel_treemap_type','cantidad', TRUE)); ?>
 			{_stock_map_radio_cant_}
 		</label>
 		<label class="radio-inline">
-			<?php echo form_radio('sel_treemap_type', 'valor', set_radio('sel_treemap_type','valor')); ?>
+			<?= form_radio('sel_treemap_type', 'valor', set_radio('sel_treemap_type','valor')); ?>
 			{_stock_map_radio_value_}
 		</label>
 	</div>

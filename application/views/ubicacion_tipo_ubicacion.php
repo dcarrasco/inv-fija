@@ -9,24 +9,24 @@
 
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="display: none;">
-		<?php echo form_open('','id=frm_agregar')?>
-		<?php echo form_hidden('formulario','agregar'); ?>
+		<?= form_open('','id=frm_agregar')?>
+		<?= form_hidden('formulario','agregar'); ?>
 
 		<div class="row">
 			<div class="col-md-4">
 				Tipo de Inventario
-				<?php echo form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
-				<?php echo form_error('agr-tipo_inventario'); ?>
+				<?= form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
+				<?= form_error('agr-tipo_inventario'); ?>
 			</div>
 			<div class="col-md-4">
 				Ubicacion
-				<?php echo form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
-				<?php echo form_error('agr-ubicacion'); ?>
+				<?= form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
+				<?= form_error('agr-ubicacion'); ?>
 			</div>
 			<div class="col-md-4">
 				Tipo de Ubicacion
-				<?php echo form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
-				<?php echo form_error('agr-tipo_ubicacion'); ?>
+				<?= form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
+				<?= form_error('agr-tipo_ubicacion'); ?>
 			</div>
 		</div>
 
@@ -38,14 +38,14 @@
 				</a>
 			</div>
 		</div>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 	</div> <!-- fin content-module-main-agregar -->
 </div>
 
 <div class="row">
 	<div class="">
-		<?php echo form_open('', 'id="frm_usuarios"'); ?>
-		<?php echo form_hidden('formulario','editar'); ?>
+		<?= form_open('', 'id="frm_usuarios"'); ?>
+		<?= form_hidden('formulario','editar'); ?>
 		<table class="table table-hover table-condensed table-striped">
 			<thead>
 				<tr>
@@ -59,21 +59,21 @@
 			<tbody>
 				<?php foreach ($datos_hoja as $reg): ?>
 				<tr>
-					<td><?php echo $reg['id']; ?></td>
+					<td><?= $reg['id']; ?></td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
-						<?php echo form_error($reg['id'].'-tipo_inventario'); ?>
+						<?= form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
+						<?= form_error($reg['id'].'-tipo_inventario'); ?>
 					</td>
 					<td>
-						<?php echo form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
-						<?php echo form_error($reg['id'].'-tipo_ubicacion'); ?>
+						<?= form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
+						<?= form_error($reg['id'].'-tipo_ubicacion'); ?>
 					</td>
 					<td>
-						<?php echo form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
-						<?php echo form_error($reg['id'].'-ubicacion'); ?>
+						<?= form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
+						<?= form_error($reg['id'].'-ubicacion'); ?>
 					</td>
 					<td>
-						<a href="#" class="btn btn-default btn-sm" id="btn_borrar" id-borrar="<?php echo $reg['id']; ?>">
+						<a href="#" class="btn btn-default btn-sm" id="btn_borrar" id-borrar="<?= $reg['id']; ?>">
 							<span class="fa fa-trash"></span>
 						</a>
 					</td>
@@ -81,10 +81,10 @@
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 
 		<div class="text-center">
-			<?php echo ($links_paginas != '') ? $links_paginas : ''; ?>
+			<?= ($links_paginas != '') ? $links_paginas : ''; ?>
 		</div>
 	</div> <!-- fin content-module-main -->
 
@@ -95,10 +95,10 @@
 		</a>
 	</div> <!-- fin content-module-footer -->
 
-	<?php echo form_open('','id="frm_borrar"'); ?>
-		<?php echo form_hidden('formulario','borrar'); ?>
-		<?php echo form_hidden('id_borrar'); ?>
-	<?php echo form_close(); ?>
+	<?= form_open('','id="frm_borrar"'); ?>
+		<?= form_hidden('formulario','borrar'); ?>
+		<?= form_hidden('id_borrar'); ?>
+	<?= form_close(); ?>
 
 
 </div> <!-- fin content-module -->

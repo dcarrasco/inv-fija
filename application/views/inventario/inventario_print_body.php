@@ -2,8 +2,8 @@
 	<table>
 		<tr>
 			<td>Fecha: ___________________________</td>
-			<td><h2><?php echo 'Inventario: ' . $nombre_inventario; ?></h2></td>
-			<td class="ar"><h2>Hoja: <?php echo $hoja; ?></h2></td>
+			<td><h2><?= 'Inventario: ' . $nombre_inventario; ?></h2></td>
+			<td class="ar"><h2>Hoja: <?= $hoja; ?></h2></td>
 		</tr>
 		<tr>
 			<td colspan="2">Auditor: _______________________________</td>
@@ -53,17 +53,17 @@
 				<?php $catalogo_rel = $detalle->get_relation_object('catalogo'); ?>
 				<?php $lin += 1; ?>
 				<tr>
-					<td class="ac"><?php echo $detalle->ubicacion; ?></td>
+					<td class="ac"><?= $detalle->ubicacion; ?></td>
 					<!-- <td class="ac"><?php //echo $detalle->hu; ?></td> -->
-					<td class="ac"><?php echo $detalle->catalogo; ?></td>
-					<td><?php echo $detalle->descripcion; ?></td>
-					<td class="ac"><?php echo $detalle->lote; ?></td>
-					<td class="ac"><?php echo $detalle->centro; ?></td>
-					<td class="ac"><?php echo $detalle->almacen; ?></td>
-					<td class="ac"><?php echo $detalle->um; ?></td>
+					<td class="ac"><?= $detalle->catalogo; ?></td>
+					<td><?= $detalle->descripcion; ?></td>
+					<td class="ac"><?= $detalle->lote; ?></td>
+					<td class="ac"><?= $detalle->centro; ?></td>
+					<td class="ac"><?= $detalle->almacen; ?></td>
+					<td class="ac"><?= $detalle->um; ?></td>
 
 					<?php if (!$oculta_stock_sap): ?>
-						<td class="ac"><?php echo fmt_cantidad($detalle->stock_sap); ?></td>
+						<td class="ac"><?= fmt_cantidad($detalle->stock_sap); ?></td>
 					<?php endif; ?>
 
 					<!-- cantidad física -->
@@ -112,7 +112,7 @@
 			<?php if (!$oculta_stock_sap): ?>
 				<tr>
 					<td colspan="7" class="no-border"></td>
-					<td class="ac"><strong><?php echo fmt_cantidad($sum_sap); ?></strong></td>
+					<td class="ac"><strong><?= fmt_cantidad($sum_sap); ?></strong></td>
 					<td colspan="4" class="no-border"></td>
 				</tr>
 			<?php endif; ?>

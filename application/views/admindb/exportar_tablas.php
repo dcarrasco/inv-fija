@@ -1,4 +1,4 @@
-<?php echo form_open(); ?>
+<?= form_open(); ?>
 <div class="accordion hidden-print">
 	<div class="panel panel-default">
 
@@ -20,17 +20,17 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_tables_}</label>
-						<?php echo form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="id_select_tabla" size="10" class="form-control" onchange="'.form_onchange('select_tabla', 'select_campo', 'adminbd_exportartablas/ajax_campos').'"'); ?>
+						<?= form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="id_select_tabla" size="10" class="form-control" onchange="'.form_onchange('select_tabla', 'select_campo', 'adminbd_exportartablas/ajax_campos').'"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_fields_}</label>
-						<?php echo form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="id_select_campo" size="7" class="form-control"'); ?>
+						<?= form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="id_select_campo" size="7" class="form-control"'); ?>
 
 						<label>{_adminbd_exportar_label_fields_filter_}</label>
-						<?php echo form_input('filtro', $this->input->post('filtro'),'id="filtro_campo" class="form-control"'); ?>
+						<?= form_input('filtro', $this->input->post('filtro'),'id="filtro_campo" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -48,7 +48,7 @@
 
 	</div>
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 <pre>
 {result_string}

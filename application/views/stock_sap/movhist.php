@@ -1,5 +1,5 @@
-<?php echo form_open('','id="frm_param"'); ?>
-<?php echo form_hidden('sort', set_value('sort','')); ?>
+<?= form_open('','id="frm_param"'); ?>
+<?= form_hidden('sort', set_value('sort','')); ?>
 
 <div class="accordion" id="accordion">
 	<div class="panel panel-default">
@@ -19,33 +19,33 @@
 
 				{validation_errors}
 
-				<div class="col-md-2 form-group <?php echo form_has_error('fechas[]')?>">
+				<div class="col-md-2 form-group <?= form_has_error_class('fechas[]')?>">
 					<label class="control-label">{_stock_movhist_label_dates_}</label>
 
 					<div class="input-group">
-						<?php echo form_dropdown('tipo_fecha', $combo_tipo_fecha, $this->input->post('tipo_fecha'), 'class="form-control"'); ?>
+						<?= form_dropdown('tipo_fecha', $combo_tipo_fecha, $this->input->post('tipo_fecha'), 'class="form-control"'); ?>
 						<div class="input-group-btn">
 							<button id="filtro_tipo_fecha" class="btn btn-default" type="button">
 								{_stock_movhist_button_filter_}
 							</button>
 						</div>
 					</div>
-					<?php echo form_hidden('tipo_fecha_filtro', set_value('tipo_fecha_filtro')) ?>
+					<?= form_hidden('tipo_fecha_filtro', set_value('tipo_fecha_filtro')) ?>
 
-					<?php echo form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'), 'size="8" class="form-control"'); ?>
+					<?= form_multiselect('fechas[]', $combo_fechas, $this->input->post('fechas'), 'size="8" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-3 form-group <?php echo form_has_error('cmv[]')?>">
+				<div class="col-md-3 form-group <?= form_has_error_class('cmv[]')?>">
 					<label class="control-label">{_stock_movhist_label_movs_}</label>
 
-					<?php echo form_multiselect('cmv[]', $combo_cmv, $this->input->post('cmv'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('cmv[]', $combo_cmv, $this->input->post('cmv'), 'size="10" class="form-control"'); ?>
 				</div>
 
-				<div class="col-md-3 form-group <?php echo form_has_error('almacenes[]')?>">
+				<div class="col-md-3 form-group <?= form_has_error_class('almacenes[]')?>">
 					<label class="control-label">{_stock_movhist_label_alm_}</label>
 
 					<div class="input-group">
-						<?php echo form_dropdown('tipo_alm', $combo_tipo_alm, $this->input->post('tipo_alm'), 'class="form-control"'); ?>
+						<?= form_dropdown('tipo_alm', $combo_tipo_alm, $this->input->post('tipo_alm'), 'class="form-control"'); ?>
 						<div class="input-group-btn">
 							<button id="filtro_tipo_alm" class="btn btn-default" type="button">
 								{_stock_movhist_button_filter_}
@@ -53,26 +53,26 @@
 						</div>
 					</div>
 
-					<?php echo form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="8" class="form-control"'); ?>
+					<?= form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'size="8" class="form-control"'); ?>
 
 					<div class="text-right">
 						<div class="radio-inline">
-							<?php echo form_radio('tipo_cruce_alm', 'alm', set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
+							<?= form_radio('tipo_cruce_alm', 'alm', set_radio('tipo_cruce_alm', 'alm', TRUE)); ?>
 							{_stock_movhist_radio_alm_}
 						</div>
 
 						<div class="radio-inline">
-							<?php echo form_radio('tipo_cruce_alm', 'rec', set_radio('tipo_cruce_alm', 'rec')); ?>
+							<?= form_radio('tipo_cruce_alm', 'rec', set_radio('tipo_cruce_alm', 'rec')); ?>
 							{_stock_movhist_radio_rec_}
 						</div>
 					</div>
 				</div>
 
-				<div class="col-md-4 form-group <?php echo form_has_error('materiales[]')?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('materiales[]')?>">
 					<label class="control-label">{_stock_movhist_label_mats_}</label>
 
 					<div class="input-group">
-					<?php echo form_dropdown('tipo_mat', $combo_tipo_mat, $this->input->post('tipo_mat'), 'class="form-control"'); ?>
+					<?= form_dropdown('tipo_mat', $combo_tipo_mat, $this->input->post('tipo_mat'), 'class="form-control"'); ?>
 						<div class="input-group-btn">
 							<button id="filtro_tipo_mat" class="btn btn-default" type="button">
 								{_stock_movhist_button_filter_}
@@ -80,7 +80,7 @@
 						</div>
 					</div>
 
-					<?php echo form_multiselect('materiales[]', $combo_materiales, $this->input->post('materiales'), 'size="8" class="form-control"'); ?>
+					<?= form_multiselect('materiales[]', $combo_materiales, $this->input->post('materiales'), 'size="8" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-12 text-right">
@@ -94,7 +94,7 @@
 		</div>
 	</div>
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 <div> <!-- *************** REPORTE *************** -->
 	{reporte}

@@ -1,23 +1,23 @@
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
 
-		<?php echo form_open('', 'class="form-horizontal" role="form"')?>
+		<?= form_open('', 'class="form-horizontal" role="form"')?>
 		<fieldset>
 
 		<legend>{_inventario_form_new_}</legend>
 
 		{validation_errors}
 
-		<?php echo $detalle_inventario->form_item('ubicacion', FALSE); ?>
+		<?= $detalle_inventario->form_item('ubicacion', FALSE); ?>
 
-		<div class="form-group <?php echo form_has_error('catalogo'); ?>">
+		<div class="form-group <?= form_has_error_class('catalogo'); ?>">
 			<label class="control-label col-sm-4">
 				{_inventario_form_new_material_}
-				<?php echo $detalle_inventario->get_marca_obligatorio_field('catalogo'); ?>
+				<?= $detalle_inventario->get_marca_obligatorio_field('catalogo'); ?>
 			</label>
 			<div class="col-sm-3">
 				<div class="input-group">
-					<?php echo form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
+					<?= form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
 					<span class="input-group-btn">
 						<div class="btn btn-default">
 							<span class="fa fa-search"></span>
@@ -26,23 +26,23 @@
 				</div>
 			</div>
 			<div class="col-md-5">
-				<?php echo form_dropdown('catalogo', $arr_catalogo, '', 'class="form-control" id="agr_material"'); ?>
+				<?= form_dropdown('catalogo', $arr_catalogo, '', 'class="form-control" id="agr_material"'); ?>
 			</div>
 		</div>
 
-		<?php echo $detalle_inventario->form_item('lote', FALSE); ?>
+		<?= $detalle_inventario->form_item('lote', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('um', FALSE); ?>
+		<?= $detalle_inventario->form_item('um', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('centro', FALSE); ?>
+		<?= $detalle_inventario->form_item('centro', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('almacen', FALSE); ?>
+		<?= $detalle_inventario->form_item('almacen', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('stock_fisico', FALSE); ?>
+		<?= $detalle_inventario->form_item('stock_fisico', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('hu', FALSE); ?>
+		<?= $detalle_inventario->form_item('hu', FALSE); ?>
 
-		<?php echo $detalle_inventario->form_item('observacion', FALSE); ?>
+		<?= $detalle_inventario->form_item('observacion', FALSE); ?>
 
 		<div class="form-group">
 			<label class="control-label col-sm-4">
@@ -67,7 +67,7 @@
 							{_inventario_form_new_button_edit_}
 						<?php endif; ?>
 					</button>
-					<a href="<?php echo site_url($this->router->class.'/ingreso/'.$hoja); ?>" class="btn btn-default">
+					<a href="<?= site_url($this->router->class.'/ingreso/'.$hoja); ?>" class="btn btn-default">
 						<span class="fa fa-ban"></span>
 						{_inventario_form_new_button_cancel_}
 					</a>
@@ -76,7 +76,7 @@
 		</div>
 
 		</fieldset>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 	</div> <!-- fin content-module-main-agregar -->
 </div>
 

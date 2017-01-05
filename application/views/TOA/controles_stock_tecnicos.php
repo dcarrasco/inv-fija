@@ -1,5 +1,5 @@
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<?= form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -18,24 +18,24 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-3 form_group <?php echo form_error('empresa') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('empresa') ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
-						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
+						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
-						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
+						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-3 form_group <?php echo form_error('dato') ? 'has-error' : '' ?>">
+					<div class="col-md-3 form_group <?= form_has_error_class('dato') ?>">
 						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
-						<?php echo form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
+						<?= form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-2 form_group <?php echo form_error('mostrar') ? 'has-error' : '' ?>">
+					<div class="col-md-2 form_group <?= form_has_error_class('mostrar') ?>">
 						<label class="control-label">{_controles_tecnicos_mostrar_}</label>
-						<?php echo form_dropdown('mostrar', $combo_dato_mostrar, set_value('mostrar'), 'class="form-control"'); ?>
+						<?= form_dropdown('mostrar', $combo_dato_mostrar, set_value('mostrar'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-2">
@@ -49,7 +49,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <div class="content-module-main">
@@ -67,8 +67,8 @@
 					<th>T&eacute;cnico</th>
 					<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 						<th class="text-center">
-							<?php echo $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
-							<?php echo $dia_act; ?>
+							<?= $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+							<?= $dia_act; ?>
 						</th>
 					<?php $tot_col[$dia_act] = 0; ?>
 					<?php endforeach; ?>
@@ -80,16 +80,16 @@
 		<?php endif; ?>
 		<tr>
 			<td class="text-muted">
-				<?php echo $num_lin + 1; ?>
+				<?= $num_lin + 1; ?>
 			</td>
 			<td style="white-space: nowrap;">
-				<?php echo $id_tecnico.' - '.$datos['tecnico']; ?>
-				(<?php echo fmt_rut($datos['rut']); ?>)
+				<?= $id_tecnico.' - '.$datos['tecnico']; ?>
+				(<?= fmt_rut($datos['rut']); ?>)
 			</td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<?php if ($valor): ?>
 					<?php $valor_desplegar = set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
-					<td class="text-center info"><?php echo anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, $valor_desplegar); ?></td>
+					<td class="text-center info"><?= anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$id_tecnico, $valor_desplegar); ?></td>
 				<?php else: ?>
 					<td></td>
 				<?php endif ?>
@@ -107,7 +107,7 @@
 			<th></th>
 			<th></th>
 			<?php foreach ($tot_col as $dia_act => $valor): ?>
-				<th class="text-center"><?php echo set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
+				<th class="text-center"><?= set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
 			<?php endforeach; ?>
 		</tr>
 	</tfoot>

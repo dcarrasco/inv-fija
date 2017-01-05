@@ -1,4 +1,4 @@
-<?php echo form_open('', 'id="form_param"'); ?>
+<?= form_open('', 'id="form_param"'); ?>
 <div class="accordion hidden-print">
 	<div class="panel panel-default">
 
@@ -21,7 +21,7 @@
 						<label>
 							{_stock_clasif_label_tipoop_}
 						</label>
-						<?php echo form_dropdown('operacion', $combo_operacion, $tipo_op,'id="select_operacion" class="form-control"'); ?>
+						<?= form_dropdown('operacion', $combo_operacion, $tipo_op,'id="select_operacion" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -30,7 +30,7 @@
 						<label>
 							{_stock_clasif_label_fechas_}
 						</label>
-						<?php echo form_multiselect('fechas[]', $combo_fechas, $fechas,'size="10" id="select_fecha" class="form-control"'); ?>
+						<?= form_multiselect('fechas[]', $combo_fechas, $fechas,'size="10" id="select_fecha" class="form-control"'); ?>
 					</div>
 				</div>
 
@@ -38,7 +38,7 @@
 					<div class="form-group">
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('sel_borrar', 'borrar', set_value('sel_borrar')); ?>
+								<?= form_checkbox('sel_borrar', 'borrar', set_value('sel_borrar')); ?>
 								{_stock_clasif_label_delete_}
 							</label>
 						</div>
@@ -59,7 +59,7 @@
 	</div>
 
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 <?php $total = array(); ?>
 <table class="table table-striped table-hover table-condensed reporte">
@@ -71,7 +71,7 @@
 			<th>tipo</th>
 			<?php if (count($reporte['fechas'])>0): ?>
 				<?php foreach ($reporte['fechas'] as $fec): ?>
-					<th class="text-right"><?php echo $fec; ?></th>
+					<th class="text-right"><?= $fec; ?></th>
 					<?php $total[$fec] = 0; ?>
 				<?php endforeach ?>
 			<?php endif ?>
@@ -82,12 +82,12 @@
 		<?php if (count($reporte['datos']) > 0): ?>
 		<?php foreach ($reporte['datos'] as $lin): ?>
 		<tr>
-			<td><?php echo $lin['tipo_op'] ?></td>
-			<td><?php echo $lin['orden'] ?></td>
-			<td><?php echo $lin['clasificacion'] ?></td>
-			<td><?php echo $lin['tipo'] ?></td>
+			<td><?= $lin['tipo_op'] ?></td>
+			<td><?= $lin['orden'] ?></td>
+			<td><?= $lin['clasificacion'] ?></td>
+			<td><?= $lin['tipo'] ?></td>
 			<?php foreach ($reporte['fechas'] as $fec): ?>
-				<td class="text-right"><?php echo fmt_monto($lin[$fec]); ?></td>
+				<td class="text-right"><?= fmt_monto($lin[$fec]); ?></td>
 				<?php $total[$fec] += $lin[$fec]; ?>
 			<?php endforeach ?>
 		</tr>
@@ -102,7 +102,7 @@
 			<th></th>
 			<th></th>
 			<?php foreach ($reporte['fechas'] as $fec): ?>
-				<th class="text-right"><?php echo fmt_monto($total[$fec]); ?></th>
+				<th class="text-right"><?= fmt_monto($total[$fec]); ?></th>
 				<?php $total[$fec] = 0; ?>
 			<?php endforeach ?>
 		</tr>

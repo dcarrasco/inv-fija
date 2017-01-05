@@ -534,7 +534,7 @@ class Orm_model implements IteratorAggregate {
 		$field_error = NULL;
 		if ($formulario_enviado)
 		{
-			$field_error = (form_has_error($campo) === 'has-error') ? TRUE : FALSE;
+			$field_error = (form_has_error_class($campo) === 'has-error') ? TRUE : FALSE;
 		}
 
 		if ($campo !== '')
@@ -546,7 +546,7 @@ class Orm_model implements IteratorAggregate {
 										'id_'.$campo,
 										array('class' => 'control-label col-sm-4')
 									),
-				'item_error'    => form_has_error($campo),
+				'item_error'    => form_has_error_class($campo),
 				'item-feedback' => is_null($field_error) ? '' : 'has-feedback',
 				'item_form'     => $this->print_form_field($campo, FALSE, '', $field_error),
 				'item_help'     => $show_help ? $this->get_texto_ayuda_field($campo) : '',

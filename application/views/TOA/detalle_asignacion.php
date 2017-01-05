@@ -12,13 +12,13 @@
 				<label class="control-label col-md-2">Documento Material</label>
 				<div class="col-md-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['documento_material']; ?>
+						<?= $linea_detalle['documento_material']; ?>
 					</p>
 				</div>
 				<label class="control-label col-md-2">Fecha</label>
 				<div class="col-md-4">
 					<p class="form-control-static">
-						<?php echo fmt_fecha($linea_detalle['fecha']); ?>
+						<?= fmt_fecha($linea_detalle['fecha']); ?>
 					</p>
 				</div>
 			</div>
@@ -27,14 +27,14 @@
 				<label class="control-label col-md-2">Empresa</label>
 				<div class="col-md-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['empresa']; ?>
+						<?= $linea_detalle['empresa']; ?>
 					</p>
 				</div>
 				<label class="control-label col-md-2">T&eacute;cnico</label>
 				<div class="col-md-4">
 					<p class="form-control-static">
-						<?php echo $linea_detalle['cliente']; ?> -
-						<?php echo $linea_detalle['tecnico']; ?>
+						<?= $linea_detalle['cliente']; ?> -
+						<?= $linea_detalle['tecnico']; ?>
 					</p>
 				</div>
 			</div>
@@ -65,19 +65,19 @@
 		<?php endif; ?>
 
 					<tr>
-						<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['centro']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['almacen']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['material']; ?></td>
-						<td class="text-left"><?php echo $linea_detalle['texto_material']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['lote']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['valor']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['umb']; ?></td>
-						<td class="text-center"><?php echo fmt_cantidad($linea_detalle['cant']); ?></td>
-						<td class="text-center"><?php echo fmt_monto($linea_detalle['monto']); ?></td>
-						<td class="text-center"><?php echo $linea_detalle['codigo_movimiento']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['elemento_pep']; ?></td>
-						<td class="text-center"><?php echo $linea_detalle['documento_material']; ?></td>
+						<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+						<td class="text-center"><?= $linea_detalle['centro']; ?></td>
+						<td class="text-center"><?= $linea_detalle['almacen']; ?></td>
+						<td class="text-center"><?= $linea_detalle['material']; ?></td>
+						<td class="text-left"><?= $linea_detalle['texto_material']; ?></td>
+						<td class="text-center"><?= $linea_detalle['lote']; ?></td>
+						<td class="text-center"><?= $linea_detalle['valor']; ?></td>
+						<td class="text-center"><?= $linea_detalle['umb']; ?></td>
+						<td class="text-center"><?= fmt_cantidad($linea_detalle['cant']); ?></td>
+						<td class="text-center"><?= fmt_monto($linea_detalle['monto']); ?></td>
+						<td class="text-center"><?= $linea_detalle['codigo_movimiento']; ?></td>
+						<td class="text-center"><?= $linea_detalle['elemento_pep']; ?></td>
+						<td class="text-center"><?= $linea_detalle['documento_material']; ?></td>
 					</tr>
 		<?php $nlinea += 1; ?>
 	<?php endforeach; ?>

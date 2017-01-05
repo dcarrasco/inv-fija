@@ -1,4 +1,4 @@
-<?php echo form_open('','id="frm_param"'); ?>
+<?= form_open('','id="frm_param"'); ?>
 <div class="accordion hidden-print" id="accordion">
 	<div class="panel panel-default">
 		<div class="panel-heading">
@@ -23,18 +23,18 @@
 
 				{validation_errors}
 
-				<div class="col-md-4 form-group <?php echo form_error('tipo_alm[]') ? 'has-error' : ''; ?>">
+				<div class="col-md-4 form-group <?= form_has_error_class('tipo_alm[]') ?>">
 					<label class="control-label">{_stock_perm_label_alm_}</label>
 
-					<?php echo form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
 
 					<div class="pull-right">
 						<div class="radio-inline">
-							<?php echo form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"'); ?>
+							<?= form_radio('tipo_op', 'MOVIL', set_radio('tipo_op','MOVIL', TRUE), 'id="tipo_op_movil"'); ?>
 							{_stock_perm_radio_movil_}
 						</div>
 						<div class="radio-inline">
-							<?php echo form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"'); ?>
+							<?= form_radio('tipo_op', 'FIJA', set_radio('tipo_op','FIJA'), 'id="tipo_op_fija"'); ?>
 							{_stock_perm_radio_fija_}
 						</div>
 					</div>
@@ -42,12 +42,12 @@
 
 				<div class="col-md-3 form-group">
 					<label class="control-label">{_stock_perm_label_estados_}</label>
-					<?php echo form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-2 form-group">
 					<label class="control-label">{_stock_perm_label_tipmat_}</label>
-					<?php echo form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-3">
@@ -56,19 +56,19 @@
 
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
+								<?= form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
 								{_stock_perm_check_alm_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
+								<?= form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
 								{_stock_perm_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?php echo form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
+								<?= form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
 								{_stock_perm_check_modelos_}
 							</label>
 						</div>
@@ -87,10 +87,10 @@
 			</div>
 		</div>
 
-		<?php echo form_hidden('sort', set_value('sort','')); ?>
+		<?= form_hidden('sort', set_value('sort','')); ?>
 	</div>
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 <div> <!-- *************** REPORTE *************** -->
 	{reporte}

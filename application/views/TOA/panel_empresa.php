@@ -1,5 +1,5 @@
 <div class="accordion">
-	<?php echo form_open('','method="get" id="frm_param" class="form-inline"'); ?>
+	<?= form_open('','method="get" id="frm_param" class="form-inline"'); ?>
 	<div class="panel panel-default">
 
 
@@ -19,14 +19,14 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-xs-4 form_group <?php echo form_error('empresa') ? 'has-error' : ''; ?>">
+					<div class="col-xs-4 form_group <?= form_has_error_class('empresa') ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
-						<?php echo form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
+						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-xs-6 form_group <?php echo form_error('mes') ? 'has-error' : ''; ?>">
+					<div class="col-xs-6 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
-						<?php echo form_month('mes', set_value('mes'), 'class="form-control"'); ?>
+						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-xs-2">
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <?php if ($form_validated): ?>
@@ -222,7 +222,7 @@ google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawCharts);
 
 function drawCharts() {
-	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_empresa; ?>);
+	var data_cant = google.visualization.arrayToDataTable(<?= $cant_peticiones_empresa; ?>);
 	var options_cant = {
 		title : 'Cantidad Peticiones',
 		legend: {position: 'none'},
@@ -235,7 +235,7 @@ function drawCharts() {
 	chart_cant.draw(data_cant, options_cant);
 
 
-	var data_monto = google.visualization.arrayToDataTable(<?php echo $monto_peticiones_empresa; ?>);
+	var data_monto = google.visualization.arrayToDataTable(<?= $monto_peticiones_empresa; ?>);
 	var options_monto = {
 		title : 'Monto Peticiones',
 		legend: {position: 'none'},
@@ -248,7 +248,7 @@ function drawCharts() {
 	chart_monto.draw(data_monto, options_monto);
 
 
-	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_instala; ?>);
+	var data_cant = google.visualization.arrayToDataTable(<?= $cant_peticiones_instala; ?>);
 	var options_cant = {
 		title : 'Cantidad Peticiones Instalacion',
 		//legend: {position: 'none'},
@@ -261,7 +261,7 @@ function drawCharts() {
 	chart_cant.draw(data_cant, options_cant);
 
 
-	var data_cant = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_repara; ?>);
+	var data_cant = google.visualization.arrayToDataTable(<?= $cant_peticiones_repara; ?>);
 	var options_cant = {
 		title : 'Cantidad Peticiones Reparacion',
 		//legend: {position: 'none'},
@@ -274,7 +274,7 @@ function drawCharts() {
 	chart_cant.draw(data_cant, options_cant);
 
 
-	var data_tecnicos = google.visualization.arrayToDataTable(<?php echo $cant_tecnicos_empresa; ?>);
+	var data_tecnicos = google.visualization.arrayToDataTable(<?= $cant_tecnicos_empresa; ?>);
 	var options_tecnicos = {
 		title : 'Cantidad Tecnicos',
 		//legend: {position: 'none'},
@@ -287,7 +287,7 @@ function drawCharts() {
 	chart_tecnicos.draw(data_tecnicos, options_tecnicos);
 
 
-	var data_stock = google.visualization.arrayToDataTable(<?php echo $stock_empresa; ?>);
+	var data_stock = google.visualization.arrayToDataTable(<?= $stock_empresa; ?>);
 	var options_stock = {
 		title : 'Stock Almacenes',
 		legend: {position: 'none'},
@@ -300,7 +300,7 @@ function drawCharts() {
 	chart_stock.draw(data_stock, options_stock);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $stock_tecnicos_empresa; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $stock_tecnicos_empresa; ?>);
 	var options_stock_tecnicos = {
 		title : 'Stock Tecnicos',
 		legend: {position: 'none'},
@@ -313,7 +313,7 @@ function drawCharts() {
 	chart_stock_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_instala; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $usage_peticiones_instala; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Instala',
 		pieHole: 0.4,
@@ -324,7 +324,7 @@ function drawCharts() {
 	chart_usage_instala.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_peticiones_repara; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $usage_peticiones_repara; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Repara',
 		pieHole: 0.4,
@@ -335,7 +335,7 @@ function drawCharts() {
 	chart_usage_repara.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $usage_cant_tecnicos; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $usage_cant_tecnicos; ?>);
 	var options_stock_tecnicos = {
 		title : 'Uso Tecnicos',
 		pieHole: 0.4,
@@ -346,9 +346,9 @@ function drawCharts() {
 	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $cant_peticiones_empresa_proy; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $cant_peticiones_empresa_proy; ?>);
 	var options_stock_tecnicos = {
-		title : 'Proyeccion Q Peticiones: <?php echo $proy_q_pet; ?>',
+		title : 'Proyeccion Q Peticiones: <?= $proy_q_pet; ?>',
 		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#FF6633'}, 1: {color: '#EEE'}}
@@ -357,9 +357,9 @@ function drawCharts() {
 	chart_usage_tecnicos.draw(data_stock_tecnicos, options_stock_tecnicos);
 
 
-	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?php echo $monto_peticiones_empresa_proy; ?>);
+	var data_stock_tecnicos = google.visualization.arrayToDataTable(<?= $monto_peticiones_empresa_proy; ?>);
 	var options_stock_tecnicos = {
-		title : 'Proyeccion Monto Peticiones: $ <?php echo $proy_monto_pet; ?>',
+		title : 'Proyeccion Monto Peticiones: $ <?= $proy_monto_pet; ?>',
 		pieHole: 0.4,
 		legend: {position: 'none'},
 		slices: {0: {color: '#990099'}, 1: {color: '#EEE'}}

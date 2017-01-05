@@ -1,5 +1,5 @@
 <div class="accordion hidden-print">
-	<?php echo form_open('','method="get" id="frm_param"'); ?>
+	<?= form_open('','method="get" id="frm_param"'); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -18,14 +18,14 @@
 				{validation_errors}
 
 				<div class="row">
-					<div class="col-md-5 form_group <?php echo form_error('cliente') ? 'has-error' : '' ?>">
+					<div class="col-md-5 form_group <?= form_has_error_class('cliente') ?>">
 						<label class="control-label">{_controles_clientes_}</label>
-						<?php echo form_input('cliente', set_value('cliente'), 'class="form-control"'); ?>
+						<?= form_input('cliente', set_value('cliente'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-5 form_group <?php echo form_error('mes') ? 'has-error' : '' ?>">
+					<div class="col-md-5 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_consumo_fechas_}</label>
-						<?php echo form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control" data-date-min-view-mode="1"'); ?>
+						<?= form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control" data-date-min-view-mode="1"'); ?>
 					</div>
 
 					<div class="col-md-2">
@@ -39,7 +39,7 @@
 			</div>
 		</div>
 	</div>
-	<?php echo form_close(); ?>
+	<?= form_close(); ?>
 </div>
 
 <div class="content-module-main">
@@ -64,10 +64,10 @@
 		<?php endif; ?>
 
 		<tr>
-			<td class="text-muted"><?php echo $num_lin+ 1; ?></td>
-			<td><?php echo fmt_rut($cliente['customer_number']); ?></td>
-			<td><?php echo $cliente['cname']; ?></td>
-			<td class="text-center"><?php echo anchor($link_peticiones.$cliente['customer_number'],fmt_cantidad($cliente['cantidad'])); ?></td>
+			<td class="text-muted"><?= $num_lin+ 1; ?></td>
+			<td><?= fmt_rut($cliente['customer_number']); ?></td>
+			<td><?= $cliente['cname']; ?></td>
+			<td class="text-center"><?= anchor($link_peticiones.$cliente['customer_number'],fmt_cantidad($cliente['cantidad'])); ?></td>
 		</tr>
 		<?php $num_lin+= 1; ?>
 	<?php endforeach; ?>

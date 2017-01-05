@@ -1,17 +1,17 @@
 <div>
 	<?php if ( ! $reporte): ?>
 	<div class="col-md-10 col-md-offset-1 well">
-		<?php echo form_open('','class="form-horizontal"'); ?>
+		<?= form_open('','class="form-horizontal"'); ?>
 		<fieldset>
 
 			<legend>{_toa_consumo_peticion_legend_}</legend>
 
 			{validation_errors}
 
-			<div class="form-group <?php echo form_has_error('pag_desde'); ?>">
+			<div class="form-group <?= form_has_error_class('pag_desde'); ?>">
 				<label class="control-label col-sm-4">{_toa_consumo_peticion_label_}</label>
 				<div class="col-sm-8">
-					<?php echo form_input('peticion', set_value('peticion'), 'class="form-control"'); ?>
+					<?= form_input('peticion', set_value('peticion'), 'class="form-control"'); ?>
 				</div>
 			</div>
 
@@ -27,7 +27,7 @@
 			</div>
 
 		</fieldset>
-		<?php echo form_close(); ?>
+		<?= form_close(); ?>
 	</div>
 	<?php else: ?>
 	<div class="col-md-7 well form-horizontal">
@@ -38,13 +38,13 @@
 				<label class="control-label col-sm-2 col-xs-3">ID Petici&oacute;n</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['appt_number']; ?>
+						<?= $reporte['arr_peticion_toa']['appt_number']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Fecha</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo fmt_fecha($reporte['arr_peticion_toa']['date']); ?>
+						<?= fmt_fecha($reporte['arr_peticion_toa']['date']); ?>
 					</p>
 				</div>
 			</div>
@@ -53,13 +53,13 @@
 				<label class="control-label col-sm-2 col-xs-3">RUT</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo fmt_rut($reporte['arr_peticion_toa']['customer_number']); ?>
+						<?= fmt_rut($reporte['arr_peticion_toa']['customer_number']); ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Nombre</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['cname']; ?>
+						<?= $reporte['arr_peticion_toa']['cname']; ?>
 					</p>
 				</div>
 			</div>
@@ -68,13 +68,13 @@
 				<label class="control-label col-sm-2 col-xs-3">Tel&eacute;fono</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['cphone']; ?>
+						<?= $reporte['arr_peticion_toa']['cphone']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Celular</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['ccell']; ?>
+						<?= $reporte['arr_peticion_toa']['ccell']; ?>
 					</p>
 				</div>
 			</div>
@@ -83,13 +83,13 @@
 				<label class="control-label col-sm-2 col-xs-3">e-mail</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['cemail']; ?>
+						<?= $reporte['arr_peticion_toa']['cemail']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Direcci&oacute;n</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['caddress']; ?>
+						<?= $reporte['arr_peticion_toa']['caddress']; ?>
 					</p>
 				</div>
 			</div>
@@ -98,13 +98,13 @@
 				<label class="control-label col-sm-2 col-xs-3">Agencia</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['XA_ORIGINAL_AGENCY']; ?>
+						<?= $reporte['arr_peticion_toa']['XA_ORIGINAL_AGENCY']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Ciudad</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['ccity']; ?>
+						<?= $reporte['arr_peticion_toa']['ccity']; ?>
 					</p>
 				</div>
 			</div>
@@ -113,9 +113,9 @@
 				<label class="control-label col-sm-2 col-xs-3">Tecnolog&iacute;as</label>
 				<div class="col-sm-10 col-xs-9">
 					<p class="form-control-static">
-						<span class="label label-default">BA</span><span class="label label-info"><?php echo $reporte['arr_peticion_toa']['XA_BROADBAND_TECHNOLOGY']; ?></span>
-						<span class="label label-default">STB</span><span class="label label-info"><?php echo $reporte['arr_peticion_toa']['XA_TELEPHONE_TECHNOLOGY']; ?></span>
-						<span class="label label-default">TV</span><span class="label label-info"><?php echo $reporte['arr_peticion_toa']['XA_TV_TECHNOLOGY']; ?></span>
+						<span class="label label-default">BA</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_BROADBAND_TECHNOLOGY']; ?></span>
+						<span class="label label-default">STB</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_TELEPHONE_TECHNOLOGY']; ?></span>
+						<span class="label label-default">TV</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_TV_TECHNOLOGY']; ?></span>
 					</p>
 				</div>
 			</div>
@@ -124,14 +124,14 @@
 				<label class="control-label col-sm-2 col-xs-3">Empresa</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['empresa']; ?>
+						<?= $reporte['arr_peticion_toa']['empresa']; ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">T&eacute;cnico</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['Resource_External_ID']; ?>
-						<?php echo $reporte['arr_peticion_toa']['Resource_Name']; ?>
+						<?= $reporte['arr_peticion_toa']['Resource_External_ID']; ?>
+						<?= $reporte['arr_peticion_toa']['Resource_Name']; ?>
 					</p>
 				</div>
 			</div>
@@ -146,7 +146,7 @@
 				<label class="control-label col-sm-2 col-xs-3">Origen Peticion</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php echo $reporte['arr_peticion_toa']['XA_CHANNEL_ORIGIN']; ?>
+						<?= $reporte['arr_peticion_toa']['XA_CHANNEL_ORIGIN']; ?>
 					</p>
 				</div>
 			</div>
@@ -154,7 +154,7 @@
 	</div>
 
 	<div class="col-md-5">
-		<?php echo $google_maps; ?>
+		<?= $google_maps; ?>
 	</div>
 
 	<div class="col-md-12">
@@ -190,20 +190,20 @@
 					<?php $nlinea = 0; $sum_cant = 0; $sum_monto = 0; ?>
 					<?php foreach ($reporte['arr_materiales_sap'] as $linea_detalle): ?>
 						<tr>
-							<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['material']; ?></td>
-							<td class="text-left"><?php echo $linea_detalle['texto_material']; ?></td>
-							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?php echo $linea_detalle['serie_toa']; ?>"><?php echo $linea_detalle['serie_toa']; ?></a></td>
-							<td class="text-center"><?php echo $linea_detalle['centro']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['lote']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['valor']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['documento_material']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['codigo_movimiento']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['texto_movimiento']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['elemento_pep']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['umb']; ?></td>
-							<td class="text-center"><?php echo fmt_cantidad($linea_detalle['cant']); ?></td>
-							<td class="text-center"><?php echo fmt_monto($linea_detalle['monto']); ?></td>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center"><?= $linea_detalle['material']; ?></td>
+							<td class="text-left"><?= $linea_detalle['texto_material']; ?></td>
+							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['serie_toa']; ?>"><?= $linea_detalle['serie_toa']; ?></a></td>
+							<td class="text-center"><?= $linea_detalle['centro']; ?></td>
+							<td class="text-center"><?= $linea_detalle['lote']; ?></td>
+							<td class="text-center"><?= $linea_detalle['valor']; ?></td>
+							<td class="text-center"><?= $linea_detalle['documento_material']; ?></td>
+							<td class="text-center"><?= $linea_detalle['codigo_movimiento']; ?></td>
+							<td class="text-center"><?= $linea_detalle['texto_movimiento']; ?></td>
+							<td class="text-center"><?= $linea_detalle['elemento_pep']; ?></td>
+							<td class="text-center"><?= $linea_detalle['umb']; ?></td>
+							<td class="text-center"><?= fmt_cantidad($linea_detalle['cant']); ?></td>
+							<td class="text-center"><?= fmt_monto($linea_detalle['monto']); ?></td>
 						</tr>
 						<?php $nlinea += 1; $sum_cant += $linea_detalle['cant']; $sum_monto += $linea_detalle['monto']; ?>
 					<?php endforeach; ?>
@@ -222,8 +222,8 @@
 							<th></th>
 							<th></th>
 							<th></th>
-							<th class="text-center"><?php echo fmt_cantidad($sum_cant) ?></th>
-							<th class="text-center"><?php echo fmt_monto($sum_monto); ?></th>
+							<th class="text-center"><?= fmt_cantidad($sum_cant) ?></th>
+							<th class="text-center"><?= fmt_monto($sum_monto); ?></th>
 						</tr>
 					</tfoot>
 				</table>
@@ -259,14 +259,14 @@
 					<?php $nlinea = 0; $sum_cant = 0; ?>
 					<?php foreach ($reporte['arr_materiales_toa'] as $linea_detalle): ?>
 						<tr>
-							<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['XI_SAP_CODE']; ?></td>
-							<td class="text-left"><?php echo $linea_detalle['XI_SAP_CODE_DESCRIPTION']; ?></td>
-							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?php echo $linea_detalle['invsn']; ?>"><?php echo $linea_detalle['invsn']; ?></a></td>
-							<td class="text-center"><?php echo $linea_detalle['I_INSTALL_DATE']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['XI_BULK_SAP']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['invpool']; ?></td>
-							<td class="text-center"><?php echo fmt_cantidad($linea_detalle['quantity']); ?></td>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center"><?= $linea_detalle['XI_SAP_CODE']; ?></td>
+							<td class="text-left"><?= $linea_detalle['XI_SAP_CODE_DESCRIPTION']; ?></td>
+							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['invsn']; ?>"><?= $linea_detalle['invsn']; ?></a></td>
+							<td class="text-center"><?= $linea_detalle['I_INSTALL_DATE']; ?></td>
+							<td class="text-center"><?= $linea_detalle['XI_BULK_SAP']; ?></td>
+							<td class="text-center"><?= $linea_detalle['invpool']; ?></td>
+							<td class="text-center"><?= fmt_cantidad($linea_detalle['quantity']); ?></td>
 						</tr>
 						<?php $nlinea += 1; $sum_cant += $linea_detalle['quantity'];?>
 					<?php endforeach; ?>
@@ -280,7 +280,7 @@
 							<th></th>
 							<th></th>
 							<th></th>
-							<th class="text-center"><?php echo fmt_cantidad($sum_cant) ?></th>
+							<th class="text-center"><?= fmt_cantidad($sum_cant) ?></th>
 						</tr>
 					</tfoot>
 				</table>
@@ -314,12 +314,12 @@
 					<?php $nlinea = 0; $sum_cant = 0; ?>
 					<?php foreach ($reporte['arr_materiales_vpi'] as $linea_detalle): ?>
 						<tr>
-							<td class="text-center text-muted"><?php echo $nlinea+1; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['ps_id']; ?></td>
-							<td class="text-left"><?php echo $linea_detalle['desc_producto_servicio']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['cod_opco']; ?></td>
-							<td class="text-center"><?php echo $linea_detalle['desc_operacion_comercial']; ?></td>
-							<td class="text-center"><?php echo fmt_cantidad($linea_detalle['pspe_cantidad']); ?></td>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center"><?= $linea_detalle['ps_id']; ?></td>
+							<td class="text-left"><?= $linea_detalle['desc_producto_servicio']; ?></td>
+							<td class="text-center"><?= $linea_detalle['cod_opco']; ?></td>
+							<td class="text-center"><?= $linea_detalle['desc_operacion_comercial']; ?></td>
+							<td class="text-center"><?= fmt_cantidad($linea_detalle['pspe_cantidad']); ?></td>
 						</tr>
 						<?php $nlinea += 1; $sum_cant += $linea_detalle['pspe_cantidad'];?>
 					<?php endforeach; ?>
@@ -331,7 +331,7 @@
 							<th></th>
 							<th></th>
 							<th></th>
-							<th class="text-center"><?php echo fmt_cantidad($sum_cant) ?></th>
+							<th class="text-center"><?= fmt_cantidad($sum_cant) ?></th>
 						</tr>
 					</tfoot>
 				</table>
@@ -343,10 +343,10 @@
 	<?php endif ?>
 </div>
 
-<?php echo form_open(site_url('stock_analisis_series'), 'id=id_detalle_serie'); ?>
-<?php echo form_hidden('series', '1'); ?>
-<?php echo form_hidden('show_mov', 'show'); ?>
-<?php echo form_close(); ?>
+<?= form_open(site_url('stock_analisis_series'), 'id=id_detalle_serie'); ?>
+<?= form_hidden('series', '1'); ?>
+<?= form_hidden('show_mov', 'show'); ?>
+<?= form_close(); ?>
 
 <script>
 $(document).ready(function () {

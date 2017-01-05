@@ -1,4 +1,4 @@
-<?php echo form_open('','id="frm_ppal"'); ?>
+<?= form_open('','id="frm_ppal"'); ?>
 <div class="panel panel-default hidden-print">
 	<div class="panel-heading">
 		<a href="#form_param" class="accordion-toggle" data-toggle="collapse">
@@ -13,11 +13,11 @@
 			{validation_errors}
 
 			<div class="col-md-4">
-				<div class="form-group <?php echo form_has_error('series'); ?>">
+				<div class="form-group <?= form_has_error_class('series'); ?>">
 					<label class="control-label">
 						{_stock_analisis_label_series_}
 					</label>
-					<?php echo form_textarea('series', set_value('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
+					<?= form_textarea('series', set_value('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
 				</div>
 			</div>
 
@@ -28,44 +28,44 @@
 					</label>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_mov', 'show', set_value('show_mov', TRUE)); ?>
+							<?= form_checkbox('show_mov', 'show', set_value('show_mov', TRUE)); ?>
 							{_stock_analisis_check_movimientos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
+							<?= form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
 							{_stock_analisis_check_filtrar_ultmov_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_despachos', 'show', set_value('show_despachos')); ?>
+							<?= form_checkbox('show_despachos', 'show', set_value('show_despachos')); ?>
 							{_stock_analisis_check_despachos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap')); ?>
+							<?= form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap')); ?>
 							{_stock_analisis_check_stock_sap_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl')); ?>
+							<?= form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl')); ?>
 							{_stock_analisis_check_stock_scl_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_trafico', 'show', set_value('show_trafico')); ?>
+							<?= form_checkbox('show_trafico', 'show', set_value('show_trafico')); ?>
 							{_stock_analisis_check_trafico_}
-							(<?php echo anchor($this->router->class.'/trafico_por_mes', '{_stock_analisis_link_detalle_trafico_}'); ?>)
+							(<?= anchor($this->router->class.'/trafico_por_mes', '{_stock_analisis_link_detalle_trafico_}'); ?>)
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?php echo form_checkbox('show_gdth', 'show', set_value('show_gdth')); ?>
+							<?= form_checkbox('show_gdth', 'show', set_value('show_gdth')); ?>
 							{_stock_analisis_check_gestor_}
 						</label>
 					</div>
@@ -88,7 +88,7 @@
 		</div>
 	</div>
 </div>
-<?php echo form_close(); ?>
+<?= form_close(); ?>
 
 
 <?php if (set_value('show_mov')): ?>
@@ -198,16 +198,16 @@
 				</th>
 			<?php foreach($serie_gdth as $reg_log_gdth): ?>
 				<tr>
-					<td><?php echo $reg_log_gdth['id_log_deco_tarjeta'] ?></td>
-					<td><?php echo $reg_log_gdth['fecha_log'] ?></td>
-					<td><?php echo $reg_log_gdth['serie_deco'] ?></td>
-					<td><?php echo $reg_log_gdth['serie_tarjeta'] ?></td>
-					<td><?php echo $reg_log_gdth['peticion'] ?></td>
-					<td><?php echo $reg_log_gdth['estado'] ?></td>
-					<td><?php echo $reg_log_gdth['tipo_operacion_cas'] ?></td>
-					<td><?php echo $reg_log_gdth['telefono'] ?></td>
-					<td><?php echo $reg_log_gdth['rut'] ?></td>
-					<td><?php echo $reg_log_gdth['nombre'] ?></td>
+					<td><?= $reg_log_gdth['id_log_deco_tarjeta'] ?></td>
+					<td><?= $reg_log_gdth['fecha_log'] ?></td>
+					<td><?= $reg_log_gdth['serie_deco'] ?></td>
+					<td><?= $reg_log_gdth['serie_tarjeta'] ?></td>
+					<td><?= $reg_log_gdth['peticion'] ?></td>
+					<td><?= $reg_log_gdth['estado'] ?></td>
+					<td><?= $reg_log_gdth['tipo_operacion_cas'] ?></td>
+					<td><?= $reg_log_gdth['telefono'] ?></td>
+					<td><?= $reg_log_gdth['rut'] ?></td>
+					<td><?= $reg_log_gdth['nombre'] ?></td>
 				</tr>
 			<?php endforeach; ?>
 			<?php endforeach; ?>

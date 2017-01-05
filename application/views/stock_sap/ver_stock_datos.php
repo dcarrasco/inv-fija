@@ -16,15 +16,15 @@
 					</div>
 					<div>
 						<label class="checkbox-inline">
-							<?php echo form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo', 'equipos'), 'id="sel_graph_tipo_equipos"'); ?>
+							<?= form_radio('sel_graph_tipo', 'equipos', set_radio('sel_graph_tipo', 'equipos'), 'id="sel_graph_tipo_equipos"'); ?>
 							{_stock_sap_radio_equipos_}
 						</label>
 						<label class="checkbox-inline">
-							<?php echo form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo', 'simcard'), 'id="sel_graph_tipo_simcard"'); ?>
+							<?= form_radio('sel_graph_tipo', 'simcard', set_radio('sel_graph_tipo', 'simcard'), 'id="sel_graph_tipo_simcard"'); ?>
 							{_stock_sap_radio_sim_}
 						</label>
 						<label class="checkbox-inline">
-							<?php echo form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo', 'otros'), 'id="sel_graph_tipo_otros"'); ?>
+							<?= form_radio('sel_graph_tipo', 'otros', set_radio('sel_graph_tipo', 'otros'), 'id="sel_graph_tipo_otros"'); ?>
 							{_stock_sap_radio_otros_}
 						</label>
 					</div>
@@ -33,11 +33,11 @@
 					</div>
 					<div>
 						<label class="checkbox-inline">
-							<?php echo form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?>
+							<?= form_radio('sel_graph_valor', 'cantidad', set_radio('sel_graph_valor','cantidad'), 'id="sel_graph_valor_cantidad"'); ?>
 							Cantidad
 						</label>
 						<label class="checkbox-inline">
-							<?php echo form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?>
+							<?= form_radio('sel_graph_valor', 'monto', set_radio('sel_graph_valor','monto'), 'id="sel_graph_valor_monto"'); ?>
 							Monto
 						</label>
 					</div>
@@ -61,14 +61,14 @@
 
 <script language="javascript">
 	var data_grafico = {
-		q_equipos: <?php echo $datos_grafico['serie_q_equipos']; ?>,
-		v_equipos: <?php echo $datos_grafico['serie_v_equipos']; ?>,
-		q_simcard: <?php echo $datos_grafico['serie_q_simcard']; ?>,
-		v_simcard: <?php echo $datos_grafico['serie_v_simcard']; ?>,
-		q_otros: <?php echo $datos_grafico['serie_q_otros']; ?>,
-		v_otros: <?php echo $datos_grafico['serie_v_otros']; ?>,
-		x_label: <?php echo $datos_grafico['str_eje_x']; ?>,
-		series_label: <?php echo $datos_grafico['str_label_series']; ?>,
+		q_equipos: <?= $datos_grafico['serie_q_equipos']; ?>,
+		v_equipos: <?= $datos_grafico['serie_v_equipos']; ?>,
+		q_simcard: <?= $datos_grafico['serie_q_simcard']; ?>,
+		v_simcard: <?= $datos_grafico['serie_v_simcard']; ?>,
+		q_otros: <?= $datos_grafico['serie_q_otros']; ?>,
+		v_otros: <?= $datos_grafico['serie_v_otros']; ?>,
+		x_label: <?= $datos_grafico['str_eje_x']; ?>,
+		series_label: <?= $datos_grafico['str_label_series']; ?>,
 	}
 
 	$(document).ready(function(){
