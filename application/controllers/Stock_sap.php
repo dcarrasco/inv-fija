@@ -103,68 +103,38 @@ class Stock_sap extends CI_Controller {
 	public function mostrar_stock($tipo_op = '')
 	{
 		$this->load->model('stock_sap_model');
-		$this->load->library('grafica_stock');
-
-		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
-		$almacen_sap = new Almacen_sap;
-		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$arr_mostrar = array('fecha', 'tipo_articulo');
-		array_push($arr_mostrar, ($this->input->post('sel_tiposalm') === 'sel_tiposalm') ? 'tipo_alm' : 'almacen');
-		foreach (array('almacen','material','lote','tipo_stock') as $mostrar)
+		foreach (array('sel_tiposalm','almacen','material','lote','tipo_stock') as $mostrar)
 		{
-			if ($this->input->post($mostrar) === $mostrar)
-			{
-				array_push($arr_mostrar, $mostrar);
-			}
-		}
-
-		$arr_filtrar = 	array();
-		foreach (array('fecha','tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $filtro)
-		{
-			$arr_filtrar[$filtro] = $this->input->post($filtro);
+			($this->input->post($mostrar) === $mostrar) AND array_push($arr_mostrar, $mostrar);
 		}
 
 		$tabla_stock = '';
 		$datos_grafico = array();
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
+		$almacen_sap = new Almacen_sap;
+		$tipoalmacen_sap = new Tipoalmacen_sap;
 
-		$this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation);
-		if ($this->form_validation->run())
-		{
-			// recupera tabla de stock de la BD o del cache
-			$tabla_stock = $stock->reporte($arr_mostrar, $this->input->post());
-
-			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
-			{
-				//$datos_grafico = $this->grafica_stock->datos_grafico($stock, $this->input->post());
-			}
-		}
-
-		$combo_fechas = $stock->get_combo_fechas();
-
-		// recupera combo almacenes de la BD o del cache
+		$combo_fechas    = $stock->get_combo_fechas();
 		$combo_almacenes = (set_value('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
 			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
 			: $almacen_sap->get_combo_almacenes($tipo_op);
 
+		$this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation);
+		if ($this->form_validation->run())
+		{
+			$tabla_stock = $stock->reporte($arr_mostrar, $this->input->post());
+		}
+
 		$data = array(
-			'menu_modulo' => array(
-				'menu'         => $this->_arr_menu,
-				'mod_selected' => ($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'
-			),
-			'tabla_stock'           => $tabla_stock,
-			'combo_almacenes'       => $combo_almacenes,
-			'combo_fechas'          => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
-			'tipo_op'               => $tipo_op,
-			'arr_mostrar'           => $arr_mostrar,
-			'datos_grafico'         => $datos_grafico,
-			'totaliza_tipo_almacen' => ((in_array('almacen', $arr_mostrar)
-											OR in_array('material', $arr_mostrar)
-											OR in_array('lote', $arr_mostrar)
-											OR in_array('tipo_stock', $arr_mostrar))
-										AND ($this->input->post('sel_tiposalm') === 'sel_tiposalm'))
-										? TRUE
-										: FALSE,
+			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => ($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
+			'tabla_stock'     => $tabla_stock,
+			'combo_almacenes' => $combo_almacenes,
+			'combo_fechas'    => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
+			'tipo_op'         => $tipo_op,
+			'arr_mostrar'     => $arr_mostrar,
+			'datos_grafico'   => $datos_grafico,
 		);
 
 
@@ -260,14 +230,6 @@ class Stock_sap extends CI_Controller {
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
 			'datos_grafico'          => '',
-			'totaliza_tipo_almacen'  => (((in_array('almacen', $arr_mostrar)
-												OR in_array('material', $arr_mostrar)
-												OR in_array('lote', $arr_mostrar)
-												OR in_array('tipo_stock', $arr_mostrar)
-											)
-											AND ($this->input->post('sel_tiposalm') === 'sel_tiposalm'))
-											? TRUE : FALSE
-										),
 		);
 
 		if ($this->input->post('excel'))

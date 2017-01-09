@@ -120,7 +120,7 @@ class Stock_sap_model extends CI_Model {
 		{
 			$arr_campos['fecha_stock'] = array('titulo' => 'fecha stock', 'class' => '', 'tipo' => 'fecha');
 		}
-		if (in_array('tipo_alm', $mostrar))
+		if (in_array('sel_tiposalm', $mostrar))
 		{
 			$arr_campos['tipo_almacen'] = array('titulo' => 'tipo almacen', 'class' => '', 'tipo' => 'texto');
 		}
