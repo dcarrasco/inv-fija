@@ -345,6 +345,7 @@ class Reporte {
 		// recorre cada uno de los campos y formatea la celda
 		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
 		{
+			$data = '';
 			if ($nombre_campo === $this->_get_campo_subtotal($arr_campos))
 			{
 				$data = strtoupper($tipo).' '.$nombre_subtotal;
@@ -352,10 +353,6 @@ class Reporte {
 			elseif (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
 			{
 				$data = $this->formato_reporte($arr_totales[$tipo][$nombre_campo], $arr_param_campo);
-			}
-			else
-			{
-				$data = '';
 			}
 
 			array_push($arr_linea_totales, array(

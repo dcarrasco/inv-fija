@@ -109,7 +109,10 @@ class Stock_sap extends CI_Controller {
 		$almacen_sap = new Almacen_sap;
 		$tipoalmacen_sap = new Tipoalmacen_sap;
 
-		$arr_mostrar = array('fecha', 'tipo_alm', 'tipo_articulo');
+		$arr_mostrar = array('fecha', 'tipo_articulo');
+
+		array_push($arr_mostrar, ($this->input->post('sel_tiposalm') === 'sel_tiposalm') ? 'tipo_alm' : 'almacen');
+
 		foreach (array('almacen','material','lote','tipo_stock') as $mostrar)
 		{
 			if ($this->input->post($mostrar) === $mostrar)
