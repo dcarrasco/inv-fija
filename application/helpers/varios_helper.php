@@ -602,6 +602,10 @@ if ( ! function_exists('cached_query'))
 		$ci =& get_instance();
 		$cache_ttl = 300;
 
+		$params = ( ! is_array($params)) ? array($params) : $params;
+
+		log_message('debug', "cached_query: id({$cache_id}), object(".get_class($object)."), method({$method}), params(".json_encode($params).")");
+
 		// limpia caches antiguos
 		if (is_array($ci->cache->cache_info()))
 		{

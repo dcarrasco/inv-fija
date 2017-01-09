@@ -27,6 +27,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Stock_sap_fija_model extends Stock_sap_model {
 
 	/**
+	 * Indica el tipo de operación del stock (fijo o movil)
+	 * @var string
+	 */
+	public $tipo_op = 'FIJA';
+
+	/**
 	 * Constructor de la clase
 	 *
 	 * @return void
@@ -154,9 +160,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		}
 		*/
 
-		$arr_result = $this->db->get()->result_array();
-
-		return $this->format_table_stock($arr_result, $mostrar, $filtrar);
+		return $this->db->get()->result_array();
 	}
 
 	// --------------------------------------------------------------------

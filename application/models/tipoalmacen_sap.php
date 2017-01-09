@@ -128,6 +128,19 @@ class Tipoalmacen_sap extends ORM_Model {
 	 */
 	public function get_combo_tiposalm($tipo_op = '')
 	{
+		return cached_query('combo_tiposalm'.$tipo_op, $this, 'get_combo_tiposalm_db', array($tipo_op));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera tipos de almacen y devuelve arreglo para poblar combo
+	 *
+	 * @param  string $tipo_op Tipo de operación (fija o movil)
+	 * @return array           Arreglo de tipos de almacén
+	 */
+	public function get_combo_tiposalm_db($tipo_op = '')
+	{
 		$arr_result = $this->db
 			->select('id_tipo as llave, tipo as valor')
 			->order_by('tipo')

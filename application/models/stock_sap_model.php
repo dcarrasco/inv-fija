@@ -27,6 +27,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Stock_sap_model extends CI_Model {
 
 	/**
+	 * Indica el tipo de operación del stock (fijo o movil)
+	 * @var string
+	 */
+	public $tipo_op = '';
+
+	/**
 	 * Arreglo con validación formulario stock SAP
 	 *
 	 * @var array
@@ -74,6 +80,22 @@ class Stock_sap_model extends CI_Model {
 	public function get_stock($mostrar = array(), $filtrar = array())
 	{
 		return '';
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera stock fijo o movil
+	 *
+	 * @param  array $mostrar Arreglo con campos a mostrar
+	 * @param  array $filtrar Arreglo con campos a filtrar
+	 * @return array          Arreglo con stock
+	 */
+	public function reporte($mostrar = array(), $filtrar = array())
+	{
+		$arr_stock = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', array($mostrar, $filtrar));
+
+		return $this->format_table_stock($arr_stock, $mostrar, $filtrar);
 	}
 
 	// --------------------------------------------------------------------
@@ -196,7 +218,20 @@ class Stock_sap_model extends CI_Model {
 	 * @param  string $tipo_op Indicador del tipo de operación
 	 * @return array           Fechas
 	 */
-	public function get_combo_fechas($tipo_op = '')
+	public function get_combo_fechas()
+	{
+		return cached_query('combo_fechas'.$this->tipo_op, $this, 'get_combo_fechas_db', array());
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera fechas para mostrar en combobox
+	 *
+	 * @param  string $tipo_op Indicador del tipo de operación
+	 * @return array           Fechas
+	 */
+	public function get_combo_fechas_db()
 	{
 		$arr_fecha_tmp = $this->get_data_combo_fechas();
 		$arr_fecha = array('ultimodia' => array(), 'todas' => $arr_fecha_tmp);

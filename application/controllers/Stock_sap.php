@@ -110,9 +110,7 @@ class Stock_sap extends CI_Controller {
 		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$arr_mostrar = array('fecha', 'tipo_articulo');
-
 		array_push($arr_mostrar, ($this->input->post('sel_tiposalm') === 'sel_tiposalm') ? 'tipo_alm' : 'almacen');
-
 		foreach (array('almacen','material','lote','tipo_stock') as $mostrar)
 		{
 			if ($this->input->post($mostrar) === $mostrar)
@@ -120,6 +118,7 @@ class Stock_sap extends CI_Controller {
 				array_push($arr_mostrar, $mostrar);
 			}
 		}
+
 		$arr_filtrar = 	array();
 		foreach (array('fecha','tipo_alm','tipo_articulo','almacenes','sel_tiposalm','tipo_stock_equipos','tipo_stock_simcard','tipo_stock_otros') as $filtro)
 		{
@@ -133,12 +132,7 @@ class Stock_sap extends CI_Controller {
 		if ($this->form_validation->run())
 		{
 			// recupera tabla de stock de la BD o del cache
-			$tabla_stock = cached_query(
-				'mostrar_stock'.$tipo_op.serialize($arr_mostrar).serialize($arr_filtrar),
-				$stock,
-				'get_stock',
-				array($arr_mostrar, $arr_filtrar)
-			);
+			$tabla_stock = $stock->reporte($arr_mostrar, $this->input->post());
 
 			if ($tipo_op === 'MOVIL' AND $tabla_stock !== '')
 			{
@@ -146,13 +140,12 @@ class Stock_sap extends CI_Controller {
 			}
 		}
 
-		// recupera combo fechas de la BD o del cache
-		$combo_fechas = cached_query('combo_fechas'.$tipo_op, $stock, 'get_combo_fechas', array());
+		$combo_fechas = $stock->get_combo_fechas();
 
 		// recupera combo almacenes de la BD o del cache
 		$combo_almacenes = (set_value('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
-			? cached_query('combo_tiposalm'.$tipo_op, $tipoalmacen_sap, 'get_combo_tiposalm', array($tipo_op))
-			: cached_query('combo_almacenes'.$tipo_op, $almacen_sap, 'get_combo_almacenes', array($tipo_op));
+			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
+			: $almacen_sap->get_combo_almacenes($tipo_op);
 
 		$data = array(
 			'menu_modulo' => array(
@@ -351,9 +344,7 @@ class Stock_sap extends CI_Controller {
 	public function ajax_fechas($tipo_op = 'MOVIL', $tipo_fecha = 'ultimodia')
 	{
 		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
-
-		// recupera combo fechas de la BD o del cache
-		$arr_fechas = cached_query('combo_fechas'.$tipo_op, $stock, 'get_combo_fechas', array());
+		$arr_fechas = $stock->get_combo_fechas();
 
 		$this->output
 			->set_content_type('text')
@@ -377,8 +368,8 @@ class Stock_sap extends CI_Controller {
 		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$arr_almacenes = ($tipo_alm === 'sel_tiposalm')
-			? cached_query('combo_tiposalm'.$tipo_op, $tipoalmacen_sap, 'get_combo_tiposalm', array($tipo_op))
-			: cached_query('combo_almacenes'.$tipo_op, $almacen_sap, 'get_combo_almacenes', array($tipo_op));
+			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
+			: $almacen_sap->get_combo_almacenes($tipo_op);
 
 		$this->output
 			->set_content_type('text')

@@ -142,6 +142,21 @@ class Almacen_sap extends ORM_Model {
 	 */
 	public function get_combo_almacenes($tipo_op = '', $filtro = '')
 	{
+		return cached_query('combo_almacenes'.$tipo_op.$filtro, $this, 'get_combo_almacenes_db', array($tipo_op, $filtro));
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo con almacenes para usar en combo
+	 *
+	 * @param  string $tipo_op Indica si la operacion es fija o movil
+	 * @param  string $filtro  Filtra almacenes por tipo
+	 * @return array           Arreglo de almacenes
+	 */
+	public function get_combo_almacenes_db($tipo_op = '', $filtro = '')
+	{
 		if ($filtro === '')
 		{
 			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op)));
