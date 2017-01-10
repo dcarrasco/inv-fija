@@ -80,13 +80,13 @@ class Reporte {
 				);
 				break;
 			case 'numero':
-				return fmt_cantidad($valor);
+				return fmt_cantidad($valor, 0, TRUE);
 				break;
 			case 'valor':
-				return fmt_monto($valor);
+				return fmt_monto($valor, 'UN', '$', 0, TRUE);
 				break;
 			case 'valor_pmp':
-				return fmt_monto($valor);
+				return fmt_monto($valor, 'UN', '$', 0, TRUE);
 				break;
 			case 'numero_dif':
 				return '<strong>' .
@@ -121,33 +121,22 @@ class Reporte {
 		$ci =& get_instance();
 
 		$sort_by = $ci->input->post_get('sort');
+		$sort_by = ($sort_by === NULL OR $sort_by === '') ? $campo_default : $sort_by;
+		$sort_by = ( ! in_array(substr($sort_by, 0, 1), array('+', '-'))) ? '+'.$sort_by : $sort_by;
 
-		if ($sort_by === NULL OR $sort_by === '')
-		{
-			$sort_by_field = $campo_default;
-			$sort_by_order = '+';
-		}
-		else
-		{
-			if ( ! in_array(substr($sort_by, 0, 1), array('+', '-')))
-			{
-				$sort_by = '+'.$sort_by;
-			}
-			$sort_by_field = substr($sort_by, 1, strlen($sort_by));
-			$sort_by_order = substr($sort_by, 0, 1);
-		}
-
+		$sort_by_field = substr($sort_by, 1, strlen($sort_by));
+		$sort_by_order = substr($sort_by, 0, 1);
 		$new_orden_tipo  = ($sort_by_order === '+') ? '-' : '+';
 
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
 
-			$arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
-			$arr_tipo_icono_texto  = array('link', 'texto');
+			// $arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
+			// $arr_tipo_icono_texto  = array('link', 'texto');
+			// $tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
+			// $tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
 			$tipo_icono = 'amount';
-			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
-			$tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
 
 			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-{$tipo_icono}-desc" : "sort-{$tipo_icono}-asc";
 
@@ -238,7 +227,7 @@ class Reporte {
 		}
 
 		// --- TOTALES ---
-		$ci->table->add_row($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
+		$ci->table->set_footer($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
 
 		return $ci->table->generate().' '.$script;
 	}
@@ -299,7 +288,6 @@ class Reporte {
 	{
 		$arr_linea_datos = array();
 
-
 		// primera celda, muestra el numero de la linea
 		array_push($arr_linea_datos, array(
 			'data'  => $num_linea,
@@ -356,7 +344,7 @@ class Reporte {
 			}
 
 			array_push($arr_linea_totales, array(
-				'data' => "<strong>{$data}</strong>",
+				'data' => $data,
 				'class' => array_key_exists('class', $arr_param_campo) ? $arr_param_campo['class'] : ''
 			));
 		}

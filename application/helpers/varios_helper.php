@@ -458,14 +458,14 @@ if ( ! function_exists('fmt_monto'))
 	 * @param  integer $decimales    Cantidad de decimales a mostrar
 	 * @return string                Monto formateado
 	 */
-	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0)
+	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE)
 	{
 		if ( ! is_numeric($monto))
 		{
 			return NULL;
 		}
 
-		if ($monto === 0)
+		if ($monto === 0 AND ! $mostrar_cero)
 		{
 			return '';
 		}
