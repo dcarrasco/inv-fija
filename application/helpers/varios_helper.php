@@ -429,9 +429,10 @@ if ( ! function_exists('fmt_cantidad'))
 	 * @param  integer $valor        Valor a formatear
 	 * @param  integer $decimales    Cantidad de decimales a mostrar
 	 * @param  boolean $mostrar_cero Indica si muestra o no valores ceros
+	 * @param  boolean $format_diff  Indica si formatea valores positivos (verde) y negativos (rojo)
 	 * @return string                Valor formateado
 	 */
-	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE)
+	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
 		if ( ! is_numeric($valor))
 		{
@@ -439,8 +440,17 @@ if ( ! function_exists('fmt_cantidad'))
 		}
 
 		$cero = $mostrar_cero ? '0' : '';
+		$valor_formateado = ($valor === 0) ? $cero : number_format($valor, $decimales, ',', '.');
 
-		return ($valor === 0) ? $cero : number_format($valor, $decimales, ',', '.');
+		$format_start = '';
+		$format_end   = '';
+		if ($format_diff)
+		{
+			$format_start = ($valor > 0) ? '<strong><span class="text-success">+' : (($valor < 0 ) ? '<strong><span class="text-danger">' : '');
+			$format_end   = ($valor === 0) ? '' : '</span></strong>';
+		}
+
+		return $format_start.$valor_formateado.$format_end;
 	}
 }
 
@@ -456,9 +466,11 @@ if ( ! function_exists('fmt_monto'))
 	 * @param  string  $unidad       Unidad a desplegar
 	 * @param  string  $signo_moneda Simbolo monetario
 	 * @param  integer $decimales    Cantidad de decimales a mostrar
+	 * @param  boolean $mostrar_cero Indica si muestra o no valores ceros
+	 * @param  boolean $format_diff  Indica si formatea valores positivos (verde) y negativos (rojo)
 	 * @return string                Monto formateado
 	 */
-	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE)
+	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
 		if ( ! is_numeric($monto))
 		{
@@ -469,17 +481,26 @@ if ( ! function_exists('fmt_monto'))
 		{
 			return '';
 		}
-		else
+
+		if (strtoupper($unidad) === 'UN')
 		{
-			if (strtoupper($unidad) === 'UN')
-			{
-				return $signo_moneda . '&nbsp;' . number_format($monto, $decimales, ',', '.');
-			}
-			elseif (strtoupper($unidad) === 'MM')
-			{
-				return 'MM' . $signo_moneda . '&nbsp;' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
-			}
+			$valor_formateado = $signo_moneda . '&nbsp;' . number_format($monto, $decimales, ',', '.');
 		}
+		elseif (strtoupper($unidad) === 'MM')
+		{
+			$valor_formateado = 'MM' . $signo_moneda . '&nbsp;' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
+		}
+
+		$format_start = '';
+		$format_end   = '';
+		if ($format_diff)
+		{
+			$format_start = ($monto > 0) ? '<strong><span class="text-success">+' : (($monto < 0 ) ? '<strong><span class="text-danger">' : '');
+			$format_end   = ($monto === 0) ? '' : '</span></strong>';
+		}
+
+		return $format_start.$valor_formateado.$format_end;
+
 	}
 
 // --------------------------------------------------------------------

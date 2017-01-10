@@ -48,37 +48,33 @@ class Reporte {
 	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
+		$format_detalle = function($valor, $arr_param_campo, $registro, $campo)
+		{
+			$registro['permanencia'] = $campo;
+			$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
+			$valor_desplegar = fmt_cantidad($valor);
+
+			return anchor(
+				$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
+				($valor_desplegar === '') ? ' ' : $valor_desplegar
+			);
+		};
+
 		$arr_formatos = array(
-			'texto'     => function($valor) {return $valor;},
-			'fecha'     => function($valor) {return fmt_fecha($valor);},
-			'numero'    => function($valor) {return fmt_cantidad($valor, 0, TRUE);},
-			'valor'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
-			'valor_pmp' => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
-			'link'      => function($valor, $arr_param_campo) {return anchor($arr_param_campo['href'] . $valor, $valor);},
-			'numero_dif' => function($valor) {return '<strong>' . (($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) . fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .'</strong>';},
-			'valor_dif' => function($valor) {return '<strong>' .(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .'</strong>';},
+			'texto'         => function($valor) {return $valor;},
+			'fecha'         => function($valor) {return fmt_fecha($valor);},
+			'numero'        => function($valor) {return fmt_cantidad($valor, 0, TRUE);},
+			'valor'         => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
+			'valor_pmp'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
+			'numero_dif'    => function($valor) {return fmt_cantidad($valor, 0, TRUE, TRUE);},
+			'valor_dif'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE, TRUE);},
+			'link'          => function($valor, $arr_param_campo) {return anchor($arr_param_campo['href'] . $valor, $valor);},
 			'link_registro' => function($valor, $arr_param_campo, $registro)
 				{
-					$arr_link = array();
-					foreach ($arr_param_campo['href_registros'] as $campos_link)
-					{
-						$valor_registro = ($campos_link === 'fecha') ? fmt_fecha_db($registro[$campos_link]) : $registro[$campos_link];
-						array_push($arr_link, $valor_registro);
-					}
-
-					return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
+					array_walk($arr_param_campo['href_registros'], function(&$elem, $key, $reg) {$elem = $reg[$elem];}, $registro);
+					return anchor($arr_param_campo['href'].'/'.implode('/', $arr_param_campo['href_registros']), $valor);
 				},
-			'link_detalle_series' => function($valor, $arr_param_campo, $registro, $campo)
-				{
-					$registro['permanencia'] = $campo;
-					$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
-					$valor_desplegar = fmt_cantidad($valor);
-
-					return anchor(
-						$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
-						($valor_desplegar === '') ? ' ' : $valor_desplegar
-					);
-				},
+			'link_detalle_series' => $format_detalle,
 		);
 
 		$tipo_dato = $arr_param_campo['tipo'];
