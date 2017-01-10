@@ -223,9 +223,9 @@ class Orm_model implements IteratorAggregate {
 		{
 			$campo = (substr($campo, 0, 1) !== '_' ? '_' : '').$campo;
 
-			if (isset($this->$campo))
+			if (isset($this->{$campo}))
 			{
-				$this->$campo = $propiedad;
+				$this->{$campo} = $propiedad;
 			}
 		}
 	}
@@ -419,17 +419,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _determina_campo_id()
 	{
-		$arr_key = array();
-
-		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
-		{
-			if ($obj_campo->get_es_id())
-			{
-				array_push($arr_key, $nombre_campo);
-			}
-		}
-
-		return $arr_key;
+		return array_keys(array_filter($this->_model_fields, function($elem) {return $elem->get_es_id();} ));
 	}
 
 	// --------------------------------------------------------------------
@@ -441,16 +431,9 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_id()
 	{
-		$arr_id = array();
+		$model_id = implode($this->_separador_campos, array_intersect_key($this->_fields_values, array_flip($this->_model_campo_id)));
 
-		foreach ($this->_model_campo_id as $campo)
-		{
-			array_push($arr_id, $this->{$campo});
-		}
-
-		$model_id = implode($this->_separador_campos, $arr_id);
-
-		return ($model_id === '') ? NULL : $model_id;
+		return ($model_id === '' OR $model_id === $this->_separador_campos) ? NULL : $model_id;
 	}
 
 	// --------------------------------------------------------------------
@@ -466,10 +449,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function valida_form()
 	{
-		foreach ($this->_model_fields as $nombre_campo => $obj_campo)
-		{
-			$this->set_validation_rules_field($nombre_campo);
-		}
+		$this->set_validation_rules_field(array_keys($this->_model_fields));
 
 		return $this->form_validation->run();
 	}
@@ -479,11 +459,21 @@ class Orm_model implements IteratorAggregate {
 	/**
 	 * Genera la regla de validación para un campo, de acuerdo a la definición del campo
 	 *
-	 * @param  string $campo Nombre del campo
+	 * @param  string/array $campo Nombre del campo / Arreglo con nombres de campos
 	 * @return void
 	 */
 	public function set_validation_rules_field($campo = '')
 	{
+		if (is_array($campo))
+		{
+			foreach($campo as $elemento_campo)
+			{
+				$this->set_validation_rules_field($elemento_campo);
+			}
+
+			return;
+		}
+
 		$field = $this->_model_fields[$campo];
 
 		$reglas = 'trim';
@@ -891,33 +881,12 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
-		$arr_condiciones = array();
+		// junta los arreglos de campos id con los valores
+		$arr_condiciones = array_combine($this->_model_campo_id, explode($this->_separador_campos, $id_modelo));
 
-		if (count($this->_model_campo_id) === 1)
-		{
-			foreach ($this->_model_campo_id as $campo_id)
-			{
-				$tipo_id = $this->_model_fields[$campo_id]->get_tipo();
-
-				if ($tipo_id === Orm_field::TIPO_ID OR $tipo_id === Orm_field::TIPO_INT)
-				{
-					$arr_condiciones[$campo_id] = (int) $id_modelo;
-				}
-				else
-				{
-					$arr_condiciones[$campo_id] = $id_modelo;
-				}
-			}
-		}
-		else
-		{
-			$arr_val_id = explode($this->_separador_campos, $id_modelo);
-
-			foreach ($this->_model_campo_id as $indice => $campo_id)
-			{
-				$arr_condiciones[$campo_id] = is_null($id_modelo) ? '' : $arr_val_id[$indice];
-			}
-		}
+		// en caso que los id sean INT o ID, transforma los valores a (int)
+		$model_fields = $this->_model_fields;
+		array_walk($arr_condiciones, function(&$val, $key, $fields) {$val = in_array($fields[$key]->get_tipo(), array(Orm_field::TIPO_ID, Orm_field::TIPO_INT)) ? (int) $val : $val;}, $model_fields);
 
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
