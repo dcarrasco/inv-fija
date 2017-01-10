@@ -48,63 +48,46 @@ class Reporte {
 	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
-		switch ($arr_param_campo['tipo'])
-		{
-			case 'texto':
-				return $valor;
-				break;
-			case 'fecha':
-				return fmt_fecha($valor);
-				break;
-			case 'link':
-				return anchor($arr_param_campo['href'] . $valor, $valor);
-				break;
-			case 'link_registro':
-				$arr_link = array();
-				foreach ($arr_param_campo['href_registros'] as $campos_link)
+		$arr_formatos = array(
+			'texto'     => function($valor) {return $valor;},
+			'fecha'     => function($valor) {return fmt_fecha($valor);},
+			'numero'    => function($valor) {return fmt_cantidad($valor, 0, TRUE);},
+			'valor'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
+			'valor_pmp' => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
+			'link'      => function($valor, $arr_param_campo) {return anchor($arr_param_campo['href'] . $valor, $valor);},
+			'numero_dif' => function($valor) {return '<strong>' . (($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) . fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .'</strong>';},
+			'valor_dif' => function($valor) {return '<strong>' .(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .'</strong>';},
+			'link_registro' => function($valor, $arr_param_campo, $registro)
 				{
-					$valor_registro = ($campos_link === 'fecha') ? fmt_fecha_db($registro[$campos_link]) : $registro[$campos_link];
-					array_push($arr_link, $valor_registro);
-				}
+					$arr_link = array();
+					foreach ($arr_param_campo['href_registros'] as $campos_link)
+					{
+						$valor_registro = ($campos_link === 'fecha') ? fmt_fecha_db($registro[$campos_link]) : $registro[$campos_link];
+						array_push($arr_link, $valor_registro);
+					}
 
-				return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
-				break;
-			case 'link_detalle_series':
-				$registro['permanencia'] = $campo;
-				$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
-				$valor_desplegar = fmt_cantidad($valor);
+					return anchor($arr_param_campo['href'].'/'.implode('/', $arr_link), $valor);
+				},
+			'link_detalle_series' => function($valor, $arr_param_campo, $registro, $campo)
+				{
+					$registro['permanencia'] = $campo;
+					$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
+					$valor_desplegar = fmt_cantidad($valor);
 
-				return anchor(
-					$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
-					($valor_desplegar === '') ? ' ' : $valor_desplegar
-				);
-				break;
-			case 'numero':
-				return fmt_cantidad($valor, 0, TRUE);
-				break;
-			case 'valor':
-				return fmt_monto($valor, 'UN', '$', 0, TRUE);
-				break;
-			case 'valor_pmp':
-				return fmt_monto($valor, 'UN', '$', 0, TRUE);
-				break;
-			case 'numero_dif':
-				return '<strong>' .
-					(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .
-					fmt_cantidad($valor) . (($valor !== '0') ? '</span>' : '') .
-					'</strong>';
-				break;
-			case 'valor_dif':
-				return '<strong>' .
-					(($valor > 0) ? '<span class="text-success">+' : (($valor < 0) ? '<span class="text-danger">' : '')) .
-					fmt_monto($valor) . (($valor !== 0) ? '</span>' : '') .
-					'</strong>';
-				break;
-			default:
-				return $valor;
-				break;
+					return anchor(
+						$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
+						($valor_desplegar === '') ? ' ' : $valor_desplegar
+					);
+				},
+		);
+
+		$tipo_dato = $arr_param_campo['tipo'];
+		if ( ! array_key_exists($tipo_dato, $arr_formatos))
+		{
+			return $valor;
 		}
 
+		return call_user_func_array($arr_formatos[$tipo_dato], array($valor, $arr_param_campo, $registro, $campo));
 	}
 
 	// --------------------------------------------------------------------
