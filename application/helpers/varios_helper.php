@@ -606,6 +606,22 @@ if ( ! function_exists('fmt_rut'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('map'))
+{
+	/**
+	 * Wrapper de la función array_map
+	 * @param  mixed &$data Arreglo con datos
+	 * @param  mixed &$f    Funcion a ejecutar
+	 * @return array        Resultado de array_map
+	 */
+	function map($data, $f)
+	{
+		return array_map($f, $data);
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('cached_query'))
 {
 	/**

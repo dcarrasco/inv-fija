@@ -48,7 +48,7 @@ class Reporte {
 	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
-		$format_detalle = function($valor, $arr_param_campo, $registro, $campo)
+		$func_format_detalle = function($valor, $arr_param_campo, $registro, $campo)
 		{
 			$registro['permanencia'] = $campo;
 			$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
@@ -68,13 +68,9 @@ class Reporte {
 			'valor_pmp'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE);},
 			'numero_dif'    => function($valor) {return fmt_cantidad($valor, 0, TRUE, TRUE);},
 			'valor_dif'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE, TRUE);},
-			'link'          => function($valor, $arr_param_campo) {return anchor($arr_param_campo['href'] . $valor, $valor);},
-			'link_registro' => function($valor, $arr_param_campo, $registro)
-				{
-					array_walk($arr_param_campo['href_registros'], function(&$elem, $key, $reg) {$elem = $reg[$elem];}, $registro);
-					return anchor($arr_param_campo['href'].'/'.implode('/', $arr_param_campo['href_registros']), $valor);
-				},
-			'link_detalle_series' => $format_detalle,
+			'link'          => function($valor, $param) {return anchor($param['href'] . $valor, $valor);},
+			'link_registro' => function($valor, $param, $registro) {return anchor($param['href'].'/'.implode('/', array_map(function($elem) use($registro) {return $registro[$elem];}, $param['href_registros'])), $valor);},
+			'link_detalle_series' => $func_format_detalle,
 		);
 
 		$tipo_dato = $arr_param_campo['tipo'];
@@ -132,24 +128,13 @@ class Reporte {
 	 */
 	public function get_order_by($sort_by)
 	{
-		return implode(array_map(array($this, '_order_by'), explode(',', $sort_by)), ', ');
-	}
+		$func_order_by_transform = function($value)
+		{
+			$value = ( ! in_array(substr(trim($value), 0, 1), array('+', '-'))) ? '+'.trim($value) : trim($value);
+			return substr($value, 1, strlen($value)) . ((substr($value, 0, 1) === '+') ? ' ASC' : ' DESC');
+		};
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve un string con formato "[+/-]campo" a formato "campo [ASC/DESC]"
-	 *
-	 * @param  string $sort_by Texto a cambiar el formato
-	 * @return string          Texto con formato final
-	 */
-	private function _order_by($sort_by)
-	{
-		$sort_by = ( ! in_array(substr(trim($sort_by), 0, 1), array('+', '-'))) ? '+'.trim($sort_by) : trim($sort_by);
-		$sort = substr($sort_by, 1, strlen($sort_by));
-		$sort .= (substr($sort_by, 0, 1) === '+') ? ' ASC' : ' DESC';
-
-		return $sort;
+		return implode(map(explode(',', $sort_by), $func_order_by_transform), ', ');
 	}
 
 
