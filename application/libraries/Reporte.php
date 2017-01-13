@@ -95,26 +95,17 @@ class Reporte {
 	{
 		$ci =& get_instance();
 
-		$sort_by = $ci->input->post_get('sort');
-		$sort_by = ($sort_by === NULL OR $sort_by === '') ? $campo_default : $sort_by;
-		$sort_by = ( ! in_array(substr($sort_by, 0, 1), array('+', '-'))) ? '+'.$sort_by : $sort_by;
+		$sort_by = empty($ci->input->post_get('sort')) ? $campo_default : $ci->input->post_get('sort');
+		$sort_by = ( ! preg_match('/^[+\-](.*)$/', $sort_by)) ? '+'.$sort_by : $sort_by;
 
-		$sort_by_field = substr($sort_by, 1, strlen($sort_by));
-		$sort_by_order = substr($sort_by, 0, 1);
-		$new_orden_tipo  = ($sort_by_order === '+') ? '-' : '+';
+		$sort_by_field  = substr($sort_by, 1, strlen($sort_by));
+		$sort_by_order  = substr($sort_by, 0, 1);
+		$new_orden_tipo = ($sort_by_order === '+') ? '-' : '+';
 
 		foreach ($arr_campos as $campo => $valor)
 		{
+			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-amount-desc" : "sort-amount-asc";
 			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
-
-			// $arr_tipo_icono_numero = array('numero', 'numero_dif', 'valor', 'valor_dif', 'valor_pmp');
-			// $arr_tipo_icono_texto  = array('link', 'texto');
-			// $tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_numero) ? 'numeric' : $tipo_icono;
-			// $tipo_icono = in_array($arr_campos[$campo]['tipo'], $arr_tipo_icono_texto) ? 'alpha' : $tipo_icono;
-			$tipo_icono = 'amount';
-
-			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-{$tipo_icono}-desc" : "sort-{$tipo_icono}-asc";
-
 			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
 		}
 	}
@@ -134,7 +125,7 @@ class Reporte {
 			return substr($value, 1, strlen($value)) . ((substr($value, 0, 1) === '+') ? ' ASC' : ' DESC');
 		};
 
-		return implode(map(explode(',', $sort_by), $func_order_by_transform), ', ');
+		return collect(explode(',', $sort_by))->map($func_order_by_transform)->implode(', ');
 	}
 
 

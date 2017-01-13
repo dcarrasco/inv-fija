@@ -2374,11 +2374,11 @@ class Toa_model extends CI_Model {
 			// titulo
 			if ($num_registro === 0)
 			{
-				$arrjs = "[['Dia', ".implode(map(array_keys($valor), $func_agrega_comillas), ',').']';
+				$arrjs = "[['Dia', ".collect(array_keys($valor))->map($func_agrega_comillas)->implode(',').']';
 			}
 
 			// agregamos los datos del día
-			$arrjs .= ", ['{$num_dia}',".implode(map($valor, $func_nulos_a_cero), ',').']';
+			$arrjs .= ", ['{$num_dia}',".collect($valor)->map($func_nulos_a_cero)->implode(',').']';
 			$num_registro += 1;
 		}
 

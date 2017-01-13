@@ -466,7 +466,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		if (is_array($campo))
 		{
-			return map($campo, function($val){$this->set_validation_rules_field($val);});
+			return collect($campo)->map(function($val) {$this->set_validation_rules_field($val);});
 		}
 
 		$field = $this->_model_fields[$campo];

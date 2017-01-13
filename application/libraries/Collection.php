@@ -43,10 +43,7 @@ class Collection implements IteratorAggregate {
 	 **/
 	public function __construct($items = NULL)
 	{
-		if (is_array($items))
-		{
-			$this->_items = $items;
-		}
+		$this->get_array($items);
 	}
 
 	// --------------------------------------------------------------------
@@ -58,6 +55,22 @@ class Collection implements IteratorAggregate {
 	public function __toString()
 	{
 		return '';
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Inicializa la colección con un arreglo
+	 *
+	 * @param array $items Arreglo inicial para poblar la colección
+	 * @return  void
+	 **/
+	public function get_array($items = array())
+	{
+		if (is_array($items))
+		{
+			$this->_items = $items;
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -164,6 +177,32 @@ class Collection implements IteratorAggregate {
 	public function key_exists($llave)
 	{
 		return isset($this->_items[$llave]);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Ejecuta una funcion sobre cada uno de los elementos de la coleccion
+	 *
+	 * @param  callable $f Funcion a ejecutar en cada elemento
+	 * @return Collection  Colección con el resultado
+	 */
+	function map($f)
+	{
+		return new static(array_map($f, $this->_items));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Transforma una colección en un string
+	 *
+	 * @param  string $glue String para concatenar los elementos de la coleccion
+	 * @return string       String concatenado
+	 */
+	function implode($glue = '')
+	{
+		return implode($glue, $this->_items);
 	}
 
 

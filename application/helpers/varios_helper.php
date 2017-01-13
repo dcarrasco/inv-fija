@@ -606,6 +606,24 @@ if ( ! function_exists('fmt_rut'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('collect'))
+{
+	/**
+	 * Wrapper de la función array_map
+	 * @param  array $arr Arreglo con datos
+	 * @return array        Resultado de array_map
+	 */
+	function collect($arr = array())
+	{
+		$collection = new Collection;
+		$collection->get_array($arr);
+
+		return $collection;
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('map'))
 {
 	/**
