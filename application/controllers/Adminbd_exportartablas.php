@@ -84,9 +84,9 @@ class Adminbd_exportartablas extends CI_Controller {
 		}
 
 		// reglas de validacion formulario
-		$this->form_validation->set_rules($this->adminbd_model->validation_exportar_tablas);
+		$is_form_valid = $this->form_validation->set_rules($this->adminbd_model->validation_exportar_tablas)->run();
 
-		if ($this->form_validation->run() === TRUE)
+		if ($is_form_valid)
 		{
 			if ($this->db->table_exists($tabla))
 			{

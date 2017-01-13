@@ -118,9 +118,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function consumos()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_consumos_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -147,9 +148,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function asignaciones()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_consumos_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -175,9 +177,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function materiales_consumidos()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_consumos_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_consumos_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -203,9 +206,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function stock()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_stock_empresa_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_stock_empresa_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -231,9 +235,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function stock_tecnicos()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_stock_tecnicos_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_stock_tecnicos_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 
@@ -302,9 +307,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function materiales()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_materiales_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_materiales_validation)
+			->run();
 
 		$empresa_toa = new Empresa_toa();
 		$tipo_trabajo = new Tipo_trabajo_toa();
@@ -361,9 +367,10 @@ class Toa_controles extends CI_Controller {
 	 */
 	public function clientes()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->controles_clientes_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->controles_clientes_validation)
+			->run();
 
 		$datos = array(
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'clientes'),

@@ -71,8 +71,7 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 		$this->load->model('log_gestor_model');
 		$datos = array();
 
-		$this->form_validation->set_rules($this->log_gestor_model->validation_rules);
-		$this->form_validation->run();
+		$this->form_validation->set_rules($this->log_gestor_model->validation_rules)->run();
 
 		$arr_filtro_cas = array();
 

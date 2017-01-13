@@ -112,9 +112,8 @@ class Inventario_reportes extends CI_Controller {
 	 */
 	public function listado($tipo = 'hoja', $param1 = '')
 	{
-		// define reglas para usar set_value
-		$this->form_validation->set_rules($this->inventario_model->reportes_validation);
-		$this->form_validation->run();
+		// define reglas para usar set_value, y ejecuta validación de formulario
+		$this->form_validation->set_rules($this->inventario_model->reportes_validation)->run();
 
 		$id_inventario = set_value('inv_activo', $this->inventario_model->get_id_inventario_activo());
 

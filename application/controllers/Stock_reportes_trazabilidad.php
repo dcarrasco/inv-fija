@@ -85,15 +85,16 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		$this->load->model('reportestock_model');
 
 		// define reglas para usar set_value
-		$this->form_validation->set_rules('tipo_alm');
-		$this->form_validation->set_rules('estado_sap');
-		$this->form_validation->set_rules('incl_almacen', '', 'trim');
-		$this->form_validation->set_rules('incl_lote', '', 'trim');
-		$this->form_validation->set_rules('incl_estado', '', 'trim');
-		$this->form_validation->set_rules('incl_modelos', '', 'trim');
-		$this->form_validation->set_rules('order_by', '', 'trim');
-		$this->form_validation->set_rules('order_sort', '', 'trim');
-		$this->form_validation->run();
+		$this->form_validation
+			->set_rules('tipo_alm')
+			->set_rules('estado_sap')
+			->set_rules('incl_almacen', '', 'trim')
+			->set_rules('incl_lote', '', 'trim')
+			->set_rules('incl_estado', '', 'trim')
+			->set_rules('incl_modelos', '', 'trim')
+			->set_rules('order_by', '', 'trim')
+			->set_rules('order_sort', '', 'trim')
+			->run();
 
 		$orden_campo   = set_value('order_by');
 		$orden_tipo    = set_value('order_sort');

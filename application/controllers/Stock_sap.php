@@ -76,8 +76,6 @@ class Stock_sap extends CI_Controller {
 				'icon'  => 'th',
 			),
 		);
-
-		$this->load->driver('cache', array('adapter' => 'file'));
 	}
 
 	// --------------------------------------------------------------------
@@ -121,22 +119,17 @@ class Stock_sap extends CI_Controller {
 			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
 			: $almacen_sap->get_combo_almacenes($tipo_op);
 
-		$this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation);
-		if ($this->form_validation->run())
-		{
-			$tabla_stock = $stock->reporte($arr_mostrar, $this->input->post());
-		}
+		$is_form_valid = $this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation)->run();
 
 		$data = array(
 			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => ($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
-			'tabla_stock'     => $tabla_stock,
+			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, $this->input->post()) : '',
 			'combo_almacenes' => $combo_almacenes,
 			'combo_fechas'    => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
 			'tipo_op'         => $tipo_op,
 			'arr_mostrar'     => $arr_mostrar,
 			'datos_grafico'   => $datos_grafico,
 		);
-
 
 		if ($this->input->post('excel'))
 		{

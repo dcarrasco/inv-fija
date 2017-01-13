@@ -73,9 +73,9 @@ class Login extends CI_Controller {
 
 		$this->acl_model->delete_session_data();
 
-		$this->form_validation->set_rules($this->acl_model->login_validation);
+		$is_form_valid = $this->form_validation->set_rules($this->acl_model->login_validation)->run();
 
-		if ($this->form_validation->run() === TRUE)
+		if ($is_form_valid)
 		{
 			$usuario      = set_value('usr');
 			$password     = set_value('pwd');
@@ -153,7 +153,7 @@ class Login extends CI_Controller {
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
 		}
 
-		if ($this->form_validation->run() === TRUE)
+		if ($this->form_validation->run())
 		{
 			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
 			{

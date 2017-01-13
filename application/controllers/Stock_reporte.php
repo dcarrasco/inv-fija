@@ -113,9 +113,9 @@ class Stock_reporte extends CI_Controller {
 		$view = 'listado';
 
 		// define reglas para usar set_value
-		$this->form_validation->set_rules($this->reportestock_model->permanencia_validation);
+		$is_form_valid = $this->form_validation->set_rules($this->reportestock_model->permanencia_validation)->run();
 
-		if ($this->form_validation->run() === TRUE)
+		if ($is_form_valid)
 		{
 			if ($tipo === 'permanencia')
 			{
@@ -173,9 +173,10 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function mapastock()
 	{
-		$this->form_validation->set_rules('sel_centro', '', 'trim');
-		$this->form_validation->set_rules('sel_treemap_type', '', 'trim');
-		$this->form_validation->run();
+		$this->form_validation
+			->set_rules('sel_centro', '', 'trim')
+			->set_rules('sel_treemap_type', '', 'trim')
+			->run();
 
 		$centro = set_value('sel_centro', 'CL03');
 
@@ -202,8 +203,7 @@ class Stock_reporte extends CI_Controller {
 	 */
 	public function movhist()
 	{
-		$this->form_validation->set_rules($this->reportestock_model->movhist_validation);
-		$this->form_validation->run();
+		$this->form_validation->set_rules($this->reportestock_model->movhist_validation)->run();
 
 		$param_tipo_fecha     = set_value('tipo_fecha', 'ANNO');
 		$param_tipo_alm       = set_value('tipo_alm', 'MOVIL-TIPOALM');

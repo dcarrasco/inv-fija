@@ -276,11 +276,13 @@ class Inventario_analisis extends CI_Controller {
 
 		$inventario = new Inventario($this->_id_inventario);
 
-		$this->form_validation->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]');
-		$this->form_validation->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]');
-		$this->form_validation->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '');
+		$is_form_valid = $this->form_validation
+			->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]')
+			->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]')
+			->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '')
+			->run();
 
-		if ($this->form_validation->run() === FALSE)
+		if ( ! $is_form_valid)
 		{
 			$data = array(
 				'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'imprime_inventario'),
@@ -296,14 +298,12 @@ class Inventario_analisis extends CI_Controller {
 		}
 		else
 		{
-			$oculta_stock_sap = (set_value('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0;
-
 			redirect(
 				$this->router->class . '/imprime_hojas/' .
-				set_value('pag_desde') . '/' .
-				set_value('pag_hasta') . '/' .
-				$oculta_stock_sap . '/' .
-				time()
+					set_value('pag_desde') . '/' .
+					set_value('pag_hasta') . '/' .
+					((set_value('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0) . '/' .
+					time()
 			);
 		}
 

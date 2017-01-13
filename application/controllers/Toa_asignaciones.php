@@ -68,13 +68,14 @@ class Toa_asignaciones extends CI_Controller {
 	 */
 	public function asignaciones()
 	{
-		$this->form_validation->set_data($this->input->get());
-		$this->form_validation->set_rules($this->toa_model->consumos_validation);
-		$this->form_validation->run();
+		$this->form_validation
+			->set_data($this->input->get())
+			->set_rules($this->toa_model->consumos_validation)
+			->run();
 
 		$datos = array(
 			'combo_reportes' => $this->toa_model->tipos_reporte_asignaciones,
-			'reporte'        => $this->toa_model->asignaciones_toa($this->input->get('sel_reporte'), $this->input->get('fecha_desde'), $this->input->get('fecha_hasta'), $this->input->get('order_by'), $this->input->get('order_sort')),
+			'reporte'        => $this->toa_model->asignaciones_toa(set_value('sel_reporte'), set_value('fecha_desde'), set_value('fecha_hasta'), set_value('order_by'), set_value('order_sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);

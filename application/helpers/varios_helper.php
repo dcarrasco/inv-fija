@@ -637,6 +637,7 @@ if ( ! function_exists('cached_query'))
 	function cached_query($cache_id = '', $object = NULL, $method = '', $params = array())
 	{
 		$ci =& get_instance();
+		$ci->load->driver('cache', array('adapter' => 'file'));
 		$cache_ttl = 300;
 
 		$params = ( ! is_array($params)) ? array($params) : $params;

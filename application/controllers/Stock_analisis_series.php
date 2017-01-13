@@ -79,9 +79,9 @@ class Stock_analisis_series extends CI_Controller {
 			'log_gdth'  => array(),
 		);
 
-		$this->form_validation->set_rules($this->analisis_series_model->validation_analisis);
+		$is_form_valid = $this->form_validation->set_rules($this->analisis_series_model->validation_analisis)->run();
 
-		if ($this->form_validation->run() === TRUE)
+		if ($is_form_valid)
 		{
 			$series = set_value('series');
 
