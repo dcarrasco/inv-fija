@@ -182,14 +182,43 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Devuelve los elementos de la coleccion como un arreglo
+	 *
+	 * @return array Elementos de la coleccion
+	 */
+	function all()
+	{
+		return $this->_items;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve un elementos de la coleccion por la llave
+	 *
+	 * @param  mixed $id_elem Llave el elemento a buscar
+	 * @param  mixed $default Valor a devolver en caso de no encontrar la llave
+	 * @return array Elementos de la coleccion
+	 */
+	function get($id_elem, $default = NULL)
+	{
+		return isset($this->_items[$id_elem]) ? $this->_items[$id_elem] : $default;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Ejecuta una funcion sobre cada uno de los elementos de la coleccion
 	 *
-	 * @param  callable $f Funcion a ejecutar en cada elemento
-	 * @return Collection  Colección con el resultado
+	 * @param  callable $callback_function Funcion a ejecutar en cada elemento
+	 * @return Collection                  Colección con el resultado
 	 */
-	function map($f)
+	function map($callback_function)
 	{
-		return new static(array_map($f, $this->_items));
+		$arr_keys  = array_keys($this->_items);
+		$arr_items = array_map($callback_function, $this->_items, $arr_keys);
+
+		return new static(array_combine($arr_keys, $arr_items));
 	}
 
 	// --------------------------------------------------------------------

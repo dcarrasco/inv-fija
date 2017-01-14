@@ -69,7 +69,11 @@ class Reporte {
 			'numero_dif'    => function($valor) {return fmt_cantidad($valor, 0, TRUE, TRUE);},
 			'valor_dif'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE, TRUE);},
 			'link'          => function($valor, $param) {return anchor($param['href'] . $valor, $valor);},
-			'link_registro' => function($valor, $param, $registro) {return anchor($param['href'].'/'.implode('/', array_map(function($elem) use($registro) {return $registro[$elem];}, $param['href_registros'])), $valor);},
+			'link_registro' => function($valor, $param, $registro) {return anchor(
+				$param['href'].'/'.collect($param['href_registros'])
+					->map(function($elem) use($registro) {return $registro[$elem];})->implode('/'),
+				$valor);
+			},
 			'link_detalle_series' => $func_format_detalle,
 		);
 
@@ -105,7 +109,7 @@ class Reporte {
 		foreach ($arr_campos as $campo => $valor)
 		{
 			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
-			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-amount-desc" : "sort-amount-asc";
+			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? 'sort-amount-desc' : 'sort-amount-asc';
 			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
 		}
 	}
@@ -121,7 +125,7 @@ class Reporte {
 	{
 		$func_order_by_transform = function($value)
 		{
-			$value = ( ! in_array(substr(trim($value), 0, 1), array('+', '-'))) ? '+'.trim($value) : trim($value);
+			$value = ( ! preg_match('/^[+\-](.*)$/', trim($value))) ? '+'.trim($value) : trim($value);
 			return substr($value, 1, strlen($value)) . ((substr($value, 0, 1) === '+') ? ' ASC' : ' DESC');
 		};
 

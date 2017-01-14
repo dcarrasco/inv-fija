@@ -881,7 +881,13 @@ class Orm_model implements IteratorAggregate {
 
 		// en caso que los id sean INT o ID, transforma los valores a (int)
 		$model_fields = $this->_model_fields;
-		array_walk($arr_condiciones, function(&$val, $key, $fields) {$val = in_array($fields[$key]->get_tipo(), array(Orm_field::TIPO_ID, Orm_field::TIPO_INT)) ? (int) $val : $val;}, $model_fields);
+		$arr_condiciones = collect($arr_condiciones)
+			->map(function($valor, $llave) use($model_fields) {
+				return in_array(collect($model_fields)->get($llave)->get_tipo(),
+					array(Orm_field::TIPO_ID, Orm_field::TIPO_INT))
+					? (int) $valor : $valor;
+			})
+			->all();
 
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
