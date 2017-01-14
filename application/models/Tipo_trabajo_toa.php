@@ -100,7 +100,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 			$descripcion_trabajo .= ' <span class="label label-default">IPTV</span><span class="label label-info">'.substr($this->id_tipo, 8, 2)."</span>";
 		}
 
-		return (string) ($descripcion_trabajo === '') ? $this->id_tipo : $descripcion_trabajo;
+		return (string) empty($descripcion_trabajo) ? $this->id_tipo : $descripcion_trabajo;
 	}
 
 }

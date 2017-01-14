@@ -174,7 +174,7 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_id_usr($usuario = '')
 	{
-		$user = ($usuario === '') ? $this->get_user() : $usuario;
+		$user = empty($usuario) ? $this->get_user() : $usuario;
 
 		$registro = $this->db
 			->get_where($this->config->item('bd_usuarios'), array('usr' => $user))
@@ -656,8 +656,7 @@ class Acl_model extends CI_Model {
 	 */
 	private function _hash_password($password = '', $salt = '')
 	{
-		$salt = ($salt === '') ? $this->_create_salt() : $salt;
-		$salt .= $this->config->item('encryption_key');
+		$salt = (empty($salt) ? $this->_create_salt() : $salt).$this->config->item('encryption_key');
 
 		return crypt($password, $salt);
 	}

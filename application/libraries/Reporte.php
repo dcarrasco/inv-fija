@@ -104,8 +104,8 @@ class Reporte {
 
 		foreach ($arr_campos as $campo => $valor)
 		{
-			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-amount-desc" : "sort-amount-asc";
 			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
+			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? "sort-amount-desc" : "sort-amount-asc";
 			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
 		}
 	}

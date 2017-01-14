@@ -110,7 +110,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 
 		if ($tipo === 'perm_consumo')
 		{
-			$orden_campo = ($orden_campo === '') ? 'tipo' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'tipo' : $orden_campo;
 			$datos_hoja = $this->reportestock_model->get_reporte_perm_consumo($orden_campo, $orden_tipo, $tipo_alm, $estado_sap, $incl_almacen, $incl_lote, $incl_estado, $incl_modelos);
 
 			$arr_campos = array();
@@ -149,7 +149,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		}
 		elseif ($tipo === 'det_consumo')
 		{
-			$orden_campo = ($orden_campo === '') ? 'tipo' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'tipo' : $orden_campo;
 			$datos_hoja = $this->reportestock_model->get_detalle_series_consumo($tipo_alm);
 
 			$arr_campos = array();

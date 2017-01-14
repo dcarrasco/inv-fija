@@ -245,7 +245,7 @@ if ( ! function_exists('app_render_view'))
 		// titulos y variables generales
 		$datos['app_title']    = (ENVIRONMENT !== 'production' ? 'DEV - ' : '').$ci->config->item('app_nombre');
 		$datos['base_url']     = base_url();
-		$datos['js_base_url']  = ($ci->config->item('index_page') === '') ? base_url() : base_url().$ci->config->item('index_page').'/';
+		$datos['js_base_url']  = empty($ci->config->item('index_page')) ? base_url() : base_url().$ci->config->item('index_page').'/';
 		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
 
 		// navegación

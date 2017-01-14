@@ -405,7 +405,7 @@ class Toa_model extends CI_Model {
 
 		if ($tipo_reporte === 'detalle')
 		{
-			$orden_campo = ($orden_campo === '') ? '+referencia' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+referencia' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('a.fecha_contabilizacion as fecha')
@@ -459,7 +459,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'peticion')
 		{
-			$orden_campo = ($orden_campo === '') ? '+referencia' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+referencia' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('a.referencia')
@@ -496,7 +496,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'tip_material')
 		{
-			$orden_campo = ($orden_campo === '') ? '+desc_tip_material' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+desc_tip_material' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('desc_tip_material')
@@ -526,7 +526,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'material')
 		{
-			$orden_campo = ($orden_campo === '') ? '+desc_tip_material, +material' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+desc_tip_material, +material' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('desc_tip_material')
@@ -560,7 +560,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'lote')
 		{
-			$orden_campo = ($orden_campo === '') ? '+valor, +lote' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+valor, +lote' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -586,7 +586,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'lote-material')
 		{
-			$orden_campo = ($orden_campo === '') ? '+valor' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+valor' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -618,7 +618,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'pep')
 		{
-			$orden_campo = ($orden_campo === '') ? '+codigo_movimiento' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+codigo_movimiento' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('codigo_movimiento')
@@ -647,7 +647,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'tecnicos')
 		{
-			$orden_campo = ($orden_campo === '') ? '+empresa, +tecnico' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+empresa, +tecnico' : $orden_campo;
 
 			$query = $this->db
 				->select('c.empresa')
@@ -683,7 +683,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'ciudades')
 		{
-			$orden_campo = ($orden_campo === '') ? '+orden' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+orden' : $orden_campo;
 
 			$query = $this->db
 				->select('b.id_ciudad')
@@ -719,7 +719,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'empresas')
 		{
-			$orden_campo = ($orden_campo === '') ? '+empresa' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+empresa' : $orden_campo;
 
 			$query = $this->db
 				->select('c.empresa')
@@ -751,7 +751,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'tipo-trabajo')
 		{
-			$orden_campo = ($orden_campo === '') ? '+carta_porte' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? '+carta_porte' : $orden_campo;
 
 			$query = $this->db
 				->select('a.carta_porte')
@@ -1017,7 +1017,7 @@ class Toa_model extends CI_Model {
 
 		if ($tipo_reporte === 'detalle')
 		{
-			$orden_campo = ($orden_campo === '') ? 'referencia' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'referencia' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('a.fecha_contabilizacion as fecha')
@@ -1069,7 +1069,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'material' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'material' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('material')
@@ -1095,7 +1095,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'lote')
 		{
-			$orden_campo = ($orden_campo === '') ? 'valor' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'valor' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -1121,7 +1121,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'lote-material')
 		{
-			$orden_campo = ($orden_campo === '') ? 'valor' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'valor' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('valor')
@@ -1153,7 +1153,7 @@ class Toa_model extends CI_Model {
 		}
 		elseif ($tipo_reporte === 'tecnicos')
 		{
-			$orden_campo = ($orden_campo === '') ? 'empresa' : $orden_campo;
+			$orden_campo = empty($orden_campo) ? 'empresa' : $orden_campo;
 
 			$arr_data = $this->db
 				->select('c.empresa')

@@ -153,7 +153,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_hoja($id_inventario = 0, $orden_campo = '+hoja', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+hoja' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+hoja' : $orden_campo;
 
 		$this->db->select('di.hoja, d.nombre as digitador, a.nombre as auditor');
 
@@ -219,7 +219,7 @@ class Inventario_model extends CI_Model {
 	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = '+ubicacion',
 												$incl_ajustes = '0', $elim_sin_dif = '0', $hoja = 0)
 	{
-		$orden_campo = $orden_campo === '' ? '+ubicacion' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
 
 		$this->db->select("case when reg_nuevo='S' THEN ubicacion + ' [*]' ELSE ubicacion END as ubicacion", FALSE);
 		$this->db->select('di.catalogo');
@@ -286,7 +286,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_material($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+catalogo' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 
 		$this->db->select("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre as nombre_fam", FALSE);
 		$this->db->select("f.codigo + '_' + sf.codigo as fam_subfam", FALSE);
@@ -358,7 +358,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+catalogo' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 
 		$this->db->select('i.catalogo, i.descripcion, i.um, c.pmp');
 		$this->db->select_sum('stock_fisico', 'q_fisico');
@@ -420,7 +420,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0', $catalogo = '')
 	{
-		$orden_campo = $orden_campo === '' ? '+ubicacion' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
 
 		$this->db->select('i.*, c.pmp');
 		$this->db->select('stock_fisico as stock_fisico');
@@ -485,7 +485,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+ubicacion' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
 
 		$this->db->select('di.ubicacion');
 
@@ -549,7 +549,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = '+tipo_ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+tipo_ubicacion' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+tipo_ubicacion' : $orden_campo;
 
 		$this->db->select('t.tipo_ubicacion');
 		$this->db->select('d.ubicacion');
@@ -621,7 +621,7 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_reporte_ajustes($id_inventario = 0, $orden_campo = '+catalogo',  $elim_sin_dif = '0')
 	{
-		$orden_campo = $orden_campo === '' ? '+catalogo' : $orden_campo;
+		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 
 		$this->db->select('catalogo');
 		$this->db->select('descripcion');

@@ -322,7 +322,7 @@ class Reportestock_model extends CI_Model {
 	public function get_config_reporte_permanencia()
 	{
 		return array(
-			'orden'   => (set_value('sort') === '') ? '+tipo' : set_value('sort'),
+			'orden'   => set_value('sort', '+tipo'),
 			'filtros' => array(
 				'tipo_alm'   => set_value('tipo_alm'),
 				'estado_sap' => set_value('estado_sap'),
@@ -1078,7 +1078,7 @@ class Reportestock_model extends CI_Model {
 
 		$arr_filtros = array_key_exists('filtros', $config) ? $config['filtros'] : array();
 		$order_by    = array_key_exists('orden', $config) ? $config['orden'] : '';
-		$order_by    = ($order_by === '' OR $order_by === NULL) ? '+fecha' : $order_by;
+		$order_by    = empty($order_by) ? '+fecha' : $order_by;
 
 		$param_ok = $arr_filtros['fechas'] AND $arr_filtros['cmv'] AND $arr_filtros['almacenes'] AND $arr_filtros['materiales'] AND $arr_filtros['tipo_alm'];
 

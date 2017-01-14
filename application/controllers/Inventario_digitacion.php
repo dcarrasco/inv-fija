@@ -74,10 +74,7 @@ class Inventario_digitacion extends CI_Controller {
 			return $this->hoja_mobile($hoja);
 		}
 
-		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
-		{
-			$hoja = 1;
-		}
+		$hoja = empty($hoja) ? 1 : $hoja;
 
 		// recupera el inventario activo
 		$inventario = new Inventario;
@@ -142,10 +139,7 @@ class Inventario_digitacion extends CI_Controller {
 	 */
 	public function hoja_mobile($hoja = 0)
 	{
-		if ($hoja === 0 OR $hoja === '' OR $hoja === NULL)
-		{
-			$hoja = 1;
-		}
+		$hoja = empty($hoja) ? 1 : $hoja;
 
 		// recupera el inventario activo
 		$inventario = new Inventario;
