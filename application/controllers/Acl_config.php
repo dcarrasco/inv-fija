@@ -49,7 +49,7 @@ class Acl_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('acl');
 
-		$this->arr_menu = array(
+		$this->set_menu_modulo(array(
 			'usuario' => array(
 				'url'   => $this->router->class . '/listado/usuario',
 				'texto' => $this->lang->line('acl_config_menu_usuarios'),
@@ -70,7 +70,7 @@ class Acl_config extends Orm_controller {
 				'texto' => $this->lang->line('acl_config_menu_modulos'),
 				'icon'  => 'list-alt',
 			),
-		);
+		));
 
 	}
 

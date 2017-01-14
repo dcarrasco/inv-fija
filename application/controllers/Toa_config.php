@@ -49,7 +49,7 @@ class Toa_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('toa');
 
-		$this->arr_menu = array(
+		$this->set_menu_modulo(array(
 			'tecnico_toa' => array(
 				'url'   => $this->router->class . '/listado/tecnico_toa',
 				'texto' => $this->lang->line('toa_config_menu_tecnico'),
@@ -80,9 +80,17 @@ class Toa_config extends Orm_controller {
 				'texto' => $this->lang->line('toa_config_menu_empresa_ciudad'),
 				'icon'  => 'map-marker',
 			),
-		);
+		));
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera ciudades
+	 *
+	 * @param  string $id_empresa Identificador de la empresa
+	 * @return string             Elementos de option de las ciudades de la empresa
+	 */
 	public function get_select_ciudad($id_empresa = NULL)
 	{
 		$empresa_ciudad = new Empresa_ciudad_toa;

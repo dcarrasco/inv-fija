@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Inventario_analisis extends CI_Controller {
+class Inventario_analisis extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -47,13 +47,6 @@ class Inventario_analisis extends CI_Controller {
 	 */
 	private $_nombre_inventario = '';
 
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -68,7 +61,7 @@ class Inventario_analisis extends CI_Controller {
 		parent::__construct();
 		$this->lang->load('inventario');
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'ajustes' => array(
 				'url'   => $this->router->class . '/ajustes',
 				'texto' => $this->lang->line('inventario_menu_ajustes'),
@@ -89,7 +82,7 @@ class Inventario_analisis extends CI_Controller {
 				'texto' => $this->lang->line('inventario_menu_act_precios'),
 				'icon'  => 'usd'
 			),
-		);
+		));
 
 	}
 
@@ -148,7 +141,7 @@ class Inventario_analisis extends CI_Controller {
 		if ($this->form_validation->run() === FALSE)
 		{
 			$data = array(
-				'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'ajustes'),
+				'menu_modulo'     => $this->get_menu_modulo('ajustes'),
 				'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
 				'detalle_ajustes' => $detalles,
 				'ocultar_reg'     => $ocultar_reg,
@@ -231,7 +224,7 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'sube_stock'),
+			'menu_modulo'       => $this->get_menu_modulo('sube_stock'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
 			'script_carga'      => $script_carga,
@@ -285,7 +278,7 @@ class Inventario_analisis extends CI_Controller {
 		if ( ! $is_form_valid)
 		{
 			$data = array(
-				'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => 'imprime_inventario'),
+				'menu_modulo'       => $this->get_menu_modulo('imprime_inventario'),
 				'inventario_id'     => $this->_id_inventario,
 				'inventario_nombre' => $this->_nombre_inventario,
 				'max_hoja'          => $inventario->get_max_hoja_inventario(),
@@ -365,7 +358,7 @@ class Inventario_analisis extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => 'actualiza_precios'),
+			'menu_modulo'      => $this->get_menu_modulo('actualiza_precios'),
 			'update_status'    => $update_status,
 			'cant_actualizada' => $cant_actualizada,
 		);

@@ -49,7 +49,7 @@ class Stock_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('stock');
 
-		$this->arr_menu = array(
+		$this->set_menu_modulo(array(
 			'almacen_sap' => array(
 				'url'   => $this->router->class . '/listado/almacen_sap',
 				'texto' => $this->lang->line('stock_config_menu_alm'),
@@ -90,7 +90,7 @@ class Stock_config extends Orm_controller {
 				'texto' => $this->lang->line('stock_config_menu_cmv'),
 				'icon'  => 'th',
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -105,7 +105,7 @@ class Stock_config extends Orm_controller {
 		$almacen = new Almacen_sap;
 
 		$data = array(
-			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => 'almacenes_no_ingresados'),
+			'menu_modulo' => $this->get_menu_modulo('almacenes_no_ingresados'),
 			'almacenes'   => $almacen->almacenes_no_ingresados(),
 		);
 

@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_sap extends CI_Controller {
+class Stock_sap extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -32,13 +32,6 @@ class Stock_sap extends CI_Controller {
 	 * @var  string
 	 */
 	public $llave_modulo = 'stock_sap';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
 
 	// --------------------------------------------------------------------
 
@@ -54,7 +47,7 @@ class Stock_sap extends CI_Controller {
 		parent::__construct();
 		$this->lang->load('stock');
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'stock_movil' => array(
 				'url'   => $this->router->class . '/mostrar_stock/MOVIL',
 				'texto' => $this->lang->line('stock_sap_menu_movil'),
@@ -75,7 +68,7 @@ class Stock_sap extends CI_Controller {
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
 				'icon'  => 'th',
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -122,7 +115,7 @@ class Stock_sap extends CI_Controller {
 		$is_form_valid = $this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation)->run();
 
 		$data = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => ($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
+			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
 			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, $this->input->post()) : '',
 			'combo_almacenes' => $combo_almacenes,
 			'combo_fechas'    => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
@@ -166,8 +159,8 @@ class Stock_sap extends CI_Controller {
 		);
 
 		$data = array(
+			'menu_modulo'    => $this->get_menu_modulo(''),
 			'detalle_series' => $detalle_series,
-			'menu_modulo'    => array('menu' => $this->_arr_menu, 'mod_selected' => ''),
 		);
 
 		app_render_view('stock_sap/detalle_series', $data);
@@ -216,7 +209,7 @@ class Stock_sap extends CI_Controller {
 		$combo_fechas = $stock->get_combo_fechas();
 
 		$data = array(
-			'menu_modulo'            => array('menu' => $this->_arr_menu, 'mod_selected' => 'transito_fija'),
+			'menu_modulo'            => $this->get_menu_modulo('transito_fija'),
 			'tabla_stock'            => $tabla_stock,
 			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
 			'combo_fechas_todas'     => $combo_fechas['todas'],
@@ -269,13 +262,10 @@ class Stock_sap extends CI_Controller {
 		}
 
 		$view_data = array(
-			'menu_modulo'            => array(
-				'menu'         => $this->_arr_menu,
-				'mod_selected' => 'reporte_clasif',
-			),
+			'menu_modulo'     => $this->get_menu_modulo('reporte_clasif'),
 			'combo_fechas'    => $combo_fechas['ultimodia'],
 			'combo_operacion' => $combo_operacion,
-			'url_reporte'     => site_url($this->_arr_menu['reporte_clasif']['url']),
+			'url_reporte'     => site_url($this->menu_opciones['reporte_clasif']['url']),
 			'tipo_op'         => $tipo_op,
 			'fechas'          => $fechas,
 			'reporte'         => $reporte,

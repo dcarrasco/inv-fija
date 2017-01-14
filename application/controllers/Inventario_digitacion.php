@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Inventario_digitacion extends CI_Controller {
+class Inventario_digitacion extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo

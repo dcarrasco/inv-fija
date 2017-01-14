@@ -15,23 +15,30 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
- * Clase Controller Reporte de consumos TOA
+ * Clase Controller ORM
  *
  * @category CodeIgniter
- * @package  Stock
+ * @package  ORM
  * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
  * @license  MIT License
  * @link     localhost:1520
  *
  */
-class Toa_peticiones extends Controller_base {
+class Controller_base extends CI_Controller {
 
 	/**
 	 * Llave de identificación del módulo
 	 *
 	 * @var  string
 	 */
-	public $llave_modulo = 'AhYLaPntOUUC';
+	public $llave_modulo = '';
+
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = array();
 
 	// --------------------------------------------------------------------
 
@@ -43,38 +50,36 @@ class Toa_peticiones extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_model');
-		$this->lang->load('toa');
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Pagina index, ejecuta por defecto al no recibir parámetros
+	 * Fija arreglo para el menu modulo
 	 *
+	 * @param  array $menu Arreglo con el menu
 	 * @return void
 	 */
-	public function index()
+	public function set_menu_modulo($menu = [])
 	{
-		return $this->peticion();
+		$this->menu_opciones = $menu;
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Despliega detalle de una peticion
+	 * Devuelve arreglo formateado para el menu modulo
 	 *
-	 * @param  string $peticion Identificador de la peticion
-	 * @return void
+	 * @param  string $opcion Opcion seleccionada del menu
+	 * @return array          Menu de opciones, con seleccion
 	 */
-	public function peticion($peticion = NULL)
+	public function get_menu_modulo($opcion = NULL)
 	{
-		redirect('/toa_consumos/detalle_peticion/'.$peticion);
+		return array('menu' => $this->menu_opciones, 'mod_selected' => $opcion);
 	}
-
 
 
 
 }
-/* End of file Toa_peticiones.php */
-/* Location: ./application/controllers/Toa_peticiones.php */
+/* End of file Controller_base.php */
+/* Location: ./application/controllers/Controller_base.php */

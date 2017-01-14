@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_reportes_trazabilidad extends CI_Controller {
+class Stock_reportes_trazabilidad extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -32,13 +32,6 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 	 * @var  string
 	 */
 	public $llave_modulo = 'j*&on238=B';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
 
 	// --------------------------------------------------------------------
 
@@ -53,10 +46,10 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 	{
 		parent::__construct();
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'perm_consumo' => array('url' => $this->router->class . '/listado/perm_consumo', 'texto' => 'Permanencia Consumo'),
 			'det_consumo' => array('url' => $this->router->class . '/listado/det_consumo', 'texto' => 'Detalle Series Consumo'),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -180,7 +173,7 @@ class Stock_reportes_trazabilidad extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
+			'menu_modulo'     => $this->get_menu_modulo($tipo),
 			'datos_hoja'      => $datos_hoja,
 			'tipo_reporte'    => $view,
 			'nombre_reporte'  => $tipo,

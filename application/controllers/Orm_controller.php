@@ -24,23 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Orm_controller extends CI_Controller {
-
-	/**
-	 * Llave de identificación del módulo
-	 *
-	 * @var  string
-	 */
-	public $llave_modulo = '';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	protected $arr_menu = array();
-
-	// --------------------------------------------------------------------
+class Orm_controller extends Controller_base {
 
 	/**
 	 * Constructor de la clase
@@ -62,7 +46,7 @@ class Orm_controller extends CI_Controller {
 	 */
 	public function index()
 	{
-		$arr_keys = array_keys($this->arr_menu);
+		$arr_keys = array_keys($this->menu_opciones);
 		$this->listado($arr_keys[0]);
 	}
 
@@ -83,14 +67,13 @@ class Orm_controller extends CI_Controller {
 		$modelo->set_model_filtro($filtro);
 
 		$data = array(
-			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
+			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
 			'modelos'     => $modelo->list_paginated($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => http_build_query($this->input->get()),
 		);
-
 		app_render_view('ORM/orm_listado', $data);
 	}
 
@@ -111,7 +94,7 @@ class Orm_controller extends CI_Controller {
 		if ( ! $modelo->valida_form())
 		{
 			$data = array(
-				'menu_modulo'   => array('menu' => $this->arr_menu, 'mod_selected' => $nombre_modelo),
+				'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
 				'modelo'        => $modelo,
 				'url_form'      => site_url("{$this->router->class}/editar/{$nombre_modelo}/{$id_modelo}?{$url_params}"),
 				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}?{$url_params}"),

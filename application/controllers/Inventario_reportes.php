@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Inventario_reportes extends CI_Controller {
+class Inventario_reportes extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -32,13 +32,6 @@ class Inventario_reportes extends CI_Controller {
 	 * @var  string
 	 */
 	public $llave_modulo = 'reportes';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
 
 	// --------------------------------------------------------------------
 
@@ -55,7 +48,7 @@ class Inventario_reportes extends CI_Controller {
 		$this->load->model('inventario_model');
 		$this->lang->load('inventario');
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'hoja' => array(
 				'url'   => $this->router->class . '/listado/hoja',
 				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
@@ -86,7 +79,7 @@ class Inventario_reportes extends CI_Controller {
 				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
 				'icon'  => 'wrench'
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -123,7 +116,7 @@ class Inventario_reportes extends CI_Controller {
 		$arr_campos = $this->inventario_model->get_campos_reporte($tipo);
 
 		$data = array(
-			'menu_modulo'       => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
+			'menu_modulo'       => $this->get_menu_modulo($tipo),
 			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'      => $view,
 			'nombre_reporte'    => $tipo,

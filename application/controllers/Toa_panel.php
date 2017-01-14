@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Toa_panel extends CI_Controller {
+class Toa_panel extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -76,12 +76,10 @@ class Toa_panel extends CI_Controller {
 			->run();
 
 		$datos = array(
-			'combo_empresas' => array_merge(
-				$empresa_toa->find('list'),
-				array('***' => 'Todas')
-			),
+			'combo_empresas' => array_merge($empresa_toa->find('list'),	array('***' => 'Todas')),
 			'form_validated' => FALSE,
 		);
+
 		if ($is_form_valid)
 		{
 			$sel_empresa = set_value('empresa');

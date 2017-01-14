@@ -26,7 +26,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_reporte extends CI_Controller {
+class Stock_reporte extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -34,14 +34,6 @@ class Stock_reporte extends CI_Controller {
 	 * @var  string
 	 */
 	public $llave_modulo = 'odk9@i2_23';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
-
 
 	// --------------------------------------------------------------------
 
@@ -59,7 +51,7 @@ class Stock_reporte extends CI_Controller {
 		$this->load->model('reportestock_model');
 		$this->lang->load('stock');
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'permanencia' => array(
 				'url'   => $this->router->class . '/listado/permanencia',
 				'texto' => $this->lang->line('stock_perm_menu_perm'),
@@ -80,7 +72,7 @@ class Stock_reporte extends CI_Controller {
 				'texto' => $this->lang->line('stock_perm_menu_est03'),
 				'icon'  => 'refresh',
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -125,7 +117,7 @@ class Stock_reporte extends CI_Controller {
 		}
 
 		$data = array(
-			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => $tipo),
+			'menu_modulo'      => $this->get_menu_modulo($tipo),
 			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'     => $view,
 			'nombre_reporte'   => $tipo,
@@ -155,7 +147,7 @@ class Stock_reporte extends CI_Controller {
 		);
 
 		$data = array(
-			'menu_modulo'        => array('menu' => $this->_arr_menu, 'mod_selected' => 'permanencia'),
+			'menu_modulo'        => $this->get_menu_modulo('permanencia'),
 			'menu_configuracion' => '',
 			'detalle_series'     => $detalle_series,
 		);
@@ -185,9 +177,9 @@ class Stock_reporte extends CI_Controller {
 		$arr_treemap_valor = $this->reportestock_model->arr_query2treemap('valor', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'valor', 'perm');
 
 		$data = array(
-			'menu_modulo' => array('menu' => $this->_arr_menu, 'mod_selected' => 'mapastock'),
+			'menu_modulo'           => $this->get_menu_modulo('mapastock'),
 			'treemap_data_cantidad' => $arr_treemap_cantidad,
-			'treemap_data_valor' => $arr_treemap_valor,
+			'treemap_data_valor'    => $arr_treemap_valor,
 		);
 
 		app_render_view('stock_sap/treemap', $data);
@@ -212,24 +204,22 @@ class Stock_reporte extends CI_Controller {
 		$param_sort           = set_value('sort', '+fecha');
 
 		$arr_campos    = $this->reportestock_model->get_campos_reporte_movhist();
-		$datos_reporte = $this->reportestock_model->get_reporte_movhist(
-			array(
-				'filtros' => array(
-					'tipo_fecha'     => $param_tipo_fecha,
-					'fechas'         => $this->input->post('fechas'),
-					'cmv'            => $this->input->post('cmv'),
-					'tipo_alm'       => $param_tipo_alm,
-					'almacenes'      => $this->input->post('almacenes'),
-					'tipo_cruce_alm' => $param_tipo_cruce_alm,
-					'tipo_mat'       => $param_tipo_mat,
-					'materiales'     => $this->input->post('materiales'),
-				),
-				'orden' => $param_sort,
-			)
-		);
+		$datos_reporte = $this->reportestock_model->get_reporte_movhist(array(
+			'filtros' => array(
+				'tipo_fecha'     => $param_tipo_fecha,
+				'fechas'         => $this->input->post('fechas'),
+				'cmv'            => $this->input->post('cmv'),
+				'tipo_alm'       => $param_tipo_alm,
+				'almacenes'      => $this->input->post('almacenes'),
+				'tipo_cruce_alm' => $param_tipo_cruce_alm,
+				'tipo_mat'       => $param_tipo_mat,
+				'materiales'     => $this->input->post('materiales'),
+			),
+			'orden' => $param_sort,
+		));
 
 		$data = array(
-			'menu_modulo'      => array('menu' => $this->_arr_menu, 'mod_selected' => 'movhist'),
+			'menu_modulo'      => $this->get_menu_modulo('movhist'),
 			'combo_tipo_fecha' => $this->reportestock_model->get_combo_tipo_fecha(),
 			'combo_fechas'     => $this->reportestock_model->get_combo_fechas($param_tipo_fecha),
 			'combo_cmv'        => $this->reportestock_model->get_combo_cmv(),
@@ -354,7 +344,7 @@ class Stock_reporte extends CI_Controller {
 	public function est03()
 	{
 		$data = array(
-			'menu_modulo' => array('menu' => $this->_arr_menu, 'mod_selected' => 'est03'),
+			'menu_modulo' => $this->get_menu_modulo('est03'),
 			'almacenes'   => $this->reportestock_model->get_almacenes_est03(),
 			'marcas'      => $this->reportestock_model->get_marcas_est03(),
 			'reporte'     => $this->reportestock_model->get_stock_est03(),

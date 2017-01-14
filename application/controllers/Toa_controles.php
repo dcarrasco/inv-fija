@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Toa_controles extends CI_Controller {
+class Toa_controles extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -32,13 +32,6 @@ class Toa_controles extends CI_Controller {
 	 * @var  string
 	 */
 	public $llave_modulo = 'oknsk82js7s';
-
-	/**
-	 * Menu de opciones
-	 *
-	 * @var  array
-	 */
-	private $_arr_menu = array();
 
 	// --------------------------------------------------------------------
 
@@ -53,7 +46,7 @@ class Toa_controles extends CI_Controller {
 		$this->load->model('toa_model');
 		$this->lang->load('toa');
 
-		$this->_arr_menu = array(
+		$this->set_menu_modulo(array(
 			'consumos' => array(
 				'url'   => $this->router->class . '/consumos',
 				'texto' => $this->lang->line('toa_controles_tecnicos'),
@@ -94,7 +87,7 @@ class Toa_controles extends CI_Controller {
 				'texto' => $this->lang->line('toa_controles_clientes'),
 				'icon'  => 'users'
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -126,7 +119,7 @@ class Toa_controles extends CI_Controller {
 		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'consumos'),
+			'menu_modulo'          => $this->get_menu_modulo('consumos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
@@ -156,7 +149,7 @@ class Toa_controles extends CI_Controller {
 		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'asignaciones'),
+			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_asignacion(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
@@ -185,7 +178,7 @@ class Toa_controles extends CI_Controller {
 		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales_consumidos'),
+			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
@@ -214,7 +207,7 @@ class Toa_controles extends CI_Controller {
 		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock'),
+			'menu_modulo'          => $this->get_menu_modulo('stock'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
@@ -243,7 +236,7 @@ class Toa_controles extends CI_Controller {
 		$empresa_toa = new Empresa_toa();
 
 		$datos = array(
-			'menu_modulo'          => array('menu' => $this->_arr_menu, 'mod_selected' => 'stock_tecnicos'),
+			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
 			'combo_dato_mostrar'   => $this->toa_model->combo_mostrar_stock_tecnicos,
@@ -317,7 +310,7 @@ class Toa_controles extends CI_Controller {
 
 
 		$datos = array(
-			'menu_modulo'              => array('menu' => $this->_arr_menu, 'mod_selected' => 'materiales'),
+			'menu_modulo'              => $this->get_menu_modulo('materiales'),
 			'combo_empresas'           => $empresa_toa->find('list'),
 			'combo_tipos_trabajo'      => array_merge(array('000' => 'Todos'), $tipo_trabajo->find('list', array('opc_ini' => FALSE))),
 			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
@@ -349,7 +342,7 @@ class Toa_controles extends CI_Controller {
 		}
 
 		$datos = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'nuevos_tecnicos'),
+			'menu_modulo'     => $this->get_menu_modulo('nuevos_tecnicos'),
 			'msg_agregar'     => $msg_agregar,
 			'nuevos_tecnicos' => $nuevos_tecnicos,
 		);
@@ -373,7 +366,7 @@ class Toa_controles extends CI_Controller {
 			->run();
 
 		$datos = array(
-			'menu_modulo'     => array('menu' => $this->_arr_menu, 'mod_selected' => 'clientes'),
+			'menu_modulo'     => $this->get_menu_modulo('clientes'),
 			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
 			'clientes'        => $this->toa_model->clientes(set_value('cliente'), set_value('fecha_desde'), set_value('fecha_hasta'), set_value('dato')),
 			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-','',set_value('fecha_desde')).'/'.str_replace('-','',set_value('fecha_hasta')).'/',

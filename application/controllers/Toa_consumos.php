@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Toa_consumos extends CI_Controller {
+class Toa_consumos extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo

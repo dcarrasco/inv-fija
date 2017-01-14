@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Login extends CI_Controller {
+class Login extends Controller_base {
 
 	/**
 	 * Constructor de la clase

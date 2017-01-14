@@ -49,7 +49,7 @@ class Inventario_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('inventario');
 
-		$this->arr_menu = array(
+		$this->set_menu_modulo(array(
 			'auditor' => array(
 				'url'   => $this->router->class . '/listado/auditor/',
 				'texto' => $this->lang->line('inventario_config_menu_auditores'),
@@ -100,7 +100,7 @@ class Inventario_config extends Orm_controller {
 				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
 				'icon'  => 'balance-scale',
 			),
-		);
+		));
 	}
 
 	// --------------------------------------------------------------------
@@ -181,7 +181,7 @@ class Inventario_config extends Orm_controller {
 			}
 
 			$data = array(
-				'menu_modulo'            => array('menu' => $this->arr_menu, 'mod_selected' => 'ubicaciones'),
+				'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 				'datos_hoja'             => $datos_hoja,
 				'combo_tipos_inventario' => $tipo_inventario->find('list'),
 				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
