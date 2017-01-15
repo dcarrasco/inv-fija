@@ -616,7 +616,7 @@ if ( ! function_exists('collect'))
 	function collect($arr = array())
 	{
 		$collection = new Collection;
-		$collection->get_array($arr);
+		$collection->make($arr);
 
 		return $collection;
 	}

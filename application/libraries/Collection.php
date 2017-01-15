@@ -43,7 +43,7 @@ class Collection implements IteratorAggregate {
 	 **/
 	public function __construct($items = NULL)
 	{
-		$this->get_array($items);
+		$this->make($items);
 	}
 
 	// --------------------------------------------------------------------
@@ -65,7 +65,7 @@ class Collection implements IteratorAggregate {
 	 * @param array $items Arreglo inicial para poblar la colección
 	 * @return  void
 	 **/
-	public function get_array($items = array())
+	public function make($items = array())
 	{
 		if (is_array($items))
 		{
