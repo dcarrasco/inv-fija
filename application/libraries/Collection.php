@@ -234,6 +234,37 @@ class Collection implements IteratorAggregate {
 		return implode($glue, $this->_items);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	* Ejecuta un filtro en cada uno de los valores de la coleccion.
+	*
+	* @param  callable $callback Funcion de filtrado
+	* @return static
+	*/
+	public function filter($callback = NULL)
+	{
+		if ($callback)
+		{
+			return new static(array_filter($this->_items, $callback));
+		}
+
+		return new static(array_filter($this->_items));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Reduce la coleccion a un unico valor.
+	*
+	* @param  callable $callback Funcion de reduccon
+	* @param  mixed    $initial  Valor inicial
+	* @return mixed
+	*/
+	public function reduce($callback, $initial = NULL)
+	{
+		return array_reduce($this->_items, $callback, $initial);
+	}
 
 
 }

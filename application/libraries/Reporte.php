@@ -118,18 +118,17 @@ class Reporte {
 
 	/**
 	 * Devuelve string de ordenamiento
-	 * @param  string $sort_by Orden en formato: +campo1, +campo2, -campo3
+	 * @param  string $sort_by Orden en formato: +campo1,+campo2,-campo3
 	 * @return string          Orden en formato: campo1 ASC, campo2 ASC, campo3 DESC
 	 */
 	public function get_order_by($sort_by)
 	{
-		$func_order_by_transform = function($value)
-		{
-			$value = ( ! preg_match('/^[+\-](.*)$/', trim($value))) ? '+'.trim($value) : trim($value);
-			return substr($value, 1, strlen($value)) . ((substr($value, 0, 1) === '+') ? ' ASC' : ' DESC');
-		};
-
-		return collect(explode(',', $sort_by))->map($func_order_by_transform)->implode(', ');
+		return collect(explode(',', $sort_by))
+			->map(function($value) {
+				$value = ( ! preg_match('/^[+\-](.*)$/', trim($value))) ? '+'.trim($value) : trim($value);
+				return substr($value, 1, strlen($value)).((substr($value, 0, 1) === '+') ? ' ASC' : ' DESC');
+			})
+			->implode(', ');
 	}
 
 
@@ -154,39 +153,46 @@ class Reporte {
 		$ci->table->set_template($template);
 
 		$script       = '<script type="text/javascript" src="'.base_url().'js/reporte.js"></script>';
-		$num_linea    = 0;
 		$subtotal_ant = '***init***';
+
+		$campos_totalizables = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
+		$init_total_subtotal = collect($arr_campos)
+			->filter(function($elem) use ($campos_totalizables) {return in_array($elem['tipo'], $campos_totalizables);})
+			->map(function($elem) {return 0;});
+
 		$arr_totales  = array(
-			'campos'   => array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series'),
-			'total'    => array(),
-			'subtotal' => array(),
+			'campos'   => $campos_totalizables,
+			'total'    => $init_total_subtotal
+							->map(function($elem, $key) use($arr_datos) {
+								return collect($arr_datos)
+									->reduce(function($total, $elem) use($key) {return $total + $elem[$key];}, 0);
+							})
+							->all(),
+			'subtotal' => $init_total_subtotal,
 		);
+
 
 		// --- ENCABEZADO REPORTE ---
 		$ci->table->set_heading($this->_reporte_linea_encabezado($arr_campos, $arr_totales));
 
 		// --- CUERPO REPORTE ---
-		foreach ($arr_datos as $linea)
-		{
-			$num_linea += 1;
-
-			if ($this->_get_campo_subtotal($arr_campos) !== NULL AND $this->_es_nuevo_subtotal($linea, $arr_campos, $subtotal_ant))
-			{
-				$this->_reporte_linea_subtotal($linea, $arr_campos, $arr_totales, $subtotal_ant);
-			}
-
-			$ci->table->add_row($this->_reporte_linea_datos($linea, $arr_campos, $arr_totales, $num_linea));
-		}
-
-		// --- ULTIMO SUBTOTAL ---
-		if ($this->_get_campo_subtotal($arr_campos) !== NULL)
-		{
-			$ci->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
-			$ci->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
-		}
+		$num_linea = 0;
+		collect($arr_datos)
+			->map(function($linea) use ($arr_campos, &$num_linea, $ci){
+				$num_linea += 1;
+				$ci->table->add_row($this->_reporte_linea_datos($linea, $arr_campos, $num_linea));
+			});
 
 		// --- TOTALES ---
 		$ci->table->set_footer($this->_reporte_linea_totales('total', $arr_campos, $arr_totales));
+
+		// --- ULTIMO SUBTOTAL ---
+		// if ($this->_get_campo_subtotal($arr_campos) !== NULL)
+		// {
+		// 	$ci->table->add_row($this->_reporte_linea_totales('subtotal', $arr_campos, $arr_totales, $subtotal_ant));
+		// 	$ci->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
+		// }
+
 
 		return $ci->table->generate().' '.$script;
 	}
@@ -199,37 +205,20 @@ class Reporte {
 	 *
 	 * @param  array $arr_campos  Arreglo con la descripcion de los campos del reporte
 	 * @param  array $arr_totales Arreglo con los totales y subtotales de los campos del reporte
-	 * @return array               Arreglo con los campos del encabezado
+	 * @return array              Arreglo con los campos del encabezado
 	 */
 	private function _reporte_linea_encabezado($arr_campos = array(), &$arr_totales = array())
 	{
-		$arr_linea_encabezado = array();
-
-		// primera celda, es en blanco
-		array_push($arr_linea_encabezado, '');
-
-		// recorre cada uno de los campos generando la celda de encabezado
-		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
-		{
-			if ( ! array_key_exists('class', $arr_param_campo))
-			{
-				$arr_param_campo['class'] = '';
-			}
-
-			$arr_celda = array(
-				'data' => "<span data-sort=\"{$arr_param_campo['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$arr_param_campo['titulo']}\">{$arr_param_campo['titulo']}</span>{$arr_param_campo['img_orden']}",
-				'class' => $arr_param_campo === '' ? '' : $arr_param_campo['class'],
-			);
-			array_push($arr_linea_encabezado, $arr_celda);
-
-			if (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
-			{
-				$arr_totales['total'][$nombre_campo]    = 0;
-				$arr_totales['subtotal'][$nombre_campo] = 0;
-			}
-		}
-
-		return $arr_linea_encabezado;
+		return array_merge(
+			array(''),
+			collect($arr_campos)
+				->map(function($elem) {return array(
+					'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
+					'class' => isset($elem['class']) ? $elem['class'] : '',
+					);
+				})
+				->all()
+		);
 	}
 
 	// --------------------------------------------------------------------
@@ -237,38 +226,23 @@ class Reporte {
 	/**
 	 * Genera arreglo con los datos de una linea del reporte
 	 *
-	 * @param  array   $arr_linea   Arreglo con los valores de la linea
-	 * @param  array   $arr_campos  Arreglo con la descripcion de los campos del reporte
-	 * @param  array   $arr_totales Arreglo con los totales y subtotales de los campos del reporte
-	 * @param  integer $num_linea   Numero de linea actual
+	 * @param  array   $arr_linea  Arreglo con los valores de la linea
+	 * @param  array   $arr_campos Arreglo con la descripcion de los campos del reporte
+	 * @param  integer $num_linea  Numero de linea actual
 	 * @return array                 Arreglo con los campos de una linea
 	 */
-	private function _reporte_linea_datos($arr_linea = array(), $arr_campos = array(), &$arr_totales = array(), $num_linea = 0)
+	private function _reporte_linea_datos($arr_linea = array(), $arr_campos = array(), $num_linea = 0)
 	{
-		$arr_linea_datos = array();
-
-		// primera celda, muestra el numero de la linea
-		array_push($arr_linea_datos, array(
-			'data'  => $num_linea,
-			'class' => 'text-muted'
+		return (array_merge(
+			array(array('data' => $num_linea, 'class' => 'text-muted')),
+			collect($arr_campos)
+				->map(function($elem, $key) use ($arr_linea) {return array(
+					'data' => $this->formato_reporte($arr_linea[$key], $elem, $arr_linea, $key),
+					'class' => isset($elem['class']) ? $elem['class'] : '',
+					);
+				})
+				->all()
 		));
-
-		// recorre cada uno de los campos y formatea la celda
-		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
-		{
-			array_push($arr_linea_datos, array(
-				'data'  => $this->formato_reporte($arr_linea[$nombre_campo], $arr_param_campo, $arr_linea, $nombre_campo),
-				'class' => array_key_exists('class', $arr_param_campo) ? $arr_param_campo['class'] : ''
-			));
-
-			if (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
-			{
-				$arr_totales['total'][$nombre_campo]    += $arr_linea[$nombre_campo];
-				$arr_totales['subtotal'][$nombre_campo] += $arr_linea[$nombre_campo];
-			}
-		}
-
-		return $arr_linea_datos;
 	}
 
 	// --------------------------------------------------------------------
@@ -284,31 +258,18 @@ class Reporte {
 	 */
 	private function _reporte_linea_totales($tipo = '', $arr_campos = array(), $arr_totales = array(), $nombre_subtotal = '')
 	{
-		$arr_linea_totales = array();
-
-		// primera celda, muestra el numero de la linea
-		array_push($arr_linea_totales, '');
-
-		// recorre cada uno de los campos y formatea la celda
-		foreach ($arr_campos as $nombre_campo => $arr_param_campo)
-		{
-			$data = '';
-			if ($nombre_campo === $this->_get_campo_subtotal($arr_campos))
-			{
-				$data = strtoupper($tipo).' '.$nombre_subtotal;
-			}
-			elseif (in_array($arr_param_campo['tipo'], $arr_totales['campos']))
-			{
-				$data = $this->formato_reporte($arr_totales[$tipo][$nombre_campo], $arr_param_campo);
-			}
-
-			array_push($arr_linea_totales, array(
-				'data' => $data,
-				'class' => array_key_exists('class', $arr_param_campo) ? $arr_param_campo['class'] : ''
-			));
-		}
-
-		return $arr_linea_totales;
+		return (array_merge(
+			array(''),
+			collect($arr_campos)
+				->map(function($elem, $key) use ($tipo, $arr_totales) {return array(
+					'data' => in_array($elem['tipo'], $arr_totales['campos'])
+						? $this->formato_reporte($arr_totales[$tipo][$key], $elem)
+						: '',
+					'class' => isset($elem['class']) ? $elem['class'] : '',
+					);
+				})
+				->all()
+		));
 	}
 
 
