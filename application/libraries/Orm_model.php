@@ -419,7 +419,11 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _determina_campo_id()
 	{
-		return array_keys(array_filter($this->_model_fields, function($elem) {return $elem->get_es_id();} ));
+		return collect($this->_model_fields)
+			->filter(function($elem) {
+				return $elem->get_es_id();
+			})
+			->keys()->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -466,7 +470,7 @@ class Orm_model implements IteratorAggregate {
 	{
 		if (is_array($campo))
 		{
-			return collect($campo)->map(function($val) {$this->set_validation_rules_field($val);});
+			return collect($campo)->map(function($elem) {$this->set_validation_rules_field($elem);});
 		}
 
 		$field = $this->_model_fields[$campo];
@@ -509,8 +513,9 @@ class Orm_model implements IteratorAggregate {
 	/**
 	 * Devuelve string con item de formulario para el campo indicado
 	 *
-	 * @param  string $campo Nombre del campo para devolver el elemento de formulario
-	 * @return string        Formulario
+	 * @param  string  $campo     Nombre del campo para devolver el elemento de formulario
+	 * @param  boolean $show_help Indica si se mostrara glosa de ayuda
+	 * @return string             Formulario
 	 */
 	public function form_item($campo = '', $show_help = TRUE)
 	{
@@ -1095,18 +1100,13 @@ class Orm_model implements IteratorAggregate {
 				{
 					$tipo_campo = $obj_campo->get_tipo();
 
-					if ($tipo_campo === Orm_field::TIPO_ID
-						OR $tipo_campo === Orm_field::TIPO_BOOLEAN
-						OR $tipo_campo === Orm_field::TIPO_INT)
+					if (in_array($tipo_campo, array(Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT)))
 					{
 						$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 					}
-					elseif ($tipo_campo === Orm_field::TIPO_DATETIME)
+					elseif ($tipo_campo === Orm_field::TIPO_DATETIME AND $arr_data[$nombre_campo] !== '')
 					{
-						if ($arr_data[$nombre_campo] !== '')
-						{
-							$this->_fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
-						}
+						$this->_fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
 					}
 					else
 					{
@@ -1143,15 +1143,10 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _put_filtro($filtro = '')
 	{
-		$arr_like = array();
-
-		foreach ($this->_model_fields as $nombre => $campo)
-		{
-			if ($campo->get_tipo() === Orm_field::TIPO_CHAR)
-			{
-				$arr_like[$nombre] = $filtro;
-			}
-		}
+		$arr_like = collect($this->_model_fields)
+			->filter(function ($field) {return $field->get_tipo() === Orm_field::TIPO_CHAR;})
+			->map(function($elem) use ($filtro) {return $filtro;})
+			->all();
 
 		if (count($arr_like) > 0)
 		{

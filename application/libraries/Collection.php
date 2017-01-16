@@ -151,7 +151,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function keys()
 	{
-		return array_keys($this->_items);
+		return new static(array_keys($this->_items));
 	}
 
 	// --------------------------------------------------------------------
@@ -265,6 +265,7 @@ class Collection implements IteratorAggregate {
 	{
 		return array_reduce($this->_items, $callback, $initial);
 	}
+
 
 
 }

@@ -69,10 +69,12 @@ class Reporte {
 			'numero_dif'    => function($valor) {return fmt_cantidad($valor, 0, TRUE, TRUE);},
 			'valor_dif'     => function($valor) {return fmt_monto($valor, 'UN', '$', 0, TRUE, TRUE);},
 			'link'          => function($valor, $param) {return anchor($param['href'] . $valor, $valor);},
-			'link_registro' => function($valor, $param, $registro) {return anchor(
-				$param['href'].'/'.collect($param['href_registros'])
-					->map(function($elem) use($registro) {return $registro[$elem];})->implode('/'),
-				$valor);
+			'link_registro' => function($valor, $param, $registro) {
+				return anchor(
+					$param['href'].'/'.collect($param['href_registros'])
+						->map(function($elem) use($registro) {return $registro[$elem];})
+						->implode('/'),
+					$valor);
 			},
 			'link_detalle_series' => $func_format_detalle,
 		);
@@ -163,9 +165,9 @@ class Reporte {
 		$arr_totales  = array(
 			'campos'   => $campos_totalizables,
 			'total'    => $init_total_subtotal
-							->map(function($elem, $key) use($arr_datos) {
+							->map(function($elem, $llave) use($arr_datos) {
 								return collect($arr_datos)
-									->reduce(function($total, $elem) use($key) {return $total + $elem[$key];}, 0);
+									->reduce(function($total, $elem) use($llave) {return $total + $elem[$llave];}, 0);
 							})
 							->all(),
 			'subtotal' => $init_total_subtotal,
@@ -212,9 +214,10 @@ class Reporte {
 		return array_merge(
 			array(''),
 			collect($arr_campos)
-				->map(function($elem) {return array(
-					'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
-					'class' => isset($elem['class']) ? $elem['class'] : '',
+				->map(function($elem) {
+					return array(
+						'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
+						'class' => isset($elem['class']) ? $elem['class'] : '',
 					);
 				})
 				->all()
@@ -235,13 +238,13 @@ class Reporte {
 	{
 		return (array_merge(
 			array(array('data' => $num_linea, 'class' => 'text-muted')),
-			collect($arr_campos)
-				->map(function($elem, $key) use ($arr_linea) {return array(
-					'data' => $this->formato_reporte($arr_linea[$key], $elem, $arr_linea, $key),
+			collect($arr_campos)->map(function($elem, $llave) use ($arr_linea) {
+				return array(
+					'data' => $this->formato_reporte($arr_linea[$llave], $elem, $arr_linea, $llave),
 					'class' => isset($elem['class']) ? $elem['class'] : '',
-					);
-				})
-				->all()
+				);
+			})
+			->all()
 		));
 	}
 
@@ -260,15 +263,15 @@ class Reporte {
 	{
 		return (array_merge(
 			array(''),
-			collect($arr_campos)
-				->map(function($elem, $key) use ($tipo, $arr_totales) {return array(
+			collect($arr_campos)->map(function($elem, $llave) use ($tipo, $arr_totales) {
+				return array(
 					'data' => in_array($elem['tipo'], $arr_totales['campos'])
-						? $this->formato_reporte($arr_totales[$tipo][$key], $elem)
+						? $this->formato_reporte($arr_totales[$tipo][$llave], $elem)
 						: '',
 					'class' => isset($elem['class']) ? $elem['class'] : '',
-					);
-				})
-				->all()
+				);
+			})
+			->all()
 		));
 	}
 
