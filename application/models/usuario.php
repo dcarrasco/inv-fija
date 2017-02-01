@@ -72,7 +72,7 @@ class Usuario extends ORM_Model {
 					'texto_ayuda'    => 'Indica se el usuario est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 				),
-				'usr' => array(
+				'username' => array(
 					'label'          => 'Username',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 30,
@@ -80,14 +80,14 @@ class Usuario extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				),
-				'pwd' => array(
+				'password' => array(
 					'label'          => 'Password',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 40,
 					'texto_ayuda'    => 'Password para el ingreso al sistema. M&aacute;ximo 40 caracteres.',
 					'mostrar_lista'  => FALSE,
 				),
-				'correo' => array(
+				'email' => array(
 					'label'          => 'Correo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 40,

@@ -177,7 +177,7 @@ class Acl_model extends CI_Model {
 		$user = empty($usuario) ? $this->get_user() : $usuario;
 
 		$registro = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $user))
+			->get_where($this->config->item('bd_usuarios'), array('username' => $user))
 			->row_array();
 
 		return is_array($registro) ? $registro['id'] : '';
@@ -205,7 +205,7 @@ class Acl_model extends CI_Model {
 	public function get_user_firstname()
 	{
 		$row = $this->db
-			->where('usr', $this->get_user())
+			->where('username', $this->get_user())
 			->get($this->config->item('bd_usuarios'))
 			->row();
 
@@ -264,14 +264,14 @@ class Acl_model extends CI_Model {
 	public function check_user_credentials($usuario = '', $password = '')
 	{
 		$reg_usuario = $this->db
-			->where('usr', $usuario)
+			->where('username', $usuario)
 			->where('activo', 1)
 			->get($this->config->item('bd_usuarios'))
 			->row();
 
 		if ($reg_usuario)
 		{
-			return $this->_valida_password($password, $reg_usuario->pwd);
+			return $this->_valida_password($password, $reg_usuario->password);
 		}
 
 		return FALSE;
@@ -288,7 +288,7 @@ class Acl_model extends CI_Model {
 	private function _write_login_audit($usuario = '')
 	{
 		$this->db
-			->where('usr', $usuario)
+			->where('username', $usuario)
 			->update($this->config->item('bd_usuarios'), array(
 				'fecha_login'  => date('Y-m-d H:i:s'),
 				'ip_login'     => $this->input->ip_address(),
@@ -347,7 +347,7 @@ class Acl_model extends CI_Model {
 	{
 		$row_user = $this->db
 			->get_where($this->config->item('bd_usuarios'), array(
-				'usr' => (string) $usuario,
+				'username' => (string) $usuario,
 			))
 			->row();
 
@@ -441,7 +441,7 @@ class Acl_model extends CI_Model {
 	private function _reset_login_errors($usuario = '')
 	{
 		$this->db
-			->where('usr', $usuario)
+			->where('username', $usuario)
 			->update($this->config->item('bd_usuarios'), array(
 				'login_errors'  => 0,
 			));
@@ -459,7 +459,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->set('login_errors', 'login_errors + 1', FALSE)
-			->where('usr', $usuario)
+			->where('username', $usuario)
 			->update($this->config->item('bd_usuarios'));
 	}
 
@@ -497,7 +497,7 @@ class Acl_model extends CI_Model {
 			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join($this->config->item('bd_modulos') . ' m', 'm.id = rm.id_modulo')
 			->join($this->config->item('bd_app') . ' a', 'a.id = m.id_app')
-			->where('usr', (string) $usuario)
+			->where('username', (string) $usuario)
 			->order_by('a.orden, m.orden')
 			->get()
 			->result_array();
@@ -537,7 +537,7 @@ class Acl_model extends CI_Model {
 			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
 			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
 			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->where('usr', $usuario)
+			->where('username', $usuario)
 			->get()
 			->result_array();
 
@@ -817,12 +817,12 @@ class Acl_model extends CI_Model {
 	public function tiene_clave($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
+			->get_where($this->config->item('bd_usuarios'), array('username' => $usuario))
 			->row_array();
 
 		if (count($arr_rs) > 0)
 		{
-			return (is_null($arr_rs['pwd']) OR trim($arr_rs['pwd']) === '') ? FALSE : TRUE;
+			return (is_null($arr_rs['password']) OR trim($arr_rs['password']) === '') ? FALSE : TRUE;
 		}
 		else
 		{
@@ -841,7 +841,7 @@ class Acl_model extends CI_Model {
 	public function existe_usuario($usuario = '')
 	{
 		$regs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('usr' => $usuario))
+			->get_where($this->config->item('bd_usuarios'), array('username' => $usuario))
 			->num_rows();
 
 		return ($regs > 0) ? TRUE : FALSE;
@@ -864,9 +864,9 @@ class Acl_model extends CI_Model {
 		if ($chk_usr)
 		{
 			$this->db
-				->where('usr', $usuario)
+				->where('username', $usuario)
 				->update($this->config->item('bd_usuarios'), array(
-					'pwd' => $this->_hash_password($clave_new)
+					'password' => $this->_hash_password($clave_new)
 				));
 
 			return TRUE;
