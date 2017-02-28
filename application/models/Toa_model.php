@@ -31,7 +31,7 @@ class Toa_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
+	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z33');
 	// public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z81', 'Z82', 'Z83', 'Z84');
 	// Z81 CAPEX  Z82 ANULA CAPEX  / Z83 OPEX y Z84 ANULA OPEX   Regularizaciones Manuales
 
@@ -848,6 +848,35 @@ class Toa_model extends CI_Model {
 		elseif ($tipo_reporte === 'clientes')
 		{
 			$this->db->where('d.customer_number', $param3);
+		}
+
+		elseif ($tipo_reporte === 'total_cliente')
+		{
+			$this->db->reset_query();
+			return $this->db
+				->from($this->config->item('bd_peticiones_toa').' p')
+				->join($this->config->item('bd_movimientos_sap_fija').' m', 'm.referencia=p.appt_number', 'left')
+				->where('customer_number', $param3)
+				->select('p.date as fecha')
+				->select('p.appt_number as referencia')
+				->select('upper(p.xa_work_type) as carta_porte', FALSE)
+				->select('p.contractor_company as empresa')
+				->select('p.resource_external_id as cliente')
+				->select('p.resource_name as tecnico')
+				->select('p.acoord_x')
+				->select('p.acoord_y')
+				->select("'ver detalle' as texto_link")
+				->select("sum(-m.cantidad_en_um) as cant", FALSE)
+				->select("sum(-m.importe_ml) as monto", FALSE)
+				->group_by('p.date')
+				->group_by('p.appt_number')
+				->group_by('p.xa_work_type')
+				->group_by('p.contractor_company')
+				->group_by('p.resource_external_id')
+				->group_by('p.resource_name')
+				->group_by('p.acoord_x')
+				->group_by('p.acoord_y')
+				->get()->result_array();
 		}
 
 		return $this->db

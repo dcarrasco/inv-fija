@@ -53,7 +53,7 @@
 				<label class="control-label col-sm-2 col-xs-3">RUT</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= fmt_rut($reporte['arr_peticion_toa']['customer_number']); ?>
+						<?= anchor('toa_consumos/ver_peticiones/total_cliente/f1/f2/'.$reporte['arr_peticion_toa']['customer_number'], fmt_rut($reporte['arr_peticion_toa']['customer_number'])); ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Nombre</label>
