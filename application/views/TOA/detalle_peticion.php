@@ -289,6 +289,7 @@
 		</div>
 	</div>
 
+	<?php if ($tipo_peticion === 'instala'): ?>
 	<div class="col-md-12">
 		<div class="panel panel-default">
 			<div class="panel-heading">
@@ -339,7 +340,68 @@
 			</div>
 		</div>
 	</div>
-
+	<?php else: ?>
+	<div class="col-md-12">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<a href="#panel_repara" class="accordion-toggle" data-toggle="collapse">
+					<span class="fa fa-list"></span>
+					{_toa_consumo_peticion_panel_repara_}
+				</a>
+			</div>
+			<div class="panel-body collapse in" id="panel_repara">
+			<?php if (count($reporte['arr_peticion_repara']) > 0): ?>
+				<table class="table table-striped table-hover table-condensed reporte">
+					<thead>
+						<tr>
+							<th class="text-center">item</th>
+							<th class="text-center">Producto</th>
+							<th class="text-center">Clave</th>
+							<th class="text-center">Rev Clave</th>
+							<th class="text-left">Descripcion</th>
+							<th class="text-left">Agrupacion CS</th>
+							<th class="text-left">Ambito</th>
+						</tr>
+					</thead>
+					<tbody>
+					<?php $nlinea = 0; ?>
+					<?php foreach ($reporte['arr_peticion_repara'] as $linea_detalle): ?>
+						<tr>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center">STB</td>
+							<td class="text-center"><?= $linea_detalle['stb_clave']; ?></td>
+							<td class="text-center"><?= $linea_detalle['stb_rev_clave']; ?></td>
+							<td class="text-left"><?= $linea_detalle['stb_descripcion']; ?></td>
+							<td class="text-left"><?= $linea_detalle['stb_agrupacion_cs']; ?></td>
+							<td class="text-left"><?= $linea_detalle['stb_ambito']; ?></td>
+						</tr>
+						<tr>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center">BA</td>
+							<td class="text-center"><?= $linea_detalle['ba_clave']; ?></td>
+							<td class="text-center"><?= $linea_detalle['ba_rev_clave']; ?></td>
+							<td class="text-left"><?= $linea_detalle['ba_descripcion']; ?></td>
+							<td class="text-left"><?= $linea_detalle['ba_agrupacion_cs']; ?></td>
+							<td class="text-left"><?= $linea_detalle['ba_ambito']; ?></td>
+						</tr>
+						<tr>
+							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center">TV</td>
+							<td class="text-center"><?= $linea_detalle['tv_clave']; ?></td>
+							<td class="text-center"><?= $linea_detalle['tv_rev_clave']; ?></td>
+							<td class="text-left"><?= $linea_detalle['tv_descripcion']; ?></td>
+							<td class="text-left"><?= $linea_detalle['tv_agrupacion_cs']; ?></td>
+							<td class="text-left"><?= $linea_detalle['tv_ambito']; ?></td>
+						</tr>
+						<?php $nlinea += 1;?>
+					<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif ?>
+			</div>
+		</div>
+	</div>
+	<?php endif ?>
 	<?php endif ?>
 </div>
 

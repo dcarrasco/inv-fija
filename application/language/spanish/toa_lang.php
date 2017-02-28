@@ -13,6 +13,7 @@ $lang['toa_consumo_peticion_not_found']     = 'Petici&oacute;n no encontrada';
 $lang['toa_consumo_peticion_panel_sap']     = 'Materiales rebajados en SAP';
 $lang['toa_consumo_peticion_panel_toa']     = 'Materiales instalados en TOA';
 $lang['toa_consumo_peticion_panel_vpi']     = 'Materiales solicitados en VPI';
+$lang['toa_consumo_peticion_panel_repara']  = 'Claves solicitud repara';
 
 $lang['toa_config_menu_tecnico']               = 'T&eacute;cnicos';
 $lang['toa_config_menu_empresa']               = 'Empresas';

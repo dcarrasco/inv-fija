@@ -976,11 +976,34 @@ class Toa_model extends CI_Model {
 			->get($this->config->item('bd_peticiones_vpi'))
 			->result_array();
 
+		$arr_peticion_repara = $this->db->from($this->config->item('bd_peticiones_toa'))
+			->select('a.clave as stb_clave')
+			->select('a.rev_clave as stb_rev_clave')
+			->select('a.descripcion as stb_descripcion')
+			->select('a.agrupacion_cs as stb_agrupacion_cs')
+			->select('a.ambito as stb_ambito')
+			->select('b.clave as ba_clave')
+			->select('b.rev_clave as ba_rev_clave')
+			->select('b.descripcion as ba_descripcion')
+			->select('b.agrupacion_cs as ba_agrupacion_cs')
+			->select('b.ambito as ba_ambito')
+			->select('c.clave as tv_clave')
+			->select('c.rev_clave as tv_rev_clave')
+			->select('c.descripcion as tv_descripcion')
+			->select('c.agrupacion_cs as tv_agrupacion_cs')
+			->select('c.ambito as tv_ambito')
+			->join($this->config->item('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
+			->join($this->config->item('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
+			->join($this->config->item('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
+			->where('appt_number', $arr_peticion_toa['appt_number'])
+			->get()->result_array();
+
 		return array(
 			'arr_peticion_toa'   => $arr_peticion_toa,
 			'arr_materiales_sap' => $arr_materiales_sap,
 			'arr_materiales_toa' => $arr_materiales_toa,
 			'arr_materiales_vpi' => $arr_materiales_vpi,
+			'arr_peticion_repara' => $arr_peticion_repara,
 		);
 	}
 

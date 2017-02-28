@@ -153,8 +153,9 @@ class Toa_consumos extends Controller_base {
 		set_message(($peticion AND ! $arr_peticiones) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
 
 		$datos = array(
-			'reporte'     => $arr_peticiones,
-			'google_maps' => $this->googlemaps->create_map(),
+			'tipo_peticion' => strtoupper(substr($peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
+			'reporte'       => $arr_peticiones,
+			'google_maps'   => $this->googlemaps->create_map(),
 		);
 
 		app_render_view('toa/detalle_peticion', $datos);

@@ -98,6 +98,7 @@ $config['bd_peticiones_sap']            = BD_TOA.'toa_peticiones_sap';
 $config['bd_peticiones_toa']            = BD_TOA.'appt_toa2';
 $config['bd_materiales_peticiones_toa'] = BD_TOA.'inv_fields_toa';
 $config['bd_peticiones_vpi']            = BD_TOA.'consumo_toa_vpi';
+$config['bd_claves_cierre_toa']         = BD_TOA.'toa_claves_cierre';
 $config['bd_tecnicos_toa']              = BD_TOA.'toa_tecnicos';
 $config['bd_empresas_toa']              = BD_TOA.'toa_empresas';
 $config['bd_ciudades_toa']              = BD_TOA.'toa_ciudades';
