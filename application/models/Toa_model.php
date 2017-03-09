@@ -428,8 +428,8 @@ class Toa_model extends CI_Model {
 				->select('(-a.importe_ml) as monto', FALSE)
 				->select('a.usuario')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
+				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp = c.id_empresa', 'left', FALSE)
 				->order_by($this->reporte->get_order_by($orden_campo))
 				->get()->result_array();
 
@@ -477,8 +477,8 @@ class Toa_model extends CI_Model {
 				->group_by('a.cliente')
 				->group_by('b.tecnico')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
+				->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp = c.id_empresa', 'left', FALSE)
 				->order_by($this->reporte->get_order_by($orden_campo))
 				->get()->result_array();
 
@@ -661,7 +661,7 @@ class Toa_model extends CI_Model {
 				->group_by('b.tecnico')
 				->group_by('a.referencia')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->get_compiled_select();
 
@@ -697,7 +697,7 @@ class Toa_model extends CI_Model {
 				->group_by('d.orden')
 				->group_by('a.referencia')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->join($this->config->item('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
 				->get_compiled_select();
@@ -731,7 +731,7 @@ class Toa_model extends CI_Model {
 				->group_by('c.id_empresa')
 				->group_by('a.referencia')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->get_compiled_select();
 
@@ -899,8 +899,8 @@ class Toa_model extends CI_Model {
 			->group_by('d.acoord_x')
 			->group_by('d.acoord_y')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
 			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
 			->join($this->config->item('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
 			->join($this->config->item('bd_tip_material_trabajo_toa').' f', 'e.id_tip_material_trabajo = f.id', 'left', FALSE)
@@ -955,7 +955,7 @@ class Toa_model extends CI_Model {
 
 		$arr_peticion_toa = $this->db
 			->from($this->config->item('bd_peticiones_toa').' d')
-			->join($this->config->item('bd_empresas_toa').' c', 'd.contractor_company collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'd.contractor_company=c.id_empresa', 'left', FALSE)
 			->where('appt_number', $peticion)
 			->where('astatus', 'complete')
 			->get()->row_array();
@@ -985,8 +985,8 @@ class Toa_model extends CI_Model {
 			->select('a.carta_porte')
 			->select('a.usuario')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp collate Latin1_General_CI_AS = c.id_empresa collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
@@ -1091,7 +1091,7 @@ class Toa_model extends CI_Model {
 				->select('(-a.importe_ml) as monto', FALSE)
 				->select('a.usuario')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				//->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
@@ -1218,7 +1218,7 @@ class Toa_model extends CI_Model {
 				->group_by('a.cliente')
 				->group_by('b.tecnico')
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				->join($this->config->item('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
 				//->order_by($orden_campo, $orden_tipo)
@@ -1317,7 +1317,7 @@ class Toa_model extends CI_Model {
 			->group_by('a.valor')
 			->group_by('a.lote')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->join($this->config->item('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
 			->order_by('a.documento_material', 'ASC')
@@ -1382,7 +1382,7 @@ class Toa_model extends CI_Model {
 			->select('(a.importe_ml) as monto', FALSE)
 			->select('a.usuario')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			//->order_by($orden_campo, $orden_tipo)
 			->where('fecha_contabilizacion', $fecha)
@@ -1504,7 +1504,7 @@ class Toa_model extends CI_Model {
 				->where('codigo_movimiento', $filtro_trx)
 				->where_in('centro', $this->centros_consumo)
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->get_compiled_select();
 
 			$arr_dato_desplegar = array(
@@ -1613,7 +1613,7 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->where('almacen', NULL)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE);
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE);
 
 		if ($dato_desplegar === 'unidades')
 		{
@@ -1717,9 +1717,9 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			// ->where('almacen', NULL)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_catalogos').' c', 'a.material collate Latin1_General_CI_AS = c.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material collate Latin1_General_CI_AS = d.id_catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join($this->config->item('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
+			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
 			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left');
 
 		if ($dato_desplegar === 'monto')
@@ -1881,7 +1881,7 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
 			->join($this->config->item('bd_tiposalm_sap').' d', 'c.id_tipo=d.id_tipo', 'left')
-			->join($this->config->item('bd_catalogos').' e', 'a.material collate Latin1_General_CI_AS = e.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_catalogos').' e', 'a.material=e.catalogo', 'left', FALSE)
 			->where('a.fecha_stock=', $fecha)
 			->where('a.centro', $centro)
 			->where('a.almacen', $almacen)
@@ -1948,7 +1948,7 @@ class Toa_model extends CI_Model {
 			->select('a.acreedor')
 			->select('b.rut')
 			->from($this->config->item('bd_stock_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS=b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left', FALSE)
 			->where('a.fecha_stock>=', $fecha_desde)
 			->where('a.fecha_stock<', $fecha_hasta)
 			->where('b.id_empresa', $empresa)
@@ -2015,8 +2015,8 @@ class Toa_model extends CI_Model {
 			->select('a.cantidad')
 			->select('a.valor')
 			->from($this->config->item('bd_stock_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
-			->join($this->config->item('bd_catalogos').' c', 'a.material collate Latin1_General_CI_AS = c.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left', FALSE)
+			->join($this->config->item('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->where('a.fecha_stock=', $fecha)
 			->where('a.acreedor', $id_tecnico)
 			->order_by('material, lote')
@@ -2118,7 +2118,7 @@ class Toa_model extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material collate Latin1_General_CI_AS=b.id_catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material=b.id_catalogo', 'left', FALSE)
 			->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
@@ -2456,7 +2456,7 @@ class Toa_model extends CI_Model {
 			->select('a.vale_acomp as id_empresa')
 			->select('d.resource_external_id as rut')
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente collate Latin1_General_CI_AS = b.id_tecnico collate Latin1_General_CI_AS', 'left', FALSE)
+			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
 			->where('a.fecha_contabilizacion >= dateadd(day, -20, convert(date, getdate()))')
 			->where_in('codigo_movimiento', $this->movimientos_consumo)

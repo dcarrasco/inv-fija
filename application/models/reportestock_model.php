@@ -1165,7 +1165,7 @@ class Reportestock_model extends CI_Model {
 			$this->db->join($this->config->item('bd_fechas_sap').' as f', 'm.'.$mov_fecha.'=f.fecha', 'LEFT');
 			$this->db->join($this->config->item('bd_cmv_sap').' as c', 'm.'.$mov_cmv.'=c.cmv', 'LEFT');
 			$this->db->join($this->config->item('bd_usuarios_sap').' as u', 'm.'.$mov_user.'=u.usuario', 'LEFT');
-			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.' collate Latin1_General_CI_AS =mat.'.$mov_mat2.' collate Latin1_General_CI_AS ', 'LEFT', FALSE);
+			$this->db->join($this->config->item($tabla_mat) . ' as mat', 'm.'.$mov_mat.'=mat.'.$mov_mat2, 'LEFT', FALSE);
 
 			if ($arr_filtros['tipo_cruce_alm'] === 'alm')
 			{

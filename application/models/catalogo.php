@@ -167,14 +167,14 @@ class Catalogo extends ORM_Model {
 			'UPDATE '.$this->get_model_tabla().' '.
 			'SET fija_catalogos.pmp=s.pmp '.
 			'FROM '.$tabla_temporal_precios.' as s '.
-			'WHERE catalogo collate Latin1_General_CI_AS = s.material collate Latin1_General_CI_AS'
+			'WHERE catalogo=s.material'
 		);
 
 		// cuenta los precios actualizados
 		$cant_regs = $this->db->query(
 			'SELECT count(*) as cant '.
 			'FROM '.$this->get_model_tabla().' as c '.
-			'JOIN '.$tabla_temporal_precios.' as t on (c.catalogo collate Latin1_General_CI_AS = t.material collate Latin1_General_CI_AS)'
+			'JOIN '.$tabla_temporal_precios.' as t on c.catalogo=t.material'
 		)->row()->cant;
 
 		// borra tabla temporal con ultimos precios
