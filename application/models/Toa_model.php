@@ -1024,7 +1024,7 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
 			->join($this->config->item('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
 			->join($this->config->item('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
-			->where('appt_number', $arr_peticion_toa['appt_number'])
+			->where('appt_number', $peticion)
 			->get()->result_array();
 
 		return array(
