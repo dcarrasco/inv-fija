@@ -42,4 +42,8 @@
 	</table>
 <?php endif; ?>
 
+<div class="text-right">
+	<small>Actualizado: {actualizado_el}</small>
+</div>
+
 </div> <!-- fin content-module-main -->
