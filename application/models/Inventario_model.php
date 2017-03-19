@@ -185,7 +185,7 @@ class Inventario_model extends CI_Model {
 		$this->db->from($this->config->item('bd_detalle_inventario').' di');
 		$this->db->join($this->config->item('bd_usuarios').' d', 'd.id = di.digitador', 'left');
 		$this->db->join($this->config->item('bd_auditores').' a', 'a.id = di.auditor', 'left');
-		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE);
 		$this->db->where('id_inventario', $id_inventario);
 		$this->db->group_by('di.hoja, d.nombre, a.nombre');
 		$this->db->order_by($this->reporte->get_order_by($orden_campo));
@@ -252,7 +252,7 @@ class Inventario_model extends CI_Model {
 		}
 
 		$this->db->from($this->config->item('bd_detalle_inventario').' di');
-		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE);
 
 		$this->db->where('di.id_inventario', $id_inventario);
 		$this->db->where('di.hoja', $hoja);
@@ -321,7 +321,7 @@ class Inventario_model extends CI_Model {
 		}
 		$this->db->select_max('fecha_modificacion', 'fecha');
 		$this->db->from($this->config->item('bd_detalle_inventario').' di');
-		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left');
+		$this->db->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE);
 		$this->db->join($this->config->item('bd_familias').' f', "f.codigo = substring(di.catalogo,1,5) and f.tipo='FAM'", 'left');
 		$this->db->join($this->config->item('bd_familias').' sf', "sf.codigo = substring(di.catalogo,1,7) and sf.tipo='SUBFAM'", 'left');
 
