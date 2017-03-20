@@ -142,6 +142,11 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera porción select para suma de stocks
+	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
+	 * @return Inventario_model
+	 */
 	protected function _db_select_sum_cantidades($incl_ajustes = '0')
 	{
 		$stock_ajuste = ($incl_ajustes === '1') ? ' + di.stock_ajuste' : '';
@@ -160,6 +165,11 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera porción select para stocks
+	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
+	 * @return Inventario_model
+	 */
 	protected function _db_select_cantidades($incl_ajustes = '0')
 	{
 		$stock_ajuste = ($incl_ajustes === '1') ? ' + di.stock_ajuste' : '';
@@ -179,6 +189,11 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera porción from para reporte inventarios
+	 * @param  integer $id_inventario Indicador del inventario
+	 * @return Inventario_model
+	 */
 	protected function _db_base_reporte($id_inventario = 0)
 	{
 		$this->db->from($this->config->item('bd_detalle_inventario').' di')
@@ -190,6 +205,12 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera filtro para registros sin diferencias de stock
+	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
+	 * @param  string $elim_sin_dif Indicador filtrarán los registros sin diferencias de inventario
+	 * @return Inventario_model
+	 */
 	protected function _db_elim_sin_diferencia($incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$stock_ajuste = ($incl_ajustes === '1') ? ' + di.stock_ajuste' : '';
@@ -349,20 +370,19 @@ class Inventario_model extends CI_Model {
 	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0', $catalogo = '')
 	{
 		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
+		$min_sap_fisico = '(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico)))';
 
 		$this->_db_select_cantidades($incl_ajustes)
 			->_db_base_reporte($id_inventario)
 			->_db_elim_sin_diferencia($incl_ajustes, $elim_sin_dif);
 
 		$this->db->select('di.*, c.pmp')
-			->select('(stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante')
-			->select('(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente')
-			->select('(stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_sobrante')
-			->select('pmp * (stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_faltante')
-			->select('pmp * (0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_coincidente')
-			->select('pmp * (stock_fisico - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as v_sobrante')
-			->select('(stock_sap - 0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_faltante')
-			->select('(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico))) as q_coincidente')
+			->select("(stock_sap - {$min_sap_fisico}) as q_faltante")
+			->select("({$min_sap_fisico}) as q_coincidente")
+			->select("(stock_fisico - {$min_sap_fisico}) as q_sobrante")
+			->select("pmp * (stock_sap - {$min_sap_fisico}) as v_faltante")
+			->select("pmp * ({$min_sap_fisico}) as v_coincidente")
+			->select("pmp * (stock_fisico - {$min_sap_fisico}) as v_sobrante")
 			->where('di.catalogo', $catalogo)
 			->order_by($this->reporte->get_order_by($orden_campo));
 
@@ -453,7 +473,7 @@ class Inventario_model extends CI_Model {
 			->select('di.ubicacion')
 			->select('di.hoja')
 			->select('di.um')
-			->select('CASE WHEN (stock_fisico-stock_sap+stock_ajuste) > 0 THEN \'SOBRANTE\' WHEN (stock_fisico-stock_sap+stock_ajuste) < 0 THEN \'FALTANTE\' WHEN (stock_fisico-stock_sap+stock_ajuste) = 0 THEN \'OK\' END as tipo', FALSE)
+			->select("CASE WHEN (stock_fisico-stock_sap+stock_ajuste) > 0 THEN 'SOBRANTE' WHEN (stock_fisico-stock_sap+stock_ajuste) < 0 THEN 'FALTANTE' WHEN (stock_fisico-stock_sap+stock_ajuste) = 0 THEN 'OK' END as tipo", FALSE)
 			->select('glosa_ajuste')
 			->order_by('catalogo, lote, centro, almacen, ubicacion');
 
