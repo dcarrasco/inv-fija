@@ -309,26 +309,27 @@ class Inventario_model extends CI_Model {
 	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
-		$stock_ajuste = ($incl_ajustes === '1') ? ' + di.stock_ajuste' : '';
+		$stock_fisico = ($incl_ajustes === '1') ? '(di.stock_fisico+di.stock_ajuste)' : 'di.stock_fisico';
+		$min_sap_fisico = "(0.5 * (SUM(stock_sap + {$stock_fisico}) - ABS(SUM(stock_sap - {$stock_fisico}))))";
 
 		$this->_db_base_reporte($id_inventario);
 
 		$this->db->select('di.catalogo, di.descripcion, di.um, c.pmp')
 			->select_sum('stock_fisico', 'q_fisico')
 			->select_sum('stock_sap', 'q_sap')
-			->select("(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as q_faltante")
-			->select("(0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as q_coincidente")
-			->select("(SUM((stock_fisico{$stock_ajuste})) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as q_sobrante")
-			->select("c.pmp * (SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as v_faltante")
-			->select("c.pmp * (0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as v_coincidente")
-			->select("c.pmp * (SUM((stock_fisico{$stock_ajuste})) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) as v_sobrante")
+			->select("(SUM(stock_sap) - {$min_sap_fisico}) as q_faltante")
+			->select("{$min_sap_fisico} as q_coincidente")
+			->select("(SUM({$stock_fisico}) - {$min_sap_fisico}) as q_sobrante")
+			->select("c.pmp * (SUM(stock_sap) - {$min_sap_fisico}) as v_faltante")
+			->select("c.pmp * {$min_sap_fisico} as v_coincidente")
+			->select("c.pmp * (SUM({$stock_fisico}) - {$min_sap_fisico}) as v_sobrante")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
 			->order_by($this->reporte->get_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
-			$this->db->having("(SUM(stock_sap) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) <> 0");
-			$this->db->or_having("(SUM((stock_fisico{$stock_ajuste})) - 0.5 * (SUM(stock_sap + (stock_fisico{$stock_ajuste})) - ABS(SUM(stock_sap - (stock_fisico{$stock_ajuste}))))) <> 0");
+			$this->db->having("(SUM(stock_sap) - {$min_sap_fisico}) <> 0");
+			$this->db->or_having("(SUM({$stock_fisico}) - {$min_sap_fisico}) <> 0");
 		}
 
 		return $this->db->get()->result_array();
@@ -415,9 +416,9 @@ class Inventario_model extends CI_Model {
 		$this->db->select('t.tipo_ubicacion')
 			->select('di.ubicacion')
 			->select_max('fecha_modificacion', 'fecha')
-			->join($this->config->item('bd_inventarios') . ' i', 'di.id_inventario=i.id', 'left')
-			->join($this->config->item('bd_ubic_tipoubic') . ' ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = di.ubicacion', 'left')
-			->join($this->config->item('bd_tipo_ubicacion') . ' t', 't.id=ut.id_tipo_ubicacion', 'left')
+			->join($this->config->item('bd_inventarios').' i', 'di.id_inventario=i.id', 'left')
+			->join($this->config->item('bd_ubic_tipoubic').' ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = di.ubicacion', 'left')
+			->join($this->config->item('bd_tipo_ubicacion').' t', 't.id=ut.id_tipo_ubicacion', 'left')
 			->group_by('t.tipo_ubicacion')
 			->group_by('di.ubicacion')
 			->order_by($this->reporte->get_order_by($orden_campo));
