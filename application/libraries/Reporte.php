@@ -145,8 +145,18 @@ class Reporte {
 	 */
 	public function genera_reporte($arr_campos = array(), $arr_datos = array())
 	{
-		$ci =& get_instance();
+		$arr_campos = collect($arr_campos)
+			->map(function ($elem) {
+				if (! array_key_exists('tipo', $elem))
+				{
+					$elem['tipo'] = 'texto';
+				}
 
+				return $elem;
+			})
+			->all();
+
+		$ci =& get_instance();
 		$ci->load->library('table');
 		$template = array(
 			'table_open' => '<table class="table table-striped table-hover table-condensed reporte table-fixed-header">',
