@@ -84,7 +84,7 @@ $.fn.fixedHeader = function (options) {
             if (!isFixed) setTimeout(function () {  $win.scrollTop($win.scrollTop() - 47) }, 10);
         })
 
-        $head.clone().removeClass('header').addClass('header-copy header-fixed').appendTo(o);
+        $head.clone().removeClass('header').addClass('header-copy header-fixed hidden-print').appendTo(o);
 
         var ww = [];
         o.find('thead.header > tr:first > th').each(function (i, h){
