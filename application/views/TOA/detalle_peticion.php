@@ -130,7 +130,7 @@
 				<label class="control-label col-sm-2 col-xs-3">T&eacute;cnico</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['Resource_External_ID']; ?>
+						<?= anchor('toa_config/listado/tecnico_toa?filtro='.$reporte['arr_peticion_toa']['Resource_External_ID'], $reporte['arr_peticion_toa']['Resource_External_ID']) ?>
 						<?= $reporte['arr_peticion_toa']['Resource_Name']; ?>
 					</p>
 				</div>
