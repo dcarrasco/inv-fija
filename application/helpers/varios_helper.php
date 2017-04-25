@@ -553,7 +553,7 @@ if ( ! function_exists('fmt_fecha'))
 			$fecha = substr($fecha, 0, 4).'/'.substr($fecha, 4, 2).'/'.substr($fecha, 6, 2);
 		}
 
-		return date_create($fecha)->format('Y-m-d');
+		return date_create($fecha)->format($formato);
 	}
 }
 
