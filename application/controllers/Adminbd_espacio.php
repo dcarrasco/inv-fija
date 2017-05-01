@@ -77,33 +77,30 @@ class Adminbd_espacio extends CI_Controller {
 			'BD_TOA',
 		);
 
-		$arr_espacio = collect($bases_datos)->map(function($base) {
-			return collect($this->adminbd_model->get_tables_sizes($base))
-				->map(function($elem) use ($base) {
-					return array_merge(array('DataBase' => $base), $elem);
-				})
-				->all();
-		})->reduce(function($new_array, $elem) {
-			return array_merge($new_array, $elem);
-		}, array());
+		$arr_espacio = collect($bases_datos)
+			->map(function($base) {
+				return collect($this->adminbd_model->get_tables_sizes($base))
+					->map(function($elem) use ($base) {
+						return array_merge(array('DataBase' => $base), $elem);
+					})
+					->all();
+			})->reduce(function($new_array, $elem) {
+				return array_merge($new_array, $elem);
+			}, array());
 
-		function sort_size($elem_a, $elem_b) {
+		$arr_espacio = collect($arr_espacio)->sort(function($elem_a, $elem_b) {
 			return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
-		}
-
-		uasort($arr_espacio, 'sort_size');
+		});
 
 		$arr_sum = array(
-			'RowCounts'  => 0,
+			'RowCounts'     => 0,
 			'TotalSpaceKB'  => 0,
 			'UsedSpaceKB'   => 0,
 			'UnusedSpaceKB' => 0,
 		);
 
 		$arr_sum = collect($arr_sum)->map(function($sum_init, $sum_key) use ($arr_espacio) {
-			return collect($arr_espacio)->reduce(function($total, $elem) use ($sum_key) {
-				return $total + $elem[$sum_key];
-			}, $sum_init);
+			return $arr_espacio->sum($sum_key);
 		})->all();
 
 

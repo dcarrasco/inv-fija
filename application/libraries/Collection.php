@@ -257,7 +257,7 @@ class Collection implements IteratorAggregate {
 	/**
 	* Reduce la coleccion a un unico valor.
 	*
-	* @param  callable $callback Funcion de reduccon
+	* @param  callable $callback Funcion de reduccion
 	* @param  mixed    $initial  Valor inicial
 	* @return mixed
 	*/
@@ -266,6 +266,36 @@ class Collection implements IteratorAggregate {
 		return array_reduce($this->_items, $callback, $initial);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	* Suma la coleccion.
+	*
+	* @param  string  $campo         Campo a sumar
+	* @param  integer $valor_inicial Valor inicial
+	* @return mixed
+	*/
+	public function sum($campo = NULL, $valor_inicial = 0)
+	{
+		return $this->reduce(function($total, $elem) use ($campo) {
+			return $total + (is_null($campo) ? $elem : $elem[$campo]);
+		}, $valor_inicial);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Ordena la coleccion.
+	*
+	* @param  callable $callback Funcion de ordenamiento
+	* @return mixed
+	*/
+	public function sort($callback)
+	{
+		uasort($this->_items, $callback);
+
+		return $this;
+	}
 
 
 }
