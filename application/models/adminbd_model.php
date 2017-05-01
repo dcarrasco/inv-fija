@@ -211,7 +211,7 @@ WHERE
 GROUP BY
     t.Name, s.Name, p.Rows
 ORDER BY
-    t.Name";
+    TotalSpaceKB desc";
 
 	$result = $this->_db_object->query($sql_tables_sizes)->result_array();
 
