@@ -77,11 +77,21 @@ class Adminbd_espacio extends CI_Controller {
 			'BD_TOA',
 		);
 
-		$arr_espacio = array();
-		foreach($bases_datos as $base)
-		{
-			$arr_espacio[$base] = $this->adminbd_model->get_tables_sizes($base);
+		$arr_espacio = collect($bases_datos)->map(function($base) {
+			return collect($this->adminbd_model->get_tables_sizes($base))
+				->map(function($elem) use ($base) {
+					return array_merge(array('DataBase' => $base), $elem);
+				})
+				->all();
+		})->reduce(function($new_array, $elem) {
+			return array_merge($new_array, $elem);
+		}, array());
+
+		function sort_size($elem_a, $elem_b) {
+			return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
 		}
+
+		uasort($arr_espacio, 'sort_size');
 
 		$datos = array(
 			'tablas' => $arr_espacio,
