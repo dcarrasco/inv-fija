@@ -11,6 +11,16 @@
 				<th class="text-right">Espacio no usado [MB]</th>
 			</tr>
 		</thead>
+		<tfoot>
+			<tr>
+				<th></th>
+				<th></th>
+				<th class="text-right"><?=fmt_cantidad($arr_sum['RowCounts'])?></th>
+				<th class="text-right"><?=fmt_cantidad($arr_sum['TotalSpaceKB']/1024)?></th>
+				<th class="text-right"><?=fmt_cantidad($arr_sum['UsedSpaceKB']/1024)?></th>
+				<th class="text-right"><?=fmt_cantidad($arr_sum['UnusedSpaceKB']/1024)?></th>
+			</tr>
+		</tfoot>
 		<tbody>
 		<?php foreach($tablas as $tabla): ?>
 			<tr class="<?= substr($tabla['TableName'], 0, 3) === 'tmp' ? 'danger' : '' ?>">

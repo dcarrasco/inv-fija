@@ -93,8 +93,23 @@ class Adminbd_espacio extends CI_Controller {
 
 		uasort($arr_espacio, 'sort_size');
 
+		$arr_sum = array(
+			'RowCounts'  => 0,
+			'TotalSpaceKB'  => 0,
+			'UsedSpaceKB'   => 0,
+			'UnusedSpaceKB' => 0,
+		);
+
+		$arr_sum = collect($arr_sum)->map(function($sum_init, $sum_key) use ($arr_espacio) {
+			return collect($arr_espacio)->reduce(function($total, $elem) use ($sum_key) {
+				return $total + $elem[$sum_key];
+			}, $sum_init);
+		})->all();
+
+
 		$datos = array(
-			'tablas' => $arr_espacio,
+			'tablas'  => $arr_espacio,
+			'arr_sum' => $arr_sum,
 		);
 
 		app_render_view('admindb/espacio', $datos);
