@@ -297,6 +297,34 @@ class Collection implements IteratorAggregate {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	* Flatten la coleccion a sólo un nivel
+	*
+	* @param  callable $callback Funcion de ordenamiento
+	* @return mixed
+	*/
+	public function flatten($profundidad = INF)
+	{
+		return collect(array_reduce($this->_items, function($result, $item) use ($profundidad) {
+			$item = $item instanceof Collection ? $item->all() : $item;
+
+			if (! is_array($item))
+			{
+				return array_merge($result, array($item));
+			}
+			// elseif ($profundidad === 1)
+			// {
+			// 	return array_merge($result, array_values($item));
+			// }
+			else
+			{
+				return array_merge($result, array_values($item));
+				// return array_merge($result, $this->flatten($item, $profundidad - 1));
+			}
+		}, array()));
+	}
 
 }
 /* End of file collection.php */

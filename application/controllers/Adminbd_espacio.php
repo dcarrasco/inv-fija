@@ -84,13 +84,11 @@ class Adminbd_espacio extends CI_Controller {
 						return array_merge(array('DataBase' => $base), $elem);
 					})
 					->all();
-			})->reduce(function($new_array, $elem) {
-				return array_merge($new_array, $elem);
-			}, array());
-
-		$arr_espacio = collect($arr_espacio)->sort(function($elem_a, $elem_b) {
-			return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
-		});
+				})
+			->flatten()
+			->sort(function($elem_a, $elem_b) {
+				return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
+			});
 
 		$arr_sum = array(
 			'RowCounts'     => 0,
@@ -111,8 +109,6 @@ class Adminbd_espacio extends CI_Controller {
 
 		app_render_view('admindb/espacio', $datos);
 	}
-
-
 
 }
 /* End of file Adminbd_espacio.php */
