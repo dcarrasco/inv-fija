@@ -188,6 +188,7 @@ class Adminbd_model extends CI_Model {
 		$this->_db_object->query('use '.$base_datos);
 
 		$sql_tables_sizes = "SELECT
+	'$base_datos' AS DataBaseName,
     t.NAME AS TableName,
     s.Name AS SchemaName,
     p.rows AS RowCounts,

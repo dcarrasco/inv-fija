@@ -79,13 +79,9 @@ class Adminbd_espacio extends CI_Controller {
 
 		$arr_espacio = collect($bases_datos)
 			->map(function($base) {
-				return collect($this->adminbd_model->get_tables_sizes($base))
-					->map(function($elem) use ($base) {
-						return array_merge(array('DataBase' => $base), $elem);
-					})
-					->all();
-				})
-			->flatten()
+				return $this->adminbd_model->get_tables_sizes($base);
+			})
+			->flatten(1)
 			->sort(function($elem_a, $elem_b) {
 				return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
 			});

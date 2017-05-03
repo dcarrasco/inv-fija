@@ -302,7 +302,7 @@ class Collection implements IteratorAggregate {
 	/**
 	* Flatten la coleccion a sólo un nivel
 	*
-	* @param  callable $callback Funcion de ordenamiento
+	* @param  integer $profundidad Indica cuantos niveles se hara flatten
 	* @return mixed
 	*/
 	public function flatten($profundidad = INF)
@@ -310,20 +310,37 @@ class Collection implements IteratorAggregate {
 		return collect(array_reduce($this->_items, function($result, $item) use ($profundidad) {
 			$item = $item instanceof Collection ? $item->all() : $item;
 
-			if (! is_array($item))
+			if ( ! is_array($item))
 			{
 				return array_merge($result, array($item));
 			}
-			// elseif ($profundidad === 1)
-			// {
-			// 	return array_merge($result, array_values($item));
-			// }
-			else
+			elseif ($profundidad === 1)
 			{
 				return array_merge($result, array_values($item));
-				// return array_merge($result, $this->flatten($item, $profundidad - 1));
+			}
+			else
+			{
+				return array_merge($result, collect($item)->flatten($profundidad - 1)->all());
 			}
 		}, array()));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Junta elementos de la coleccion con nuevos items
+	*
+	* @param  mixed $items Items a juntar a la coleccion actual
+	* @return mixed
+	*/
+	public function merge($items)
+	{
+		$items = $items instanceof Collection ? $items->all() : $items;
+		$items = is_array($items) ? $items : array($items);
+
+		$this->_items = array_merge($this->_items, $items);
+
+		return $this;
 	}
 
 }

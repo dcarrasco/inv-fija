@@ -24,7 +24,7 @@
 		<tbody>
 		<?php foreach($tablas as $tabla): ?>
 			<tr class="<?= substr($tabla['TableName'], 0, 3) === 'tmp' ? 'danger' : '' ?>">
-				<td class="text-left"><?= $tabla['DataBase']; ?></td>
+				<td class="text-left"><?= $tabla['DataBaseName']; ?></td>
 				<td class="text-left"><?= $tabla['TableName']; ?></td>
 				<td class="text-right"><?= fmt_cantidad($tabla['RowCounts']); ?></td>
 				<td class="text-right"><?= fmt_cantidad($tabla['TotalSpaceKB']/1024); ?></td>
