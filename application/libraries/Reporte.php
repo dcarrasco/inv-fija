@@ -147,7 +147,7 @@ class Reporte {
 	{
 		$arr_campos = collect($arr_campos)
 			->map(function ($elem) {
-				if (! array_key_exists('tipo', $elem))
+				if ( ! array_key_exists('tipo', $elem))
 				{
 					$elem['tipo'] = 'texto';
 				}
@@ -168,19 +168,16 @@ class Reporte {
 		$subtotal_ant = '***init***';
 
 		$campos_totalizables = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
-		$init_total_subtotal = collect($arr_campos)
-			->filter(function($elem) use ($campos_totalizables) {return in_array($elem['tipo'], $campos_totalizables);})
-			->map(function($elem) {return 0;});
 
 		$arr_totales  = array(
 			'campos'   => $campos_totalizables,
-			'total'    => $init_total_subtotal
-							->map(function($elem, $llave) use($arr_datos) {
-								return collect($arr_datos)
-									->reduce(function($total, $elem) use($llave) {return $total + $elem[$llave];}, 0);
-							})
-							->all(),
-			'subtotal' => $init_total_subtotal,
+			'total'    => collect($arr_campos)
+				->filter(function($campo) use ($campos_totalizables) {
+					return in_array($campo['tipo'], $campos_totalizables);
+				})->map(function($elem, $campo) use ($arr_datos) {
+					return collect($arr_datos)->sum($campo);
+				})->all(),
+			'subtotal' => array(),
 		);
 
 
