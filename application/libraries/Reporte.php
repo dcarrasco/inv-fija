@@ -48,18 +48,6 @@ class Reporte {
 	 */
 	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
 	{
-		$func_format_detalle = function($valor, $arr_param_campo, $registro, $campo)
-		{
-			$registro['permanencia'] = $campo;
-			$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
-			$valor_desplegar = fmt_cantidad($valor);
-
-			return anchor(
-				$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
-				($valor_desplegar === '') ? ' ' : $valor_desplegar
-			);
-		};
-
 		$arr_formatos = array(
 			'texto'         => function($valor) {return $valor;},
 			'fecha'         => function($valor) {return fmt_fecha($valor);},
@@ -76,16 +64,23 @@ class Reporte {
 						->implode('/'),
 					$valor);
 			},
-			'link_detalle_series' => $func_format_detalle,
+			'link_detalle_series' => function($valor, $arr_param_campo, $registro, $campo) {
+				$registro['permanencia'] = $campo;
+				$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
+				$valor_desplegar = fmt_cantidad($valor);
+
+				return anchor(
+					$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
+					($valor_desplegar === '') ? ' ' : $valor_desplegar
+				);
+			},
 		);
 
 		$tipo_dato = $arr_param_campo['tipo'];
-		if ( ! array_key_exists($tipo_dato, $arr_formatos))
-		{
-			return $valor;
-		}
 
-		return call_user_func_array($arr_formatos[$tipo_dato], array($valor, $arr_param_campo, $registro, $campo));
+		return array_key_exists($tipo_dato, $arr_formatos)
+			? call_user_func_array($arr_formatos[$tipo_dato], array($valor, $arr_param_campo, $registro, $campo))
+			: $valor;
 	}
 
 	// --------------------------------------------------------------------
@@ -105,15 +100,16 @@ class Reporte {
 		$sort_by = ( ! preg_match('/^[+\-](.*)$/', $sort_by)) ? '+'.$sort_by : $sort_by;
 
 		$sort_by_field  = substr($sort_by, 1, strlen($sort_by));
-		$sort_by_order  = substr($sort_by, 0, 1);
-		$new_orden_tipo = ($sort_by_order === '+') ? '-' : '+';
+		$new_orden_tipo = (substr($sort_by, 0, 1) === '+') ? '-' : '+';
 
-		foreach ($arr_campos as $campo => $valor)
-		{
-			$arr_campos[$campo]['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
-			$order_icon = (substr($arr_campos[$campo]['sort'], 0, 1) === '+') ? 'sort-amount-desc' : 'sort-amount-asc';
-			$arr_campos[$campo]['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
-		}
+		$arr_campos = collect($arr_campos)
+			->map(function($props_campo, $campo) use ($sort_by_field, $new_orden_tipo) {
+				$props_campo['sort'] = (($campo === $sort_by_field) ? $new_orden_tipo : '+').$campo;
+				$order_icon = (substr($props_campo['sort'], 0, 1) === '+') ? 'sort-amount-desc' : 'sort-amount-asc';
+				$props_campo['img_orden'] = ($campo === $sort_by_field) ? " <span class=\"fa fa-{$order_icon}\" ></span>" : '';
+
+				return $props_campo;
+			})->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -147,10 +143,7 @@ class Reporte {
 	{
 		$arr_campos = collect($arr_campos)
 			->map(function ($elem) {
-				if ( ! array_key_exists('tipo', $elem))
-				{
-					$elem['tipo'] = 'texto';
-				}
+				$elem['tipo'] = array_key_exists('tipo', $elem) ? $elem['tipo'] : 'texto';
 
 				return $elem;
 			})
@@ -180,7 +173,6 @@ class Reporte {
 			'subtotal' => array(),
 		);
 
-
 		// --- ENCABEZADO REPORTE ---
 		$ci->table->set_heading($this->_reporte_linea_encabezado($arr_campos, $arr_totales));
 
@@ -202,7 +194,6 @@ class Reporte {
 		// 	$ci->table->add_row(array_fill(0, count($arr_campos) + 1, ''));
 		// }
 
-
 		return $ci->table->generate().' '.$script;
 	}
 
@@ -218,17 +209,14 @@ class Reporte {
 	 */
 	private function _reporte_linea_encabezado($arr_campos = array(), &$arr_totales = array())
 	{
-		return array_merge(
-			array(''),
-			collect($arr_campos)
-				->map(function($elem) {
-					return array(
-						'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
-						'class' => isset($elem['class']) ? $elem['class'] : '',
-					);
-				})
-				->all()
-		);
+		return collect(array(''))->merge(
+			collect($arr_campos)->map(function($elem) {
+				return array(
+					'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
+					'class' => isset($elem['class']) ? $elem['class'] : '',
+				);
+			})
+		)->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -243,16 +231,14 @@ class Reporte {
 	 */
 	private function _reporte_linea_datos($arr_linea = array(), $arr_campos = array(), $num_linea = 0)
 	{
-		return (array_merge(
-			array(array('data' => $num_linea, 'class' => 'text-muted')),
+		return collect(array(array('data' => $num_linea, 'class' => 'text-muted')))->merge(
 			collect($arr_campos)->map(function($elem, $llave) use ($arr_linea) {
 				return array(
 					'data' => $this->formato_reporte($arr_linea[$llave], $elem, $arr_linea, $llave),
 					'class' => isset($elem['class']) ? $elem['class'] : '',
 				);
 			})
-			->all()
-		));
+		)->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -268,8 +254,7 @@ class Reporte {
 	 */
 	private function _reporte_linea_totales($tipo = '', $arr_campos = array(), $arr_totales = array(), $nombre_subtotal = '')
 	{
-		return (array_merge(
-			array(''),
+		return collect(array(''))->merge(
 			collect($arr_campos)->map(function($elem, $llave) use ($tipo, $arr_totales) {
 				return array(
 					'data' => in_array($elem['tipo'], $arr_totales['campos'])
@@ -278,10 +263,8 @@ class Reporte {
 					'class' => isset($elem['class']) ? $elem['class'] : '',
 				);
 			})
-			->all()
-		));
+		)->all();
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -324,7 +307,6 @@ class Reporte {
 
 		return FALSE;
 	}
-
 
 	// --------------------------------------------------------------------
 
