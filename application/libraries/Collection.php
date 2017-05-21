@@ -67,10 +67,20 @@ class Collection implements IteratorAggregate {
 	 **/
 	public function make($items = array())
 	{
-		if (is_array($items))
+		if ($items instanceof Collection)
+		{
+			$this->_items = $items->all();
+		}
+		else if (is_array($items))
 		{
 			$this->_items = $items;
 		}
+		else
+		{
+			$this->_items = array($items);
+		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
