@@ -63,14 +63,13 @@ class Login extends Controller_base {
 	 */
 	public function login()
 	{
-		$this->acl_model->delete_old_captchas();
-
 		// si el usuario ya está logueado, redireccionar a la app
 		if ($this->acl_model->is_user_logged())
 		{
 			redirect($this->acl_model->get_redirect_app());
 		}
 
+		$this->acl_model->delete_old_captchas();
 		$this->acl_model->delete_session_data();
 
 		$is_form_valid = $this->form_validation->set_rules($this->acl_model->login_validation)->run();
@@ -89,11 +88,9 @@ class Login extends Controller_base {
 			}
 
 			// si el usuario debe validar captcha
-			$captcha_valido = TRUE;
-			if ($this->acl_model->use_captcha($usuario))
-			{
-				$captcha_valido = $this->acl_model->validar_captcha($captcha_word, $this->session->session_id);
-			}
+			$captcha_valido = $this->acl_model->use_captcha($usuario)
+				? $this->acl_model->validar_captcha($captcha_word, $this->session->session_id)
+				: TRUE;
 
 			// si el usuario valida correctamente, redireccionamos a la app
 			if ($captcha_valido AND $this->acl_model->login($usuario, $password, $remember_me === 'remember'))
