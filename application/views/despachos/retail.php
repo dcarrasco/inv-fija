@@ -4,19 +4,19 @@
 <div class="form-group">
 	<label class="control-label col-md-2 col-md-offset-2">{_label_rut_retail_}</label>
 	<div class="col-sm-6">
-		<?= form_dropdown('rut_retail', $combo_retail, set_value('rut_retail'), 'class="form-control"'); ?>
+		<?= form_dropdown('rut_retail', $combo_retail, request('rut_retail'), 'class="form-control"'); ?>
 	</div>
 </div>
 <div class="form-group">
 	<label class="control-label col-md-2 col-md-offset-2">{_label_modelos_}</label>
 	<div class="col-sm-6">
-		<?= form_textarea('modelos', set_value('modelos'), 'class="form-control"'); ?>
+		<?= form_textarea('modelos', request('modelos'), 'class="form-control"'); ?>
 	</div>
 </div>
 <div class="form-group">
 	<label class="control-label col-md-2 col-md-offset-2">{_label_max_facturas_}</label>
 	<div class="col-sm-6">
-		<?= form_dropdown('max_facturas', $combo_max_facturas, set_value('max_facturas', 5), 'class="form-control"'); ?>
+		<?= form_dropdown('max_facturas', $combo_max_facturas, request('max_facturas', 5), 'class="form-control"'); ?>
 	</div>
 </div>
 <div class="form-group">

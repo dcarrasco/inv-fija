@@ -18,14 +18,14 @@
 			<div class="form-group <?= form_has_error_class('pag_desde'); ?>">
 				<label class="control-label col-sm-4">{_inventario_print_label_page_from_}</label>
 				<div class="col-sm-8">
-					<?= form_input('pag_desde', set_value('pag_desde',1), 'class="form-control"  maxlength="5"'); ?>
+					<?= form_input('pag_desde', request('pag_desde',1), 'class="form-control"  maxlength="5"'); ?>
 				</div>
 			</div>
 
 			<div class="form-group <?= form_has_error_class('pag_hasta'); ?>">
 				<label class="control-label col-sm-4">{_inventario_print_label_page_to_}</label>
 				<div class="col-sm-8">
-					<?= form_input('pag_hasta', set_value('pag_hasta',$max_hoja), 'class="form-control"  maxlength="5"'); ?>
+					<?= form_input('pag_hasta', request('pag_hasta',$max_hoja), 'class="form-control"  maxlength="5"'); ?>
 				</div>
 			</div>
 
@@ -33,7 +33,7 @@
 				<label class="control-label col-sm-4">{_inventario_print_label_options_}</label>
 				<div class="col-sm-8">
 					<label class="checkbox-inline">
-						<?= form_checkbox('oculta_stock_sap', 'oculta_stock_sap', set_value('oculta_stock_sap')); ?>
+						<?= form_checkbox('oculta_stock_sap', 'oculta_stock_sap', request('oculta_stock_sap')); ?>
 						{_inventario_print_check_hide_columns_}
 					</label>
 				</div>

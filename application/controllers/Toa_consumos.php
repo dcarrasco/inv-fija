@@ -68,13 +68,13 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function consumos()
 	{
-		$this->form_validation->set_data($this->input->get())
+		$this->form_validation->set_data(request())
 			->set_rules($this->toa_model->consumos_validation)
 			->run();
 
 		$datos = array(
 			'combo_reportes' => $this->toa_model->tipos_reporte_consumo,
-			'reporte'        => $this->toa_model->consumos_toa(set_value('sel_reporte'), set_value('fecha_desde'), set_value('fecha_hasta'), set_value('sort')),
+			'reporte'        => $this->toa_model->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
@@ -138,7 +138,7 @@ class Toa_consumos extends Controller_base {
 			'map_css' => 'height: 350px',
 		));
 
-		$peticion = ( ! $peticion) ? set_value('peticion') : $peticion;
+		$peticion = ( ! $peticion) ? request('peticion') : $peticion;
 		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
 
 		if (count($arr_peticiones) AND count($arr_peticiones['arr_peticion_toa']))

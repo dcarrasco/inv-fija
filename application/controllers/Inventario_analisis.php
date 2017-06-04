@@ -125,15 +125,15 @@ class Inventario_analisis extends Controller_base {
 	public function ajustes()
 	{
 		$this->_get_datos_inventario();
-		$pagina = $this->input->get('page');
-		$ocultar_reg = $this->input->get('ocultar_reg') ? 1 : 0;
+		$pagina = request('page');
+		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
 
 		// recupera el detalle de registros con diferencias
 		$detalle_ajustes = new Detalle_inventario;
 		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
-		if ($this->input->post('formulario') === 'ajustes')
+		if (request('formulario') === 'ajustes')
 		{
 			$this->form_validation->set_rules($detalle_ajustes->get_validation_ajustes($detalles));
 		}
@@ -147,21 +147,21 @@ class Inventario_analisis extends Controller_base {
 				'ocultar_reg'     => $ocultar_reg,
 				'pag'             => $pagina,
 				'links_paginas'   => $links_paginas,
-				'url_form'        => site_url("{$this->router->class}/ajustes?".http_build_query($this->input->get())),
+				'url_form'        => site_url("{$this->router->class}/ajustes?".http_build_query(request())),
 			);
 
 			app_render_view('inventario/ajustes', $data);
 		}
 		else
 		{
-			if ($this->input->post('formulario') === 'ajustes')
+			if (request('formulario') === 'ajustes')
 			{
 				$cant_modif = $detalle_ajustes->update_ajustes($detalles);
 				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
 					: '');
 			}
 
-			redirect("{$this->router->class}/ajustes?".http_build_query($this->input->get()));
+			redirect("{$this->router->class}/ajustes?".http_build_query(request()));
 		}
 
 	}
@@ -186,9 +186,9 @@ class Inventario_analisis extends Controller_base {
 		$msj_error         = '';
 		$show_script_carga = FALSE;
 
-		if ($this->input->post('formulario') === 'upload')
+		if (request('formulario') === 'upload')
 		{
-			if ($this->input->post('upload_password') === 'logistica2012')
+			if (request('upload_password') === 'logistica2012')
 			{
 				unlink($upload_path.$upload_file);
 				$this->load->library('upload', array(
@@ -293,9 +293,9 @@ class Inventario_analisis extends Controller_base {
 		{
 			redirect(
 				$this->router->class . '/imprime_hojas/' .
-					set_value('pag_desde') . '/' .
-					set_value('pag_hasta') . '/' .
-					((set_value('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0) . '/' .
+					request('pag_desde') . '/' .
+					request('pag_hasta') . '/' .
+					((request('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0) . '/' .
 					time()
 			);
 		}
@@ -350,7 +350,7 @@ class Inventario_analisis extends Controller_base {
 		$update_status = '';
 		$cant_actualizada = 0;
 
-		if ($this->input->post('actualizar') === 'actualizar')
+		if (request('actualizar') === 'actualizar')
 		{
 			$catalogo = new Catalogo;
 			$cant_actualizada = $catalogo->actualiza_precios();

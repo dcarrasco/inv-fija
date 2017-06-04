@@ -322,16 +322,16 @@ class Reportestock_model extends CI_Model {
 	public function get_config_reporte_permanencia()
 	{
 		return array(
-			'orden'   => set_value('sort', '+tipo'),
+			'orden'   => request('sort', '+tipo'),
 			'filtros' => array(
-				'tipo_alm'   => set_value('tipo_alm'),
-				'estado_sap' => set_value('estado_sap'),
-				'tipo_mat'   => set_value('tipo_mat'),
+				'tipo_alm'   => request('tipo_alm'),
+				'estado_sap' => request('estado_sap'),
+				'tipo_mat'   => request('tipo_mat'),
 			),
 			'mostrar' => array(
-				'almacen' => set_value('incl_almacen'),
-				'lote'    => set_value('incl_lote'),
-				'modelos' => set_value('incl_modelos'),
+				'almacen' => request('incl_almacen'),
+				'lote'    => request('incl_lote'),
+				'modelos' => request('incl_modelos'),
 			),
 		);
 	}
@@ -349,29 +349,29 @@ class Reportestock_model extends CI_Model {
 
 		$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
 
-		if (set_value('incl_almacen') === '1')
+		if (request('incl_almacen') === '1')
 		{
 			$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
 			$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto');
 			$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
 		}
 
-		if (is_array(set_value('estado_sap')) AND count(set_value('estado_sap')) > 0)
+		if (is_array(request('estado_sap')) AND count(request('estado_sap')) > 0)
 		{
 			$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto');
 		}
 
-		if (set_value('incl_lote') === '1')
+		if (request('incl_lote') === '1')
 		{
 			$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
 		}
 
-		if (is_array(set_value('tipo_mat')) AND count(set_value('tipo_mat')) > 0)
+		if (is_array(request('tipo_mat')) AND count(request('tipo_mat')) > 0)
 		{
 			$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto');
 		}
 
-		if (set_value('incl_modelos') === '1')
+		if (request('incl_modelos') === '1')
 		{
 			$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '', 'tipo' => 'texto');
 		}

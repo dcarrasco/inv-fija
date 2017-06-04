@@ -60,8 +60,8 @@ class Orm_controller extends Controller_base {
 	 */
 	public function listado($nombre_modelo = '')
 	{
-		$filtro = $this->input->get('filtro');
-		$page   = $this->input->get('page');
+		$filtro = request('filtro');
+		$page   = request('page');
 
 		$modelo = new $nombre_modelo;
 		$modelo->set_model_filtro($filtro);
@@ -72,7 +72,7 @@ class Orm_controller extends Controller_base {
 			'modelos'     => $modelo->list_paginated($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
-			'url_params'  => http_build_query($this->input->get()),
+			'url_params'  => http_build_query(request()),
 		);
 		app_render_view('ORM/orm_listado', $data);
 	}
@@ -88,7 +88,7 @@ class Orm_controller extends Controller_base {
 	 */
 	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
-		$url_params = http_build_query($this->input->get());
+		$url_params = http_build_query(request());
 		$modelo = new $nombre_modelo($id_modelo);
 
 		if ( ! $modelo->valida_form())
@@ -106,12 +106,12 @@ class Orm_controller extends Controller_base {
 		{
 			$modelo->recuperar_post();
 
-			if ($this->input->post('grabar'))
+			if (request('grabar'))
 			{
 				$modelo->grabar();
 				set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
 			}
-			elseif ($this->input->post('borrar'))
+			elseif (request('borrar'))
 			{
 				$modelo->borrar();
 				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));

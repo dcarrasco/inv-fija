@@ -20,7 +20,7 @@
 							<strong>Seleccionar Almacenes</strong>
 						</div>
 						<div>
-							<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
+							<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, request('tipo_alm'), 'size="10" class="form-control"'); ?>
 						</div>
 					</div>
 
@@ -30,19 +30,19 @@
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
+								<?= form_checkbox('incl_almacen', '1', request('incl_almacen'), 'id="incl_almacen"'); ?>
 								Mostrar almacenes
 							</div>
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
+								<?= form_checkbox('incl_modelos', '1', request('incl_modelos'), 'id="incl_modelos"'); ?>
 								Mostrar materiales
 							</div>
 						</div>
 						<div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
+								<?= form_checkbox('incl_lote', '1', request('incl_lote'), 'id="incl_lote"'); ?>
 								Mostrar lotes
 							</div>
 						</div>
@@ -61,8 +61,8 @@
 			</div>
 		</div>
 	</div>
-	<?= form_hidden('order_by', set_value('order_by','')); ?>
-	<?= form_hidden('order_sort', set_value('order_sort','')); ?>
+	<?= form_hidden('order_by', request('order_by','')); ?>
+	<?= form_hidden('order_sort', request('order_sort','')); ?>
 	<?= form_close(); ?>
 </div>
 

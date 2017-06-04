@@ -75,7 +75,7 @@ class Adminbd_exportartablas extends CI_Controller {
 		$result_string = '';
 
 		$base_datos = '';
-		$tabla = $this->input->post('tabla');
+		$tabla = request('tabla');
 
 		if (strpos($tabla, '..') !== FALSE)
 		{
@@ -90,9 +90,9 @@ class Adminbd_exportartablas extends CI_Controller {
 		{
 			if ($this->db->table_exists($tabla))
 			{
-				if ($this->input->post('campo') AND $this->input->post('filtro'))
+				if (request('campo') AND request('filtro'))
 				{
-					$this->db->where($this->input->post('campo'), $this->input->post('filtro'));
+					$this->db->where(request('campo'), request('filtro'));
 				}
 
 				$result_string = $this->dbutil->csv_from_result($this->db->get($tabla));

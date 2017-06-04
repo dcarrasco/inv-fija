@@ -150,15 +150,15 @@ class Inventario_config extends Orm_controller {
 
 		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pagina);
 
-		if ($this->input->post('formulario') === 'editar')
+		if (request('formulario') === 'editar')
 		{
 			$this->form_validation->set_rules($this->ubicacion_model->get_validation_edit($datos_hoja));
 		}
-		elseif ($this->input->post('formulario') === 'agregar')
+		elseif (request('formulario') === 'agregar')
 		{
 			$this->form_validation->set_rules($this->ubicacion_model->get_validation_add());
 		}
-		elseif ($this->input->post('formulario') === 'borrar')
+		elseif (request('formulario') === 'borrar')
 		{
 			$this->form_validation->set_rules('id_borrar', '', 'trim|required');
 		}
@@ -192,21 +192,21 @@ class Inventario_config extends Orm_controller {
 		}
 		else
 		{
-			if ($this->input->post('formulario') === 'editar')
+			if (request('formulario') === 'editar')
 			{
 				$cant_modif = 0;
 
 				foreach($datos_hoja as $registro)
 				{
-					if ((set_value($registro['id'].'-tipo_inventario') !== $registro['tipo_inventario']) OR
-						(set_value($registro['id'].'-ubicacion')       !== $registro['ubicacion']) OR
-						(set_value($registro['id'].'-tipo_ubicacion')  !== $registro['id_tipo_ubicacion']))
+					if ((request($registro['id'].'-tipo_inventario') !== $registro['tipo_inventario']) OR
+						(request($registro['id'].'-ubicacion')       !== $registro['ubicacion']) OR
+						(request($registro['id'].'-tipo_ubicacion')  !== $registro['id_tipo_ubicacion']))
 					{
 						$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
 							$registro['id'],
-							set_value($registro['id'] . '-tipo_inventario'),
-							set_value($registro['id'] . '-ubicacion'),
-							set_value($registro['id'] . '-tipo_ubicacion')
+							request($registro['id'] . '-tipo_inventario'),
+							request($registro['id'] . '-ubicacion'),
+							request($registro['id'] . '-tipo_ubicacion')
 						);
 						$cant_modif += 1;
 					}
@@ -217,27 +217,27 @@ class Inventario_config extends Orm_controller {
 						: ''
 				);
 			}
-			elseif ($this->input->post('formulario') === 'agregar')
+			elseif (request('formulario') === 'agregar')
 			{
 				$count = 0;
 
-				foreach($this->input->post('agr-ubicacion') as $valor)
+				foreach(request('agr-ubicacion') as $valor)
 				{
 					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
 						0,
-						set_value('agr-tipo_inventario'),
+						request('agr-tipo_inventario'),
 						$valor,
-						set_value('agr-tipo_ubicacion')
+						request('agr-tipo_ubicacion')
 					);
 					$count += 1;
 				}
 
 				set_message('Se agregaron ' . $count . ' ubicaciones correctamente');
 			}
-			elseif ($this->input->post('formulario') === 'borrar')
+			elseif (request('formulario') === 'borrar')
 			{
-				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(set_value('id_borrar'));
-				set_message('Registro (id=' . set_value('id_borrar') . ') borrado correctamente');
+				$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(request('id_borrar'));
+				set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
 			}
 
 			redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pagina);

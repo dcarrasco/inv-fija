@@ -33,7 +33,7 @@
 							{_stock_sap_radio_date2_}
 						</label>
 					</div>
-					<?= form_multiselect('fecha[]', $combo_fechas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
+					<?= form_multiselect('fecha[]', $combo_fechas, request('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-4 form-group <?= form_has_error_class('almacenes[]') ?>">
@@ -50,11 +50,11 @@
 							{_stock_sap_radio_alm2_}
 						</label>
 					</div>
-					<?= form_multiselect('almacenes[]', $combo_almacenes, $this->input->post('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
+					<?= form_multiselect('almacenes[]', $combo_almacenes, request('almacenes'), 'id="select_almacenes" size="10" class="form-control"'); ?>
 					<div id="show_tiposalm">
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('almacen', 'almacen', set_value('almacen')); ?>
+								<?= form_checkbox('almacen', 'almacen', request('almacen')); ?>
 								{_stock_sap_check_show_alm_}
 							</label>
 						</div>
@@ -74,19 +74,19 @@
 
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('material', 'material', set_value('material')); ?>
+								<?= form_checkbox('material', 'material', request('material')); ?>
 								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('lote', 'lote', set_value('lote')); ?>
+								<?= form_checkbox('lote', 'lote', request('lote')); ?>
 								{_stock_sap_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
+								<?= form_checkbox('tipo_stock', 'tipo_stock', request('tipo_stock')); ?>
 								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
@@ -94,15 +94,15 @@
 						<?php if ($tipo_op === 'MOVIL'): ?>
 						<div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', set_value('tipo_stock_equipos', TRUE)); ?>
+								<?= form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', request('tipo_stock_equipos', TRUE)); ?>
 								{_stock_sap_radio_equipos_}
 							</div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', set_value('tipo_stock_simcard', TRUE)); ?>
+								<?= form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', request('tipo_stock_simcard', TRUE)); ?>
 								{_stock_sap_radio_sim_}
 							</div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_otros', 'tipo_stock_otros', set_value('tipo_stock_otros', TRUE)); ?>
+								<?= form_checkbox('tipo_stock_otros', 'tipo_stock_otros', request('tipo_stock_otros', TRUE)); ?>
 								{_stock_sap_radio_otros_}
 							</div>
 						</div>

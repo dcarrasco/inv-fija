@@ -2,7 +2,7 @@
 	<?= form_open('', 'class="form-search" method="get"'); ?>
 	<div class="col-md-3 col-sm-5 col-xs-6">
 		<div class="input-group input-group-sm">
-			<?= form_input('filtro', set_value('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
+			<?= form_input('filtro', request('filtro', $modelo->get_model_filtro()), 'class="form-control" id="filtro" maxlength="30" placeholder="{_orm_filter_}"'); ?>
 			<span class="input-group-btn">
 				<button type="submit" id="btn_filtro" class="btn btn-default">
 					<span class="fa fa-search"></span>

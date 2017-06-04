@@ -17,7 +17,7 @@
 			</label>
 			<div class="col-sm-3">
 				<div class="input-group">
-					<?= form_input('agr_filtrar', set_value('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
+					<?= form_input('agr_filtrar', request('agr_filtrar'), 'class="form-control" id="agr_filtrar" placeholder="{_inventario_form_new_material_placeholder_}"'); ?>
 					<span class="input-group-btn">
 						<div class="btn btn-default">
 							<span class="fa fa-search"></span>

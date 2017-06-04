@@ -20,17 +20,17 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_tables_}</label>
-						<?= form_dropdown('tabla', $combo_tablas, $this->input->post('tabla'),'id="id_select_tabla" size="10" class="form-control" onchange="'.form_onchange('select_tabla', 'select_campo', 'adminbd_exportartablas/ajax_campos').'"'); ?>
+						<?= form_dropdown('tabla', $combo_tablas, request('tabla'),'id="id_select_tabla" size="10" class="form-control" onchange="'.form_onchange('select_tabla', 'select_campo', 'adminbd_exportartablas/ajax_campos').'"'); ?>
 					</div>
 				</div>
 
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>{_adminbd_exportar_label_fields_}</label>
-						<?= form_dropdown('campo', $combo_campos, $this->input->post('campo'),'id="id_select_campo" size="7" class="form-control"'); ?>
+						<?= form_dropdown('campo', $combo_campos, request('campo'),'id="id_select_campo" size="7" class="form-control"'); ?>
 
 						<label>{_adminbd_exportar_label_fields_filter_}</label>
-						<?= form_input('filtro', $this->input->post('filtro'),'id="filtro_campo" class="form-control"'); ?>
+						<?= form_input('filtro', request('filtro'),'id="filtro_campo" class="form-control"'); ?>
 					</div>
 				</div>
 

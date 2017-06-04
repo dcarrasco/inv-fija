@@ -624,6 +624,29 @@ if ( ! function_exists('collect'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('request'))
+{
+	/**
+	 * Devuelve un valor de post o get
+	 * @param  string $field   Campo a recuperar el valor
+	 * @param  string $default Valor a devolver por defecto
+	 * @return mixed           Variable post o get
+	 */
+	function request($field = NULL, $default = NULL)
+	{
+		$ci =& get_instance();
+
+		if (is_null($field))
+		{
+			return array_merge($ci->input->post(), $ci->input->get());
+		}
+
+		return empty($ci->input->post_get($field)) ? $default : $ci->input->post_get($field);
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('map'))
 {
 	/**

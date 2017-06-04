@@ -104,7 +104,7 @@ class Stock_reporte extends Controller_base {
 
 		$view = 'listado';
 
-		// define reglas para usar set_value
+		// define reglas de validacion
 		$is_form_valid = $this->form_validation->set_rules($this->reportestock_model->permanencia_validation)->run();
 
 		if ($is_form_valid)
@@ -124,7 +124,7 @@ class Stock_reporte extends Controller_base {
 			'filtro_dif'       => '',
 			'arr_campos'       => $arr_campos,
 			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
-			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(set_value('tipo_op', 'MOVIL')),
+			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(request('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 		);
@@ -143,7 +143,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$detalle_series = $this->reporte->genera_reporte(
 			$this->reportestock_model->get_campos_reporte_detalle_series(),
-			$this->reportestock_model->get_detalle_series($this->input->get())
+			$this->reportestock_model->get_detalle_series(request())
 		);
 
 		$data = array(
@@ -170,7 +170,7 @@ class Stock_reporte extends Controller_base {
 			->set_rules('sel_treemap_type', '', 'trim')
 			->run();
 
-		$centro = set_value('sel_centro', 'CL03');
+		$centro = request('sel_centro', 'CL03');
 
 		$arr_treemap = $this->reportestock_model->get_treemap_permanencia($centro);
 		$arr_treemap_cantidad = $this->reportestock_model->arr_query2treemap('cantidad', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
@@ -197,23 +197,23 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->form_validation->set_rules($this->reportestock_model->movhist_validation)->run();
 
-		$param_tipo_fecha     = set_value('tipo_fecha', 'ANNO');
-		$param_tipo_alm       = set_value('tipo_alm', 'MOVIL-TIPOALM');
-		$param_tipo_mat       = set_value('tipo_mat', 'TIPO');
-		$param_tipo_cruce_alm = set_value('tipo_cruce_alm', 'alm');
-		$param_sort           = set_value('sort', '+fecha');
+		$param_tipo_fecha     = request('tipo_fecha', 'ANNO');
+		$param_tipo_alm       = request('tipo_alm', 'MOVIL-TIPOALM');
+		$param_tipo_mat       = request('tipo_mat', 'TIPO');
+		$param_tipo_cruce_alm = request('tipo_cruce_alm', 'alm');
+		$param_sort           = request('sort', '+fecha');
 
 		$arr_campos    = $this->reportestock_model->get_campos_reporte_movhist();
 		$datos_reporte = $this->reportestock_model->get_reporte_movhist(array(
 			'filtros' => array(
 				'tipo_fecha'     => $param_tipo_fecha,
-				'fechas'         => $this->input->post('fechas'),
-				'cmv'            => $this->input->post('cmv'),
+				'fechas'         => request('fechas'),
+				'cmv'            => request('cmv'),
 				'tipo_alm'       => $param_tipo_alm,
-				'almacenes'      => $this->input->post('almacenes'),
+				'almacenes'      => request('almacenes'),
 				'tipo_cruce_alm' => $param_tipo_cruce_alm,
 				'tipo_mat'       => $param_tipo_mat,
-				'materiales'     => $this->input->post('materiales'),
+				'materiales'     => request('materiales'),
 			),
 			'orden' => $param_sort,
 		));

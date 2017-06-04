@@ -98,7 +98,7 @@ class Stock_sap extends Controller_base {
 		$arr_mostrar = array('fecha', 'tipo_articulo');
 		foreach (array('sel_tiposalm','almacen','material','lote','tipo_stock') as $mostrar)
 		{
-			($this->input->post($mostrar) === $mostrar) AND array_push($arr_mostrar, $mostrar);
+			(request($mostrar) === $mostrar) AND array_push($arr_mostrar, $mostrar);
 		}
 
 		$tabla_stock = '';
@@ -108,7 +108,7 @@ class Stock_sap extends Controller_base {
 		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$combo_fechas    = $stock->get_combo_fechas();
-		$combo_almacenes = (set_value('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
+		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
 			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
 			: $almacen_sap->get_combo_almacenes($tipo_op);
 
@@ -116,15 +116,15 @@ class Stock_sap extends Controller_base {
 
 		$data = array(
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
-			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, $this->input->post()) : '',
+			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, request()) : '',
 			'combo_almacenes' => $combo_almacenes,
-			'combo_fechas'    => $combo_fechas[set_value('sel_fechas', 'ultimodia')],
+			'combo_fechas'    => $combo_fechas[request('sel_fechas', 'ultimodia')],
 			'tipo_op'         => $tipo_op,
 			'arr_mostrar'     => $arr_mostrar,
 			'datos_grafico'   => $datos_grafico,
 		);
 
-		if ($this->input->post('excel'))
+		if (request('excel'))
 		{
 			$this->parser->parse('stock_sap/ver_stock_encab_excel', $data);
 			$this->parser->parse('stock_sap/ver_stock_datos', $data);
@@ -187,7 +187,7 @@ class Stock_sap extends Controller_base {
 		$arr_mostrar = array('fecha', 'almacen');
 		foreach ($arr_mostrar_todos as $mostrar)
 		{
-			if ($this->input->post($mostrar) === $mostrar)
+			if (request($mostrar) === $mostrar)
 			{
 				array_push($arr_mostrar, $mostrar);
 			}
@@ -196,7 +196,7 @@ class Stock_sap extends Controller_base {
 		$arr_filtrar = 	array();
 		foreach ($arr_filtrar_todos as $filtrar)
 		{
-			$arr_filtrar[$filtrar] = $this->input->post($filtrar);
+			$arr_filtrar[$filtrar] = request($filtrar);
 		}
 
 		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
@@ -218,7 +218,7 @@ class Stock_sap extends Controller_base {
 			'datos_grafico'          => '',
 		);
 
-		if ($this->input->post('excel'))
+		if (request('excel'))
 		{
 			$this->load->view('stock_sap/ver_stock_encab_excel', $data);
 			$this->load->view('stock_sap/ver_stock_datos', $data);
@@ -239,9 +239,9 @@ class Stock_sap extends Controller_base {
 	 */
 	public function reporte_clasif()
 	{
-		$tipo_op = set_value('operacion', 'FIJA');
-		$fechas = set_value('fechas', NULL);
-		$borrar_datos = set_value('sel_borrar') === 'borrar';
+		$tipo_op = request('operacion', 'FIJA');
+		$fechas = request('fechas', NULL);
+		$borrar_datos = request('sel_borrar') === 'borrar';
 
 		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
 

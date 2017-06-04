@@ -564,7 +564,7 @@ class Inventario_model extends CI_Model {
 			'digitador' => array('titulo' => 'Digitador', 'tipo' => 'texto'),
 		);
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'hoja');
 
@@ -590,7 +590,7 @@ class Inventario_model extends CI_Model {
 			'almacen'     => array('titulo' => 'Almacen', 'tipo' => 'texto'),
 		);
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
 
@@ -608,7 +608,7 @@ class Inventario_model extends CI_Model {
 	{
 		$arr_campos = array();
 
-		if (set_value('incl_familias') === '1')
+		if (request('incl_familias') === '1')
 		{
 			$arr_campos['nombre_fam'] = array('titulo' => 'Familia', 'tipo' => 'subtotal');
 		}
@@ -618,7 +618,7 @@ class Inventario_model extends CI_Model {
 		$arr_campos['um'] = array('titulo' => 'UM', 'tipo' => 'texto');
 		$arr_campos['pmp'] = array('titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp');
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'catalogo');
 
@@ -669,7 +669,7 @@ class Inventario_model extends CI_Model {
 			'lote'        => array('titulo' => 'lote', 'tipo' => 'texto'),
 		);
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
 
@@ -689,7 +689,7 @@ class Inventario_model extends CI_Model {
 			'ubicacion' => array('titulo' => 'Ubicaci&oacute;n', 'tipo' => 'texto'),
 		);
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
 
@@ -710,7 +710,7 @@ class Inventario_model extends CI_Model {
 			'ubicacion'      => array('titulo' => 'Ubicacion', 'tipo' => 'texto'),
 		);
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(set_value('incl_ajustes')));
+		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
 		$this->reporte->set_order_campos($arr_campos, 'tipo_ubicacion');
 

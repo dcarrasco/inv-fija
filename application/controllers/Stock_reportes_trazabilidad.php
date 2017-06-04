@@ -77,7 +77,7 @@ class Stock_reportes_trazabilidad extends Controller_base {
 	{
 		$this->load->model('reportestock_model');
 
-		// define reglas para usar set_value
+		// define reglas para usar request
 		$this->form_validation
 			->set_rules('tipo_alm')
 			->set_rules('estado_sap')
@@ -89,14 +89,14 @@ class Stock_reportes_trazabilidad extends Controller_base {
 			->set_rules('order_sort', '', 'trim')
 			->run();
 
-		$orden_campo   = set_value('order_by');
-		$orden_tipo    = set_value('order_sort');
-		$tipo_alm      = $this->input->post('tipo_alm');
-		$estado_sap    = $this->input->post('estado_sap');
-		$incl_almacen  = set_value('incl_almacen');
-		$incl_lote     = set_value('incl_lote');
-		$incl_estado   = set_value('incl_estado');
-		$incl_modelos  = set_value('incl_modelos');
+		$orden_campo   = request('order_by');
+		$orden_tipo    = request('order_sort');
+		$tipo_alm      = request('tipo_alm');
+		$estado_sap    = request('estado_sap');
+		$incl_almacen  = request('incl_almacen');
+		$incl_lote     = request('incl_lote');
+		$incl_estado   = request('incl_estado');
+		$incl_modelos  = request('incl_modelos');
 
 		$new_orden_tipo  = ($orden_tipo === 'ASC') ? 'DESC' : 'ASC';
 		$view = 'listado';

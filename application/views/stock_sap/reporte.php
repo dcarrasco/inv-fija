@@ -26,7 +26,7 @@
 				<div class="col-md-4 form-group <?= form_has_error_class('tipo_alm[]') ?>">
 					<label class="control-label">{_stock_perm_label_alm_}</label>
 
-					<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, $this->input->post('tipo_alm'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('tipo_alm[]', $combo_tipo_alm, request('tipo_alm'), 'size="10" class="form-control"'); ?>
 
 					<div class="pull-right">
 						<div class="radio-inline">
@@ -42,12 +42,12 @@
 
 				<div class="col-md-3 form-group">
 					<label class="control-label">{_stock_perm_label_estados_}</label>
-					<?= form_multiselect('estado_sap[]', $combo_estado_sap, $this->input->post('estado_sap'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('estado_sap[]', $combo_estado_sap, request('estado_sap'), 'size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-2 form-group">
 					<label class="control-label">{_stock_perm_label_tipmat_}</label>
-					<?= form_multiselect('tipo_mat[]', $combo_tipo_mat, $this->input->post('tipo_mat'), 'size="10" class="form-control"'); ?>
+					<?= form_multiselect('tipo_mat[]', $combo_tipo_mat, request('tipo_mat'), 'size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-3">
@@ -56,19 +56,19 @@
 
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('incl_almacen', '1', set_value('incl_almacen'), 'id="incl_almacen"'); ?>
+								<?= form_checkbox('incl_almacen', '1', request('incl_almacen'), 'id="incl_almacen"'); ?>
 								{_stock_perm_check_alm_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('incl_lote', '1', set_value('incl_lote'), 'id="incl_lote"'); ?>
+								<?= form_checkbox('incl_lote', '1', request('incl_lote'), 'id="incl_lote"'); ?>
 								{_stock_perm_check_lotes_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('incl_modelos', '1', set_value('incl_modelos'), 'id="incl_modelos"'); ?>
+								<?= form_checkbox('incl_modelos', '1', request('incl_modelos'), 'id="incl_modelos"'); ?>
 								{_stock_perm_check_modelos_}
 							</label>
 						</div>
@@ -87,7 +87,7 @@
 			</div>
 		</div>
 
-		<?= form_hidden('sort', set_value('sort','')); ?>
+		<?= form_hidden('sort', request('sort','')); ?>
 	</div>
 </div>
 <?= form_close(); ?>

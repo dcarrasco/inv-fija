@@ -38,7 +38,7 @@
 					<div class="form-group">
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('sel_borrar', 'borrar', set_value('sel_borrar')); ?>
+								<?= form_checkbox('sel_borrar', 'borrar', request('sel_borrar')); ?>
 								{_stock_clasif_label_delete_}
 							</label>
 						</div>

@@ -17,7 +17,7 @@
 					<label class="control-label">
 						{_stock_analisis_label_series_}
 					</label>
-					<?= form_textarea('series', set_value('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
+					<?= form_textarea('series', request('series'), 'id="series" rows="10" cols="30" class="form-control"'); ?>
 				</div>
 			</div>
 
@@ -28,44 +28,44 @@
 					</label>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_mov', 'show', set_value('show_mov', TRUE)); ?>
+							<?= form_checkbox('show_mov', 'show', request('show_mov', TRUE)); ?>
 							{_stock_analisis_check_movimientos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
+							<?= form_checkbox('ult_mov', 'show', request('ult_mov')); ?>
 							{_stock_analisis_check_filtrar_ultmov_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_despachos', 'show', set_value('show_despachos')); ?>
+							<?= form_checkbox('show_despachos', 'show', request('show_despachos')); ?>
 							{_stock_analisis_check_despachos_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_stock_sap', 'show', set_value('show_stock_sap')); ?>
+							<?= form_checkbox('show_stock_sap', 'show', request('show_stock_sap')); ?>
 							{_stock_analisis_check_stock_sap_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_stock_scl', 'show', set_value('show_stock_scl')); ?>
+							<?= form_checkbox('show_stock_scl', 'show', request('show_stock_scl')); ?>
 							{_stock_analisis_check_stock_scl_}
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_trafico', 'show', set_value('show_trafico')); ?>
+							<?= form_checkbox('show_trafico', 'show', request('show_trafico')); ?>
 							{_stock_analisis_check_trafico_}
 							(<?= anchor($this->router->class.'/trafico_por_mes', '{_stock_analisis_link_detalle_trafico_}'); ?>)
 						</label>
 					</div>
 					<div class="checkbox">
 						<label>
-							<?= form_checkbox('show_gdth', 'show', set_value('show_gdth')); ?>
+							<?= form_checkbox('show_gdth', 'show', request('show_gdth')); ?>
 							{_stock_analisis_check_gestor_}
 						</label>
 					</div>
@@ -91,7 +91,7 @@
 <?= form_close(); ?>
 
 
-<?php if (set_value('show_mov')): ?>
+<?php if (request('show_mov')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_movimientos" class="accordion-toggle" data-toggle="collapse">
@@ -107,7 +107,7 @@
 </div>
 <?php endif; ?>
 
-<?php if (set_value('show_despachos')): ?>
+<?php if (request('show_despachos')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_despachos" class="accordion-toggle" data-toggle="collapse">
@@ -123,7 +123,7 @@
 </div>
 <?php endif; ?>
 
-<?php if (set_value('show_stock_sap')): ?>
+<?php if (request('show_stock_sap')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_stock_sap" class="accordion-toggle" data-toggle="collapse">
@@ -139,7 +139,7 @@
 </div>
 <?php endif; ?>
 
-<?php if (set_value('show_stock_scl')): ?>
+<?php if (request('show_stock_scl')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_stock_scl" class="accordion-toggle" data-toggle="collapse">
@@ -155,7 +155,7 @@
 </div>
 <?php endif; ?>
 
-<?php if (set_value('show_trafico')): ?>
+<?php if (request('show_trafico')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_trafico" class="accordion-toggle" data-toggle="collapse">
@@ -172,7 +172,7 @@
 <?php endif; ?>
 
 
-<?php if (set_value('show_gdth')): ?>
+<?php if (request('show_gdth')): ?>
 <div class="panel panel-default">
 	<div class="panel-heading">
 		<a href="#tabla_gdth" class="accordion-toggle" data-toggle="collapse">

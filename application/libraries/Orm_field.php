@@ -361,7 +361,7 @@ class Orm_field {
 		$id_prefix  = 'id_';
 
 		$valor_field = ($valor === '' AND $this->_default !== '') ? $this->_default : $valor;
-		$valor_field = set_value($this->_nombre, $valor_field);
+		$valor_field = request($this->_nombre, $valor_field);
 
 		$arr_param = array(
 			'name'        => $this->_nombre,
@@ -492,7 +492,7 @@ class Orm_field {
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
 			//$form = form_multiselect($this->_nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = $ci->input->post($this->_nombre) ? $ci->input->post($this->_nombre) : $valor_field;
+			$opciones = request($this->_nombre) ? request($this->_nombre) : $valor_field;
 
 			$form = form_multiselect(
 				$this->_nombre.'[]',

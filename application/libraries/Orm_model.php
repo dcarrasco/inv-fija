@@ -1127,7 +1127,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function recuperar_post()
 	{
-		return $this->fill_from_array($this->input->post());
+		return $this->fill_from_array(request());
 	}
 
 

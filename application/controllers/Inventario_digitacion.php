@@ -88,12 +88,12 @@ class Inventario_digitacion extends Controller_base {
 		$hoja_detalle_inventario = $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
 		//$this->benchmark->mark('detalle_inventario_end');
 
-		if ($this->input->post('formulario') === 'buscar')
+		if (request('formulario') === 'buscar')
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
 		}
-		elseif ($this->input->post('formulario') === 'inventario')
+		elseif (request('formulario') === 'inventario')
 		{
 			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
 			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
@@ -116,7 +116,7 @@ class Inventario_digitacion extends Controller_base {
 		}
 		else
 		{
-			if ($this->input->post('formulario') === 'inventario')
+			if (request('formulario') === 'inventario')
 			{
 				$id_usuario_login  = $this->acl_model->get_id_usr();
 				$cant_modif = $detalle_inventario->update_digitacion($inventario->get_id_inventario_activo(), $hoja, $id_usuario_login);
@@ -124,7 +124,7 @@ class Inventario_digitacion extends Controller_base {
 				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 			}
 
-			redirect($this->router->class . '/ingreso/' . $this->input->post('hoja') . '/' . time());
+			redirect($this->router->class . '/ingreso/' . request('hoja') . '/' . time());
 		}
 
 	}
@@ -226,10 +226,10 @@ class Inventario_digitacion extends Controller_base {
 
 		$catalogo = new Catalogo;
 		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
-		if ($this->input->post('catalogo'))
+		if (request('catalogo'))
 		{
-			$catalogo->find_id($this->input->post('catalogo'));
-			$arr_catalogo = array($this->input->post('catalogo') => $catalogo);
+			$catalogo->find_id(request('catalogo'));
+			$arr_catalogo = array(request('catalogo') => $catalogo);
 		}
 
 		if ($id_registro)
@@ -259,7 +259,7 @@ class Inventario_digitacion extends Controller_base {
 		{
 			$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
-			if ($this->input->post('accion') === 'agregar')
+			if (request('accion') === 'agregar')
 			{
 				$detalle_inventario->grabar();
 				set_message(sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));

@@ -11,7 +11,7 @@
 			<div class="form-group <?= form_has_error_class('pag_desde'); ?>">
 				<label class="control-label col-sm-4">{_toa_consumo_peticion_label_}</label>
 				<div class="col-sm-8">
-					<?= form_input('peticion', set_value('peticion'), 'class="form-control"'); ?>
+					<?= form_input('peticion', request('peticion'), 'class="form-control"'); ?>
 				</div>
 			</div>
 

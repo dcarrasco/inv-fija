@@ -102,7 +102,7 @@
 					<td class="text-center col-md-1">
 						<?= form_input(
 							'stock_fisico_'.$linea_det->id,
-							set_value('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
+							request('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
 							'class="input-sm form-control text-right" tabindex="'.$tab_index.'"'
 						); ?>
 						<?= form_error('stock_fisico_' . $linea_det->id); ?>
@@ -110,7 +110,7 @@
 					<td class="text-center col-md-1">
 						<?= form_input(
 							'hu_'.$linea_det->id,
-							set_value('hu_'.$linea_det->id, $linea_det->hu),
+							request('hu_'.$linea_det->id, $linea_det->hu),
 							'class="input-sm form-control" tabindex="'.($tab_index+100).'"'
 						); ?>
 						<?= form_error('hu_'.$linea_det->id); ?>
@@ -118,7 +118,7 @@
 					<td class="text-center">
 						<?= form_input(
 							'observacion_'.$linea_det->id,
-							set_value('observacion_'.$linea_det->id, $linea_det->observacion),
+							request('observacion_'.$linea_det->id, $linea_det->observacion),
 							'class="input-sm form-control" maxlength="100" tabindex="'.($tab_index + 200).'"'
 						); ?>
 					</td>

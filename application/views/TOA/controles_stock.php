@@ -20,17 +20,17 @@
 				<div class="row">
 					<div class="col-md-3 form_group <?= form_has_error_class('empresa') ?>">
 						<label class="control-label">{_controles_tecnicos_empresas_}</label>
-						<?= form_dropdown('empresa', $combo_empresas, set_value('empresa'), 'class="form-control"'); ?>
+						<?= form_dropdown('empresa', $combo_empresas, request('empresa'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-3 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
-						<?= form_month('mes', set_value('mes'), 'class="form-control"'); ?>
+						<?= form_month('mes', request('mes'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-3 form_group <?= form_has_error_class('dato') ?>">
 						<label class="control-label">{_controles_tecnicos_dato_desplegar_}</label>
-						<?= form_dropdown('dato', $combo_dato_desplegar, set_value('dato'), 'class="form-control"'); ?>
+						<?= form_dropdown('dato', $combo_dato_desplegar, request('dato'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-3">
@@ -80,7 +80,7 @@
 			<td style="white-space: nowrap;"><?= $datos['centro']; ?>-<?= $datos['cod_almacen']; ?> <?= $datos['des_almacen']?></td>
 			<?php foreach ($datos['actuaciones'] as $dia_act => $valor): ?>
 				<?php if ($valor): ?>
-					<?php $valor_desplegar = (set_value('dato') === 'monto') ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
+					<?php $valor_desplegar = (request('dato') === 'monto') ? fmt_monto($valor, 'MM') : fmt_cantidad($valor); ?>
 					<td class="text-center info"><?= anchor($url_detalle_dia.'/'.$anomes.$dia_act.'/'.$datos['centro'].'-'.$datos['cod_almacen'], $valor_desplegar); ?></td>
 				<?php else: ?>
 					<td></td>
@@ -99,7 +99,7 @@
 			<th></th>
 			<th></th>
 			<?php foreach ($tot_col as $dia_act => $valor): ?>
-				<th class="text-center"><?= set_value('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
+				<th class="text-center"><?= request('dato') === 'monto' ? fmt_monto($valor, 'MM') : fmt_cantidad($valor);  ?></th>
 			<?php endforeach; ?>
 		</tr>
 	</tfoot>

@@ -71,7 +71,7 @@ class Toa_panel extends Controller_base {
 		$empresa_toa = new Empresa_toa();
 
 		$is_form_valid = $this->form_validation
-			->set_data($this->input->get())
+			->set_data(request())
 			->set_rules($this->toa_model->panel_validation)
 			->run();
 
@@ -82,8 +82,8 @@ class Toa_panel extends Controller_base {
 
 		if ($is_form_valid)
 		{
-			$sel_empresa = set_value('empresa');
-			$sel_mes     = set_value('mes');
+			$sel_empresa = request('empresa');
+			$sel_mes     = request('mes');
 
 			$datos = array_merge($datos, array(
 				'form_validated'               => TRUE,

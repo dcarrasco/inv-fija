@@ -16,7 +16,7 @@
 								'name' => 'series',
 								'rows' => '10',
 								'cols' => '30',
-								'value' => set_value('series'),
+								'value' => request('series'),
 								'class' => 'form-control',
 							)); ?>
 						<label class="radio-inline">
@@ -33,7 +33,7 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>Meses</label>
-						<?= form_multiselect('meses[]', $combo_mes, $this->input->post('meses'),'size="12" class="form-control"'); ?>
+						<?= form_multiselect('meses[]', $combo_mes, request('meses'),'size="12" class="form-control"'); ?>
 					</div>
 				</div>
 

@@ -1,6 +1,6 @@
 <div class="accordion">
 	<?= form_open('','method="get" id="frm_param" class="form-inline"'); ?>
-	<?= form_hidden('sort', set_value('sort','')); ?>
+	<?= form_hidden('sort', request('sort','')); ?>
 	<div class="panel panel-default">
 
 		<div class="panel-heading">
@@ -21,13 +21,13 @@
 				<div class="row">
 					<div class="col-md-4 form_group <?= form_has_error_class('sel_reporte') ?>">
 						<label class="control-label">{_consumo_reporte_}</label>
-						<?= form_dropdown('sel_reporte', $combo_reportes, $this->input->get('sel_reporte'), 'class="form-control"'); ?>
+						<?= form_dropdown('sel_reporte', $combo_reportes, request('sel_reporte'), 'class="form-control"'); ?>
 					</div>
 
 					<div class="col-md-6 form_group <?= (form_error('fecha_desde') OR form_error('fecha_hasta')) ? 'has-error' : ''; ?>">
 						<label class="col-md-4 control-label">{_consumo_fechas_}</label>
 						<div class="col-md-8">
-							<?= form_date_range('fecha_desde', $this->input->get('fecha_desde'), 'fecha_hasta', $this->input->get('fecha_hasta'), 'class="form-control"'); ?>
+							<?= form_date_range('fecha_desde', request('fecha_desde'), 'fecha_hasta', request('fecha_hasta'), 'class="form-control"'); ?>
 						</div>
 					</div>
 

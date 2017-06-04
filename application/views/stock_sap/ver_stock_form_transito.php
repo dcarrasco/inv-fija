@@ -34,7 +34,7 @@
 							{_stock_sap_radio_date2_}
 						</label>
 					</div>
-					<?= form_multiselect('fecha[]', $combo_fechas_todas, $this->input->post('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
+					<?= form_multiselect('fecha[]', $combo_fechas_todas, request('fecha'),'id="select_fechas" size="10" class="form-control"'); ?>
 				</div>
 
 				<div class="col-md-4">
@@ -42,19 +42,19 @@
 						<label class="control-label">{_stock_sap_label_mats_}</label>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('tipo_stock', 'tipo_stock', set_value('tipo_stock')); ?>
+								<?= form_checkbox('tipo_stock', 'tipo_stock', request('tipo_stock')); ?>
 								{_stock_sap_check_tipstock_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('material', 'material', set_value('material')); ?>
+								<?= form_checkbox('material', 'material', request('material')); ?>
 								{_stock_sap_check_mat_}
 							</label>
 						</div>
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('lote', 'lote', set_value('lote')); ?>
+								<?= form_checkbox('lote', 'lote', request('lote')); ?>
 								{_stock_sap_check_lotes_}
 							</label>
 						</div>

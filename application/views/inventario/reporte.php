@@ -3,7 +3,7 @@
 	{validation_errors}
 
 	<?= form_open('','id="frm_param" class="form-inline"'); ?>
-	<?= form_hidden('sort', set_value('sort','')); ?>
+	<?= form_hidden('sort', request('sort','')); ?>
 
 	<div class="form-group col-md-5">
 		<label for="sel_inv_activo">{_inventario_report_label_inventario_}</label>
@@ -12,15 +12,15 @@
 
 	<div class="form-group col-md-5">
 		<label class="checkbox-inline">
-			<?= form_checkbox('elim_sin_dif', '1', set_value('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
+			<?= form_checkbox('elim_sin_dif', '1', request('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
 		</label>
 		<label class="checkbox-inline">
-			<?= form_checkbox('incl_ajustes', '1', set_value('incl_ajustes'), 'id="incl_ajustes"'); ?>
+			<?= form_checkbox('incl_ajustes', '1', request('incl_ajustes'), 'id="incl_ajustes"'); ?>
 			{_inventario_report_check_incluir_ajustes_}
 		</label>
 		<label class="checkbox-inline">
-			<?= form_checkbox('incl_familias', '1', set_value('incl_familias'), 'id="incl_familias"'); ?>
+			<?= form_checkbox('incl_familias', '1', request('incl_familias'), 'id="incl_familias"'); ?>
 			{_inventario_report_check_incluir_familias_}
 		</label>
 	</div>
@@ -32,7 +32,7 @@
 					<span class="fa fa-search"></span>
 
 				</span>
-				<?= form_input('filtrar_material', set_value('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
+				<?= form_input('filtrar_material', request('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
 			</div>
 		</div>
 	</div>

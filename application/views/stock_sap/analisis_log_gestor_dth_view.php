@@ -25,7 +25,7 @@
 								'name' => 'series',
 								'rows' => '10',
 								'cols' => '30',
-								'value' => set_value('series'),
+								'value' => request('series'),
 								'class' => 'form-control',
 							)); ?>
 					</div>
@@ -48,7 +48,7 @@
 
 						<div class="checkbox">
 							<label>
-								<?= form_checkbox('ult_mov', 'show', set_value('ult_mov')); ?>
+								<?= form_checkbox('ult_mov', 'show', request('ult_mov')); ?>
 								{_stock_gestor_check_filter_last_mov_}
 							</label>
 						</div>
@@ -57,11 +57,11 @@
 
 						<div>
 							<label class="checkbox-inline">
-								<?= form_checkbox('tipo_op_alta', 'alta', set_value('tipo_op_alta', 'alta')); ?>
+								<?= form_checkbox('tipo_op_alta', 'alta', request('tipo_op_alta', 'alta')); ?>
 								{_stock_gestor_check_alta_}
 							</label>
 							<label class="checkbox-inline">
-								<?= form_checkbox('tipo_op_baja', 'baja', set_value('tipo_op_baja', 'baja')); ?>
+								<?= form_checkbox('tipo_op_baja', 'baja', request('tipo_op_baja', 'baja')); ?>
 								{_stock_gestor_check_baja_}
 							</label>
 						</div>

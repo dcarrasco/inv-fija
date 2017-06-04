@@ -15,17 +15,17 @@
 		<div class="row">
 			<div class="col-md-4">
 				Tipo de Inventario
-				<?= form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, set_value('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
+				<?= form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, request('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
 				<?= form_error('agr-tipo_inventario'); ?>
 			</div>
 			<div class="col-md-4">
 				Ubicacion
-				<?= form_multiselect('agr-ubicacion[]', array(), set_value('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
+				<?= form_multiselect('agr-ubicacion[]', array(), request('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
 				<?= form_error('agr-ubicacion'); ?>
 			</div>
 			<div class="col-md-4">
 				Tipo de Ubicacion
-				<?= form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), set_value('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
+				<?= form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), request('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
 				<?= form_error('agr-tipo_ubicacion'); ?>
 			</div>
 		</div>
@@ -61,15 +61,15 @@
 				<tr>
 					<td><?= $reg['id']; ?></td>
 					<td>
-						<?= form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, set_value($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
+						<?= form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, request($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
 						<?= form_error($reg['id'].'-tipo_inventario'); ?>
 					</td>
 					<td>
-						<?= form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], set_value($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
+						<?= form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], request($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
 						<?= form_error($reg['id'].'-tipo_ubicacion'); ?>
 					</td>
 					<td>
-						<?= form_input($reg['id'].'-ubicacion', set_value($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
+						<?= form_input($reg['id'].'-ubicacion', request($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
 						<?= form_error($reg['id'].'-ubicacion'); ?>
 					</td>
 					<td>

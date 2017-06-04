@@ -474,7 +474,7 @@ class Detalle_inventario extends ORM_Model {
 
 		// recupera el nombre del material
 		$material = new Catalogo;
-		$material->find_id($ci->input->post('catalogo'));
+		$material->find_id(request('catalogo'));
 
 		if ($id_detalle)
 		{
@@ -486,21 +486,21 @@ class Detalle_inventario extends ORM_Model {
 			'id'                 => (int) $id_detalle,
 			'id_inventario'      => (int) $id_inventario,
 			'hoja'               => (int) $hoja,
-			'ubicacion'          => strtoupper($ci->input->post('ubicacion')),
-			'hu'                 => strtoupper($ci->input->post('hu')),
-			'catalogo'           => strtoupper($ci->input->post('catalogo')),
+			'ubicacion'          => strtoupper(request('ubicacion')),
+			'hu'                 => strtoupper(request('hu')),
+			'catalogo'           => strtoupper(request('catalogo')),
 			'descripcion'        => $material->descripcion,
-			'lote'               => strtoupper($ci->input->post('lote')),
-			'centro'             => strtoupper($ci->input->post('centro')),
-			'almacen'            => strtoupper($ci->input->post('almacen')),
-			'um'                 => strtoupper($ci->input->post('um')),
+			'lote'               => strtoupper(request('lote')),
+			'centro'             => strtoupper(request('centro')),
+			'almacen'            => strtoupper(request('almacen')),
+			'um'                 => strtoupper(request('um')),
 			'stock_sap'          => 0,
-			'stock_fisico'       => (int) $ci->input->post('stock_fisico'),
+			'stock_fisico'       => (int) request('stock_fisico'),
 			'digitador'          => (int) $ci->acl_model->get_id_usr(),
 			'auditor'            => (int) $id_auditor,
 			'reg_nuevo'          => 'S',
 			'fecha_modificacion' => date('Y-m-d H:i:s'),
-			'observacion'        => $ci->input->post('observacion'),
+			'observacion'        => request('observacion'),
 			'stock_ajuste'       => 0,
 			'glosa_ajuste'       => '',
 			'fecha_ajuste'       => NULL,
@@ -523,11 +523,11 @@ class Detalle_inventario extends ORM_Model {
 
 		foreach($data_collection as $linea_detalle)
 		{
-			if ( (int) set_value('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste OR
-				trim(set_value('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste) )
+			if ( (int) request('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste OR
+				trim(request('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste) )
 			{
-				$linea_detalle->stock_ajuste = (int) set_value('stock_ajuste_'.$linea_detalle->id);
-				$linea_detalle->glosa_ajuste = trim(set_value('observacion_'.$linea_detalle->id));
+				$linea_detalle->stock_ajuste = (int) request('stock_ajuste_'.$linea_detalle->id);
+				$linea_detalle->glosa_ajuste = trim(request('observacion_'.$linea_detalle->id));
 				$linea_detalle->fecha_ajuste = date('Y-m-d H:i:s');
 				$linea_detalle->grabar();
 				$cant_modif += 1;
@@ -557,10 +557,10 @@ class Detalle_inventario extends ORM_Model {
 		{
 			$linea_detalle->fill(array(
 				'digitador'          => $id_usr,
-				'auditor'            => set_value('auditor'),
-				'stock_fisico'       => set_value('stock_fisico_'.$linea_detalle->id),
-				'hu'                 => set_value('hu_'.$linea_detalle->id),
-				'observacion'        => set_value('observacion_'.$linea_detalle->id),
+				'auditor'            => request('auditor'),
+				'stock_fisico'       => request('stock_fisico_'.$linea_detalle->id),
+				'hu'                 => request('hu_'.$linea_detalle->id),
+				'observacion'        => request('observacion_'.$linea_detalle->id),
 				'fecha_modificacion' => date('Y-m-d H:i:s'),
 			));
 

@@ -76,10 +76,10 @@ class Login extends Controller_base {
 
 		if ($is_form_valid)
 		{
-			$usuario      = set_value('usr');
-			$password     = set_value('pwd');
-			$captcha_word = set_value('captcha');
-			$remember_me  = set_value('remember_me');
+			$usuario      = request('usr');
+			$password     = request('pwd');
+			$captcha_word = request('captcha');
+			$remember_me  = request('remember_me');
 
 			// si el usuario existe y no tiene fijada una clave, lo obligamos a fijarla
 			if ($this->acl_model->existe_usuario($usuario) AND ! $this->acl_model->tiene_clave($usuario))
@@ -105,7 +105,7 @@ class Login extends Controller_base {
 			set_message($this->lang->line('login_error_usr_pwd'), 'danger');
 		}
 
-		$captcha_img  = $this->acl_model->get_captcha_img(set_value('usr'));
+		$captcha_img  = $this->acl_model->get_captcha_img(request('usr'));
 
 		$data = array(
 			'usar_captcha' => $captcha_img !== '',
@@ -145,19 +145,19 @@ class Login extends Controller_base {
 	{
 		$this->form_validation->set_rules($this->acl_model->change_password_validation);
 
-		if ( ! $this->acl_model->tiene_clave($this->input->post('usr')))
+		if ( ! $this->acl_model->tiene_clave(request('usr')))
 		{
 			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
 		}
 
 		if ($this->form_validation->run())
 		{
-			if ( ! $this->acl_model->check_user_credentials(set_value('usr'), set_value('pwd_old')))
+			if ( ! $this->acl_model->check_user_credentials(request('usr'), request('pwd_old')))
 			{
 				set_message($this->lang->line('login_error_usr_pwd'), 'danger');
 			}
 
-			if ($this->acl_model->cambio_clave(set_value('usr'), set_value('pwd_old'), set_value('pwd_new1')))
+			if ($this->acl_model->cambio_clave(request('usr'), request('pwd_old'), request('pwd_new1')))
 			{
 				set_message($this->lang->line('login_success_pwd_changed'));
 
@@ -165,12 +165,12 @@ class Login extends Controller_base {
 			}
 		}
 
-		$usuario = set_value('usr', $usr_param);
+		$usuario = request('usr', $usr_param);
 
 		$data = array(
 			'usr'               => $usuario,
 			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
-			'ocultar_password'  => $this->input->post('usr') ? TRUE : FALSE,
+			'ocultar_password'  => request('usr') ? TRUE : FALSE,
 			'extra_styles'      => '<style type="text/css">body {margin-top: 40px;}</style>',
 			'arr_vistas'        => array('ACL/cambio_password'),
 			'vista_login'       => TRUE,

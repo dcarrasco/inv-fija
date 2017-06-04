@@ -96,7 +96,7 @@ class Reporte {
 	{
 		$ci =& get_instance();
 
-		$sort_by = empty($ci->input->post_get('sort')) ? $campo_default : $ci->input->post_get('sort');
+		$sort_by = empty(request('sort')) ? $campo_default : request('sort');
 		$sort_by = ( ! preg_match('/^[+\-](.*)$/', $sort_by)) ? '+'.$sort_by : $sort_by;
 
 		$sort_by_field  = substr($sort_by, 1, strlen($sort_by));

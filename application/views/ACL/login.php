@@ -24,7 +24,7 @@
 					{_login_input_user_}
 				</label>
 				<div class="controls">
-					<?= form_input('usr', set_value('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
+					<?= form_input('usr', request('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
 				</div>
 			</div>
 
@@ -56,7 +56,7 @@
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="checkbox">
 					<label>
-						<?= form_checkbox('remember_me', 'remember', set_value('remember_me')); ?>
+						<?= form_checkbox('remember_me', 'remember', request('remember_me')); ?>
 						{_login_check_remember_me_}
 					</label>
 				</div>

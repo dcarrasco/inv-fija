@@ -23,7 +23,7 @@
 			<div class="control-group col-md-8 col-md-offset-2 <?= form_has_error_class('usr'); ?>">
 				<label class="control-label" for="usr">{_login_input_user_}</label>
 				<div class="controls">
-					<?= form_input('usr', set_value('usr', $usr),'maxlength="45" class="form-control"'); ?>
+					<?= form_input('usr', request('usr', $usr),'maxlength="45" class="form-control"'); ?>
 				</div>
 			</div>
 

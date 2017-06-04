@@ -108,11 +108,11 @@ class Inventario_reportes extends Controller_base {
 		// define reglas para usar set_value, y ejecuta validación de formulario
 		$this->form_validation->set_rules($this->inventario_model->reportes_validation)->run();
 
-		$id_inventario = set_value('inv_activo', $this->inventario_model->get_id_inventario_activo());
+		$id_inventario = request('inv_activo', $this->inventario_model->get_id_inventario_activo());
 
 		$view = 'listado';
 
-		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, set_value('sort'), set_value('incl_ajustes'), set_value('elim_sin_dif'), $param1);
+		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
 		$arr_campos = $this->inventario_model->get_campos_reporte($tipo);
 
 		$data = array(

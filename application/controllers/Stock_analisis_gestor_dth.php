@@ -75,22 +75,22 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 
 		$arr_filtro_cas = array();
 
-		if ($this->input->post('tipo_op_alta') === 'alta')
+		if (request('tipo_op_alta') === 'alta')
 		{
 			array_push($arr_filtro_cas, "'ALTA'");
 		}
 
-		if ($this->input->post('tipo_op_baja') === 'baja')
+		if (request('tipo_op_baja') === 'baja')
 		{
 			array_push($arr_filtro_cas, "'BAJA'");
 		}
 
 		$datos['log'] = $this->log_gestor_model->get_log(
-			$this->input->post('series'),
-			$this->input->post('set_serie'),
-			$this->input->post('tipo_reporte'),
+			request('series'),
+			request('set_serie'),
+			request('tipo_reporte'),
 			implode(', ', $arr_filtro_cas),
-			$this->input->post('ult_mov') === 'show'
+			request('ult_mov') === 'show'
 		);
 
 		app_render_view('stock_sap/analisis_log_gestor_dth_view', $datos);

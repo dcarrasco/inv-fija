@@ -83,7 +83,7 @@ class Stock_analisis_series extends Controller_base {
 
 		if ($is_form_valid)
 		{
-			$series = set_value('series');
+			$series = request('series');
 
 			$analisis_model = new analisis_series_model;
 			$gestor_model   = new log_gestor_model;
@@ -123,7 +123,7 @@ class Stock_analisis_series extends Controller_base {
 
 			foreach ($arr_reportes as $input => $reporte)
 			{
-				if ($this->input->post($input) === 'show')
+				if (request($input) === 'show')
 				{
 					$datos['datos_'.$input] = call_user_func_array(array($reporte['class'], $reporte['method']), $reporte['params']);
 				}
@@ -144,11 +144,11 @@ class Stock_analisis_series extends Controller_base {
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
 
-		$tipo =set_value('sel_tipo');
+		$tipo =request('sel_tipo');
 
 		$datos = array(
 				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
-				'datos_trafico' => $this->analisis_series_model->get_trafico_mes($this->input->post('series'), $this->input->post('meses'), $tipo),
+				'datos_trafico' => $this->analisis_series_model->get_trafico_mes(request('series'), request('meses'), $tipo),
 			);
 
 		app_render_view('stock_sap/analisis_series_trafico_view', $datos);
