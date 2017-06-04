@@ -357,6 +357,19 @@ class Collection implements IteratorAggregate {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	* Junta elementos de la coleccion con nuevos items
+	*
+	* @param  mixed $items Items a juntar a la coleccion actual
+	* @return mixed
+	*/
+	public function only($items = array())
+	{
+		return new static(array_intersect_key($this->_items, array_flip((array) $items)));
+	}
+
 }
 /* End of file collection.php */
 /* Location: ./application/libraries/collection.php */

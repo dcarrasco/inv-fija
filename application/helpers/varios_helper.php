@@ -641,6 +641,13 @@ if ( ! function_exists('request'))
 			return array_merge($ci->input->post(), $ci->input->get());
 		}
 
+		if (is_array($field))
+		{
+			return collect(array_merge($ci->input->post(), $ci->input->get()))
+				->only($field)
+				->all();
+		}
+
 		return empty($ci->input->post_get($field)) ? $default : $ci->input->post_get($field);
 	}
 }
