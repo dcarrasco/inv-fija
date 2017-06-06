@@ -370,6 +370,54 @@ class Collection implements IteratorAggregate {
 		return new static(array_intersect_key($this->_items, array_flip((array) $items)));
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Ejecuta un callback sobre cada item
+	 *
+	 * @param  callable  $callback
+	 * @return $this
+	 */
+	public function each(callable $callback)
+	{
+		foreach ($this->_items as $key => $item)
+		{
+			if ($callback($item, $key) === false)
+			{
+				break;
+			}
+		}
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Run an associative map over each of the items.
+	 *
+	 * The callback should return an associative array with a single key/value pair.
+	 *
+	 * @param  callable  $callback
+	 * @return static
+	 */
+	public function map_with_keys(callable $callback)
+	{
+		$result = [];
+
+		foreach ($this->_items as $key => $value)
+		{
+			$assoc = $callback($value, $key);
+
+			foreach ($assoc as $mapKey => $mapValue)
+			{
+				$result[$mapKey] = $mapValue;
+			}
+		}
+
+		return new static($result);
+	}
+
 }
 /* End of file collection.php */
 /* Location: ./application/libraries/collection.php */

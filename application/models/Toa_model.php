@@ -1778,8 +1778,6 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
@@ -1795,12 +1793,13 @@ class Toa_model extends CI_Model {
 			->where_in('e.id_empresa', $empresa)
 			->get()->result_array();
 
-		$this->db
+		$stock = $this->db
 			->select('a.fecha_stock as fecha')
 			->select('d.tipo')
 			->select('a.centro')
 			->select('a.almacen')
 			->select('b.des_almacen')
+			->select_sum(($dato_desplegar === 'unidades') ? 'a.cantidad' : 'a.valor', 'dato')
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join($this->config->item('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
@@ -1813,38 +1812,37 @@ class Toa_model extends CI_Model {
 			->group_by('d.tipo')
 			->group_by('a.centro')
 			->group_by('a.almacen')
-			->group_by('b.des_almacen');
+			->group_by('b.des_almacen')
+			->get()->result_array();
 
-		if ($dato_desplegar === 'unidades')
-		{
-			$this->db->select_sum('a.cantidad', 'dato');
-		}
-		else
-		{
-			$this->db->select_sum('a.valor', 'dato');
-		}
+		$arr_dias = $this->_get_arr_dias($anomes);
 
-		$stock = $this->db->get()->result_array();
+		return collect($almacenes)
+			->map_with_keys(function($almacen) use ($arr_dias, $stock) {
+				$stock_almacen = collect($stock)
+					->filter(function($stock) use ($almacen) {
+						return $stock['centro'] === $almacen['centro'] AND $stock['almacen'] === $almacen['cod_almacen'];
+					})->map_with_keys(function($stock) {
+						return array(
+							substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']
+						);
+					})->all();
 
-		$matriz = array();
+				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_almacen) {
+					return $valor + (array_key_exists($indice, $stock_almacen) ? $stock_almacen[$indice] : 0);
+				})->all();
 
-		foreach ($almacenes as $almacen)
-		{
-			$matriz[$almacen['centro'].$almacen['cod_almacen']] = array(
-				'tipo'        => $almacen['tipo'],
-				'centro'      => $almacen['centro'],
-				'cod_almacen' => $almacen['cod_almacen'],
-				'des_almacen' => $almacen['des_almacen'],
-				'actuaciones' => $arr_dias,
-			);
-		}
-
-		foreach ($stock as $registro)
-		{
-			$matriz[$registro['centro'].$registro['almacen']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
-		}
-
-		return $matriz;
+				return array(
+					$almacen['centro'].$almacen['cod_almacen'] => array(
+						'tipo'        => $almacen['tipo'],
+						'centro'      => $almacen['centro'],
+						'cod_almacen' => $almacen['cod_almacen'],
+						'des_almacen' => $almacen['des_almacen'],
+						'actuaciones' => $actuaciones,
+						'con_datos'   => collect($actuaciones)->sum(),
+					)
+				);
+			})->all();
 	}
 
 
@@ -1927,28 +1925,17 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
-
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
 
 		$tecnicos = new Tecnico_toa();
 		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
 
-		$matriz = array();
-		foreach ($arr_tecnicos as $tecnico)
-		{
-			$matriz[$tecnico->id_tecnico] = array(
-				'tecnico'     => $tecnico->tecnico,
-				'rut'         => $tecnico->rut,
-				'actuaciones' => $arr_dias,
-			);
-		}
-
-		$this->db
+		$stock = $this->db
 			->select('a.fecha_stock as fecha')
 			->select('a.acreedor')
 			->select('b.rut')
+			->select_sum(($dato_desplegar === 'unidades') ? 'a.cantidad' : 'a.valor', 'dato')
 			->from($this->config->item('bd_stock_fija').' a')
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left', FALSE)
 			->where('a.fecha_stock>=', $fecha_desde)
@@ -1956,35 +1943,35 @@ class Toa_model extends CI_Model {
 			->where('b.id_empresa', $empresa)
 			->group_by('a.fecha_stock')
 			->group_by('a.acreedor')
-			->group_by('b.rut');
+			->group_by('b.rut')
+			->get()->result_array();
 
-		if ($dato_desplegar === 'unidades')
-		{
-			$this->db->select_sum('a.cantidad', 'dato');
-		}
-		else
-		{
-			$this->db->select_sum('a.valor', 'dato');
-		}
+		$arr_dias = $this->_get_arr_dias($anomes);
 
-		$stock = $this->db->get()->result_array();
+		return collect($arr_tecnicos)
+			->map_with_keys(function($tecnico) use ($arr_dias, $stock) {
+				$stock_tecnico = collect($stock)
+					->filter(function($stock) use ($tecnico) {
+						return $stock['acreedor'] === $tecnico->id_tecnico;
+					})->map_with_keys(function($stock) {
+						return array(
+							substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']
+						);
+					})->all();
 
-		foreach ($stock as $registro)
-		{
-			$matriz[$registro['acreedor']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
-		}
+				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_tecnico) {
+					return $valor + (array_key_exists($indice, $stock_tecnico) ? $stock_tecnico[$indice] : 0);
+				})->all();
 
-		foreach ($matriz as $id_tecnico => $tecnico)
-		{
-			$con_datos = 0;
-			foreach ($tecnico['actuaciones'] as $dia => $dato)
-			{
-				$con_datos += $dato;
-			}
-			$matriz[$id_tecnico]['con_datos'] = $con_datos;
-		}
-
-		return $matriz;
+				return array(
+					$tecnico->id_tecnico => array(
+						'tecnico'     => $tecnico->tecnico,
+						'rut'         => $tecnico->rut,
+						'actuaciones' => $actuaciones,
+						'con_datos'   => collect($actuaciones)->sum(),
+					)
+				);
+			})->all();
 	}
 
 
