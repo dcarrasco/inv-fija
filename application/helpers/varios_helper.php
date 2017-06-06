@@ -667,6 +667,52 @@ if ( ! function_exists('map'))
 		return array_map($f, $data);
 	}
 }
+	// --------------------------------------------------------------------
+
+if ( ! function_exists('get_fecha_hasta'))
+{
+	/**
+	 * Devuelve la fecha más un mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return string         Fecha más un mes (formato YYYYMMDD)
+	 */
+	function get_fecha_hasta($anomes = NULL)
+	{
+		$mes = (int) substr($anomes, 4, 2);
+		$ano = (int) substr($anomes, 0, 4);
+
+		return (string) (($mes === 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
+
+	}
+}
+
+	// --------------------------------------------------------------------
+
+if ( ! function_exists('get_arr_dias'))
+{
+	/**
+	 * Devuelve arreglo con dias del mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return array          Arreglo con dias del mes (llaves en formato DD)
+	 */
+	function get_arr_dias($anomes = NULL)
+	{
+		$mes = (int) substr($anomes, 4, 2);
+		$ano = (int) substr($anomes, 0, 4);
+
+		$arr_dias = array();
+
+		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
+		{
+			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
+			$arr_dias[$indice_dia] = NULL;
+		}
+
+		return $arr_dias;
+	}
+}
 
 // --------------------------------------------------------------------
 

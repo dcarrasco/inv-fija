@@ -199,9 +199,11 @@ class Toa_controles extends Controller_base {
 	 */
 	public function stock()
 	{
+		$this->load->model('toa_stock');
+
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_stock_empresa_validation)
+			->set_rules($this->toa_stock->controles_stock_empresa_validation)
 			->run();
 
 		$empresa_toa = new Empresa_toa();
@@ -209,10 +211,10 @@ class Toa_controles extends Controller_base {
 		$datos = array(
 			'menu_modulo'          => $this->get_menu_modulo('stock'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
+			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 			'anomes'               => request('mes'),
-			'stock_almacenes'      => $this->toa_model->stock_almacenes(request('empresa'), request('mes'), request('dato')),
+			'stock_almacenes'      => $this->toa_stock->stock_almacenes(request('empresa'), request('mes'), request('dato')),
 		);
 
 		app_render_view('toa/controles_stock', $datos);
@@ -228,9 +230,11 @@ class Toa_controles extends Controller_base {
 	 */
 	public function stock_tecnicos()
 	{
+		$this->load->model('toa_stock');
+
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_stock_tecnicos_validation)
+			->set_rules($this->toa_stock->controles_stock_tecnicos_validation)
 			->run();
 
 		$empresa_toa = new Empresa_toa();
@@ -238,11 +242,11 @@ class Toa_controles extends Controller_base {
 		$datos = array(
 			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_stock,
-			'combo_dato_mostrar'   => $this->toa_model->combo_mostrar_stock_tecnicos,
+			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
+			'combo_dato_mostrar'   => $this->toa_stock->combo_mostrar_stock_tecnicos,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
 			'anomes'               => request('mes'),
-			'stock_tecnicos'       => $this->toa_model->stock_tecnicos(request('empresa'), request('mes'), request('dato')),
+			'stock_tecnicos'       => $this->toa_stock->stock_tecnicos(request('empresa'), request('mes'), request('dato')),
 		);
 
 		app_render_view('toa/controles_stock_tecnicos', $datos);
@@ -261,8 +265,10 @@ class Toa_controles extends Controller_base {
 	 */
 	public function detalle_stock($fecha = NULL, $centro_almacen = NULL)
 	{
+		$this->load->model('toa_stock');
+
 		$datos = array(
-			'reporte' => $this->toa_model->detalle_stock_almacen($fecha, $centro_almacen),
+			'reporte' => $this->toa_stock->detalle_stock_almacen($fecha, $centro_almacen),
 			'google_maps' => '',
 		);
 
@@ -282,8 +288,10 @@ class Toa_controles extends Controller_base {
 	 */
 	public function detalle_stock_tecnico($fecha = NULL, $id_tecnico = NULL)
 	{
+		$this->load->model('toa_stock');
+
 		$datos = array(
-			'reporte' => $this->toa_model->detalle_stock_tecnico($fecha, $id_tecnico),
+			'reporte' => $this->toa_stock->detalle_stock_tecnico($fecha, $id_tecnico),
 			'google_maps' => '',
 		);
 
