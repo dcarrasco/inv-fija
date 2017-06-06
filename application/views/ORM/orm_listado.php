@@ -43,7 +43,7 @@
 						<?php endif; ?>
 					<?php endforeach; ?>
 					<td class="text-center">
-						<a href="{url_editar}<?= $o->get_model_id(); ?>?{url_params}" class="">
+						<a href="{url_editar}<?= $o->get_model_id(); ?>{url_params}" class="">
 							<!-- <span class="fa fa-edit"></span> -->
 							{_orm_link_edit_}
 						</a>
