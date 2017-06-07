@@ -43,7 +43,7 @@ class Toa_consumos extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_model');
+		$this->load->model('toa_consumo');
 		$this->lang->load('toa');
 	}
 
@@ -68,13 +68,15 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function consumos()
 	{
-		$this->form_validation->set_data(request())
-			->set_rules($this->toa_model->consumos_validation)
+		$this->form_validation
+			->set_data(request())
+			->set_rules($this->toa_consumo->consumos_validation)
 			->run();
 
+
 		$datos = array(
-			'combo_reportes' => $this->toa_model->tipos_reporte_consumo,
-			'reporte'        => $this->toa_model->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
+			'combo_reportes' => $this->toa_consumo->tipos_reporte_consumo,
+			'reporte'        => $this->toa_consumo->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
 		);
 
 		app_render_view('toa/consumos', $datos);
@@ -95,6 +97,8 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
+		$this->load->model('toa_model');
+
 		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
 
 		$this->load->library('googlemaps');
@@ -102,17 +106,13 @@ class Toa_consumos extends Controller_base {
 			'map_css' => 'height: 350px',
 		));
 
-		if (count($datos_peticiones))
-		{
-			foreach ($datos_peticiones as $peticion)
-			{
-				$this->googlemaps->add_marker(array(
-					'lat'   => $peticion['acoord_y'],
-					'lng'   => $peticion['acoord_x'],
-					'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
+		collect($datos_peticiones)->each(function($peticion) {
+			$this->googlemaps->add_marker(array(
+				'lat'   => $peticion['acoord_y'],
+				'lng'   => $peticion['acoord_x'],
+				'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
 			));
-			}
-		}
+		});
 
 		$datos = array(
 			'reporte'      => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
