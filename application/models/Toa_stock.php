@@ -143,7 +143,7 @@ class Toa_stock extends CI_Model {
 					})->all();
 
 				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_almacen) {
-					return $valor + (array_key_exists($indice, $stock_almacen) ? $stock_almacen[$indice] : 0);
+					return $valor + array_get($stock_almacen, $indice, 0);
 				})->all();
 
 				return array(
@@ -256,7 +256,7 @@ class Toa_stock extends CI_Model {
 					})->all();
 
 				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_tecnico) {
-					return $valor + (array_key_exists($indice, $stock_tecnico) ? $stock_tecnico[$indice] : 0);
+					return $valor + array_get($stock_tecnico, $indice, 0);
 				})->all();
 
 				return array(

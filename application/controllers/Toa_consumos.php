@@ -133,6 +133,7 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function detalle_peticion($peticion = NULL)
 	{
+		$this->load->model('toa_model');
 		$this->load->library('googlemaps');
 		$this->googlemaps->initialize(array(
 			'map_css' => 'height: 350px',

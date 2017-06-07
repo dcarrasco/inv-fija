@@ -1173,7 +1173,7 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = $this->_get_arr_dias($anomes);
+		$arr_dias = get_arr_dias($anomes);
 
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = $this->_get_fecha_hasta($anomes);
@@ -1183,13 +1183,14 @@ class Toa_model extends CI_Model {
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
 
-		$this->db
+		$datos = $this->db
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.material')
 			->select('c.descripcion')
 			->select('a.ume')
 			->select('e.desc_tip_material')
 			->select('e.color')
+			->select_sum(($dato_desplegar === 'monto') ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
 			->group_by('a.fecha_contabilizacion')
 			->group_by('a.material')
 			->group_by('c.descripcion')
@@ -1206,42 +1207,42 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join($this->config->item('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
-			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left');
+			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
+			->get()->result_array();
 
-		if ($dato_desplegar === 'monto')
-		{
-			$this->db->select_sum('(-a.importe_ml)', 'dato');
-		}
-		else
-		{
-			$this->db->select_sum('(-a.cantidad_en_um)', 'dato');
-		}
-
-		$datos = $this->db->get()->result_array();
-
-		$matriz = array();
-		foreach ($datos as $registro)
-		{
-			if ( ! array_key_exists($registro['material'], $matriz))
-			{
-				$matriz[$registro['desc_tip_material'].$registro['material']] = array(
-					'material'     => $registro['material'],
-					'descripcion'  => $registro['descripcion'],
-					'unidad'       => $registro['ume'],
-					'tip_material' => $registro['desc_tip_material'],
-					'color'        => $registro['color'],
-					'actuaciones'  => $arr_dias,
+		$matriz = collect($datos)
+			->map_with_keys(function ($material) use ($arr_dias) {
+				return array(
+					$material['desc_tip_material'].$material['material'] => array(
+						'material'     => $material['material'],
+						'descripcion'  => $material['descripcion'],
+						'unidad'       => $material['ume'],
+						'tip_material' => $material['desc_tip_material'],
+						'color'        => $material['color'],
+						'actuaciones'  => $arr_dias,
+					)
 				);
-			}
-		}
+			})->all();
+
 		ksort($matriz);
 
-		foreach ($datos as $registro)
-		{
-			$matriz[$registro['desc_tip_material'].$registro['material']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
-		}
+		return collect($matriz)->map(function($material) use ($datos) {
+			$consumo_material = collect($datos)
+				->filter(function($dato) use ($material) {
+					return $dato['material'] === $material['material'];
+				})->map_with_keys(function($dato) {
+					return array(
+						substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']
+					);
+				});
 
-		return $matriz;
+			$material['actuaciones'] = collect($material['actuaciones'])
+				->map(function($valor, $indice) use ($consumo_material) {
+					return $valor + $consumo_material->get($indice, 0);
+				})->all();
+
+			return $material;
+		});
 	}
 
 

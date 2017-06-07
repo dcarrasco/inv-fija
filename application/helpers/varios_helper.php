@@ -194,7 +194,7 @@ if ( ! function_exists('menu_modulo'))
 	{
 		$arr_menu_modulo = array();
 
-		$mod_selected = array_key_exists('mod_selected', $menu) ? $menu['mod_selected'] : $mod_selected;
+		$mod_selected = array_get($menu, 'mod_selected', $mod_selected);
 
 		if (array_key_exists('menu', $menu))
 		{
@@ -654,6 +654,43 @@ if ( ! function_exists('request'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('array_get'))
+{
+	function array_get($arreglo = array(), $indice = NULL, $default = NULL)
+	{
+		if ( ! is_array($arreglo))
+		{
+			return NULL;
+		}
+
+		if (is_null($indice))
+		{
+			return $arreglo;
+		}
+
+		if (array_key_exists($indice, $arreglo))
+		{
+			return $arreglo[$indice];
+		}
+
+		foreach (explode('.', $indice) as $segmento)
+		{
+			if (is_array($arreglo) AND array_key_exists($segmento, $arreglo))
+			{
+				$arreglo = $arreglo[$segmento];
+			}
+			else
+			{
+				return $default;
+			}
+		}
+
+		return $arreglo;
+
+	}
+}
+// --------------------------------------------------------------------
+
 if ( ! function_exists('map'))
 {
 	/**
@@ -667,7 +704,8 @@ if ( ! function_exists('map'))
 		return array_map($f, $data);
 	}
 }
-	// --------------------------------------------------------------------
+
+// --------------------------------------------------------------------
 
 if ( ! function_exists('get_fecha_hasta'))
 {
