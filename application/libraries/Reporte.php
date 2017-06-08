@@ -143,7 +143,7 @@ class Reporte {
 	{
 		$arr_campos = collect($arr_campos)
 			->map(function ($elem) {
-				$elem['tipo'] = array_key_exists('tipo', $elem) ? $elem['tipo'] : 'texto';
+				$elem['tipo'] = array_get($elem, 'tipo', 'texto');
 
 				return $elem;
 			})

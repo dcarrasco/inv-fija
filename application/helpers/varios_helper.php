@@ -205,7 +205,7 @@ if ( ! function_exists('menu_modulo'))
 					'menu_url'      => site_url($valor['url']),
 					'menu_nombre'   => $valor['texto'],
 					'menu_selected' => ($modulo === $mod_selected) ? 'active' : '',
-					'menu_icon'     => array_key_exists('icon', $valor) ? $valor['icon'] : NULL,
+					'menu_icon'     => array_get($valor, 'icon', NULL),
 				));
 			}
 

@@ -157,15 +157,8 @@ class Orm_model implements IteratorAggregate {
 	 **/
 	public function config_model($param = array())
 	{
-		if (array_key_exists('modelo', $param))
-		{
-			$this->_config_modelo($param['modelo']);
-		}
-
-		if (array_key_exists('campos', $param))
-		{
-			$this->_config_campos($param['campos']);
-		}
+		$this->_config_modelo(array_get($param, 'modelo', array()));
+		$this->_config_campos(array_get($param, 'campos', array()));
 
 		$this->_model_campo_id = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
@@ -564,24 +557,22 @@ class Orm_model implements IteratorAggregate {
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->_model_fields[$campo]->get_relation();
 
-		if (array_key_exists('conditions', $arr_relation))
+		foreach (array_get($arr_relation, 'conditions', array()) as $cond_key => $cond_value)
 		{
-			foreach ($arr_relation['conditions'] as $cond_key => $cond_value)
+			// si encontramos un valor que comience por @filed_value,
+			// se reemplaza por el valor del campo en el objeto
+			// ejemplo: @field_value:nombre_campo:valor_default
+			if ( ! is_array($cond_value) AND strpos($cond_value, '@field_value') === 0)
 			{
-				// si encontramos un valor que comience por @filed_value,
-				// se reemplaza por el valor del campo en el objeto
-				// ejemplo: @field_value:nombre_campo:valor_default
-				if ( ! is_array($cond_value) AND strpos($cond_value, '@field_value') === 0)
-				{
-					list($cond_tipo, $cond_campo, $cond_default) = explode(':', $cond_value);
+				list($cond_tipo, $cond_campo, $cond_default) = explode(':', $cond_value);
 
-					$arr_relation['conditions'][$cond_key] = $this->{$cond_campo}
-						? $this->{$cond_campo}
-						: $cond_default;
-				}
+				$arr_relation['conditions'][$cond_key] = $this->{$cond_campo}
+					? $this->{$cond_campo}
+					: $cond_default;
 			}
-			$this->_model_fields[$campo]->set_relation($arr_relation);
 		}
+
+		$this->_model_fields[$campo]->set_relation($arr_relation);
 
 		return $this->_model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic, $field_error);
 	}
@@ -749,25 +740,22 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function find($tipo = 'first', $param = array(), $recupera_relation = TRUE)
 	{
-		if (array_key_exists('conditions', $param))
+		foreach (array_get($param, 'conditions', array()) as $campo => $valor)
 		{
-			foreach ($param['conditions'] as $campo => $valor)
+			if (is_array($valor))
 			{
-				if (is_array($valor))
+				if (count($valor) === 0)
 				{
-					if (count($valor) === 0)
-					{
-						$this->db->where($campo.'=', 'NULL', FALSE);
-					}
-					else
-					{
-						$this->db->where_in($campo, $valor);
-					}
+					$this->db->where($campo.'=', 'NULL', FALSE);
 				}
 				else
 				{
-					$this->db->where($campo, $valor);
+					$this->db->where_in($campo, $valor);
 				}
+			}
+			else
+			{
+				$this->db->where($campo, $valor);
 			}
 		}
 
