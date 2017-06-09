@@ -192,26 +192,18 @@ if ( ! function_exists('menu_modulo'))
 	 */
 	function menu_modulo($menu = array(), $mod_selected = '')
 	{
-		$arr_menu_modulo = array();
-
 		$mod_selected = array_get($menu, 'mod_selected', $mod_selected);
 
-		if (array_key_exists('menu', $menu))
-		{
-			foreach ($menu['menu'] as $modulo => $valor)
-			{
-				array_push($arr_menu_modulo, array(
-					'menu_key'      => $modulo,
-					'menu_url'      => site_url($valor['url']),
-					'menu_nombre'   => $valor['texto'],
-					'menu_selected' => ($modulo === $mod_selected) ? 'active' : '',
-					'menu_icon'     => array_get($valor, 'icon', NULL),
-				));
-			}
-
-		}
-
-		return $arr_menu_modulo;
+		return collect(array_get($menu, 'menu', array()))
+			->map(function($menu, $menu_key) use ($mod_selected) {
+				return array(
+					'menu_key'      => $menu_key,
+					'menu_url'      => site_url($menu['url']),
+					'menu_nombre'   => $menu['texto'],
+					'menu_selected' => ($menu_key === $mod_selected) ? 'active' : '',
+					'menu_icon'     => array_get($menu, 'icon', NULL),
+				);
+			})->all();
 	}
 }
 // --------------------------------------------------------------------

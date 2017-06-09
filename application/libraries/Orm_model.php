@@ -759,10 +759,7 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		if (array_key_exists('filtro', $param) AND $param['filtro'] !== '')
-		{
-			$this->_put_filtro($param['filtro']);
-		}
+		$this->_put_filtro(array_get($param, 'filtro'));
 
 		if (array_key_exists('limit', $param))
 		{
@@ -1131,14 +1128,18 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _put_filtro($filtro = '')
 	{
-		$arr_like = collect($this->_model_fields)
-			->filter(function ($field) {return $field->get_tipo() === Orm_field::TIPO_CHAR;})
-			->map(function($elem) use ($filtro) {return $filtro;})
-			->all();
-
-		if (count($arr_like) > 0)
+		if ( ! empty($filtro))
 		{
-			$this->db->or_like($arr_like, $filtro, 'both');
+			$arr_like = collect($this->_model_fields)
+				->filter(function ($field) {return $field->get_tipo() === Orm_field::TIPO_CHAR;})
+				->map(function($elem) use ($filtro) {return $filtro;})
+				->all();
+
+			if (count($arr_like) > 0)
+			{
+				$this->db->or_like($arr_like, $filtro, 'both');
+			}
+
 		}
 	}
 

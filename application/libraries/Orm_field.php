@@ -483,7 +483,6 @@ class Orm_field {
 
 			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" size="7" class="form-control '.$clase_adic.'"';
 
-
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
 				? array('conditions' => $this->_relation['conditions'])
 				: array();
