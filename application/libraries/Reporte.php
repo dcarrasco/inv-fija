@@ -234,7 +234,7 @@ class Reporte {
 		return collect(array(array('data' => $num_linea, 'class' => 'text-muted')))->merge(
 			collect($arr_campos)->map(function($elem, $llave) use ($arr_linea) {
 				return array(
-					'data' => $this->formato_reporte($arr_linea[$llave], $elem, $arr_linea, $llave),
+					'data' => $this->formato_reporte(array_get($arr_linea, $llave), $elem, $arr_linea, $llave),
 					'class' => isset($elem['class']) ? $elem['class'] : '',
 				);
 			})

@@ -130,6 +130,11 @@ class Stock_sap_model extends CI_Model {
 			$arr_campos['cod_almacen'] = array('titulo' => 'cod almacen', 'class' => '', 'tipo' => 'texto');
 			$arr_campos['des_almacen'] = array('titulo' => 'des almacen', 'class' => '', 'tipo' => 'texto');
 		}
+		if (in_array('acreedor', $mostrar))
+		{
+			$arr_campos['acreedor'] = array('titulo' => 'proveedor', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['des_proveedor'] = array('titulo' => 'des proveedor', 'class' => '', 'tipo' => 'texto');
+		}
 		if (in_array('material', $mostrar))
 		{
 			if (array_key_exists('cod_articulo', $campos_resultado))

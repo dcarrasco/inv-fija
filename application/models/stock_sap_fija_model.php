@@ -197,19 +197,18 @@ class Stock_sap_fija_model extends Stock_sap_model {
 			// cantidades y tipos de stock
 			if (in_array('tipo_stock', $mostrar))
 			{
-				$this->db->select('s.estado, s.acreedor, p.des_proveedor');
-				$this->db->join($this->config->item('bd_proveedores') . ' p', 'p.cod_proveedor=s.acreedor', 'left');
-				$this->db->group_by('s.estado, s.acreedor, p.des_proveedor');
-				$this->db->order_by('s.estado, s.acreedor');
+				$this->db->select('s.estado');
+				$this->db->group_by('s.estado');
+				$this->db->order_by('s.estado');
 			}
 
 			// materiales
 			if (in_array('material', $mostrar))
 			{
-				$this->db->select('s.material, m.desc_material, s.umb');
+				$this->db->select('s.material, m.descripcion, s.umb');
 				$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
-				$this->db->group_by('s.material, m.desc_material, s.umb');
-				$this->db->order_by('s.material, m.desc_material, s.umb');
+				$this->db->group_by('s.material, m.descripcion, s.umb');
+				$this->db->order_by('s.material, m.descripcion, s.umb');
 			}
 
 			// lotes
@@ -219,10 +218,13 @@ class Stock_sap_fija_model extends Stock_sap_model {
 				$this->db->group_by('s.lote');
 			}
 
-			$this->db->select('sum(s.cantidad) as cantidad, sum(s.valor) as VAL_cantidad', FALSE);
+			$this->db->select('s.acreedor, p.des_proveedor')
+				->select('sum(s.cantidad) as cantidad, sum(s.valor) as monto', FALSE)
+				->group_by('s.acreedor, p.des_proveedor');
 
 			// tablas
-			$this->db->from($this->config->item('bd_stock_fija') . ' s');
+			$this->db->from($this->config->item('bd_stock_fija').' s');
+			$this->db->join($this->config->item('bd_proveedores').' p', 's.acreedor=p.cod_proveedor', 'left');
 
 			// condiciones
 			// fechas
@@ -232,6 +234,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 			}
 
 			$this->db->where('s.almacen is null');
+			$this->db->where("((len(s.acreedor)<>7 and s.acreedor not like '130%') or s.acreedor is null)");
 
 
 			$arr_result = $this->db->get()->result_array();

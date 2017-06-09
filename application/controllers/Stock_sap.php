@@ -181,10 +181,10 @@ class Stock_sap extends Controller_base {
 
 		$tabla_stock = '';
 
-		$arr_mostrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
+		$arr_mostrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor');
 		$arr_filtrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
 
-		$arr_mostrar = array('fecha', 'almacen');
+		$arr_mostrar = array('fecha', 'almacen', 'acreedor', 'des_proveedor');
 		foreach ($arr_mostrar_todos as $mostrar)
 		{
 			if (request($mostrar) === $mostrar)
