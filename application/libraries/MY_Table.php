@@ -126,7 +126,7 @@ class MY_Table extends CI_Table {
 					}
 				}
 
-				$out .= $temp.(isset($heading['data']) ? $heading['data'] : '').$this->template['heading_cell_end'];
+				$out .= $temp.array_get($heading, 'data', '').$this->template['heading_cell_end'];
 			}
 
 			$out .= $this->template['heading_row_end'].$this->newline.$this->template['thead_close'].$this->newline;
@@ -149,7 +149,7 @@ class MY_Table extends CI_Table {
 					}
 				}
 
-				$out .= $temp.(isset($footer['data']) ? $footer['data'] : '').$this->template['footer_cell_end'];
+				$out .= $temp.array_get($footer, 'data', '').$this->template['footer_cell_end'];
 			}
 
 			$out .= $this->template['footer_row_end'].$this->newline.$this->template['tfoot_close'].$this->newline;
@@ -185,7 +185,7 @@ class MY_Table extends CI_Table {
 						}
 					}
 
-					$cell = isset($cell['data']) ? $cell['data'] : '';
+					$cell = array_get($cell, 'data', '');
 					$out .= $temp;
 
 					if ($cell === '' OR $cell === NULL)

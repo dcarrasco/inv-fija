@@ -528,14 +528,10 @@ class Orm_field {
 
 		if ($this->_tipo === Orm_field::TIPO_HAS_MANY)
 		{
-			$campo = '<ul class="formatted_has_many">';
-			foreach ($this->_relation['data'] as $obj_modelo)
-			{
-				$campo .= '<li>'.$obj_modelo.'</li>';
-			}
-			$campo .= '</ul>';
-
-			return $campo;
+			return '<ul class="formatted_has_many">'
+				. array_get($this->_relation, 'data')
+					->concat(function($obj_modelo) { return '<li>'.(string)$obj_modelo.'</li>'; })
+				. '</ul>';
 		}
 
 		if (count($this->_choices) > 0)

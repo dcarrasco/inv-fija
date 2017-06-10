@@ -298,6 +298,25 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	public function concat($callback)
+	{
+		if (is_string($callback))
+		{
+			$callback = function($elem) {return $elem[$callback];};
+		}
+
+		if (is_callable($callback))
+		{
+			return $this->reduce(function($carry, $elem) use ($callback) {
+				return $carry.$callback($elem);
+			}, '');
+		}
+
+	return;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	* Ordena la coleccion.
 	*
@@ -416,6 +435,42 @@ class Collection implements IteratorAggregate {
 		}
 
 		return new static($result);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Return the first element in an array passing a given truth test.
+	*
+	* @param  array  $array
+	* @param  callable|null  $callback
+	* @param  mixed  $default
+	* @return mixed
+	*/
+	public function first(callable $callback = null, $default = null)
+	{
+		if (is_null($callback))
+		{
+			if (empty($this->_items))
+			{
+				return $default;
+			}
+
+			foreach ($this->_items as $item)
+			{
+				return $item;
+			}
+		}
+
+		foreach ($this->_items as $key => $value)
+		{
+			if (call_user_func($callback, $value, $key))
+			{
+				return $value;
+			}
+		}
+
+		return $default;
 	}
 
 }

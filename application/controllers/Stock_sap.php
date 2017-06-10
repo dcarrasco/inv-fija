@@ -95,11 +95,11 @@ class Stock_sap extends Controller_base {
 	{
 		$this->load->model('stock_sap_model');
 
-		$arr_mostrar = array('fecha', 'tipo_articulo');
-		foreach (array('sel_tiposalm','almacen','material','lote','tipo_stock') as $mostrar)
-		{
-			(request($mostrar) === $mostrar) AND array_push($arr_mostrar, $mostrar);
-		}
+		$arr_mostrar = collect(array('fecha', 'tipo_articulo'))
+			->merge(collect(request())
+				->only(array('sel_tiposalm','almacen','material','lote','tipo_stock'))
+				->keys()
+			)->all();
 
 		$tabla_stock = '';
 		$datos_grafico = array();
@@ -181,23 +181,13 @@ class Stock_sap extends Controller_base {
 
 		$tabla_stock = '';
 
-		$arr_mostrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor');
+		$arr_mostrar_todos = array('almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor');
+		$arr_mostrar = collect(array('fecha', 'almacen', 'acreedor', 'des_proveedor'))
+			->merge(collect(request())->only($arr_mostrar_todos)->keys())
+			->all();
+
 		$arr_filtrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
-
-		$arr_mostrar = array('fecha', 'almacen', 'acreedor', 'des_proveedor');
-		foreach ($arr_mostrar_todos as $mostrar)
-		{
-			if (request($mostrar) === $mostrar)
-			{
-				array_push($arr_mostrar, $mostrar);
-			}
-		}
-
-		$arr_filtrar = 	array();
-		foreach ($arr_filtrar_todos as $filtrar)
-		{
-			$arr_filtrar[$filtrar] = request($filtrar);
-		}
+		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
 
 		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
 
@@ -211,8 +201,7 @@ class Stock_sap extends Controller_base {
 		$data = array(
 			'menu_modulo'            => $this->get_menu_modulo('transito_fija'),
 			'tabla_stock'            => $tabla_stock,
-			'combo_fechas_ultimodia' => $combo_fechas['ultimodia'],
-			'combo_fechas_todas'     => $combo_fechas['todas'],
+			'combo_fechas_todas'     => $combo_fechas[request('sel_fechas','ultimodia')],
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
 			'datos_grafico'          => '',

@@ -167,15 +167,14 @@ if ( ! function_exists('titulo_modulo'))
 	{
 		// carga objeto global CI
 		$ci =& get_instance();
+		$url_actual = $ci->uri->segment(1);
 
-		$arr_modulos = $ci->acl_model->get_user_menu();
-		foreach ($arr_modulos as $modulo)
-		{
-			if($modulo['url'] === $ci->uri->segment(1))
-			{
-				return "<i class=\"fa fa-{$modulo['modulo_icono']} fa-fw\"></i> {$modulo['modulo']}";
-			}
-		}
+		$modulo_selected = collect($ci->acl_model->get_user_menu())
+			->filter(function($item) use ($url_actual) {
+				return array_get($item, 'url') === $url_actual;
+			})->first();
+
+		return "<i class=\"fa fa-{$modulo_selected['modulo_icono']} fa-fw\"></i> {$modulo_selected['modulo']}";
 	}
 }
 
@@ -232,13 +231,13 @@ if ( ! function_exists('app_render_view'))
 			$datos['menu_modulo'] = menu_modulo($datos['menu_modulo'], is_string($vista) ? basename($vista) : '');
 		}
 
-		$vista_login = isset($datos['vista_login']) ? $datos['vista_login']: FALSE;
+		$vista_login = array_get($datos, 'vista_login', FALSE);
 
 		// titulos y variables generales
 		$datos['app_title']    = (ENVIRONMENT !== 'production' ? 'DEV - ' : '').$ci->config->item('app_nombre');
 		$datos['base_url']     = base_url();
 		$datos['js_base_url']  = empty($ci->config->item('index_page')) ? base_url() : base_url().$ci->config->item('index_page').'/';
-		$datos['extra_styles'] = isset($datos['extra_styles']) ? $datos['extra_styles'] : '';
+		$datos['extra_styles'] = array_get($datos, 'extra_styles', '');
 
 		// navegación
 		$datos['is_vista_login']  = $vista_login;

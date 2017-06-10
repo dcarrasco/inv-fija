@@ -213,7 +213,7 @@ class Reporte {
 			collect($arr_campos)->map(function($elem) {
 				return array(
 					'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
-					'class' => isset($elem['class']) ? $elem['class'] : '',
+					'class' => array_get($elem, 'class', ''),
 				);
 			})
 		)->all();
@@ -235,7 +235,7 @@ class Reporte {
 			collect($arr_campos)->map(function($elem, $llave) use ($arr_linea) {
 				return array(
 					'data' => $this->formato_reporte(array_get($arr_linea, $llave), $elem, $arr_linea, $llave),
-					'class' => isset($elem['class']) ? $elem['class'] : '',
+					'class' => array_get($elem, 'class', ''),
 				);
 			})
 		)->all();
@@ -260,7 +260,7 @@ class Reporte {
 					'data' => in_array($elem['tipo'], $arr_totales['campos'])
 						? $this->formato_reporte($arr_totales[$tipo][$llave], $elem)
 						: '',
-					'class' => isset($elem['class']) ? $elem['class'] : '',
+					'class' => array_get($elem, 'class', ''),
 				);
 			})
 		)->all();

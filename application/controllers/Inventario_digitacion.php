@@ -288,15 +288,10 @@ class Inventario_digitacion extends Controller_base {
 	public function ajax_act_agr_materiales($filtro = '')
 	{
 		$material = new Catalogo;
-		$arr_dropdown = $material->find('list', array('filtro' => $filtro));
 
-		$options = '';
-		foreach ($arr_dropdown as $llave => $valor)
-		{
-			$options .= '<option value="' . $llave . '">' . $valor . '</option>';
-		}
-
-		$this->output->set_content_type('text')->set_output($options);
+		return $this->output
+			->set_content_type('text')
+			->set_output(form_print_options($material->find('list', array('filtro' => $filtro))));
 	}
 
 
