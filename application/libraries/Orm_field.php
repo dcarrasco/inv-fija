@@ -441,13 +441,15 @@ class Orm_field {
 
 		if ($this->_tipo === Orm_field::TIPO_BOOLEAN)
 		{
+			$valor = (boolean) $valor;
+
 			$form = '<label class="radio-inline" for="'.$id_prefix.$this->_nombre.'_1">';
-			$form .= form_radio($this->_nombre, 1, ($valor_field === '1') ? TRUE : FALSE, 'id='.$id_prefix.$this->_nombre.'_1');
+			$form .= form_radio($this->_nombre, 1, $valor_field, 'id='.$id_prefix.$this->_nombre.'_1');
 			$form .= $ci->lang->line('orm_radio_yes');
 			$form .= '</label>';
 
 			$form .= '<label class="radio-inline" for="'.$id_prefix.$this->_nombre.'_0">';
-			$form .= form_radio($this->_nombre, 0, ($valor_field === '1') ? FALSE : TRUE, 'id='.$id_prefix.$this->_nombre.'_0');
+			$form .= form_radio($this->_nombre, 0, ! $valor_field, 'id='.$id_prefix.$this->_nombre.'_0');
 			$form .= $ci->lang->line('orm_radio_no');
 			$form .= '</label>';
 
