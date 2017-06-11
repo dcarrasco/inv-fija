@@ -36,9 +36,7 @@ class Clase_movimiento extends ORM_Model {
 	 */
 	public function __construct($cmv = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_cmv_sap'),
 				'model_label'        => 'Clase de movimiento',
@@ -66,12 +64,7 @@ class Clase_movimiento extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($cmv)
-		{
-			$this->fill($cmv);
-		}
+		parent::__construct($cmv);
 	}
 
 	// --------------------------------------------------------------------

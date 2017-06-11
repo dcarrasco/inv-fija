@@ -36,9 +36,7 @@ class Centro extends ORM_Model {
 	 */
 	public function __construct($id_centro = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_centros'),
 				'model_label'        => 'Centro',
@@ -58,12 +56,7 @@ class Centro extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_centro)
-		{
-			$this->fill($id_centro);
-		}
+		parent::__construct($id_centro);
 	}
 
 

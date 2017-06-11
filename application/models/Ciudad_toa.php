@@ -34,11 +34,9 @@ class Ciudad_toa extends ORM_Model {
 	 * @param  string $id_empresa Identificador de la ciudad
 	 * @return void
 	 */
-	public function __construct($id = NULL)
+	public function __construct($id_ciudad = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_ciudades_toa'),
 				'model_label'        => 'Ciudad TOA',
@@ -71,12 +69,7 @@ class Ciudad_toa extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id)
-		{
-			$this->fill($id);
-		}
+		parent::__construct($id_ciudad);
 	}
 
 

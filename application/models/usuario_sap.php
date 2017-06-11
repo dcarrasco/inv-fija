@@ -36,9 +36,7 @@ class Usuario_sap extends ORM_Model {
 	 */
 	public function __construct($id_usuario_sap = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_usuarios_sap'),
 				'model_label'        => 'Usuario SAP',
@@ -65,13 +63,7 @@ class Usuario_sap extends ORM_Model {
 				),
 			),
 		);
-
-		$this->config_model($arr_config);
-
-		if ($id_usuario_sap)
-		{
-			$this->fill($id_usuario_sap);
-		}
+		parent::__construct($id_usuario_sap);
 	}
 
 

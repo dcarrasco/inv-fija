@@ -36,9 +36,7 @@ class Empresa_toa extends ORM_Model {
 	 */
 	public function __construct($id_empresa = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_empresas_toa'),
 				'model_label'        => 'Empresa TOA',
@@ -88,12 +86,7 @@ class Empresa_toa extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_empresa)
-		{
-			$this->fill($id_empresa);
-		}
+		parent::__construct($id_empresa);
 	}
 
 

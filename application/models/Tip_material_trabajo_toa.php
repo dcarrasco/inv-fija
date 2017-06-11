@@ -36,9 +36,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tip_material = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tip_material_trabajo_toa'),
 				'model_label'        => 'Tipo Material de trabajo',
@@ -77,12 +75,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tip_material)
-		{
-			$this->fill($id_tip_material);
-		}
+		parent::__construct($id_tip_material);
 	}
 
 

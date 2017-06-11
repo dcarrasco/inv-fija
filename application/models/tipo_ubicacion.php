@@ -36,9 +36,7 @@ class Tipo_ubicacion extends ORM_Model {
 	 */
 	public function __construct($id_tipo_ubicacion = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tipo_ubicacion'),
 				'model_label'        => 'Tipo de ubicaci&oacute;n',
@@ -68,12 +66,7 @@ class Tipo_ubicacion extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tipo_ubicacion)
-		{
-			$this->fill($id_tipo_ubicacion);
-		}
+		parent::__construct($id_tipo_ubicacion);
 	}
 
 

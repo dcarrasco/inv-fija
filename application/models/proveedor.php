@@ -36,9 +36,7 @@ class Proveedor extends ORM_Model {
 	 */
 	public function __construct($id_proveedor = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_proveedores'),
 				'model_label'        => 'Proveedor',
@@ -66,12 +64,7 @@ class Proveedor extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_proveedor)
-		{
-			$this->fill($id_proveedor);
-		}
+		parent::__construct($id_proveedor);
 	}
 
 

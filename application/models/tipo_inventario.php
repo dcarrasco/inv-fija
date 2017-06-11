@@ -36,9 +36,7 @@ class Tipo_inventario extends ORM_Model {
 	 */
 	public function __construct($id_tipo_inventario = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tipos_inventario'),
 				'model_label'        => 'Tipo de inventario',
@@ -66,12 +64,7 @@ class Tipo_inventario extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tipo_inventario)
-		{
-			$this->fill($id_tipo_inventario);
-		}
+		parent::__construct($id_tipo_inventario);
 	}
 
 

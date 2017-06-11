@@ -36,9 +36,7 @@ class App extends ORM_Model {
 	 */
 	public function __construct($id_app = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_app'),
 				'model_label'        => 'Aplicaci&oacute;n',
@@ -86,12 +84,7 @@ class App extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_app)
-		{
-			$this->fill($id_app);
-		}
+		parent::__construct($id_app);
 	}
 
 

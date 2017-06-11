@@ -36,9 +36,7 @@ class Modulo extends ORM_Model {
 	 */
 	public function __construct($id_modulo = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_modulos'),
 				'model_label'        => 'M&oacute;dulo',
@@ -101,12 +99,7 @@ class Modulo extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_modulo)
-		{
-			$this->fill($id_modulo);
-		}
+		parent::__construct($id_modulo);
 	}
 
 

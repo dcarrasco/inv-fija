@@ -36,9 +36,7 @@ class Tecnico_toa extends ORM_Model {
 	 */
 	public function __construct($id_tecnico = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tecnicos_toa'),
 				'model_label'        => 'T&eacute;cnico TOA',
@@ -89,12 +87,7 @@ class Tecnico_toa extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tecnico)
-		{
-			$this->fill($id_tecnico);
-		}
+		parent::__construct($id_tecnico);
 
 		$this->get_ciudades_tecnico();
 	}

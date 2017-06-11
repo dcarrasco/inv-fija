@@ -36,9 +36,7 @@ class Auditor extends ORM_Model {
 	 */
 	public function __construct($id_auditor = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_auditores'),
 				'model_label'        => 'Auditor',
@@ -67,12 +65,7 @@ class Auditor extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_auditor)
-		{
-			$this->fill($id_auditor);
-		}
+		parent::__construct($id_auditor);
 	}
 
 

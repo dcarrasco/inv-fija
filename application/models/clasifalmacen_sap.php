@@ -36,9 +36,7 @@ class Clasifalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_clasif_almacen = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_clasifalm_sap'),
 				'model_label'        => 'Clasificaci&oacute;n Almac&eacute;n',
@@ -130,12 +128,7 @@ class Clasifalmacen_sap extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_clasif_almacen)
-		{
-			$this->fill($id_clasif_almacen);
-		}
+		parent::__construct($id_clasif_almacen);
 	}
 
 

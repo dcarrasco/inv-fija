@@ -36,9 +36,7 @@ class Rol extends ORM_Model {
 	 */
 	public function __construct($id_rol = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_rol'),
 				'model_label'        => 'Rol',
@@ -85,12 +83,7 @@ class Rol extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_rol)
-		{
-			$this->fill($id_rol);
-		}
+		parent::__construct($id_rol);
 	}
 
 

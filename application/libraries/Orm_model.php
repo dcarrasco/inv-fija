@@ -124,6 +124,12 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private $_fields_relation_objects = NULL;
 
+	/**
+	 * Arreglo con la configuración del modelo
+	 *
+	 * @var array
+	 */
+	protected $_model_config = array();
 
 	// --------------------------------------------------------------------
 
@@ -134,7 +140,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return  void
 	 **/
-	public function __construct()
+	public function __construct($id_modelo = NULL)
 	{
 		$this->lang->load('orm');
 
@@ -144,6 +150,13 @@ class Orm_model implements IteratorAggregate {
 		$this->_model_label  = $this->_model_nombre;
 		$this->_model_label_plural = $this->_model_label . 's';
 		$this->_fields_relation_objects = new Collection();
+
+		$this->config_model($this->_model_config);
+
+		if ($id_modelo)
+		{
+			$this->fill($id_modelo);
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -803,8 +816,7 @@ class Orm_model implements IteratorAggregate {
 
 			foreach ($registros as $registro)
 			{
-				$obj_modelo = new $this->_model_class();
-				$obj_modelo->fill_from_array($registro);
+				$obj_modelo = new $this->_model_class($registro);
 
 				if ($recupera_relation)
 				{
@@ -846,8 +858,7 @@ class Orm_model implements IteratorAggregate {
 
 			foreach ($registros as $registro)
 			{
-				$obj_modelo = new $this->_model_class();
-				$obj_modelo->fill_from_array($registro);
+				$obj_modelo = new $this->_model_class($registro);
 				$arr_list[$obj_modelo->get_model_id()] = (string) $obj_modelo;
 			}
 
@@ -1077,29 +1088,22 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function fill_from_array($arr_data = array())
 	{
-		if ($arr_data AND count($arr_data) > 0)
-		{
-			foreach ($this->_model_fields as $nombre_campo => $obj_campo)
-			{
-				if (array_key_exists($nombre_campo, $arr_data))
+		collect($this->_model_fields)
+			->only(collect($arr_data)->keys()->all())
+			->each(function($campo, $nombre_campo) use ($arr_data) {
+				if (in_array($campo->get_tipo(), array(Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT)))
 				{
-					$tipo_campo = $obj_campo->get_tipo();
-
-					if (in_array($tipo_campo, array(Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT)))
-					{
-						$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
-					}
-					elseif ($tipo_campo === Orm_field::TIPO_DATETIME AND $arr_data[$nombre_campo] !== '')
-					{
-						$this->_fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
-					}
-					else
-					{
-						$this->_fields_values[$nombre_campo] = $arr_data[$nombre_campo];
-					}
+					$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 				}
-			}
-		}
+				elseif ($campo->get_tipo() === Orm_field::TIPO_DATETIME AND $arr_data[$nombre_campo] !== '')
+				{
+					$this->_fields_values[$nombre_campo] = date('Y-m-d H:i:s', strtotime($arr_data[$nombre_campo]));
+				}
+				else
+				{
+					$this->_fields_values[$nombre_campo] = $arr_data[$nombre_campo];
+				}
+			});
 	}
 
 

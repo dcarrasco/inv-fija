@@ -226,11 +226,6 @@ class Inventario_digitacion extends Controller_base {
 
 		$catalogo = new Catalogo;
 		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
-		if (request('catalogo'))
-		{
-			$catalogo->find_id(request('catalogo'));
-			$arr_catalogo = array(request('catalogo') => $catalogo);
-		}
 
 		if ($id_registro)
 		{

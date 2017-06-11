@@ -36,9 +36,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function __construct($id_inventario = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_inventarios'),
 				'model_label'        => 'Inventario',
@@ -74,12 +72,7 @@ class Inventario extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_inventario)
-		{
-			$this->fill($id_inventario);
-		}
+		parent::__construct($id_inventario);
 	}
 
 

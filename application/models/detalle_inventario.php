@@ -45,9 +45,7 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function __construct($id_detalle = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_detalle_inventario'),
 				'model_label'        => 'Detalle inventario',
@@ -191,13 +189,8 @@ class Detalle_inventario extends ORM_Model {
 				),
 			),
 		);
-		$this->config_model($arr_config);
 
-
-		if ($id_detalle)
-		{
-			$this->fill($id_detalle);
-		}
+		parent::__construct($id_detalle);
 	}
 
 	// --------------------------------------------------------------------
@@ -473,8 +466,7 @@ class Detalle_inventario extends ORM_Model {
 		$id_inventario = $inventario->get_id_inventario_activo();
 
 		// recupera el nombre del material
-		$material = new Catalogo;
-		$material->find_id(request('catalogo'));
+		$material = new Catalogo(request('catalogo'));
 
 		if ($id_detalle)
 		{

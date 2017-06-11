@@ -36,9 +36,7 @@ class Unidad_medida extends ORM_Model {
 	 */
 	public function __construct($id_unidad_medida = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_unidades'),
 				'model_label'        => 'Unidad de medida',
@@ -66,12 +64,7 @@ class Unidad_medida extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_unidad_medida)
-		{
-			$this->fill($id_unidad_medida);
-		}
+		parent::__construct($id_unidad_medida);
 	}
 
 

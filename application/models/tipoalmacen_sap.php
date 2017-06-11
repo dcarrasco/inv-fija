@@ -36,9 +36,7 @@ class Tipoalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_tipo_alm_sap = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tiposalm_sap'),
 				'model_label'        => 'Tipo Almac&eacute;n',
@@ -96,12 +94,7 @@ class Tipoalmacen_sap extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tipo_alm_sap)
-		{
-			$this->fill($id_tipo_alm_sap);
-		}
+		parent::__construct($id_tipo_alm_sap);
 	}
 
 

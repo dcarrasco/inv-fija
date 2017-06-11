@@ -36,9 +36,7 @@ class Familia extends ORM_Model {
 	 */
 	public function __construct($id_familia = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_familias'),
 				'model_label'        => 'Familia',
@@ -77,12 +75,7 @@ class Familia extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_familia)
-		{
-			$this->fill($id_familia);
-		}
+		parent::__construct($id_familia);
 	}
 
 

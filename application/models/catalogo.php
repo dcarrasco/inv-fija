@@ -36,9 +36,7 @@ class Catalogo extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_catalogos'),
 				'model_label'        => 'Cat&aacute;logo',
@@ -100,12 +98,7 @@ class Catalogo extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_catalogo)
-		{
-			$this->fill($id_catalogo);
-		}
+		parent::__construct($id_catalogo);
 	}
 
 

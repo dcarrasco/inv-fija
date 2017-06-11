@@ -36,9 +36,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tipo = NULL)
 	{
-		parent::__construct();
-
-		$arr_config = array(
+		$this->_model_config = array(
 			'modelo' => array(
 				'model_tabla'        => $this->config->item('bd_tipos_trabajo_toa'),
 				'model_label'        => 'Tipo de trabajo TOA',
@@ -66,12 +64,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 			),
 		);
 
-		$this->config_model($arr_config);
-
-		if ($id_tipo)
-		{
-			$this->fill($id_tipo);
-		}
+		parent::__construct($id_tipo);
 	}
 
 
