@@ -180,18 +180,13 @@ class Orm_field {
 		$this->_nombre_bd = $nombre;
 		$this->_label     = $nombre;
 
-		if (is_array($param))
-		{
-			foreach ($param as $llave => $valor)
+		collect($param)->each(function($param_value, $param_index) {
+			$llave = (substr($param_index, 0, 1) !== '_' ? '_' : '').$param_index;
+			if (isset($this->{$llave}))
 			{
-				$llave = (substr($llave, 0, 1) !== '_' ? '_' : '').$llave;
-
-				if (isset($this->$llave))
-				{
-					$this->$llave = $valor;
-				}
+				$this->{$llave} = $param_value;
 			}
-		}
+		});
 
 		if ($this->_tipo === Orm_field::TIPO_INT AND $this->_default === '')
 		{

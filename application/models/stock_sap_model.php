@@ -298,6 +298,7 @@ class Stock_sap_model extends CI_Model {
 	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = NULL, $borrar_datos = FALSE)
 	{
 		$arr_result = array();
+		$fechas = is_array($fechas) ? $fechas : array($fechas);
 
 		if ($fechas)
 		{

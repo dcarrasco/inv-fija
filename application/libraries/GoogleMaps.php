@@ -97,10 +97,9 @@ class Googlemaps {
 	 */
 	public function initialize($arr_config)
 	{
-		foreach($arr_config as $config_key => $config_value)
-		{
+		collect($arr_config)->each(function($config_value, $config_key) {
 			$this->{'_'.$config_key} = $config_value;
-		}
+		});
 	}
 
 	// --------------------------------------------------------------------
@@ -153,13 +152,10 @@ class Googlemaps {
 			'zindex' => 100,
 		);
 
-		foreach($marker_config as $marker_key => $marker_value)
-		{
-			if (array_key_exists($marker_key, $marker))
-			{
-				$marker_config[$marker_key] = $marker[$marker_key];
-			}
-		}
+		$marker_config = collect($marker_config)
+			->map(function($marker_item, $index) use ($marker) {
+				return array_get($marker, $index, $marker_item);
+		})->all();
 
 		if ($marker_config['lat'] !== 0 AND $marker_config['lng'] !== 0
 			AND $marker_config['lat'] !== $marker_config['lng'] )

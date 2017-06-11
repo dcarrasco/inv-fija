@@ -225,15 +225,13 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _config_modelo($arr_config = array())
 	{
-		foreach ($arr_config as $campo => $propiedad)
-		{
-			$campo = (substr($campo, 0, 1) !== '_' ? '_' : '').$campo;
-
-			if (isset($this->{$campo}))
+		collect($arr_config)->each(function($config_value, $config_index) {
+			$llave = (substr($config_index, 0, 1) !== '_' ? '_' : '').$config_index;
+			if (isset($this->{$llave}))
 			{
-				$this->{$campo} = $propiedad;
+				$this->{$llave} = $config_value;
 			}
-		}
+		});
 	}
 
 	// --------------------------------------------------------------------
@@ -246,13 +244,12 @@ class Orm_model implements IteratorAggregate {
 	 */
 	protected function _config_campos($arr_config = array())
 	{
-		foreach ($arr_config as $campo => $propiedad)
-		{
-			$propiedad['tabla_bd'] = $this->_model_tabla;
-			$obj_field = new Orm_field($campo, $propiedad);
-			$this->_model_fields[$campo] = $obj_field;
+		collect($arr_config)->each(function($config_value, $campo) {
+			$config_value['tabla_bd'] = $this->_model_tabla;
+
+			$this->_model_fields[$campo] = new Orm_field($campo, $config_value);
 			$this->_fields_values[$campo] = NULL;
-		}
+		});
 	}
 
 
