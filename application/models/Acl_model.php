@@ -592,23 +592,22 @@ class Acl_model extends CI_Model {
 		$this->input->set_cookie(array(
 			'name'  => 'login_token',
 			'value' => json_encode(array(
-							'usr'   => $usuario,
-							'token' => $token,
-						)),
+				'usr'   => $usuario,
+				'token' => $token,
+			)),
 			'expire' => $this->rememberme_cookie_duration,
 		));
 
 		// Graba el registro en la BD
-		$this->db
-			->insert(
-				$this->config->item('bd_pcookies'),
-				array(
-					'user_id'   => $usuario,
-					'cookie_id' => $this->_hash_password($token, $salt),
-					'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
-					'salt'      => $salt,
-				)
-			);
+		$this->db->insert(
+			$this->config->item('bd_pcookies'),
+			array(
+				'user_id'   => $usuario,
+				'cookie_id' => $this->_hash_password($token, $salt),
+				'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
+				'salt'      => $salt,
+			)
+		);
 	}
 
 	// --------------------------------------------------------------------
@@ -682,20 +681,18 @@ class Acl_model extends CI_Model {
 				))
 				->result_array();
 
-			foreach($reg_pcookies as $registro)
-			{
-				if ($this->_valida_password($token_object->token, $registro['cookie_id']))
-				{
-					// eliminamos la cookie utilizada en la BD
-					$this->db
-						->where('user_id', $token_object->usr)
-						->where('cookie_id', $registro['cookie_id'])
-						->delete($this->config->item('bd_pcookies'));
+			$where = collect(collect($reg_pcookies)
+				->first(function($pcookie) use ($token_object) {
+					return $this->_valida_password($token_object->token, array_get($pcookie, 'cookie_id'));
+				}))->only(array('user_id','cookie_id'))
+				->all();
 
-					// borramos la cookie del browser
-					$this->delete_cookie_data();
-				}
-			}
+			// eliminamos la cookie utilizada en la BD
+			$this->db->where($where)
+				->delete($this->config->item('bd_pcookies'));
+
+			// borramos la cookie del browser
+			$this->delete_cookie_data();
 		}
 	}
 
@@ -743,31 +740,28 @@ class Acl_model extends CI_Model {
 	{
 		$token_object = json_decode($this->input->cookie('login_token'));
 
-		if ($token_object)
+		if ( ! $token_object)
 		{
-			// elimina cookies antiguas
-			$this->db
-				// ->where('user_id', $token_object->usr)
-				->where('expiry<', date('Y-m-d H:i:s'))
-				->delete($this->config->item('bd_pcookies'));
-
-			// recupera cookies almacenadas
-			$reg_pcookies = $this->db
-				->get_where($this->config->item('bd_pcookies'), array(
-					'user_id'   => $token_object->usr,
-				))
-				->result_array();
-
-			foreach($reg_pcookies as $registro)
-			{
-				if ($this->_valida_password($token_object->token, $registro['cookie_id']))
-				{
-					return $registro['user_id'];
-				}
-			}
+			return NULL;
 		}
 
-		return NULL;
+		// elimina cookies antiguas
+		$this->db
+			// ->where('user_id', $token_object->usr)
+			->where('expiry<', date('Y-m-d H:i:s'))
+			->delete($this->config->item('bd_pcookies'));
+
+		// recupera cookies almacenadas
+		$reg_pcookies = $this->db
+			->get_where($this->config->item('bd_pcookies'), array(
+				'user_id'   => $token_object->usr,
+			))
+			->result_array();
+
+		return collect(collect($reg_pcookies)
+			->first(function($pcookie) use ($token_object) {
+				return $this->_valida_password($token_object->token, array_get($pcookie, 'cookie_id'));
+			}))->get('user_id');
 	}
 
 	// --------------------------------------------------------------------
@@ -888,15 +882,7 @@ class Acl_model extends CI_Model {
 	{
 		$arr_menu = $this->_get_menu_usuario($this->get_user());
 
-		if (count($arr_menu))
-		{
-			redirect($arr_menu[0]['url']);
-		}
-		else
-		{
-			redirect('login/');
-		}
-
+		redirect(array_get(collect($arr_menu)->first(), 'url', 'login/'));
 	}
 
 
