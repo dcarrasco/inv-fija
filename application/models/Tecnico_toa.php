@@ -108,7 +108,7 @@ class Tecnico_toa extends ORM_Model {
 	// --------------------------------------------------------------------
 	public function get_ciudades_tecnico()
 	{
-		if ($this->id_empresa)
+		if ($this->id_empresa AND $this->uri->segment(2) === 'editar')
 		{
 			$empresa_ciudad = new Empresa_ciudad_toa;
 			$arr_ciudades = $empresa_ciudad->arr_ciudades_por_empresa($this->id_empresa);

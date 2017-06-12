@@ -1003,11 +1003,12 @@ class Orm_model implements IteratorAggregate {
 	 */
 	private function _add_relation_fields($obj_model)
 	{
-		foreach($obj_model->get_model_fields() as $campo => $obj_campo)
-		{
-			if ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_ONE)
-			{
+		collect($obj_model->get_model_fields())
+			->filter(function($campo) {
+				return $campo->get_tipo() === Orm_field::TIPO_HAS_ONE;
+			})->each(function($obj_campo, $campo) use ($obj_model) {
 				$relation_model = $obj_campo->get_relation();
+
 				if (array_key_exists('model', $relation_model))
 				{
 					if ( ! $this->_fields_relation_objects->key_exists($campo))
@@ -1019,8 +1020,7 @@ class Orm_model implements IteratorAggregate {
 						$this->_fields_relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
 					}
 				}
-			}
-		}
+			});
 	}
 
 	// --------------------------------------------------------------------
