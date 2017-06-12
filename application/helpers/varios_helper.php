@@ -651,7 +651,7 @@ if ( ! function_exists('array_get'))
 	{
 		if ( ! is_array($arreglo))
 		{
-			return NULL;
+			return $default;
 		}
 
 		if (is_null($indice))
