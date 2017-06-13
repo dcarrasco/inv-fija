@@ -681,10 +681,12 @@ class Acl_model extends CI_Model {
 				))
 				->result_array();
 
-			$where = collect(collect($reg_pcookies)
-				->first(function($pcookie) use ($token_object) {
-					return $this->_valida_password($token_object->token, array_get($pcookie, 'cookie_id'));
-				}))->only(array('user_id','cookie_id'))
+			$where = collect($reg_pcookies)
+				->map(function($cookie) {
+					return collect($cookie);
+				})->first(function($pcookie) use ($token_object) {
+					return $this->_valida_password($token_object->token, $pcookie->get('cookie_id'));
+				})->only(array('user_id','cookie_id'))
 				->all();
 
 			// eliminamos la cookie utilizada en la BD
@@ -758,10 +760,12 @@ class Acl_model extends CI_Model {
 			))
 			->result_array();
 
-		return collect(collect($reg_pcookies)
-			->first(function($pcookie) use ($token_object) {
-				return $this->_valida_password($token_object->token, array_get($pcookie, 'cookie_id'));
-			}))->get('user_id');
+		return collect($reg_pcookies)
+			->map(function($cookie) {
+				return collect($cookie);
+			})->first(function($pcookie) use ($token_object) {
+				return $this->_valida_password($token_object->token, $pcookie->get('cookie_id'));
+			}, collect())->get('user_id');
 	}
 
 	// --------------------------------------------------------------------
