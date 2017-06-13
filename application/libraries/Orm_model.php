@@ -438,9 +438,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_model_id()
 	{
-		$model_id = implode($this->_separador_campos, array_intersect_key($this->_fields_values, array_flip($this->_model_campo_id)));
-
-		return ($model_id === '' OR $model_id === $this->_separador_campos) ? NULL : $model_id;
+		return collect($this->_fields_values)->only($this->_model_campo_id)->implode($this->_separador_campos);
 	}
 
 	// --------------------------------------------------------------------
@@ -718,7 +716,7 @@ class Orm_model implements IteratorAggregate {
 			'reuse_query_string'   => TRUE,
 			'page_query_string'    => TRUE,
 			'query_string_segment' => 'page',
-
+			'use_page_numbers'     => TRUE,
 		);
 
 		$this->pagination->initialize($cfg_pagination);
@@ -900,10 +898,12 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function list_paginated($offset = 0)
 	{
+		$offset = empty($offset) ? 1 : $offset;
+
 		return $this->find('all', array(
 			'filtro' => $this->_model_filtro,
 			'limit'  => $this->_model_page_results,
-			'offset' => $offset
+			'offset' => ($offset-1)*$this->_model_page_results,
 		));
 	}
 
