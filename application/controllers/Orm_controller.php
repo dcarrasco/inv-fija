@@ -96,7 +96,7 @@ class Orm_controller extends Controller_base {
 			$data = array(
 				'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
 				'modelo'        => $modelo,
-				'url_form'      => site_url("{$this->router->class}/editar/{$nombre_modelo}/{$id_modelo}?{$url_params}"),
+				'url_form'      => site_url("{$this->router->class}/editar/{$nombre_modelo}/{$id_modelo}{$url_params}"),
 				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
 			);
 
