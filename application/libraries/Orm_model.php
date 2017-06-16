@@ -423,10 +423,9 @@ class Orm_model implements IteratorAggregate {
 	private function _determina_campo_id()
 	{
 		return collect($this->_model_fields)
-			->filter(function($elem) {
-				return $elem->get_es_id();
-			})
-			->keys()->all();
+			->filter(function($elem) { return $elem->get_es_id(); })
+			->keys()
+			->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -562,27 +561,25 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '', $field_error = NULL)
 	{
-		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
 		$arr_relation = $this->_model_fields[$campo]->get_relation();
 
-		foreach (array_get($arr_relation, 'conditions', array()) as $cond_key => $cond_value)
-		{
-			// si encontramos un valor que comience por @filed_value,
-			// se reemplaza por el valor del campo en el objeto
-			// ejemplo: @field_value:nombre_campo:valor_default
-			if ( ! is_array($cond_value) AND strpos($cond_value, '@field_value') === 0)
-			{
-				list($cond_tipo, $cond_campo, $cond_default) = explode(':', $cond_value);
+		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
+		$arr_relation['conditions'] = collect($arr_relation)
+			->map(function ($elem) { return collect($elem); })
+			->get('conditions', collect())
+			->map(function ($condition) {
+				if (! is_array($condition) AND strpos($condition, '@field_value') === 0)
+				{
+					list($cond_tipo, $cond_campo, $cond_default) = explode(':', $condition);
+					return $this->{$cond_campo} ? $this->{$cond_campo} : $cond_default;
+				}
 
-				$arr_relation['conditions'][$cond_key] = $this->{$cond_campo}
-					? $this->{$cond_campo}
-					: $cond_default;
-			}
-		}
+				return $condition;
+			})->all();
 
 		$this->_model_fields[$campo]->set_relation($arr_relation);
 
-		return $this->_model_fields[$campo]->form_field($this->$campo, $filtra_activos, $clase_adic, $field_error);
+		return $this->_model_fields[$campo]->form_field($this->{$campo}, $filtra_activos, $clase_adic, $field_error);
 	}
 
 	// --------------------------------------------------------------------
@@ -767,24 +764,13 @@ class Orm_model implements IteratorAggregate {
 			}
 		}
 
-		$this->_put_filtro(array_get($param, 'filtro'));
-
 		if (array_key_exists('limit', $param))
 		{
-			if (array_key_exists('offset', $param))
-			{
-				$this->db->limit($param['limit'], $param['offset']);
-			}
-			else
-			{
-				$this->db->limit($param['limit']);
-			}
+			$this->db->limit(array_get($param, 'limit', NULL), array_get($param, 'offset', NULL));
 		}
 
-		if (array_key_exists('order_by', $param))
-		{
-			$this->db->order_by($param['order_by']);
-		}
+		$this->_put_filtro(array_get($param, 'filtro'));
+		$this->db->order_by(array_get($param, 'order_by', $this->_model_order_by));
 
 		if ($tipo === 'first')
 		{
@@ -800,64 +786,37 @@ class Orm_model implements IteratorAggregate {
 		}
 		elseif ($tipo === 'all')
 		{
-			$results_collection = new Collection();
+			return collect($this->db->get($this->_model_tabla)->result_array())
+				->map(function ($registro) use ($recupera_relation) {
+					$obj_modelo = new $this->_model_class($registro);
+					if ($recupera_relation)
+					{
+						$obj_modelo->_recuperar_relation_fields($this->_fields_relation_objects);
+						$this->_add_relation_fields($obj_modelo);
+					}
 
-			if ($this->_model_order_by !== '' AND ! array_key_exists('order_by', $param))
-			{
-				$this->db->order_by($this->_model_order_by);
-			}
-
-			$registros = $this->db->get($this->_model_tabla)->result_array();
-
-			foreach ($registros as $registro)
-			{
-				$obj_modelo = new $this->_model_class($registro);
-
-				if ($recupera_relation)
-				{
-					$obj_modelo->_recuperar_relation_fields($this->_fields_relation_objects);
-					$this->_add_relation_fields($obj_modelo);
-				}
-
-				$results_collection->add_item($obj_modelo);
-			}
-
-			return $results_collection;
+					return $obj_modelo;
+				});
 		}
 		elseif ($tipo === 'count')
 		{
-			return $this->db
-				->select('count(*) as cant')
-				->get($this->_model_tabla)
-				->row()
-				->cant;
+			return $this->db->from($this->_model_tabla)->count_all_results();
 		}
 		elseif ($tipo === 'list')
 		{
-			$arr_list = array();
+			$opc_ini = collect(array_get($param, 'opc_ini', TRUE)
+				? array('' => 'Seleccione '.strtolower($this->_model_label).'...')
+				: array()
+			);
 
-			if ( ! $param OR array_key_exists('opc_ini', $param))
-			{
-				if ( ! $param OR $param['opc_ini'] === TRUE)
-				{
-					$arr_list[''] = 'Seleccione '.strtolower($this->_model_label).'...';
-				}
-			}
+			$opciones = collect($this->db->get($this->_model_tabla)->result_array())
+				->map_with_keys(function ($registro) {
+					$obj_modelo = new $this->_model_class($registro);
 
-			if ($this->_model_order_by !== '' AND ! array_key_exists('order_by', $param))
-			{
-				$this->db->order_by($this->_model_order_by);
-			}
+					return array($obj_modelo->get_model_id() => (string) $obj_modelo);
+				});
 
-			$registros = $this->db->get($this->_model_tabla)->result_array();
-
-			foreach ($registros as $registro)
-			{
-				$obj_modelo = new $this->_model_class($registro);
-				$arr_list[$obj_modelo->get_model_id()] = (string) $obj_modelo;
-			}
-
-			return $arr_list;
+			return $opc_ini->merge($opciones)->all();
 		}
 	}
 
@@ -873,17 +832,16 @@ class Orm_model implements IteratorAggregate {
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
 		// junta los arreglos de campos id con los valores
-		$arr_condiciones = array_combine($this->_model_campo_id, explode($this->_separador_campos, $id_modelo));
+		$model_fields = $this->_model_fields;
 
 		// en caso que los id sean INT o ID, transforma los valores a (int)
-		$model_fields = $this->_model_fields;
-		$arr_condiciones = collect($arr_condiciones)
-			->map(function($valor, $llave) use($model_fields) {
-				return in_array(collect($model_fields)->get($llave)->get_tipo(),
-					array(Orm_field::TIPO_ID, Orm_field::TIPO_INT))
-					? (int) $valor : $valor;
-			})
-			->all();
+		$arr_condiciones =
+			collect(array_combine($this->_model_campo_id, explode($this->_separador_campos, $id_modelo)))
+				->map(function($valor, $llave) use($model_fields) {
+					return in_array(collect($model_fields)->get($llave)->get_tipo(),
+						array(Orm_field::TIPO_ID, Orm_field::TIPO_INT))
+						? (int) $valor : $valor;
+				})->all();
 
 		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
 	}
