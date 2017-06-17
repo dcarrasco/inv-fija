@@ -70,6 +70,15 @@ class Stock_analisis_series extends Controller_base {
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
 
+		$datos = array(
+			'datos_show_mov' => '',
+			'datos_show_despachos' => '',
+			'datos_show_stock_sap' => '',
+			'datos_show_stock_scl' => '',
+			'datos_show_trafico' => '',
+			'datos_show_gdth' => '',
+		);
+
 		$is_form_valid = $this->form_validation->set_rules($this->analisis_series_model->validation_analisis)->run();
 
 		if ($is_form_valid)

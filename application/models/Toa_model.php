@@ -245,7 +245,7 @@ class Toa_model extends CI_Model {
 
 		return array_merge(
 			array('000' => 'Todos los movimientos'),
-			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_consumo), 'order_by' => 'des_cmv'))
+			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_consumo), 'order_by' => 'des_cmv', 'opc_ini' => FALSE))
 		);
 	}
 
@@ -262,7 +262,7 @@ class Toa_model extends CI_Model {
 
 		return array_merge(
 			array('000' => 'Todos los movimientos'),
-			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_asignaciones)))
+			$cmv->find('list', array('conditions' => array('cmv' => $this->movimientos_asignaciones), 'opc_ini' => FALSE))
 		);
 	}
 

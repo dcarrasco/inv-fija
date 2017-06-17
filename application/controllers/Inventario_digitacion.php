@@ -233,44 +233,49 @@ class Inventario_digitacion extends Controller_base {
 			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->descripcion);
 		}
 
+		$detalle_inventario->hoja = $hoja;
+		$detalle_inventario->get_relation_fields();
+
+		$data = array(
+			'detalle_inventario' => $detalle_inventario,
+			'id'                 => $id_registro,
+			'hoja'               => $hoja,
+			'arr_catalogo'       => $arr_catalogo,
+			'url_form'           => site_url("{$this->router->class}/update/{$hoja}/{$id_auditor}/{$id_registro}"),
+		);
+
+		app_render_view('inventario/inventario_editar', $data);
+
+	}
+
+	// --------------------------------------------------------------------
+
+	public function update($hoja = 0, $id_auditor = 0, $id_registro = NULL)
+	{
+		$detalle_inventario = new Detalle_inventario($id_registro);
 		$detalle_inventario->get_relation_fields();
 		$detalle_inventario->hoja = $hoja;
 		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
 
 		$detalle_inventario->get_validation_editar();
+		route_validation($this->form_validation->run());
 
-		if ($this->form_validation->run() === FALSE)
+		$detalle_inventario->get_editar_post_data($id_registro, $hoja);
+
+		if (request('accion') === 'agregar')
 		{
-			$data = array(
-				'detalle_inventario' => $detalle_inventario,
-				'id'                 => $id_registro,
-				'hoja'               => $hoja,
-				'arr_catalogo'       => $arr_catalogo,
-			);
-
-			app_render_view('inventario/inventario_editar', $data);
+			$detalle_inventario->grabar();
+			set_message(sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
 		}
 		else
 		{
-			$detalle_inventario->get_editar_post_data($id_registro, $hoja);
-
-			if (request('accion') === 'agregar')
-			{
-				$detalle_inventario->grabar();
-				set_message(sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
-			}
-			else
-			{
-				$detalle_inventario->borrar();
-				set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
-			}
-
-			log_message('debug', 'Class: Inventario_digitacion; Metodo: editar; Query: '.$this->db->last_query());
-			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
+			$detalle_inventario->borrar();
+			set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 		}
 
+		log_message('debug', 'Class: Inventario_digitacion; Metodo: editar; Query: '.$this->db->last_query());
+		redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 	}
-
 
 	// --------------------------------------------------------------------
 

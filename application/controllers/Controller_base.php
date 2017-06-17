@@ -40,6 +40,13 @@ class Controller_base extends CI_Controller {
 	 */
 	public $menu_opciones = array();
 
+	/**
+	 * Errores de validación
+	 *
+	 * @var Collection
+	 */
+	public $errors = NULL;
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -50,6 +57,7 @@ class Controller_base extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->errors = collect($this->session->flashdata('errors'));
 	}
 
 	// --------------------------------------------------------------------

@@ -152,7 +152,7 @@ class Almacen_sap extends ORM_Model {
 	{
 		if ($filtro === '')
 		{
-			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op)));
+			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op), 'opc_ini' => FALSE));
 		}
 		else
 		{

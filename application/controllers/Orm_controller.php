@@ -91,34 +91,37 @@ class Orm_controller extends Controller_base {
 		$url_params = empty($this->input->get()) ? '' : '?'.http_build_query($this->input->get());
 		$modelo = new $nombre_modelo($id_modelo);
 
-		if ( ! $modelo->valida_form())
+		$data = array(
+			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
+			'modelo'        => $modelo,
+			'url_form'      => site_url("{$this->router->class}/update/{$nombre_modelo}/{$id_modelo}{$url_params}"),
+			'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
+		);
+
+		app_render_view('ORM/orm_editar', $data);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function update($nombre_modelo = '', $id_modelo = NULL)
+	{
+		$modelo = new $nombre_modelo($id_modelo);
+		route_validation($modelo->valida_form());
+		$modelo->recuperar_post();
+
+		if (request('grabar'))
 		{
-			$data = array(
-				'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
-				'modelo'        => $modelo,
-				'url_form'      => site_url("{$this->router->class}/editar/{$nombre_modelo}/{$id_modelo}{$url_params}"),
-				'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
-			);
-
-			app_render_view('ORM/orm_editar', $data);
+			$modelo->grabar();
+			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
 		}
-		else
+		elseif (request('borrar'))
 		{
-			$modelo->recuperar_post();
-
-			if (request('grabar'))
-			{
-				$modelo->grabar();
-				set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
-			}
-			elseif (request('borrar'))
-			{
-				$modelo->borrar();
-				set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
-			}
-
-			redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
+			$modelo->borrar();
+			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 		}
+
+		$url_params = empty($this->input->get()) ? '' : '?'.http_build_query($this->input->get());
+		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}
 
 

@@ -345,17 +345,21 @@ if ( ! function_exists('print_validation_errors'))
 	 */
 	function print_validation_errors()
 	{
-
 		// carga objeto global CI
 		$ci =& get_instance();
-		$ci->form_validation->set_error_delimiters('<li> ', '</li>');
 
-		if (validation_errors())
+		if ($ci->errors->is_empty())
 		{
-			return print_message('<ul>'.validation_errors().'</ul>', 'danger');
+			$ci->errors = collect($ci->form_validation->error_array());
 		}
 
-		return NULL;
+		return ($ci->errors->length() > 0)
+			? print_message('<ul>'.
+				$ci->errors->concat(function($error) {
+					return '<li>'.$error.'</li>';
+				})
+				.'</ul>', 'danger')
+			: '';
 	}
 }
 
@@ -404,8 +408,32 @@ if ( ! function_exists('form_has_error_class'))
 	{
 		$ci =& get_instance();
 
+		if ($ci->errors->is_empty())
+		{
+			$ci->errors = collect($ci->form_validation->error_array());
+		}
+
 		// return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
-		return (form_error($form_field) !== '') ? 'has-error' : '';
+		return $ci->errors->has($form_field) ? 'has-error' : '';
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('errors'))
+{
+	/**
+	 * Devuelve el error de un campo
+	 *
+	 * @param  string $form_field Campo
+	 * @return string             Error del campo
+	 */
+	function errors($form_field = '')
+	{
+		$ci =& get_instance();
+		$error = $ci->errors->get($form_field, '');
+
+		return empty($error) ? '' : "<p class=\"text-danger\">{$error}</p>";
 	}
 }
 
@@ -627,19 +655,22 @@ if ( ! function_exists('request'))
 	{
 		$ci =& get_instance();
 
+		$old_request = collect($ci->session->flashdata('old_request'));
+
+		$request = collect(array_merge($ci->input->post(), $ci->input->get()))
+			->merge($old_request);
+
 		if (is_null($field))
 		{
-			return array_merge($ci->input->post(), $ci->input->get());
+			return $request->all();
 		}
 
 		if (is_array($field))
 		{
-			return collect(array_merge($ci->input->post(), $ci->input->get()))
-				->only($field)
-				->all();
+			return $request->only($field)->all();
 		}
 
-		return empty($ci->input->post_get($field)) ? $default : $ci->input->post_get($field);
+		return $request->get($field, $default);
 	}
 }
 
@@ -740,6 +771,30 @@ if ( ! function_exists('get_arr_dias'))
 		}
 
 		return $arr_dias;
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('route_validation'))
+{
+	/**
+	 * [route_validation description]
+	 *
+	 * @param  boolean $is_valid [description]
+	 * @return [type]            [description]
+	 */
+	function route_validation($is_valid = FALSE)
+	{
+		$ci = &get_instance();
+
+		if ( ! $is_valid)
+		{
+			$ci->session->set_flashdata('errors', $ci->form_validation->error_array());
+			$ci->session->set_flashdata('old_request', array_merge($ci->input->post(), $ci->input->get()));
+
+			redirect($ci->input->server('HTTP_REFERER'));
+		}
 	}
 }
 

@@ -1,7 +1,7 @@
 <div class="row">
 	<div class="col-md-8 col-md-offset-2 well">
 
-		<?= form_open('', 'class="form-horizontal" role="form"')?>
+		<?= form_open($url_form, 'class="form-horizontal" role="form"')?>
 		<fieldset>
 
 		<legend>{_inventario_form_new_}</legend>

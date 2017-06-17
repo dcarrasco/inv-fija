@@ -200,7 +200,7 @@ class Collection implements IteratorAggregate {
 	 *
 	 * @return array Elementos de la coleccion
 	 */
-	function all()
+	public function all()
 	{
 		return $this->_items;
 	}
@@ -214,7 +214,7 @@ class Collection implements IteratorAggregate {
 	 * @param  mixed $default Valor a devolver en caso de no encontrar la llave
 	 * @return array Elementos de la coleccion
 	 */
-	function get($id_elem, $default = NULL)
+	public function get($id_elem, $default = NULL)
 	{
 		return isset($this->_items[$id_elem]) ? $this->_items[$id_elem] : $default;
 	}
@@ -227,12 +227,50 @@ class Collection implements IteratorAggregate {
 	 * @param  callable $callback_function Funcion a ejecutar en cada elemento
 	 * @return Collection                  Colección con el resultado
 	 */
-	function map($callback_function)
+	public function map($callback_function)
 	{
 		$arr_keys  = array_keys($this->_items);
 		$arr_items = array_map($callback_function, $this->_items, $arr_keys);
 
 		return new static(array_combine($arr_keys, $arr_items));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Determina si la colleción está vacía
+	 *
+	 * @return boolean Indica si la collección está vacía
+	 */
+	public function is_empty()
+	{
+		return ! $this->_items OR count($this->_items) === 0;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Determina si un indice existe en los elementos de la colección
+	 *
+	 * @param  string $indice Indice a buscar
+	 * @return boolean        Indicador de existencia del indice
+	 */
+	public function has($indice = '')
+	{
+		if (is_array($indice))
+		{
+			$has_indices = FALSE;
+			foreach ($indice as $indice_string)
+			{
+				if (array_key_exists($indice_string, $this->_items))
+				{
+					return TRUE;
+				}
+			}
+			return FALSE;
+		}
+
+		return array_key_exists($indice, $this->_items);
 	}
 
 	// --------------------------------------------------------------------
