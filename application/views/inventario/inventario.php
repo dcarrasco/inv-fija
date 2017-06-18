@@ -32,7 +32,7 @@
 		</div>
 	</div>
 
-	<div class="form-group col-md-3">
+	<div class="form-group col-md-3 <?= form_has_error_class('auditor') ?>">
 		<label class="control-label">{_inventario_auditor_}</label>
 		{combo_auditores}
 	</div>
@@ -49,7 +49,7 @@
 
 
 <div id="formulario_digitador">
-	<?= form_open($this->router->class . "/ingreso/$hoja/$id_auditor/".time(), 'id="frm_inventario"'); ?>
+	<?= form_open($url_form, 'id="frm_inventario"'); ?>
 	<?= form_hidden('formulario','inventario'); ?>
 	<?= form_hidden('hoja', $hoja); ?>
 	<?= form_hidden('auditor', $id_auditor); ?>
@@ -73,39 +73,39 @@
 			<?php $sum_sap = 0; $sum_fisico = 0;?>
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario as $linea_det): ?>
-				<tr>
+				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>
 					<td class="text-center" nowrap>
-						<?= $linea_det->get_valor_field('ubicacion'); ?>
+						<?= $linea_det->get_valor_field('ubicacion') ?>
 
 						<?php if ($linea_det->reg_nuevo === 'S'):?>
-							<a href="<?= site_url($this->router->class . '/editar/' . $hoja . '/' . $id_auditor . '/' . $linea_det->id); ?>" class="btn btn-default btn-xs">
+							<a href="<?= site_url("{$this->router->class}/editar/{$hoja}/{$id_auditor}/{$linea_det->id}") ?>" class="btn btn-default btn-xs">
 								<span class="fa fa-edit"></span>
 							</a>
-							<?= form_hidden('ubicacion_'   . $linea_det->id, $linea_det->ubicacion); ?>
-							<?php //echo form_hidden('hu_'          . $linea_det->id, $linea_det->hu); ?>
-							<?= form_hidden('catalogo_'    . $linea_det->id, $linea_det->catalogo); ?>
-							<?= form_hidden('descripcion_' . $linea_det->id, $linea_det->descripcion); ?>
-							<?= form_hidden('lote_'        . $linea_det->id, $linea_det->lote); ?>
-							<?= form_hidden('centro_'      . $linea_det->id, $linea_det->centro); ?>
-							<?= form_hidden('almacen_'     . $linea_det->id, $linea_det->almacen); ?>
-							<?= form_hidden('um_'          . $linea_det->id, $linea_det->um); ?>
+							<?= form_hidden("ubicacion_{$linea_det->id}", $linea_det->ubicacion); ?>
+							<?php //echo form_hidden("hu_{$linea_det->id}", $linea_det->hu); ?>
+							<?= form_hidden("catalogo_{$linea_det->id}", $linea_det->catalogo); ?>
+							<?= form_hidden("descripcion{$linea_det->id}", $linea_det->descripcion); ?>
+							<?= form_hidden("lote_{$linea_det->id}", $linea_det->lote); ?>
+							<?= form_hidden("centro_{$linea_det->id}", $linea_det->centro); ?>
+							<?= form_hidden("almacen_{$linea_det->id}", $linea_det->almacen); ?>
+							<?= form_hidden("um_{$linea_det->id}", $linea_det->um); ?>
 						<?php endif; ?>
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
-					<td class="text-center"><?= $linea_det->catalogo; ?></td>
-					<td class="text_left"><?= $linea_det->get_valor_field('descripcion'); ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('lote'); ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('centro'); ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('almacen'); ?></td>
-					<td class="text-center"><?= $linea_det->um; ?></td>
-					<td class="text-right"><?= fmt_cantidad($linea_det->stock_sap); ?></td>
-					<td class="text-center col-md-1">
+					<td class="text-center"><?= $linea_det->catalogo ?></td>
+					<td class="text_left"><?= $linea_det->get_valor_field('descripcion') ?></td>
+					<td class="text-center"><?= $linea_det->get_valor_field('lote') ?></td>
+					<td class="text-center"><?= $linea_det->get_valor_field('centro') ?></td>
+					<td class="text-center"><?= $linea_det->get_valor_field('almacen') ?></td>
+					<td class="text-center"><?= $linea_det->um ?></td>
+					<td class="text-right"><?= fmt_cantidad($linea_det->stock_sap) ?></td>
+					<td class="text-center col-md-1 <?= form_has_error_class("stock_fisico_{$linea_det->id}") ?>">
 						<?= form_input(
-							'stock_fisico_'.$linea_det->id,
-							request('stock_fisico_'.$linea_det->id, $linea_det->stock_fisico),
-							'class="input-sm form-control text-right" tabindex="'.$tab_index.'"'
+							"stock_fisico_{$linea_det->id}",
+							request("stock_fisico_{$linea_det->id}", $linea_det->stock_fisico),
+							"class=\"input-sm form-control text-right\" tabindex=\"{$tab_index}\""
 						); ?>
-						<?= form_error('stock_fisico_' . $linea_det->id); ?>
+						<?= errors("stock_fisico_{$linea_det->id}") ?>
 					</td>
 					<td class="text-center col-md-1">
 						<?= form_input(

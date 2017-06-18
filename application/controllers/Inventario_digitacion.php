@@ -80,6 +80,44 @@ class Inventario_digitacion extends Controller_base {
 		$inventario = new Inventario;
 		$inventario->get_inventario_activo();
 
+		//$this->benchmark->mark('detalle_inventario_start');
+		$detalle_inventario = new Detalle_inventario;
+		$hoja_detalle_inventario = $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja);
+		//$this->benchmark->mark('detalle_inventario_end');
+
+		$id_auditor = $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja);
+		$detalle_inventario->fill(array('auditor' => $id_auditor));
+
+		$data = array(
+			'detalle_inventario' => $hoja_detalle_inventario,
+			'hoja'               => $hoja,
+			'nombre_inventario'  => $inventario->nombre,
+			'combo_auditores'    => $detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'),
+			'id_auditor'         => $id_auditor,
+			'url_form'           => "{$this->router->class}/update_hoja/{$hoja}/{$id_auditor}",
+			'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
+			'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
+		);
+
+		app_render_view('inventario/inventario', $data);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Permite digitar una hoja de detalle de inventario
+	 *
+	 * @param  integer $hoja Numero de la hoja a visualizar
+	 * @return void
+	 */
+	public function update_hoja($hoja = 0)
+	{
+		$hoja = empty($hoja) ? 1 : $hoja;
+
+		// recupera el inventario activo
+		$inventario = new Inventario;
+		$inventario->get_inventario_activo();
+
 		$nuevo_detalle_inventario = new Detalle_inventario;
 		//$nuevo_detalle_inventario->get_relation_fields();
 
@@ -100,33 +138,17 @@ class Inventario_digitacion extends Controller_base {
 			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion($hoja_detalle_inventario));
 		}
 
-		if ($this->form_validation->run() === FALSE)
+		route_validation($this->form_validation->run());
+
+		if (request('formulario') === 'inventario')
 		{
-			$data = array(
-				'detalle_inventario' => $hoja_detalle_inventario,
-				'hoja'               => $hoja,
-				'nombre_inventario'  => $inventario->nombre,
-				'combo_auditores'    => $detalle_inventario->print_form_field('auditor', FALSE, 'input-sm'),
-				'id_auditor'         => $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja),
-				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
-				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
-			);
+			$id_usuario_login  = $this->acl_model->get_id_usr();
+			$cant_modif = $detalle_inventario->update_digitacion($inventario->get_id_inventario_activo(), $hoja, $id_usuario_login);
 
-			app_render_view('inventario/inventario', $data);
-		}
-		else
-		{
-			if (request('formulario') === 'inventario')
-			{
-				$id_usuario_login  = $this->acl_model->get_id_usr();
-				$cant_modif = $detalle_inventario->update_digitacion($inventario->get_id_inventario_activo(), $hoja, $id_usuario_login);
-
-				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
-			}
-
-			redirect($this->router->class . '/ingreso/' . request('hoja') . '/' . time());
+			set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 		}
 
+		redirect($this->router->class.'/ingreso/'.request('hoja'));
 	}
 
 	// --------------------------------------------------------------------

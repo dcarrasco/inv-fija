@@ -117,10 +117,8 @@ class Collection implements IteratorAggregate {
 		}
 		else
 		{
-			if ( ! $this->key_exists($llave))
-			{
-				$this->_items[$llave] = $item;
-			}
+
+			$this->_items[$llave] = $item;
 		}
 	}
 
@@ -409,9 +407,15 @@ class Collection implements IteratorAggregate {
 		$items = $items instanceof Collection ? $items->all() : $items;
 		$items = is_array($items) ? $items : array($items);
 
-		$this->_items = array_merge($this->_items, $items);
+		// $this->_items = array_merge($this->_items, $items);
 
-		return $this;
+		$orig = new Collection($this->_items);
+
+		collect($items)->each(function ($value, $index) use (&$orig) {
+				$orig->add_item($value, $index);
+			});
+
+		return $orig;
 	}
 
 	// --------------------------------------------------------------------
