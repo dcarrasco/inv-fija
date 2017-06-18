@@ -12,6 +12,8 @@
 	</div>
 </div>
 
+{validation_errors}
+
 <div>
 	<?= form_open($url_form, 'id="frm_inventario"'); ?>
 	<?= form_hidden('formulario','ajustes'); ?>
@@ -68,7 +70,7 @@
 					<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
 				<?php endif; ?>
 
-				<tr>
+				<tr class="<?= empty(errors('stock_ajuste_'.$detalle->id)) ? '' : 'danger' ?>">
 					<td class="text-center"><?= ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
 					<td class="text-left"><?= ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
 					<td class="text-center"><?= $detalle->lote; ?></td>
@@ -80,9 +82,9 @@
 					<td class="text-center"><?= $detalle->um; ?></td>
 					<td class="text-center"><?= fmt_cantidad($detalle->stock_sap); ?></td>
 					<td class="text-center"><?= fmt_cantidad($detalle->stock_fisico); ?></td>
-					<td>
+					<td class="<?= form_has_error_class('stock_ajuste_'.$detalle->id) ?>">
 						<?= form_input('stock_ajuste_'.$detalle->id, request('stock_ajuste_'.$detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="'.$tab_index.'"'); ?>
-						<?= form_error('stock_ajuste_'.$detalle->id); ?>
+						<?= errors('stock_ajuste_'.$detalle->id); ?>
 					</td>
 					<td class="text-center">
 						<?= fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>

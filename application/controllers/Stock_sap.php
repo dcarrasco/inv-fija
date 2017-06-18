@@ -190,8 +190,9 @@ class Stock_sap extends Controller_base {
 		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
 
 		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
+		$is_form_valid = $this->form_validation->run();
 
-		if ($this->form_validation->run())
+		if ($is_form_valid)
 		{
 			$tabla_stock = $stock->get_stock_transito($arr_mostrar, $arr_filtrar);
 		}

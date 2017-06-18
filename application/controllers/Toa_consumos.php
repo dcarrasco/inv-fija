@@ -73,7 +73,6 @@ class Toa_consumos extends Controller_base {
 			->set_rules($this->toa_consumo->consumos_validation)
 			->run();
 
-
 		$datos = array(
 			'combo_reportes' => $this->toa_consumo->tipos_reporte_consumo,
 			'reporte'        => $this->toa_consumo->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),

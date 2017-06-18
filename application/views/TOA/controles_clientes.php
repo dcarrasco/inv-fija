@@ -23,7 +23,7 @@
 						<?= form_input('cliente', request('cliente'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-md-5 form_group <?= form_has_error_class('mes') ?>">
+					<div class="col-md-5 form_group <?= form_has_error_class(array('fecha_desde', 'fecha_hasta')) ?>">
 						<label class="control-label">{_consumo_fechas_}</label>
 						<?= form_date_range('fecha_desde', request('fecha_desde'), 'fecha_hasta', request('fecha_hasta'), 'class="form-control" data-date-min-view-mode="1"'); ?>
 					</div>

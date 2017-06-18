@@ -89,7 +89,7 @@ class Acl_config extends Orm_controller {
 
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($modulo->find('list', array('conditions' => array('id_app' => $id_app)))));
+			->set_output(form_print_options($modulo->find('list', array('conditions' => array('id_app' => $id_app), 'opc_ini' => FALSE))));
 	}
 
 

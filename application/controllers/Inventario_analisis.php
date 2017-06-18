@@ -125,7 +125,7 @@ class Inventario_analisis extends Controller_base {
 	public function ajustes()
 	{
 		$this->_get_datos_inventario();
-		$pagina = request('page');
+		$pagina = request('page', 1);
 		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
 
 		// recupera el detalle de registros con diferencias
@@ -133,37 +133,49 @@ class Inventario_analisis extends Controller_base {
 		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
+		$data = array(
+			'menu_modulo'     => $this->get_menu_modulo('ajustes'),
+			'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
+			'detalle_ajustes' => $detalles,
+			'ocultar_reg'     => $ocultar_reg,
+			'pag'             => $pagina,
+			'links_paginas'   => $links_paginas,
+			'url_form'        => site_url("{$this->router->class}/update_ajustes?".http_build_query(collect(request())->only(array('page', 'ocultar_reg'))->all())),
+		);
+
+		app_render_view('inventario/ajustes', $data);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega la página de ajustes de inventarios
+	 *
+	 * @return void
+	 */
+	public function update_ajustes()
+	{
+		$this->_get_datos_inventario();
+		$pagina = request('page');
+		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
+
+		// recupera el detalle de registros con diferencias
+		$detalle_ajustes = new Detalle_inventario;
+		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
+
+		route_validation($this->form_validation
+			->set_rules($detalle_ajustes->get_validation_ajustes($detalles))
+			->run()
+		);
+
 		if (request('formulario') === 'ajustes')
 		{
-			$this->form_validation->set_rules($detalle_ajustes->get_validation_ajustes($detalles));
+			$cant_modif = $detalle_ajustes->update_ajustes($detalles);
+			set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
+				: '');
 		}
 
-		if ($this->form_validation->run() === FALSE)
-		{
-			$data = array(
-				'menu_modulo'     => $this->get_menu_modulo('ajustes'),
-				'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
-				'detalle_ajustes' => $detalles,
-				'ocultar_reg'     => $ocultar_reg,
-				'pag'             => $pagina,
-				'links_paginas'   => $links_paginas,
-				'url_form'        => site_url("{$this->router->class}/ajustes?".http_build_query(request())),
-			);
-
-			app_render_view('inventario/ajustes', $data);
-		}
-		else
-		{
-			if (request('formulario') === 'ajustes')
-			{
-				$cant_modif = $detalle_ajustes->update_ajustes($detalles);
-				set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
-					: '');
-			}
-
-			redirect("{$this->router->class}/ajustes?".http_build_query(request()));
-		}
-
+		redirect("{$this->router->class}/ajustes?".http_build_query(collect(request())->only(array('page', 'ocultar_reg'))->all()));
 	}
 
 	// --------------------------------------------------------------------
@@ -263,45 +275,52 @@ class Inventario_analisis extends Controller_base {
 	 * @param  integer $id_inventario Identificador del inventario a imprimir
 	 * @return void
 	 */
-	public function imprime_inventario($id_inventario = 0)
+	public function imprime_inventario()
 	{
 		$this->_get_datos_inventario();
-
 		$inventario = new Inventario($this->_id_inventario);
 
-		$is_form_valid = $this->form_validation
-			->set_rules('pag_desde', $this->lang->line('inventario_print_label_page_from'), 'trim|required|greater_than[0]')
-			->set_rules('pag_hasta', $this->lang->line('inventario_print_label_page_to'), 'trim|required|greater_than[0]')
-			->set_rules('oculta_stock_sap', 'Oculta Stock SAP', '')
-			->run();
+		$data = array(
+			'menu_modulo'       => $this->get_menu_modulo('imprime_inventario'),
+			'inventario_id'     => $this->_id_inventario,
+			'inventario_nombre' => $this->_nombre_inventario,
+			'max_hoja'          => $inventario->get_max_hoja_inventario(),
+			'url_form'          => site_url("{$this->router->class}/imprime_inventario_validate"),
+		);
 
-		if ( ! $is_form_valid)
-		{
-			$data = array(
-				'menu_modulo'       => $this->get_menu_modulo('imprime_inventario'),
-				'inventario_id'     => $this->_id_inventario,
-				'inventario_nombre' => $this->_nombre_inventario,
-				'max_hoja'          => $inventario->get_max_hoja_inventario(),
-				'link_config'       => 'config',
-				'link_reporte'      => 'reportes',
-				'link_inventario'   => 'inventario',
-			);
-
-			app_render_view('inventario/imprime_inventario', $data);
-		}
-		else
-		{
-			redirect(
-				$this->router->class . '/imprime_hojas/' .
-					request('pag_desde') . '/' .
-					request('pag_hasta') . '/' .
-					((request('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0) . '/' .
-					time()
-			);
-		}
-
+		app_render_view('inventario/imprime_inventario', $data);
 	}
 
+	// --------------------------------------------------------------------
+
+	public function imprime_inventario_validate()
+	{
+		$valida_form_imprime_inventario = array(
+			array(
+				'field' => 'pag_desde',
+				'label' => $this->lang->line('inventario_print_label_page_from'),
+				'rules' => 'trim|required|greater_than[0]',
+			),
+			array(
+				'field' => 'pag_hasta',
+				'label' => $this->lang->line('inventario_print_label_page_to'),
+				'rules' => 'trim|required|greater_than[0]',
+			),
+		);
+
+		route_validation(
+			$this->form_validation->set_rules($valida_form_imprime_inventario)->run()
+		);
+
+		redirect($this->router->class.'/imprime_hojas/'
+			.request('pag_desde').'/'
+			.request('pag_hasta').'/'
+			.((request('oculta_stock_sap') === 'oculta_stock_sap') ? 1 : 0).'/'
+			.time()
+		);
+
+
+	}
 	// --------------------------------------------------------------------
 
 	/**

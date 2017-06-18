@@ -44,6 +44,7 @@ class Toa_asignaciones extends Controller_base {
 	{
 		parent::__construct();
 		$this->load->model('toa_model');
+		$this->load->model('toa_consumo');
 		$this->lang->load('toa');
 	}
 
@@ -70,7 +71,7 @@ class Toa_asignaciones extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->consumos_validation)
+			->set_rules($this->toa_consumo->consumos_validation)
 			->run();
 
 		$datos = array(

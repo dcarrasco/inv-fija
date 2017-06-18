@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
-		<?= form_open('','class="form-horizontal"'); ?>
+		<?= form_open($url_form,'class="form-horizontal"'); ?>
 		<?= form_hidden('formulario','imprime'); ?>
 		<fieldset>
 

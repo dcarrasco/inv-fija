@@ -98,7 +98,14 @@ class Toa_config extends Orm_controller {
 
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($ciudad->find('list', array('conditions' => array('id_ciudad' => $empresa_ciudad->arr_ciudades_por_empresa($id_empresa))))));
+			->set_output(
+				form_print_options(
+					$ciudad->find('list', array(
+						'conditions' => array('id_ciudad' => $empresa_ciudad->arr_ciudades_por_empresa($id_empresa)),
+						'opc_ini' => FALSE
+					))
+				)
+			);
 	}
 
 

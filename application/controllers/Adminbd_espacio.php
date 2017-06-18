@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Adminbd_espacio extends CI_Controller {
+class Adminbd_espacio extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo

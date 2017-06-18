@@ -263,7 +263,7 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  integer $pagina                Pagina a mostrar
 	 * @return Collection                     Arreglo con el detalle de los registros
 	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 1)
 	{
 		$arr_detalles = $this->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
@@ -272,7 +272,7 @@ class Detalle_inventario extends ORM_Model {
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
-			->limit($this->per_page_ajustes, $pagina)
+			->limit($this->per_page_ajustes, ($pagina-1)*$this->get_model_page_results())
 			->get($this->get_model_tabla())
 			->result_array();
 
@@ -338,6 +338,7 @@ class Detalle_inventario extends ORM_Model {
 			'reuse_query_string'   => TRUE,
 			'page_query_string'    => TRUE,
 			'query_string_segment' => 'page',
+			'use_page_numbers'     => TRUE,
 		);
 
 		$this->pagination->initialize($cfg_pagination);
