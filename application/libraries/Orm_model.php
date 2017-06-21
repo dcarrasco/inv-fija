@@ -835,8 +835,8 @@ class Orm_model implements IteratorAggregate {
 		$model_fields = $this->_model_fields;
 
 		// en caso que los id sean INT o ID, transforma los valores a (int)
-		$arr_condiciones =
-			collect(array_combine($this->_model_campo_id, explode($this->_separador_campos, $id_modelo)))
+		$arr_condiciones = collect($this->_model_campo_id)
+				->combine(explode($this->_separador_campos, $id_modelo))
 				->map(function($valor, $llave) use($model_fields) {
 					return in_array(collect($model_fields)->get($llave)->get_tipo(),
 						array(Orm_field::TIPO_ID, Orm_field::TIPO_INT))

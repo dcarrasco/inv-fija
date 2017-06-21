@@ -455,6 +455,20 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Combina la llave de los elementos de la colección
+	 * con los valores de un arreglo
+	 *
+	 * @param  array $valores Arreglo de valores
+	 * @return static
+	 */
+	public function combine($valores = array())
+	{
+		return new static(array_combine($this->_items, $valores));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Run an associative map over each of the items.
 	 *
 	 * The callback should return an associative array with a single key/value pair.
