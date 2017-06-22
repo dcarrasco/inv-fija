@@ -861,7 +861,7 @@ class Orm_model implements IteratorAggregate {
 		return $this->find('all', array(
 			'filtro' => $this->_model_filtro,
 			'limit'  => $this->_model_page_results,
-			'page'   => ($page-1) * $this->_model_page_results,
+			'offset' => ($page-1) * $this->_model_page_results,
 		));
 	}
 
