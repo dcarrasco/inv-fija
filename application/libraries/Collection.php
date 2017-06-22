@@ -407,15 +407,22 @@ class Collection implements IteratorAggregate {
 		$items = $items instanceof Collection ? $items->all() : $items;
 		$items = is_array($items) ? $items : array($items);
 
-		// $this->_items = array_merge($this->_items, $items);
+		reset($items);
+		// si la primera llave del arreglo es 0, usamos arrat merge
+		if (key($items) === 0)
+		{
+			$this->_items = array_merge($this->_items, $items);
+			return $this;
+		}
+		else
+		{
+			$orig = new Collection($this->_items);
+			collect($items)->each(function ($value, $index) use (&$orig) {
+					$orig->add_item($value, $index);
+				});
 
-		$orig = new Collection($this->_items);
-
-		collect($items)->each(function ($value, $index) use (&$orig) {
-				$orig->add_item($value, $index);
-			});
-
-		return $orig;
+			return $orig;
+		}
 	}
 
 	// --------------------------------------------------------------------
