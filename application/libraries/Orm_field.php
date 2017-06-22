@@ -460,7 +460,7 @@ class Orm_field {
 			$param_adic .= ($this->_onchange !== '') ? ' onchange="'.$this->_onchange.'"' : '';
 
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
-				? array('conditions' => $this->_relation['conditions'])
+				? array('conditions' => $this->_relation['conditions'], 'opc_ini' => FALSE)
 				: array();
 
 			$form = form_dropdown(
