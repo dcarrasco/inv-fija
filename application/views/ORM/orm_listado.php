@@ -12,7 +12,7 @@
 	</div>
 
 	<div class="col-md-9 col-sm-7 col-xs-6 text-right">
-		<a href="{url_editar}?{url_params}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
+		<a href="{url_editar}{url_params}" class="btn btn-primary" id="btn_mostrar_agregar" role="button">
 			<span class="fa fa-plus-circle"></span>
 			{_orm_button_new_} <?= strtolower($modelo->get_model_label()); ?>
 		</a>

@@ -140,7 +140,7 @@ class Inventario_analisis extends Controller_base {
 			'ocultar_reg'     => $ocultar_reg,
 			'pag'             => $pagina,
 			'links_paginas'   => $links_paginas,
-			'url_form'        => site_url("{$this->router->class}/update_ajustes?".http_build_query(collect(request())->only(array('page', 'ocultar_reg'))->all())),
+			'url_form'        => site_url("{$this->router->class}/update_ajustes".url_params()),
 		);
 
 		app_render_view('inventario/ajustes', $data);
@@ -175,7 +175,7 @@ class Inventario_analisis extends Controller_base {
 				: '');
 		}
 
-		redirect("{$this->router->class}/ajustes?".http_build_query(collect(request())->only(array('page', 'ocultar_reg'))->all()));
+		redirect("{$this->router->class}/ajustes".url_params());
 	}
 
 	// --------------------------------------------------------------------

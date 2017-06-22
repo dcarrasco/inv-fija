@@ -72,7 +72,7 @@ class Orm_controller extends Controller_base {
 			'modelos'     => $modelo->list_paginated($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
-			'url_params'  => empty($this->input->get()) ? '' : '?'.http_build_query($this->input->get()),
+			'url_params'  => url_params(),
 		);
 		app_render_view('ORM/orm_listado', $data);
 	}
@@ -88,8 +88,8 @@ class Orm_controller extends Controller_base {
 	 */
 	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
-		$url_params = empty($this->input->get()) ? '' : '?'.http_build_query($this->input->get());
 		$modelo = new $nombre_modelo($id_modelo);
+		$url_params = $url_params();
 
 		$data = array(
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
@@ -120,7 +120,7 @@ class Orm_controller extends Controller_base {
 			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 		}
 
-		$url_params = empty($this->input->get()) ? '' : '?'.http_build_query($this->input->get());
+		$url_params = $url_params();
 		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}
 

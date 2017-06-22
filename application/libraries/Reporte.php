@@ -70,7 +70,7 @@ class Reporte {
 				$valor_desplegar = fmt_cantidad($valor);
 
 				return anchor(
-					$arr_param_campo['href'].'?'.http_build_query(array_intersect_key($registro, array_flip($arr_indices))),
+					$arr_param_campo['href'].url_params(array_intersect_key($registro, array_flip($arr_indices))),
 					($valor_desplegar === '') ? ' ' : $valor_desplegar
 				);
 			},

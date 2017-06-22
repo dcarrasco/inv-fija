@@ -117,7 +117,7 @@ class Googlemaps {
 			'key'      => $this->_api_key,
 			'callback' => $function_name,
 		);
-		$url_js = $this->_url_js.'?'.http_build_query($arr_url_param);
+		$url_js = $this->_url_js.url_params($arr_url_param);
 
 
 		$txt_js  = "<div id=\"{$this->_map_id}\" style=\"{$this->_map_css}\"></div>\n";

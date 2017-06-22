@@ -440,6 +440,18 @@ if ( ! function_exists('errors'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('url_params'))
+{
+	function url_params($arr_params = array())
+	{
+		$ci =& get_instance();
+		$url_params = http_build_query((count($arr_params) === 0) ? $ci->input->get() : $arr_params);
+
+		return empty($url_params) ? '' : '?'.$url_params;
+	}
+}
+// --------------------------------------------------------------------
+
 if ( ! function_exists('fmt_cantidad'))
 {
 	/**
