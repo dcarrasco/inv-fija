@@ -120,7 +120,7 @@ class Orm_controller extends Controller_base {
 			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
 		}
 
-		$url_params = $url_params();
+		$url_params = url_params();
 		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}
 
