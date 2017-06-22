@@ -89,7 +89,7 @@ class Orm_controller extends Controller_base {
 	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$modelo = new $nombre_modelo($id_modelo);
-		$url_params = $url_params();
+		$url_params = url_params();
 
 		$data = array(
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
