@@ -851,17 +851,17 @@ class Orm_model implements IteratorAggregate {
 	/**
 	 * Recupera listado paginado
 	 *
-	 * @param  integer $offset Offset para recuperar una pagina determinada
+	 * @param  integer $page Numero de página a recuperar
 	 * @return void
 	 */
-	public function list_paginated($offset = 0)
+	public function list_paginated($page = 0)
 	{
-		$offset = empty($offset) ? 1 : $offset;
+		$page = empty($page) ? 1 : $page;
 
 		return $this->find('all', array(
 			'filtro' => $this->_model_filtro,
 			'limit'  => $this->_model_page_results,
-			'offset' => ($offset-1)*$this->_model_page_results,
+			'page'   => ($page-1) * $this->_model_page_results,
 		));
 	}
 
