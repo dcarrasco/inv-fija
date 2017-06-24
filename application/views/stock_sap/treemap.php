@@ -1,6 +1,6 @@
 <div>
 	<div class="form-group">
-		<?= form_open('', array('id' => 'form_centro')); ?>
+		<?= form_open('', ['id' => 'form_centro']); ?>
 		<strong>
 			{_stock_map_label_centro_}
 		</strong>
