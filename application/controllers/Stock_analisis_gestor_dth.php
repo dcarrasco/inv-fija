@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_analisis_gestor_dth extends CI_Controller {
+class Stock_analisis_gestor_dth extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
@@ -85,19 +85,16 @@ class Stock_analisis_gestor_dth extends CI_Controller {
 			array_push($arr_filtro_cas, "'BAJA'");
 		}
 
-		$datos['log'] = $this->log_gestor_model->get_log(
-			request('series'),
-			request('set_serie'),
-			request('tipo_reporte'),
-			implode(', ', $arr_filtro_cas),
-			request('ult_mov') === 'show'
-		);
-
-		app_render_view('stock_sap/analisis_log_gestor_dth_view', $datos);
+		app_render_view('stock_sap/analisis_log_gestor_dth_view', [
+			'log' => $this->log_gestor_model->get_log(
+				request('series'),
+				request('set_serie'),
+				request('tipo_reporte'),
+				implode(', ', $arr_filtro_cas),
+				request('ult_mov') === 'show'
+			)
+		]);
 	}
-
-
-
 
 }
 /* End of file stock_analisis_gestor_dth.php */

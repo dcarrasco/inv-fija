@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Despachos_retail extends CI_Controller {
+class Despachos_retail extends Controller_base {
 
 	/**
 	 * Llave de identificación del módulo
