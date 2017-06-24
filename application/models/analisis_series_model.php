@@ -31,16 +31,16 @@ class Analisis_series_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $validation_analisis = array(
-		array('field' => 'series', 'label' => 'Series', 'rules' => 'trim|required'),
-		array('field' => 'show_mov', 'label' => 'Mostrar Movimientos', 'rules' => ''),
-		array('field' => 'ult_mov', 'label' => 'Ultimo movimiento', 'rules' => ''),
-		array('field' => 'show_despachos', 'label' => 'Mostrar despachos', 'rules' => ''),
-		array('field' => 'show_stock_sap', 'label' => 'Mostrar stock SAP', 'rules' => ''),
-		array('field' => 'show_stock_scl', 'label' => 'Mostrar stock SCL', 'rules' => ''),
-		array('field' => 'show_trafico', 'label' => 'Mostrar trafico', 'rules' => ''),
-		array('field' => 'show_gdth', 'label' => 'Mostrar gestor DTH', 'rules' => ''),
-	);
+	public $validation_analisis = [
+		['field' => 'series', 'label' => 'Series', 'rules' => 'trim|required'],
+		['field' => 'show_mov', 'label' => 'Mostrar Movimientos', 'rules' => ''],
+		['field' => 'ult_mov', 'label' => 'Ultimo movimiento', 'rules' => ''],
+		['field' => 'show_despachos', 'label' => 'Mostrar despachos', 'rules' => ''],
+		['field' => 'show_stock_sap', 'label' => 'Mostrar stock SAP', 'rules' => ''],
+		['field' => 'show_stock_scl', 'label' => 'Mostrar stock SCL', 'rules' => ''],
+		['field' => 'show_trafico', 'label' => 'Mostrar trafico', 'rules' => ''],
+		['field' => 'show_gdth', 'label' => 'Mostrar gestor DTH', 'rules' => ''],
+	];
 
 
 
@@ -54,9 +54,9 @@ class Analisis_series_model extends CI_Model {
 		parent::__construct();
 
 		$this->load->library('table');
-		$this->table->set_template(array(
+		$this->table->set_template([
 			'table_open' => '<table class="table table-bordered table-striped table-hover table-condensed reporte" style="white-space:nowrap;">',
-		));
+		]);
 
 	}
 
@@ -72,11 +72,11 @@ class Analisis_series_model extends CI_Model {
 	 */
 	private function _series_list_to_array($series = string, $tipo = 'SAP')
 	{
-		$arr_series = array();
+		$arr_series = [];
 		$series = str_replace(' ', '', $series);
 		$arr_series = preg_grep('/[\d]+/', explode("\r\n", $series));
 
-		$arr_series_celular = array();
+		$arr_series_celular = [];
 
 		foreach ($arr_series as $llave => $valor)
 		{
@@ -382,7 +382,7 @@ class Analisis_series_model extends CI_Model {
 					->join($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 					->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
 					->join($this->config->item('bd_trafico_causabaja') . ' b', 'a.cod_causabaja = b.cod_causabaja', 'left')
-					->where(array('ano' => $ano, 'mes' => $mes))
+					->where(['ano' => $ano, 'mes' => $mes])
 					->where_in('imei', $arr_series)
 					->order_by('imei, fec_alta')
 					->get()
@@ -400,7 +400,7 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_meses_trafico()
 	{
-		$resultado = array();
+		$resultado = [];
 
 		$this->db
 			->distinct()
@@ -429,8 +429,8 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_trafico_mes($series = '', $str_meses = '', $tipo = 'imei')
 	{
-		$result = array();
-		$arr_series = array();
+		$result = [];
+		$arr_series = [];
 
 		if ($series !== '')
 		{
@@ -439,7 +439,7 @@ class Analisis_series_model extends CI_Model {
 
 		foreach ($arr_series as $serie)
 		{
-			$meses = array();
+			$meses = [];
 			$meses = explode('-', $str_meses);
 
 			foreach($meses as $mes)
@@ -449,7 +449,7 @@ class Analisis_series_model extends CI_Model {
 
 				// recupera datos de trafico
 				$this->db->from($this->config->item('bd_trafico_mes'));
-				$this->db->where(array('ano' => $mes_ano, 'mes' => $mes_mes));
+				$this->db->where(['ano' => $mes_ano, 'mes' => $mes_mes]);
 				$this->db->where($tipo, $serie);
 
 				foreach($this->db->get()->result_array() as $registro)
@@ -460,7 +460,7 @@ class Analisis_series_model extends CI_Model {
 		}
 
 		// recupera datos comerciales
-		$result_final = array();
+		$result_final = [];
 
 		foreach($result as $imei => $datos_imei)
 		{
@@ -512,7 +512,7 @@ class Analisis_series_model extends CI_Model {
 			->select("c.nom_cliente + ' ' + c.ape1_cliente + ' ' + c.ape2_cliente as nombre")
 			->from($this->config->item('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 			->join($this->config->item('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
-			->where(array('a.num_celular' => $celular, 'a.fec_alta' => $maxfecha))
+			->where(['a.num_celular' => $celular, 'a.fec_alta' => $maxfecha])
 			->get()->row_array();
 	}
 

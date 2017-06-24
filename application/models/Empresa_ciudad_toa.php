@@ -36,45 +36,41 @@ class Empresa_ciudad_toa extends ORM_Model {
 	 */
 	public function __construct($id_empresa = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_empresas_ciudades_toa'),
 				'model_label'        => 'Empresa ciudad TOA',
 				'model_label_plural' => 'Empresas ciudades TOA',
 				'model_order_by'     => 'id_empresa, id_ciudad',
-			),
-			'campos' => array(
-				'id_empresa' => array(
+			],
+			'campos' => [
+				'id_empresa' => [
 					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-					'relation'       => array(
-						'model' => 'empresa_toa'
-					),
+					'relation'       => ['model' => 'empresa_toa'],
 					'texto_ayuda'    => 'Seleccione una empresa TOA.',
-				),
-				'id_ciudad' => array(
+				],
+				'id_ciudad' => [
 					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-					'relation'       => array(
-						'model' => 'ciudad_toa'
-					),
+					'relation'       => ['model' => 'ciudad_toa'],
 					'texto_ayuda'    => 'Seleccione una Ciudad TOA.',
-				),
-				'almacenes' => array(
-					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+				],
+				'almacenes' => [
+					'tipo'     => Orm_field::TIPO_HAS_MANY,
+					'relation' => [
 						'model'         => 'almacen_sap',
 						'join_table'    => $this->config->item('bd_empresas_ciudades_almacenes_toa'),
-						'id_one_table'  => array('id_empresa', 'id_ciudad'),
-						'id_many_table' => array('centro', 'cod_almacen'),
-						'conditions'    => array('centro' => array('CH32','CH33'))
-					),
-					'texto_ayuda'    => 'Almacenes asociados a la empresa - ciudad.',
-				),
-			),
-		);
+						'id_one_table'  => ['id_empresa', 'id_ciudad'],
+						'id_many_table' => ['centro', 'cod_almacen'],
+						'conditions'    => ['centro' => ['CH32','CH33']],
+					],
+					'texto_ayuda' => 'Almacenes asociados a la empresa - ciudad.',
+				],
+			],
+		];
 
 		parent::__construct($id_empresa);
 	}
@@ -95,11 +91,11 @@ class Empresa_ciudad_toa extends ORM_Model {
 
 	public function arr_ciudades_por_empresa($id_empresa = NULL)
 	{
-		$arr_ciudades = array();
+		$arr_ciudades = [];
 
 		if ($id_empresa)
 		{
-			$listado_empresa_ciudad = $this->find('all', array('conditions' => array('id_empresa' => $id_empresa)));
+			$listado_empresa_ciudad = $this->find('all', ['conditions' => ['id_empresa' => $id_empresa]]);
 
 			foreach($listado_empresa_ciudad as $obj_empresa_ciudad)
 			{

@@ -36,15 +36,15 @@ class Clasifalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_clasif_almacen = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_clasifalm_sap'),
 				'model_label'        => 'Clasificaci&oacute;n Almac&eacute;n',
 				'model_label_plural' => 'Clasificaci&oacute;n de Almacenes',
 				'model_order_by'     => 'tipo_op, orden, clasificacion',
-			),
-			'campos' => array(
-				'id_clasif' => array(
+			],
+			'campos' => [
+				'id_clasif' => [
 						'label'            => 'id',
 						'tipo'             => Orm_field::TIPO_INT,
 						'largo'            => 10,
@@ -53,27 +53,27 @@ class Clasifalmacen_sap extends ORM_Model {
 						'es_obligatorio'   => TRUE,
 						'es_unico'         => TRUE,
 						'es_autoincrement' => TRUE,
-				),
-				'clasificacion' => array(
+				],
+				'clasificacion' => [
 					'label'          => 'Clasificaci&oacute;n de Almac&eacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-				),
-				'orden' => array(
+				],
+				'orden' => [
 					'label'          => 'Orden de la clasificaci&oacute;n',
 					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Orden de la clasificaci&oacute;n del almac&eacute;n.',
 					'es_obligatorio' => TRUE,
-				),
-				'dir_responsable' => array(
+				],
+				'dir_responsable' => [
 					'label'          => 'Direcci&oacute;n responsable',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Seleccione la direcci&oacute;n responsable',
-					'choices'        => array(
+					'choices'        => [
 						'*'          => 'Por material',
 						'TERMINALES' => 'Terminales',
 						'REDES'      => 'Redes',
@@ -81,56 +81,53 @@ class Clasifalmacen_sap extends ORM_Model {
 						'LOGISTICA'  => 'Log&iacute;stica',
 						'TTPP'       => 'Telefon&iacute;a P&uacute;blica',
 						'MARKETING'  => 'Marketing',
-					),
+					],
 					'es_obligatorio' => TRUE,
-				),
-				'estado_ajuste' => array(
+				],
+				'estado_ajuste' => [
 					'label'          => 'Estado de ajuste materiales',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Indica confiabilidad de existencia del material.',
-					'choices'        => array(
+					'choices'        => [
 						'EXISTE'     => 'Existe',
 						'NO_EXISTE'  => 'No existe',
 						'NO_SABEMOS' => 'No sabemos',
-					),
+					],
 					'es_obligatorio' => TRUE,
-				),
-				'id_tipoclasif' => array(
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'tipo_clasifalm'
-					),
-				),
-				'tipo_op' => array(
+				],
+				'id_tipoclasif' => [
+					'tipo'     => Orm_field::TIPO_HAS_ONE,
+					'relation' => ['model' => 'tipo_clasifalm'],
+				],
+				'tipo_op' => [
 					'label'          => 'Tipo operaci&oacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
-					'choices'        => array(
+					'choices'        => [
 						'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
 						'FIJA'  => 'Operaci&oacute;n Fija'
-					),
+					],
 					'es_obligatorio' => TRUE,
 					'onchange'       => form_onchange('tipo_op', 'tiposalm', 'stock_config/get_select_tipoalmacen'),
-				),
-				'tiposalm' => array(
+				],
+				'tiposalm' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+					'relation'       => [
 						'model'         => 'tipoalmacen_sap',
 						'join_table'    => $this->config->item('bd_clasif_tipoalm_sap'),
-						'id_one_table'  => array('id_clasif'),
-						'id_many_table' => array('id_tipo'),
-						'conditions'    => array('tipo_op' => '@field_value:tipo_op:MOVIL')
-					),
+						'id_one_table'  => ['id_clasif'],
+						'id_many_table' => ['id_tipo'],
+						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
+					],
 					'texto_ayuda'    => 'Tipos de almac&eacute;n asociados a la clasificaci&oacute;n.',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_clasif_almacen);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -143,8 +140,6 @@ class Clasifalmacen_sap extends ORM_Model {
 	{
 		return (string) $this->clasificacion;
 	}
-
-
 
 }
 /* End of file almacen.php */

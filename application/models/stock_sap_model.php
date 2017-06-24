@@ -37,18 +37,18 @@ class Stock_sap_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $stock_sap_validation = array(
-		array(
+	public $stock_sap_validation = [
+		[
 			'field' => 'fecha[]',
 			'label' => 'Fechas',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'almacenes[]',
 			'label' => 'Almacenes',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	// --------------------------------------------------------------------
 
@@ -63,9 +63,9 @@ class Stock_sap_model extends CI_Model {
 
 		$this->load->helper('html');
 		$this->load->library('table');
-		$this->table->set_template(array(
+		$this->table->set_template([
 			'table_open' => '<table class="table table-striped table-hover table-condensed reporte">',
-		));
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -77,7 +77,7 @@ class Stock_sap_model extends CI_Model {
 	 * @param  array $filtrar Arreglo con campos a filtrar
 	 * @return array          Arreglo con stock
 	 */
-	public function get_stock($mostrar = array(), $filtrar = array())
+	public function get_stock($mostrar = [], $filtrar = [])
 	{
 		return '';
 	}
@@ -91,9 +91,9 @@ class Stock_sap_model extends CI_Model {
 	 * @param  array $filtrar Arreglo con campos a filtrar
 	 * @return array          Arreglo con stock
 	 */
-	public function reporte($mostrar = array(), $filtrar = array())
+	public function reporte($mostrar = [], $filtrar = [])
 	{
-		$arr_stock = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', array($mostrar, $filtrar));
+		$arr_stock = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
 
 		return $this->format_table_stock($arr_stock, $mostrar, $filtrar);
 	}
@@ -108,90 +108,90 @@ class Stock_sap_model extends CI_Model {
 	 * @param  array $filtrar    Filtros de datos del reporte
 	 * @return string            HTML de la tabla del reporte
 	 */
-	protected function format_table_stock($arr_result = array(), $mostrar = array(), $filtrar = array())
+	protected function format_table_stock($arr_result = [], $mostrar = [], $filtrar = [])
 	{
 		if (count($arr_result) > 0)
 		{
 			$campos_resultado = $arr_result[0];
 		}
 
-		$arr_campos = array();
+		$arr_campos = [];
 		if (in_array('fecha', $mostrar))
 		{
-			$arr_campos['fecha_stock'] = array('titulo' => 'fecha stock', 'class' => '', 'tipo' => 'fecha');
+			$arr_campos['fecha_stock'] = ['titulo' => 'fecha stock', 'class' => '', 'tipo' => 'fecha'];
 		}
 		if (in_array('sel_tiposalm', $mostrar))
 		{
-			$arr_campos['tipo_almacen'] = array('titulo' => 'tipo almacen', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['tipo_almacen'] = ['titulo' => 'tipo almacen', 'class' => '', 'tipo' => 'texto'];
 		}
 		if (in_array('almacen', $mostrar))
 		{
-			$arr_campos['centro'] = array('titulo' => 'centro', 'class' => '', 'tipo' => 'texto');
-			$arr_campos['cod_almacen'] = array('titulo' => 'cod almacen', 'class' => '', 'tipo' => 'texto');
-			$arr_campos['des_almacen'] = array('titulo' => 'des almacen', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['centro'] = ['titulo' => 'centro', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['cod_almacen'] = ['titulo' => 'cod almacen', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['des_almacen'] = ['titulo' => 'des almacen', 'class' => '', 'tipo' => 'texto'];
 		}
 		if (in_array('acreedor', $mostrar))
 		{
-			$arr_campos['acreedor'] = array('titulo' => 'proveedor', 'class' => '', 'tipo' => 'texto');
-			$arr_campos['des_proveedor'] = array('titulo' => 'des proveedor', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['acreedor'] = ['titulo' => 'proveedor', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['des_proveedor'] = ['titulo' => 'des proveedor', 'class' => '', 'tipo' => 'texto'];
 		}
 		if (in_array('material', $mostrar))
 		{
 			if (array_key_exists('cod_articulo', $campos_resultado))
 			{
-				$arr_campos['cod_articulo'] = array('titulo' => 'material', 'class' => '', 'tipo' => 'texto');
+				$arr_campos['cod_articulo'] = ['titulo' => 'material', 'class' => '', 'tipo' => 'texto'];
 			}
 			else
 			{
-				$arr_campos['material'] = array('titulo' => 'material', 'class' => '', 'tipo' => 'texto');
-				$arr_campos['descripcion'] = array('titulo' => 'desc material', 'class' => '', 'tipo' => 'texto');
+				$arr_campos['material'] = ['titulo' => 'material', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['descripcion'] = ['titulo' => 'desc material', 'class' => '', 'tipo' => 'texto'];
 
 			}
 		}
 		if (in_array('lote', $mostrar))
 		{
-			$arr_campos['lote'] = array('titulo' => 'lote', 'class' => '', 'tipo' => 'texto');
+			$arr_campos['lote'] = ['titulo' => 'lote', 'class' => '', 'tipo' => 'texto'];
 		}
 		if (in_array('tipo_stock', $mostrar))
 		{
 			if (array_key_exists('LU', $campos_resultado))
 			{
-				$arr_campos['tipo_articulo'] = array('titulo' => 'tipo articulo', 'class' => '', 'tipo' => 'texto');
-				$arr_campos['LU'] = array('titulo' => 'cant LU', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['BQ'] = array('titulo' => 'cant BQ', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['CC'] = array('titulo' => 'cant CC', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['TT'] = array('titulo' => 'cant TT', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['OT'] = array('titulo' => 'cant OT', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['VAL_LU'] = array('titulo' => 'valor LU', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['VAL_BQ'] = array('titulo' => 'valor BQ', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['VAL_CC'] = array('titulo' => 'valor CC', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['VAL_TT'] = array('titulo' => 'valor TT', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['VAL_OT'] = array('titulo' => 'valor OT', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['total'] = array('titulo' => 'cant total', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['VAL_total'] = array('titulo' => 'valor total', 'class' => 'text-right', 'tipo' => 'valor');
+				$arr_campos['tipo_articulo'] = ['titulo' => 'tipo articulo', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['LU'] = ['titulo' => 'cant LU', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['BQ'] = ['titulo' => 'cant BQ', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['CC'] = ['titulo' => 'cant CC', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['TT'] = ['titulo' => 'cant TT', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['OT'] = ['titulo' => 'cant OT', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['VAL_LU'] = ['titulo' => 'valor LU', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['VAL_BQ'] = ['titulo' => 'valor BQ', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['VAL_CC'] = ['titulo' => 'valor CC', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['VAL_TT'] = ['titulo' => 'valor TT', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['VAL_OT'] = ['titulo' => 'valor OT', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['total'] = ['titulo' => 'cant total', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['VAL_total'] = ['titulo' => 'valor total', 'class' => 'text-right', 'tipo' => 'valor'];
 			}
 			else
 			{
-				$arr_campos['estado'] = array('titulo' => 'estado', 'class' => '', 'tipo' => 'texto');
-				$arr_campos['cantidad'] = array('titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['monto'] = array('titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor');
+				$arr_campos['estado'] = ['titulo' => 'estado', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['cantidad'] = ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
 			}
 		}
 		else
 		{
 			if (array_key_exists('EQUIPOS', $campos_resultado))
 			{
-				$arr_campos['EQUIPOS'] = array('titulo' => 'cant equipos', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['VAL_EQUIPOS'] = array('titulo' => 'valor equipos', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['SIMCARD'] = array('titulo' => 'cant simcard', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['VAL_SIMCARD'] = array('titulo' => 'valor simcard', 'class' => 'text-right', 'tipo' => 'valor');
-				$arr_campos['OTROS'] = array('titulo' => 'cant otros', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['VAL_OTROS'] = array('titulo' => 'valor otros', 'class' => 'text-right', 'tipo' => 'valor');
+				$arr_campos['EQUIPOS'] = ['titulo' => 'cant equipos', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['VAL_EQUIPOS'] = ['titulo' => 'valor equipos', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['SIMCARD'] = ['titulo' => 'cant simcard', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['VAL_SIMCARD'] = ['titulo' => 'valor simcard', 'class' => 'text-right', 'tipo' => 'valor'];
+				$arr_campos['OTROS'] = ['titulo' => 'cant otros', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['VAL_OTROS'] = ['titulo' => 'valor otros', 'class' => 'text-right', 'tipo' => 'valor'];
 			}
 			elseif (array_key_exists('cantidad', $campos_resultado))
 			{
-				$arr_campos['cantidad'] = array('titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero');
-				$arr_campos['monto'] = array('titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor');
+				$arr_campos['cantidad'] = ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
+				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
 			}
 		}
 		$this->reporte->set_order_campos($arr_campos, 'fecha_stock');
@@ -209,7 +209,7 @@ class Stock_sap_model extends CI_Model {
 	 * @param  array $filtrar Arreglo con filtros a aplicar
 	 * @return array           Stock en transito
 	 */
-	public function get_stock_transito($mostrar = array(), $filtrar = array())
+	public function get_stock_transito($mostrar = [], $filtrar = [])
 	{
 		return '';
 	}
@@ -225,7 +225,7 @@ class Stock_sap_model extends CI_Model {
 	 */
 	public function get_combo_fechas()
 	{
-		return cached_query('combo_fechas'.$this->tipo_op, $this, 'get_combo_fechas_db', array());
+		return cached_query('combo_fechas'.$this->tipo_op, $this, 'get_combo_fechas_db', []);
 	}
 
 	// --------------------------------------------------------------------
@@ -239,7 +239,7 @@ class Stock_sap_model extends CI_Model {
 	public function get_combo_fechas_db()
 	{
 		$arr_fecha_tmp = $this->get_data_combo_fechas();
-		$arr_fecha = array('ultimodia' => array(), 'todas' => $arr_fecha_tmp);
+		$arr_fecha = ['ultimodia' => [], 'todas' => $arr_fecha_tmp];
 
 		$anno_mes_ant = '';
 		foreach($arr_fecha_tmp as $llave => $valor)
@@ -297,8 +297,8 @@ class Stock_sap_model extends CI_Model {
 	 */
 	public function reporte_clasificacion($tipo_op = 'MOVIL', $fechas = NULL, $borrar_datos = FALSE)
 	{
-		$arr_result = array();
-		$fechas = is_array($fechas) ? $fechas : array($fechas);
+		$arr_result = [];
+		$fechas = is_array($fechas) ? $fechas : [$fechas];
 
 		if ($fechas)
 		{
@@ -334,8 +334,8 @@ class Stock_sap_model extends CI_Model {
 		}
 
 		// agrega registros en arreglo final
-		$arr_final = array();
-		$arr_fechas = array();
+		$arr_final = [];
+		$arr_fechas = [];
 		foreach($arr_result as $result_fecha)
 		{
 			foreach ($result_fecha as $registro)
@@ -347,7 +347,7 @@ class Stock_sap_model extends CI_Model {
 
 				if ( ! array_key_exists($registro['orden'], $arr_final))
 				{
-					$arr_final[$registro['orden']] = array();
+					$arr_final[$registro['orden']] = [];
 				}
 
 				$arr_final[$registro['orden']]['tipo_op'] = $registro['tipo_op'];
@@ -374,7 +374,7 @@ class Stock_sap_model extends CI_Model {
 
 		asort($arr_fechas);
 
-		return array('datos' => $arr_final, 'fechas' => $arr_fechas);
+		return ['datos' => $arr_final, 'fechas' => $arr_fechas];
 	}
 
 	// --------------------------------------------------------------------

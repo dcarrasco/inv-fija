@@ -36,37 +36,36 @@ class Proveedor extends ORM_Model {
 	 */
 	public function __construct($id_proveedor = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_proveedores'),
 				'model_label'        => 'Proveedor',
 				'model_label_plural' => 'Proveedores',
 				'model_order_by'     => 'des_proveedor',
-			),
-			'campos' => array(
-				'cod_proveedor' => array(
+			],
+			'campos' => [
+				'cod_proveedor' => [
 					'label'          => 'C&oacute;digo del proveedor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
-					'es_id' => TRUE,
+					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-				'des_proveedor' => array(
+				],
+				'des_proveedor' => [
 					'label'          => 'Nombre del proveedor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => FALSE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_proveedor);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -79,7 +78,6 @@ class Proveedor extends ORM_Model {
 	{
 		return (string) $this->des_proveedor;
 	}
-
 
 }
 /* End of file proveedor.php */

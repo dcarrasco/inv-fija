@@ -31,38 +31,38 @@ class Inventario_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $reportes_validation = array(
-		array(
+	public $reportes_validation = [
+		[
 			'field' => 'inv_activo',
 			'label' => 'Inventario activo',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'elim_sin_dif',
 			'label' => 'Ocultar registros sin diferencias',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'incl_ajustes',
 			'label' => 'Incluir ajustes de inventario',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'incl_familias',
 			'label' => 'Incluir familias de productos',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'order_by',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'order_sort',
 			'label' => '',
 			'rules' => 'trim'
-		),
-	);
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -105,12 +105,12 @@ class Inventario_model extends CI_Model {
 			->order_by('desc_tipo_inventario, nombre')
 			->get()->result_array();
 
-		$arr_combo = array();
+		$arr_combo = [];
 		foreach($arr_rs as $item)
 		{
 			if ( ! array_key_exists($item['desc_tipo_inventario'], $arr_combo))
 			{
-				$arr_combo[$item['desc_tipo_inventario']] = array();
+				$arr_combo[$item['desc_tipo_inventario']] = [];
 			}
 
 			$arr_combo[$item['desc_tipo_inventario']][$item['id']] = $item['nombre'];
@@ -134,10 +134,12 @@ class Inventario_model extends CI_Model {
 	 * @param  string  $param1        Parámetros adicionales
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte($reporte = '', $id_inventario = 0, $sort_by = NULL,
-										$incl_ajustes = '0', $elim_sin_dif = '0', $param1 = NULL)
+	public function get_reporte($reporte = '', $id_inventario = 0, $sort_by = NULL, $incl_ajustes = '0', $elim_sin_dif = '0', $param1 = NULL)
 	{
-		return call_user_func_array(array($this, 'get_reporte_'.$reporte), array($id_inventario, $sort_by, $incl_ajustes, $elim_sin_dif, $param1));
+		return call_user_func_array(
+			[$this, 'get_reporte_'.$reporte],
+			[$id_inventario, $sort_by, $incl_ajustes, $elim_sin_dif, $param1]
+		);
 	}
 
 	// --------------------------------------------------------------------
@@ -495,30 +497,30 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte($reporte)
 	{
-		return call_user_func_array(array($this, 'get_campos_reporte_'.$reporte), array());
+		return call_user_func_array([$this, 'get_campos_reporte_'.$reporte], []);
 	}
 
 	// --------------------------------------------------------------------
 
 	protected function _get_campos_sum_stock($incl_ajustes = '0')
 	{
-		$arr_campos = array();
+		$arr_campos = [];
 
-		$arr_campos['sum_stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
-		$arr_campos['sum_stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['sum_stock_sap'] = ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'];
+		$arr_campos['sum_stock_fisico'] = ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'];
 		if ($incl_ajustes === '1')
 		{
-			$arr_campos['sum_stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['sum_stock_ajuste'] = ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'];
 		}
-		$arr_campos['sum_stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+		$arr_campos['sum_stock_diff'] = ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'];
 
-		$arr_campos['sum_valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
-		$arr_campos['sum_valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['sum_valor_sap'] = ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'];
+		$arr_campos['sum_valor_fisico'] = ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'];
 		if ($incl_ajustes === '1')
 		{
-			$arr_campos['sum_valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['sum_valor_ajuste'] = ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'];
 		}
-		$arr_campos['sum_valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+		$arr_campos['sum_valor_diff'] = ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'];
 
 		return $arr_campos;
 
@@ -528,23 +530,23 @@ class Inventario_model extends CI_Model {
 
 	protected function _get_campos_stock($incl_ajustes = '0')
 	{
-		$arr_campos = array();
+		$arr_campos = [];
 
-		$arr_campos['stock_sap'] = array('titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero');
-		$arr_campos['stock_fisico'] = array('titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero');
+		$arr_campos['stock_sap'] = ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'];
+		$arr_campos['stock_fisico'] = ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'];
 		if ($incl_ajustes === '1')
 		{
-			$arr_campos['stock_ajuste'] = array('titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero');
+			$arr_campos['stock_ajuste'] = ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'];
 		}
-		$arr_campos['stock_diff'] = array('titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif');
+		$arr_campos['stock_diff'] = ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'];
 
-		$arr_campos['valor_sap'] = array('titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor');
-		$arr_campos['valor_fisico'] = array('titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor');
+		$arr_campos['valor_sap'] = ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'];
+		$arr_campos['valor_fisico'] = ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'];
 		if ($incl_ajustes === '1')
 		{
-			$arr_campos['valor_ajuste'] = array('titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor');
+			$arr_campos['valor_ajuste'] = ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'];
 		}
-		$arr_campos['valor_diff'] = array('titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif');
+		$arr_campos['valor_diff'] = ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'];
 
 		return $arr_campos;
 	}
@@ -558,11 +560,11 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_hoja()
 	{
-		$arr_campos = array(
-			'hoja'      => array('titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'),
-			'auditor'   => array('titulo' => 'Auditor', 'tipo' => 'texto'),
-			'digitador' => array('titulo' => 'Digitador', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'hoja'      => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
+			'auditor'   => ['titulo' => 'Auditor', 'tipo' => 'texto'],
+			'digitador' => ['titulo' => 'Digitador', 'tipo' => 'texto'],
+		];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
@@ -581,14 +583,14 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_detalle_hoja()
 	{
-		$arr_campos = array(
-			'ubicacion'   => array('titulo' => 'Ubicacion', 'tipo' => 'texto'),
-			'catalogo'    => array('titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'),
-			'descripcion' => array('titulo' => 'Descripcion', 'tipo' => 'texto'),
-			'lote'        => array('titulo' => 'Lote', 'tipo' => 'texto'),
-			'centro'      => array('titulo' => 'Centro', 'tipo' => 'texto'),
-			'almacen'     => array('titulo' => 'Almacen', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'ubicacion'   => ['titulo' => 'Ubicacion', 'tipo' => 'texto'],
+			'catalogo'    => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
+			'descripcion' => ['titulo' => 'Descripcion', 'tipo' => 'texto'],
+			'lote'        => ['titulo' => 'Lote', 'tipo' => 'texto'],
+			'centro'      => ['titulo' => 'Centro', 'tipo' => 'texto'],
+			'almacen'     => ['titulo' => 'Almacen', 'tipo' => 'texto'],
+		];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
 
@@ -606,17 +608,17 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_material()
 	{
-		$arr_campos = array();
+		$arr_campos = [];
 
 		if (request('incl_familias') === '1')
 		{
-			$arr_campos['nombre_fam'] = array('titulo' => 'Familia', 'tipo' => 'subtotal');
+			$arr_campos['nombre_fam'] = ['titulo' => 'Familia', 'tipo' => 'subtotal'];
 		}
 
-		$arr_campos['catalogo'] = array('titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/');
-		$arr_campos['descripcion'] = array('titulo' => 'Descripcion', 'tipo' => 'texto');
-		$arr_campos['um'] = array('titulo' => 'UM', 'tipo' => 'texto');
-		$arr_campos['pmp'] = array('titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp');
+		$arr_campos['catalogo'] = ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'];
+		$arr_campos['descripcion'] = ['titulo' => 'Descripcion', 'tipo' => 'texto'];
+		$arr_campos['um'] = ['titulo' => 'UM', 'tipo' => 'texto'];
+		$arr_campos['pmp'] = ['titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp'];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
@@ -635,17 +637,17 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_material_faltante()
 	{
-		$arr_campos = array(
-			'catalogo'      => array('titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'),
-			'descripcion'   => array('titulo' => 'Descripcion', 'tipo' => 'texto'),
-			'um'            => array('titulo' => 'UM', 'tipo' => 'texto'),
-			'q_faltante'    => array('titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero'),
-			'q_coincidente' => array('titulo' => 'Cant Coincidente', 'class' => 'text-center', 'tipo' => 'numero'),
-			'q_sobrante'    => array('titulo' => 'Cant Sobrante', 'class' => 'text-center', 'tipo' => 'numero'),
-			'v_faltante'    => array('titulo' => 'Valor Faltante', 'class' => 'text-center', 'tipo' => 'valor'),
-			'v_coincidente' => array('titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor'),
-			'v_sobrante'    => array('titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor'),
-		);
+		$arr_campos = [
+			'catalogo'      => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
+			'descripcion'   => ['titulo' => 'Descripcion', 'tipo' => 'texto'],
+			'um'            => ['titulo' => 'UM', 'tipo' => 'texto'],
+			'q_faltante'    => ['titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero'],
+			'q_coincidente' => ['titulo' => 'Cant Coincidente', 'class' => 'text-center', 'tipo' => 'numero'],
+			'q_sobrante'    => ['titulo' => 'Cant Sobrante', 'class' => 'text-center', 'tipo' => 'numero'],
+			'v_faltante'    => ['titulo' => 'Valor Faltante', 'class' => 'text-center', 'tipo' => 'valor'],
+			'v_coincidente' => ['titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor'],
+			'v_sobrante'    => ['titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor'],
+		];
 
 		$this->reporte->set_order_campos($arr_campos, 'catalogo');
 
@@ -661,13 +663,13 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_detalle_material()
 	{
-		$arr_campos = array(
-			'catalogo'    => array('titulo' => 'Catalogo', 'tipo' => 'texto'),
-			'descripcion' => array('titulo' => 'Descripcion', 'tipo' => 'texto'),
-			'ubicacion'   => array('titulo' => 'Ubicacion', 'tipo' => 'texto'),
-			'hoja'        => array('titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'),
-			'lote'        => array('titulo' => 'lote', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'catalogo'    => ['titulo' => 'Catalogo', 'tipo' => 'texto'],
+			'descripcion' => ['titulo' => 'Descripcion', 'tipo' => 'texto'],
+			'ubicacion'   => ['titulo' => 'Ubicacion', 'tipo' => 'texto'],
+			'hoja' => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
+			'lote' => ['titulo' => 'lote', 'tipo' => 'texto'],
+		];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
 
@@ -685,9 +687,9 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_ubicacion()
 	{
-		$arr_campos = array(
-			'ubicacion' => array('titulo' => 'Ubicaci&oacute;n', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'ubicacion' => ['titulo' => 'Ubicaci&oacute;n', 'tipo' => 'texto'],
+		];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
@@ -705,10 +707,10 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_tipos_ubicacion()
 	{
-		$arr_campos = array(
-			'tipo_ubicacion' => array('titulo' => 'Tipo Ubicacion', 'tipo' => 'subtotal'),
-			'ubicacion'      => array('titulo' => 'Ubicacion', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'tipo_ubicacion' => ['titulo' => 'Tipo Ubicacion', 'tipo' => 'subtotal'],
+			'ubicacion'      => ['titulo' => 'Ubicacion', 'tipo' => 'texto'],
+		];
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
@@ -726,22 +728,22 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_campos_reporte_ajustes()
 	{
-		$arr_campos = array(
-			'catalogo'     => array('titulo' => 'Material', 'tipo' => 'texto'),
-			'descripcion'  => array('titulo' => 'Descripci&oacute;n material', 'tipo' => 'texto'),
-			'lote'         => array('titulo' => 'Lote', 'tipo' => 'texto'),
-			'centro'       => array('titulo' => 'Centro', 'tipo' => 'texto'),
-			'almacen'      => array('titulo' => 'Almacen', 'tipo' => 'texto'),
-			'ubicacion'    => array('titulo' => 'Ubicaci&oacute;n', 'tipo' => 'texto'),
-			'hoja'         => array('titulo' => 'Hoja', 'tipo' => 'texto'),
-			'um'           => array('titulo' => 'UM', 'tipo' => 'texto'),
-			'stock_sap'    => array('titulo' => 'Stock SAP', 'class' => 'text-center', 'tipo' => 'numero'),
-			'stock_fisico' => array('titulo' => 'Stock F&iacute;sico', 'class' => 'text-center', 'tipo' => 'numero'),
-			'stock_ajuste' => array('titulo' => 'Stock Ajuste', 'class' => 'text-center', 'tipo' => 'numero'),
-			'stock_diff'   => array('titulo' => 'Stock Dif', 'class' => 'text-center', 'tipo' => 'numero'),
-			'tipo'         => array('titulo' => 'Tipo Dif', 'class' => 'text-center', 'tipo' => 'texto'),
-			'glosa_ajuste' => array('titulo' => 'Observaci&oacute;n', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'catalogo'     => ['titulo' => 'Material', 'tipo' => 'texto'],
+			'descripcion'  => ['titulo' => 'Descripci&oacute;n material', 'tipo' => 'texto'],
+			'lote'         => ['titulo' => 'Lote', 'tipo' => 'texto'],
+			'centro'       => ['titulo' => 'Centro', 'tipo' => 'texto'],
+			'almacen'      => ['titulo' => 'Almacen', 'tipo' => 'texto'],
+			'ubicacion'    => ['titulo' => 'Ubicaci&oacute;n', 'tipo' => 'texto'],
+			'hoja'         => ['titulo' => 'Hoja', 'tipo' => 'texto'],
+			'um'           => ['titulo' => 'UM', 'tipo' => 'texto'],
+			'stock_sap'    => ['titulo' => 'Stock SAP', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_fisico' => ['titulo' => 'Stock F&iacute;sico', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_ajuste' => ['titulo' => 'Stock Ajuste', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_diff'   => ['titulo' => 'Stock Dif', 'class' => 'text-center', 'tipo' => 'numero'],
+			'tipo'         => ['titulo' => 'Tipo Dif', 'class' => 'text-center', 'tipo' => 'texto'],
+			'glosa_ajuste' => ['titulo' => 'Observaci&oacute;n', 'tipo' => 'texto'],
+		];
 
 		$this->reporte->set_order_campos($arr_campos, 'catalogo');
 

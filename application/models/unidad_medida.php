@@ -36,15 +36,15 @@ class Unidad_medida extends ORM_Model {
 	 */
 	public function __construct($id_unidad_medida = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_unidades'),
 				'model_label'        => 'Unidad de medida',
 				'model_label_plural' => 'Unidades de medida',
 				'model_order_by'     => 'unidad',
-			),
-			'campos' => array(
-				'unidad' => array(
+			],
+			'campos' => [
+				'unidad' => [
 					'label'          => 'Unidad',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,21 +52,20 @@ class Unidad_medida extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'desc_unidad' => array(
+				],
+				'desc_unidad' => [
 					'label'          => 'Descripci&oacute;n unidad de medida',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_unidad_medida);
 	}
-
 
 	// --------------------------------------------------------------------
 

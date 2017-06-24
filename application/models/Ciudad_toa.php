@@ -36,15 +36,15 @@ class Ciudad_toa extends ORM_Model {
 	 */
 	public function __construct($id_ciudad = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_ciudades_toa'),
 				'model_label'        => 'Ciudad TOA',
 				'model_label_plural' => 'Ciudades TOA',
 				'model_order_by'     => 'orden',
-			),
-			'campos' => array(
-				'id_ciudad' => array(
+			],
+			'campos' => [
+				'id_ciudad' => [
 					'label'          => 'ID de la ciudad',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 5,
@@ -52,26 +52,25 @@ class Ciudad_toa extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-				'ciudad' => array(
+				],
+				'ciudad' => [
 					'label'          => 'Nombre de la ciudad',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre de la ciudad. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-				),
-				'orden' => array(
+				],
+				'orden' => [
 					'label'          => 'Orden de la ciudad',
 					'tipo'           => Orm_field::TIPO_INT,
 					'texto_ayuda'    => 'Orden de despliegue de la ciudad.',
 					'es_obligatorio' => TRUE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_ciudad);
 	}
-
 
 	// --------------------------------------------------------------------
 

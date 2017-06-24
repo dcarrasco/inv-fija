@@ -36,15 +36,15 @@ class Almacen extends ORM_Model {
 	 */
 	public function __construct($id_almacen = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_almacenes'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'almacen',
-			),
-			'campos' => array(
-				'almacen' => array(
+			],
+			'campos' => [
+				'almacen' => [
 					'label'          => 'Almac&eacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,9 +52,9 @@ class Almacen extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_almacen);
 	}

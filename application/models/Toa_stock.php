@@ -31,71 +31,71 @@ class Toa_stock extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $controles_stock_empresa_validation = array(
-		array(
+	public $controles_stock_empresa_validation = [
+		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mes',
 			'label' => 'Mes',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'dato',
 			'label' => 'Dato a desplegar',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Arreglo con validación formulario controles stock tecnicos
 	 *
 	 * @var array
 	 */
-	public $controles_stock_tecnicos_validation = array(
-		array(
+	public $controles_stock_tecnicos_validation = [
+		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mes',
 			'label' => 'Mes',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'dato',
 			'label' => 'Dato a desplegar',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mostrar',
 			'label' => 'Mostrar tecnicos',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Combo de unidades reporte control stock
 	 *
 	 * @var array
 	 */
-	public $combo_unidades_stock = array(
+	public $combo_unidades_stock = [
 		'monto'        => 'Suma de montos',
 		'unidades'     => 'Suma de unidades',
-	);
+	];
 
 	/**
 	 * Combo para mostrar todos los tecnivos o solo los con datos
 	 *
 	 * @var array
 	 */
-	public $combo_mostrar_stock_tecnicos = array(
+	public $combo_mostrar_stock_tecnicos = [
 		'todos' => 'Todos los t&eacute;cnicos',
 		'datos' => 'S&oacute;lo con datos',
-	);
+	];
 
 	// --------------------------------------------------------------------
 
@@ -137,25 +137,21 @@ class Toa_stock extends CI_Model {
 					->filter(function($stock) use ($almacen) {
 						return $stock['centro'] === $almacen['centro'] AND $stock['almacen'] === $almacen['cod_almacen'];
 					})->map_with_keys(function($stock) {
-						return array(
-							substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']
-						);
+						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
 					})->all();
 
 				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_almacen) {
 					return $valor + array_get($stock_almacen, $indice, 0);
 				})->all();
 
-				return array(
-					$almacen['centro'].$almacen['cod_almacen'] => array(
-						'tipo'        => $almacen['tipo'],
-						'centro'      => $almacen['centro'],
-						'cod_almacen' => $almacen['cod_almacen'],
-						'des_almacen' => $almacen['des_almacen'],
-						'actuaciones' => $actuaciones,
-						'con_datos'   => collect($actuaciones)->sum(),
-					)
-				);
+				return [$almacen['centro'].$almacen['cod_almacen'] => [
+					'tipo'        => $almacen['tipo'],
+					'centro'      => $almacen['centro'],
+					'cod_almacen' => $almacen['cod_almacen'],
+					'des_almacen' => $almacen['des_almacen'],
+					'actuaciones' => $actuaciones,
+					'con_datos'   => collect($actuaciones)->sum(),
+				]];
 			})->all();
 	}
 
@@ -239,7 +235,7 @@ class Toa_stock extends CI_Model {
 		}
 
 		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 		$stock = $this->_get_stock_tecnicos($empresa, $anomes, $dato_desplegar);
 
 		$arr_dias = get_arr_dias($anomes);
@@ -250,23 +246,19 @@ class Toa_stock extends CI_Model {
 					->filter(function($stock) use ($tecnico) {
 						return $stock['acreedor'] === $tecnico->id_tecnico;
 					})->map_with_keys(function($stock) {
-						return array(
-							substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']
-						);
+						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
 					})->all();
 
 				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_tecnico) {
 					return $valor + array_get($stock_tecnico, $indice, 0);
 				})->all();
 
-				return array(
-					$tecnico->id_tecnico => array(
-						'tecnico'     => $tecnico->tecnico,
-						'rut'         => $tecnico->rut,
-						'actuaciones' => $actuaciones,
-						'con_datos'   => collect($actuaciones)->sum(),
-					)
-				);
+				return [$tecnico->id_tecnico => [
+					'tecnico'     => $tecnico->tecnico,
+					'rut'         => $tecnico->rut,
+					'actuaciones' => $actuaciones,
+					'con_datos'   => collect($actuaciones)->sum(),
+				]];
 			})->all();
 	}
 
@@ -343,19 +335,19 @@ class Toa_stock extends CI_Model {
 			->where('d.es_sumable', 1)
 			->get()->result_array();
 
-		$arr_campos = array();
-		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'fecha');
-		$arr_campos['tipo']        = array('titulo' => 'Tipo Almac&eacute;n', 'tipo' => 'texto');
-		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
-		$arr_campos['almacen']     = array('titulo' => 'Almac&eacute;n', 'tipo' => 'texto');
-		$arr_campos['des_almacen'] = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
-		$arr_campos['material']    = array('titulo' => 'Material', 'tipo' => 'texto');
-		$arr_campos['descripcion'] = array('titulo' => 'Desc Material', 'tipo' => 'texto');
-		$arr_campos['lote']        = array('titulo' => 'Lote', 'tipo' => 'texto');
-		$arr_campos['umb']         = array('titulo' => 'Unidad', 'tipo' => 'texto');
-		$arr_campos['estado']      = array('titulo' => 'Estado', 'tipo' => 'texto');
-		$arr_campos['cantidad']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-		$arr_campos['valor']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$arr_campos = [];
+		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
+		$arr_campos['tipo']        = ['titulo' => 'Tipo Almac&eacute;n', 'tipo' => 'texto'];
+		$arr_campos['centro']      = ['titulo' => 'Centro', 'tipo' => 'texto'];
+		$arr_campos['almacen']     = ['titulo' => 'Almac&eacute;n', 'tipo' => 'texto'];
+		$arr_campos['des_almacen'] = ['titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto'];
+		$arr_campos['material']    = ['titulo' => 'Material', 'tipo' => 'texto'];
+		$arr_campos['descripcion'] = ['titulo' => 'Desc Material', 'tipo' => 'texto'];
+		$arr_campos['lote']        = ['titulo' => 'Lote', 'tipo' => 'texto'];
+		$arr_campos['umb']         = ['titulo' => 'Unidad', 'tipo' => 'texto'];
+		$arr_campos['estado']      = ['titulo' => 'Estado', 'tipo' => 'texto'];
+		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$this->reporte->set_order_campos($arr_campos, 'material');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -397,18 +389,18 @@ class Toa_stock extends CI_Model {
 			->order_by('material, lote')
 			->get()->result_array();
 
-		$arr_campos = array();
-		$arr_campos['fecha']       = array('titulo' => 'Fecha', 'tipo' => 'fecha');
-		$arr_campos['centro']      = array('titulo' => 'Centro', 'tipo' => 'texto');
-		$arr_campos['acreedor']    = array('titulo' => 'Cod T&eacute;cnico', 'tipo' => 'texto');
-		$arr_campos['tecnico']     = array('titulo' => 'Nombre T&eacute;cnico', 'tipo' => 'texto');
-		$arr_campos['material']    = array('titulo' => 'Material', 'tipo' => 'texto');
-		$arr_campos['descripcion'] = array('titulo' => 'Desc Material', 'tipo' => 'texto');
-		$arr_campos['lote']        = array('titulo' => 'Lote', 'tipo' => 'texto');
-		$arr_campos['umb']         = array('titulo' => 'Unidad', 'tipo' => 'texto');
-		$arr_campos['estado']      = array('titulo' => 'Estado', 'tipo' => 'texto');
-		$arr_campos['cantidad']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-		$arr_campos['valor']       = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$arr_campos = [];
+		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
+		$arr_campos['centro']      = ['titulo' => 'Centro', 'tipo' => 'texto'];
+		$arr_campos['acreedor']    = ['titulo' => 'Cod T&eacute;cnico', 'tipo' => 'texto'];
+		$arr_campos['tecnico']     = ['titulo' => 'Nombre T&eacute;cnico', 'tipo' => 'texto'];
+		$arr_campos['material']    = ['titulo' => 'Material', 'tipo' => 'texto'];
+		$arr_campos['descripcion'] = ['titulo' => 'Desc Material', 'tipo' => 'texto'];
+		$arr_campos['lote']        = ['titulo' => 'Lote', 'tipo' => 'texto'];
+		$arr_campos['umb']         = ['titulo' => 'Unidad', 'tipo' => 'texto'];
+		$arr_campos['estado']      = ['titulo' => 'Estado', 'tipo' => 'texto'];
+		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$this->reporte->set_order_campos($arr_campos, 'material');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);

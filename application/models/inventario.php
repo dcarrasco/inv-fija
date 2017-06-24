@@ -36,45 +36,40 @@ class Inventario extends ORM_Model {
 	 */
 	public function __construct($id_inventario = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_inventarios'),
 				'model_label'        => 'Inventario',
 				'model_label_plural' => 'Inventarios',
 				'model_order_by'     => 'nombre',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'   => Orm_field::TIPO_ID,
-				),
-				'nombre' => array(
+			],
+			'campos' => [
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'nombre' => [
 					'label'          => 'Nombre del inventario',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'activo' => array(
+				],
+				'activo' => [
 					'label'          => 'Activo',
 					'tipo'           => Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
-				),
-				'tipo_inventario' => array(
+				],
+				'tipo_inventario' => [
 					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'tipo_inventario'
-					),
+					'relation'       => ['model' => 'tipo_inventario'],
 					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
 					'es_obligatorio' => TRUE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_inventario);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -87,7 +82,6 @@ class Inventario extends ORM_Model {
 	{
 		return (string) $this->nombre;
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -105,7 +99,7 @@ class Inventario extends ORM_Model {
 		{
 			$this->db
 				->where('id <>', (int) $this->id)
-				->update($this->get_model_tabla(), array('activo' => 0));
+				->update($this->get_model_tabla(), ['activo' => 0]);
 		}
 	}
 
@@ -119,7 +113,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_id_inventario_activo()
 	{
-		$this->find('first', array('conditions' => array('activo' => 1)));
+		$this->find('first', ['conditions' => ['activo' => 1]]);
 
 		return (int) $this->get_model_id();
 	}
@@ -150,7 +144,7 @@ class Inventario extends ORM_Model {
 	{
 		$registro = $this->db
 			->select('max(hoja) as max_hoja')
-			->get_where($this->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id))
+			->get_where($this->config->item('bd_detalle_inventario'), ['id_inventario' => $this->id])
 			->row();
 
 		return ($registro->max_hoja);
@@ -166,7 +160,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function borrar_detalle_inventario()
 	{
-		$this->db->delete($this->config->item('bd_detalle_inventario'), array('id_inventario' => $this->id));
+		$this->db->delete($this->config->item('bd_detalle_inventario'), ['id_inventario' => $this->id]);
 	}
 
 
@@ -184,8 +178,8 @@ class Inventario extends ORM_Model {
 		$count_error = 0;
 		$num_linea   = 0;
 
-		$arr_lineas_error = array();
-		$arr_bulk_insert  = array();
+		$arr_lineas_error = [];
+		$arr_bulk_insert  = [];
 		$script_carga     = '';
 
 		foreach(file($archivo) as $linea)
@@ -220,7 +214,12 @@ class Inventario extends ORM_Model {
 			$msj_termino .= '<br>Lineas con errores (' . implode(', ', $arr_lineas_error) . ')';
 		}
 
-		return array('script' => $script_carga, 'regs_ok' => $count_ok, 'regs_error' => $count_error, 'msj_termino' => $msj_termino);
+		return [
+			'script'      => $script_carga,
+			'regs_ok'     => $count_ok,
+			'regs_error'  => $count_error,
+			'msj_termino' => $msj_termino,
+		];
 	}
 
 
@@ -252,7 +251,7 @@ class Inventario extends ORM_Model {
 		}
 
 		$arr_datos = array_combine(
-			array('ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'um', 'stock_sap', 'hoja'),
+			['ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'um', 'stock_sap', 'hoja'],
 			$arr_datos
 		);
 		extract($arr_datos);
@@ -270,7 +269,7 @@ class Inventario extends ORM_Model {
 		{
 			if (is_numeric($stock_sap) AND is_numeric($hoja))
 			{
-				return (array(
+				return [
 					$this->security->get_csrf_token_name() => $this->security->get_csrf_hash(),
 					'id'                 => 0,
 					'id_inventario'      => $this->id,
@@ -292,7 +291,7 @@ class Inventario extends ORM_Model {
 					'reg_nuevo'          => '',
 					'stock_ajuste'       => 0,
 					'glosa_ajuste'       => '',
-				));
+				];
 
 			}
 			else

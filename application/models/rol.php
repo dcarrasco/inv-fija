@@ -36,56 +36,51 @@ class Rol extends ORM_Model {
 	 */
 	public function __construct($id_rol = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_rol'),
 				'model_label'        => 'Rol',
 				'model_label_plural' => 'Roles',
 				'model_order_by'     => 'rol',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'   => Orm_field::TIPO_ID,
-				),
-				'id_app' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'app',
-					),
-					'texto_ayuda'    => 'Aplicaci&oacute;n a la que pertenece el rol.',
-					'onchange'       => form_onchange('id_app', 'modulo', 'acl_config/get_select_modulo'),
-				),
-				'rol' => array(
+			],
+			'campos' => [
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'id_app' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => ['model' => 'app'],
+					'texto_ayuda' => 'Aplicaci&oacute;n a la que pertenece el rol.',
+					'onchange'    => form_onchange('id_app', 'modulo', 'acl_config/get_select_modulo'),
+				],
+				'rol' => [
 					'label'          => 'Rol',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del rol. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'descripcion' => array(
-					'label'          => 'Descripci&oacute;n del rol',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 100,
-					'texto_ayuda'    => 'Descripci&oacute;n del rol. M&aacute;ximo 100 caracteres.',
-				),
-				'modulo' => array(
-					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+				],
+				'descripcion' => [
+					'label'       => 'Descripci&oacute;n del rol',
+					'tipo'        => Orm_field::TIPO_CHAR,
+					'largo'       => 100,
+					'texto_ayuda' => 'Descripci&oacute;n del rol. M&aacute;ximo 100 caracteres.',
+				],
+				'modulo' => [
+					'tipo'     => Orm_field::TIPO_HAS_MANY,
+					'relation' => [
 						'model'         => 'modulo',
 						'join_table'    => 'acl_rol_modulo',
-						'id_one_table'  => array('id_rol'),
-						'id_many_table' => array('id_modulo'),
-						'conditions'    => array('id_app' => '@field_value:id_app:NULL'),
-					),
+						'id_one_table'  => ['id_rol'],
+						'id_many_table' => ['id_modulo'],
+						'conditions'    => ['id_app' => '@field_value:id_app:NULL'],
+					],
 					'texto_ayuda'    => 'M&oacute;dulos del rol.',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_rol);
 	}
-
 
 	// --------------------------------------------------------------------
 

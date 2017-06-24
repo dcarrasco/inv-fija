@@ -36,39 +36,34 @@ class Tipo_ubicacion extends ORM_Model {
 	 */
 	public function __construct($id_tipo_ubicacion = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tipo_ubicacion'),
 				'model_label'        => 'Tipo de ubicaci&oacute;n',
 				'model_label_plural' => 'Tipos de ubicaci&oacute;n',
 				'model_order_by'     => 'tipo_inventario, tipo_ubicacion',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'   => Orm_field::TIPO_ID,
-				),
-				'tipo_inventario' => array(
+			],
+			'campos' => [
+				'id'              => ['tipo' => Orm_field::TIPO_ID],
+				'tipo_inventario' => [
 					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'tipo_inventario'
-					),
+					'relation'       => ['model' => 'tipo_inventario'],
 					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
 					'es_obligatorio' => TRUE,
-				),
-				'tipo_ubicacion' => array(
+				],
+				'tipo_ubicacion' => [
 					'label'          => 'Tipo de ubicaci&oacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 30,
 					'texto_ayuda'    => 'M&aacute;ximo 30 caracteres.',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				),
-			),
-		);
+					'es_unico'       => TRUE,
+				],
+			],
+		];
 
 		parent::__construct($id_tipo_ubicacion);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -81,7 +76,6 @@ class Tipo_ubicacion extends ORM_Model {
 	{
 		return (string) $this->tipo_ubicacion;
 	}
-
 
 }
 /* End of file tipo_ubicacion.php */

@@ -36,15 +36,15 @@ class Familia extends ORM_Model {
 	 */
 	public function __construct($id_familia = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_familias'),
 				'model_label'        => 'Familia',
 				'model_label_plural' => 'Familias',
 				'model_order_by'     => 'codigo',
-			),
-			'campos' => array(
-				'codigo' => array(
+			],
+			'campos' => [
+				'codigo' => [
 					'label'          => 'C&oacute;digo de la familia',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
@@ -52,32 +52,31 @@ class Familia extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-				'tipo' => array(
-					'label'          => 'Tipo de familia',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 30,
-					'texto_ayuda'    => 'Seleccione el tipo de familia.',
-					'choices'        => array(
-						'FAM' => 'Familia',
-						'SUBFAM' => 'SubFamilia'
-					),
+				],
+				'tipo' => [
+					'label'       => 'Tipo de familia',
+					'tipo'        => Orm_field::TIPO_CHAR,
+					'largo'       => 30,
+					'texto_ayuda' => 'Seleccione el tipo de familia.',
+					'choices'     => [
+						'FAM'    => 'Familia',
+						'SUBFAM' => 'SubFamilia',
+					],
 					'es_obligatorio' => TRUE,
-				),
-				'nombre' => array(
+				],
+				'nombre' => [
 					'label'          => 'Nombre de la familia',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_familia);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -90,7 +89,6 @@ class Familia extends ORM_Model {
 	{
 		return (string) $this->nombre;
 	}
-
 
 }
 /* End of file familia.php */

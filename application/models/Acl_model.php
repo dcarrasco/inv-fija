@@ -31,51 +31,51 @@ class Acl_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $login_validation = array(
-		array(
+	public $login_validation = [
+		[
 			'field' => 'usr',
 			'label' => 'Usuario',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'pwd',
 			'label' => 'Password',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'remember_me',
 			'label' => 'Recordarme',
 			'rules' => 'trim'
-		),
-	);
+		],
+	];
 
 	/**
 	 * Reglas para formulario cambiar password
 	 *
 	 * @var array
 	 */
-	public $change_password_validation = array(
-		array(
+	public $change_password_validation = [
+		[
 			'field' => 'usr',
 			'label' => 'Usuario',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'pwd_old',
 			'label' => 'Clave Anterior',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'pwd_new1',
 			'label' => 'Clave Nueva',
 			'rules' => 'trim|required|min_length[8]|password_validation'
-		),
-		array(
+		],
+		[
 			'field' => 'pwd_new2',
 			'label' => 'Clave Nueva (reingreso)',
 			'rules' => 'trim|required|matches[pwd_new1]'
-		),
-	);
+		],
+	];
 
 	/**
 	 * Cantidad de veces que el usuario puede loguearse erroneamente,
@@ -177,7 +177,7 @@ class Acl_model extends CI_Model {
 		$user = empty($usuario) ? $this->get_user() : $usuario;
 
 		$registro = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('username' => $user))
+			->get_where($this->config->item('bd_usuarios'), ['username' => $user])
 			->row_array();
 
 		return is_array($registro) ? $registro['id'] : '';
@@ -289,11 +289,11 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('username', $usuario)
-			->update($this->config->item('bd_usuarios'), array(
+			->update($this->config->item('bd_usuarios'), [
 				'fecha_login'  => date('Y-m-d H:i:s'),
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
-			));
+			]);
 	}
 
 	// --------------------------------------------------------------------
@@ -313,14 +313,14 @@ class Acl_model extends CI_Model {
 			return '';
 		}
 
-		$captcha_config = array(
-			'img_path'      => './img/captcha/',
-			'img_url'       => base_url() . 'img/captcha/',
-			'word'          => genera_captcha_word(),
-			'img_width'     => 260,
-			'img_height'    => 50,
-			'font_size'     => 30,
-		);
+		$captcha_config = [
+			'img_path'   => './img/captcha/',
+			'img_url'    => base_url() . 'img/captcha/',
+			'word'       => genera_captcha_word(),
+			'img_width'  => 260,
+			'img_height' => 50,
+			'font_size'  => 30,
+		];
 
 		$captcha = create_captcha($captcha_config);
 
@@ -346,10 +346,9 @@ class Acl_model extends CI_Model {
 	public function use_captcha($usuario = '')
 	{
 		$row_user = $this->db
-			->get_where($this->config->item('bd_usuarios'), array(
+			->get_where($this->config->item('bd_usuarios'), [
 				'username' => (string) $usuario,
-			))
-			->row();
+			])->row();
 
 		$login_attempts = isset($row_user) ? $row_user->login_errors : 0;
 
@@ -371,11 +370,11 @@ class Acl_model extends CI_Model {
 		$this->_delete_captchas_session($session_id);
 
 		$this->db
-			->insert($this->config->item('bd_captcha'), array(
+			->insert($this->config->item('bd_captcha'), [
 				'captcha_time' => (int) $time,
 				'session_id'   => (string) $session_id,
 				'word'         => (string) $word,
-			));
+			]);
 	}
 
 	// --------------------------------------------------------------------
@@ -419,13 +418,11 @@ class Acl_model extends CI_Model {
 	public function validar_captcha($captcha = '', $session_id = '')
 	{
 		$row_captcha = $this->db
-			->get_where($this->config->item('bd_captcha'),
-				array(
-					'session_id' => $session_id,
-					'word'       => $captcha,
-					'captcha_time >' => time() - $this->captcha_duration,
-				))
-			->row();
+			->get_where($this->config->item('bd_captcha'), [
+				'session_id' => $session_id,
+				'word'       => $captcha,
+				'captcha_time >' => time() - $this->captcha_duration,
+			])->row();
 
 		return isset($row_captcha);
 	}
@@ -442,9 +439,9 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('username', $usuario)
-			->update($this->config->item('bd_usuarios'), array(
+			->update($this->config->item('bd_usuarios'), [
 				'login_errors'  => 0,
-			));
+			]);
 	}
 
 	// --------------------------------------------------------------------
@@ -514,11 +511,11 @@ class Acl_model extends CI_Model {
 	 */
 	private function _set_session_data($usuario, $remember = FALSE)
 	{
-		$this->session->set_userdata(array(
-			'user'        => $usuario,
-			'modulos'     => json_encode($this->_get_llaves_modulos($usuario)),
-			'menu_app'    => json_encode($this->_get_menu_usuario($usuario)),
-		));
+		$this->session->set_userdata([
+			'user'     => $usuario,
+			'modulos'  => json_encode($this->_get_llaves_modulos($usuario)),
+			'menu_app' => json_encode($this->_get_menu_usuario($usuario)),
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -568,11 +565,11 @@ class Acl_model extends CI_Model {
 	 */
 	public function delete_cookie_data()
 	{
-		$this->input->set_cookie(array(
+		$this->input->set_cookie([
 			'name'   => 'login_token',
 			'value'  => '',
 			'expire' => '',
-		));
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -589,25 +586,19 @@ class Acl_model extends CI_Model {
 		$salt  = $this->_create_salt();
 
 		// Graba la cookie que recuerda la sesion
-		$this->input->set_cookie(array(
-			'name'  => 'login_token',
-			'value' => json_encode(array(
-				'usr'   => $usuario,
-				'token' => $token,
-			)),
+		$this->input->set_cookie([
+			'name'   => 'login_token',
+			'value'  => json_encode(['usr' => $usuario, 'token' => $token]),
 			'expire' => $this->rememberme_cookie_duration,
-		));
+		]);
 
 		// Graba el registro en la BD
-		$this->db->insert(
-			$this->config->item('bd_pcookies'),
-			array(
-				'user_id'   => $usuario,
-				'cookie_id' => $this->_hash_password($token, $salt),
-				'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
-				'salt'      => $salt,
-			)
-		);
+		$this->db->insert($this->config->item('bd_pcookies'), [
+			'user_id'   => $usuario,
+			'cookie_id' => $this->_hash_password($token, $salt),
+			'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
+			'salt'      => $salt,
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -676,17 +667,16 @@ class Acl_model extends CI_Model {
 		{
 			// recupera cookies almacenadas
 			$reg_pcookies = $this->db
-				->get_where($this->config->item('bd_pcookies'), array(
-					'user_id'   => $token_object->usr,
-				))
-				->result_array();
+				->get_where($this->config->item('bd_pcookies'), [
+					'user_id' => $token_object->usr,
+				])->result_array();
 
 			$where = collect($reg_pcookies)
 				->map(function($cookie) {
 					return collect($cookie);
 				})->first(function($pcookie) use ($token_object) {
 					return $this->_valida_password($token_object->token, $pcookie->get('cookie_id'));
-				})->only(array('user_id','cookie_id'))
+				})->only(['user_id', 'cookie_id'])
 				->all();
 
 			// eliminamos la cookie utilizada en la BD
@@ -755,10 +745,9 @@ class Acl_model extends CI_Model {
 
 		// recupera cookies almacenadas
 		$reg_pcookies = $this->db
-			->get_where($this->config->item('bd_pcookies'), array(
-				'user_id'   => $token_object->usr,
-			))
-			->result_array();
+			->get_where($this->config->item('bd_pcookies'), [
+				'user_id' => $token_object->usr,
+			])->result_array();
 
 		return collect($reg_pcookies)
 			->map(function($cookie) {
@@ -815,7 +804,7 @@ class Acl_model extends CI_Model {
 	public function tiene_clave($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('username' => $usuario))
+			->get_where($this->config->item('bd_usuarios'), ['username' => $usuario])
 			->row_array();
 
 		if (count($arr_rs) > 0)
@@ -839,7 +828,7 @@ class Acl_model extends CI_Model {
 	public function existe_usuario($usuario = '')
 	{
 		$regs = $this->db
-			->get_where($this->config->item('bd_usuarios'), array('username' => $usuario))
+			->get_where($this->config->item('bd_usuarios'), ['username' => $usuario])
 			->num_rows();
 
 		return ($regs > 0) ? TRUE : FALSE;
@@ -863,9 +852,9 @@ class Acl_model extends CI_Model {
 		{
 			$this->db
 				->where('username', $usuario)
-				->update($this->config->item('bd_usuarios'), array(
+				->update($this->config->item('bd_usuarios'), [
 					'password' => $this->_hash_password($clave_new)
-				));
+				]);
 
 			return TRUE;
 		}

@@ -36,15 +36,15 @@ class Catalogo_foto extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_catalogos_fotos'),
 				'model_label'        => 'Cat&aacute;logo foto',
 				'model_label_plural' => 'Cat&aacute;logos fotos',
 				'model_order_by'     => 'catalogo',
-			),
-			'campos' => array(
-				'catalogo' => array(
+			],
+			'campos' => [
+				'catalogo' => [
 					'label'          => 'Cat&aacute;logo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
@@ -52,19 +52,18 @@ class Catalogo_foto extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'foto' => array(
+				],
+				'foto' => [
 					'label'          => 'Foto del material',
 					'tipo'           => 'picture',
 					'texto_ayuda'    => 'Foto del material.',
 					'es_obligatorio' => TRUE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_catalogo);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -77,9 +76,6 @@ class Catalogo_foto extends ORM_Model {
 	{
 		return (string) $this->catalogo;
 	}
-
-
-
 
 }
 /* End of file catalogo_foto.php */

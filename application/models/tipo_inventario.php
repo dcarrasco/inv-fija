@@ -36,15 +36,15 @@ class Tipo_inventario extends ORM_Model {
 	 */
 	public function __construct($id_tipo_inventario = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tipos_inventario'),
 				'model_label'        => 'Tipo de inventario',
 				'model_label_plural' => 'Tipos de inventario',
 				'model_order_by'     => 'desc_tipo_inventario',
-			),
-			'campos' => array(
-				'id_tipo_inventario' => array(
+			],
+			'campos' => [
+				'id_tipo_inventario' => [
 					'label'          => 'Tipo de inventario',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,21 +52,20 @@ class Tipo_inventario extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-				'desc_tipo_inventario' => array(
+				],
+				'desc_tipo_inventario' => [
 					'label'          => 'Descripci&oacute;n tipo de inventario',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_tipo_inventario);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -79,7 +78,6 @@ class Tipo_inventario extends ORM_Model {
 	{
 		return (string) $this->desc_tipo_inventario;
 	}
-
 
 }
 
