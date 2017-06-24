@@ -47,28 +47,28 @@ class Stock_sap extends Controller_base {
 		parent::__construct();
 		$this->lang->load('stock');
 
-		$this->set_menu_modulo(array(
-			'stock_movil' => array(
+		$this->set_menu_modulo([
+			'stock_movil' => [
 				'url'   => $this->router->class . '/mostrar_stock/MOVIL',
 				'texto' => $this->lang->line('stock_sap_menu_movil'),
 				'icon'  => 'mobile',
-			),
-			'stock_fija' => array(
+			],
+			'stock_fija' => [
 				'url'   => $this->router->class . '/mostrar_stock/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_fijo'),
 				'icon'  => 'phone',
-			),
-			'transito_fija' => array(
+			],
+			'transito_fija' => [
 				'url'   => $this->router->class . '/transito/FIJA',
 				'texto' => $this->lang->line('stock_sap_menu_transito'),
 				'icon'  => 'send',
-			),
-			'reporte_clasif' => array(
+			],
+			'reporte_clasif' => [
 				'url'   => $this->router->class . '/reporte_clasif',
 				'texto' => $this->lang->line('stock_sap_menu_clasif'),
 				'icon'  => 'th',
-			),
-		));
+			],
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -95,14 +95,14 @@ class Stock_sap extends Controller_base {
 	{
 		$this->load->model('stock_sap_model');
 
-		$arr_mostrar = collect(array('fecha', 'tipo_articulo'))
+		$arr_mostrar = collect(['fecha', 'tipo_articulo'])
 			->merge(collect(request())
-				->only(array('sel_tiposalm','almacen','material','lote','tipo_stock'))
+				->only(['sel_tiposalm','almacen','material','lote','tipo_stock'])
 				->keys()
 			)->all();
 
 		$tabla_stock = '';
-		$datos_grafico = array();
+		$datos_grafico = [];
 		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
 		$almacen_sap = new Almacen_sap;
 		$tipoalmacen_sap = new Tipoalmacen_sap;
@@ -114,7 +114,7 @@ class Stock_sap extends Controller_base {
 
 		$is_form_valid = $this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation)->run();
 
-		$data = array(
+		$data = [
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
 			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, request()) : '',
 			'combo_almacenes' => $combo_almacenes,
@@ -122,7 +122,7 @@ class Stock_sap extends Controller_base {
 			'tipo_op'         => $tipo_op,
 			'arr_mostrar'     => $arr_mostrar,
 			'datos_grafico'   => $datos_grafico,
-		);
+		];
 
 		if (request('excel'))
 		{
@@ -131,7 +131,7 @@ class Stock_sap extends Controller_base {
 		}
 		else
 		{
-			app_render_view(array('stock_sap/ver_stock_form', 'stock_sap/ver_stock_datos'), $data);
+			app_render_view(['stock_sap/ver_stock_form', 'stock_sap/ver_stock_datos'], $data);
 		}
 	}
 
@@ -155,15 +155,13 @@ class Stock_sap extends Controller_base {
 			'detalle_series'.$centro.$almacen.$material.$lote,
 			$stock,
 			'get_detalle_series',
-			array($centro, $almacen, $material, $lote)
+			[$centro, $almacen, $material, $lote]
 		);
 
-		$data = array(
+		app_render_view('stock_sap/detalle_series', [
 			'menu_modulo'    => $this->get_menu_modulo(''),
 			'detalle_series' => $detalle_series,
-		);
-
-		app_render_view('stock_sap/detalle_series', $data);
+		]);
 	}
 
 
@@ -181,12 +179,12 @@ class Stock_sap extends Controller_base {
 
 		$tabla_stock = '';
 
-		$arr_mostrar_todos = array('almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor');
-		$arr_mostrar = collect(array('fecha', 'almacen', 'acreedor', 'des_proveedor'))
+		$arr_mostrar_todos = ['almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor'];
+		$arr_mostrar = collect(['fecha', 'almacen', 'acreedor', 'des_proveedor'])
 			->merge(collect(request())->only($arr_mostrar_todos)->keys())
 			->all();
 
-		$arr_filtrar_todos = array('fecha', 'almacen', 'tipo_stock', 'material', 'lote');
+		$arr_filtrar_todos = ['fecha', 'almacen', 'tipo_stock', 'material', 'lote'];
 		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
 
 		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
@@ -199,14 +197,14 @@ class Stock_sap extends Controller_base {
 
 		$combo_fechas = $stock->get_combo_fechas();
 
-		$data = array(
+		$data = [
 			'menu_modulo'            => $this->get_menu_modulo('transito_fija'),
 			'tabla_stock'            => $tabla_stock,
 			'combo_fechas_todas'     => $combo_fechas[request('sel_fechas','ultimodia')],
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
 			'datos_grafico'          => '',
-		);
+		];
 
 		if (request('excel'))
 		{
@@ -215,7 +213,7 @@ class Stock_sap extends Controller_base {
 		}
 		else
 		{
-			app_render_view(array('stock_sap/ver_stock_form_transito', 'stock_sap/ver_stock_datos'), $data);
+			app_render_view(['stock_sap/ver_stock_form_transito', 'stock_sap/ver_stock_datos'], $data);
 		}
 	}
 
@@ -233,15 +231,15 @@ class Stock_sap extends Controller_base {
 		$fechas = request('fechas', NULL);
 		$borrar_datos = request('sel_borrar') === 'borrar';
 
-		$combo_operacion = array('FIJA' => 'Fija', 'MOVIL' => 'Movil');
+		$combo_operacion = ['FIJA' => 'Fija', 'MOVIL' => 'Movil'];
 
 		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
 		$combo_fechas = $stock->get_combo_fechas();
 
 		$reporte = $stock->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
 
-		$arrjs_reporte = array();
-		$js_slices     = array();
+		$arrjs_reporte = [];
+		$js_slices     = [];
 		if (count($reporte['datos']) > 0)
 		{
 			foreach ($reporte['datos'] as $linea)
@@ -251,7 +249,7 @@ class Stock_sap extends Controller_base {
 			}
 		}
 
-		$view_data = array(
+		app_render_view('stock_sap/reporte_clasif', [
 			'menu_modulo'     => $this->get_menu_modulo('reporte_clasif'),
 			'combo_fechas'    => $combo_fechas['ultimodia'],
 			'combo_operacion' => $combo_operacion,
@@ -261,9 +259,7 @@ class Stock_sap extends Controller_base {
 			'reporte'         => $reporte,
 			'reporte_js'      => '[[\'Clasificacion\', \'Monto\'], ' . implode(', ', $arrjs_reporte) . ']',
 			'js_slices'       => '[' . implode(',', $js_slices). ']',
-		);
-
-		app_render_view('stock_sap/reporte_clasif', $view_data);
+		]);
 	}
 
 

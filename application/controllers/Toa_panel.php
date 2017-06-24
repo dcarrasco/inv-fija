@@ -75,17 +75,17 @@ class Toa_panel extends Controller_base {
 			->set_rules($this->toa_model->panel_validation)
 			->run();
 
-		$datos = array(
-			'combo_empresas' => array_merge($empresa_toa->find('list'),	array('***' => 'Todas')),
+		$datos = [
+			'combo_empresas' => array_merge($empresa_toa->find('list'),	['***' => 'Todas']),
 			'form_validated' => FALSE,
-		);
+		];
 
 		if ($is_form_valid)
 		{
 			$sel_empresa = request('empresa');
 			$sel_mes     = request('mes');
 
-			$datos = array_merge($datos, array(
+			$datos = array_merge($datos, [
 				'form_validated'               => TRUE,
 				'cant_peticiones_empresa'      => $this->toa_model->get_resumen_panel_gchart('SAP_Q_PET', $sel_empresa, $sel_mes),
 				'cant_peticiones_empresa_proy' => $this->toa_model->get_resumen_panel_proyeccion('SAP_Q_PET', $sel_empresa, $sel_mes),
@@ -93,9 +93,9 @@ class Toa_panel extends Controller_base {
 				'monto_peticiones_empresa'      => $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_PET', $sel_empresa, $sel_mes),
 				'monto_peticiones_empresa_proy' => $this->toa_model->get_resumen_panel_proyeccion('SAP_MONTO_PET', $sel_empresa, $sel_mes),
 
-				'cant_peticiones_instala' => $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_PET_INSTALA', 'toa' => 'TOA_Q_PET_INSTALA'), $sel_empresa, $sel_mes),
-				'cant_peticiones_repara'  => $this->toa_model->get_resumen_panel_gchart(array('sap'  => 'SAP_Q_PET_REPARA', 'toa' => 'TOA_Q_PET_REPARA'), $sel_empresa, $sel_mes),
-				'cant_tecnicos_empresa'   => $this->toa_model->get_resumen_panel_gchart(array('sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'), $sel_empresa, $sel_mes),
+				'cant_peticiones_instala' => $this->toa_model->get_resumen_panel_gchart(['sap' => 'SAP_Q_PET_INSTALA', 'toa' => 'TOA_Q_PET_INSTALA'], $sel_empresa, $sel_mes),
+				'cant_peticiones_repara'  => $this->toa_model->get_resumen_panel_gchart(['sap'  => 'SAP_Q_PET_REPARA', 'toa' => 'TOA_Q_PET_REPARA'], $sel_empresa, $sel_mes),
+				'cant_tecnicos_empresa'   => $this->toa_model->get_resumen_panel_gchart(['sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'], $sel_empresa, $sel_mes),
 				'stock_empresa'           => $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes),
 				'stock_tecnicos_empresa'  => $this->toa_model->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes),
 
@@ -105,7 +105,7 @@ class Toa_panel extends Controller_base {
 
 				'proy_q_pet'     => fmt_cantidad($this->toa_model->get_resumen_usage('SAP_Q_PET', $sel_empresa, $sel_mes)/$this->toa_model->get_resumen_panel_porcentaje_mes('SAP_Q_PET', $sel_empresa, $sel_mes)),
 				'proy_monto_pet' => fmt_cantidad($this->toa_model->get_resumen_usage('SAP_MONTO_PET', $sel_empresa, $sel_mes)/$this->toa_model->get_resumen_panel_porcentaje_mes('SAP_MONTO_PET', $sel_empresa, $sel_mes)),
-			));
+			]);
 
 		}
 

@@ -49,58 +49,58 @@ class Inventario_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('inventario');
 
-		$this->set_menu_modulo(array(
-			'auditor' => array(
+		$this->set_menu_modulo([
+			'auditor' => [
 				'url'   => $this->router->class . '/listado/auditor/',
 				'texto' => $this->lang->line('inventario_config_menu_auditores'),
 				'icon'  => 'user',
-			),
-			'familia' => array(
+			],
+			'familia' => [
 				'url'   => $this->router->class . '/listado/familia',
 				'texto' => $this->lang->line('inventario_config_menu_familias'),
 				'icon'  => 'th',
-			),
-			'catalogo' => array(
+			],
+			'catalogo' => [
 				'url'   => $this->router->class . '/listado/catalogo',
 				'texto' => $this->lang->line('inventario_config_menu_materiales'),
 				'icon'  => 'barcode',
-			),
-			'tipo_inventario' => array(
+			],
+			'tipo_inventario' => [
 				'url'   => $this->router->class . '/listado/tipo_inventario',
 				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
 				'icon'  => 'th',
-			),
-			'inventario' => array(
+			],
+			'inventario' => [
 				'url'   => $this->router->class . '/listado/inventario',
 				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
 				'icon'  => 'list',
-			),
-			'tipo_ubicacion' => array(
+			],
+			'tipo_ubicacion' => [
 				'url'   => $this->router->class . '/listado/tipo_ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
 				'icon'  => 'th',
-			),
-			'ubicaciones' => array(
+			],
+			'ubicaciones' => [
 				'url'   => $this->router->class . '/ubicacion_tipo_ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
 				'icon'  => 'map-marker',
-			),
-			'centro' => array(
+			],
+			'centro' => [
 				'url'   => $this->router->class . '/listado/centro',
 				'texto' => $this->lang->line('inventario_config_menu_centros'),
 				'icon'  => 'th',
-			),
-			'almacen' => array(
+			],
+			'almacen' => [
 				'url'   => $this->router->class . '/listado/almacen',
 				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
 				'icon'  => 'home',
-			),
-			'unidad_medida' => array(
+			],
+			'unidad_medida' => [
 				'url'   => $this->router->class . '/listado/unidad_medida',
 				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
 				'icon'  => 'balance-scale',
-			),
-		));
+			],
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -118,7 +118,8 @@ class Inventario_config extends Orm_controller {
 
 		$this->load->library('pagination');
 		$limite_por_pagina = 15;
-		$config_pagination = array(
+
+		$this->pagination->initialize([
 			'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
 			'per_page'    => $limite_por_pagina,
 			'base_url'    => site_url($this->router->class . '/ubicacion_tipo_ubicacion'),
@@ -145,8 +146,7 @@ class Inventario_config extends Orm_controller {
 			'last_link'   => 'Ultimo',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
-		);
-		$this->pagination->initialize($config_pagination);
+		]);
 
 		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($limite_por_pagina, $pagina);
 
@@ -165,13 +165,13 @@ class Inventario_config extends Orm_controller {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$arr_combo_tipo_ubic = array();
+			$arr_combo_tipo_ubic = [];
 
 			foreach($datos_hoja as $registro)
 			{
 				if ( ! array_key_exists($registro['tipo_inventario'], $arr_combo_tipo_ubic))
 				{
-					$arr_combo_tipo_ubic[$registro['tipo_inventario']] = array();
+					$arr_combo_tipo_ubic[$registro['tipo_inventario']] = [];
 				}
 			}
 
@@ -180,15 +180,13 @@ class Inventario_config extends Orm_controller {
 				$arr_combo_tipo_ubic[$llave] = $this->ubicacion_model->get_combo_tipos_ubicacion($llave);
 			}
 
-			$data = array(
+			app_render_view('ubicacion_tipo_ubicacion', [
 				'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 				'datos_hoja'             => $datos_hoja,
 				'combo_tipos_inventario' => $tipo_inventario->find('list'),
 				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 				'links_paginas'          => $this->pagination->create_links(),
-			);
-
-			app_render_view('ubicacion_tipo_ubicacion', $data);
+			]);
 		}
 		else
 		{

@@ -107,14 +107,12 @@ class Login extends Controller_base {
 
 		$captcha_img  = $this->acl_model->get_captcha_img(request('usr'));
 
-		$data = array(
+		app_render_view('ACL/login', [
 			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
 			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
 			'vista_login'  => TRUE,
-		);
-
-		app_render_view('ACL/login', $data);
+		]);
 	}
 
 
@@ -167,19 +165,15 @@ class Login extends Controller_base {
 
 		$usuario = request('usr', $usr_param);
 
-		$data = array(
+		app_render_view('ACL/cambio_password', [
 			'usr'               => $usuario,
 			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => request('usr') ? TRUE : FALSE,
 			'extra_styles'      => '<style type="text/css">body {margin-top: 40px;}</style>',
-			'arr_vistas'        => array('ACL/cambio_password'),
+			'arr_vistas'        => ['ACL/cambio_password'],
 			'vista_login'       => TRUE,
-		);
-
-		app_render_view('ACL/cambio_password', $data);
+		]);
 	}
-
-
 
 }
 /* End of file login.php */

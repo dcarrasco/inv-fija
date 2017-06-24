@@ -69,7 +69,7 @@ class Despachos_retail extends CI_Controller {
 	 */
 	public function retail($rut_retail = NULL)
 	{
-		$arr_facturas  = array();
+		$arr_facturas  = [];
 		$is_form_valid = $this->form_validation->set_rules($this->despachos_model->validation_rules)->run();
 
 		if ($is_form_valid)
@@ -78,16 +78,12 @@ class Despachos_retail extends CI_Controller {
 			$arr_facturas = $this->despachos_model->get_listado_ultimas_facturas(request('rut_retail'), request('modelos'));
 		}
 
-		$datos = array(
+		app_render_view('despachos/retail', [
 			'combo_retail'       => $this->despachos_model->get_combo_rut_retail(),
 			'combo_max_facturas' => $this->despachos_model->get_combo_cantidad_facturas(),
 			'facturas'           => $arr_facturas,
-		);
-
-		app_render_view('despachos/retail', $datos);
+		]);
 	}
-
-
 
 }
 /* End of file despachos_retail.php */

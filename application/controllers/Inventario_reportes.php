@@ -48,38 +48,38 @@ class Inventario_reportes extends Controller_base {
 		$this->load->model('inventario_model');
 		$this->lang->load('inventario');
 
-		$this->set_menu_modulo(array(
-			'hoja' => array(
+		$this->set_menu_modulo([
+			'hoja' => [
 				'url'   => $this->router->class . '/listado/hoja',
 				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
 				'icon'  => 'file-text-o'
-			),
-			'material' => array(
+			],
+			'material' => [
 				'url'   => $this->router->class . '/listado/material',
 				'texto' => $this->lang->line('inventario_menu_reporte_mat'),
 				'icon'  => 'barcode'
-			),
-			'material_faltante' => array(
+			],
+			'material_faltante' => [
 				'url'   => $this->router->class . '/listado/material_faltante',
 				'texto' => $this->lang->line('inventario_menu_reporte_faltante'),
 				'icon'  => 'tasks'
-			),
-			'ubicacion' => array(
+			],
+			'ubicacion' => [
 				'url'   => $this->router->class . '/listado/ubicacion' ,
 				'texto' => $this->lang->line('inventario_menu_reporte_ubicacion'),
 				'icon'  => 'map-marker'
-			),
-			'tipos_ubicacion' => array(
+			],
+			'tipos_ubicacion' => [
 				'url'   => $this->router->class . '/listado/tipos_ubicacion',
 				'texto' => $this->lang->line('inventario_menu_reporte_tip_ubic'),
 				'icon'  => 'th'
-			),
-			'ajustes' => array(
+			],
+			'ajustes' => [
 				'url'   => $this->router->class . '/listado/ajustes',
 				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
 				'icon'  => 'wrench'
-			),
-		));
+			],
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -115,7 +115,7 @@ class Inventario_reportes extends Controller_base {
 		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
 		$arr_campos = $this->inventario_model->get_campos_reporte($tipo);
 
-		$data = array(
+		app_render_view('inventario/reporte', [
 			'menu_modulo'       => $this->get_menu_modulo($tipo),
 			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'      => $view,
@@ -124,12 +124,8 @@ class Inventario_reportes extends Controller_base {
 			'combo_inventarios' => $this->inventario_model->get_combo_inventarios(),
 			'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
 			'id_inventario'     => $id_inventario,
-		);
-
-		app_render_view('inventario/reporte', $data);
+		]);
 	}
-
-
 
 }
 /* End of file inventario_reportes.php */

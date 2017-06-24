@@ -99,13 +99,11 @@ class Adminbd_exportartablas extends Controller_base {
 			}
 		}
 
-		$data = array(
+		$data = [
 			'combo_tablas' => $this->adminbd_model->get_table_list(),
-			'combo_campos' => $tabla
-								? $this->adminbd_model->get_fields_list($tabla)
-								: array(),
+			'combo_campos' => $tabla ? $this->adminbd_model->get_fields_list($tabla) : [],
 			'result_string' => $result_string,
-		);
+		];
 
 		$this->db->query('use '.$this->db->database);
 

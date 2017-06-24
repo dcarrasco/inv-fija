@@ -73,12 +73,11 @@ class Toa_consumos extends Controller_base {
 			->set_rules($this->toa_consumo->consumos_validation)
 			->run();
 
-		$datos = array(
+		app_render_view('toa/consumos', [
 			'combo_reportes' => $this->toa_consumo->tipos_reporte_consumo,
 			'reporte'        => $this->toa_consumo->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
-		);
+		]);
 
-		app_render_view('toa/consumos', $datos);
 	}
 
 
@@ -101,24 +100,22 @@ class Toa_consumos extends Controller_base {
 		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
 
 		$this->load->library('googlemaps');
-		$this->googlemaps->initialize(array(
+		$this->googlemaps->initialize([
 			'map_css' => 'height: 350px',
-		));
+		]);
 
 		collect($datos_peticiones)->each(function($peticion) {
-			$this->googlemaps->add_marker(array(
+			$this->googlemaps->add_marker([
 				'lat'   => $peticion['acoord_y'],
 				'lng'   => $peticion['acoord_x'],
 				'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
-			));
+			]);
 		});
 
-		$datos = array(
+		app_render_view('toa/peticiones', [
 			'reporte'      => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
 			'google_maps'  => $this->googlemaps->create_map(),
-		);
-
-		app_render_view('toa/peticiones', $datos);
+		]);
 	}
 
 
@@ -134,33 +131,30 @@ class Toa_consumos extends Controller_base {
 	{
 		$this->load->model('toa_model');
 		$this->load->library('googlemaps');
-		$this->googlemaps->initialize(array(
+		$this->googlemaps->initialize([
 			'map_css' => 'height: 350px',
-		));
+		]);
 
 		$peticion = ( ! $peticion) ? request('peticion') : $peticion;
 		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
 
 		if (count($arr_peticiones) AND count($arr_peticiones['arr_peticion_toa']))
 		{
-			$this->googlemaps->add_marker(array(
+			$this->googlemaps->add_marker([
 				'lat'   => $arr_peticiones['arr_peticion_toa']['acoord_y'],
 				'lng'   => $arr_peticiones['arr_peticion_toa']['acoord_x'],
 				'title' => $arr_peticiones['arr_peticion_toa']['cname'],
-			));
+			]);
 		}
 
 		set_message(($peticion AND ! $arr_peticiones) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
 
-		$datos = array(
+		app_render_view('toa/detalle_peticion', [
 			'tipo_peticion' => strtoupper(substr($peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
 			'reporte'       => $arr_peticiones,
 			'google_maps'   => $this->googlemaps->create_map(),
-		);
-
-		app_render_view('toa/detalle_peticion', $datos);
+		]);
 	}
-
 
 }
 /* End of file Toa_consumos.php */

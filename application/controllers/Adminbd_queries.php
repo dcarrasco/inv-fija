@@ -70,17 +70,12 @@ class Adminbd_queries extends Controller_base {
 	{
 		$reload_secs = 15;
 
-		$datos = array(
+		app_render_view('admindb/queries', [
 			'queries_data' => $this->adminbd_model->get_running_queries(),
 			'extra_styles' => $reload_secs > 0 ? "<meta http-equiv=\"refresh\" content=\"{$reload_secs};URL='".$this->router->class."'\">" : '',
 			'actualizado_el' => date('Y-m-d H:i:s'),
-		);
-
-		app_render_view('admindb/queries', $datos);
-
+		]);
 	}
-
-
 
 }
 /* End of file Adminbd_queries.php */
