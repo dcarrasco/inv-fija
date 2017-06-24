@@ -26,13 +26,13 @@ if ( ! function_exists('dbg'))
 		// carga objeto global CI
 		$ci =& get_instance();
 
-		$colores_texto = array(
+		$colores_texto = [
 			'llave_array' => 'tomato',
 			'numero'      => 'blue',
 			'texto'       => 'limegreen',
 			'boolean'     => 'rebeccapurple',
 			'array'       => 'red',
-		);
+		];
 
 		foreach (func_get_args() as $item)
 		{
@@ -41,7 +41,7 @@ if ( ! function_exists('dbg'))
 			$dump = ob_get_contents();
 			ob_end_clean();
 			$dump = preg_replace(
-				array(
+				[
 					'/=>\n[ ]+/i',
 					'/\n/',
 					'/ /i',
@@ -52,8 +52,8 @@ if ( ! function_exists('dbg'))
 					'/bool\((\w*)\)/i',
 					'/string\((\w*)\)&nbsp;\"([\w\.,\-~\/%:+><\&\$#@\*{}\[\]=;?\' \(\)\|]*)\"/i',
 					'/array\(([\d\.]*)\)/i',
-				),
-				array(
+				],
+				[
 					' => ',
 					'<br/>',
 					'&nbsp;',
@@ -64,11 +64,11 @@ if ( ! function_exists('dbg'))
 					'<span style="color:'.$colores_texto['boolean'].'"><i>bool</i>($1)</span>',
 					'<span style="color:'.$colores_texto['texto'].'"><i>string</i>($1)&nbsp;"$2"</span>',
 					'<span style="color:'.$colores_texto['array'].'"><i>array</i>($1)</span>',
-				),
+				],
 				$dump
 			);
 
-			echo $ci->parser->parse('common/dbg.php', array('dump'=>$dump), TRUE);
+			echo $ci->parser->parse('common/dbg.php', ['dump'=>$dump], TRUE);
 		}
 	}
 }
@@ -106,8 +106,8 @@ if ( ! function_exists('menu_app'))
 
 		$arr_modulos = $ci->acl_model->get_user_menu();
 
-		$arr_apps = array();
-		$arr_mods = array();
+		$arr_apps = [];
+		$arr_mods = [];
 		$app_ant = '';
 		$app_sel = '';
 
@@ -117,13 +117,13 @@ if ( ! function_exists('menu_app'))
 			{
 				if ($modulo['app'] !== $app_ant AND $app_ant !== '')
 				{
-					array_push($arr_apps, array(
+					array_push($arr_apps, [
 						'selected' => $app_sel,
 						'icono'    => $modulo_ant['app_icono'],
 						'app'      => $modulo_ant['app'],
 						'modulos'  => $arr_mods
-					));
-					$arr_mods = array();
+					]);
+					$arr_mods = [];
 					$app_sel = '';
 				}
 
@@ -132,22 +132,22 @@ if ( ! function_exists('menu_app'))
 					$app_sel = 'active';
 				}
 
-				array_push($arr_mods, array(
+				array_push($arr_mods, [
 					'modulo_url'      => site_url($modulo['url']),
 					'modulo_icono'    => $modulo['modulo_icono'],
 					'modulo_nombre'   => $modulo['modulo'],
 					'modulo_selected' => ($modulo['url'] === $ci->uri->segment(1)) ? 'active' : '',
-				));
+				]);
 
 				$app_ant = $modulo['app'];
 				$modulo_ant = $modulo;
 			}
-			array_push($arr_apps, array(
+			array_push($arr_apps, [
 				'selected' => $app_sel,
 				'icono'    => $modulo_ant['app_icono'],
 				'app'      => $modulo_ant['app'],
 				'modulos'  => $arr_mods
-			));
+			]);
 		}
 
 		return $arr_apps;
@@ -189,19 +189,19 @@ if ( ! function_exists('menu_modulo'))
 	 * @param  string $mod_selected Módulo seleccionado
 	 * @return array                Arreglo reestructurado
 	 */
-	function menu_modulo($menu = array(), $mod_selected = '')
+	function menu_modulo($menu = [], $mod_selected = '')
 	{
 		$mod_selected = array_get($menu, 'mod_selected', $mod_selected);
 
-		return collect(array_get($menu, 'menu', array()))
+		return collect(array_get($menu, 'menu', []))
 			->map(function($menu, $menu_key) use ($mod_selected) {
-				return array(
+				return [
 					'menu_key'      => $menu_key,
 					'menu_url'      => site_url($menu['url']),
 					'menu_nombre'   => $menu['texto'],
 					'menu_selected' => ($menu_key === $mod_selected) ? 'active' : '',
 					'menu_icon'     => array_get($menu, 'icon', NULL),
-				);
+				];
 			})->all();
 	}
 }
@@ -216,7 +216,7 @@ if ( ! function_exists('app_render_view'))
 	 * @param  array $datos Arreglo con parámetros de datos a dibujar
 	 * @return void
 	 */
-	function app_render_view($vista = NULL, $datos = array())
+	function app_render_view($vista = NULL, $datos = [])
 	{
 		if ( ! $vista)
 		{
@@ -241,7 +241,7 @@ if ( ! function_exists('app_render_view'))
 
 		// navegación
 		$datos['is_vista_login']  = $vista_login;
-		$datos['navbar_menu']     = $vista_login ? array() : menu_app();
+		$datos['navbar_menu']     = $vista_login ? [] : menu_app();
 		$datos['titulo_modulo']   = titulo_modulo();
 		$datos['logout_url']      = site_url('login/logout');
 		$datos['user_firstname']  = $ci->acl_model->get_user_firstname();
@@ -253,11 +253,11 @@ if ( ! function_exists('app_render_view'))
 		$datos['validation_errors'] = print_validation_errors();
 
 		// vistas
-		$datos['arr_vistas'] = array();
-		$vista = is_array($vista) ? $vista : array($vista);
+		$datos['arr_vistas'] = [];
+		$vista = is_array($vista) ? $vista : [$vista];
 		foreach ($vista as $item_vista)
 		{
-			array_push($datos['arr_vistas'], array('vista' => $ci->parser->parse($item_vista, $datos, TRUE)));
+			array_push($datos['arr_vistas'], ['vista' => $ci->parser->parse($item_vista, $datos, TRUE)]);
 		}
 
 		return $ci->parser->parse('common/app_layout', $datos);
@@ -302,12 +302,12 @@ if ( ! function_exists('print_message'))
 				$img_tipo   = 'ok-sign';
 			}
 
-			$arr_datos_view = array(
+			$arr_datos_view = [
 				'tipo'       => $tipo,
 				'texto_tipo' => $texto_tipo,
 				'img_tipo'   => $img_tipo,
 				'mensaje'    => $mensaje,
-			);
+			];
 
 			return $ci->parser->parse('common/alert', $arr_datos_view, TRUE);
 		}
@@ -375,9 +375,9 @@ if ( ! function_exists('form_array_format'))
 	 * @param  string $msg_ini Elemento inicial a desplegar en select
 	 * @return array           Arreglo con formato a utilizar
 	 */
-	function form_array_format($arreglo = array(), $msg_ini = '')
+	function form_array_format($arreglo = [], $msg_ini = '')
 	{
-		$arr_combo = array();
+		$arr_combo = [];
 
 		if ($msg_ini !== '')
 		{
@@ -442,7 +442,7 @@ if ( ! function_exists('errors'))
 
 if ( ! function_exists('url_params'))
 {
-	function url_params($arr_params = array())
+	function url_params($arr_params = [])
 	{
 		$ci =& get_instance();
 		$url_params = http_build_query((count($arr_params) === 0) ? $ci->input->get() : $arr_params);
@@ -644,7 +644,7 @@ if ( ! function_exists('collect'))
 	 * @param  array $arr Arreglo con datos
 	 * @return array        Resultado de array_map
 	 */
-	function collect($arr = array())
+	function collect($arr = [])
 	{
 		return new Collection($arr);
 	}
@@ -687,7 +687,7 @@ if ( ! function_exists('request'))
 
 if ( ! function_exists('array_get'))
 {
-	function array_get($arreglo = array(), $indice = NULL, $default = NULL)
+	function array_get($arreglo = [], $indice = NULL, $default = NULL)
 	{
 		if ( ! is_array($arreglo))
 		{
@@ -771,7 +771,7 @@ if ( ! function_exists('get_arr_dias'))
 		$mes = (int) substr($anomes, 4, 2);
 		$ano = (int) substr($anomes, 0, 4);
 
-		$arr_dias = array();
+		$arr_dias = [];
 
 		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
@@ -821,13 +821,13 @@ if ( ! function_exists('cached_query'))
 	 * @param  array  $params   Arreglo con los parámetros de la función a ejecutar
 	 * @return mixed            Resultado de la función
 	 */
-	function cached_query($cache_id = '', $object = NULL, $method = '', $params = array())
+	function cached_query($cache_id = '', $object = NULL, $method = '', $params = [])
 	{
 		$ci =& get_instance();
-		$ci->load->driver('cache', array('adapter' => 'file'));
+		$ci->load->driver('cache', ['adapter' => 'file']);
 		$cache_ttl = 300;
 
-		$params = ( ! is_array($params)) ? array($params) : $params;
+		$params = ( ! is_array($params)) ? [$params] : $params;
 
 		log_message('debug', "cached_query: id({$cache_id}), object(".get_class($object)."), method({$method}), params(".json_encode($params).")");
 
@@ -853,7 +853,7 @@ if ( ! function_exists('cached_query'))
 
 		if ( ! $result = $ci->cache->get($cache_id))
 		{
-			$result = call_user_func_array(array($object, $method), $params);
+			$result = call_user_func_array([$object, $method], $params);
 			$ci->cache->save($cache_id, $result, $cache_ttl);
 		}
 
@@ -873,7 +873,7 @@ if ( ! function_exists('genera_captcha_word'))
 	 */
 	function genera_captcha_word()
 	{
-		$diccionario = array(
+		$diccionario = [
 			'abiertas','abiertos','aborrece','abrasada','abrazado','abrazara','abreviar','abriendo','abririan','abrumado',
 			'acabadas','acaballa','acabando','acabaras','acabaron','acabasen','acciones','aceitera','acertada','acertado',
 			'acertare','achaques','acogerse','acometer','acometia','acomodar','aconsejo','acontece','acordaba','acordado',
@@ -992,7 +992,7 @@ if ( ! function_exists('genera_captcha_word'))
 			'vigesimo','viniendo','vinieron','viniesen','vinosele','virtudes','visitaba','visitado','vizcaina','vizcaino',
 			'vocablos','voluntad','volvamos','volverle','volverse','volverte','volviera','volviere','volviese','volviose',
 			'vomitase','vosotros','vuelvase','vuestras','vuestros','yantaria'
-		);
+		];
 
 		return $diccionario[array_rand($diccionario)];
 	}

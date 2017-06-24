@@ -127,14 +127,14 @@ class Orm_field {
 	 *
 	 * @var  array
 	 */
-	private $_choices = array();
+	private $_choices = [];
 
 	/**
 	 * Arreglo con los datos de la relación
 	 *
 	 * @var  array
 	 */
-	private $_relation = array();
+	private $_relation = [];
 
 	/**
 	 * Indica si el campo es ID
@@ -174,7 +174,7 @@ class Orm_field {
 	 * @param  array  $param  Parametros de construccion
 	 * @return void
 	 **/
-	public function __construct($nombre = '', $param = array())
+	public function __construct($nombre = '', $param = [])
 	{
 		$this->_nombre    = $nombre;
 		$this->_nombre_bd = $nombre;
@@ -358,7 +358,7 @@ class Orm_field {
 		$valor_field = ($valor === '' AND $this->_default !== '') ? $this->_default : $valor;
 		$valor_field = request($this->_nombre, $valor_field);
 
-		$arr_param = array(
+		$arr_param = [
 			'name'        => $this->_nombre,
 			'id'          => $id_prefix . $this->_nombre,
 			'class'       => 'form-control '.$clase_adic,
@@ -366,7 +366,7 @@ class Orm_field {
 			'maxlength'   => $this->_largo,
 			'size'        => $this->_largo,
 			'placeholder' => $ci->lang->line('orm_placeholder').strtolower($this->_label),
-		);
+		];
 
 		$status_feedback = '';
 		if ( ! is_null($field_error))
@@ -460,8 +460,8 @@ class Orm_field {
 			$param_adic .= ($this->_onchange !== '') ? ' onchange="'.$this->_onchange.'"' : '';
 
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
-				? array('conditions' => $this->_relation['conditions'], 'opc_ini' => FALSE)
-				: array();
+				? ['conditions' => $this->_relation['conditions'], 'opc_ini' => FALSE]
+				: [];
 
 			$form = form_dropdown(
 				$this->_nombre,
@@ -481,8 +481,8 @@ class Orm_field {
 			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" size="7" class="form-control '.$clase_adic.'"';
 
 			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
-				? array('conditions' => $this->_relation['conditions'])
-				: array();
+				? ['conditions' => $this->_relation['conditions']]
+				: [];
 
 			$dropdown_conditions['opc_ini'] = FALSE;
 
@@ -568,56 +568,55 @@ class Orm_field {
 	{
 		if ($this->_tipo === Orm_field::TIPO_ID)
 		{
-			return array(
+			return [
 				'type'           => 'INT',
 				'constraint'     => $this->_largo,
 				'auto_increment' => $this->_es_autoincrement,
 				'null'           => $this->_es_obligatorio,
-			);
+			];
 		}
 		elseif ($this->_tipo === Orm_field::TIPO_CHAR)
 		{
-			return array(
+			return [
 				'type'       => 'VARCHAR',
 				'constraint' => $this->_largo,
 				'default'    => $this->_default,
 				'null'       => $this->_es_obligatorio,
-			);
+			];
 		}
 		elseif ($this->_tipo === 'text')
 		{
-			return array(
+			return [
 				'type'       => 'TEXT',
 				'constraint' => $this->_largo,
 				'default'    => $this->_default,
 				'null'       => $this->_es_obligatorio,
-			);
+			];
 		}
 		elseif ($this->_tipo === Orm_field::TIPO_INT)
 		{
-			return array(
+			return [
 				'type'       => 'INT',
 				'constraint' => $this->_largo,
 				'default'    => $this->_default,
 				'null'       => $this->_es_obligatorio,
-			);
+			];
 		}
 		elseif ($this->_tipo === Orm_field::TIPO_BOOLEAN)
 		{
-			return array(
+			return [
 				'type'       => 'BIT',
 				'null'       => $this->_es_obligatorio,
-			);
+			];
 		}
 		elseif ($this->_tipo === Orm_field::TIPO_DATETIME)
 		{
-			$bd_attrib = array(
+			$bd_attrib = [
 				'type'       => 'DATETIME',
 				'null'       => $this->_es_obligatorio,
-			);
+			];
 		}
 	}
-
 
 }
 /* End of file orm_field.php */

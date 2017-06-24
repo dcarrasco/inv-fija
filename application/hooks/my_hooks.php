@@ -45,7 +45,7 @@ class MY_Hooks {
 		$ci->load->model('acl_model');
 		$ci->config->load('inv-fija');
 
-		$whitelist_classes = array('login', 'migration');
+		$whitelist_classes = ['login', 'migration'];
 
 		$class = $ci->router->fetch_class();
 

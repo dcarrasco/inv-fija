@@ -44,26 +44,26 @@ class Grafica_stock {
 	 * @param  array $arr_param Arreglo con parametreos
 	 * @return array        Datos para construir graficos
 	 */
-	public function datos_grafico($arr_stock = array(), $arr_param = array())
+	public function datos_grafico($arr_stock = [], $arr_param = [])
 	{
-		$arr_param_key = array('fecha_ultimodia', 'fecha_todas');
+		$arr_param_key = ['fecha_ultimodia', 'fecha_todas'];
 
 		foreach ($arr_param_key as $parametro)
 		{
 			if ( ! array_key_exists($parametro, $arr_param))
 			{
-				$arr_param[$parametro] = array();
+				$arr_param[$parametro] = [];
 			}
 		}
 
-		$graph_q_equipos  = array();
-		$graph_q_simcard  = array();
-		$graph_q_otros    = array();
-		$graph_v_equipos  = array();
-		$graph_v_simcard  = array();
-		$graph_v_otros    = array();
-		$arr_eje_x        = array();
-		$arr_label_series = array();
+		$graph_q_equipos  = [];
+		$graph_q_simcard  = [];
+		$graph_q_otros    = [];
+		$graph_v_equipos  = [];
+		$graph_v_simcard  = [];
+		$graph_v_otros    = [];
+		$arr_eje_x        = [];
+		$arr_label_series = [];
 
 		foreach($arr_stock as $registro_stock)
 		{
@@ -154,8 +154,7 @@ class Grafica_stock {
 			$graph_v_otros[$registro_stock[$idx_series]][$registro_stock[$idx_eje_x]] = $registro_stock['VAL_OTROS']/1000000;
 		}
 
-
-		$arr_datos = array(
+		$arr_datos = [
 			'serie_q_equipos'  => $this->_arr_series_to_string($graph_q_equipos),
 			'serie_v_equipos'  => $this->_arr_series_to_string($graph_v_equipos),
 			'serie_q_simcard'  => $this->_arr_series_to_string($graph_q_simcard),
@@ -164,7 +163,7 @@ class Grafica_stock {
 			'serie_v_otros'    => $this->_arr_series_to_string($graph_v_otros),
 			'str_eje_x'        => '[' . implode(',', $arr_eje_x) . ']',
 			'str_label_series' => '[' . implode(',', $arr_label_series) . ']',
-		);
+		];
 
 		return $arr_datos;
 	}
@@ -195,9 +194,9 @@ class Grafica_stock {
 	 * @param  array $arreglo Arreglo a convertir
 	 * @return string
 	 */
-	private function _arr_series_to_string($arreglo = array())
+	private function _arr_series_to_string($arreglo = [])
 	{
-		$arr_temp = array();
+		$arr_temp = [];
 		foreach($arreglo as $arr_elem)
 		{
 			array_push($arr_temp, '[' . implode(',', $arr_elem) . ']');

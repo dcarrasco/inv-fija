@@ -31,7 +31,7 @@ class Collection implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $_items = array();
+	private $_items = [];
 
 	// --------------------------------------------------------------------
 
@@ -65,11 +65,11 @@ class Collection implements IteratorAggregate {
 	 * @param array $items Arreglo inicial para poblar la colección
 	 * @return  void
 	 **/
-	public function make($items = array())
+	public function make($items = [])
 	{
 		if (is_null($items))
 		{
-			$this->_items = array();
+			$this->_items = [];
 		}
 		else if ($items instanceof Collection)
 		{
@@ -81,7 +81,7 @@ class Collection implements IteratorAggregate {
 		}
 		else
 		{
-			$this->_items = array($items);
+			$this->_items = [$items];
 		}
 
 		return $this;
@@ -381,7 +381,7 @@ class Collection implements IteratorAggregate {
 
 			if ( ! is_array($item))
 			{
-				return array_merge($result, array($item));
+				return array_merge($result, [$item]);
 			}
 			elseif ($profundidad === 1)
 			{
@@ -391,7 +391,7 @@ class Collection implements IteratorAggregate {
 			{
 				return array_merge($result, collect($item)->flatten($profundidad - 1)->all());
 			}
-		}, array()));
+		}, []));
 	}
 
 	// --------------------------------------------------------------------
@@ -405,7 +405,7 @@ class Collection implements IteratorAggregate {
 	public function merge($items)
 	{
 		$items = $items instanceof Collection ? $items->all() : $items;
-		$items = is_array($items) ? $items : array($items);
+		$items = is_array($items) ? $items : [$items];
 
 		reset($items);
 		// si la primera llave del arreglo es 0, usamos arrat merge
@@ -433,7 +433,7 @@ class Collection implements IteratorAggregate {
 	* @param  mixed $items Items a juntar a la coleccion actual
 	* @return mixed
 	*/
-	public function only($items = array())
+	public function only($items = [])
 	{
 		return new static(array_intersect_key($this->_items, array_flip((array) $items)));
 	}
@@ -468,7 +468,7 @@ class Collection implements IteratorAggregate {
 	 * @param  array $valores Arreglo de valores
 	 * @return static
 	 */
-	public function combine($valores = array())
+	public function combine($valores = [])
 	{
 		return new static(array_combine($this->_items, $valores));
 	}

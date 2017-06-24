@@ -31,7 +31,7 @@ class Googlemaps {
 	 *
 	 * @var array
 	 */
-	private $_markers = array();
+	private $_markers = [];
 
 	/**
 	 * Identificador del DIV que contendrá el mapa
@@ -113,10 +113,10 @@ class Googlemaps {
 	{
 		$function_name = 'initMap_'.$this->_map_id;
 
-		$arr_url_param = array(
+		$arr_url_param = [
 			'key'      => $this->_api_key,
 			'callback' => $function_name,
-		);
+		];
 		$url_js = $this->_url_js.url_params($arr_url_param);
 
 
@@ -144,13 +144,13 @@ class Googlemaps {
 	 */
 	public function add_marker($marker = NULL)
 	{
-		$marker_config = array(
+		$marker_config = [
 			'lat'    => 0,
 			'lng'    => 0,
 			'map'    => 'map',
 			'title'  => 'title',
 			'zindex' => 100,
-		);
+		];
 
 		$marker_config = collect($marker_config)
 			->map(function($marker_item, $index) use ($marker) {
