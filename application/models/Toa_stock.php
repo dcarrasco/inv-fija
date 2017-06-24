@@ -337,15 +337,15 @@ class Toa_stock extends CI_Model {
 
 		$arr_campos = [];
 		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-		$arr_campos['tipo']        = ['titulo' => 'Tipo Almac&eacute;n', 'tipo' => 'texto'];
-		$arr_campos['centro']      = ['titulo' => 'Centro', 'tipo' => 'texto'];
-		$arr_campos['almacen']     = ['titulo' => 'Almac&eacute;n', 'tipo' => 'texto'];
-		$arr_campos['des_almacen'] = ['titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto'];
-		$arr_campos['material']    = ['titulo' => 'Material', 'tipo' => 'texto'];
-		$arr_campos['descripcion'] = ['titulo' => 'Desc Material', 'tipo' => 'texto'];
-		$arr_campos['lote']        = ['titulo' => 'Lote', 'tipo' => 'texto'];
-		$arr_campos['umb']         = ['titulo' => 'Unidad', 'tipo' => 'texto'];
-		$arr_campos['estado']      = ['titulo' => 'Estado', 'tipo' => 'texto'];
+		$arr_campos['tipo']        = ['titulo' => 'Tipo Almac&eacute;n'];
+		$arr_campos['centro']      = ['titulo' => 'Centro'];
+		$arr_campos['almacen']     = ['titulo' => 'Almac&eacute;n'];
+		$arr_campos['des_almacen'] = ['titulo' => 'Desc Almac&eacute;n'];
+		$arr_campos['material']    = ['titulo' => 'Material'];
+		$arr_campos['descripcion'] = ['titulo' => 'Desc Material'];
+		$arr_campos['lote']        = ['titulo' => 'Lote'];
+		$arr_campos['umb']         = ['titulo' => 'Unidad'];
+		$arr_campos['estado']      = ['titulo' => 'Estado'];
 		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$this->reporte->set_order_campos($arr_campos, 'material');
@@ -391,14 +391,14 @@ class Toa_stock extends CI_Model {
 
 		$arr_campos = [];
 		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-		$arr_campos['centro']      = ['titulo' => 'Centro', 'tipo' => 'texto'];
-		$arr_campos['acreedor']    = ['titulo' => 'Cod T&eacute;cnico', 'tipo' => 'texto'];
-		$arr_campos['tecnico']     = ['titulo' => 'Nombre T&eacute;cnico', 'tipo' => 'texto'];
-		$arr_campos['material']    = ['titulo' => 'Material', 'tipo' => 'texto'];
-		$arr_campos['descripcion'] = ['titulo' => 'Desc Material', 'tipo' => 'texto'];
-		$arr_campos['lote']        = ['titulo' => 'Lote', 'tipo' => 'texto'];
-		$arr_campos['umb']         = ['titulo' => 'Unidad', 'tipo' => 'texto'];
-		$arr_campos['estado']      = ['titulo' => 'Estado', 'tipo' => 'texto'];
+		$arr_campos['centro']      = ['titulo' => 'Centro'];
+		$arr_campos['acreedor']    = ['titulo' => 'Cod T&eacute;cnico'];
+		$arr_campos['tecnico']     = ['titulo' => 'Nombre T&eacute;cnico'];
+		$arr_campos['material']    = ['titulo' => 'Material'];
+		$arr_campos['descripcion'] = ['titulo' => 'Desc Material'];
+		$arr_campos['lote']        = ['titulo' => 'Lote'];
+		$arr_campos['umb']         = ['titulo' => 'Unidad'];
+		$arr_campos['estado']      = ['titulo' => 'Estado'];
 		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$this->reporte->set_order_campos($arr_campos, 'material');

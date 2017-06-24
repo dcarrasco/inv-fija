@@ -114,29 +114,29 @@ class Stock_reportes_trazabilidad extends Controller_base {
 
 			$arr_campos = [];
 
-			$arr_campos['tipo'] = ['titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto'];
+			$arr_campos['tipo'] = ['titulo' => 'Tipo Almacen'];
 
 			if ($incl_almacen === '1')
 			{
-				$arr_campos['centro'] = ['titulo' => 'Centro','class' => '', 'tipo' => 'texto'];
-				$arr_campos['almacen'] = ['titulo' => 'CodAlm','class' => '', 'tipo' => 'texto'];
-				$arr_campos['des_almacen'] = ['titulo' => 'Almacen','class' => '', 'tipo' => 'texto'];
+				$arr_campos['centro'] = ['titulo' => 'Centro'];
+				$arr_campos['almacen'] = ['titulo' => 'CodAlm'];
+				$arr_campos['des_almacen'] = ['titulo' => 'Almacen'];
 			}
 
 			if ($incl_estado === '1')
 			{
-				$arr_campos['estado_sap'] = ['titulo' => 'Estado SAP','class' => '', 'tipo' => 'texto'];
+				$arr_campos['estado_sap'] = ['titulo' => 'Estado SAP'];
 			}
 
 			if ($incl_modelos === '1')
 			{
-				$arr_campos['material'] = ['titulo' => 'CodMat','class' => '', 'tipo' => 'texto'];
-				$arr_campos['des_material'] = ['titulo' => 'Material','class' => '', 'tipo' => 'texto'];
+				$arr_campos['material'] = ['titulo' => 'CodMat'];
+				$arr_campos['des_material'] = ['titulo' => 'Material'];
 			}
 
 			if ($incl_lote === '1')
 			{
-				$arr_campos['lote'] = ['titulo' => 'Lote','class' => '', 'tipo' => 'texto'];
+				$arr_campos['lote'] = ['titulo' => 'Lote'];
 			}
 
 			$arr_campos['m030']   = ['titulo' => '000-030', 'class' => 'text-center', 'tipo' => 'numero'];
@@ -153,15 +153,15 @@ class Stock_reportes_trazabilidad extends Controller_base {
 
 			$arr_campos = [];
 
-			$arr_campos['tipo']         = ['titulo' => 'Tipo Almacen', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['centro']       = ['titulo' => 'Centro', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['almacen']      = ['titulo' => 'Cod Alm', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['des_almacen']  = ['titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['material']     = ['titulo' => 'Cod Mat', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['des_material'] = ['titulo' => 'Material', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['lote']         = ['titulo' => 'Lote', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['dias']         = ['titulo' => 'Permanencia', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['serie']        = ['titulo' => 'Serie', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['tipo']         = ['titulo' => 'Tipo Almacen'];
+			$arr_campos['centro']       = ['titulo' => 'Centro'];
+			$arr_campos['almacen']      = ['titulo' => 'Cod Alm'];
+			$arr_campos['des_almacen']  = ['titulo' => 'Almacen'];
+			$arr_campos['material']     = ['titulo' => 'Cod Mat'];
+			$arr_campos['des_material'] = ['titulo' => 'Material'];
+			$arr_campos['lote']         = ['titulo' => 'Lote'];
+			$arr_campos['dias']         = ['titulo' => 'Permanencia'];
+			$arr_campos['serie']        = ['titulo' => 'Serie'];
 
 		}
 

@@ -118,45 +118,45 @@ class Stock_sap_model extends CI_Model {
 		$arr_campos = [];
 		if (in_array('fecha', $mostrar))
 		{
-			$arr_campos['fecha_stock'] = ['titulo' => 'fecha stock', 'class' => '', 'tipo' => 'fecha'];
+			$arr_campos['fecha_stock'] = ['titulo' => 'fecha stock', 'tipo' => 'fecha'];
 		}
 		if (in_array('sel_tiposalm', $mostrar))
 		{
-			$arr_campos['tipo_almacen'] = ['titulo' => 'tipo almacen', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['tipo_almacen'] = ['titulo' => 'tipo almacen'];
 		}
 		if (in_array('almacen', $mostrar))
 		{
-			$arr_campos['centro'] = ['titulo' => 'centro', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['cod_almacen'] = ['titulo' => 'cod almacen', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['des_almacen'] = ['titulo' => 'des almacen', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['centro'] = ['titulo' => 'centro'];
+			$arr_campos['cod_almacen'] = ['titulo' => 'cod almacen'];
+			$arr_campos['des_almacen'] = ['titulo' => 'des almacen'];
 		}
 		if (in_array('acreedor', $mostrar))
 		{
-			$arr_campos['acreedor'] = ['titulo' => 'proveedor', 'class' => '', 'tipo' => 'texto'];
-			$arr_campos['des_proveedor'] = ['titulo' => 'des proveedor', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['acreedor'] = ['titulo' => 'proveedor'];
+			$arr_campos['des_proveedor'] = ['titulo' => 'des proveedor'];
 		}
 		if (in_array('material', $mostrar))
 		{
 			if (array_key_exists('cod_articulo', $campos_resultado))
 			{
-				$arr_campos['cod_articulo'] = ['titulo' => 'material', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['cod_articulo'] = ['titulo' => 'material'];
 			}
 			else
 			{
-				$arr_campos['material'] = ['titulo' => 'material', 'class' => '', 'tipo' => 'texto'];
-				$arr_campos['descripcion'] = ['titulo' => 'desc material', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['material'] = ['titulo' => 'material'];
+				$arr_campos['descripcion'] = ['titulo' => 'desc material'];
 
 			}
 		}
 		if (in_array('lote', $mostrar))
 		{
-			$arr_campos['lote'] = ['titulo' => 'lote', 'class' => '', 'tipo' => 'texto'];
+			$arr_campos['lote'] = ['titulo' => 'lote'];
 		}
 		if (in_array('tipo_stock', $mostrar))
 		{
 			if (array_key_exists('LU', $campos_resultado))
 			{
-				$arr_campos['tipo_articulo'] = ['titulo' => 'tipo articulo', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['tipo_articulo'] = ['titulo' => 'tipo articulo'];
 				$arr_campos['LU'] = ['titulo' => 'cant LU', 'class' => 'text-right', 'tipo' => 'numero'];
 				$arr_campos['BQ'] = ['titulo' => 'cant BQ', 'class' => 'text-right', 'tipo' => 'numero'];
 				$arr_campos['CC'] = ['titulo' => 'cant CC', 'class' => 'text-right', 'tipo' => 'numero'];
@@ -172,7 +172,7 @@ class Stock_sap_model extends CI_Model {
 			}
 			else
 			{
-				$arr_campos['estado'] = ['titulo' => 'estado', 'class' => '', 'tipo' => 'texto'];
+				$arr_campos['estado'] = ['titulo' => 'estado'];
 				$arr_campos['cantidad'] = ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
 				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
 			}

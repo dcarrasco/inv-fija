@@ -347,33 +347,33 @@ class Reportestock_model extends CI_Model {
 	{
 		$arr_campos = [];
 
-		$arr_campos['tipo'] = ['titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto'];
+		$arr_campos['tipo'] = ['titulo' => 'Tipo Almacen'];
 
 		if (request('incl_almacen') === '1')
 		{
-			$arr_campos['centro'] = ['titulo' => 'Centro','class' => '', 'tipo' => 'texto'];
-			$arr_campos['almacen'] = ['titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto'];
-			$arr_campos['des_almacen'] = ['titulo' => 'Almacen','class' => '', 'tipo' => 'texto'];
+			$arr_campos['centro'] = ['titulo' => 'Centro'];
+			$arr_campos['almacen'] = ['titulo' => 'CodAlmacen'];
+			$arr_campos['des_almacen'] = ['titulo' => 'Almacen'];
 		}
 
 		if (is_array(request('estado_sap')) AND count(request('estado_sap')) > 0)
 		{
-			$arr_campos['estado_sap'] = ['titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto'];
+			$arr_campos['estado_sap'] = ['titulo' => 'Estado Stock'];
 		}
 
 		if (request('incl_lote') === '1')
 		{
-			$arr_campos['lote'] = ['titulo' => 'Lote','class' => '', 'tipo' => 'texto'];
+			$arr_campos['lote'] = ['titulo' => 'Lote'];
 		}
 
 		if (is_array(request('tipo_mat')) AND count(request('tipo_mat')) > 0)
 		{
-			$arr_campos['tipo_material'] = ['titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto'];
+			$arr_campos['tipo_material'] = ['titulo' => 'Tipo Material'];
 		}
 
 		if (request('incl_modelos') === '1')
 		{
-			$arr_campos['modelo'] = ['titulo' => 'Modelo','class' => '', 'tipo' => 'texto'];
+			$arr_campos['modelo'] = ['titulo' => 'Modelo'];
 		}
 
 		$campos_datos = [
@@ -483,20 +483,20 @@ class Reportestock_model extends CI_Model {
 	public function get_campos_reporte_detalle_series()
 	{
 		$arr_campos = [
-			'tipo'           => ['titulo' => 'Tipo Almacen', 'class' => '', 'tipo' => 'texto'],
-			'fecha_stock'    => ['titulo' => 'Fecha stock', 'class' => '', 'tipo' => 'texto'],
-			'centro'         => ['titulo' => 'Centro', 'class' => '', 'tipo' => 'texto'],
-			'almacen'        => ['titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto'],
-			'des_almacen'    => ['titulo' => 'Desc Almacen', 'class' => '', 'tipo' => 'texto'],
-			'material'       => ['titulo' => 'Material', 'class' => '', 'tipo' => 'texto'],
-			'des_material'   => ['titulo' => 'Desc Material', 'class' => '', 'tipo' => 'texto'],
-			'lote'           => ['titulo' => 'Lote', 'class' => '', 'tipo' => 'texto'],
-			'estado_stock'   => ['titulo' => 'Estado stock', 'class' => '', 'tipo' => 'texto'],
-			'modificado_el'  => ['titulo' => 'Modificado el', 'class' => '', 'tipo' => 'texto'],
-			'serie'          => ['titulo' => 'Serie', 'class' => '', 'tipo' => 'texto'],
-			'pmp'            => ['titulo' => 'PMP', 'class' => '', 'tipo' => 'texto'],
-			'modificado_por' => ['titulo' => 'Modificado por', 'class' => '', 'tipo' => 'texto'],
-			'nom_usuario'    => ['titulo' => 'Nombre usuario', 'class' => '', 'tipo' => 'texto'],
+			'tipo'           => ['titulo' => 'Tipo Almacen'],
+			'fecha_stock'    => ['titulo' => 'Fecha stock'],
+			'centro'         => ['titulo' => 'Centro'],
+			'almacen'        => ['titulo' => 'Almacen'],
+			'des_almacen'    => ['titulo' => 'Desc Almacen'],
+			'material'       => ['titulo' => 'Material'],
+			'des_material'   => ['titulo' => 'Desc Material'],
+			'lote'           => ['titulo' => 'Lote'],
+			'estado_stock'   => ['titulo' => 'Estado stock'],
+			'modificado_el'  => ['titulo' => 'Modificado el'],
+			'serie'          => ['titulo' => 'Serie'],
+			'pmp'            => ['titulo' => 'PMP'],
+			'modificado_por' => ['titulo' => 'Modificado por'],
+			'nom_usuario'    => ['titulo' => 'Nombre usuario'],
 		];
 		$this->reporte->set_order_campos($arr_campos, 'tipo');
 
@@ -1050,19 +1050,19 @@ class Reportestock_model extends CI_Model {
 	{
 		$arr_campos = [];
 
-		$arr_campos['fecha']        = ['titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['cmv']          = ['titulo' => 'CMov', 'class' => 'text-center', 'tipo' => 'texto'];
-		$arr_campos['ce']           = ['titulo' => 'Centro', 'class' => 'text-center', 'tipo' => 'texto'];
-		$arr_campos['alm']          = ['titulo' => 'Almacen', 'class' => 'text-center', 'tipo' => 'texto'];
-		$arr_campos['rec']          = ['titulo' => 'Dest', 'class' => 'text-center', 'tipo' => 'texto'];
-		$arr_campos['n_doc']        = ['titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['ref']          = ['titulo' => 'Ref', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['codigo_sap']   = ['titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['des_material'] = ['titulo' => 'Desc material', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['lote']         = ['titulo' => 'Lote', 'class' => '', 'tipo' => 'texto'];
+		$arr_campos['fecha']        = ['titulo' => 'Fecha'];
+		$arr_campos['cmv']          = ['titulo' => 'CMov', 'class' => 'text-center'];
+		$arr_campos['ce']           = ['titulo' => 'Centro', 'class' => 'text-center'];
+		$arr_campos['alm']          = ['titulo' => 'Almacen', 'class' => 'text-center'];
+		$arr_campos['rec']          = ['titulo' => 'Dest', 'class' => 'text-center'];
+		$arr_campos['n_doc']        = ['titulo' => 'Num doc'];
+		$arr_campos['ref']          = ['titulo' => 'Ref'];
+		$arr_campos['codigo_sap']   = ['titulo' => 'Codigo SAP'];
+		$arr_campos['des_material'] = ['titulo' => 'Desc material'];
+		$arr_campos['lote']         = ['titulo' => 'Lote'];
 		$arr_campos['cantidad']     = ['titulo' => 'Cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
-		$arr_campos['usuario']      = ['titulo' => 'Usuario', 'class' => '', 'tipo' => 'texto'];
-		$arr_campos['nom_usuario']  = ['titulo' => 'Nom usuario', 'class' => '', 'tipo' => 'texto'];
+		$arr_campos['usuario']      = ['titulo' => 'Usuario'];
+		$arr_campos['nom_usuario']  = ['titulo' => 'Nom usuario'];
 
 		$this->reporte->set_order_campos($arr_campos, 'fecha');
 
