@@ -33,23 +33,23 @@ class Despachos_model extends CI_Model {
 	 */
 	public $limite_facturas = 5;
 
-	public $validation_rules = array(
-		array(
+	public $validation_rules = [
+		[
 			'field' => 'rut_retail',
 			'label' => 'RUT Retail',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'modelos',
 			'label' => 'Modelos de equipos',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'max_facturas',
 			'label' => 'Maximo de facturas',
 			'rules' => 'trim|required'
-		),
-	);
+		],
+	];
 
 	// --------------------------------------------------------------------
 
@@ -95,7 +95,7 @@ class Despachos_model extends CI_Model {
 	 */
 	public function get_combo_cantidad_facturas()
 	{
-		return array(
+		return [
 			'1' => 1,
 			'3' => 3,
 			'5' => 5,
@@ -103,7 +103,7 @@ class Despachos_model extends CI_Model {
 			'20' => 20,
 			'30' => 30,
 			'50' => 50,
-		);
+		];
 	}
 
 
@@ -121,7 +121,7 @@ class Despachos_model extends CI_Model {
 	{
 		if ($rut AND $modelos)
 		{
-			$arr_result = array();
+			$arr_result = [];
 			$arr_modelos = explode("\r\n", $modelos);
 
 			foreach ($arr_modelos as $modelo)
@@ -154,19 +154,19 @@ class Despachos_model extends CI_Model {
 				->get()
 				->result_array();
 
-			$arr_facturas = array();
+			$arr_facturas = [];
 
-			$arr_facturas['datos'] = array();
-			$arr_campos_enc = array('operador', 'operador_c', 'rut', 'des_bodega', 'cod_cliente');
+			$arr_facturas['datos'] = [];
+			$arr_campos_enc = ['operador', 'operador_c', 'rut', 'des_bodega', 'cod_cliente'];
 			foreach($arr_campos_enc as $campo)
 			{
 				$arr_facturas['datos'][$campo] = '';
 			}
 
-			$arr_campos_det = array('alm', 'cmv', 'n_doc', 'referencia', 'cod_sap', 'texto_breve_material', 'lote', 'fecha', 'cant');
+			$arr_campos_det = ['alm', 'cmv', 'n_doc', 'referencia', 'cod_sap', 'texto_breve_material', 'lote', 'fecha', 'cant'];
 			for($i = 0; $i < $this->limite_facturas; $i++)
 			{
-				$arr_facturas['factura_' . $i] = array();
+				$arr_facturas['factura_' . $i] = [];
 				foreach($arr_campos_det as $campo)
 				{
 					$arr_facturas['factura_' . $i][$campo] = '';

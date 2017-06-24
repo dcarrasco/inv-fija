@@ -36,15 +36,15 @@ class Clase_movimiento extends ORM_Model {
 	 */
 	public function __construct($cmv = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_cmv_sap'),
 				'model_label'        => 'Clase de movimiento',
 				'model_label_plural' => 'Clases de movimiento',
 				'model_order_by'     => 'cmv',
-			),
-			'campos' => array(
-				'cmv' => array(
+			],
+			'campos' => [
+				'cmv' => [
 					'label'          => 'C&oacute;digo movimiento',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,17 +52,17 @@ class Clase_movimiento extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'des_cmv' => array(
+				],
+				'des_cmv' => [
 					'label'          => 'Descripci&oacute;n del movimiento',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del movimiento. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					//'es_unico'       => TRUE
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($cmv);
 	}
@@ -78,8 +78,6 @@ class Clase_movimiento extends ORM_Model {
 	{
 		return (string) $this->des_cmv;
 	}
-
-
 
 }
 /* End of file Clase_movimiento.php */

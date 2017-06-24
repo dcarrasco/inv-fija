@@ -52,9 +52,9 @@ class Stock_sap_movil_model extends Stock_sap_model {
 	 * @param  array $filtrar Arreglo con campos a filtrar
 	 * @return array          Arreglo con stock
 	 */
-	public function get_stock($mostrar = array(), $filtrar = array())
+	public function get_stock($mostrar = [], $filtrar = [])
 	{
-		$arr_result = array();
+		$arr_result = [];
 
 		// fecha stock
 		if (in_array('fecha', $mostrar))
@@ -236,7 +236,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 
 		if (in_array('tipo_stock', $mostrar))
 		{
-			$arr_filtro_tipo_stock = array();
+			$arr_filtro_tipo_stock = [];
 
 			if (in_array('tipo_stock_equipos', $filtrar))
 			{
@@ -265,14 +265,14 @@ class Stock_sap_movil_model extends Stock_sap_model {
 
 		$arr_result = $this->db->get()->result_array();
 
-		$arr_stock_tmp01 = array();
+		$arr_stock_tmp01 = [];
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
 		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
 		if (in_array('tipo_articulo', $mostrar) AND  ! in_array('tipo_stock', $mostrar))
 		{
 			foreach($arr_result as $registro)
 			{
-				$arr_reg = array();
+				$arr_reg = [];
 				$llave_total = '';
 				$valor_total = 0;
 				$valor_monto = 0;
@@ -301,7 +301,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 				array_push($arr_stock_tmp01, $arr_reg);
 			}
 
-			$arr_stock = array();
+			$arr_stock = [];
 			$llave_ant = '';
 			$i = 0;
 
@@ -315,7 +315,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 				$valor_monto = 0;
 
 				// determina la llave actual y el valor del campo total
-				$arr_tmp = array();
+				$arr_tmp = [];
 				foreach ($registro as $campo_key => $campo_val)
 				{
 					if ($campo_key === 'EQUIPOS' OR $campo_key === 'OTROS' OR $campo_key === 'SIMCARD')
@@ -345,7 +345,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 						array_push($arr_stock, $arr_ant);
 					}
 
-					$arr_ant = array();
+					$arr_ant = [];
 					$arr_ant = $arr_tmp;
 					$arr_ant['EQUIPOS']     = 0;
 					$arr_ant['VAL_EQUIPOS'] = 0;
@@ -387,7 +387,7 @@ class Stock_sap_movil_model extends Stock_sap_model {
 	 * @param  array $filtrar Arreglo con filtros a aplicar
 	 * @return array          Stock en transito
 	 */
-	public function get_stock_transito($mostrar = array(), $filtrar = array())
+	public function get_stock_transito($mostrar = [], $filtrar = [])
 	{
 		return '';
 	}
@@ -409,10 +409,10 @@ class Stock_sap_movil_model extends Stock_sap_model {
 
 		foreach ($arr_result as $indice => $arr_fecha)
 		{
-			$arr_result[$indice] = array(
+			$arr_result[$indice] = [
 				'llave' => fmt_fecha_db($arr_fecha['fecha_stock']),
 				'valor' => fmt_fecha($arr_fecha['fecha_stock']),
-			);
+			];
 		}
 
 		return form_array_format($arr_result);
@@ -506,7 +506,7 @@ AND E.FECHA_STOCK = ?
 GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 
-		return $this->db->query($sql_query, array($tipo_op, $fecha));
+		return $this->db->query($sql_query, [$tipo_op, $fecha]);
 
 	}
 

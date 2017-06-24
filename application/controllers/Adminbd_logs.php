@@ -47,18 +47,18 @@ class Adminbd_logs extends Controller_base {
 		parent::__construct();
 		$this->lang->load('adminbd');
 
-		$this->arr_menu = array(
-			'borra_log' => array(
+		$this->arr_menu = [
+			'borra_log' => [
 				'url'   => $this->router->class . '/borra_log',
 				'texto' => $this->lang->line('adminbd_log_menu_borra'),
 				'icon'  => 'database',
-			),
-			'indices' => array(
+			],
+			'indices' => [
 				'url'   => $this->router->class . '/indices',
 				'texto' => $this->lang->line('adminbd_log_menu_indices'),
 				'icon'  => 'database',
-			),
-		);
+			],
+		];
 	}
 
 	// --------------------------------------------------------------------
@@ -109,17 +109,13 @@ class Adminbd_logs extends Controller_base {
 	 */
 	private function _show_file($archivo = '', $menu = '')
 	{
-		$log_file = file_exists($archivo) ? file($archivo) : array('--- Archivo no encontrado ---');
+		$log_file = file_exists($archivo) ? file($archivo) : ['--- Archivo no encontrado ---'];
 
-		$datos = array(
-			'menu_modulo' => array('menu' => $this->arr_menu, 'mod_selected' => $menu),
-			'log_file' => $log_file,
-		);
-
-		app_render_view('admindb/logs', $datos);
+		app_render_view('admindb/logs', [
+			'menu_modulo' => ['menu' => $this->arr_menu, 'mod_selected' => $menu],
+			'log_file'    => $log_file,
+		]);
 	}
-
-
 
 }
 /* End of file adminbd_logs.php */

@@ -52,9 +52,9 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	 * @param  array $filtrar Arreglo con campos a filtrar
 	 * @return array          Arreglo con stock
 	 */
-	public function get_stock($mostrar = array(), $filtrar = array())
+	public function get_stock($mostrar = [], $filtrar = [])
 	{
-		$arr_result = array();
+		$arr_result = [];
 
 		// fecha stock
 		if (in_array('fecha', $mostrar))
@@ -172,9 +172,9 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	 * @param  array $filtrar Arreglo con filtros a aplicar
 	 * @return array           Stock en transito
 	 */
-	public function get_stock_transito($mostrar = array(), $filtrar = array())
+	public function get_stock_transito($mostrar = [], $filtrar = [])
 	{
-		$arr_result = array();
+		$arr_result = [];
 
 		if (array_key_exists('fecha', $filtrar) AND count($filtrar['fecha'])>0)
 		{
@@ -261,10 +261,10 @@ class Stock_sap_fija_model extends Stock_sap_model {
 
 		foreach ($arr_result as $indice => $arr_fecha)
 		{
-			$arr_result[$indice] = array(
+			$arr_result[$indice] = [
 				'llave' => fmt_fecha_db($arr_fecha['fecha_stock']),
 				'valor' => fmt_fecha($arr_fecha['fecha_stock']),
-			);
+			];
 		}
 
 		return form_array_format($arr_result);
@@ -296,7 +296,7 @@ AND E.FECHA_STOCK = ?
 GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
 
-		return $this->db->query($sql_query, array($tipo_op, $fecha));
+		return $this->db->query($sql_query, [$tipo_op, $fecha]);
 
 	}
 

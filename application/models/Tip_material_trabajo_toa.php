@@ -36,48 +36,45 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tip_material = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tip_material_trabajo_toa'),
 				'model_label'        => 'Tipo Material de trabajo',
 				'model_label_plural' => 'Tipos Material de trabajo',
 				'model_order_by'     => 'desc_tip_material',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'           => Orm_field::TIPO_ID,
-				),
-				'desc_tip_material' => array(
+			],
+			'campos' => [
+				'id'                => ['tipo' => Orm_field::TIPO_ID],
+				'desc_tip_material' => [
 					'label'          => 'Descripci&oacute;n tipo de material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del tipo de material. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'color' => array(
+				],
+				'color' => [
 					'label'          => 'Color tipo material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Color o clase que identifica el tipo de material. M&aacute;ximo 50 caracteres.',
-				),
-				'tip_material' => array(
+				],
+				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+					'relation'       => [
 						'model'         => 'catalogo',
 						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
-						'id_one_table' => array('id_tip_material_trabajo'),
-						'id_many_table'  => array('id_catalogo'),
-						//'conditions'    => array('id_app' => '@field_value:id_app'),
-					),
+						'id_one_table'  => ['id_tip_material_trabajo'],
+						'id_many_table' => ['id_catalogo'],
+						//'conditions'    => ['id_app' => '@field_value:id_app'],
+					],
 					'texto_ayuda'    => 'Tipo de material TOA.',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_tip_material);
 	}
-
 
 	// --------------------------------------------------------------------
 

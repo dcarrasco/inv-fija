@@ -54,7 +54,7 @@
 
 <div class="content-module-main">
 <?php if ($stock_tecnicos): ?>
-	<?php $num_lin = 0; $tot_col = array();?>
+	<?php $num_lin = 0; $tot_col = [];?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 	<?php foreach ($stock_tecnicos as $id_tecnico => $datos): ?>
 	<?php if ($datos['con_datos'] > 0 OR request('mostrar') === 'todos'): ?>

@@ -72,9 +72,6 @@ class Toa_peticiones extends Controller_base {
 		redirect('/toa_consumos/detalle_peticion/'.$peticion);
 	}
 
-
-
-
 }
 /* End of file Toa_peticiones.php */
 /* Location: ./application/controllers/Toa_peticiones.php */

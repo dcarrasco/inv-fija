@@ -73,7 +73,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $_model_campo_id = array();
+	private $_model_campo_id = [];
 
 	/**
 	 * Indicador si se recuperaron los datos de las relaciones
@@ -108,14 +108,14 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $_fields_values = array();
+	private $_fields_values = [];
 
 	/**
 	 * Arreglo con los campos del modelo
 	 *
 	 * @var array
 	 */
-	private $_model_fields = array();
+	private $_model_fields = [];
 
 	/**
 	 * Arreglo temporal de objetos recuperados de la BD
@@ -129,7 +129,7 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	protected $_model_config = array();
+	protected $_model_config = [];
 
 	// --------------------------------------------------------------------
 
@@ -168,10 +168,10 @@ class Orm_model implements IteratorAggregate {
 	 * @param   array $param Arreglo con los parametros a configurar
 	 * @return  void
 	 **/
-	public function config_model($param = array())
+	public function config_model($param = [])
 	{
-		$this->_config_modelo(array_get($param, 'modelo', array()));
-		$this->_config_campos(array_get($param, 'campos', array()));
+		$this->_config_modelo(array_get($param, 'modelo', []));
+		$this->_config_campos(array_get($param, 'campos', []));
 
 		$this->_model_campo_id = $this->_determina_campo_id();
 		//$this->_recuperar_relation_fields();
@@ -223,7 +223,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_config arreglo con la configuración del modelo
 	 * @return nada
 	 */
-	private function _config_modelo($arr_config = array())
+	private function _config_modelo($arr_config = [])
 	{
 		collect($arr_config)->each(function($config_value, $config_index) {
 			$llave = (substr($config_index, 0, 1) !== '_' ? '_' : '').$config_index;
@@ -242,7 +242,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_config arreglo con la configuración de los campos del modelo
 	 * @return nada
 	 */
-	protected function _config_campos($arr_config = array())
+	protected function _config_campos($arr_config = [])
 	{
 		collect($arr_config)->each(function($config_value, $campo) {
 			$config_value['tabla_bd'] = $this->_model_tabla;
@@ -529,18 +529,18 @@ class Orm_model implements IteratorAggregate {
 
 		if ($campo !== '')
 		{
-			$data = array(
+			$data = [
 				'form_label'    => form_label(
-										ucfirst($this->get_label_field($campo))
-										.$this->get_marca_obligatorio_field($campo),
-										'id_'.$campo,
-										array('class' => 'control-label col-sm-4')
-									),
+					ucfirst($this->get_label_field($campo))
+					.$this->get_marca_obligatorio_field($campo),
+					'id_'.$campo,
+					['class' => 'control-label col-sm-4']
+				),
 				'item_error'    => form_has_error_class($campo),
 				'item-feedback' => is_null($field_error) ? '' : 'has-feedback',
 				'item_form'     => $this->print_form_field($campo, FALSE, '', $field_error),
 				'item_help'     => $show_help ? $this->get_texto_ayuda_field($campo) : '',
-			);
+			];
 
 			return $this->parser->parse('orm/form_item', $data, TRUE);
 		}
@@ -678,9 +678,9 @@ class Orm_model implements IteratorAggregate {
 	public function crea_links_paginas()
 	{
 		$this->load->library('pagination');
-		$total_rows = $this->find('count', array('filtro' => $this->_model_filtro), FALSE);
+		$total_rows = $this->find('count', ['filtro' => $this->_model_filtro], FALSE);
 
-		$cfg_pagination = array(
+		$cfg_pagination = [
 			'uri_segment'     => 5,
 			'num_links'       => 5,
 			'full_tag_open'   => '<ul class="pagination">',
@@ -714,7 +714,7 @@ class Orm_model implements IteratorAggregate {
 			'page_query_string'    => TRUE,
 			'query_string_segment' => 'page',
 			'use_page_numbers'     => TRUE,
-		);
+		];
 
 		$this->pagination->initialize($cfg_pagination);
 
@@ -743,9 +743,9 @@ class Orm_model implements IteratorAggregate {
 	 * @param  boolean $recupera_relation Indica si se recuperan los modelos relacionados
 	 * @return array                      Arreglo de resultados
 	 */
-	public function find($tipo = 'first', $param = array(), $recupera_relation = TRUE)
+	public function find($tipo = 'first', $param = [], $recupera_relation = TRUE)
 	{
-		foreach (array_get($param, 'conditions', array()) as $campo => $valor)
+		foreach (array_get($param, 'conditions', []) as $campo => $valor)
 		{
 			if (is_array($valor))
 			{
@@ -805,15 +805,15 @@ class Orm_model implements IteratorAggregate {
 		elseif ($tipo === 'list')
 		{
 			$opc_ini = collect(array_get($param, 'opc_ini', TRUE)
-				? array('' => 'Seleccione '.strtolower($this->_model_label).'...')
-				: array()
+				? ['' => 'Seleccione '.strtolower($this->_model_label).'...']
+				: []
 			);
 
 			$opciones = collect($this->db->get($this->_model_tabla)->result_array())
 				->map_with_keys(function ($registro) {
 					$obj_modelo = new $this->_model_class($registro);
 
-					return array($obj_modelo->get_model_id() => (string) $obj_modelo);
+					return [$obj_modelo->get_model_id() => (string) $obj_modelo];
 				});
 
 			return $opc_ini->merge($opciones)->all();
@@ -839,11 +839,11 @@ class Orm_model implements IteratorAggregate {
 				->combine(explode($this->_separador_campos, $id_modelo))
 				->map(function($valor, $llave) use($model_fields) {
 					return in_array(collect($model_fields)->get($llave)->get_tipo(),
-						array(Orm_field::TIPO_ID, Orm_field::TIPO_INT))
+						[Orm_field::TIPO_ID, Orm_field::TIPO_INT])
 						? (int) $valor : $valor;
 				})->all();
 
-		$this->find('first', array('conditions' => $arr_condiciones), $recupera_relation);
+		$this->find('first', ['conditions' => $arr_condiciones], $recupera_relation);
 	}
 
 	// --------------------------------------------------------------------
@@ -858,11 +858,11 @@ class Orm_model implements IteratorAggregate {
 	{
 		$page = empty($page) ? 1 : $page;
 
-		return $this->find('all', array(
+		return $this->find('all', [
 			'filtro' => $this->_model_filtro,
 			'limit'  => $this->_model_page_results,
 			'offset' => ($page-1) * $this->_model_page_results,
-		));
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -913,7 +913,7 @@ class Orm_model implements IteratorAggregate {
 				$arr_props_relation = $obj_campo->get_relation();
 
 				// genera arreglo where con la llave del modelo
-				$arr_where = array();
+				$arr_where = [];
 				$arr_id_one_table = $arr_props_relation['id_one_table'];
 
 				foreach ($this->_model_campo_id as $campo_id)
@@ -931,18 +931,17 @@ class Orm_model implements IteratorAggregate {
 				$model_relacionado = new $class_relacionado();
 
 				// genera arreglo de condiciones de busqueda
-				$arr_where = array();
-
+				$arr_where = [];
 				foreach ($registros as $registro)
 				{
 					array_push($arr_where, array_pop($registro));
 				}
-				$arr_condiciones = array($this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where);
+				$arr_condiciones = [$this->_junta_campos_select($model_relacionado->get_model_campo_id()) => $arr_where];
 
-				$model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
+				$model_relacionado->find('all', ['conditions' => $arr_condiciones], FALSE);
 
 				$arr_props_relation['model'] = $model_relacionado;
-				$arr_props_relation['data'] = $model_relacionado->find('all', array('conditions' => $arr_condiciones), FALSE);
+				$arr_props_relation['data'] = $model_relacionado->find('all', ['conditions' => $arr_condiciones], FALSE);
 				$this->_model_fields[$nombre_campo]->set_relation($arr_props_relation);
 				$this->_fields_values[$nombre_campo] = $arr_where;
 				$this->_model_got_relations = TRUE;
@@ -990,7 +989,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_campos Arreglo con el listado de campos
 	 * @return string             Listado de campos unidos por la BD
 	 */
-	private function _junta_campos_select($arr_campos = array())
+	private function _junta_campos_select($arr_campos = [])
 	{
 		if (count($arr_campos) === 1)
 		{
@@ -1041,12 +1040,12 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_data Arreglo con los valores
 	 * @return void
 	 */
-	public function fill_from_array($arr_data = array())
+	public function fill_from_array($arr_data = [])
 	{
 		collect($this->_model_fields)
 			->only(collect($arr_data)->keys()->all())
 			->each(function($campo, $nombre_campo) use ($arr_data) {
-				if (in_array($campo->get_tipo(), array(Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT)))
+				if (in_array($campo->get_tipo(), [Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT]))
 				{
 					$this->_fields_values[$nombre_campo] = (int) $arr_data[$nombre_campo];
 				}
@@ -1135,8 +1134,8 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function grabar()
 	{
-		$data_update  = array();
-		$data_where   = array();
+		$data_update  = [];
+		$data_where   = [];
 		$es_auto_id   = FALSE;
 		$es_insert    = FALSE;
 
@@ -1206,7 +1205,7 @@ class Orm_model implements IteratorAggregate {
 			{
 				$relation = $campo->get_relation();
 
-				$arr_where_delete = array();
+				$arr_where_delete = [];
 				$data_where_tmp = $data_where;
 
 				foreach ($relation['id_one_table'] as $id_one_table_key)
@@ -1218,8 +1217,7 @@ class Orm_model implements IteratorAggregate {
 
 				foreach ($this->$nombre as $valor_campo)
 				{
-					$arr_values = array();
-
+					$arr_values = [];
 					$data_where_tmp = $data_where;
 
 					foreach ($relation['id_one_table'] as $id_one_table_key)
@@ -1249,7 +1247,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function borrar()
 	{
-		$data_where = array();
+		$data_where = [];
 
 		foreach ($this->_model_fields as $nombre => $campo)
 		{
@@ -1266,7 +1264,7 @@ class Orm_model implements IteratorAggregate {
 			if ($campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
 				$relation = $campo->get_relation();
-				$arr_where_delete = array();
+				$arr_where_delete = [];
 				$data_where_tmp = $data_where;
 
 				foreach ($relation['id_one_table'] as $id_one_table_key)

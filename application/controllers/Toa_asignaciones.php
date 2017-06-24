@@ -74,12 +74,10 @@ class Toa_asignaciones extends Controller_base {
 			->set_rules($this->toa_consumo->consumos_validation)
 			->run();
 
-		$datos = array(
+		app_render_view('toa/consumos', [
 			'combo_reportes' => $this->toa_model->tipos_reporte_asignaciones,
 			'reporte'        => $this->toa_model->asignaciones_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('order_by'), request('order_sort')),
-		);
-
-		app_render_view('toa/consumos', $datos);
+		]);
 	}
 
 
@@ -97,11 +95,10 @@ class Toa_asignaciones extends Controller_base {
 	 */
 	public function ver_asignaciones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
-		$datos = array(
+		app_render_view('toa/peticiones', [
 			'reporte' => $this->toa_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3, $param4),
-		);
+		]);
 
-		app_render_view('toa/peticiones', $datos);
 
 	}
 
@@ -117,14 +114,10 @@ class Toa_asignaciones extends Controller_base {
 	 */
 	public function detalle_asignacion($fecha = NULL, $peticion = NULL)
 	{
-		$datos = array(
+		app_render_view('toa/detalle_asignacion', [
 			'reporte' => $this->toa_model->detalle_asignacion_toa($fecha, $peticion),
-		);
-
-		app_render_view('toa/detalle_asignacion', $datos);
-
+		]);
 	}
-
 
 }
 /* End of file Toa_consumos.php */

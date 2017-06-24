@@ -36,15 +36,15 @@ class Tipo_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tipo = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tipos_trabajo_toa'),
 				'model_label'        => 'Tipo de trabajo TOA',
 				'model_label_plural' => 'Tipos de trabajo TOA',
 				'model_order_by'     => 'id_tipo',
-			),
-			'campos' => array(
-				'id_tipo' => array(
+			],
+			'campos' => [
+				'id_tipo' => [
 					'label'          => 'Tipo de rabajo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 30,
@@ -52,17 +52,17 @@ class Tipo_trabajo_toa extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'desc_tipo' => array(
+				],
+				'desc_tipo' => [
 					'label'          => 'Descripci&oacute;n tipo de trabajo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del tipo de trabajo. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_tipo);
 	}
@@ -84,13 +84,13 @@ class Tipo_trabajo_toa extends ORM_Model {
 	{
 		$descripcion_trabajo = '';
 
-		if (strlen($this->id_tipo) === 10 AND in_array(substr($this->id_tipo, 0, 1), array('A', '-', 'M', 'B', 'T')))
+		if (strlen($this->id_tipo) === 10 AND in_array(substr($this->id_tipo, 0, 1), ['A', '-', 'M', 'B', 'T']))
 		{
-			$descripcion_trabajo = '<span class="label label-default">BA</span><span class="label label-info">'.substr($this->id_tipo, 0, 2)."</span>";
-			$descripcion_trabajo .= ' <span class="label label-default">STB</span><span class="label label-info">'.substr($this->id_tipo, 2, 2)."</span>";
-			$descripcion_trabajo .= ' <span class="label label-default">DTH</span><span class="label label-info">'.substr($this->id_tipo, 4, 2)."</span>";
-			$descripcion_trabajo .= ' <span class="label label-default">VDSL</span><span class="label label-info">'.substr($this->id_tipo, 6, 2)."</span>";
-			$descripcion_trabajo .= ' <span class="label label-default">IPTV</span><span class="label label-info">'.substr($this->id_tipo, 8, 2)."</span>";
+			$descripcion_trabajo = '<span class="label label-default">BA</span><span class="label label-info">'.substr($this->id_tipo, 0, 2).'</span>';
+			$descripcion_trabajo .= ' <span class="label label-default">STB</span><span class="label label-info">'.substr($this->id_tipo, 2, 2).'</span>';
+			$descripcion_trabajo .= ' <span class="label label-default">DTH</span><span class="label label-info">'.substr($this->id_tipo, 4, 2).'</span>';
+			$descripcion_trabajo .= ' <span class="label label-default">VDSL</span><span class="label label-info">'.substr($this->id_tipo, 6, 2).'</span>';
+			$descripcion_trabajo .= ' <span class="label label-default">IPTV</span><span class="label label-info">'.substr($this->id_tipo, 8, 2).'</span>';
 		}
 
 		return (string) empty($descripcion_trabajo) ? $this->id_tipo : $descripcion_trabajo;

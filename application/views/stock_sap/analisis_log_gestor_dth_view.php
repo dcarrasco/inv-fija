@@ -20,14 +20,14 @@
 							<?= form_radio('set_serie', 'rut', set_radio('set_serie','rut'))?>
 							{_stock_gestor_radio_cliente_}
 						</label>
-						<?= form_textarea(array(
-								'id' => 'series',
-								'name' => 'series',
-								'rows' => '10',
-								'cols' => '30',
+						<?= form_textarea([
+								'id'    => 'series',
+								'name'  => 'series',
+								'rows'  => '10',
+								'cols'  => '30',
 								'value' => request('series'),
 								'class' => 'form-control',
-							)); ?>
+							]); ?>
 					</div>
 				</div>
 
@@ -131,7 +131,7 @@
 	</div>
 </div>
 
-<?= form_open($this->router->class . '/historia', array('id' => 'frmHistoria')); ?>
+<?= form_open($this->router->class . '/historia', ['id' => 'frmHistoria']); ?>
 <?= form_hidden('series'); ?>
 <?= form_hidden('show_mov', 'show'); ?>
 <?= form_close(); ?>

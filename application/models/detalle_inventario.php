@@ -45,150 +45,136 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function __construct($id_detalle = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_detalle_inventario'),
 				'model_label'        => 'Detalle inventario',
 				'model_label_plural' => 'Detalles inventario',
 				'model_order_by'     => 'id',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'   => Orm_field::TIPO_ID,
-				),
-				'id_inventario' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'inventario',
-					),
-				),
-				'hoja' => array(
+			],
+			'campos' => [
+				'id'            => ['tipo' => Orm_field::TIPO_ID],
+				'id_inventario' => [
+					'tipo'     => Orm_field::TIPO_HAS_ONE,
+					'relation' => ['model' => 'inventario'],
+				],
+				'hoja' => [
 					'label'          => 'Hoja',
 					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'N&uacute;mero de la hoja usada en el inventario',
 					'es_obligatorio' => TRUE,
-				),
-				'ubicacion' => array(
+				],
+				'ubicacion' => [
 					'label'          => 'Ubicaci&oacute;n del material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Indica la posici&oacute;n del material en el almac&eacute;n.',
 					'es_obligatorio' => TRUE,
-				),
-				'hu' => array(
+				],
+				'hu' => [
 					'label'          => 'HU del material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'Indica la HU del material en el almac&eacute;n.',
 					'es_obligatorio' => FALSE,
-				),
-				'catalogo' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'catalogo',
-					),
-					'texto_ayuda'    => 'Cat&aacute;logo del material.',
-				),
-				'descripcion' => array(
+				],
+				'catalogo' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => ['model' => 'catalogo'],
+					'texto_ayuda' => 'Cat&aacute;logo del material.',
+				],
+				'descripcion' => [
 					'label'          => 'Descripci&oacute;n del material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 45,
 					'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
 					'es_obligatorio' => TRUE,
-				),
-				'lote' => array(
+				],
+				'lote' => [
 					'label'          => 'Lote del material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Lote del material.',
 					'es_obligatorio' => TRUE,
-				),
-				'centro' => array(
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'centro'
-					),
-				),
-				'almacen' => array(
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'almacen'
-					),
-				),
-				'um' => array(
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'unidad_medida'
-					),
-				),
-				'stock_sap' => array(
+				],
+				'centro' => [
+					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+					'relation' => ['model' => 'centro'],
+				],
+				'almacen' => [
+					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+					'relation' => ['model' => 'almacen'],
+				],
+				'um' => [
+					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+					'relation' => ['model' => 'unidad_medida'],
+				],
+				'stock_sap' => [
 					'label'          => 'Stock SAP del material',
 					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Stock sist&eacute;mico (SAP) del material.',
 					'es_obligatorio' => TRUE,
-				),
-				'stock_fisico' => array(
+				],
+				'stock_fisico' => [
 					'label'          => 'Stock f&iacute;sico del material',
 					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'Stock f&iacute;sico (inventariado) del material.',
 					'es_obligatorio' => TRUE,
-				),
-				'digitador' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'usuario',
-					),
-					'texto_ayuda'    => 'Digitador de la hoja.',
-				),
-				'auditor' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
+				],
+				'digitador' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => ['model' => 'usuario'],
+					'texto_ayuda' => 'Digitador de la hoja.',
+				],
+				'auditor' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => [
 						'model'      => 'auditor',
-						'conditions' => array('activo' => 1),
-					),
-					'texto_ayuda'    => 'Auditor de la hoja.',
-				),
-				'reg_nuevo' => array(
+						'conditions' => ['activo' => 1],
+					],
+					'texto_ayuda' => 'Auditor de la hoja.',
+				],
+				'reg_nuevo' => [
 					'label'          => 'Registro nuevo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 1,
 					'texto_ayuda'    => 'Indica si el registro es nuevo.',
 					'es_obligatorio' => TRUE,
-				),
-				'fecha_modificacion' => array(
+				],
+				'fecha_modificacion' => [
 					'label'          => 'Fecha de modificacion',
 					'tipo'           => Orm_field::TIPO_DATETIME,
 					'texto_ayuda'    => 'Fecha de modificaci&oacute;n del registro.',
 					'es_obligatorio' => TRUE,
-				),
-				'observacion' => array(
-					'label'          => 'Observaci&oacute;n de registro',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 200,
-					'texto_ayuda'    => 'M&aacute;ximo 200 caracteres.',
-				),
-				'stock_ajuste' => array(
-					'label'          => 'Stock de ajuste del material',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'M&aacute;ximo 100 caracteres.',
-				),
-				'glosa_ajuste' => array(
-					'label'          => 'Observaci&oacute;n del ajuste',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 100,
-					'texto_ayuda'    => 'M&aacute;ximo 100 caracteres.',
-				),
-				'fecha_ajuste' => array(
-					'label'          => 'Fecha del ajuste',
-					'tipo'           => Orm_field::TIPO_DATETIME,
-					'texto_ayuda'    => 'Fecha de modificacion del ajuste.',
-				),
-			),
-		);
+				],
+				'observacion' => [
+					'label'       => 'Observaci&oacute;n de registro',
+					'tipo'        => Orm_field::TIPO_CHAR,
+					'largo'       => 200,
+					'texto_ayuda' => 'M&aacute;ximo 200 caracteres.',
+				],
+				'stock_ajuste' => [
+					'label'       => 'Stock de ajuste del material',
+					'tipo'        => Orm_field::TIPO_INT,
+					'largo'       => 10,
+					'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
+				],
+				'glosa_ajuste' => [
+					'label'       => 'Observaci&oacute;n del ajuste',
+					'tipo'        => Orm_field::TIPO_CHAR,
+					'largo'       => 100,
+					'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
+				],
+				'fecha_ajuste' => [
+					'label'       => 'Fecha del ajuste',
+					'tipo'        => Orm_field::TIPO_DATETIME,
+					'texto_ayuda' => 'Fecha de modificacion del ajuste.',
+				],
+			],
+		];
 
 		parent::__construct($id_detalle);
 	}
@@ -216,10 +202,10 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		return $this->find('all', array(
-			'conditions' => array('id_inventario' => $id_inventario, 'hoja' => $hoja),
+		return $this->find('all', [
+			'conditions' => ['id_inventario' => $id_inventario, 'hoja' => $hoja],
 			'order_by'   => 'ubicacion, catalogo, id'
-		));
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -306,8 +292,7 @@ class Detalle_inventario extends ORM_Model {
 			->count_all_results($this->get_model_tabla());
 
 		$this->load->library('pagination');
-
-		$cfg_pagination = array(
+		$this->pagination->initialize([
 			'uri_segment' => 4,
 			'num_links'   => 5,
 
@@ -339,9 +324,7 @@ class Detalle_inventario extends ORM_Model {
 			'page_query_string'    => TRUE,
 			'query_string_segment' => 'page',
 			'use_page_numbers'     => TRUE,
-		);
-
-		$this->pagination->initialize($cfg_pagination);
+		]);
 
 		return $this->pagination->create_links();
 	}
@@ -356,22 +339,22 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_validation_ajustes(Collection $data_collection)
 	{
-		$arr_validation = array();
+		$arr_validation = [];
 
 		if ($data_collection->length())
 		{
 			foreach($data_collection as $linea_detalle)
 			{
-				array_push($arr_validation, array(
+				array_push($arr_validation, [
 					'field' => 'stock_ajuste_'.$linea_detalle->id,
 					'label' => 'cantidad',
 					'rules' => 'trim|integer'
-				));
-				array_push($arr_validation, array(
+				]);
+				array_push($arr_validation, [
 					'field' => 'observacion_'.$linea_detalle->id,
 					'label' => 'observacion',
 					'rules' => 'trim'
-				));
+				]);
 			}
 		}
 
@@ -388,27 +371,27 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_validation_digitacion(Collection $data_collection)
 	{
-		$arr_validation = array();
+		$arr_validation = [];
 
 		if ($data_collection->length() > 0)
 		{
 			foreach($data_collection as $linea_detalle)
 			{
-				array_push($arr_validation, array(
+				array_push($arr_validation, [
 					'field' => 'stock_fisico_'.$linea_detalle->id,
 					'label' => 'Cantidad',
 					'rules' => 'trim|required|integer|greater_than[-1]'
-				));
-				array_push($arr_validation, array(
+				]);
+				array_push($arr_validation, [
 					'field' => 'hu'.$linea_detalle->id,
 					'label' => 'HU',
 					'rules' => 'trim'
-				));
-				array_push($arr_validation, array(
+				]);
+				array_push($arr_validation, [
 					'field' => 'observacion'.$linea_detalle->id,
 					'label' => 'Observacion',
 					'rules' => 'trim'
-				));
+				]);
 			}
 		}
 
@@ -475,7 +458,7 @@ class Detalle_inventario extends ORM_Model {
 		}
 		$id_auditor = $this->get_auditor_hoja($id_inventario, $hoja);
 
-		$this->fill(array(
+		$this->fill([
 			'id'                 => (int) $id_detalle,
 			'id_inventario'      => (int) $id_inventario,
 			'hoja'               => (int) $hoja,
@@ -497,8 +480,7 @@ class Detalle_inventario extends ORM_Model {
 			'stock_ajuste'       => 0,
 			'glosa_ajuste'       => '',
 			'fecha_ajuste'       => NULL,
-		));
-
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -548,14 +530,14 @@ class Detalle_inventario extends ORM_Model {
 
 		foreach($this->get_hoja($id_inventario, $hoja) as $linea_detalle)
 		{
-			$linea_detalle->fill(array(
+			$linea_detalle->fill([
 				'digitador'          => $id_usr,
 				'auditor'            => request('auditor'),
 				'stock_fisico'       => request('stock_fisico_'.$linea_detalle->id),
 				'hu'                 => request('hu_'.$linea_detalle->id),
 				'observacion'        => request('observacion_'.$linea_detalle->id),
 				'fecha_modificacion' => date('Y-m-d H:i:s'),
-			));
+			]);
 
 			$linea_detalle->grabar();
 			$cant_modif += 1;

@@ -11,14 +11,14 @@
 				<div class="col-md-4">
 					<div class="form-group">
 						<label>Series</label>
-						<?= form_textarea(array(
-								'id' => 'series',
-								'name' => 'series',
-								'rows' => '10',
-								'cols' => '30',
+						<?= form_textarea([
+								'id'    => 'series',
+								'name'  => 'series',
+								'rows'  => '10',
+								'cols'  => '30',
 								'value' => request('series'),
 								'class' => 'form-control',
-							)); ?>
+							]); ?>
 						<label class="radio-inline">
 							<?= form_radio('sel_tipo', 'imei', set_radio('sel_tipo', 'imei', TRUE)); ?>
 							IMEI

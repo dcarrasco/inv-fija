@@ -66,15 +66,14 @@ class Orm_controller extends Controller_base {
 		$modelo = new $nombre_modelo;
 		$modelo->set_model_filtro($filtro);
 
-		$data = array(
+		app_render_view('ORM/orm_listado', [
 			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
 			'modelos'     => $modelo->list_paginated($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => url_params(),
-		);
-		app_render_view('ORM/orm_listado', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -91,18 +90,23 @@ class Orm_controller extends Controller_base {
 		$modelo = new $nombre_modelo($id_modelo);
 		$url_params = url_params();
 
-		$data = array(
+		app_render_view('ORM/orm_editar', [
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
 			'modelo'        => $modelo,
 			'url_form'      => site_url("{$this->router->class}/update/{$nombre_modelo}/{$id_modelo}{$url_params}"),
 			'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
-		);
-
-		app_render_view('ORM/orm_editar', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Actualiza los datos de una entidad
+	 *
+	 * @param  string $nombre_modelo Nombre del modelo a actualizar o borrar
+	 * @param  string $id_modelo     Identificador del modelo
+	 * @return void
+	 */
 	public function update($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$modelo = new $nombre_modelo($id_modelo);
@@ -123,7 +127,6 @@ class Orm_controller extends Controller_base {
 		$url_params = url_params();
 		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}
-
 
 }
 /* End of file orm_controller.php */

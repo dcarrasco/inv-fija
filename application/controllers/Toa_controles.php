@@ -46,48 +46,48 @@ class Toa_controles extends Controller_base {
 		$this->load->model('toa_model');
 		$this->lang->load('toa');
 
-		$this->set_menu_modulo(array(
-			'consumos' => array(
+		$this->set_menu_modulo([
+			'consumos' => [
 				'url'   => $this->router->class . '/consumos',
 				'texto' => $this->lang->line('toa_controles_tecnicos'),
 				'icon'  => 'user'
-			),
-			'materiales_consumidos' => array(
+			],
+			'materiales_consumidos' => [
 				'url'   => $this->router->class . '/materiales_consumidos',
 				'texto' => $this->lang->line('toa_controles_materiales_consumidos'),
 				'icon'  => 'tv'
-			),
-			'materiales' => array(
+			],
+			'materiales' => [
 				'url'   => $this->router->class . '/materiales',
 				'texto' => $this->lang->line('toa_controles_materiales'),
 				'icon'  => 'file-text-o'
-			),
-			'asignaciones' => array(
+			],
+			'asignaciones' => [
 				'url'   => $this->router->class . '/asignaciones',
 				'texto' => $this->lang->line('toa_controles_asignaciones'),
 				'icon'  => 'archive'
-			),
-			'stock' => array(
+			],
+			'stock' => [
 				'url'   => $this->router->class . '/stock',
 				'texto' => $this->lang->line('toa_controles_stock'),
 				'icon'  => 'signal'
-			),
-			'stock_tecnicos' => array(
+			],
+			'stock_tecnicos' => [
 				'url'   => $this->router->class . '/stock_tecnicos',
 				'texto' => $this->lang->line('toa_controles_stock_tecnicos'),
 				'icon'  => 'truck'
-			),
-			'nuevos_tecnicos' => array(
+			],
+			'nuevos_tecnicos' => [
 				'url'   => $this->router->class . '/nuevos_tecnicos',
 				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
 				'icon'  => 'users'
-			),
-			'clientes' => array(
+			],
+			'clientes' => [
 				'url'   => $this->router->class . '/clientes',
 				'texto' => $this->lang->line('toa_controles_clientes'),
 				'icon'  => 'users'
-			),
-		));
+			],
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -118,7 +118,7 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$datos = array(
+		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
@@ -126,9 +126,8 @@ class Toa_controles extends Controller_base {
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => request('mes'),
 			'control'              => $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
-		);
+		]);
 
-		app_render_view('toa/controles', $datos);
 	}
 
 
@@ -148,7 +147,7 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$datos = array(
+		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_asignacion(),
@@ -156,9 +155,7 @@ class Toa_controles extends Controller_base {
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
 			'control'              => $this->toa_model->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
-		);
-
-		app_render_view('toa/controles', $datos);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -177,7 +174,7 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$datos = array(
+		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
@@ -185,9 +182,7 @@ class Toa_controles extends Controller_base {
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => request('mes'),
 			'control'              => $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
-		);
-
-		app_render_view('toa/control_materiales_consumidos', $datos);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -208,16 +203,14 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$datos = array(
+		app_render_view('toa/controles_stock', [
 			'menu_modulo'          => $this->get_menu_modulo('stock'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 			'anomes'               => request('mes'),
 			'stock_almacenes'      => $this->toa_stock->stock_almacenes(request('empresa'), request('mes'), request('dato')),
-		);
-
-		app_render_view('toa/controles_stock', $datos);
+		]);
 	}
 
 
@@ -239,7 +232,7 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$datos = array(
+		app_render_view('toa/controles_stock_tecnicos', [
 			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
@@ -247,9 +240,7 @@ class Toa_controles extends Controller_base {
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
 			'anomes'               => request('mes'),
 			'stock_tecnicos'       => $this->toa_stock->stock_tecnicos(request('empresa'), request('mes'), request('dato')),
-		);
-
-		app_render_view('toa/controles_stock_tecnicos', $datos);
+		]);
 	}
 
 
@@ -267,12 +258,10 @@ class Toa_controles extends Controller_base {
 	{
 		$this->load->model('toa_stock');
 
-		$datos = array(
+		app_render_view('toa/peticiones', [
 			'reporte' => $this->toa_stock->detalle_stock_almacen($fecha, $centro_almacen),
 			'google_maps' => '',
-		);
-
-		app_render_view('toa/peticiones', $datos);
+		]);
 	}
 
 
@@ -290,12 +279,10 @@ class Toa_controles extends Controller_base {
 	{
 		$this->load->model('toa_stock');
 
-		$datos = array(
+		app_render_view('toa/peticiones', [
 			'reporte' => $this->toa_stock->detalle_stock_tecnico($fecha, $id_tecnico),
 			'google_maps' => '',
-		);
-
-		app_render_view('toa/peticiones', $datos);
+		]);
 	}
 
 
@@ -317,17 +304,15 @@ class Toa_controles extends Controller_base {
 		$tipo_trabajo = new Tipo_trabajo_toa();
 
 
-		$datos = array(
+		app_render_view('toa/controles_materiales_tipo_trabajo', [
 			'menu_modulo'              => $this->get_menu_modulo('materiales'),
 			'combo_empresas'           => $empresa_toa->find('list'),
-			'combo_tipos_trabajo'      => array_merge(array('000' => 'Todos'), $tipo_trabajo->find('list', array('opc_ini' => FALSE))),
+			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], $tipo_trabajo->find('list', ['opc_ini' => FALSE])),
 			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => request('mes'),
 			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo(request('empresa'), request('mes'), request('tipo_trabajo'), request('dato')),
-		);
-
-		app_render_view('toa/controles_materiales_tipo_trabajo', $datos);
+		]);
 	}
 
 
@@ -349,13 +334,11 @@ class Toa_controles extends Controller_base {
 			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), count($nuevos_tecnicos)));
 		}
 
-		$datos = array(
+		app_render_view('toa/controles_nuevos_tecnicos', [
 			'menu_modulo'     => $this->get_menu_modulo('nuevos_tecnicos'),
 			'msg_agregar'     => $msg_agregar,
 			'nuevos_tecnicos' => $nuevos_tecnicos,
-		);
-
-		app_render_view('toa/controles_nuevos_tecnicos', $datos);
+		]);
 	}
 
 
@@ -373,16 +356,13 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_clientes_validation)
 			->run();
 
-		$datos = array(
+		app_render_view('toa/controles_clientes', [
 			'menu_modulo'     => $this->get_menu_modulo('clientes'),
 			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
 			'clientes'        => $this->toa_model->clientes(request('cliente'), request('fecha_desde'), request('fecha_hasta'), request('dato')),
 			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-','',request('fecha_desde')).'/'.str_replace('-','',request('fecha_hasta')).'/',
-		);
-
-		app_render_view('toa/controles_clientes', $datos);
+		]);
 	}
-
 
 }
 /* End of file Toa_controles.php */

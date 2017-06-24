@@ -36,15 +36,15 @@ class Usuario_sap extends ORM_Model {
 	 */
 	public function __construct($id_usuario_sap = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_usuarios_sap'),
 				'model_label'        => 'Usuario SAP',
 				'model_label_plural' => 'Usuarios SAP',
 				'model_order_by'     => 'usuario',
-			),
-			'campos' => array(
-				'usuario' => array(
+			],
+			'campos' => [
+				'usuario' => [
 					'label'          => 'Codigo Usuario',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,20 +52,20 @@ class Usuario_sap extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'nom_usuario' => array(
+				],
+				'nom_usuario' => [
 					'label'          => 'Nombre de usuario',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del usuario. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => FALSE,
-				),
-			),
-		);
+				],
+			],
+		];
+
 		parent::__construct($id_usuario_sap);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -78,7 +78,6 @@ class Usuario_sap extends ORM_Model {
 	{
 		return (string) $this->nom_usuario;
 	}
-
 
 }
 /* End of file usuario_sap.php */

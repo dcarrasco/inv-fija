@@ -31,38 +31,38 @@ class Log_gestor_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $validation_rules = array(
-		array(
+	public $validation_rules = [
+		[
 			'field' => 'series',
 			'label' => 'Series',
 			'rules' => ''
-		),
-		array(
+		],
+		[
 			'field' => 'set_serie',
 			'label' => 'Series',
 			'rules' => ''
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_reporte',
 			'label' => 'Tipo de Reporte',
 			'rules' => ''
-		),
-		array(
+		],
+		[
 			'field' => 'ult_mov',
 			'label' => 'Ultimo movimiento',
 			'rules' => ''
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_op_alta',
 			'label' => 'Tipo de operación de alta',
 			'rules' => ''
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_op_baja',
 			'label' => 'Tipo de operción de baja',
 			'rules' => ''
-		),
-	);
+		],
+	];
 
 
 	/**
@@ -90,7 +90,7 @@ class Log_gestor_model extends CI_Model {
 	public function get_log($series = '', $tipo_serie = 'serie_deco', $tipo_reporte = 'log', $filtro_cas = "'ALTA', 'BAJA'", $ult_mov = FALSE)
 	{
 
-		$result = array();
+		$result = [];
 		$arr_series = explode("\n", $series);
 
 		foreach ($arr_series as $serie)
@@ -148,7 +148,7 @@ class Log_gestor_model extends CI_Model {
 				$query = $this->db->query($s_query);
 
 				// en caso de $ult_mov, filtra los movimientos que no sean los últimos
-				$res_array = array();
+				$res_array = [];
 				if ($ult_mov)
 				{
 					$tmp_array = $query->result_array();
@@ -171,7 +171,7 @@ class Log_gestor_model extends CI_Model {
 
 
 				// repasa las series de los decos, calculando los DV de c/u de ellas
-				$res_array2 = array();
+				$res_array2 = [];
 				foreach($res_array as $registro)
 				{
 					$registro['serie_deco'] = $registro['serie_deco'] . $this->dv_serie_deco($registro['serie_deco']);

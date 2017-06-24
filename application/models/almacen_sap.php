@@ -36,76 +36,74 @@ class Almacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_almacen = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_almacenes_sap'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'centro, cod_almacen',
-			),
-			'campos' => array(
-				'centro' => array(
+			],
+			'campos' => [
+				'centro' => [
 					'label'          => 'Centro',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'C&oacute;digo SAP del centro. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-				),
-				'cod_almacen' => array(
+				],
+				'cod_almacen' => [
 					'label'          => 'Almac&eacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
 					'texto_ayuda'    => 'C&oacute;digo SAP del almac&eacuten. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-				),
-				'des_almacen' => array(
+				],
+				'des_almacen' => [
 					'label'          => 'Descripci&oacute;n Almac&eacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del almac&eacuten. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-				),
-				'uso_almacen' => array(
+				],
+				'uso_almacen' => [
 						'label'          => 'Uso Almac&eacute;n',
 						'tipo'           => Orm_field::TIPO_CHAR,
 						'largo'          => 50,
 						'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
-				),
-				'responsable' => array(
+				],
+				'responsable' => [
 					'label'          => 'Responsable',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del responsable del almac&eacuten. M&aacute;ximo 50 caracteres.',
-				),
-				'tipo_op' => array(
+				],
+				'tipo_op' => [
 					'label'          => 'Tipo operaci&oacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
-					'choices'        => array(
+					'choices'        => [
 						'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
 						'FIJA'  => 'Operaci&oacute;n Fija'
-					),
+					],
 					'es_obligatorio' => TRUE,
 					'onchange'       => form_onchange('tipo_op', 'tipos', 'stock_config/get_select_tipoalmacen'),
-				),
-				'tipos' => array(
+				],
+				'tipos' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+					'relation'       => [
 						'model'         => 'tipoalmacen_sap',
-						'conditions'    => array(
-							'tipo_op' => '@field_value:tipo_op:MOVIL'
-						),
+						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
 						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
-						'id_one_table'  => array('centro','cod_almacen'),
-						'id_many_table' => array('id_tipo'),
-					),
+						'id_one_table'  => ['centro', 'cod_almacen'],
+						'id_many_table' => ['id_tipo'],
+					],
 					'texto_ayuda'    => 'Tipos asociados al almac&eacuten.',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_almacen);
 	}
@@ -135,7 +133,7 @@ class Almacen_sap extends ORM_Model {
 	 */
 	public function get_combo_almacenes($tipo_op = '', $filtro = '')
 	{
-		return cached_query('combo_almacenes'.$tipo_op.$filtro, $this, 'get_combo_almacenes_db', array($tipo_op, $filtro));
+		return cached_query('combo_almacenes'.$tipo_op.$filtro, $this, 'get_combo_almacenes_db', [$tipo_op, $filtro]);
 	}
 
 
@@ -152,7 +150,10 @@ class Almacen_sap extends ORM_Model {
 	{
 		if ($filtro === '')
 		{
-			return $this->find('list', array('conditions' => array('tipo_op' => $tipo_op), 'opc_ini' => FALSE));
+			return $this->find('list', [
+				'conditions' => ['tipo_op' => $tipo_op],
+				'opc_ini'    => FALSE
+			]);
 		}
 		else
 		{

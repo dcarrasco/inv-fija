@@ -36,15 +36,15 @@ class Centro extends ORM_Model {
 	 */
 	public function __construct($id_centro = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_centros'),
 				'model_label'        => 'Centro',
 				'model_label_plural' => 'Centros',
 				'model_order_by'     => 'centro',
-			),
-			'campos' => array(
-				'centro' => array(
+			],
+			'campos' => [
+				'centro' => [
 					'label'          => 'Centro',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
@@ -52,13 +52,12 @@ class Centro extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_centro);
 	}
-
 
 	// --------------------------------------------------------------------
 

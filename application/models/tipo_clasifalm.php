@@ -36,15 +36,15 @@ class Tipo_clasifalm extends ORM_Model {
 	 */
 	public function __construct($id_tipoclasif = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tipo_clasifalm_sap'),
 				'model_label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
 				'model_label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
 				'model_order_by'     => 'tipo',
-			),
-			'campos' => array(
-				'id_tipoclasif' => array(
+			],
+			'campos' => [
+				'id_tipoclasif' => [
 						'label'            => 'id',
 						'tipo'             => Orm_field::TIPO_INT,
 						'largo'            => 10,
@@ -53,23 +53,23 @@ class Tipo_clasifalm extends ORM_Model {
 						'es_obligatorio'   => TRUE,
 						'es_unico'         => TRUE,
 						'es_autoincrement' => TRUE,
-				),
-				'tipo' => array(
+				],
+				'tipo' => [
 					'label'          => 'Tipo Clasificaci&oacute;n de Almac&eacute;n',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Tipo Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-				),
-				'color' => array(
+				],
+				'color' => [
 					'label'          => 'Color del tipo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Color del tipo para graficar. M&aacute;ximo 20 caracteres.',
 					'es_obligatorio' => FALSE,
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_tipoclasif);
 	}
@@ -85,8 +85,6 @@ class Tipo_clasifalm extends ORM_Model {
 	{
 		return (string) $this->tipo;
 	}
-
-
 
 }
 /* End of file almacen.php */

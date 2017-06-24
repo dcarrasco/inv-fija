@@ -70,14 +70,14 @@ class Stock_analisis_series extends Controller_base {
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
 
-		$datos = array(
-			'datos_show_mov' => '',
+		$datos = [
+			'datos_show_mov'       => '',
 			'datos_show_despachos' => '',
 			'datos_show_stock_sap' => '',
 			'datos_show_stock_scl' => '',
-			'datos_show_trafico' => '',
-			'datos_show_gdth' => '',
-		);
+			'datos_show_trafico'   => '',
+			'datos_show_gdth'      => '',
+		];
 
 		$is_form_valid = $this->form_validation->set_rules($this->analisis_series_model->validation_analisis)->run();
 
@@ -88,33 +88,33 @@ class Stock_analisis_series extends Controller_base {
 			$analisis_model = new analisis_series_model;
 			$gestor_model   = new log_gestor_model;
 
-			$arr_reportes = array(
-				'show_mov' => array(
-					'class'  => $analisis_model, 'method' => 'get_historia', 'params' => array($series),
-				),
-				'show_despachos' => array(
-					'class'  => $analisis_model, 'method' => 'get_despacho', 'params' => array($series),
-				),
-				'show_stock_sap' => array(
-					'class'  => $analisis_model, 'method' => 'get_stock_sap', 'params' => array($series),
-				),
-				'show_stock_scl' => array(
-					'class'  => $analisis_model, 'method' => 'get_stock_scl', 'params' => array($series),
-				),
-				'show_trafico' => array(
-					'class'  => $analisis_model, 'method' => 'get_trafico', 'params' => array($series),
-				),
-				'show_gdth' => array(
-					'class'  => $gestor_model, 'method' => 'get_log', 'params' => array($series, 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE),
-				),
-			);
+			$arr_reportes = [
+				'show_mov' => [
+					'class'  => $analisis_model, 'method' => 'get_historia', 'params' => [$series],
+				],
+				'show_despachos' => [
+					'class'  => $analisis_model, 'method' => 'get_despacho', 'params' => [$series],
+				],
+				'show_stock_sap' => [
+					'class'  => $analisis_model, 'method' => 'get_stock_sap', 'params' => [$series],
+				],
+				'show_stock_scl' => [
+					'class'  => $analisis_model, 'method' => 'get_stock_scl', 'params' => [$series],
+				],
+				'show_trafico' => [
+					'class'  => $analisis_model, 'method' => 'get_trafico', 'params' => [$series],
+				],
+				'show_gdth' => [
+					'class'  => $gestor_model, 'method' => 'get_log', 'params' => [$series, 'serie_deco', 'log', "'ALTA', 'BAJA'", FALSE],
+				],
+			];
 
 			$datos = collect($arr_reportes)
 				->only(array_keys(request()))
 				->map_with_keys(function($elem, $indice) {
-					return array(
-						"datos_{$indice}" => call_user_func_array(array($elem['class'], $elem['method']), $elem['params'])
-					);
+					return [
+						"datos_{$indice}" => call_user_func_array([$elem['class'], $elem['method']], $elem['params'])
+					];
 				})->all();
 		}
 
@@ -133,12 +133,10 @@ class Stock_analisis_series extends Controller_base {
 		$this->load->model('analisis_series_model');
 		$this->load->model('acl_model');
 
-		$datos = array(
-				'combo_mes' => $this->analisis_series_model->get_meses_trafico(),
-				'datos_trafico' => $this->analisis_series_model->get_trafico_mes(request('series'), request('meses'), request('sel_tipo')),
-			);
-
-		app_render_view('stock_sap/analisis_series_trafico_view', $datos);
+		app_render_view('stock_sap/analisis_series_trafico_view', [
+			'combo_mes'     => $this->analisis_series_model->get_meses_trafico(),
+			'datos_trafico' => $this->analisis_series_model->get_trafico_mes(request('series'), request('meses'), request('sel_tipo')),
+		]);
 	}
 
 	// --------------------------------------------------------------------

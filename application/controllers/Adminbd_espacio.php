@@ -68,14 +68,14 @@ class Adminbd_espacio extends Controller_base {
 	 */
 	public function espacio()
 	{
-		$bases_datos = array(
+		$bases_datos = [
 			'BD_Controles',
 			'BD_Inventario',
 			'BD_Logistica',
 			'BD_Planificacion',
 			'BD_Sucursales',
 			'BD_TOA',
-		);
+		];
 
 		$arr_espacio = collect($bases_datos)
 			->map(function($base) {
@@ -86,24 +86,22 @@ class Adminbd_espacio extends Controller_base {
 				return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
 			});
 
-		$arr_sum = array(
+		$arr_sum = [
 			'RowCounts'     => 0,
 			'TotalSpaceKB'  => 0,
 			'UsedSpaceKB'   => 0,
 			'UnusedSpaceKB' => 0,
-		);
+		];
 
 		$arr_sum = collect($arr_sum)->map(function($sum_init, $sum_key) use ($arr_espacio) {
 			return $arr_espacio->sum($sum_key);
 		})->all();
 
 
-		$datos = array(
+		app_render_view('admindb/espacio', [
 			'tablas'  => $arr_espacio,
 			'arr_sum' => $arr_sum,
-		);
-
-		app_render_view('admindb/espacio', $datos);
+		]);
 	}
 
 }

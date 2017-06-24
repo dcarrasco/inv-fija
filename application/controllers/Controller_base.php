@@ -38,7 +38,7 @@ class Controller_base extends CI_Controller {
 	 *
 	 * @var  array
 	 */
-	public $menu_opciones = array();
+	public $menu_opciones = [];
 
 	/**
 	 * Errores de validación
@@ -83,10 +83,11 @@ class Controller_base extends CI_Controller {
 	 */
 	public function get_menu_modulo($opcion = NULL)
 	{
-		return array('menu' => $this->menu_opciones, 'mod_selected' => $opcion);
+		return [
+			'menu'         => $this->menu_opciones,
+			'mod_selected' => $opcion
+		];
 	}
-
-
 
 }
 /* End of file Controller_base.php */

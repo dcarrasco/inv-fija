@@ -31,106 +31,106 @@ class Reportestock_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $permanencia_validation = array(
-		array(
+	public $permanencia_validation = [
+		[
 			'field' => 'tipo_alm[]',
 			'label' => 'Almacenes',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'estado_sap[]',
 			'label' => 'Estados Stock',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_mat[]',
 			'label' => 'Tipos de material',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_op',
 			'label' => 'Tipo de operacion',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'incl_almacen',
 			'label' => 'Mostrar almacenes',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'incl_lotes',
 			'label' => 'Mostrar lotes',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'incl_modelos',
 			'label' => 'Mostrar modelos equipos',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'order_by',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'order_sort',
 			'label' => '',
 			'rules' => 'trim'
-		),
-	);
+		],
+	];
 
 	/**
 	 * Arreglo de reglas de validación reporte movhist
 	 *
 	 * @var array
 	 */
-	public $movhist_validation = array(
-		array(
+	public $movhist_validation = [
+		[
 			'field' => 'tipo_fecha',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_alm',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_mat',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_cruce_alm',
 			'label' => '',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'fechas[]',
 			'label' => 'Fecha reporte',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'cmv[]',
 			'label' => 'Movimientos',
 			'rules' => 'trim|required'
-		),
-		array(
+		],
+		[
 			'field' => 'almacenes[]',
 			'label' => 'Almacenes',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'materiales',
 			'label' => 'Materiales',
 			'rules' => 'trim'
-		),
-		array(
+		],
+		[
 			'field' => 'sort',
 			'label' => 'Orden reporte',
 			'rules' => 'trim'
-		),
-	);
+		],
+	];
 
 	// --------------------------------------------------------------------
 
@@ -172,13 +172,13 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function combo_estado_sap()
 	{
-		return array(
+		return [
 			'01' => '01 Libre Utilizacion',
 			'02' => '02 Control de Calidad',
 			'03' => '03 Devolucion Cliente',
 			'06' => '06 Transito',
 			'07' => '07 Bloqueado',
-		);
+		];
 	}
 
 
@@ -215,12 +215,12 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function combo_tipo_mat()
 	{
-		return array(
-				'EQUIPO'  => 'Equipos',
-				'SIMCARD' => 'Simcard',
-				'FIJA'    => 'Fija',
-				'OTRO'    => 'Otros',
-			);
+		return [
+			'EQUIPO'  => 'Equipos',
+			'SIMCARD' => 'Simcard',
+			'FIJA'    => 'Fija',
+			'OTRO'    => 'Otros',
+		];
 	}
 
 	// =====================================================================================================
@@ -234,9 +234,9 @@ class Reportestock_model extends CI_Model {
 	 * @param  array $config Arreglo de configuración
 	 * @return array         Arreglo con el detalle del reporte
 	 */
-	public function get_reporte_permanencia($config = array())
+	public function get_reporte_permanencia($config = [])
 	{
-		$arr_reporte = array();
+		$arr_reporte = [];
 		$param_ok = $config['filtros']['tipo_alm'];
 
 		if ($param_ok)
@@ -321,19 +321,19 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_config_reporte_permanencia()
 	{
-		return array(
+		return [
 			'orden'   => request('sort', '+tipo'),
-			'filtros' => array(
+			'filtros' => [
 				'tipo_alm'   => request('tipo_alm'),
 				'estado_sap' => request('estado_sap'),
 				'tipo_mat'   => request('tipo_mat'),
-			),
-			'mostrar' => array(
+			],
+			'mostrar' => [
 				'almacen' => request('incl_almacen'),
 				'lote'    => request('incl_lote'),
 				'modelos' => request('incl_modelos'),
-			),
-		);
+			],
+		];
 	}
 
 	// --------------------------------------------------------------------
@@ -345,38 +345,38 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_campos_reporte_permanencia()
 	{
-		$arr_campos = array();
+		$arr_campos = [];
 
-		$arr_campos['tipo'] = array('titulo' => 'Tipo Almacen','class' => '', 'tipo' => 'texto');
+		$arr_campos['tipo'] = ['titulo' => 'Tipo Almacen'];
 
 		if (request('incl_almacen') === '1')
 		{
-			$arr_campos['centro'] = array('titulo' => 'Centro','class' => '', 'tipo' => 'texto');
-			$arr_campos['almacen'] = array('titulo' => 'CodAlmacen','class' => '', 'tipo' => 'texto');
-			$arr_campos['des_almacen'] = array('titulo' => 'Almacen','class' => '', 'tipo' => 'texto');
+			$arr_campos['centro'] = ['titulo' => 'Centro'];
+			$arr_campos['almacen'] = ['titulo' => 'CodAlmacen'];
+			$arr_campos['des_almacen'] = ['titulo' => 'Almacen'];
 		}
 
 		if (is_array(request('estado_sap')) AND count(request('estado_sap')) > 0)
 		{
-			$arr_campos['estado_sap'] = array('titulo' => 'Estado Stock','class' => '', 'tipo' => 'texto');
+			$arr_campos['estado_sap'] = ['titulo' => 'Estado Stock'];
 		}
 
 		if (request('incl_lote') === '1')
 		{
-			$arr_campos['lote'] = array('titulo' => 'Lote','class' => '', 'tipo' => 'texto');
+			$arr_campos['lote'] = ['titulo' => 'Lote'];
 		}
 
 		if (is_array(request('tipo_mat')) AND count(request('tipo_mat')) > 0)
 		{
-			$arr_campos['tipo_material'] = array('titulo' => 'Tipo Material','class' => '', 'tipo' => 'texto');
+			$arr_campos['tipo_material'] = ['titulo' => 'Tipo Material'];
 		}
 
 		if (request('incl_modelos') === '1')
 		{
-			$arr_campos['modelo'] = array('titulo' => 'Modelo','class' => '', 'tipo' => 'texto');
+			$arr_campos['modelo'] = ['titulo' => 'Modelo'];
 		}
 
-		$campos_datos = array(
+		$campos_datos = [
 			'm030'   => '000-030',
 			'm060'   => '031-060',
 			'm090'   => '061-090',
@@ -387,16 +387,16 @@ class Reportestock_model extends CI_Model {
 			'mas720' => '+720',
 			'otro'   => 'otro',
 			'total'  => 'Total',
-		);
+		];
 
 		foreach ($campos_datos as $llave => $valor)
 		{
-			$arr_campos[$llave] = array(
+			$arr_campos[$llave] = [
 				'titulo' => $valor,
 				'class'  => 'text-center',
 				'tipo'   => 'link_detalle_series',
 				'href'   => $this->router->class.'/detalle',
-			);
+			];
 
 		}
 
@@ -420,7 +420,7 @@ class Reportestock_model extends CI_Model {
 	 * @param  string $incl_modelos indica si se incluiran los modelos
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_perm_consumo($orden_campo = 't.tipo', $orden_tipo = 'ASC', $tipo_alm = array(), $estado_sap = array(), $incl_almacen = '0', $incl_lote = '0', $incl_estado = '0', $incl_modelos = '0')
+	public function get_reporte_perm_consumo($orden_campo = 't.tipo', $orden_tipo = 'ASC', $tipo_alm = [], $estado_sap = [], $incl_almacen = '0', $incl_lote = '0', $incl_estado = '0', $incl_modelos = '0')
 	{
 
 		$this->db->select('t.tipo');
@@ -482,22 +482,22 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_campos_reporte_detalle_series()
 	{
-		$arr_campos = array(
-			'tipo'           => array('titulo' => 'Tipo Almacen', 'class' => '', 'tipo' => 'texto'),
-			'fecha_stock'    => array('titulo' => 'Fecha stock', 'class' => '', 'tipo' => 'texto'),
-			'centro'         => array('titulo' => 'Centro', 'class' => '', 'tipo' => 'texto'),
-			'almacen'        => array('titulo' => 'Almacen', 'class' => '', 'tipo' => 'texto'),
-			'des_almacen'    => array('titulo' => 'Desc Almacen', 'class' => '', 'tipo' => 'texto'),
-			'material'       => array('titulo' => 'Material', 'class' => '', 'tipo' => 'texto'),
-			'des_material'   => array('titulo' => 'Desc Material', 'class' => '', 'tipo' => 'texto'),
-			'lote'           => array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto'),
-			'estado_stock'   => array('titulo' => 'Estado stock', 'class' => '', 'tipo' => 'texto'),
-			'modificado_el'  => array('titulo' => 'Modificado el', 'class' => '', 'tipo' => 'texto'),
-			'serie'          => array('titulo' => 'Serie', 'class' => '', 'tipo' => 'texto'),
-			'pmp'            => array('titulo' => 'PMP', 'class' => '', 'tipo' => 'texto'),
-			'modificado_por' => array('titulo' => 'Modificado por', 'class' => '', 'tipo' => 'texto'),
-			'nom_usuario'    => array('titulo' => 'Nombre usuario', 'class' => '', 'tipo' => 'texto'),
-		);
+		$arr_campos = [
+			'tipo'           => ['titulo' => 'Tipo Almacen'],
+			'fecha_stock'    => ['titulo' => 'Fecha stock'],
+			'centro'         => ['titulo' => 'Centro'],
+			'almacen'        => ['titulo' => 'Almacen'],
+			'des_almacen'    => ['titulo' => 'Desc Almacen'],
+			'material'       => ['titulo' => 'Material'],
+			'des_material'   => ['titulo' => 'Desc Material'],
+			'lote'           => ['titulo' => 'Lote'],
+			'estado_stock'   => ['titulo' => 'Estado stock'],
+			'modificado_el'  => ['titulo' => 'Modificado el'],
+			'serie'          => ['titulo' => 'Serie'],
+			'pmp'            => ['titulo' => 'PMP'],
+			'modificado_por' => ['titulo' => 'Modificado por'],
+			'nom_usuario'    => ['titulo' => 'Nombre usuario'],
+		];
 		$this->reporte->set_order_campos($arr_campos, 'tipo');
 
 		return $arr_campos;
@@ -571,7 +571,7 @@ class Reportestock_model extends CI_Model {
 
 		if (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'EQUIPO')
 		{
-			$this->db->where_in('substring(s.material,1,2)', array('TM', 'TC', 'TO', 'PK', 'PO'));
+			$this->db->where_in('substring(s.material,1,2)', ['TM', 'TC', 'TO', 'PK', 'PO']);
 			$this->db->where('substring(s.material,1,8) <>', 'PKGCLOTK');
 		}
 		elseif (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'SIMCARD')
@@ -630,7 +630,6 @@ class Reportestock_model extends CI_Model {
 		}
 
 		return $this->db->get()->result_array();
-
 	}
 
 
@@ -684,9 +683,9 @@ class Reportestock_model extends CI_Model {
 	 * @param  string $campo_color Color del campo
 	 * @return string              Arreglo en formato javascript
 	 */
-	public function arr_query2treemap($tipo = 'cantidad', $arr_treemap = array(), $arr_nodos = array(), $campo_size = '', $campo_color = '')
+	public function arr_query2treemap($tipo = 'cantidad', $arr_treemap = [], $arr_nodos = [], $campo_size = '', $campo_color = '')
 	{
-		$arr_final = array();
+		$arr_final = [];
 
 		$tipo = ($tipo === 'cantidad') ? 'cantidad' : 'valor';
 
@@ -697,7 +696,12 @@ class Reportestock_model extends CI_Model {
 
 			foreach($arr_treemap as $registro)
 			{
-				array_push($arr_final, array("'".$registro[$campo_item]."'", "'".$registro[$campo_padre]."'", (int) $registro[$campo_size], $registro[$campo_color]));
+				array_push($arr_final, [
+					"'{$registro[$campo_item]}'",
+					"'{$registro[$campo_padre]}'",
+					(int) $registro[$campo_size],
+					$registro[$campo_color]
+				]);
 			}
 
 			$campo_item = $campo_padre;
@@ -705,12 +709,12 @@ class Reportestock_model extends CI_Model {
 			while (count($arr_nodos) > 0)
 			{
 				$campo_padre = array_pop($arr_nodos);
-				$arr_tmp = array();
+				$arr_tmp = [];
 				$arr_tmp2 = $arr_final;
 
 				foreach($arr_treemap as $registro)
 				{
-					$arr_v = array("'".$registro[$campo_item]."'", "'".$registro[$campo_padre]."'", 0, 0);
+					$arr_v = ["'{$registro[$campo_item]}'", "'{$registro[$campo_padre]}'", 0, 0];
 
 					if( ! in_array($arr_v, $arr_tmp))
 					{
@@ -718,24 +722,24 @@ class Reportestock_model extends CI_Model {
 					}
 				}
 
-				$arr_final = array();
+				$arr_final = [];
 				$arr_final = array_merge($arr_tmp, $arr_tmp2);
 				$campo_item = $campo_padre;
 			}
 
 			$campo_padre = "'TOTAL'";
-			$arr_tmp = array();
+			$arr_tmp = [];
 			$arr_tmp2 = $arr_final;
 			foreach($arr_treemap as $regitro)
 			{
-				$arr_v = array("'".$regitro[$campo_item]."'", $campo_padre, 0, 0);
+				$arr_v = ["'{$regitro[$campo_item]}'", $campo_padre, 0, 0];
 				if( ! in_array($arr_v, $arr_tmp))
 				{
 					array_push($arr_tmp, $arr_v);
 				}
 			}
-			$arr_final = array();
-			$arr_tmp3 = array(array($campo_padre, 'null', 0, 0));
+			$arr_final = [];
+			$arr_tmp3 = [[$campo_padre, 'null', 0, 0]];
 			$arr_final = array_merge($arr_tmp3, $arr_tmp, $arr_tmp2);
 
 			$salida = "['Item','Padre','".$tipo."','Antiguedad'],\n";
@@ -744,7 +748,7 @@ class Reportestock_model extends CI_Model {
 				$salida .= '[' . implode($registro, ',') . "],\n";
 			}
 
-			return '['.$salida.']';
+			return "[{$salida}]";
 
 		}
 	}
@@ -763,12 +767,12 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_combo_tipo_fecha($tipo_fecha = '')
 	{
-		$arr_tipo_fechas = array(
+		$arr_tipo_fechas = [
 			'ANNO'      => 'Año',
 			'TRIMESTRE' => 'Trimestre',
 			'MES'       => 'Meses',
 			'DIA'       => 'Dias'
-		);
+		];
 
 		if ($tipo_fecha === 'ANNO')
 		{
@@ -887,12 +891,12 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_combo_tipo_alm($tipo_alm = '')
 	{
-		$arr_tipos_almacen = array(
+		$arr_tipos_almacen = [
 			'MOVIL-TIPOALM' => 'Móvil - Tipos Almacén',
 			'MOVIL-ALM'     => 'Móvil - Almacenes',
 			'FIJA-TIPOALM'  => 'Fija - Tipos Almacén',
 			'FIJA-ALM'      => 'Fija - Almacenes',
-		);
+		];
 
 		if ($tipo_alm === 'MOVIL-TIPOALM')
 		{
@@ -942,12 +946,12 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_combo_tipo_mat($tipo_mat = '')
 	{
-		$arr_tipos_material = array(
+		$arr_tipos_material = [
 			'TIPO'     => 'Tipo',
 			'MARCA'    => 'Marca',
 			'MODELO'   => 'Modelo',
 			'MATERIAL' => 'Material',
-		);
+		];
 
 		if ($tipo_mat === 'TIPO')
 		{
@@ -1044,21 +1048,21 @@ class Reportestock_model extends CI_Model {
 	 */
 	public function get_campos_reporte_movhist()
 	{
-		$arr_campos = array();
+		$arr_campos = [];
 
-		$arr_campos['fecha']        = array('titulo' => 'Fecha', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cmv']          = array('titulo' => 'CMov', 'class' => 'text-center', 'tipo' => 'texto');
-		$arr_campos['ce']           = array('titulo' => 'Centro', 'class' => 'text-center', 'tipo' => 'texto');
-		$arr_campos['alm']          = array('titulo' => 'Almacen', 'class' => 'text-center', 'tipo' => 'texto');
-		$arr_campos['rec']          = array('titulo' => 'Dest', 'class' => 'text-center', 'tipo' => 'texto');
-		$arr_campos['n_doc']        = array('titulo' => 'Num doc', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['ref']          = array('titulo' => 'Ref', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['codigo_sap']   = array('titulo' => 'Codigo SAP', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['des_material'] = array('titulo' => 'Desc material', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['lote']         = array('titulo' => 'Lote', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['cantidad']     = array('titulo' => 'Cantidad', 'class' => 'text-right', 'tipo' => 'numero');
-		$arr_campos['usuario']      = array('titulo' => 'Usuario', 'class' => '', 'tipo' => 'texto');
-		$arr_campos['nom_usuario']  = array('titulo' => 'Nom usuario', 'class' => '', 'tipo' => 'texto');
+		$arr_campos['fecha']        = ['titulo' => 'Fecha'];
+		$arr_campos['cmv']          = ['titulo' => 'CMov', 'class' => 'text-center'];
+		$arr_campos['ce']           = ['titulo' => 'Centro', 'class' => 'text-center'];
+		$arr_campos['alm']          = ['titulo' => 'Almacen', 'class' => 'text-center'];
+		$arr_campos['rec']          = ['titulo' => 'Dest', 'class' => 'text-center'];
+		$arr_campos['n_doc']        = ['titulo' => 'Num doc'];
+		$arr_campos['ref']          = ['titulo' => 'Ref'];
+		$arr_campos['codigo_sap']   = ['titulo' => 'Codigo SAP'];
+		$arr_campos['des_material'] = ['titulo' => 'Desc material'];
+		$arr_campos['lote']         = ['titulo' => 'Lote'];
+		$arr_campos['cantidad']     = ['titulo' => 'Cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
+		$arr_campos['usuario']      = ['titulo' => 'Usuario'];
+		$arr_campos['nom_usuario']  = ['titulo' => 'Nom usuario'];
 
 		$this->reporte->set_order_campos($arr_campos, 'fecha');
 
@@ -1073,16 +1077,16 @@ class Reportestock_model extends CI_Model {
 	 * @param  array $config Arreglo de configuración del reporte
 	 * @return array         Reporte
 	 */
-	public function get_reporte_movhist($config = array())
+	public function get_reporte_movhist($config = [])
 	{
 
-		$arr_filtros = array_key_exists('filtros', $config) ? $config['filtros'] : array();
+		$arr_filtros = array_key_exists('filtros', $config) ? $config['filtros'] : [];
 		$order_by    = array_key_exists('orden', $config) ? $config['orden'] : '';
 		$order_by    = empty($order_by) ? '+fecha' : $order_by;
 
 		$param_ok = $arr_filtros['fechas'] AND $arr_filtros['cmv'] AND $arr_filtros['almacenes'] AND $arr_filtros['materiales'] AND $arr_filtros['tipo_alm'];
 
-		$tipo_op = in_array($arr_filtros['tipo_alm'], array('MOVIL-TIPOALM', 'MOVIL-ALM')) ? 'MOVIL' : 'FIJA';
+		$tipo_op = in_array($arr_filtros['tipo_alm'], ['MOVIL-TIPOALM', 'MOVIL-ALM']) ? 'MOVIL' : 'FIJA';
 
 		$mov_fecha  = ($tipo_op === 'MOVIL') ? 'fecha' : 'fecha_contabilizacion';
 		$mov_cmv    = ($tipo_op === 'MOVIL') ? 'cmv' : 'codigo_movimiento';
@@ -1098,40 +1102,40 @@ class Reportestock_model extends CI_Model {
 		$mov_mat2   = ($tipo_op === 'MOVIL') ? 'codigo_sap' : 'catalogo';
 		$mov_user   = ($tipo_op === 'MOVIL') ? 'usuario' : 'usuario';
 
-		$arr_reporte = array();
+		$arr_reporte = [];
 
-		$arr_filtro_fechas = array(
+		$arr_filtro_fechas = [
 			'ANNO'      => 'f.anno',
 			'TRIMESTRE' => "cast(f.anno as varchar(10)) + '/' + trimestre",
 			'MES'       => 'f.anomes',
 			'DIA'       => 'f.fecha',
-		);
+		];
 
 		if ($arr_filtros['tipo_cruce_alm'] === 'alm')
 		{
-			$arr_filtro_almacenes = array(
+			$arr_filtro_almacenes = [
 				'MOVIL-TIPOALM' => 't.id_tipo',
 				'MOVIL-ALM'     => "m.{$mov_centro}+'~'+m.{$mov_alm}",
 				'FIJA-TIPOALM'  => 't.id_tipo',
 				'FIJA-ALM'      => "m.{$mov_centro}+'~'+m.{$mov_alm}",
-			);
+			];
 		}
 		else
 		{
-			$arr_filtro_almacenes = array(
+			$arr_filtro_almacenes = [
 				'MOVIL-TIPOALM' => 't.id_tipo',
 				'MOVIL-ALM'     => "m.{$mov_centro}+'-'+m.rec",
 				'FIJA-TIPOALM'  => 't.id_tipo',
 				'FIJA-ALM'      => "m.{$mov_centro}+'-'+m.rec",
-			);
+			];
 		}
 
-		$arr_filtro_materiales = array(
+		$arr_filtro_materiales = [
 			'TIPO'     => 'mat.tipo1',
 			'MARCA'    => 'mat.sub_marca',
 			'MODELO'   => 'mat.sub_marcamodelo',
 			'MATERIAL' => 'm.codigo_sap',
-		);
+		];
 
 
 		if ($param_ok)
@@ -1264,7 +1268,7 @@ class Reportestock_model extends CI_Model {
 			->group_by("centro + '-' + almacen + ' ' + des_almacen, substring(material, 6, 2)", FALSE)
 			->order_by('almacen, marca');
 
-		$return_array = array();
+		$return_array = [];
 		foreach($this->db->get()->result_array() as $registro)
 		{
 			$return_array[$registro['almacen']][$registro['marca']] = $registro['cantidad'];
@@ -1272,7 +1276,6 @@ class Reportestock_model extends CI_Model {
 
 		return $return_array;
 	}
-
 
 }
 

@@ -125,28 +125,20 @@ class Ubicacion_model extends CI_Model {
 	{
 		if ($id_ubicacion === 0)
 		{
-			$this->db
-				->insert(
-					$this->config->item('bd_ubic_tipoubic'),
-					array(
-						'tipo_inventario'   => $tipo_inventario,
-						'ubicacion'         => $ubicacion,
-						'id_tipo_ubicacion' => $id_tipo_ubicacion,
-					)
-				);
+			$this->db->insert($this->config->item('bd_ubic_tipoubic'), [
+				'tipo_inventario'   => $tipo_inventario,
+				'ubicacion'         => $ubicacion,
+				'id_tipo_ubicacion' => $id_tipo_ubicacion,
+			]);
 		}
 		else
 		{
-			$this->db
-				->where('id', $id_ubicacion)
-				->update(
-					$this->config->item('bd_ubic_tipoubic'),
-					array(
-						'tipo_inventario'   => $tipo_inventario,
-						'ubicacion'         => $ubicacion,
-						'id_tipo_ubicacion' => $id_tipo_ubicacion,
-					)
-				);
+			$this->db->where('id', $id_ubicacion)
+				->update($this->config->item('bd_ubic_tipoubic'), [
+					'tipo_inventario'   => $tipo_inventario,
+					'ubicacion'         => $ubicacion,
+					'id_tipo_ubicacion' => $id_tipo_ubicacion,
+				]);
 		}
 	}
 
@@ -161,7 +153,7 @@ class Ubicacion_model extends CI_Model {
 	 */
 	public function borrar_ubicacion_tipo_ubicacion($id_ubicacion = 0)
 	{
-		$this->db->delete($this->config->item('bd_ubic_tipoubic'), array('id' => $id_ubicacion));
+		$this->db->delete($this->config->item('bd_ubic_tipoubic'), ['id' => $id_ubicacion]);
 	}
 
 
@@ -174,23 +166,23 @@ class Ubicacion_model extends CI_Model {
 	 */
 	public function get_validation_add()
 	{
-		return array(
-			array(
+		return [
+			[
 				'field' => 'agr-tipo_inventario',
 				'label' => 'Tipo de inventario',
 				'rules' => 'trim|required'
-			),
-			array(
+			],
+			[
 				'field' => 'agr-ubicacion[]',
 				'label' => 'Ubicaciones',
 				'rules' => 'trim|required'
-			),
-			array(
+			],
+			[
 				'field' => 'agr-tipo_ubicacion',
 				'label' => 'Tipo de ubicacion',
 				'rules' => 'trim|required'
-			),
-		);
+			],
+		];
 	}
 
 	// --------------------------------------------------------------------
@@ -202,31 +194,29 @@ class Ubicacion_model extends CI_Model {
 	 */
 	public function get_validation_edit($arr_datos)
 	{
-		$arr_validacion = array();
+		$arr_validacion = [];
 
 		foreach($arr_datos as $registro)
 		{
-			array_push($arr_validacion, array(
+			array_push($arr_validacion, [
 				'field' => $registro['id'].'-tipo_inventario',
 				'label' => 'Tipo de inventario',
 				'rules' => 'trim|required'
-			));
-			array_push($arr_validacion, array(
+			]);
+			array_push($arr_validacion, [
 				'field' => $registro['id'].'-tipo_ubicacion',
 				'label' => 'Tipo Ubicacion',
 				'rules' => 'trim|required'
-			));
-			array_push($arr_validacion, array(
+			]);
+			array_push($arr_validacion, [
 				'field' => $registro['id'].'-ubicacion',
 				'label' => 'Ubicacion',
 				'rules' => 'trim|required'
-			));
+			]);
 		}
 
 		return $arr_validacion;
 	}
-
-
 
 }
 /* End of file ubicacion_model.php */

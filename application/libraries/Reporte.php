@@ -46,9 +46,9 @@ class Reporte {
 	 * @param  string $campo           [description]
 	 * @return string                  Variable formateada
 	 */
-	public function formato_reporte($valor = '', $arr_param_campo = array(), $registro = array(), $campo = '')
+	public function formato_reporte($valor = '', $arr_param_campo = [], $registro = [], $campo = '')
 	{
-		$arr_formatos = array(
+		$arr_formatos = [
 			'texto'         => function($valor) {return $valor;},
 			'fecha'         => function($valor) {return fmt_fecha($valor);},
 			'numero'        => function($valor) {return fmt_cantidad($valor, 0, TRUE);},
@@ -66,7 +66,7 @@ class Reporte {
 			},
 			'link_detalle_series' => function($valor, $arr_param_campo, $registro, $campo) {
 				$registro['permanencia'] = $campo;
-				$arr_indices = array('id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia');
+				$arr_indices = ['id_tipo', 'centro', 'almacen', 'lote', 'estado_stock', 'material', 'tipo_material', 'permanencia'];
 				$valor_desplegar = fmt_cantidad($valor);
 
 				return anchor(
@@ -74,12 +74,12 @@ class Reporte {
 					($valor_desplegar === '') ? ' ' : $valor_desplegar
 				);
 			},
-		);
+		];
 
 		$tipo_dato = $arr_param_campo['tipo'];
 
 		return array_key_exists($tipo_dato, $arr_formatos)
-			? call_user_func_array($arr_formatos[$tipo_dato], array($valor, $arr_param_campo, $registro, $campo))
+			? call_user_func_array($arr_formatos[$tipo_dato], [$valor, $arr_param_campo, $registro, $campo])
 			: $valor;
 	}
 
@@ -139,7 +139,7 @@ class Reporte {
 	 * @param  array $arr_datos  Arreglo con los datos del reporte
 	 * @return string            Reporte
 	 */
-	public function genera_reporte($arr_campos = array(), $arr_datos = array())
+	public function genera_reporte($arr_campos = [], $arr_datos = [])
 	{
 		$arr_campos = collect($arr_campos)
 			->map(function ($elem) {
@@ -151,27 +151,27 @@ class Reporte {
 
 		$ci =& get_instance();
 		$ci->load->library('table');
-		$template = array(
+		$template = [
 			'table_open' => '<table class="table table-striped table-hover table-condensed reporte table-fixed-header">',
 			'thead_open' => '<thead class="header">',
-		);
+		];
 		$ci->table->set_template($template);
 
 		$script       = '<script type="text/javascript" src="'.base_url().'js/reporte.js"></script>';
 		$subtotal_ant = '***init***';
 
-		$campos_totalizables = array('numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series');
+		$campos_totalizables = ['numero', 'valor', 'numero_dif', 'valor_dif', 'link_detalle_series'];
 
-		$arr_totales  = array(
-			'campos'   => $campos_totalizables,
-			'total'    => collect($arr_campos)
+		$arr_totales  = [
+			'campos' => $campos_totalizables,
+			'total'  => collect($arr_campos)
 				->filter(function($campo) use ($campos_totalizables) {
 					return in_array($campo['tipo'], $campos_totalizables);
 				})->map(function($elem, $campo) use ($arr_datos) {
 					return collect($arr_datos)->sum($campo);
 				})->all(),
-			'subtotal' => array(),
-		);
+			'subtotal' => [],
+		];
 
 		// --- ENCABEZADO REPORTE ---
 		$ci->table->set_heading($this->_reporte_linea_encabezado($arr_campos, $arr_totales));
@@ -207,14 +207,14 @@ class Reporte {
 	 * @param  array $arr_totales Arreglo con los totales y subtotales de los campos del reporte
 	 * @return array              Arreglo con los campos del encabezado
 	 */
-	private function _reporte_linea_encabezado($arr_campos = array(), &$arr_totales = array())
+	private function _reporte_linea_encabezado($arr_campos = [], &$arr_totales = [])
 	{
-		return collect(array(''))->merge(
+		return collect([''])->merge(
 			collect($arr_campos)->map(function($elem) {
-				return array(
+				return [
 					'data' => "<span data-sort=\"{$elem['sort']}\" data-toggle=\"tooltip\" title=\"Ordenar por campo {$elem['titulo']}\">{$elem['titulo']}</span>{$elem['img_orden']}",
 					'class' => array_get($elem, 'class', ''),
-				);
+				];
 			})
 		)->all();
 	}
@@ -229,14 +229,14 @@ class Reporte {
 	 * @param  integer $num_linea  Numero de linea actual
 	 * @return array                 Arreglo con los campos de una linea
 	 */
-	private function _reporte_linea_datos($arr_linea = array(), $arr_campos = array(), $num_linea = 0)
+	private function _reporte_linea_datos($arr_linea = [], $arr_campos = [], $num_linea = 0)
 	{
-		return collect(array(array('data' => $num_linea, 'class' => 'text-muted')))->merge(
+		return collect([['data' => $num_linea, 'class' => 'text-muted']])->merge(
 			collect($arr_campos)->map(function($elem, $llave) use ($arr_linea) {
-				return array(
+				return [
 					'data' => $this->formato_reporte(array_get($arr_linea, $llave), $elem, $arr_linea, $llave),
 					'class' => array_get($elem, 'class', ''),
-				);
+				];
 			})
 		)->all();
 	}
@@ -252,16 +252,16 @@ class Reporte {
 	 * @param  string $nombre_subtotal Texto con el nombre del subtotal
 	 * @return array                   Arreglo con los campos de una linea de total o subtotal
 	 */
-	private function _reporte_linea_totales($tipo = '', $arr_campos = array(), $arr_totales = array(), $nombre_subtotal = '')
+	private function _reporte_linea_totales($tipo = '', $arr_campos = [], $arr_totales = [], $nombre_subtotal = '')
 	{
-		return collect(array(''))->merge(
+		return collect([''])->merge(
 			collect($arr_campos)->map(function($elem, $llave) use ($tipo, $arr_totales) {
-				return array(
+				return [
 					'data' => in_array($elem['tipo'], $arr_totales['campos'])
 						? $this->formato_reporte($arr_totales[$tipo][$llave], $elem)
 						: '',
 					'class' => array_get($elem, 'class', ''),
-				);
+				];
 			})
 		)->all();
 	}
@@ -274,7 +274,7 @@ class Reporte {
 	 * @param  array $arr_campos Arreglo con la descripcion de los campos del reporte
 	 * @return string             Nombre del campo con el tipo subtotal
 	 */
-	private function _get_campo_subtotal($arr_campos = array())
+	private function _get_campo_subtotal($arr_campos = [])
 	{
 		foreach($arr_campos as $nombre_campo => $parametros_campo)
 		{
@@ -296,7 +296,7 @@ class Reporte {
 	 * @param  string $subtotal_ant Nombre del campo con el subtotal anterior
 	 * @return boolean              Indicador si la linea actual cambio el valor del campo subtotal
 	 */
-	private function _es_nuevo_subtotal($arr_linea = array(), $arr_campos = array(), $subtotal_ant = NULL)
+	private function _es_nuevo_subtotal($arr_linea = [], $arr_campos = [], $subtotal_ant = NULL)
 	{
 		$campo_subtotal = $this->_get_campo_subtotal($arr_campos);
 
@@ -319,7 +319,7 @@ class Reporte {
 	 * @param  string $subtotal_ant Nombre del campo con el subtotal anterior
 	 * @return void
 	 */
-	private function _reporte_linea_subtotal($arr_linea = array(), $arr_campos = array(), &$arr_totales = array(), &$subtotal_ant = NULL)
+	private function _reporte_linea_subtotal($arr_linea = [], $arr_campos = [], &$arr_totales = [], &$subtotal_ant = NULL)
 	{
 		$ci =& get_instance();
 
@@ -335,10 +335,10 @@ class Reporte {
 		}
 
 		// agrega linea con titulo del subtotal
-		$ci->table->add_row(array(
+		$ci->table->add_row([
 			'data' => '<span class="fa fa-minus-circle"></span> <strong>'.$arr_linea[$campo_subtotal].'</strong>',
 			'colspan' => count($arr_campos) + 1,
-		));
+		]);
 
 		// nuevo subtotal, y deja en cero, la suma de subtotales
 		$subtotal_ant = $arr_linea[$campo_subtotal];

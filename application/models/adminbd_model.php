@@ -38,13 +38,13 @@ class Adminbd_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $validation_exportar_tablas = array(
-		array(
+	public $validation_exportar_tablas = [
+		[
 			'field' => 'tabla',
 			'label' => 'Tabla',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	// --------------------------------------------------------------------
 
@@ -69,8 +69,8 @@ class Adminbd_model extends CI_Model {
 	{
 		$this->_db_object = $this->load->database('adminbd', TRUE);
 
-		$arr_final = array();
-		$arr_users = array();
+		$arr_final = [];
+		$arr_users = [];
 		$arr_users_tmp = $this->_db_object
 			->query('sp_who2 "active"')
 			->result_array();
@@ -86,7 +86,7 @@ class Adminbd_model extends CI_Model {
 			}
 		}
 
-		$arr_queries = array();
+		$arr_queries = [];
 		$arr_queries_tmp = $this->_db_object
 			->query('SELECT  * FROM sys.dm_exec_requests CROSS APPLY sys.dm_exec_sql_text(sql_handle)')
 			->result_array();
@@ -114,7 +114,7 @@ class Adminbd_model extends CI_Model {
 	 */
 	public function get_table_list()
 	{
-		$blacklist = array(
+		$blacklist = [
 			'bd_usuarios',
 			'bd_app',
 			'bd_modulos',
@@ -123,9 +123,9 @@ class Adminbd_model extends CI_Model {
 			'bd_rol_modulo',
 			'bd_captcha',
 			'bd_pcookies',
-		);
+		];
 
-		$arr_list = array();
+		$arr_list = [];
 		foreach($this->config->config as $index => $value)
 		{
 			if (strpos($index, 'bd_') !== FALSE AND ! in_array($index, $blacklist))
@@ -159,10 +159,10 @@ class Adminbd_model extends CI_Model {
 
 		if ( ! $this->db->table_exists($tabla))
 		{
-			return array();
+			return [];
 		}
 
-		$arr_list = array();
+		$arr_list = [];
 		foreach ($this->db->list_fields($tabla) as $campo)
 		{
 			$arr_list[$campo] = $campo;

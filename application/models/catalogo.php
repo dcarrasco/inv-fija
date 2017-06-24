@@ -36,15 +36,15 @@ class Catalogo extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_catalogos'),
 				'model_label'        => 'Cat&aacute;logo',
 				'model_label_plural' => 'Cat&aacute;logos',
 				'model_order_by'     => 'catalogo',
-			),
-			'campos' => array(
-				'catalogo' => array(
+			],
+			'campos' => [
+				'catalogo' => [
 					'label'          => 'Cat&aacute;logo',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
@@ -52,16 +52,16 @@ class Catalogo extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'descripcion' => array(
+				],
+				'descripcion' => [
 					'label'          => 'Descripci&oacute;n del material',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Descripci&oacute;n del material. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					//'es_unico'       => TRUE
-				),
-				'pmp' => array(
+				],
+				'pmp' => [
 					'label'          => 'Precio Medio Ponderado (PMP)',
 					'tipo'           => Orm_field::TIPO_REAL,
 					'largo'          => 10,
@@ -70,37 +70,36 @@ class Catalogo extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'es_unico'       => FALSE,
 					'formato'        => 'monto,1',
-				),
-				'es_seriado' => array(
+				],
+				'es_seriado' => [
 					'label'          => 'Material seriado',
 					'tipo'           => Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica si el material est&aacute; seriado en el sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 0
-				),
-				// 'foto' => array(
+				],
+				// 'foto' => [
 				// 	'label'          => 'Foto del material',
 				// 	'tipo'           => 'picture',
 				// 	'texto_ayuda'    => 'Foto o imagen del material.',
 				// 	'es_obligatorio' => FALSE,
-				// ),
-				'tip_material' => array(
+				// ],
+				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => array(
+					'relation'       => [
 						'model'         => 'Tip_material_trabajo_toa',
 						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
-						'id_one_table'  => array('id_catalogo'),
-						'id_many_table' => array('id_tip_material_trabajo'),
-						//'conditions'    => array('id_app' => '@field_value:id_app'),
-					),
+						'id_one_table'  => ['id_catalogo'],
+						'id_many_table' => ['id_tip_material_trabajo'],
+						//'conditions'    => ['id_app' => '@field_value:id_app'],
+					],
 					'texto_ayuda'    => 'Tipo de material TOA.',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_catalogo);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -131,7 +130,7 @@ class Catalogo extends ORM_Model {
 
 		// actualiza precios nulos --> 0
 		$this->db->where('pmp is null')
-			->update($this->get_model_tabla(), array('pmp' => 0));
+			->update($this->get_model_tabla(), ['pmp' => 0]);
 
 		// selecciona maxima fecha del stock_sap_fija
 		$arr_max_fecha = $this->db
@@ -151,7 +150,7 @@ class Catalogo extends ORM_Model {
 			->select('material, max(valor/cantidad) as pmp into '.$tabla_temporal_precios, FALSE)
 			->from($this->config->item('bd_stock_fija'))
 			->where('fecha_stock', $max_fecha)
-			->where_in('lote', array('I', 'A'))
+			->where_in('lote', ['I', 'A'])
 			->group_by('material')
 			->get();
 
@@ -178,7 +177,6 @@ class Catalogo extends ORM_Model {
 
 		return $cant_regs;
 	}
-
 
 }
 /* End of file catalogo.php */

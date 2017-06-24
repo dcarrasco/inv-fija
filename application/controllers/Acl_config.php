@@ -49,28 +49,28 @@ class Acl_config extends Orm_controller {
 		parent::__construct();
 		$this->lang->load('acl');
 
-		$this->set_menu_modulo(array(
-			'usuario' => array(
+		$this->set_menu_modulo([
+			'usuario' => [
 				'url'   => $this->router->class . '/listado/usuario',
 				'texto' => $this->lang->line('acl_config_menu_usuarios'),
 				'icon'  => 'user',
-			),
-			'app' => array(
+			],
+			'app' => [
 				'url'   => $this->router->class . '/listado/app',
 				'texto' => $this->lang->line('acl_config_menu_aplicaciones'),
 				'icon'  => 'folder-o',
-			),
-			'rol' => array(
+			],
+			'rol' => [
 				'url'   => $this->router->class . '/listado/rol',
 				'texto' => $this->lang->line('acl_config_menu_roles'),
 				'icon'  => 'server',
-			),
-			'modulo' => array(
+			],
+			'modulo' => [
 				'url'   => $this->router->class . '/listado/modulo',
 				'texto' => $this->lang->line('acl_config_menu_modulos'),
 				'icon'  => 'list-alt',
-			),
-		));
+			],
+		]);
 
 	}
 
@@ -89,9 +89,11 @@ class Acl_config extends Orm_controller {
 
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($modulo->find('list', array('conditions' => array('id_app' => $id_app), 'opc_ini' => FALSE))));
+			->set_output(form_print_options($modulo->find('list', [
+				'conditions' => ['id_app' => $id_app],
+				'opc_ini'    => FALSE,
+			])));
 	}
-
 
 }
 /* End of file acl_config.php */

@@ -36,15 +36,15 @@ class Tecnico_toa extends ORM_Model {
 	 */
 	public function __construct($id_tecnico = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_tecnicos_toa'),
 				'model_label'        => 'T&eacute;cnico TOA',
 				'model_label_plural' => 'T&eacute;cnicos TOA',
 				'model_order_by'     => 'tecnico',
-			),
-			'campos' => array(
-				'id_tecnico' => array(
+			],
+			'campos' => [
+				'id_tecnico' => [
 					'label'          => 'ID T&eacute;cnico',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
@@ -52,40 +52,36 @@ class Tecnico_toa extends ORM_Model {
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'tecnico' => array(
+				],
+				'tecnico' => [
 					'label'          => 'Nombre t&eacute;cnico',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'Nombre del t&eacute;cnico. M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					// 'es_unico'       => TRUE
-				),
-				'rut' => array(
+				],
+				'rut' => [
 					'label'          => 'RUT del t&eacute;cnico',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 20,
 					'texto_ayuda'    => 'RUT del t&eacute;cnico. Sin puntos, con guion y d&iacute;gito verificador (en min&uacute;scula). M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					// 'es_unico'       => TRUE
-				),
-				'id_empresa' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'empresa_toa',
-					),
-					'texto_ayuda'    => 'Empresa a la que pertenece el t&eacute;cnico.',
-					'onchange'       => form_onchange('id_empresa', 'id_ciudad', 'toa_config/get_select_ciudad'),
-				),
-				'id_ciudad' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
-						'model' => 'Ciudad_toa',
-					),
-					'texto_ayuda'    => 'Ciudad a la que pertenece el t&eacute;cnico.',
-				),
-			),
-		);
+				],
+				'id_empresa' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => ['model' => 'empresa_toa'],
+					'texto_ayuda' => 'Empresa a la que pertenece el t&eacute;cnico.',
+					'onchange'    => form_onchange('id_empresa', 'id_ciudad', 'toa_config/get_select_ciudad'),
+				],
+				'id_ciudad' => [
+					'tipo'        => Orm_field::TIPO_HAS_ONE,
+					'relation'    => ['model' => 'Ciudad_toa'],
+					'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
+				],
+			],
+		];
 
 		parent::__construct($id_tecnico);
 
@@ -113,16 +109,16 @@ class Tecnico_toa extends ORM_Model {
 			$empresa_ciudad = new Empresa_ciudad_toa;
 			$arr_ciudades = $empresa_ciudad->arr_ciudades_por_empresa($this->id_empresa);
 
-			$arr_config_ciudad = array(
-				'id_ciudad' => array(
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'relation'       => array(
+			$arr_config_ciudad = [
+				'id_ciudad' => [
+					'tipo'     => Orm_field::TIPO_HAS_ONE,
+					'relation' => [
 						'model'      => 'Ciudad_toa',
-						'conditions' => array('id_ciudad' => $arr_ciudades),
-					),
-					'texto_ayuda'    => 'Ciudad a la que pertenece el t&eacute;cnico.',
-				),
-			);
+						'conditions' => ['id_ciudad' => $arr_ciudades],
+					],
+					'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
+				],
+			];
 
 			$this->_config_campos($arr_config_ciudad);
 			$this->get_relation_fields();

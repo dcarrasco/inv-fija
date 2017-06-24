@@ -20,12 +20,12 @@
 			</div>
 			<div class="col-md-4">
 				Ubicacion
-				<?= form_multiselect('agr-ubicacion[]', array(), request('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
+				<?= form_multiselect('agr-ubicacion[]', [], request('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
 				<?= form_error('agr-ubicacion'); ?>
 			</div>
 			<div class="col-md-4">
 				Tipo de Ubicacion
-				<?= form_dropdown('agr-tipo_ubicacion', array('' => 'Seleccione tipo ubicacion...'), request('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
+				<?= form_dropdown('agr-tipo_ubicacion', ['' => 'Seleccione tipo ubicacion...'], request('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
 				<?= form_error('agr-tipo_ubicacion'); ?>
 			</div>
 		</div>

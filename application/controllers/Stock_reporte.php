@@ -51,28 +51,28 @@ class Stock_reporte extends Controller_base {
 		$this->load->model('reportestock_model');
 		$this->lang->load('stock');
 
-		$this->set_menu_modulo(array(
-			'permanencia' => array(
+		$this->set_menu_modulo([
+			'permanencia' => [
 				'url'   => $this->router->class . '/listado/permanencia',
 				'texto' => $this->lang->line('stock_perm_menu_perm'),
 				'icon'  => 'clock-o',
-			),
-			'mapastock' => array(
+			],
+			'mapastock' => [
 				'url'   => $this->router->class . '/mapastock',
 				'texto' => $this->lang->line('stock_perm_menu_mapa'),
 				'icon'  => 'globe',
-				),
-			'movhist' => array(
+			],
+			'movhist' => [
 				'url'   => $this->router->class . '/movhist',
 				'texto' => $this->lang->line('stock_perm_menu_movs'),
 				'icon'  => 'calendar',
-			),
-			'est03' => array(
+			],
+			'est03' => [
 				'url'   => $this->router->class . '/est03',
 				'texto' => $this->lang->line('stock_perm_menu_est03'),
 				'icon'  => 'refresh',
-			),
-		));
+			],
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -98,8 +98,8 @@ class Stock_reporte extends Controller_base {
 	 */
 	public function listado($tipo = 'permanencia', $param1 = '')
 	{
-		$arr_campos = array();
-		$datos_hoja = array();
+		$arr_campos = [];
+		$datos_hoja = [];
 		$tipoalmacen_sap = new Tipoalmacen_sap;
 
 		$view = 'listado';
@@ -116,7 +116,7 @@ class Stock_reporte extends Controller_base {
 			}
 		}
 
-		$data = array(
+		app_render_view('stock_sap/reporte', [
 			'menu_modulo'      => $this->get_menu_modulo($tipo),
 			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'tipo_reporte'     => $view,
@@ -127,9 +127,7 @@ class Stock_reporte extends Controller_base {
 			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(request('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
-		);
-
-		app_render_view('stock_sap/reporte', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -146,13 +144,12 @@ class Stock_reporte extends Controller_base {
 			$this->reportestock_model->get_detalle_series(request())
 		);
 
-		$data = array(
+		app_render_view('stock_sap/detalle_series', [
 			'menu_modulo'        => $this->get_menu_modulo('permanencia'),
 			'menu_configuracion' => '',
 			'detalle_series'     => $detalle_series,
-		);
+		]);
 
-		app_render_view('stock_sap/detalle_series', $data);
 	}
 
 
@@ -173,16 +170,14 @@ class Stock_reporte extends Controller_base {
 		$centro = request('sel_centro', 'CL03');
 
 		$arr_treemap = $this->reportestock_model->get_treemap_permanencia($centro);
-		$arr_treemap_cantidad = $this->reportestock_model->arr_query2treemap('cantidad', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'cant', 'perm');
-		$arr_treemap_valor = $this->reportestock_model->arr_query2treemap('valor', $arr_treemap, array('tipo', 'alm', 'marca', 'modelo'), 'valor', 'perm');
+		$arr_treemap_cantidad = $this->reportestock_model->arr_query2treemap('cantidad', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'cant', 'perm');
+		$arr_treemap_valor = $this->reportestock_model->arr_query2treemap('valor', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'valor', 'perm');
 
-		$data = array(
+		app_render_view('stock_sap/treemap', [
 			'menu_modulo'           => $this->get_menu_modulo('mapastock'),
 			'treemap_data_cantidad' => $arr_treemap_cantidad,
 			'treemap_data_valor'    => $arr_treemap_valor,
-		);
-
-		app_render_view('stock_sap/treemap', $data);
+		]);
 	}
 
 
@@ -204,8 +199,8 @@ class Stock_reporte extends Controller_base {
 		$param_sort           = request('sort', '+fecha');
 
 		$arr_campos    = $this->reportestock_model->get_campos_reporte_movhist();
-		$datos_reporte = $this->reportestock_model->get_reporte_movhist(array(
-			'filtros' => array(
+		$datos_reporte = $this->reportestock_model->get_reporte_movhist([
+			'filtros' => [
 				'tipo_fecha'     => $param_tipo_fecha,
 				'fechas'         => request('fechas'),
 				'cmv'            => request('cmv'),
@@ -214,11 +209,11 @@ class Stock_reporte extends Controller_base {
 				'tipo_cruce_alm' => $param_tipo_cruce_alm,
 				'tipo_mat'       => $param_tipo_mat,
 				'materiales'     => request('materiales'),
-			),
+			],
 			'orden' => $param_sort,
-		));
+		]);
 
-		$data = array(
+		app_render_view('stock_sap/movhist', [
 			'menu_modulo'      => $this->get_menu_modulo('movhist'),
 			'combo_tipo_fecha' => $this->reportestock_model->get_combo_tipo_fecha(),
 			'combo_fechas'     => $this->reportestock_model->get_combo_fechas($param_tipo_fecha),
@@ -228,11 +223,8 @@ class Stock_reporte extends Controller_base {
 			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
 			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
 			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_reporte),
-		);
-
-		app_render_view('stock_sap/movhist', $data);
+		]);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -343,16 +335,13 @@ class Stock_reporte extends Controller_base {
 	 */
 	public function est03()
 	{
-		$data = array(
+		app_render_view('stock_sap/est03', [
 			'menu_modulo' => $this->get_menu_modulo('est03'),
 			'almacenes'   => $this->reportestock_model->get_almacenes_est03(),
 			'marcas'      => $this->reportestock_model->get_marcas_est03(),
 			'reporte'     => $this->reportestock_model->get_stock_est03(),
-		);
-
-		app_render_view('stock_sap/est03', $data);
+		]);
 	}
-
 
 }
 /* End of file stock_reporte.php */

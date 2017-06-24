@@ -61,29 +61,28 @@ class Inventario_analisis extends Controller_base {
 		parent::__construct();
 		$this->lang->load('inventario');
 
-		$this->set_menu_modulo(array(
-			'ajustes' => array(
+		$this->set_menu_modulo([
+			'ajustes' => [
 				'url'   => $this->router->class . '/ajustes',
 				'texto' => $this->lang->line('inventario_menu_ajustes'),
 				'icon'  => 'wrench'
-			),
-			'sube_stock' => array(
+			],
+			'sube_stock' => [
 				'url'   => $this->router->class . '/sube_stock',
 				'texto' => $this->lang->line('inventario_menu_upload'),
 				'icon'  => 'cloud-upload'
-			),
-			'imprime_inventario' => array(
+			],
+			'imprime_inventario' => [
 				'url'   => $this->router->class . '/imprime_inventario',
 				'texto' => $this->lang->line('inventario_menu_print'),
 				'icon'  => 'print'
-			),
-			'actualiza_precios' => array(
+			],
+			'actualiza_precios' => [
 				'url'   => $this->router->class . '/actualiza_precios',
 				'texto' => $this->lang->line('inventario_menu_act_precios'),
 				'icon'  => 'usd'
-			),
-		));
-
+			],
+		]);
 	}
 
 
@@ -133,7 +132,7 @@ class Inventario_analisis extends Controller_base {
 		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
-		$data = array(
+		app_render_view('inventario/ajustes', [
 			'menu_modulo'     => $this->get_menu_modulo('ajustes'),
 			'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
 			'detalle_ajustes' => $detalles,
@@ -141,9 +140,7 @@ class Inventario_analisis extends Controller_base {
 			'pag'             => $pagina,
 			'links_paginas'   => $links_paginas,
 			'url_form'        => site_url("{$this->router->class}/update_ajustes".url_params()),
-		);
-
-		app_render_view('inventario/ajustes', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -203,13 +200,13 @@ class Inventario_analisis extends Controller_base {
 			if (request('upload_password') === 'logistica2012')
 			{
 				unlink($upload_path.$upload_file);
-				$this->load->library('upload', array(
+				$this->load->library('upload', [
 					'upload_path'   => $upload_path,
 					'allowed_types' => 'txt|cvs',
 					'max_size'      => '2000',
 					'file_name'     => $upload_file,
 					'overwrite'     => TRUE,
-				));
+				]);
 
 				if ( ! $this->upload->do_upload('upload_file'))
 				{
@@ -235,7 +232,7 @@ class Inventario_analisis extends Controller_base {
 			}
 		}
 
-		$data = array(
+		app_render_view('inventario/sube_stock', [
 			'menu_modulo'       => $this->get_menu_modulo('sube_stock'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
@@ -247,9 +244,8 @@ class Inventario_analisis extends Controller_base {
 			'link_config'       => 'config',
 			'link_reporte'      => 'reportes',
 			'link_inventario'   => 'inventario',
-		);
+		]);
 
-		app_render_view('inventario/sube_stock', $data);
 
 	}
 
@@ -280,33 +276,31 @@ class Inventario_analisis extends Controller_base {
 		$this->_get_datos_inventario();
 		$inventario = new Inventario($this->_id_inventario);
 
-		$data = array(
+		app_render_view('inventario/imprime_inventario', [
 			'menu_modulo'       => $this->get_menu_modulo('imprime_inventario'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
 			'max_hoja'          => $inventario->get_max_hoja_inventario(),
 			'url_form'          => site_url("{$this->router->class}/imprime_inventario_validate"),
-		);
-
-		app_render_view('inventario/imprime_inventario', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
 
 	public function imprime_inventario_validate()
 	{
-		$valida_form_imprime_inventario = array(
-			array(
+		$valida_form_imprime_inventario = [
+			[
 				'field' => 'pag_desde',
 				'label' => $this->lang->line('inventario_print_label_page_from'),
 				'rules' => 'trim|required|greater_than[0]',
-			),
-			array(
+			],
+			[
 				'field' => 'pag_hasta',
 				'label' => $this->lang->line('inventario_print_label_page_to'),
 				'rules' => 'trim|required|greater_than[0]',
-			),
-		);
+			],
+		];
 
 		route_validation(
 			$this->form_validation->set_rules($valida_form_imprime_inventario)->run()
@@ -344,14 +338,13 @@ class Inventario_analisis extends Controller_base {
 		{
 			$detalle = new Detalle_inventario;
 
-			$data = array(
+			$this->load->view('inventario/inventario_print_body', [
 				'datos_hoja'        => $detalle->get_hoja($this->_id_inventario, $hoja),
 				'oculta_stock_sap'  => $oculta_stock_sap,
 				'hoja'              => $hoja,
 				'nombre_inventario' => $this->_nombre_inventario,
-			);
+			]);
 
-			$this->load->view('inventario/inventario_print_body', $data);
 		}
 
 		$this->load->view('inventario/inventario_print_footer');
@@ -376,14 +369,11 @@ class Inventario_analisis extends Controller_base {
 			$update_status = ' disabled';
 		}
 
-		$data = array(
+		app_render_view('inventario/actualiza_precios', [
 			'menu_modulo'      => $this->get_menu_modulo('actualiza_precios'),
 			'update_status'    => $update_status,
 			'cant_actualizada' => $cant_actualizada,
-		);
-
-		app_render_view('inventario/actualiza_precios', $data);
-
+		]);
 	}
 
 }

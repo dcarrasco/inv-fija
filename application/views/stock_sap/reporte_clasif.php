@@ -61,7 +61,7 @@
 </div>
 <?= form_close(); ?>
 
-<?php $total = array(); ?>
+<?php $total = []; ?>
 <table class="table table-striped table-hover table-condensed reporte">
 	<thead>
 		<tr>

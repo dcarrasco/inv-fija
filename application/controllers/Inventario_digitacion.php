@@ -86,9 +86,9 @@ class Inventario_digitacion extends Controller_base {
 		//$this->benchmark->mark('detalle_inventario_end');
 
 		$id_auditor = $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja);
-		$detalle_inventario->fill(array('auditor' => $id_auditor));
+		$detalle_inventario->fill(['auditor' => $id_auditor]);
 
-		$data = array(
+		app_render_view('inventario/inventario', [
 			'detalle_inventario' => $hoja_detalle_inventario,
 			'hoja'               => $hoja,
 			'nombre_inventario'  => $inventario->nombre,
@@ -97,9 +97,7 @@ class Inventario_digitacion extends Controller_base {
 			'url_form'           => "{$this->router->class}/update_hoja/{$hoja}/{$id_auditor}",
 			'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 			'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
-		);
-
-		app_render_view('inventario/inventario', $data);
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -172,18 +170,15 @@ class Inventario_digitacion extends Controller_base {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$data = array(
+			app_render_view('inventario/inventario_mobile', [
 				'detalle_inventario' => $detalle_inventario->get_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
 				'id_auditor'         => $detalle_inventario->get_auditor_hoja($inventario->get_id_inventario_activo(), $hoja),
 				'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
 				'link_hoja_sig'      => base_url($this->router->class . '/ingreso/' . ($hoja + 1) . '/' . time()),
-			);
-
-			app_render_view('inventario/inventario_mobile', $data);
+			]);
 		}
-
 	}
 
 	// --------------------------------------------------------------------
@@ -208,27 +203,23 @@ class Inventario_digitacion extends Controller_base {
 
 		if ($this->form_validation->run() === FALSE)
 		{
-			$data = array(
+			app_render_view('inventario/inventario_mobile_ingreso', [
 				'detalle_inventario' => $detalle_inventario,
-			);
-
-			app_render_view('inventario/inventario_mobile_ingreso', $data);
+			]);
 		}
 		else
 		{
 			$detalle_inventario->recuperar_post();
-			$detalle_inventario->fill(array(
+			$detalle_inventario->fill([
 				'digitador' => $this->acl_model->get_id_usr(),
 				'auditor'   => $this->acl_model->get_id_usr(),
 				'fecha_modificacion' => date('Y-m-d H:i:s'),
-			));
+			]);
 			$detalle_inventario->grabar();
 
 			set_message(sprintf($this->lang->line('inventario_digit_msg_save'), 1, $hoja));
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
-
-
 	}
 
 	// --------------------------------------------------------------------
@@ -247,27 +238,24 @@ class Inventario_digitacion extends Controller_base {
 		$detalle_inventario = new Detalle_inventario;
 
 		$catalogo = new Catalogo;
-		$arr_catalogo = array('' => 'Buscar y seleccionar material...');
+		$arr_catalogo = ['' => 'Buscar y seleccionar material...'];
 
 		if ($id_registro)
 		{
 			$detalle_inventario->find_id($id_registro);
-			$arr_catalogo = array($detalle_inventario->catalogo => $detalle_inventario->descripcion);
+			$arr_catalogo = [$detalle_inventario->catalogo => $detalle_inventario->descripcion];
 		}
 
 		$detalle_inventario->hoja = $hoja;
 		$detalle_inventario->get_relation_fields();
 
-		$data = array(
+		app_render_view('inventario/inventario_editar', [
 			'detalle_inventario' => $detalle_inventario,
 			'id'                 => $id_registro,
 			'hoja'               => $hoja,
 			'arr_catalogo'       => $arr_catalogo,
 			'url_form'           => site_url("{$this->router->class}/update/{$hoja}/{$id_auditor}/{$id_registro}"),
-		);
-
-		app_render_view('inventario/inventario_editar', $data);
-
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -313,9 +301,8 @@ class Inventario_digitacion extends Controller_base {
 
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options($material->find('list', array('filtro' => $filtro))));
+			->set_output(form_print_options($material->find('list', ['filtro' => $filtro])));
 	}
-
 
 }
 /* End of file inventario_digitacion.php */

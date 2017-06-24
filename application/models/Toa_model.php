@@ -31,10 +31,10 @@ class Toa_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89');
-	// public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z33');
+	public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'];
+	// public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z33'];
 	// Z33 devolucion de materiales: viene con un idtecnico distinto
-	// public $movimientos_consumo = array('Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z81', 'Z82', 'Z83', 'Z84');
+	// public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z81', 'Z82', 'Z83', 'Z84'];
 	// Z81 CAPEX  Z82 ANULA CAPEX  / Z83 OPEX y Z84 ANULA OPEX   Regularizaciones Manuales
 
 	/**
@@ -42,34 +42,34 @@ class Toa_model extends CI_Model {
 	 *
 	 * @var array
 	 */
-	public $movimientos_asignaciones = array('Z31', 'Z32');
+	public $movimientos_asignaciones = ['Z31', 'Z32'];
 
 	/**
 	 * Centros validos de consumos TOA
 	 *
 	 * @var array
 	 */
-	public $centros_consumo = array('CH32', 'CH33');
+	public $centros_consumo = ['CH32', 'CH33'];
 
 	/**
 	 * Tipos de reporte asignaciones
 	 *
 	 * @var array
 	 */
-	public $tipos_reporte_asignaciones = array(
+	public $tipos_reporte_asignaciones = [
 		'tecnicos'      => 'T&eacute;cnicos',
 		'material'      => 'Materiales',
 		'lote'          => 'Lotes',
 		'lote-material' => 'Lotes y materiales',
 		'detalle'       => 'Detalle todos los registros',
-	);
+	];
 
 	/**
 	 * Dias de la semana
 	 *
 	 * @var array
 	 */
-	public $dias_de_la_semana = array(
+	public $dias_de_la_semana = [
 		'0' => 'Do',
 		'1' => 'Lu',
 		'2' => 'Ma',
@@ -77,146 +77,146 @@ class Toa_model extends CI_Model {
 		'4' => 'Ju',
 		'5' => 'Vi',
 		'6' => 'Sa',
-	);
+	];
 
 	/**
 	 * Combo de unidades reporte control tecnicos
 	 *
 	 * @var array
 	 */
-	public $combo_unidades_consumo = array(
+	public $combo_unidades_consumo = [
 		'peticiones' => 'Cantidad de peticiones',
 		'unidades'   => 'Suma de unidades',
 		'monto'      => 'Suma de montos',
-	);
+	];
 
 	/**
 	 * Combo de unidades reporte control asignaciones
 	 *
 	 * @var array
 	 */
-	public $combo_unidades_asignacion = array(
+	public $combo_unidades_asignacion = [
 		'asignaciones' => 'Cantidad de asignaciones',
 		'unidades'     => 'Suma de unidades',
 		'monto'        => 'Suma de montos',
-	);
+	];
 
 	/**
 	 * Combo de unidades reporte control materiales consumidos
 	 *
 	 * @var array
 	 */
-	public $combo_unidades_materiales_consumidos = array(
+	public $combo_unidades_materiales_consumidos = [
 		'unidades' => 'Suma de unidades',
 		'monto'    => 'Suma de montos',
-	);
+	];
 
 	/**
 	 * Combo de unidades reporte control materiales por tipo de trabajo
 	 *
 	 * @var array
 	 */
-	public $combo_unidades_materiales_tipo_trabajo = array(
+	public $combo_unidades_materiales_tipo_trabajo = [
 		'unidades'     => 'Suma de unidades',
 		'monto'        => 'Suma de montos',
-	);
+	];
 
 	/**
 	 * Arreglo con validación formulario panel
 	 *
 	 * @var array
 	 */
-	public $panel_validation = array(
-		array(
+	public $panel_validation = [
+		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mes',
 			'label' => 'Mes',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Arreglo con validación formulario controles consumo
 	 *
 	 * @var array
 	 */
-	public $controles_consumos_validation = array(
-		array(
+	public $controles_consumos_validation = [
+		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mes',
 			'label' => 'Mes',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'filtro_trx',
 			'label' => 'Filtro transaccion',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'dato',
 			'label' => 'Dato a desplegar',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Arreglo con validación formulario controles materiales
 	 *
 	 * @var array
 	 */
-	public $controles_materiales_validation = array(
-		array(
+	public $controles_materiales_validation = [
+		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'mes',
 			'label' => 'Mes',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'tipo_trabajo',
 			'label' => 'Tipos de trabajo',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'dato',
 			'label' => 'Dato a desplegar',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 	/**
 	 * Arreglo con validación formulario controles clientes
 	 *
 	 * @var array
 	 */
-	public $controles_clientes_validation = array(
-		array(
+	public $controles_clientes_validation = [
+		[
 			'field' => 'cliente',
 			'label' => 'Cliente',
 			'rules' => 'trim',
-		),
-		array(
+		],
+		[
 			'field' => 'fecha_desde',
 			'label' => 'Fecha desde',
 			'rules' => 'required',
-		),
-		array(
+		],
+		[
 			'field' => 'fecha_hasta',
 			'label' => 'Fecha hasta',
 			'rules' => 'required',
-		),
-	);
+		],
+	];
 
 
 	// --------------------------------------------------------------------
@@ -244,12 +244,12 @@ class Toa_model extends CI_Model {
 		$cmv = new Clase_movimiento;
 
 		return array_merge(
-			array('000' => 'Todos los movimientos'),
-			$cmv->find('list', array(
-				'conditions' => array('cmv' => $this->movimientos_consumo),
+			['000' => 'Todos los movimientos'],
+			$cmv->find('list', [
+				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,
-			))
+			])
 		);
 	}
 
@@ -265,11 +265,11 @@ class Toa_model extends CI_Model {
 		$cmv = new Clase_movimiento;
 
 		return array_merge(
-			array('000' => 'Todos los movimientos'),
-			$cmv->find('list', array(
-				'conditions' => array('cmv' => $this->movimientos_asignaciones),
+			['000' => 'Todos los movimientos'],
+			$cmv->find('list', [
+				'conditions' => ['cmv' => $this->movimientos_asignaciones],
 				'opc_ini' => FALSE,
-			))
+			])
 		);
 	}
 
@@ -292,7 +292,7 @@ class Toa_model extends CI_Model {
 			return '';
 		}
 
-		$arr_data = array();
+		$arr_data = [];
 
 		$this->db
 			->where('fecha_contabilizacion>=', $param1)
@@ -416,15 +416,15 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_campos = array();
-		$arr_campos['referencia'] = array('titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'toa_consumos/detalle_peticion/');
-		$arr_campos['fecha']      = array('titulo' => 'Fecha', 'tipo' => 'fecha');
-		$arr_campos['carta_porte'] = array('titulo' => 'Tipo trabajo', 'tipo' => 'texto');
-		$arr_campos['empresa']    = array('titulo' => 'Empresa', 'tipo' => 'texto');
-		$arr_campos['cliente']    = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
-		$arr_campos['tecnico']    = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
-		$arr_campos['cant']       = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-		$arr_campos['monto']      = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
+		$arr_campos = [];
+		$arr_campos['referencia'] = ['titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'toa_consumos/detalle_peticion/'];
+		$arr_campos['fecha']      = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
+		$arr_campos['carta_porte'] = ['titulo' => 'Tipo trabajo'];
+		$arr_campos['empresa']    = ['titulo' => 'Empresa'];
+		$arr_campos['cliente']    = ['titulo' => 'Cod Tecnico'];
+		$arr_campos['tecnico']    = ['titulo' => 'Nombre Tecnico'];
+		$arr_campos['cant']       = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+		$arr_campos['monto']      = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -443,7 +443,7 @@ class Toa_model extends CI_Model {
 	{
 		if ( ! $peticion)
 		{
-			return array();
+			return [];
 		}
 
 		$arr_peticion_toa = $this->db
@@ -520,13 +520,13 @@ class Toa_model extends CI_Model {
 			->where('appt_number', $peticion)
 			->get()->result_array();
 
-		return array(
+		return [
 			'arr_peticion_toa'   => $arr_peticion_toa,
 			'arr_materiales_sap' => $arr_materiales_sap,
 			'arr_materiales_toa' => $arr_materiales_toa,
 			'arr_materiales_vpi' => $arr_materiales_vpi,
 			'arr_peticion_repara' => $arr_peticion_repara,
-		);
+		];
 	}
 
 
@@ -549,7 +549,7 @@ class Toa_model extends CI_Model {
 			return '';
 		}
 
-		$arr_data = array();
+		$arr_data = [];
 
 		$this->db
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
@@ -589,25 +589,25 @@ class Toa_model extends CI_Model {
 				//->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
-			$arr_campos = array();
-			$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'fecha');
-			$arr_campos['referencia']         = array('titulo' => 'Numero Peticion', 'tipo' => 'texto');
-			$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
-			$arr_campos['cliente']            = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
-			$arr_campos['tecnico']            = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
-			$arr_campos['codigo_movimiento']  = array('titulo' => 'Cod Movimiento', 'tipo' => 'texto');
-			$arr_campos['texto_movimiento']   = array('titulo' => 'Desc Movimiento', 'tipo' => 'texto');
-			$arr_campos['elemento_pep']       = array('titulo' => 'PEP', 'tipo' => 'texto');
-			$arr_campos['documento_material'] = array('titulo' => 'Documento SAP', 'tipo' => 'texto');
-			$arr_campos['centro']             = array('titulo' => 'Centro', 'tipo' => 'texto');
-			$arr_campos['material']           = array('titulo' => 'Cod material', 'tipo' => 'texto');
-			$arr_campos['texto_material']     = array('titulo' => 'Desc material', 'tipo' => 'texto');
-			$arr_campos['lote']               = array('titulo' => 'Lote', 'tipo' => 'texto');
-			$arr_campos['valor']              = array('titulo' => 'Valor', 'tipo' => 'texto');
-			$arr_campos['umb']                = array('titulo' => 'Unidad', 'tipo' => 'texto');
-			$arr_campos['cant']               = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto']              = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['usuario']            = array('titulo' => 'Usuario SAP', 'tipo' => 'texto');
+			$arr_campos = [];
+			$arr_campos['fecha']              = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
+			$arr_campos['referencia']         = ['titulo' => 'Numero Peticion'];
+			$arr_campos['empresa']            = ['titulo' => 'Empresa'];
+			$arr_campos['cliente']            = ['titulo' => 'Cod Tecnico'];
+			$arr_campos['tecnico']            = ['titulo' => 'Nombre Tecnico'];
+			$arr_campos['codigo_movimiento']  = ['titulo' => 'Cod Movimiento'];
+			$arr_campos['texto_movimiento']   = ['titulo' => 'Desc Movimiento'];
+			$arr_campos['elemento_pep']       = ['titulo' => 'PEP'];
+			$arr_campos['documento_material'] = ['titulo' => 'Documento SAP'];
+			$arr_campos['centro']             = ['titulo' => 'Centro'];
+			$arr_campos['material']           = ['titulo' => 'Cod material'];
+			$arr_campos['texto_material']     = ['titulo' => 'Desc material'];
+			$arr_campos['lote']               = ['titulo' => 'Lote'];
+			$arr_campos['valor']              = ['titulo' => 'Valor'];
+			$arr_campos['umb']                = ['titulo' => 'Unidad'];
+			$arr_campos['cant']               = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+			$arr_campos['monto']              = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+			$arr_campos['usuario']            = ['titulo' => 'Usuario SAP'];
 			$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -628,12 +628,12 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
-			$arr_campos = array();
-			$arr_campos['material']       = array('titulo' => 'Cod material', 'tipo' => 'texto');
-			$arr_campos['texto_material'] = array('titulo' => 'Desc material', 'tipo' => 'texto');
-			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('material'));
+			$arr_campos = [];
+			$arr_campos['material']       = ['titulo' => 'Cod material'];
+			$arr_campos['texto_material'] = ['titulo' => 'Desc material'];
+			$arr_campos['cant']           = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+			$arr_campos['monto']          = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+			$arr_campos['texto_link']     = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['material']];
 			$this->reporte->set_order_campos($arr_campos, 'material');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -654,12 +654,12 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
-			$arr_campos = array();
-			$arr_campos['valor'] = array('titulo' => 'Valor', 'tipo' => 'texto');
-			$arr_campos['lote']  = array('titulo' => 'Lote', 'tipo' => 'texto');
-			$arr_campos['cant']  = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto'] = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('lote'));
+			$arr_campos = [];
+			$arr_campos['valor'] = ['titulo' => 'Valor'];
+			$arr_campos['lote']  = ['titulo' => 'Lote'];
+			$arr_campos['cant']  = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+			$arr_campos['monto'] = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+			$arr_campos['texto_link'] = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote']];
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -684,14 +684,14 @@ class Toa_model extends CI_Model {
 				->from($this->config->item('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
-			$arr_campos = array();
-			$arr_campos['valor']          = array('titulo' => 'Valor', 'tipo' => 'texto');
-			$arr_campos['lote']           = array('titulo' => 'Lote', 'tipo' => 'texto');
-			$arr_campos['material']       = array('titulo' => 'Cod material', 'tipo' => 'texto');
-			$arr_campos['texto_material'] = array('titulo' => 'Desc material', 'tipo' => 'texto');
-			$arr_campos['cant']           = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto']          = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link']     = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote-material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('lote','material'));
+			$arr_campos = [];
+			$arr_campos['valor']          = ['titulo' => 'Valor'];
+			$arr_campos['lote']           = ['titulo' => 'Lote'];
+			$arr_campos['material']       = ['titulo' => 'Cod material'];
+			$arr_campos['texto_material'] = ['titulo' => 'Desc material'];
+			$arr_campos['cant']           = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+			$arr_campos['monto']          = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+			$arr_campos['texto_link']     = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote-material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote','material']];
 			$this->reporte->set_order_campos($arr_campos, 'valor');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -717,13 +717,13 @@ class Toa_model extends CI_Model {
 				//->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
-			$arr_campos = array();
-			$arr_campos['empresa'] = array('titulo' => 'Empresa', 'tipo' => 'texto');
-			$arr_campos['cliente'] = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
-			$arr_campos['tecnico'] = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
-			$arr_campos['cant']    = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-			$arr_campos['monto']   = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-			$arr_campos['texto_link'] = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => array('cliente'));
+			$arr_campos = [];
+			$arr_campos['empresa'] = ['titulo' => 'Empresa'];
+			$arr_campos['cliente'] = ['titulo' => 'Cod Tecnico'];
+			$arr_campos['tecnico'] = ['titulo' => 'Nombre Tecnico'];
+			$arr_campos['cant']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+			$arr_campos['monto']   = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+			$arr_campos['texto_link'] = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['cliente']];
 			$this->reporte->set_order_campos($arr_campos, 'empresa');
 
 			return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -749,7 +749,7 @@ class Toa_model extends CI_Model {
 			return '';
 		}
 
-		$arr_data = array();
+		$arr_data = [];
 
 		$this->db
 			->where('a.fecha_contabilizacion>=', $param1)
@@ -816,22 +816,22 @@ class Toa_model extends CI_Model {
 			->order_by('a.documento_material', 'ASC')
 			->get()->result_array();
 
-		$arr_campos = array();
-		$arr_campos['fecha']              = array('titulo' => 'Fecha', 'tipo' => 'fecha');
-		$arr_campos['documento_material'] = array('titulo' => 'Documento SAP', 'tipo' => 'texto');
-		$arr_campos['empresa']            = array('titulo' => 'Empresa', 'tipo' => 'texto');
-		$arr_campos['cliente']            = array('titulo' => 'Cod Tecnico', 'tipo' => 'texto');
-		$arr_campos['tecnico']            = array('titulo' => 'Nombre Tecnico', 'tipo' => 'texto');
-		$arr_campos['centro']             = array('titulo' => 'Centro', 'tipo' => 'texto');
-		$arr_campos['almacen']            = array('titulo' => 'Almac&eacute;n', 'tipo' => 'texto');
-		$arr_campos['des_almacen']        = array('titulo' => 'Desc Almac&eacute;n', 'tipo' => 'texto');
-		$arr_campos['material']           = array('titulo' => 'Material', 'tipo' => 'texto');
-		$arr_campos['texto_material']     = array('titulo' => 'Desc Material', 'tipo' => 'texto');
-		$arr_campos['lote']               = array('titulo' => 'Lote', 'tipo' => 'texto');
-		$arr_campos['valor']              = array('titulo' => 'Valor', 'tipo' => 'texto');
-		$arr_campos['cant']               = array('titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right');
-		$arr_campos['monto']              = array('titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right');
-		$arr_campos['texto_link']         = array('titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/detalle_asignacion', 'href_registros' => array('fecha','documento_material'));
+		$arr_campos = [];
+		$arr_campos['fecha']              = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
+		$arr_campos['documento_material'] = ['titulo' => 'Documento SAP'];
+		$arr_campos['empresa']            = ['titulo' => 'Empresa'];
+		$arr_campos['cliente']            = ['titulo' => 'Cod Tecnico'];
+		$arr_campos['tecnico']            = ['titulo' => 'Nombre Tecnico'];
+		$arr_campos['centro']             = ['titulo' => 'Centro'];
+		$arr_campos['almacen']            = ['titulo' => 'Almac&eacute;n'];
+		$arr_campos['des_almacen']        = ['titulo' => 'Desc Almac&eacute;n'];
+		$arr_campos['material']           = ['titulo' => 'Material'];
+		$arr_campos['texto_material']     = ['titulo' => 'Desc Material'];
+		$arr_campos['lote']               = ['titulo' => 'Lote'];
+		$arr_campos['valor']              = ['titulo' => 'Valor'];
+		$arr_campos['cant']               = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
+		$arr_campos['monto']              = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+		$arr_campos['texto_link']         = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/detalle_asignacion', 'href_registros' => ['fecha','documento_material']];
 		$this->reporte->set_order_campos($arr_campos, 'documento_material');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
@@ -851,7 +851,7 @@ class Toa_model extends CI_Model {
 	{
 		if ( ! $fecha OR ! $peticion)
 		{
-			return array();
+			return [];
 		}
 
 		return $this->db
@@ -900,7 +900,7 @@ class Toa_model extends CI_Model {
 		$mes = (int) substr($anomes, 4, 2);
 		$ano = (int) substr($anomes, 0, 4);
 
-		$arr_dias = array();
+		$arr_dias = [];
 
 		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
@@ -1000,11 +1000,11 @@ class Toa_model extends CI_Model {
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->get_compiled_select();
 
-			$arr_dato_desplegar = array(
+			$arr_dato_desplegar = [
 				'peticiones' => 'count(q1.referencia)',
 				'unidades'   => 'sum(q1.cant)',
 				'monto'      => 'sum(q1.monto)'
-			);
+			];
 
 			$query = 'select q1.fecha, q1.tecnico, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
 
@@ -1014,22 +1014,22 @@ class Toa_model extends CI_Model {
 
 
 		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
-		$matriz = array();
+		$matriz = [];
 		foreach ($arr_tecnicos as $tecnico)
 		{
-			$matriz[$tecnico->id_tecnico] = array(
+			$matriz[$tecnico->id_tecnico] = [
 				'nombre'       => $tecnico->tecnico,
 				'rut'          => $tecnico->rut,
 				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
 				'actuaciones'  => $arr_dias
-			);
+			];
 		}
-		uasort($matriz, array($this, '_sort_matriz_control_tecnicos'));
+		uasort($matriz, [$this, '_sort_matriz_control_tecnicos']);
 
-		$arr_tecnicos_con_datos = array();
+		$arr_tecnicos_con_datos = [];
 		foreach ($datos as $registro)
 		{
 			$matriz[$registro['tecnico']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
@@ -1124,22 +1124,22 @@ class Toa_model extends CI_Model {
 		$datos = $this->db->get()->result_array();
 
 		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', array('conditions' => array('id_empresa' => $empresa)));
+		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
-		$matriz = array();
+		$matriz = [];
 		foreach ($arr_tecnicos as $tecnico)
 		{
-			$matriz[$tecnico->id_tecnico] = array(
+			$matriz[$tecnico->id_tecnico] = [
 				'nombre'       => $tecnico->tecnico,
 				'rut'          => $tecnico->rut,
 				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
 				'actuaciones'  => $arr_dias
-			);
+			];
 		}
-		uasort($matriz, array($this, '_sort_matriz_control_tecnicos'));
+		uasort($matriz, [$this, '_sort_matriz_control_tecnicos']);
 
-		$arr_tecnicos_con_datos = array();
+		$arr_tecnicos_con_datos = [];
 		foreach ($datos as $registro)
 		{
 			$matriz[$registro['cliente']]['actuaciones'][substr(fmt_fecha($registro['fecha']), 8, 2)] = $registro['dato'];
@@ -1219,16 +1219,16 @@ class Toa_model extends CI_Model {
 
 		$matriz = collect($datos)
 			->map_with_keys(function ($material) use ($arr_dias) {
-				return array(
-					$material['desc_tip_material'].$material['material'] => array(
+				return [
+					$material['desc_tip_material'].$material['material'] => [
 						'material'     => $material['material'],
 						'descripcion'  => $material['descripcion'],
 						'unidad'       => $material['ume'],
 						'tip_material' => $material['desc_tip_material'],
 						'color'        => $material['color'],
 						'actuaciones'  => $arr_dias,
-					)
-				);
+					]
+				];
 			})->all();
 
 		ksort($matriz);
@@ -1238,9 +1238,7 @@ class Toa_model extends CI_Model {
 				->filter(function($dato) use ($material) {
 					return $dato['material'] === $material['material'];
 				})->map_with_keys(function($dato) {
-					return array(
-						substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']
-					);
+					return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
 				});
 
 			$material['actuaciones'] = collect($material['actuaciones'])
@@ -1367,21 +1365,21 @@ class Toa_model extends CI_Model {
 			}
 
 			$arr_data = $this->db->get()->result_array();
-			$matriz = array();
+			$matriz = [];
 
 			foreach($arr_referencias as $referencia)
 			{
-				$matriz[$referencia['referencia']] = array();
+				$matriz[$referencia['referencia']] = [];
 
 				foreach($arr_materiales as $material)
 				{
-					$matriz[$referencia['referencia']][$material['material']] = array(
+					$matriz[$referencia['referencia']][$material['material']] = [
 						'texto_material'    => $material['texto_material'],
 						'desc_tip_material' => $material['desc_tip_material'],
 						'color'             => $material['color'],
 						'fecha'             => NULL,
 						'dato'              => NULL,
-					);
+					];
 				}
 			}
 
@@ -1458,9 +1456,9 @@ class Toa_model extends CI_Model {
 	 */
 	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
 	{
-		$arr_indicador = ( ! is_array($indicador)) ? array('Data' => $indicador) : $indicador;
+		$arr_indicador = ( ! is_array($indicador)) ? ['Data' => $indicador] : $indicador;
 
-		$arr_datos = array();
+		$arr_datos = [];
 		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
 		{
 			$arr_datos[$llave_indicador] = $this->get_resumen_panel($valor_indicador, $empresa, $anomes);
@@ -1537,7 +1535,7 @@ class Toa_model extends CI_Model {
 		$usage = ($sum_indicador2 === 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
 		$usage = $usage > 100 ? 100 : (int) $usage;
 
-		return ($this->gchart_data(array('usa' => $usage, 'no usa' => 100 - $usage)));
+		return ($this->gchart_data(['usa' => $usage, 'no usa' => 100 - $usage]));
 	}
 
 
@@ -1602,12 +1600,10 @@ class Toa_model extends CI_Model {
 		$valor_indicador = $this->get_resumen_usage($indicador, $empresa, $anomes);
 		$porc_mes = $this->get_resumen_panel_porcentaje_mes($indicador, $empresa, $anomes);
 
-		return ($this->gchart_data(
-			array(
-				'actual' => $valor_indicador,
-				'proy'   => (int) ($valor_indicador/$porc_mes) - $valor_indicador
-			)
-		));
+		return $this->gchart_data([
+			'actual' => $valor_indicador,
+			'proy'   => (int) ($valor_indicador/$porc_mes) - $valor_indicador
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -1618,7 +1614,7 @@ class Toa_model extends CI_Model {
 	 * @param  array $arr_orig Arreglo a formatear
 	 * @return string
 	 */
-	public function gchart_data($arr_orig = array())
+	public function gchart_data($arr_orig = [])
 	{
 
 		if ( ! $arr_orig)
@@ -1634,7 +1630,7 @@ class Toa_model extends CI_Model {
 		{
 			if ( ! is_array($valor))
 			{
-				$valor = array('Data' => $valor);
+				$valor = ['Data' => $valor];
 			}
 
 			// titulo

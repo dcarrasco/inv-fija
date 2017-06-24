@@ -67,15 +67,15 @@
 </div>
 
 <div class="content-module-main">
-	<?php $totales    = array(); ?>
-	<?php $subtotales = array(); ?>
-	<?php $subtot_ant = array(); ?>
+	<?php $totales    = []; ?>
+	<?php $subtotales = []; ?>
+	<?php $subtot_ant = []; ?>
 	<table class="table table-bordered table-striped table-hover table-condensed reporte">
 		<thead>
 			<tr>
 				<?php foreach ($arr_campos as $campo => $arr_param_campo): ?>
 					<th <?= ($arr_param_campo === '') ? '' : 'class="' . $arr_param_campo['class'] . '"' ?>>
-						<?= anchor('#', $arr_param_campo['titulo'], array('order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo])); ?>
+						<?= anchor('#', $arr_param_campo['titulo'], ['order_by' => $arr_link_campos[$campo], 'order_sort' => $arr_link_sort[$campo]]); ?>
 						<?= $arr_img_orden[$campo]; ?>
 						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $totales[$campo] = 0; }?>
 						<?php if ($arr_param_campo['tipo']=='numero' || $arr_param_campo['tipo']=='valor') { $subtotales[$campo] = 0; }?>

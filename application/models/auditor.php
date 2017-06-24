@@ -36,34 +36,32 @@ class Auditor extends ORM_Model {
 	 */
 	public function __construct($id_auditor = NULL)
 	{
-		$this->_model_config = array(
-			'modelo' => array(
+		$this->_model_config = [
+			'modelo' => [
 				'model_tabla'        => $this->config->item('bd_auditores'),
 				'model_label'        => 'Auditor',
 				'model_label_plural' => 'Auditores',
 				'model_order_by'     => 'nombre',
-			),
-			'campos' => array(
-				'id' => array(
-					'tipo'   => Orm_field::TIPO_ID,
-				),
-				'nombre' => array(
+			],
+			'campos' => [
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'nombre' => [
 					'label'          => 'Nombre del auditor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
-				),
-				'activo' => array(
+				],
+				'activo' => [
 					'label'          => 'Activo',
 					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
 					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
 					'es_obligatorio' => TRUE,
 					'default'        => 1
-				),
-			),
-		);
+				],
+			],
+		];
 
 		parent::__construct($id_auditor);
 	}
