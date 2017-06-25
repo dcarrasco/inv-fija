@@ -140,6 +140,8 @@ class Toa_controles extends Controller_base {
 	 */
 	public function asignaciones()
 	{
+		$this->load->model('toa_asignacion');
+
 		$this->form_validation
 			->set_data(request())
 			->set_rules($this->toa_model->controles_consumos_validation)
@@ -150,11 +152,11 @@ class Toa_controles extends Controller_base {
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
 			'combo_empresas'       => $empresa_toa->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_asignacion(),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_asignacion,
+			'combo_filtro_trx'     => $this->toa_asignacion->get_combo_movimientos_asignacion(),
+			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_model->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
 		]);
 	}
 

@@ -664,22 +664,24 @@ if ( ! function_exists('request'))
 	{
 		$ci =& get_instance();
 
-		$old_request = collect($ci->session->flashdata('old_request'));
-
-		$request = collect(array_merge($ci->input->post(), $ci->input->get()))
-			->merge($old_request);
+		if ( ! $ci->request)
+		{
+			$old_request = collect($ci->session->flashdata('old_request'));
+			$ci->request = collect(array_merge($ci->input->post(), $ci->input->get()))
+				->merge($old_request);
+		}
 
 		if (is_null($field))
 		{
-			return $request->all();
+			return $ci->request->all();
 		}
 
 		if (is_array($field))
 		{
-			return $request->only($field)->all();
+			return $ci->request->only($field)->all();
 		}
 
-		return $request->get($field, $default);
+		return $ci->request->get($field, $default);
 	}
 }
 
@@ -733,53 +735,6 @@ if ( ! function_exists('map'))
 	function map($data, $f)
 	{
 		return array_map($f, $data);
-	}
-}
-
-// --------------------------------------------------------------------
-
-if ( ! function_exists('get_fecha_hasta'))
-{
-	/**
-	 * Devuelve la fecha más un mes
-	 *
-	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
-	 * @return string         Fecha más un mes (formato YYYYMMDD)
-	 */
-	function get_fecha_hasta($anomes = NULL)
-	{
-		$mes = (int) substr($anomes, 4, 2);
-		$ano = (int) substr($anomes, 0, 4);
-
-		return (string) (($mes === 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
-
-	}
-}
-
-	// --------------------------------------------------------------------
-
-if ( ! function_exists('get_arr_dias'))
-{
-	/**
-	 * Devuelve arreglo con dias del mes
-	 *
-	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
-	 * @return array          Arreglo con dias del mes (llaves en formato DD)
-	 */
-	function get_arr_dias($anomes = NULL)
-	{
-		$mes = (int) substr($anomes, 4, 2);
-		$ano = (int) substr($anomes, 0, 4);
-
-		$arr_dias = [];
-
-		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
-		{
-			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
-			$arr_dias[$indice_dia] = NULL;
-		}
-
-		return $arr_dias;
 	}
 }
 
@@ -861,6 +816,52 @@ if ( ! function_exists('cached_query'))
 	}
 }
 
+// --------------------------------------------------------------------
+
+if ( ! function_exists('get_arr_dias_mes'))
+{
+	/**
+	 * Devuelve arreglo con dias del mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return array          Arreglo con dias del mes (llaves en formato DD)
+	 */
+	function get_arr_dias_mes($anomes = NULL)
+	{
+		$mes = (int) substr($anomes, 4, 2);
+		$ano = (int) substr($anomes, 0, 4);
+
+		$arr_dias = [];
+
+		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
+		{
+			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
+			$arr_dias[$indice_dia] = NULL;
+		}
+
+		return $arr_dias;
+	}
+}
+
+// --------------------------------------------------------------------
+
+if ( ! function_exists('get_fecha_hasta'))
+{
+	/**
+	 * Devuelve la fecha más un mes
+	 *
+	 * @param  string $anomes Mes y año a consultar (formato YYYYMM)
+	 * @return string         Fecha más un mes (formato YYYYMMDD)
+	 */
+	function get_fecha_hasta($anomes = NULL)
+	{
+		$mes = (int) substr($anomes, 4, 2);
+		$ano = (int) substr($anomes, 0, 4);
+
+		return (string) (($mes === 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
+
+	}
+}
 
 // --------------------------------------------------------------------
 

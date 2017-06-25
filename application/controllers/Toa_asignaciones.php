@@ -43,8 +43,7 @@ class Toa_asignaciones extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_model');
-		$this->load->model('toa_consumo');
+		$this->load->model('toa_asignacion');
 		$this->lang->load('toa');
 	}
 
@@ -71,12 +70,12 @@ class Toa_asignaciones extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_consumo->consumos_validation)
+			->set_rules($this->toa_asignacion->asignacion_validation)
 			->run();
 
 		app_render_view('toa/consumos', [
-			'combo_reportes' => $this->toa_model->tipos_reporte_asignaciones,
-			'reporte'        => $this->toa_model->asignaciones_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('order_by'), request('order_sort')),
+			'combo_reportes' => $this->toa_asignacion->tipos_reporte_asignaciones,
+			'reporte'        => $this->toa_asignacion->asignaciones_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('order_by'), request('order_sort')),
 		]);
 	}
 
@@ -96,7 +95,8 @@ class Toa_asignaciones extends Controller_base {
 	public function ver_asignaciones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
 		app_render_view('toa/peticiones', [
-			'reporte' => $this->toa_model->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3, $param4),
+			'reporte' => $this->toa_asignacion->documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3, $param4),
+			'google_maps'   => NULL,
 		]);
 
 
@@ -115,7 +115,7 @@ class Toa_asignaciones extends Controller_base {
 	public function detalle_asignacion($fecha = NULL, $peticion = NULL)
 	{
 		app_render_view('toa/detalle_asignacion', [
-			'reporte' => $this->toa_model->detalle_asignacion_toa($fecha, $peticion),
+			'reporte' => $this->toa_asignacion->detalle_asignacion_toa($fecha, $peticion),
 		]);
 	}
 
