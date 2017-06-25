@@ -32,36 +32,12 @@ class Inventario_model extends CI_Model {
 	 * @var array
 	 */
 	public $reportes_validation = [
-		[
-			'field' => 'inv_activo',
-			'label' => 'Inventario activo',
-			'rules' => 'trim'
-		],
-		[
-			'field' => 'elim_sin_dif',
-			'label' => 'Ocultar registros sin diferencias',
-			'rules' => 'trim'
-		],
-		[
-			'field' => 'incl_ajustes',
-			'label' => 'Incluir ajustes de inventario',
-			'rules' => 'trim'
-		],
-		[
-			'field' => 'incl_familias',
-			'label' => 'Incluir familias de productos',
-			'rules' => 'trim'
-		],
-		[
-			'field' => 'order_by',
-			'label' => '',
-			'rules' => 'trim'
-		],
-		[
-			'field' => 'order_sort',
-			'label' => '',
-			'rules' => 'trim'
-		],
+		['field' => 'inv_activo',    'label' => 'Inventario activo', 'rules' => 'trim'],
+		['field' => 'elim_sin_dif',  'label' => 'Ocultar registros sin diferencias', 'rules' => 'trim'],
+		['field' => 'incl_ajustes',  'label' => 'Incluir ajustes de inventario', 'rules' => 'trim'],
+		['field' => 'incl_familias', 'label' => 'Incluir familias de productos', 'rules' => 'trim'],
+		['field' => 'order_by',   'label' => '', 'rules' => 'trim'],
+		['field' => 'order_sort', 'label' => '', 'rules' => 'trim'],
 	];
 
 	/**

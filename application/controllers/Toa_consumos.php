@@ -138,14 +138,11 @@ class Toa_consumos extends Controller_base {
 		$peticion = ( ! $peticion) ? request('peticion') : $peticion;
 		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
 
-		if (count($arr_peticiones) AND count($arr_peticiones['arr_peticion_toa']))
-		{
-			$this->googlemaps->add_marker([
-				'lat'   => $arr_peticiones['arr_peticion_toa']['acoord_y'],
-				'lng'   => $arr_peticiones['arr_peticion_toa']['acoord_x'],
-				'title' => $arr_peticiones['arr_peticion_toa']['cname'],
-			]);
-		}
+		$this->googlemaps->add_marker([
+			'lat'   => array_get($arr_peticiones, 'arr_peticion_toa.acoord_y'),
+			'lng'   => array_get($arr_peticiones, 'arr_peticion_toa.acoord_x'),
+			'title' => array_get($arr_peticiones, 'arr_peticion_toa.cname'),
+		]);
 
 		set_message(($peticion AND ! $arr_peticiones) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
 

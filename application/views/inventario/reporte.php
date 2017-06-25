@@ -10,7 +10,7 @@
 		<?= form_dropdown('inv_activo', $combo_inventarios, $id_inventario, 'id="sel_inv_activo" class="form-control input-sm"'); ?>
 	</div>
 
-	<div class="form-group col-md-5">
+	<div class="form-group col-md-4">
 		<label class="checkbox-inline">
 			<?= form_checkbox('elim_sin_dif', '1', request('elim_sin_dif'), 'id="elim_sin_dif"'); ?>
 			{_inventario_report_check_ocultar_regs_}
@@ -25,12 +25,11 @@
 		</label>
 	</div>
 
-	<div class="form-group col-md-2">
+	<div class="form-group col-md-3">
 		<div class="input-group input-group-sm">
 			<div class="input-group">
 				<span class="input-group-addon" id="btn_filtrar">
 					<span class="fa fa-search"></span>
-
 				</span>
 				<?= form_input('filtrar_material', request('filtrar_material'), 'class="form-control input-sm" id="filtrar_material" placeholder="{_inventario_report_filter_}" onKeyPress="return event.keyCode!=13"'); ?>
 			</div>

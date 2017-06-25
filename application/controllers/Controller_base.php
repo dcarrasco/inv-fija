@@ -47,6 +47,13 @@ class Controller_base extends CI_Controller {
 	 */
 	public $errors = NULL;
 
+	/**
+	 * Collection de request
+	 *
+	 * @var Collection
+	 */
+	public $request = NULL;
+
 	// --------------------------------------------------------------------
 
 	/**

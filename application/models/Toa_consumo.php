@@ -69,21 +69,9 @@ class Toa_consumo extends CI_Model {
 	 * @var array
 	 */
 	public $consumos_validation = [
-		[
-			'field' => 'sel_reporte',
-			'label' => 'Reporte',
-			'rules' => 'required',
-		],
-		[
-			'field' => 'fecha_desde',
-			'label' => 'Fecha desde',
-			'rules' => 'required',
-		],
-		[
-			'field' => 'fecha_hasta',
-			'label' => 'Fecha hasta',
-			'rules' => 'required',
-		],
+		['field' => 'sel_reporte', 'label' => 'Reporte',     'rules' => 'required'],
+		['field' => 'fecha_desde', 'label' => 'Fecha desde', 'rules' => 'required'],
+		['field' => 'fecha_hasta', 'label' => 'Fecha hasta', 'rules' => 'required'],
 	];
 
 	// --------------------------------------------------------------------
