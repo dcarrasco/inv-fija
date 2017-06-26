@@ -511,7 +511,7 @@ class Toa_model extends CI_Model {
 						return $dato['tecnico'] === $tecnico->id_tecnico;
 					})
 					->map_with_keys(function($dato) {
-						return [substr($dato['fecha'], 8, 2) => $dato['dato']];
+						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
 					});
 
 				return [$tecnico->id_tecnico => [
