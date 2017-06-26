@@ -526,7 +526,7 @@ class Toa_model extends CI_Model {
 				return collect($tecnico['actuaciones'])->sum() !== 0;
 			})
 			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
+				return $tecnico1['orden_ciudad'].$tecnico1['nombre'] > $tecnico2['orden_ciudad'].$tecnico2['nombre'];
 			});
 	}
 
