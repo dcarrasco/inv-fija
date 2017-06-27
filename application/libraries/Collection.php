@@ -359,9 +359,9 @@ class Collection implements IteratorAggregate {
 	* @param  callable $callback Funcion de ordenamiento
 	* @return mixed
 	*/
-	public function sort($callback)
+	public function sort($callback = null)
 	{
-		uasort($this->_items, $callback);
+		$callback ? uasort($this->_items, $callback) : asort($this->_items);
 
 		return $this;
 	}
@@ -498,6 +498,17 @@ class Collection implements IteratorAggregate {
 		}
 
 		return new static($result);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve elementos unicos de la colección
+	 * @return static
+	 */
+	public function unique()
+	{
+		return new static(array_unique($this->_items, SORT_REGULAR));
 	}
 
 	// --------------------------------------------------------------------

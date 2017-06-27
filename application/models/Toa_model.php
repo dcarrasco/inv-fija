@@ -444,33 +444,77 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = get_arr_dias_mes($anomes);
+		$tecnicos = new Tecnico_toa();
+		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
+		$arr_dias = collect(get_arr_dias_mes($anomes));
+		$datos    = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
+
+		return $arr_tecnicos
+			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
+				$datos_tecnico = $datos->filter(function($dato) use ($tecnico) {
+						return $dato['tecnico'] === $tecnico->id_tecnico;
+					})
+					->map_with_keys(function($dato) {
+						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+					});
+
+				return [$tecnico->id_tecnico => [
+					'nombre'       => $tecnico->tecnico,
+					'rut'          => $tecnico->rut,
+					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
+					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+					'actuaciones'  => $arr_dias->merge($datos_tecnico)->all(),
+				]];
+			})
+			->filter(function($tecnico) {
+				return collect($tecnico['actuaciones'])->sum() !== 0;
+			})
+			->sort(function($tecnico1, $tecnico2) {
+				return $tecnico1['orden_ciudad'].$tecnico1['nombre'] > $tecnico2['orden_ciudad'].$tecnico2['nombre'];
+			});
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de consumos de técnicos por dia
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
+	public function _datos_control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
+	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		$select_sum = [
-			'unidades'   => 'cant',
-			'monto'      => 'monto',
-			'peticiones' => '1',
-		];
-		$this->db->select_sum(array_get($select_sum, $dato_desplegar, '1'), 'dato');
+		if (! $filtro_trx OR $filtro_trx === '000')
+		{
+			$select_sum = [
+				'unidades'   => 'cant',
+				'monto'      => 'monto',
+				'peticiones' => '1',
+			];
+			$this->db->select_sum(array_get($select_sum, $dato_desplegar, '1'), 'dato');
 
-		$datos = $this->db
-			->select('a.fecha')
-			->select('a.tecnico')
-			->group_by('a.fecha')
-			->group_by('a.tecnico')
-			->where('a.fecha>=', $fecha_desde)
-			->where('a.fecha<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			// ->where_in('codigo_movimiento', $this->movimientos_consumo)
-			// ->where_in('centro', $this->centros_consumo)
-			->from($this->config->item('bd_peticiones_sap').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
-			->get()->result_array();
-
-		if ($filtro_trx AND $filtro_trx !== '000')
+			return $this->db
+				->select('a.fecha')
+				->select('a.tecnico')
+				->group_by('a.fecha')
+				->group_by('a.tecnico')
+				->where('a.fecha>=', $fecha_desde)
+				->where('a.fecha<', $fecha_hasta)
+				->where('b.id_empresa', $empresa)
+				// ->where_in('codigo_movimiento', $this->movimientos_consumo)
+				// ->where_in('centro', $this->centros_consumo)
+				->from($this->config->item('bd_peticiones_sap').' a')
+				->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
+				->get()->result_array();
+		}
+		else
 		{
 			$query = $this->db
 				->select('a.fecha_contabilizacion as fecha')
@@ -498,51 +542,8 @@ class Toa_model extends CI_Model {
 
 			$query = 'select q1.fecha, q1.tecnico, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
 
-			$datos = $this->db->query($query)->result_array();
+			return $this->db->query($query)->result_array();
 		}
-
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
-
-		return $arr_tecnicos
-			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
-				$datos_tecnico = collect($datos)
-					->filter(function($dato) use ($tecnico) {
-						return $dato['tecnico'] === $tecnico->id_tecnico;
-					})
-					->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
-					});
-
-				return [$tecnico->id_tecnico => [
-					'nombre'       => $tecnico->tecnico,
-					'rut'          => $tecnico->rut,
-					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
-					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-					'actuaciones'  => collect($arr_dias)->merge($datos_tecnico)->all(),
-				]];
-			})
-			->filter(function($tecnico) {
-				return collect($tecnico['actuaciones'])->sum() !== 0;
-			})
-			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1['orden_ciudad'].$tecnico1['nombre'] > $tecnico2['orden_ciudad'].$tecnico2['nombre'];
-			});
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Criterio para ordenar matriz de técnicos por ciudad
-	 *
-	 * @param  array $a Primer elemento a comparar
-	 * @param  array $b Segundo elemento a comparar
-	 * @return int      Comparación
-	 */
-	private function _sort_matriz_control_tecnicos($a, $b)
-	{
-		return $a['orden_ciudad'] > $b['orden_ciudad'];
 	}
 
 	// --------------------------------------------------------------------
@@ -563,8 +564,44 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$arr_dias = get_arr_dias_mes($anomes);
+		$arr_dias = collect(get_arr_dias_mes($anomes));
+		$datos    = collect($this->_datos_materiales_consumidos($empresa, $anomes, $filtro_trx, $dato_desplegar));
 
+		return $datos->map(function($datos) {
+				return [
+					'material'     => $datos['material'],
+					'descripcion'  => $datos['descripcion'],
+					'unidad'       => $datos['ume'],
+					'tip_material' => $datos['desc_tip_material'],
+					'color'        => $datos['color'],
+				];
+			})
+			->unique()
+			->map(function ($material) use ($arr_dias, $datos) {
+				$consumo_material = $datos->filter(function($dato) use ($material) {
+						return $dato['material'] === $material['material'];
+					})->map_with_keys(function($dato) {
+						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+					});
+
+				return [
+						'material'     => $material['material'],
+						'descripcion'  => $material['descripcion'],
+						'unidad'       => $material['unidad'],
+						'tip_material' => $material['tip_material'],
+						'color'        => $material['color'],
+						'actuaciones'  => $arr_dias->merge($consumo_material)->all(),
+				];
+			})->sort(function($material1, $material2) {
+				return $material1['tip_material'].$material1['material'] > $material2['tip_material'].$material2['material'];
+			});
+	}
+
+
+	// --------------------------------------------------------------------
+
+	private function _datos_materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades')
+	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
@@ -573,7 +610,7 @@ class Toa_model extends CI_Model {
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
 
-		$datos = $this->db
+		return $this->db
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.material')
 			->select('c.descripcion')
@@ -599,40 +636,7 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
 			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
 			->get()->result_array();
-
-		$matriz = collect($datos)
-			->map_with_keys(function ($material) use ($arr_dias) {
-				return [
-					$material['desc_tip_material'].$material['material'] => [
-						'material'     => $material['material'],
-						'descripcion'  => $material['descripcion'],
-						'unidad'       => $material['ume'],
-						'tip_material' => $material['desc_tip_material'],
-						'color'        => $material['color'],
-						'actuaciones'  => $arr_dias,
-					]
-				];
-			})->all();
-
-		ksort($matriz);
-
-		return collect($matriz)->map(function($material) use ($datos) {
-			$consumo_material = collect($datos)
-				->filter(function($dato) use ($material) {
-					return $dato['material'] === $material['material'];
-				})->map_with_keys(function($dato) {
-					return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
-				});
-
-			$material['actuaciones'] = collect($material['actuaciones'])
-				->map(function($valor, $indice) use ($consumo_material) {
-					return $valor + $consumo_material->get($indice, 0);
-				})->all();
-
-			return $material;
-		});
 	}
-
 
 	// --------------------------------------------------------------------
 

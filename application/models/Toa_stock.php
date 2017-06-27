@@ -129,28 +129,28 @@ class Toa_stock extends CI_Model {
 		$almacenes = $this->_get_almacenes($empresa);
 		$stock = $this->_get_stock_almacenes($empresa, $anomes, $dato_desplegar);
 
-		$arr_dias = get_arr_dias($anomes);
+		$arr_dias = collect(get_arr_dias_mes($anomes));
 
 		return collect($almacenes)
 			->map_with_keys(function($almacen) use ($arr_dias, $stock) {
 				$stock_almacen = collect($stock)
 					->filter(function($stock) use ($almacen) {
-						return $stock['centro'] === $almacen['centro'] AND $stock['almacen'] === $almacen['cod_almacen'];
+						return $stock['centro'].$stock['almacen'] === $almacen['centro'].$almacen['cod_almacen'];
 					})->map_with_keys(function($stock) {
 						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
 					})->all();
 
-				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_almacen) {
+				$actuaciones = $arr_dias->map(function($valor, $indice) use ($stock_almacen) {
 					return $valor + array_get($stock_almacen, $indice, 0);
-				})->all();
+				});
 
 				return [$almacen['centro'].$almacen['cod_almacen'] => [
 					'tipo'        => $almacen['tipo'],
 					'centro'      => $almacen['centro'],
 					'cod_almacen' => $almacen['cod_almacen'],
 					'des_almacen' => $almacen['des_almacen'],
-					'actuaciones' => $actuaciones,
-					'con_datos'   => collect($actuaciones)->sum(),
+					'actuaciones' => $actuaciones->all(),
+					'con_datos'   => $actuaciones->sum(),
 				]];
 			})->all();
 	}
@@ -238,7 +238,7 @@ class Toa_stock extends CI_Model {
 		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 		$stock = $this->_get_stock_tecnicos($empresa, $anomes, $dato_desplegar);
 
-		$arr_dias = get_arr_dias($anomes);
+		$arr_dias = collect(get_arr_dias_mes($anomes));
 
 		return collect($arr_tecnicos)
 			->map_with_keys(function($tecnico) use ($arr_dias, $stock) {
@@ -249,15 +249,15 @@ class Toa_stock extends CI_Model {
 						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
 					})->all();
 
-				$actuaciones = collect($arr_dias)->map(function($valor, $indice) use ($stock_tecnico) {
+				$actuaciones = $arr_dias->map(function($valor, $indice) use ($stock_tecnico) {
 					return $valor + array_get($stock_tecnico, $indice, 0);
-				})->all();
+				});
 
 				return [$tecnico->id_tecnico => [
 					'tecnico'     => $tecnico->tecnico,
 					'rut'         => $tecnico->rut,
-					'actuaciones' => $actuaciones,
-					'con_datos'   => collect($actuaciones)->sum(),
+					'actuaciones' => $actuaciones->all(),
+					'con_datos'   => $actuaciones->sum(),
 				]];
 			})->all();
 	}
