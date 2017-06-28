@@ -682,12 +682,44 @@ class Toa_model extends CI_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
+		$referencias = collect($this->_get_referencias_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo));
+		$materiales = collect($this->_get_materiales_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo));
+		$arr_data = collect($this->_get_datos_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo, $dato_desplegar));
+
+		return $referencias->flatten()->map_with_keys(function($referencia) use ($materiales, $arr_data) {
+			$data_referencia = $arr_data->filter(function($data) use ($referencia) {
+				return $data['referencia'] === $referencia;
+			});
+
+			$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
+				$data_material = $data_referencia->first(function($data) use ($material) {
+					return $data['material'] === $material['material'];
+				});
+
+				return [
+					'texto_material'    => $material['texto_material'],
+					'desc_tip_material' => $material['desc_tip_material'],
+					'color'             => $material['color'],
+					'fecha'             => array_get($data_material, 'fecha'),
+					'dato'              => array_get($data_material, 'dato'),
+				];
+			});
+
+			return [$referencia => $datos_referencia];
+		});
+	}
+
+
+	// --------------------------------------------------------------------
+
+	private function _get_referencias_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo)
+	{
 		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
 
-		$arr_referencias = $this->db
+		return $this->db
 			->distinct()
 			->select('a.referencia')
 			->where('a.fecha_contabilizacion>=', $fecha_desde)
@@ -698,14 +730,18 @@ class Toa_model extends CI_Model {
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
 			->order_by('referencia')
 			->get()->result_array();
+	}
 
+	// --------------------------------------------------------------------
 
+	private function _get_materiales_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo)
+	{
 		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
 
-		$arr_materiales = $this->db
+		return $this->db
 			->distinct()
 			->select('a.material')
 			->select('a.texto_material')
@@ -721,16 +757,22 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
+	}
 
+	// --------------------------------------------------------------------
+
+	private function _get_datos_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo, $dato_desplegar)
+	{
 		if ($tipo_trabajo !== '000')
 		{
 			$this->db->where('a.carta_porte', $tipo_trabajo);
 		}
 
-		$this->db
+		return $this->db
 			->select('a.referencia')
 			->select('a.material')
 			->select('a.fecha_contabilizacion as fecha')
+			->select_sum($dato_desplegar === 'monto' ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
 			->group_by('a.referencia')
 			->group_by('a.material')
 			->group_by('a.fecha_contabilizacion')
@@ -740,44 +782,9 @@ class Toa_model extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->order_by('referencia, material');
-
-			if ($dato_desplegar === 'monto')
-			{
-				$this->db->select_sum('(-a.importe_ml)', 'dato');
-			}
-			else
-			{
-				$this->db->select_sum('(-a.cantidad_en_um)', 'dato');
-			}
-
-			$arr_data = $this->db->get()->result_array();
-			$matriz = [];
-
-			foreach($arr_referencias as $referencia)
-			{
-				$matriz[$referencia['referencia']] = [];
-
-				foreach($arr_materiales as $material)
-				{
-					$matriz[$referencia['referencia']][$material['material']] = [
-						'texto_material'    => $material['texto_material'],
-						'desc_tip_material' => $material['desc_tip_material'],
-						'color'             => $material['color'],
-						'fecha'             => NULL,
-						'dato'              => NULL,
-					];
-				}
-			}
-
-			foreach($arr_data as $registro)
-			{
-				$matriz[$registro['referencia']][$registro['material']]['dato'] = $registro['dato'];
-				$matriz[$registro['referencia']][$registro['material']]['fecha'] = fmt_fecha($registro['fecha']);
-			}
-		return $matriz;
+			->order_by('referencia, material')
+			->get()->result_array();
 	}
-
 
 	// --------------------------------------------------------------------
 
