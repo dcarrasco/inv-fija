@@ -451,27 +451,35 @@ class Toa_model extends CI_Model {
 		$datos    = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
 
 		return $arr_tecnicos
-			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
+			->map(function($tecnico) use ($arr_dias, $datos, $anomes) {
 				$datos_tecnico = $datos->filter(function($dato) use ($tecnico) {
-						return $dato['tecnico'] === $tecnico->id_tecnico;
+						return $dato->tecnico === $tecnico->id_tecnico;
 					})
 					->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+						return [substr(fmt_fecha($dato->fecha), 8, 2) => $dato->dato];
 					});
+				$total = $datos_tecnico->sum();
 
-				return [$tecnico->id_tecnico => [
+				return (object) [
+					'header' => [
+						'ciudad'  => (string) $tecnico->get_relation_object('id_ciudad'),
+						'tecnico' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
+					],
+					'data'  => $arr_dias->merge($datos_tecnico),
+					'total' => $total,
+					'anomes' => $anomes,
+
+					'id_tecnico'   => $tecnico->id_tecnico,
 					'nombre'       => $tecnico->tecnico,
 					'rut'          => $tecnico->rut,
-					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-					'actuaciones'  => $arr_dias->merge($datos_tecnico)->all(),
-				]];
+				];
 			})
 			->filter(function($tecnico) {
-				return collect($tecnico['actuaciones'])->sum() !== 0;
+				return $tecnico->total !== 0;
 			})
 			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1['orden_ciudad'].$tecnico1['nombre'] > $tecnico2['orden_ciudad'].$tecnico2['nombre'];
+				return $tecnico1->orden_ciudad.$tecnico1->nombre > $tecnico2->orden_ciudad.$tecnico2->nombre;
 			});
 	}
 
@@ -512,7 +520,7 @@ class Toa_model extends CI_Model {
 				// ->where_in('centro', $this->centros_consumo)
 				->from($this->config->item('bd_peticiones_sap').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
-				->get()->result_array();
+				->get()->result();
 		}
 		else
 		{

@@ -175,6 +175,18 @@ class Collection implements IteratorAggregate {
 	 */
 	public function length()
 	{
+		return $this->count();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve la cantidad de itemes de la coleccion
+	 *
+	 * @return integer Cantidad de itemes
+	 */
+	public function count()
+	{
 		return count($this->_items);
 	}
 

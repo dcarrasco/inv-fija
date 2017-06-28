@@ -117,6 +117,8 @@ class Toa_controles extends Controller_base {
 			->run();
 
 		$empresa_toa = new Empresa_toa();
+		$control = $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$reporte = $this->reporte_mes->genera_reporte($control);
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
@@ -125,7 +127,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'reporte'              => $reporte,
 		]);
 
 	}
@@ -148,6 +150,8 @@ class Toa_controles extends Controller_base {
 			->run();
 
 		$empresa_toa = new Empresa_toa();
+		$control = $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$reporte = $this->reporte_mes->genera_reporte($control);
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
@@ -156,7 +160,6 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
 		]);
 	}
 
@@ -176,6 +179,10 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
+		$control = $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$reporte = $this->reporte_mes->genera_reporte($control);
+
+
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
 			'combo_empresas'       => $empresa_toa->find('list'),
@@ -183,7 +190,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'reporte'              => $reporte,
 		]);
 	}
 
