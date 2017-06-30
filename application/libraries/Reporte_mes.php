@@ -108,7 +108,9 @@ class Reporte_mes {
 		$anomes = $matriz->first()->anomes;
 
 		return collect('')
-			->merge(collect($matriz->first()->header)->keys())
+			->merge(collect($matriz->first()->header)->keys()->map(function($campo) {
+				return ucwords(str_replace('_', ' ', $campo));
+			}))
 			->merge(collect($matriz->first()->data)->keys()->map(function($dia) use ($anomes) {
 				return [
 					'data' => $this->dias_de_la_semana[date('w', strtotime($anomes.$dia))].'<br>'.$dia,
@@ -129,7 +131,7 @@ class Reporte_mes {
 	 * @param  integer $num_linea  Numero de linea actual
 	 * @return array                 Arreglo con los campos de una linea
 	 */
-	private function _reporte_linea_datos($data = NULL, $num_linea = 0, $url_detalle_dia = '', $anomes = '')
+	private function _reporte_linea_datos($data = NULL, $num_linea = 0	)
 	{
 		return collect(['ini' => $num_linea])
 			->merge(collect($data->header)->map(function ($val) {
@@ -138,9 +140,9 @@ class Reporte_mes {
 					'style' => 'white-space: nowrap;',
 				];
 			}))
-			->merge($data->data->map(function($val, $dia) use ($url_detalle_dia, $anomes, $data) {
+			->merge($data->data->map(function($val, $dia) use ($data) {
 				return [
-					'data' => $val ? anchor($url_detalle_dia.'/'.$anomes.$dia.'/'.$anomes.$dia.'/'.$data->id_tecnico, fmt_cantidad($val)) : '',
+					'data' => $val ? array_get($val, 'formated_value') : '',
 					'class' => $val ? 'text-center info' : '',
 				];
 			}))
@@ -165,8 +167,7 @@ class Reporte_mes {
 			->map_with_keys(function($dia) use ($matriz) {
 				$total_dia = $matriz->map(function($item) use ($dia) {
 					return $item->data->get($dia);
-				})->sum();
-
+				})->sum('value');
 				return [$dia => $total_dia];
 			});
 

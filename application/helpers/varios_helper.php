@@ -832,11 +832,9 @@ if ( ! function_exists('get_arr_dias_mes'))
 		$ano = (int) substr($anomes, 0, 4);
 
 		$arr_dias = [];
-
 		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
-			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
-			$arr_dias[$indice_dia] = NULL;
+			$arr_dias[$i] = NULL;
 		}
 
 		return $arr_dias;

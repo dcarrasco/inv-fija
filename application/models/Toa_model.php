@@ -437,33 +437,62 @@ class Toa_model extends CI_Model {
 	 * @param  string $dato_desplegar Tipo de dato a desplegar
 	 * @return array                  Arreglo con los datos del reporte
 	 */
-	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
+	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones', $url = '')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
 			return NULL;
 		}
 
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$tecnico  = new Tecnico_toa();
+		$tecnicos = $tecnico
+			->find('all', ['conditions' => ['id_empresa' => $empresa]])
+			->map_with_keys(function($tecnico) {
+				return [$tecnico->id_tecnico => [
+					'ciudad'  => (string) $tecnico->get_relation_object('id_ciudad'),
+					'tecnico' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
+				]];
+			});
 
-		$arr_dias = collect(get_arr_dias_mes($anomes));
-		$datos    = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
+		$dias = collect(get_arr_dias_mes($anomes))
+			->map(function($val, $dia) use ($anomes) {
+				return array_get(
+					['0'=>'Do', '1'=>'Lu', '2'=>'Ma', '3'=>'Mi', '4'=>'Ju', '5'=>'Vi', '6'=>'Sa'],
+					date('w', strtotime($anomes.$dia))
+				)." ".$dia;
+			});
+
+		$datos = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar))
+			->map(function($dato) {
+				return collect($dato)->merge(['total'=>collect($dato)->sum()])->all();
+			});
+
+dd($tecnicos->map(function($tecnico, $id) use ($dias, $datos, $anomes) {
+	return [
+		'header' => $tecnico,
+		'data'   => collect(get_arr_dias_mes($anomes))->merge($datos->get($id)),
+	];
+}),
+$dias, $datos);
 
 		return $arr_tecnicos
-			->map(function($tecnico) use ($arr_dias, $datos, $anomes) {
+			->map(function($tecnico) use ($arr_dias, $datos, $anomes, $url) {
 				$datos_tecnico = $datos->filter(function($dato) use ($tecnico) {
 						return $dato->tecnico === $tecnico->id_tecnico;
 					})
-					->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato->fecha), 8, 2) => $dato->dato];
+					->map_with_keys(function($dato) use ($url, $anomes) {
+						$dia = substr(fmt_fecha($dato->fecha), 8, 2);
+						return [$dia => [
+							'value' => $dato->dato,
+							'formated_value' => anchor("{$url}/{$anomes}{$dia}/{$anomes}{$dia}/{$dato->tecnico}",fmt_cantidad($dato->dato)),
+						]];
 					});
-				$total = $datos_tecnico->sum();
+				$total = $datos_tecnico->sum('value');
 
 				return (object) [
 					'header' => [
-						'ciudad'  => (string) $tecnico->get_relation_object('id_ciudad'),
-						'tecnico' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
+						'ciudad'      => (string) $tecnico->get_relation_object('id_ciudad'),
+						'tecnico_toa' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
 					],
 					'data'  => $arr_dias->merge($datos_tecnico),
 					'total' => $total,
@@ -508,7 +537,7 @@ class Toa_model extends CI_Model {
 			];
 			$this->db->select_sum(array_get($select_sum, $dato_desplegar, '1'), 'dato');
 
-			return $this->db
+			$query = $this->db
 				->select('a.fecha')
 				->select('a.tecnico')
 				->group_by('a.fecha')
@@ -520,7 +549,7 @@ class Toa_model extends CI_Model {
 				// ->where_in('centro', $this->centros_consumo)
 				->from($this->config->item('bd_peticiones_sap').' a')
 				->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
-				->get()->result();
+				->get();
 		}
 		else
 		{
@@ -550,8 +579,42 @@ class Toa_model extends CI_Model {
 
 			$query = 'select q1.fecha, q1.tecnico, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
 
-			return $this->db->query($query)->result_array();
+			$query = $this->db->query($query);
 		}
+		// $result = $query->result_array();
+		$this->db->reset_query();
+		$query = $this->db->query('select top 10 * from fija_detalle_inventario');
+
+		$field_data = collect($query->field_data())->map_with_keys(function($field) {
+			return [$field->name => $field->type];
+		});
+		dbg($field_data);
+
+		$result = collect($query->result_array())->map(function($row) use ($field_data) {
+			return collect($row)->map(function($val, $key) use ($field_data) {
+				if ($field_data->get($key) === 'datetime')
+				{
+					return date_create($val);
+				}
+				return ($field_data->get($key) === 'int') ? (int) $val : $val;
+			});
+		});
+
+		dd($field_data, $result, date('D',$result->first()->get('fecha_modificacion')));
+
+		dd($query->field_data(), $query->num_rows(), $query->num_fields(), $query, $result);
+
+		return $result->pluck('tecnico')->unique()
+			->map_with_keys(function($tecnico) use ($result) {
+				$data_tecnico = $result->filter(function($data) use ($tecnico) {
+						return $data['tecnico']	 === $tecnico;
+					})
+					->map_with_keys(function($data) {
+						return [(int) fmt_fecha($data['fecha'], 'd') => $data['dato']];
+					})->all();
+
+				return [$tecnico => $data_tecnico];
+			});
 	}
 
 	// --------------------------------------------------------------------
@@ -565,7 +628,7 @@ class Toa_model extends CI_Model {
 	 * @param  string $dato_desplegar Tipo de dato a desplegar
 	 * @return array                  Arreglo con los datos del reporte
 	 */
-	public function materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades')
+	public function materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades', $url = '')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
@@ -576,32 +639,43 @@ class Toa_model extends CI_Model {
 		$datos    = collect($this->_datos_materiales_consumidos($empresa, $anomes, $filtro_trx, $dato_desplegar));
 
 		return $datos->map(function($datos) {
-				return [
-					'material'     => $datos['material'],
-					'descripcion'  => $datos['descripcion'],
-					'unidad'       => $datos['ume'],
-					'tip_material' => $datos['desc_tip_material'],
-					'color'        => $datos['color'],
+				return (object) [
+					'material'     => $datos->material,
+					'descripcion'  => $datos->descripcion,
+					'unidad'       => $datos->ume,
+					'tip_material' => $datos->desc_tip_material,
+					'color'        => $datos->color,
 				];
 			})
 			->unique()
-			->map(function ($material) use ($arr_dias, $datos) {
+			->map(function ($material) use ($arr_dias, $datos, $anomes, $url) {
 				$consumo_material = $datos->filter(function($dato) use ($material) {
-						return $dato['material'] === $material['material'];
-					})->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+						return $dato->material === $material->material;
+					})->map_with_keys(function($dato) use ($url, $anomes){
+						$dia = (string) substr(fmt_fecha($dato->fecha), 8, 2);
+						return [$dia => [
+							'value'          => $dato->dato,
+							'formated_value' => anchor("{$url}/{$anomes}{$dia}/{$anomes}{$dia}/{$dato->material}",fmt_cantidad($dato->dato)),
+						]];
 					});
+				$total = $consumo_material->sum('value');
 
-				return [
-						'material'     => $material['material'],
-						'descripcion'  => $material['descripcion'],
-						'unidad'       => $material['unidad'],
-						'tip_material' => $material['tip_material'],
-						'color'        => $material['color'],
-						'actuaciones'  => $arr_dias->merge($consumo_material)->all(),
+				return (object) [
+					'header' => [
+						'tipo'     => $material->tip_material,
+						'material' => "{$material->material} - {$material->descripcion}",
+						'unidad'   => $material->unidad,
+					],
+					'data'   => $arr_dias->merge($consumo_material),
+					'total'  => $total,
+					'anomes' => $anomes,
+
+					'material'     => $material->material,
+					'tip_material' => $material->tip_material,
+					'color'        => $material->color,
 				];
 			})->sort(function($material1, $material2) {
-				return $material1['tip_material'].$material1['material'] > $material2['tip_material'].$material2['material'];
+				return $material1->tip_material.$material1->material > $material2->tip_material.$material2->material;
 			});
 	}
 
@@ -643,7 +717,7 @@ class Toa_model extends CI_Model {
 			->join($this->config->item('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
 			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
-			->get()->result_array();
+			->get()->result();
 	}
 
 	// --------------------------------------------------------------------

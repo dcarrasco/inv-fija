@@ -117,7 +117,8 @@ class Toa_controles extends Controller_base {
 			->run();
 
 		$empresa_toa = new Empresa_toa();
-		$control = $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$control = $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'), 'toa_consumos/ver_peticiones/tecnicos');
+
 		$reporte = $this->reporte_mes->genera_reporte($control);
 
 		app_render_view('toa/controles', [
@@ -125,7 +126,6 @@ class Toa_controles extends Controller_base {
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
-			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => request('mes'),
 			'reporte'              => $reporte,
 		]);
@@ -150,7 +150,7 @@ class Toa_controles extends Controller_base {
 			->run();
 
 		$empresa_toa = new Empresa_toa();
-		$control = $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$control = $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato'), 'toa_asignaciones/ver_asignaciones/tecnicos');
 		$reporte = $this->reporte_mes->genera_reporte($control);
 
 		app_render_view('toa/controles', [
@@ -158,8 +158,8 @@ class Toa_controles extends Controller_base {
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_asignacion->get_combo_movimientos_asignacion(),
 			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
-			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
+			'reporte'              => $reporte,
 		]);
 	}
 
@@ -179,7 +179,8 @@ class Toa_controles extends Controller_base {
 
 		$empresa_toa = new Empresa_toa();
 
-		$control = $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'));
+		$control = $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'), 'toa_consumos/ver_peticiones/material');
+// dbg($control);
 		$reporte = $this->reporte_mes->genera_reporte($control);
 
 
@@ -188,7 +189,6 @@ class Toa_controles extends Controller_base {
 			'combo_empresas'       => $empresa_toa->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
-			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => request('mes'),
 			'reporte'              => $reporte,
 		]);

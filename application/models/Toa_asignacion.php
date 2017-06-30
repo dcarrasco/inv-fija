@@ -461,15 +461,61 @@ class Toa_asignacion extends CI_Model {
 	 * @param  string $dato_desplegar Tipo de dato a desplegar
 	 * @return array                  Arreglo con los datos del reporte
 	 */
-	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones')
+	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones', $url = '')
 	{
 		if ( ! $empresa OR ! $anomes)
 		{
 			return NULL;
 		}
 
-		$arr_dias = get_arr_dias_mes($anomes);
+		$arr_dias = collect(get_arr_dias_mes($anomes));
 
+		$tecnicos = new Tecnico_toa();
+		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$datos = $this->_get_data_control_asignaciones($empresa, $anomes, $filtro_trx, $dato_desplegar);
+
+		return $arr_tecnicos
+			->map_with_keys(function($tecnico) use ($arr_dias, $datos, $anomes, $url) {
+				$datos_tecnico = collect($datos)
+					->filter(function($dato) use ($tecnico) {
+						return $dato->cliente === $tecnico->id_tecnico;
+					})
+					->map_with_keys(function($dato) use ($url, $anomes){
+						$dia = substr(fmt_fecha($dato->fecha), 8, 2);
+
+						return [$dia => [
+							'value' => $dato->dato,
+							'formated_value' => anchor("{$url}/{$anomes}{$dia}/{$anomes}{$dia}/{$dato->cliente}",fmt_cantidad($dato->dato)),
+						]];
+					});
+				$total = $datos_tecnico->sum('value');
+
+				return [$tecnico->id_tecnico => (object) [
+					'header' => [
+						'ciudad'  => (string) $tecnico->get_relation_object('id_ciudad'),
+						'tecnico_toa' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
+					],
+					'data'  => $arr_dias->merge($datos_tecnico),
+					'total' => $total,
+					'anomes' => $anomes,
+
+					'nombre'       => $tecnico->tecnico,
+					'rut'          => $tecnico->rut,
+					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+				]];
+			})
+			->filter(function($tecnico) {
+				return $tecnico->total !== 0;
+			})
+			->sort(function($tecnico1, $tecnico2) {
+				return $tecnico1->orden_ciudad > $tecnico2->orden_ciudad;
+			});
+	}
+
+	// --------------------------------------------------------------------
+
+	private function _get_data_control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones')
+	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
@@ -501,35 +547,8 @@ class Toa_asignacion extends CI_Model {
 			$this->db->select('count(*) as dato', FALSE);
 		}
 
-		$datos = $this->db->get()->result_array();
+		return $this->db->get()->result();
 
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
-
-		return $arr_tecnicos
-			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
-				$datos_tecnico = collect($datos)
-					->filter(function($dato) use ($tecnico) {
-						return $dato['cliente'] === $tecnico->id_tecnico;
-					})
-					->map_with_keys(function($dato) {
-						return [substr($dato['fecha'], 8, 2) => $dato['dato']];
-					});
-
-				return [$tecnico->id_tecnico => [
-					'nombre'       => $tecnico->tecnico,
-					'rut'          => $tecnico->rut,
-					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
-					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-					'actuaciones'  => collect($arr_dias)->merge($datos_tecnico)->all(),
-				]];
-			})
-			->filter(function($tecnico) {
-				return collect($tecnico['actuaciones'])->sum() !== 0;
-			})
-			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
-			});
 	}
 
 	// --------------------------------------------------------------------

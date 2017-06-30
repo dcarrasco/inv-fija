@@ -340,7 +340,17 @@ class Collection implements IteratorAggregate {
 	public function sum($campo = NULL, $valor_inicial = 0)
 	{
 		return $this->reduce(function($total, $elem) use ($campo) {
-			return $total + (is_null($campo) ? $elem : $elem[$campo]);
+			if (is_null($campo))
+			{
+				$valor_campo = $elem;
+			}
+			else
+			{
+				$elem = is_array($elem) ? $elem : (array)$elem;
+				$valor_campo = array_get($elem, $campo);
+			}
+
+			return $total + $valor_campo;
 		}, $valor_inicial);
 	}
 
@@ -521,6 +531,34 @@ class Collection implements IteratorAggregate {
 	public function unique()
 	{
 		return new static(array_unique($this->_items, SORT_REGULAR));
+	}
+
+	// --------------------------------------------------------------------
+
+	public function pluck($value, $key = NULL)
+	{
+		$results = [];
+
+		foreach ($this->_items as $item)
+		{
+			$itemValue = array_get($item, $value);
+
+			// If the key is "null", we will just append the value to the array and keep
+			// looping. Otherwise we will key the array using the value of the key we
+			// received from the developer. Then we'll return the final array form.
+			if (is_null($key))
+			{
+				$results[] = $itemValue;
+			}
+			else
+			{
+			$itemKey = array_get($item, $key);
+
+			$results[$itemKey] = $itemValue;
+			}
+		}
+
+		return new static($results);
 	}
 
 	// --------------------------------------------------------------------
