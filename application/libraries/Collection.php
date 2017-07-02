@@ -31,7 +31,7 @@ class Collection implements IteratorAggregate {
 	 *
 	 * @var array
 	 */
-	private $_items = [];
+	protected $items = [];
 
 	// --------------------------------------------------------------------
 
@@ -69,19 +69,19 @@ class Collection implements IteratorAggregate {
 	{
 		if (is_null($items))
 		{
-			$this->_items = [];
+			$this->items = [];
 		}
 		else if ($items instanceof Collection)
 		{
-			$this->_items = $items->all();
+			$this->items = $items->all();
 		}
 		else if (is_array($items))
 		{
-			$this->_items = $items;
+			$this->items = $items;
 		}
 		else
 		{
-			$this->_items = [$items];
+			$this->items = [$items];
 		}
 
 		return $this;
@@ -97,7 +97,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function getIterator()
 	{
-		return new ArrayIterator($this->_items);
+		return new ArrayIterator($this->items);
 	}
 
 	// --------------------------------------------------------------------
@@ -113,12 +113,12 @@ class Collection implements IteratorAggregate {
 	{
 		if ($llave === NULL)
 		{
-			array_push($this->_items, $item);
+			array_push($this->items, $item);
 		}
 		else
 		{
 
-			$this->_items[$llave] = $item;
+			$this->items[$llave] = $item;
 		}
 	}
 
@@ -134,7 +134,7 @@ class Collection implements IteratorAggregate {
 	{
 		if ($this->key_exists($llave))
 		{
-			unset($this->_items[$llave]);
+			unset($this->items[$llave]);
 		}
 	}
 
@@ -150,7 +150,7 @@ class Collection implements IteratorAggregate {
 	{
 		if ($this->key_exists($llave))
 		{
-			return $this->_items[$llave];
+			return $this->items[$llave];
 		}
 	}
 
@@ -163,7 +163,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function keys()
 	{
-		return new static(array_keys($this->_items));
+		return new static(array_keys($this->items));
 	}
 
 	// --------------------------------------------------------------------
@@ -187,7 +187,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function count()
 	{
-		return count($this->_items);
+		return count($this->items);
 	}
 
 	// --------------------------------------------------------------------
@@ -200,7 +200,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function key_exists($llave)
 	{
-		return isset($this->_items[$llave]);
+		return isset($this->items[$llave]);
 	}
 
 	// --------------------------------------------------------------------
@@ -212,7 +212,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function all()
 	{
-		return $this->_items;
+		return $this->items;
 	}
 
 	// --------------------------------------------------------------------
@@ -226,7 +226,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function get($id_elem, $default = NULL)
 	{
-		return isset($this->_items[$id_elem]) ? $this->_items[$id_elem] : $default;
+		return isset($this->items[$id_elem]) ? $this->items[$id_elem] : $default;
 	}
 
 	// --------------------------------------------------------------------
@@ -239,8 +239,8 @@ class Collection implements IteratorAggregate {
 	 */
 	public function map($callback_function)
 	{
-		$arr_keys  = array_keys($this->_items);
-		$arr_items = array_map($callback_function, $this->_items, $arr_keys);
+		$arr_keys  = array_keys($this->items);
+		$arr_items = array_map($callback_function, $this->items, $arr_keys);
 
 		return new static(array_combine($arr_keys, $arr_items));
 	}
@@ -254,7 +254,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function is_empty()
 	{
-		return ! $this->_items OR count($this->_items) === 0;
+		return ! $this->items OR count($this->items) === 0;
 	}
 
 	// --------------------------------------------------------------------
@@ -272,7 +272,7 @@ class Collection implements IteratorAggregate {
 			$has_indices = FALSE;
 			foreach ($indice as $indice_string)
 			{
-				if (array_key_exists($indice_string, $this->_items))
+				if (array_key_exists($indice_string, $this->items))
 				{
 					return TRUE;
 				}
@@ -280,7 +280,7 @@ class Collection implements IteratorAggregate {
 			return FALSE;
 		}
 
-		return array_key_exists($indice, $this->_items);
+		return array_key_exists($indice, $this->items);
 	}
 
 	// --------------------------------------------------------------------
@@ -293,7 +293,7 @@ class Collection implements IteratorAggregate {
 	 */
 	function implode($glue = '')
 	{
-		return implode($glue, $this->_items);
+		return implode($glue, $this->items);
 	}
 
 	// --------------------------------------------------------------------
@@ -308,10 +308,10 @@ class Collection implements IteratorAggregate {
 	{
 		if ($callback)
 		{
-			return new static(array_filter($this->_items, $callback));
+			return new static(array_filter($this->items, $callback));
 		}
 
-		return new static(array_filter($this->_items));
+		return new static(array_filter($this->items));
 	}
 
 	// --------------------------------------------------------------------
@@ -325,7 +325,7 @@ class Collection implements IteratorAggregate {
 	*/
 	public function reduce($callback, $initial = NULL)
 	{
-		return array_reduce($this->_items, $callback, $initial);
+		return array_reduce($this->items, $callback, $initial);
 	}
 
 	// --------------------------------------------------------------------
@@ -383,7 +383,7 @@ class Collection implements IteratorAggregate {
 	*/
 	public function sort($callback = null)
 	{
-		$callback ? uasort($this->_items, $callback) : asort($this->_items);
+		$callback ? uasort($this->items, $callback) : asort($this->items);
 
 		return $this;
 	}
@@ -398,7 +398,7 @@ class Collection implements IteratorAggregate {
 	*/
 	public function flatten($profundidad = INF)
 	{
-		return collect(array_reduce($this->_items, function($result, $item) use ($profundidad) {
+		return collect(array_reduce($this->items, function($result, $item) use ($profundidad) {
 			$item = $item instanceof Collection ? $item->all() : $item;
 
 			if ( ! is_array($item))
@@ -433,12 +433,12 @@ class Collection implements IteratorAggregate {
 		// si la primera llave del arreglo es 0, usamos arrat merge
 		if (key($items) === 0)
 		{
-			$this->_items = array_merge($this->_items, $items);
+			$this->items = array_merge($this->items, $items);
 			return $this;
 		}
 		else
 		{
-			$orig = new Collection($this->_items);
+			$orig = new Collection($this->items);
 			collect($items)->each(function ($value, $index) use (&$orig) {
 					$orig->add_item($value, $index);
 				});
@@ -457,7 +457,7 @@ class Collection implements IteratorAggregate {
 	*/
 	public function only($items = [])
 	{
-		return new static(array_intersect_key($this->_items, array_flip((array) $items)));
+		return new static(array_intersect_key($this->items, array_flip((array) $items)));
 	}
 
 	// --------------------------------------------------------------------
@@ -470,7 +470,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function each(callable $callback)
 	{
-		foreach ($this->_items as $key => $item)
+		foreach ($this->items as $key => $item)
 		{
 			if ($callback($item, $key) === false)
 			{
@@ -492,7 +492,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function combine($valores = [])
 	{
-		return new static(array_combine($this->_items, $valores));
+		return new static(array_combine($this->items, $valores));
 	}
 
 	// --------------------------------------------------------------------
@@ -509,7 +509,7 @@ class Collection implements IteratorAggregate {
 	{
 		$result = [];
 
-		foreach ($this->_items as $key => $value)
+		foreach ($this->items as $key => $value)
 		{
 			$assoc = $callback($value, $key);
 
@@ -530,7 +530,7 @@ class Collection implements IteratorAggregate {
 	 */
 	public function unique()
 	{
-		return new static(array_unique($this->_items, SORT_REGULAR));
+		return new static(array_unique($this->items, SORT_REGULAR));
 	}
 
 	// --------------------------------------------------------------------
@@ -539,7 +539,7 @@ class Collection implements IteratorAggregate {
 	{
 		$results = [];
 
-		foreach ($this->_items as $item)
+		foreach ($this->items as $item)
 		{
 			$itemValue = array_get($item, $value);
 
@@ -552,9 +552,9 @@ class Collection implements IteratorAggregate {
 			}
 			else
 			{
-			$itemKey = array_get($item, $key);
+				$itemKey = array_get($item, $key);
 
-			$results[$itemKey] = $itemValue;
+				$results[$itemKey] = $itemValue;
 			}
 		}
 
@@ -575,18 +575,18 @@ class Collection implements IteratorAggregate {
 	{
 		if (is_null($callback))
 		{
-			if (empty($this->_items))
+			if (empty($this->items))
 			{
 				return $default;
 			}
 
-			foreach ($this->_items as $item)
+			foreach ($this->items as $item)
 			{
 				return $item;
 			}
 		}
 
-		foreach ($this->_items as $key => $value)
+		foreach ($this->items as $key => $value)
 		{
 			if (call_user_func($callback, $value, $key))
 			{

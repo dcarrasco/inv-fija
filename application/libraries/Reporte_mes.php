@@ -26,7 +26,9 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Reporte_mes {
 
-	public $matriz = NULL;
+	public $header = NULL;
+	public $rows   = NULL;
+	public $footer = NULL;
 
 	public $dias_de_la_semana = [
 		'0' => 'Do',
@@ -50,6 +52,59 @@ class Reporte_mes {
 
 	// --------------------------------------------------------------------
 
+	public function set_header($anomes = NULL)
+	{
+		$this->header = collect(get_arr_dias_mes($anomes))
+			->map(function($val, $dia) use ($anomes) {
+				return array_get(
+					['0'=>'Do', '1'=>'Lu', '2'=>'Ma', '3'=>'Mi', '4'=>'Ju', '5'=>'Vi', '6'=>'Sa'],
+					date('w', strtotime($anomes.$dia))
+				)." {$dia}";
+			});
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function set_rows($matriz = NULL)
+	{
+		$this->rows = $matriz;
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function set_footer($matriz = NULL)
+	{
+		if ( ! $matriz)
+		{
+			$rows = $this->rows;
+
+			$matriz = [];
+			$matriz['data'] = $this->header
+				->map(function($elem, $dia) use ($rows) {
+					$rows_dia = $rows->map(function($elem) use ($dia) {
+						return $elem['data']->get($dia);
+					});
+
+					return [
+						'total' => $rows_dia->sum(),
+						//'uso'   => $rows_dia->filter()->count()/$rows_dia->count(),
+					];
+				})
+				->all();
+			$matriz['total'] = collect($matriz['data'])->sum('total');
+		}
+
+		$this->footer = $matriz;
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Imprime reporte
 	 *
@@ -57,14 +112,12 @@ class Reporte_mes {
 	 * @param  array $arr_datos  Arreglo con los datos del reporte
 	 * @return string            Reporte
 	 */
-	public function genera_reporte($matriz = NULL)
+	public function genera_reporte()
 	{
-		if ( ! $matriz)
+		if ( ! $this->header OR ! $this->rows)
 		{
 			return;
 		}
-
-		$this->matriz = $matriz;
 
 		$ci =& get_instance();
 		$ci->load->library('table');
@@ -76,19 +129,18 @@ class Reporte_mes {
 		$ci->table->set_template($template);
 
 		// --- ENCABEZADO REPORTE ---
-		$ci->table->set_heading($this->_reporte_linea_encabezado($matriz));
-
+		$ci->table->set_heading($this->_reporte_linea_encabezado());
 
 		// --- CUERPO REPORTE ---
 		$num_linea = 0;
-		$matriz->each(function($data) use (&$num_linea, $ci){
+		$this->rows->each(function($row_data) use (&$num_linea, $ci){
 			$num_linea += 1;
-			$ci->table->add_row($this->_reporte_linea_datos($data, $num_linea));
+			$ci->table->add_row($this->_reporte_linea_datos($row_data, $num_linea));
 		});
 
 		// --- TOTALES ---
-		$ci->table->add_row($this->_reporte_linea_totales($matriz));
-		$ci->table->add_row($this->_reporte_linea_uso_totales($matriz));
+		$ci->table->add_row($this->_reporte_linea_totales());
+		// $ci->table->add_row($this->_reporte_linea_uso_totales($matriz));
 
 		return $ci->table->generate();
 	}
@@ -99,23 +151,19 @@ class Reporte_mes {
 	/**
 	 * Genera arreglo con datos de encabezado del reporte
 	 *
-	 * @param  array $arr_campos  Arreglo con la descripcion de los campos del reporte
-	 * @param  array $arr_totales Arreglo con los totales y subtotales de los campos del reporte
 	 * @return array              Arreglo con los campos del encabezado
 	 */
-	private function _reporte_linea_encabezado($matriz = NULL)
+	private function _reporte_linea_encabezado()
 	{
-		$anomes = $matriz->first()->anomes;
-
-		return collect('')
-			->merge(collect($matriz->first()->header)->keys()->map(function($campo) {
-				return ucwords(str_replace('_', ' ', $campo));
-			}))
-			->merge(collect($matriz->first()->data)->keys()->map(function($dia) use ($anomes) {
-				return [
-					'data' => $this->dias_de_la_semana[date('w', strtotime($anomes.$dia))].'<br>'.$dia,
-					'class' => 'text-center',
-				];
+		return collect(['num' => ''])
+			->merge(collect(array_get($this->rows->first(), 'header'))
+				->keys()
+				->map_with_keys(function($campo) {
+					return [$campo => ucwords(str_replace('_', ' ', $campo))];
+				})
+			)
+			->merge($this->header->map(function($val_dia) {
+				return ['data' => $val_dia, 'class' => 'text-center'];
 			}))
 			->merge([['data'=>'Tot Mes', 'class'=>'text-center']])
 			->all();
@@ -126,27 +174,29 @@ class Reporte_mes {
 	/**
 	 * Genera arreglo con los datos de una linea del reporte
 	 *
-	 * @param  array   $arr_linea  Arreglo con los valores de la linea
-	 * @param  array   $arr_campos Arreglo con la descripcion de los campos del reporte
-	 * @param  integer $num_linea  Numero de linea actual
+	 * @param  array   $row_data  Arreglo con la descripcion de los campos del reporte
+	 * @param  integer $num_linea Numero de linea actual
 	 * @return array                 Arreglo con los campos de una linea
 	 */
-	private function _reporte_linea_datos($data = NULL, $num_linea = 0	)
+	private function _reporte_linea_datos($row_data = [], $num_linea = 0)
 	{
 		return collect(['ini' => $num_linea])
-			->merge(collect($data->header)->map(function ($val) {
+			->merge(collect(array_get($row_data, 'header'))->map(function ($valor) {
 				return [
-					'data' => $val,
+					'data' => $valor,
 					'style' => 'white-space: nowrap;',
 				];
 			}))
-			->merge($data->data->map(function($val, $dia) use ($data) {
+			->merge(collect(array_get($row_data, 'data'))->map(function($valor) {
 				return [
-					'data' => $val ? array_get($val, 'formated_value') : '',
-					'class' => $val ? 'text-center info' : '',
+					'data' => $valor,
+					'class' => $valor ? 'text-center info' : '',
 				];
 			}))
-			->merge([['data'=>fmt_cantidad($data->total), 'class'=>'text-center']])
+			->merge(['total' => [
+				'data'  => '<strong>'.array_get($row_data, 'total').'</strong>',
+				'class' => 'text-center active'
+			]])
 			->all();
 	}
 
@@ -155,28 +205,24 @@ class Reporte_mes {
 	/**
 	 * Genera arreglo con los datos de una linea de total o subtotal del reporte
 	 *
-	 * @param  string $tipo            Tipo de linea a imprimir (total o subtotal)
-	 * @param  array  $arr_campos      Arreglo con la descripcion de los campos del reporte
-	 * @param  array  $arr_totales     Arreglo con los totales y subtotales de los campos del reporte
-	 * @param  string $nombre_subtotal Texto con el nombre del subtotal
 	 * @return array                   Arreglo con los campos de una linea de total o subtotal
 	 */
-	private function _reporte_linea_totales($matriz)
+	private function _reporte_linea_totales()
 	{
-		$totales = $matriz->first()->data->keys()
-			->map_with_keys(function($dia) use ($matriz) {
-				$total_dia = $matriz->map(function($item) use ($dia) {
-					return $item->data->get($dia);
-				})->sum('value');
-				return [$dia => $total_dia];
-			});
-
-		return collect([['class'=>'active']])
-			->merge(collect($matriz->first()->header)->map(function ($elem) {return ['data'=>'', 'class'=>'active'];}))
-			->merge($totales->map(function($total) {
-				return ['data' => $total ? '<strong>'.fmt_cantidad($total).'</strong>' : '', 'class' => 'text-center active '];
+		return collect(['ini' => ['data'=>'', 'class'=>'active']])
+			->merge(collect(array_get($this->rows->first(), 'header'))->map(function ($valor) {
+				return ['data'=>'', 'class'=>'active'];
 			}))
-			->merge([['data'=>'<strong>'.fmt_cantidad($totales->sum()).'</strong>', 'class'=>'text-center active']])
+			->merge(collect($this->footer['data'])->map(function($valor) {
+				return [
+					'data' => "<strong>{$valor['total']}</strong>",
+					'class' => 'text-center active',
+				];
+			}))
+			->merge([[
+				'data' => "<strong>{$this->footer['total']}</strong>",
+				'class' => 'text-center active',
+			]])
 			->all();
 	}
 	// --------------------------------------------------------------------

@@ -119,7 +119,11 @@ class Toa_controles extends Controller_base {
 		$empresa_toa = new Empresa_toa();
 		$control = $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'), 'toa_consumos/ver_peticiones/tecnicos');
 
-		$reporte = $this->reporte_mes->genera_reporte($control);
+		$reporte = $this->reporte_mes
+			->set_header(request('mes'))
+			->set_rows($control)
+			->set_footer()
+			->genera_reporte();
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
@@ -180,9 +184,12 @@ class Toa_controles extends Controller_base {
 		$empresa_toa = new Empresa_toa();
 
 		$control = $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato'), 'toa_consumos/ver_peticiones/material');
-// dbg($control);
-		$reporte = $this->reporte_mes->genera_reporte($control);
 
+		$reporte = $this->reporte_mes
+			->set_header(request('mes'))
+			->set_rows($control)
+			->set_footer()
+			->genera_reporte();
 
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),

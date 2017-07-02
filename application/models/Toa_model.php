@@ -428,6 +428,42 @@ class Toa_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
+	public function merge_datos($rows, $data, $anomes)
+	{
+		return $rows->map(function($row_data, $row_id) use ($data, $anomes) {
+			return [
+				'header' => $row_data,
+				'data'   => collect(get_arr_dias_mes($anomes))->merge($data->get($row_id)),
+				'total'  => collect($data->get($row_id))->sum(),
+			];
+		})
+		->filter(function($row_data) {
+				return array_get($row_data, 'total') > 0;
+		});
+	}
+
+	// --------------------------------------------------------------------
+
+	public function format_datos($collection, $indices)
+	{
+		dbg($collection, $indices);
+		return $collection
+			->pluck($indices['id_row'])->unique()
+			->map_with_keys(function($id_row) use ($collection, $indices) {
+				$data_array = $collection
+					->filter(function($data) use ($id_row, $indices) {
+						return $data[$indices['id_row']] === $id_row;
+					})
+					->map_with_keys(function($data) use ($indices) {
+						return [$data[$indices['id_col']] => $data[$indices['data']]];
+					})	;
+
+				return [$id_row => $data_array];
+			});
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve matriz de consumos de técnicos por dia
 	 *
@@ -454,62 +490,11 @@ class Toa_model extends CI_Model {
 				]];
 			});
 
-		$dias = collect(get_arr_dias_mes($anomes))
-			->map(function($val, $dia) use ($anomes) {
-				return array_get(
-					['0'=>'Do', '1'=>'Lu', '2'=>'Ma', '3'=>'Mi', '4'=>'Ju', '5'=>'Vi', '6'=>'Sa'],
-					date('w', strtotime($anomes.$dia))
-				)." ".$dia;
-			});
+		$datos = $this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar);
+		$datos = $this->format_datos($datos, ['id_row'=>'tecnico', 'id_col'=>'fecha', 'data'=>'dato']);
+// dbg($datos);
 
-		$datos = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar))
-			->map(function($dato) {
-				return collect($dato)->merge(['total'=>collect($dato)->sum()])->all();
-			});
-
-dd($tecnicos->map(function($tecnico, $id) use ($dias, $datos, $anomes) {
-	return [
-		'header' => $tecnico,
-		'data'   => collect(get_arr_dias_mes($anomes))->merge($datos->get($id)),
-	];
-}),
-$dias, $datos);
-
-		return $arr_tecnicos
-			->map(function($tecnico) use ($arr_dias, $datos, $anomes, $url) {
-				$datos_tecnico = $datos->filter(function($dato) use ($tecnico) {
-						return $dato->tecnico === $tecnico->id_tecnico;
-					})
-					->map_with_keys(function($dato) use ($url, $anomes) {
-						$dia = substr(fmt_fecha($dato->fecha), 8, 2);
-						return [$dia => [
-							'value' => $dato->dato,
-							'formated_value' => anchor("{$url}/{$anomes}{$dia}/{$anomes}{$dia}/{$dato->tecnico}",fmt_cantidad($dato->dato)),
-						]];
-					});
-				$total = $datos_tecnico->sum('value');
-
-				return (object) [
-					'header' => [
-						'ciudad'      => (string) $tecnico->get_relation_object('id_ciudad'),
-						'tecnico_toa' => "{$tecnico->id_tecnico} - {$tecnico->tecnico} ({$tecnico->rut})",
-					],
-					'data'  => $arr_dias->merge($datos_tecnico),
-					'total' => $total,
-					'anomes' => $anomes,
-
-					'id_tecnico'   => $tecnico->id_tecnico,
-					'nombre'       => $tecnico->tecnico,
-					'rut'          => $tecnico->rut,
-					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-				];
-			})
-			->filter(function($tecnico) {
-				return $tecnico->total !== 0;
-			})
-			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1->orden_ciudad.$tecnico1->nombre > $tecnico2->orden_ciudad.$tecnico2->nombre;
-			});
+		return $this->merge_datos($tecnicos, $datos, $anomes);
 	}
 
 	// --------------------------------------------------------------------
@@ -523,12 +508,12 @@ $dias, $datos);
 	 * @param  string $dato_desplegar Tipo de dato a desplegar
 	 * @return array                  Arreglo con los datos del reporte
 	 */
-	public function _datos_control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
+	private function _datos_control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		if (! $filtro_trx OR $filtro_trx === '000')
+		if ( ! $filtro_trx OR $filtro_trx === '000')
 		{
 			$select_sum = [
 				'unidades'   => 'cant',
@@ -581,40 +566,14 @@ $dias, $datos);
 
 			$query = $this->db->query($query);
 		}
-		// $result = $query->result_array();
-		$this->db->reset_query();
-		$query = $this->db->query('select top 10 * from fija_detalle_inventario');
 
-		$field_data = collect($query->field_data())->map_with_keys(function($field) {
-			return [$field->name => $field->type];
+		return collect($query->result())->map(function($data) {
+			return [
+				'tecnico' => $data->tecnico,
+				'fecha'   => (int) fmt_fecha($data->fecha, 'd'),
+				'dato'    => $data->dato,
+			];
 		});
-		dbg($field_data);
-
-		$result = collect($query->result_array())->map(function($row) use ($field_data) {
-			return collect($row)->map(function($val, $key) use ($field_data) {
-				if ($field_data->get($key) === 'datetime')
-				{
-					return date_create($val);
-				}
-				return ($field_data->get($key) === 'int') ? (int) $val : $val;
-			});
-		});
-
-		dd($field_data, $result, date('D',$result->first()->get('fecha_modificacion')));
-
-		dd($query->field_data(), $query->num_rows(), $query->num_fields(), $query, $result);
-
-		return $result->pluck('tecnico')->unique()
-			->map_with_keys(function($tecnico) use ($result) {
-				$data_tecnico = $result->filter(function($data) use ($tecnico) {
-						return $data['tecnico']	 === $tecnico;
-					})
-					->map_with_keys(function($data) {
-						return [(int) fmt_fecha($data['fecha'], 'd') => $data['dato']];
-					})->all();
-
-				return [$tecnico => $data_tecnico];
-			});
 	}
 
 	// --------------------------------------------------------------------
@@ -638,45 +597,36 @@ $dias, $datos);
 		$arr_dias = collect(get_arr_dias_mes($anomes));
 		$datos    = collect($this->_datos_materiales_consumidos($empresa, $anomes, $filtro_trx, $dato_desplegar));
 
-		return $datos->map(function($datos) {
-				return (object) [
-					'material'     => $datos->material,
-					'descripcion'  => $datos->descripcion,
-					'unidad'       => $datos->ume,
-					'tip_material' => $datos->desc_tip_material,
-					'color'        => $datos->color,
+		$materiales = $datos->map(function($datos) {
+				return [
+					'tipo'        => $datos->desc_tip_material,
+					'material'    => $datos->material,
+					'descripcion' => $datos->descripcion,
+					'unidad'      => $datos->ume,
 				];
 			})
 			->unique()
-			->map(function ($material) use ($arr_dias, $datos, $anomes, $url) {
-				$consumo_material = $datos->filter(function($dato) use ($material) {
-						return $dato->material === $material->material;
-					})->map_with_keys(function($dato) use ($url, $anomes){
-						$dia = (string) substr(fmt_fecha($dato->fecha), 8, 2);
-						return [$dia => [
-							'value'          => $dato->dato,
-							'formated_value' => anchor("{$url}/{$anomes}{$dia}/{$anomes}{$dia}/{$dato->material}",fmt_cantidad($dato->dato)),
-						]];
-					});
-				$total = $consumo_material->sum('value');
-
-				return (object) [
-					'header' => [
-						'tipo'     => $material->tip_material,
-						'material' => "{$material->material} - {$material->descripcion}",
-						'unidad'   => $material->unidad,
-					],
-					'data'   => $arr_dias->merge($consumo_material),
-					'total'  => $total,
-					'anomes' => $anomes,
-
-					'material'     => $material->material,
-					'tip_material' => $material->tip_material,
-					'color'        => $material->color,
-				];
-			})->sort(function($material1, $material2) {
-				return $material1->tip_material.$material1->material > $material2->tip_material.$material2->material;
+			->map_with_keys(function($material) {
+				return [$material['material'] => [
+					'tipo'     => $material['tipo'],
+					'material' => $material['material'].' - '.$material['descripcion'],
+					'unidad'   => $material['unidad'],
+				]];
+			})
+			->sort(function($material1, $material2) {
+				return $material1['tipo'].$material1['material'] > $material2['tipo'].$material2['material'];
 			});
+
+		$datos = $datos->map(function($dato) {
+			return [
+				'fecha'    => (int) fmt_fecha($dato->fecha, 'd'),
+				'material' => $dato->material,
+				'dato'     => $dato->dato,
+			];
+		});
+		$datos = $this->format_datos($datos, ['id_row'=>'material', 'id_col'=>'fecha', 'data'=>'dato']);
+
+		return $this->merge_datos($materiales, $datos, $anomes);
 	}
 
 
