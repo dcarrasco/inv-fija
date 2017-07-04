@@ -433,7 +433,7 @@ class Toa_model extends CI_Model {
 		return $rows->map(function($row_data, $row_id) use ($data, $anomes) {
 			return [
 				'header' => $row_data,
-				'data'   => collect(get_arr_dias_mes($anomes))->merge($data->get($row_id)),
+				'data'   => collect(get_arr_dias_mes($anomes))->merge($data->get($row_id))->all(),
 				'total'  => collect($data->get($row_id))->sum(),
 			];
 		})
@@ -446,7 +446,6 @@ class Toa_model extends CI_Model {
 
 	public function format_datos($collection, $indices)
 	{
-		dbg($collection, $indices);
 		return $collection
 			->pluck($indices['id_row'])->unique()
 			->map_with_keys(function($id_row) use ($collection, $indices) {
@@ -492,7 +491,6 @@ class Toa_model extends CI_Model {
 
 		$datos = $this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar);
 		$datos = $this->format_datos($datos, ['id_row'=>'tecnico', 'id_col'=>'fecha', 'data'=>'dato']);
-// dbg($datos);
 
 		return $this->merge_datos($tecnicos, $datos, $anomes);
 	}

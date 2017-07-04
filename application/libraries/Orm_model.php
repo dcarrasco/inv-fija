@@ -226,7 +226,7 @@ class Orm_model implements IteratorAggregate {
 	private function _config_modelo($arr_config = [])
 	{
 		collect($arr_config)->each(function($config_value, $config_index) {
-			$llave = (substr($config_index, 0, 1) !== '_' ? '_' : '').$config_index;
+			$llave = '_'.ltrim($config_index, '_');
 			if (isset($this->{$llave}))
 			{
 				$this->{$llave} = $config_value;

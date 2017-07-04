@@ -181,7 +181,7 @@ class Orm_field {
 		$this->_label     = $nombre;
 
 		collect($param)->each(function($param_value, $param_index) {
-			$llave = (substr($param_index, 0, 1) !== '_' ? '_' : '').$param_index;
+			$llave = '_'.ltrim($param_index, '_');
 			if (isset($this->{$llave}))
 			{
 				$this->{$llave} = $param_value;

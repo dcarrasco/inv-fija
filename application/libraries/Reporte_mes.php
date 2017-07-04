@@ -80,18 +80,20 @@ class Reporte_mes {
 	{
 		if ( ! $matriz)
 		{
-			$rows = $this->rows;
-
+			$rows   = $this->rows;
 			$matriz = [];
+
 			$matriz['data'] = $this->header
 				->map(function($elem, $dia) use ($rows) {
 					$rows_dia = $rows->map(function($elem) use ($dia) {
-						return $elem['data']->get($dia);
+						return array_get($elem['data'], $dia);
 					});
 
 					return [
 						'total' => $rows_dia->sum(),
-						//'uso'   => $rows_dia->filter()->count()/$rows_dia->count(),
+						'uso' => ($rows_dia->filter()->count() === 0)
+							? '0%'
+							: fmt_cantidad(100*$rows_dia->filter()->count()/$rows_dia->count()).'%',
 					];
 				})
 				->all();
@@ -140,6 +142,7 @@ class Reporte_mes {
 
 		// --- TOTALES ---
 		$ci->table->add_row($this->_reporte_linea_totales());
+		$ci->table->add_row($this->_reporte_linea_totales('uso'));
 		// $ci->table->add_row($this->_reporte_linea_uso_totales($matriz));
 
 		return $ci->table->generate();
@@ -207,20 +210,20 @@ class Reporte_mes {
 	 *
 	 * @return array                   Arreglo con los campos de una linea de total o subtotal
 	 */
-	private function _reporte_linea_totales()
+	private function _reporte_linea_totales($tipo = 'total')
 	{
 		return collect(['ini' => ['data'=>'', 'class'=>'active']])
 			->merge(collect(array_get($this->rows->first(), 'header'))->map(function ($valor) {
 				return ['data'=>'', 'class'=>'active'];
 			}))
-			->merge(collect($this->footer['data'])->map(function($valor) {
+			->merge(collect($this->footer['data'])->map(function($valor) use($tipo) {
 				return [
-					'data' => "<strong>{$valor['total']}</strong>",
+					'data' => '<strong>'.array_get($valor, $tipo).'</strong>',
 					'class' => 'text-center active',
 				];
 			}))
 			->merge([[
-				'data' => "<strong>{$this->footer['total']}</strong>",
+				'data' => '<strong>'.array_get($this->footer, $tipo).'</strong>',
 				'class' => 'text-center active',
 			]])
 			->all();
