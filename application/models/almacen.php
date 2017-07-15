@@ -38,7 +38,7 @@ class Almacen extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_almacenes'),
+				'model_tabla'        => config('bd_almacenes'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'almacen',

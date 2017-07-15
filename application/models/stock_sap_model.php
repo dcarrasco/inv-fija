@@ -309,12 +309,12 @@ class Stock_sap_model extends CI_Model {
 					$this->db
 						->where('tipo_op', $tipo_op)
 						->where('fecha_stock', $fecha)
-						->delete($this->config->item('bd_reporte_clasif'));
+						->delete(config('bd_reporte_clasif'));
 				}
 
 				$result = $this->db
 					->select('tipo_op, convert(varchar(20), fecha_stock, 102) fecha_stock, orden, clasificacion, tipo, color, cantidad, monto', FALSE)
-					->from($this->config->item('bd_reporte_clasif'))
+					->from(config('bd_reporte_clasif'))
 					->where('tipo_op', $tipo_op)
 					->where('fecha_stock', $fecha)
 					->order_by('tipo_op, fecha_stock, orden')

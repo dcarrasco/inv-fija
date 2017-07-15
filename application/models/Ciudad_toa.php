@@ -38,7 +38,7 @@ class Ciudad_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_ciudades_toa'),
+				'model_tabla'        => config('bd_ciudades_toa'),
 				'model_label'        => 'Ciudad TOA',
 				'model_label_plural' => 'Ciudades TOA',
 				'model_order_by'     => 'orden',

@@ -38,7 +38,7 @@ class Inventario extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_inventarios'),
+				'model_tabla'        => config('bd_inventarios'),
 				'model_label'        => 'Inventario',
 				'model_label_plural' => 'Inventarios',
 				'model_order_by'     => 'nombre',
@@ -144,7 +144,7 @@ class Inventario extends ORM_Model {
 	{
 		$registro = $this->db
 			->select('max(hoja) as max_hoja')
-			->get_where($this->config->item('bd_detalle_inventario'), ['id_inventario' => $this->id])
+			->get_where(config('bd_detalle_inventario'), ['id_inventario' => $this->id])
 			->row();
 
 		return ($registro->max_hoja);
@@ -160,7 +160,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function borrar_detalle_inventario()
 	{
-		$this->db->delete($this->config->item('bd_detalle_inventario'), ['id_inventario' => $this->id]);
+		$this->db->delete(config('bd_detalle_inventario'), ['id_inventario' => $this->id]);
 	}
 
 

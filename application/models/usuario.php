@@ -38,7 +38,7 @@ class Usuario extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_usuarios'),
+				'model_tabla'        => config('bd_usuarios'),
 				'model_label'        => 'Usuario',
 				'model_label_plural' => 'Usuarios',
 				'model_order_by'     => 'nombre',
@@ -115,7 +115,7 @@ class Usuario extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => 'rol',
-						'join_table'    => $this->config->item('bd_usuario_rol'),
+						'join_table'    => config('bd_usuario_rol'),
 						'id_one_table'  => ['id_usuario'],
 						'id_many_table' => ['id_rol'],
 					],

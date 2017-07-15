@@ -38,7 +38,7 @@ class Tecnico_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tecnicos_toa'),
+				'model_tabla'        => config('bd_tecnicos_toa'),
 				'model_label'        => 'T&eacute;cnico TOA',
 				'model_label_plural' => 'T&eacute;cnicos TOA',
 				'model_order_by'     => 'tecnico',

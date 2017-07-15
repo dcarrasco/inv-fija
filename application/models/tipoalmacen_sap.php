@@ -38,7 +38,7 @@ class Tipoalmacen_sap extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tiposalm_sap'),
+				'model_tabla'        => config('bd_tiposalm_sap'),
 				'model_label'        => 'Tipo Almac&eacute;n',
 				'model_label_plural' => 'Tipos de Almac&eacute;n',
 				'model_order_by'     => 'tipo_op, tipo',
@@ -84,7 +84,7 @@ class Tipoalmacen_sap extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => 'almacen_sap',
-						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
+						'join_table'    => config('bd_tipoalmacen_sap'),
 						'id_one_table'  => ['id_tipo'],
 						'id_many_table' => ['centro', 'cod_almacen'],
 						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],

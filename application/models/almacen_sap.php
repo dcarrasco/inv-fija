@@ -38,7 +38,7 @@ class Almacen_sap extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_almacenes_sap'),
+				'model_tabla'        => config('bd_almacenes_sap'),
 				'model_label'        => 'Almac&eacute;n',
 				'model_label_plural' => 'Almacenes',
 				'model_order_by'     => 'centro, cod_almacen',
@@ -96,7 +96,7 @@ class Almacen_sap extends ORM_Model {
 					'relation'       => [
 						'model'         => 'tipoalmacen_sap',
 						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
-						'join_table'    => $this->config->item('bd_tipoalmacen_sap'),
+						'join_table'    => config('bd_tipoalmacen_sap'),
 						'id_one_table'  => ['centro', 'cod_almacen'],
 						'id_many_table' => ['id_tipo'],
 					],
@@ -162,8 +162,8 @@ class Almacen_sap extends ORM_Model {
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
-				->from($this->get_model_tabla() . ' a')
-				->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
+				->from($this->get_model_tabla().' a')
+				->join(config('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
 				->where_in('ta.id_tipo', explode($this->_separador_campos, $filtro))
 				->get()->result_array();
 
@@ -183,9 +183,9 @@ class Almacen_sap extends ORM_Model {
 		$alm_movil = $this->db
 			->distinct()
 			->select('s.centro, s.cod_bodega')
-			->from($this->config->item('bd_stock_movil') . ' s')
-			->join($this->config->item('bd_almacenes_sap') . ' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->config->item('bd_stock_movil') . ')', NULL, FALSE)
+			->from(config('bd_stock_movil').' s')
+			->join(config('bd_almacenes_sap').' a', 's.cod_bodega=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from '.config('bd_stock_movil').')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.cod_bodega')
@@ -195,9 +195,9 @@ class Almacen_sap extends ORM_Model {
 		$alm_fija = $this->db
 			->distinct()
 			->select('s.centro, s.almacen as cod_bodega')
-			->from($this->config->item('bd_stock_fija') . ' s')
-			->join($this->config->item('bd_almacenes_sap') . ' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
-			->where('fecha_stock in (select max(fecha_stock) from ' . $this->config->item('bd_stock_fija') . ')', NULL, FALSE)
+			->from(config('bd_stock_fija').' s')
+			->join(config('bd_almacenes_sap').' a', 's.almacen=a.cod_almacen and s.centro=a.centro', 'left')
+			->where('fecha_stock in (select max(fecha_stock) from '.config('bd_stock_fija').')', NULL, FALSE)
 			->where('a.cod_almacen is null')
 			->order_by('s.centro')
 			->order_by('s.almacen')

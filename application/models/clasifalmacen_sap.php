@@ -38,7 +38,7 @@ class Clasifalmacen_sap extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_clasifalm_sap'),
+				'model_tabla'        => config('bd_clasifalm_sap'),
 				'model_label'        => 'Clasificaci&oacute;n Almac&eacute;n',
 				'model_label_plural' => 'Clasificaci&oacute;n de Almacenes',
 				'model_order_by'     => 'tipo_op, orden, clasificacion',
@@ -116,7 +116,7 @@ class Clasifalmacen_sap extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => 'tipoalmacen_sap',
-						'join_table'    => $this->config->item('bd_clasif_tipoalm_sap'),
+						'join_table'    => config('bd_clasif_tipoalm_sap'),
 						'id_one_table'  => ['id_clasif'],
 						'id_many_table' => ['id_tipo'],
 						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],

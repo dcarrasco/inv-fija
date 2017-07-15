@@ -38,7 +38,7 @@ class Catalogo extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_catalogos'),
+				'model_tabla'        => config('bd_catalogos'),
 				'model_label'        => 'Cat&aacute;logo',
 				'model_label_plural' => 'Cat&aacute;logos',
 				'model_order_by'     => 'catalogo',
@@ -88,7 +88,7 @@ class Catalogo extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => 'Tip_material_trabajo_toa',
-						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
+						'join_table'    => config('bd_catalogo_tip_material_toa'),
 						'id_one_table'  => ['id_catalogo'],
 						'id_many_table' => ['id_tip_material_trabajo'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],
@@ -135,7 +135,7 @@ class Catalogo extends ORM_Model {
 		// selecciona maxima fecha del stock_sap_fija
 		$arr_max_fecha = $this->db
 			->select('max(fecha_stock) as fecha_stock', FALSE)
-			->get($this->config->item('bd_stock_fija'))
+			->get(config('bd_stock_fija'))
 			->row();
 
 		$max_fecha = fmt_fecha_db($arr_max_fecha->fecha_stock);
@@ -148,7 +148,7 @@ class Catalogo extends ORM_Model {
 
 		$this->db
 			->select('material, max(valor/cantidad) as pmp into '.$tabla_temporal_precios, FALSE)
-			->from($this->config->item('bd_stock_fija'))
+			->from(config('bd_stock_fija'))
 			->where('fecha_stock', $max_fecha)
 			->where_in('lote', ['I', 'A'])
 			->group_by('material')

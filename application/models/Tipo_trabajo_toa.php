@@ -38,7 +38,7 @@ class Tipo_trabajo_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tipos_trabajo_toa'),
+				'model_tabla'        => config('bd_tipos_trabajo_toa'),
 				'model_label'        => 'Tipo de trabajo TOA',
 				'model_label_plural' => 'Tipos de trabajo TOA',
 				'model_order_by'     => 'id_tipo',

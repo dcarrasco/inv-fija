@@ -141,9 +141,9 @@ class Toa_asignacion extends CI_Model {
 				->select('(-a.cantidad_en_um) as cant', FALSE)
 				->select('(-a.importe_ml) as monto', FALSE)
 				->select('a.usuario')
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->from(config('bd_movimientos_sap_fija').' a')
+				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 				//->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
@@ -183,7 +183,7 @@ class Toa_asignacion extends CI_Model {
 				->group_by('material')
 				->group_by('texto_material')
 				//->order_by($orden_campo, $orden_tipo)
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->from(config('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
 			$arr_campos = [];
@@ -209,7 +209,7 @@ class Toa_asignacion extends CI_Model {
 				->group_by('valor')
 				->group_by('lote')
 				//->order_by($orden_campo, $orden_tipo)
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->from(config('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
 			$arr_campos = [];
@@ -239,7 +239,7 @@ class Toa_asignacion extends CI_Model {
 				->group_by('material')
 				->group_by('texto_material')
 				//->order_by($orden_campo, $orden_tipo)
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
+				->from(config('bd_movimientos_sap_fija').' a')
 				->get()->result_array();
 
 			$arr_campos = [];
@@ -268,10 +268,10 @@ class Toa_asignacion extends CI_Model {
 				->group_by('c.empresa')
 				->group_by('a.cliente')
 				->group_by('b.tecnico')
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-				->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				->join($this->config->item('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
+				->from(config('bd_movimientos_sap_fija').' a')
+				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+				->join(config('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
 				//->order_by($orden_campo, $orden_tipo)
 				->get()->result_array();
 
@@ -367,10 +367,10 @@ class Toa_asignacion extends CI_Model {
 			->group_by('a.texto_material')
 			->group_by('a.valor')
 			->group_by('a.lote')
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-			->join($this->config->item('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			->join(config('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
 			->order_by('a.documento_material', 'ASC')
 			->get()->result_array();
 
@@ -438,9 +438,9 @@ class Toa_asignacion extends CI_Model {
 			->select('(a.cantidad_en_um) as cant', FALSE)
 			->select('(a.importe_ml) as monto', FALSE)
 			->select('a.usuario')
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			//->order_by($orden_campo, $orden_tipo)
 			->where('fecha_contabilizacion', $fecha)
 			->where('documento_material', $peticion)
@@ -489,8 +489,8 @@ class Toa_asignacion extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_asignaciones)
 			->where_in('centro', $this->centros_asignacion)
 			->where('almacen', NULL)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE);
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE);
 
 		if (in_array($dato_desplegar, ['unidades', 'monto']))
 		{

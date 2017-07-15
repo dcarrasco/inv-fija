@@ -45,7 +45,7 @@ class Ubicacion_model extends CI_Model {
 	 */
 	public function total_ubicacion_tipo_ubicacion()
 	{
-		return $this->db->count_all($this->config->item('bd_ubic_tipoubic'));
+		return $this->db->count_all(config('bd_ubic_tipoubic'));
 	}
 
 	// --------------------------------------------------------------------
@@ -61,7 +61,7 @@ class Ubicacion_model extends CI_Model {
 	{
 		return $this->db
 			->order_by('tipo_inventario ASC, id_tipo_ubicacion ASC, ubicacion ASC')
-			->get($this->config->item('bd_ubic_tipoubic'), $limit, $offset)
+			->get(config('bd_ubic_tipoubic'), $limit, $offset)
 			->result_array();
 	}
 
@@ -79,7 +79,7 @@ class Ubicacion_model extends CI_Model {
 			->select('id as llave, tipo_ubicacion as valor')
 			->order_by('tipo_ubicacion')
 			->where('tipo_inventario', $tipo_inventario)
-			->get($this->config->item('bd_tipo_ubicacion'))
+			->get(config('bd_tipo_ubicacion'))
 			->result_array();
 
 		return form_array_format($arr_rs, 'Seleccione tipo de ubicacion...');
@@ -99,9 +99,9 @@ class Ubicacion_model extends CI_Model {
 		$arr_rs = $this->db
 			->distinct()
 			->select('d.ubicacion as llave, d.ubicacion as valor')
-			->from($this->config->item('bd_detalle_inventario') . ' d')
-			->join($this->config->item('bd_inventarios') . ' i', 'd.id_inventario=i.id')
-			->join($this->config->item('bd_ubic_tipoubic') . ' u', 'd.ubicacion=u.ubicacion and i.tipo_inventario=u.tipo_inventario', 'left')
+			->from(config('bd_detalle_inventario') . ' d')
+			->join(config('bd_inventarios') . ' i', 'd.id_inventario=i.id')
+			->join(config('bd_ubic_tipoubic') . ' u', 'd.ubicacion=u.ubicacion and i.tipo_inventario=u.tipo_inventario', 'left')
 			->where('i.tipo_inventario', $tipo_inventario)
 			->where('u.id_tipo_ubicacion is null')
 			->order_by('d.ubicacion')
@@ -125,7 +125,7 @@ class Ubicacion_model extends CI_Model {
 	{
 		if ($id_ubicacion === 0)
 		{
-			$this->db->insert($this->config->item('bd_ubic_tipoubic'), [
+			$this->db->insert(config('bd_ubic_tipoubic'), [
 				'tipo_inventario'   => $tipo_inventario,
 				'ubicacion'         => $ubicacion,
 				'id_tipo_ubicacion' => $id_tipo_ubicacion,
@@ -134,7 +134,7 @@ class Ubicacion_model extends CI_Model {
 		else
 		{
 			$this->db->where('id', $id_ubicacion)
-				->update($this->config->item('bd_ubic_tipoubic'), [
+				->update(config('bd_ubic_tipoubic'), [
 					'tipo_inventario'   => $tipo_inventario,
 					'ubicacion'         => $ubicacion,
 					'id_tipo_ubicacion' => $id_tipo_ubicacion,
@@ -153,7 +153,7 @@ class Ubicacion_model extends CI_Model {
 	 */
 	public function borrar_ubicacion_tipo_ubicacion($id_ubicacion = 0)
 	{
-		$this->db->delete($this->config->item('bd_ubic_tipoubic'), ['id' => $id_ubicacion]);
+		$this->db->delete(config('bd_ubic_tipoubic'), ['id' => $id_ubicacion]);
 	}
 
 

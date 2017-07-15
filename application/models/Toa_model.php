@@ -244,8 +244,8 @@ class Toa_model extends CI_Model {
 		{
 			$this->db->reset_query();
 			return $this->db
-				->from($this->config->item('bd_peticiones_toa').' p')
-				->join($this->config->item('bd_movimientos_sap_fija').' m', 'm.referencia=p.appt_number', 'left')
+				->from(config('bd_peticiones_toa').' p')
+				->join(config('bd_movimientos_sap_fija').' m', 'm.referencia=p.appt_number', 'left')
 				->where('customer_number', $param3)
 				->select('p.date as fecha')
 				->select('p.appt_number as referencia')
@@ -288,12 +288,12 @@ class Toa_model extends CI_Model {
 			->group_by('b.tecnico')
 			->group_by('d.acoord_x')
 			->group_by('d.acoord_y')
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
-			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
-			->join($this->config->item('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
-			->join($this->config->item('bd_tip_material_trabajo_toa').' f', 'e.id_tip_material_trabajo = f.id', 'left', FALSE)
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->join(config('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_trabajo_toa').' f', 'e.id_tip_material_trabajo = f.id', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
 	}
@@ -344,8 +344,8 @@ class Toa_model extends CI_Model {
 		}
 
 		$arr_peticion_toa = $this->db
-			->from($this->config->item('bd_peticiones_toa').' d')
-			->join($this->config->item('bd_empresas_toa').' c', 'd.contractor_company=c.id_empresa', 'left', FALSE)
+			->from(config('bd_peticiones_toa').' d')
+			->join(config('bd_empresas_toa').' c', 'd.contractor_company=c.id_empresa', 'left', FALSE)
 			->where('appt_number', $peticion)
 			->where('astatus', 'complete')
 			->get()->row_array();
@@ -374,9 +374,9 @@ class Toa_model extends CI_Model {
 			->select('a.vale_acomp')
 			->select('a.carta_porte')
 			->select('a.usuario')
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
 			->where('referencia', $peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
@@ -386,16 +386,16 @@ class Toa_model extends CI_Model {
 		$arr_materiales_toa = $this->db
 			->where('aid', $arr_peticion_toa['aid'])
 			->order_by('XI_SAP_CODE')
-			->get($this->config->item('bd_materiales_peticiones_toa'))
+			->get(config('bd_materiales_peticiones_toa'))
 			->result_array();
 
 		$arr_materiales_vpi = $this->db
 			->where('appt_number', $arr_peticion_toa['appt_number'])
 			->order_by('ps_id')
-			->get($this->config->item('bd_peticiones_vpi'))
+			->get(config('bd_peticiones_vpi'))
 			->result_array();
 
-		$arr_peticion_repara = $this->db->from($this->config->item('bd_peticiones_toa'))
+		$arr_peticion_repara = $this->db->from(config('bd_peticiones_toa'))
 			->select('a_complete_reason_rep_minor_stb as stb_clave')
 			->select('a.rev_clave as stb_rev_clave')
 			->select('a.descripcion as stb_descripcion')
@@ -411,9 +411,9 @@ class Toa_model extends CI_Model {
 			->select('c.descripcion as tv_descripcion')
 			->select('c.agrupacion_cs as tv_agrupacion_cs')
 			->select('c.ambito as tv_ambito')
-			->join($this->config->item('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
-			->join($this->config->item('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
-			->join($this->config->item('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
+			->join(config('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
+			->join(config('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
+			->join(config('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
 			->where('appt_number', $peticion)
 			->get()->result_array();
 
@@ -510,8 +510,8 @@ class Toa_model extends CI_Model {
 				->where('b.id_empresa', $empresa)
 				// ->where_in('codigo_movimiento', $this->movimientos_consumo)
 				// ->where_in('centro', $this->centros_consumo)
-				->from($this->config->item('bd_peticiones_sap').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
+				->from(config('bd_peticiones_sap').' a')
+				->join(config('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
 				->get()->result_array();
 		}
 		else
@@ -530,8 +530,8 @@ class Toa_model extends CI_Model {
 				->where('b.id_empresa', $empresa)
 				->where('codigo_movimiento', $filtro_trx)
 				->where_in('centro', $this->centros_consumo)
-				->from($this->config->item('bd_movimientos_sap_fija').' a')
-				->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+				->from(config('bd_movimientos_sap_fija').' a')
+				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->get_compiled_select();
 
 			$arr_dato_desplegar = [
@@ -630,11 +630,11 @@ class Toa_model extends CI_Model {
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
 			// ->where('almacen', NULL)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
-			->join($this->config->item('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
-			->join($this->config->item('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
+			->join(config('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
 			->get()->result_array();
 	}
 
@@ -727,7 +727,7 @@ class Toa_model extends CI_Model {
 			->where('a.vale_acomp', $empresa)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->from(config('bd_movimientos_sap_fija').' a')
 			->order_by('referencia')
 			->get()->result_array();
 	}
@@ -752,9 +752,9 @@ class Toa_model extends CI_Model {
 			->where('a.vale_acomp', $empresa)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_catalogo_tip_material_toa').' b', 'a.material=b.id_catalogo', 'left', FALSE)
-			->join($this->config->item('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material=b.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
 	}
@@ -781,7 +781,7 @@ class Toa_model extends CI_Model {
 			->where('a.vale_acomp', $empresa)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
+			->from(config('bd_movimientos_sap_fija').' a')
 			->order_by('referencia, material')
 			->get()->result_array();
 	}
@@ -811,7 +811,7 @@ class Toa_model extends CI_Model {
 			->select('tipo')
 			->select('fecha')
 			->select('substring(convert(varchar(20), fecha, 103),1,2) as dia', FALSE)
-			->from($this->config->item('bd_resumen_panel_toa'))
+			->from(config('bd_resumen_panel_toa'))
 			->where('tipo', $indicador)
 			->where('fecha>=', $fecha_desde)
 			->where('fecha<', $fecha_hasta);
@@ -902,7 +902,7 @@ class Toa_model extends CI_Model {
 
 		$result = $this->db
 			->select_sum('valor')
-			->from($this->config->item('bd_resumen_panel_toa'))
+			->from(config('bd_resumen_panel_toa'))
 			->where('tipo', $indicador)
 			->where('fecha>=', $fecha_desde)
 			->where('fecha<', $fecha_hasta)
@@ -962,7 +962,7 @@ class Toa_model extends CI_Model {
 
 		$result = $this->db
 			->select_max('fecha')
-			->from($this->config->item('bd_resumen_panel_toa'))
+			->from(config('bd_resumen_panel_toa'))
 			->where('tipo', $indicador)
 			->where('fecha>=', $fecha_desde)
 			->where('fecha<', $fecha_hasta)
@@ -1059,9 +1059,9 @@ class Toa_model extends CI_Model {
 			->select('d.resource_name as tecnico')
 			->select('a.vale_acomp as id_empresa')
 			->select('d.resource_external_id as rut')
-			->from($this->config->item('bd_movimientos_sap_fija').' a')
-			->join($this->config->item('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join($this->config->item('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
 			->where('a.fecha_contabilizacion >= dateadd(day, -20, convert(date, getdate()))')
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
@@ -1083,7 +1083,7 @@ class Toa_model extends CI_Model {
 	{
 		foreach($arr_nuevos_tecnicos as $nuevo_tecnico)
 		{
-			$this->db->insert($this->config->item('bd_tecnicos_toa'), $nuevo_tecnico);
+			$this->db->insert(config('bd_tecnicos_toa'), $nuevo_tecnico);
 		}
 	}
 
@@ -1123,7 +1123,7 @@ class Toa_model extends CI_Model {
 		}
 
 		return $this->db
-			->get($this->config->item('bd_peticiones_toa'))
+			->get(config('bd_peticiones_toa'))
 			->result_array();
 	}
 

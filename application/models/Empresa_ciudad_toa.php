@@ -38,7 +38,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_empresas_ciudades_toa'),
+				'model_tabla'        => config('bd_empresas_ciudades_toa'),
 				'model_label'        => 'Empresa ciudad TOA',
 				'model_label_plural' => 'Empresas ciudades TOA',
 				'model_order_by'     => 'id_empresa, id_ciudad',
@@ -62,7 +62,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 					'tipo'     => Orm_field::TIPO_HAS_MANY,
 					'relation' => [
 						'model'         => 'almacen_sap',
-						'join_table'    => $this->config->item('bd_empresas_ciudades_almacenes_toa'),
+						'join_table'    => config('bd_empresas_ciudades_almacenes_toa'),
 						'id_one_table'  => ['id_empresa', 'id_ciudad'],
 						'id_many_table' => ['centro', 'cod_almacen'],
 						'conditions'    => ['centro' => ['CH32','CH33']],

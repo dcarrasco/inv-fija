@@ -652,6 +652,22 @@ if ( ! function_exists('collect'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('config'))
+{
+	/**
+	 * Recupera el valor de un elemento de configuración
+	 *
+	 * @param  string $item Item a recuperar
+	 * @return string       Valor de configuración
+	 */
+	function config($item = '')
+	{
+		return get_instance()->config->item($item);
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('request'))
 {
 	/**

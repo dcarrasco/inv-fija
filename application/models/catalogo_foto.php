@@ -38,7 +38,7 @@ class Catalogo_foto extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_catalogos_fotos'),
+				'model_tabla'        => config('bd_catalogos_fotos'),
 				'model_label'        => 'Cat&aacute;logo foto',
 				'model_label_plural' => 'Cat&aacute;logos fotos',
 				'model_order_by'     => 'catalogo',

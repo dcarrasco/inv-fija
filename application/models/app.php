@@ -38,7 +38,7 @@ class App extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_app'),
+				'model_tabla'        => config('bd_app'),
 				'model_label'        => 'Aplicaci&oacute;n',
 				'model_label_plural' => 'Aplicaciones',
 				'model_order_by'     => 'app',

@@ -38,7 +38,7 @@ class Tipo_clasifalm extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tipo_clasifalm_sap'),
+				'model_tabla'        => config('bd_tipo_clasifalm_sap'),
 				'model_label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
 				'model_label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
 				'model_order_by'     => 'tipo',

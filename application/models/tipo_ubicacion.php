@@ -38,7 +38,7 @@ class Tipo_ubicacion extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tipo_ubicacion'),
+				'model_tabla'        => config('bd_tipo_ubicacion'),
 				'model_label'        => 'Tipo de ubicaci&oacute;n',
 				'model_label_plural' => 'Tipos de ubicaci&oacute;n',
 				'model_order_by'     => 'tipo_inventario, tipo_ubicacion',

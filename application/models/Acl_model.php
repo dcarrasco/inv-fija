@@ -177,7 +177,7 @@ class Acl_model extends CI_Model {
 		$user = empty($usuario) ? $this->get_user() : $usuario;
 
 		$registro = $this->db
-			->get_where($this->config->item('bd_usuarios'), ['username' => $user])
+			->get_where(config('bd_usuarios'), ['username' => $user])
 			->row_array();
 
 		return is_array($registro) ? $registro['id'] : '';
@@ -204,14 +204,24 @@ class Acl_model extends CI_Model {
 	 */
 	public function get_user_firstname()
 	{
-		$row = $this->db
-			->where('username', $this->get_user())
-			->get($this->config->item('bd_usuarios'))
-			->row();
+		if ( ! $this->session->userdata('user_firstname'))
+		{
+			$usuario = $this->db
+				->where('username', $this->get_user())
+				->get(config('bd_usuarios'))
+				->row();
 
-		$nombre = $row ? $row->nombre : '';
+			$nombre = $usuario ? $usuario->nombre : '';
+			$user_firstname = strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 
-		return strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
+			$this->session->set_userdata(compact('user_firstname'));
+		}
+		else
+		{
+			$user_firstname = $this->session->userdata('user_firstname');
+		}
+
+		return $user_firstname;
 	}
 
 	// --------------------------------------------------------------------
@@ -227,17 +237,13 @@ class Acl_model extends CI_Model {
 		{
 			return TRUE;
 		}
-		else
+
+		if ($this->_is_user_remembered())
 		{
-			if ($this->_is_user_remembered())
-			{
-				return $this->_login_rememberme_cookie();
-			}
-			else
-			{
-				return FALSE;
-			}
+			return $this->_login_rememberme_cookie();
 		}
+
+		return FALSE;
 	}
 
 	// --------------------------------------------------------------------
@@ -266,7 +272,7 @@ class Acl_model extends CI_Model {
 		$reg_usuario = $this->db
 			->where('username', $usuario)
 			->where('activo', 1)
-			->get($this->config->item('bd_usuarios'))
+			->get(config('bd_usuarios'))
 			->row();
 
 		if ($reg_usuario)
@@ -289,7 +295,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('username', $usuario)
-			->update($this->config->item('bd_usuarios'), [
+			->update(config('bd_usuarios'), [
 				'fecha_login'  => date('Y-m-d H:i:s'),
 				'ip_login'     => $this->input->ip_address(),
 				'agente_login' => $this->input->user_agent(),
@@ -346,7 +352,7 @@ class Acl_model extends CI_Model {
 	public function use_captcha($usuario = '')
 	{
 		$row_user = $this->db
-			->get_where($this->config->item('bd_usuarios'), [
+			->get_where(config('bd_usuarios'), [
 				'username' => (string) $usuario,
 			])->row();
 
@@ -370,7 +376,7 @@ class Acl_model extends CI_Model {
 		$this->_delete_captchas_session($session_id);
 
 		$this->db
-			->insert($this->config->item('bd_captcha'), [
+			->insert(config('bd_captcha'), [
 				'captcha_time' => (int) $time,
 				'session_id'   => (string) $session_id,
 				'word'         => (string) $word,
@@ -389,7 +395,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('session_id', $session_id)
-			->delete($this->config->item('bd_captcha'));
+			->delete(config('bd_captcha'));
 	}
 
 	// --------------------------------------------------------------------
@@ -403,7 +409,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('captcha_time < ', time() - $this->captcha_duration)
-			->delete($this->config->item('bd_captcha'));
+			->delete(config('bd_captcha'));
 	}
 
 	// --------------------------------------------------------------------
@@ -418,7 +424,7 @@ class Acl_model extends CI_Model {
 	public function validar_captcha($captcha = '', $session_id = '')
 	{
 		$row_captcha = $this->db
-			->get_where($this->config->item('bd_captcha'), [
+			->get_where(config('bd_captcha'), [
 				'session_id' => $session_id,
 				'word'       => $captcha,
 				'captcha_time >' => time() - $this->captcha_duration,
@@ -439,7 +445,7 @@ class Acl_model extends CI_Model {
 	{
 		$this->db
 			->where('username', $usuario)
-			->update($this->config->item('bd_usuarios'), [
+			->update(config('bd_usuarios'), [
 				'login_errors'  => 0,
 			]);
 	}
@@ -457,7 +463,7 @@ class Acl_model extends CI_Model {
 		$this->db
 			->set('login_errors', 'login_errors + 1', FALSE)
 			->where('username', $usuario)
-			->update($this->config->item('bd_usuarios'));
+			->update(config('bd_usuarios'));
 	}
 
 	// --------------------------------------------------------------------
@@ -489,11 +495,11 @@ class Acl_model extends CI_Model {
 	{
 		return $this->db->distinct()
 			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
-			->from($this->config->item('bd_usuarios') . ' u')
-			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
-			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
-			->join($this->config->item('bd_modulos') . ' m', 'm.id = rm.id_modulo')
-			->join($this->config->item('bd_app') . ' a', 'a.id = m.id_app')
+			->from(config('bd_usuarios').' u')
+			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
+			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
+			->join(config('bd_modulos').' m', 'm.id = rm.id_modulo')
+			->join(config('bd_app').' a', 'a.id = m.id_app')
 			->where('username', (string) $usuario)
 			->order_by('a.orden, m.orden')
 			->get()
@@ -530,9 +536,9 @@ class Acl_model extends CI_Model {
 	{
 		$arr_rs = $this->db->distinct()
 			->select('llave_modulo')
-			->from($this->config->item('bd_usuarios') . ' u')
-			->join($this->config->item('bd_usuario_rol') . ' ur', 'ur.id_usuario = u.id')
-			->join($this->config->item('bd_rol_modulo') . ' rm', 'rm.id_rol = ur.id_rol')
+			->from(config('bd_usuarios').' u')
+			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
+			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
 			->join('acl_modulo m', 'm.id = rm.id_modulo')
 			->where('username', $usuario)
 			->get()
@@ -554,6 +560,7 @@ class Acl_model extends CI_Model {
 		$this->session->unset_userdata('remember_me');
 		$this->session->unset_userdata('modulos');
 		$this->session->unset_userdata('menu_app');
+		$this->session->unset_userdata('user_firstname');
 	}
 
 	// --------------------------------------------------------------------
@@ -593,7 +600,7 @@ class Acl_model extends CI_Model {
 		]);
 
 		// Graba el registro en la BD
-		$this->db->insert($this->config->item('bd_pcookies'), [
+		$this->db->insert(config('bd_pcookies'), [
 			'user_id'   => $usuario,
 			'cookie_id' => $this->_hash_password($token, $salt),
 			'expiry'    => date('Y-m-d H:i:s', time() + $this->rememberme_cookie_duration),
@@ -646,7 +653,7 @@ class Acl_model extends CI_Model {
 	 */
 	private function _hash_password($password = '', $salt = '')
 	{
-		$salt = (empty($salt) ? $this->_create_salt() : $salt).$this->config->item('encryption_key');
+		$salt = (empty($salt) ? $this->_create_salt() : $salt).config('encryption_key');
 
 		return crypt($password, $salt);
 	}
@@ -667,7 +674,7 @@ class Acl_model extends CI_Model {
 		{
 			// recupera cookies almacenadas
 			$reg_pcookies = $this->db
-				->get_where($this->config->item('bd_pcookies'), [
+				->get_where(config('bd_pcookies'), [
 					'user_id' => $token_object->usr,
 				])->result_array();
 
@@ -681,7 +688,7 @@ class Acl_model extends CI_Model {
 
 			// eliminamos la cookie utilizada en la BD
 			$this->db->where($where)
-				->delete($this->config->item('bd_pcookies'));
+				->delete(config('bd_pcookies'));
 
 			// borramos la cookie del browser
 			$this->delete_cookie_data();
@@ -741,11 +748,11 @@ class Acl_model extends CI_Model {
 		$this->db
 			// ->where('user_id', $token_object->usr)
 			->where('expiry<', date('Y-m-d H:i:s'))
-			->delete($this->config->item('bd_pcookies'));
+			->delete(config('bd_pcookies'));
 
 		// recupera cookies almacenadas
 		$reg_pcookies = $this->db
-			->get_where($this->config->item('bd_pcookies'), [
+			->get_where(config('bd_pcookies'), [
 				'user_id' => $token_object->usr,
 			])->result_array();
 
@@ -804,7 +811,7 @@ class Acl_model extends CI_Model {
 	public function tiene_clave($usuario = '')
 	{
 		$arr_rs = $this->db
-			->get_where($this->config->item('bd_usuarios'), ['username' => $usuario])
+			->get_where(config('bd_usuarios'), ['username' => $usuario])
 			->row_array();
 
 		if (count($arr_rs) > 0)
@@ -828,7 +835,7 @@ class Acl_model extends CI_Model {
 	public function existe_usuario($usuario = '')
 	{
 		$regs = $this->db
-			->get_where($this->config->item('bd_usuarios'), ['username' => $usuario])
+			->get_where(config('bd_usuarios'), ['username' => $usuario])
 			->num_rows();
 
 		return ($regs > 0) ? TRUE : FALSE;
@@ -852,7 +859,7 @@ class Acl_model extends CI_Model {
 		{
 			$this->db
 				->where('username', $usuario)
-				->update($this->config->item('bd_usuarios'), [
+				->update(config('bd_usuarios'), [
 					'password' => $this->_hash_password($clave_new)
 				]);
 

@@ -61,7 +61,7 @@ class Inventario_model extends CI_Model {
 	{
 		return $this->db
 			->where('activo', 1)
-			->get($this->config->item('bd_inventarios'))
+			->get(config('bd_inventarios'))
 			->row()
 			->id;
 	}
@@ -75,24 +75,26 @@ class Inventario_model extends CI_Model {
 	 */
 	public function get_combo_inventarios()
 	{
-		$arr_rs = $this->db
-			->from($this->config->item('bd_inventarios').' a')
-			->join($this->config->item('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
-			->order_by('desc_tipo_inventario, nombre')
-			->get()->result_array();
+		$inventarios = collect(
+			$this->db
+				->from(config('bd_inventarios').' a')
+				->join(config('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
+				->order_by('desc_tipo_inventario, nombre')
+				->get()->result_array()
+		);
 
-		$arr_combo = [];
-		foreach($arr_rs as $item)
-		{
-			if ( ! array_key_exists($item['desc_tipo_inventario'], $arr_combo))
-			{
-				$arr_combo[$item['desc_tipo_inventario']] = [];
-			}
-
-			$arr_combo[$item['desc_tipo_inventario']][$item['id']] = $item['nombre'];
-		}
-
-		return $arr_combo;
+		return $inventarios->pluck('desc_tipo_inventario')
+			->unique()
+			->map_with_keys(function($tipo_inventario) use ($inventarios) {
+				return [
+					$tipo_inventario => $inventarios
+						->filter(function($inventario) use ($tipo_inventario) {
+							return $inventario['desc_tipo_inventario'] === $tipo_inventario;
+						})->map_with_keys(function($inventario) {
+							return [$inventario['id'] => $inventario['nombre']];
+						})->all()
+				];
+			})->all();
 	}
 
 
@@ -174,8 +176,9 @@ class Inventario_model extends CI_Model {
 	 */
 	protected function _db_base_reporte($id_inventario = 0)
 	{
-		$this->db->from($this->config->item('bd_detalle_inventario').' di')
-			->join($this->config->item('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+
+		$this->db->from(config('bd_detalle_inventario').' di')
+			->join(config('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
 			->where('id_inventario', $id_inventario);
 
 		return $this;
@@ -222,8 +225,8 @@ class Inventario_model extends CI_Model {
 
 		$this->db->select('di.hoja, d.nombre as digitador, a.nombre as auditor')
 			->select_max('fecha_modificacion', 'fecha')
-			->join($this->config->item('bd_usuarios').' d', 'd.id = di.digitador', 'left')
-			->join($this->config->item('bd_auditores').' a', 'a.id = di.auditor', 'left')
+			->join(config('bd_usuarios').' d', 'd.id = di.digitador', 'left')
+			->join(config('bd_auditores').' a', 'a.id = di.auditor', 'left')
 			->group_by('di.hoja, d.nombre, a.nombre')
 			->order_by($this->reporte->get_order_by($orden_campo));
 
@@ -285,8 +288,8 @@ class Inventario_model extends CI_Model {
 			->select("f.codigo + '_' + sf.codigo as fam_subfam", FALSE)
 			->select('di.catalogo, di.descripcion, di.um, c.pmp')
 			->select_max('fecha_modificacion', 'fecha')
-			->join($this->config->item('bd_familias').' f', "f.codigo = substring(di.catalogo,1,5) collate Latin1_General_CI_AS and f.tipo='FAM'", 'left', FALSE)
-			->join($this->config->item('bd_familias').' sf', "sf.codigo = substring(di.catalogo,1,7) collate Latin1_General_CI_AS and sf.tipo='SUBFAM'", 'left', FALSE)
+			->join(config('bd_familias').' f', "f.codigo = substring(di.catalogo,1,5) collate Latin1_General_CI_AS and f.tipo='FAM'", 'left', FALSE)
+			->join(config('bd_familias').' sf', "sf.codigo = substring(di.catalogo,1,7) collate Latin1_General_CI_AS and sf.tipo='SUBFAM'", 'left', FALSE)
 			->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre")
 			->group_by("f.codigo + '_' + sf.codigo")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
@@ -414,9 +417,9 @@ class Inventario_model extends CI_Model {
 		$this->db->select('t.tipo_ubicacion')
 			->select('di.ubicacion')
 			->select_max('fecha_modificacion', 'fecha')
-			->join($this->config->item('bd_inventarios').' i', 'di.id_inventario=i.id', 'left')
-			->join($this->config->item('bd_ubic_tipoubic').' ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = di.ubicacion', 'left')
-			->join($this->config->item('bd_tipo_ubicacion').' t', 't.id=ut.id_tipo_ubicacion', 'left')
+			->join(config('bd_inventarios').' i', 'di.id_inventario=i.id', 'left')
+			->join(config('bd_ubic_tipoubic').' ut', 'ut.tipo_inventario=i.tipo_inventario and ut.ubicacion = di.ubicacion', 'left')
+			->join(config('bd_tipo_ubicacion').' t', 't.id=ut.id_tipo_ubicacion', 'left')
 			->group_by('t.tipo_ubicacion')
 			->group_by('di.ubicacion')
 			->order_by($this->reporte->get_order_by($orden_campo));

@@ -47,7 +47,7 @@ class Detalle_inventario extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_detalle_inventario'),
+				'model_tabla'        => config('bd_detalle_inventario'),
 				'model_label'        => 'Detalle inventario',
 				'model_label_plural' => 'Detalles inventario',
 				'model_order_by'     => 'id',

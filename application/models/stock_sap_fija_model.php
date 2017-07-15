@@ -98,7 +98,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select('s.material, m.descripcion, s.umb');
-			$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material=m.catalogo', 'left', FALSE);
+			$this->db->join(config('bd_catalogos') . ' m', 's.material=m.catalogo', 'left', FALSE);
 			$this->db->group_by('s.material, m.descripcion, s.umb');
 			$this->db->order_by('s.material, m.descripcion, s.umb');
 		}
@@ -124,15 +124,15 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		// tablas
 		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
-			$this->db->from($this->config->item('bd_stock_fija') . ' s');
-			$this->db->join($this->config->item('bd_tipoalmacen_sap') . ' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
-			$this->db->join($this->config->item('bd_tiposalm_sap') . ' t', 't.id_tipo=ta.id_tipo');
-			$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+			$this->db->from(config('bd_stock_fija') . ' s');
+			$this->db->join(config('bd_tipoalmacen_sap') . ' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
+			$this->db->join(config('bd_tiposalm_sap') . ' t', 't.id_tipo=ta.id_tipo');
+			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
 		}
 		else
 		{
-			$this->db->from($this->config->item('bd_stock_fija') . ' s');
-			$this->db->join($this->config->item('bd_almacenes_sap') . ' a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
+			$this->db->from(config('bd_stock_fija') . ' s');
+			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
 		}
 
 		// condiciones
@@ -206,7 +206,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 			if (in_array('material', $mostrar))
 			{
 				$this->db->select('s.material, m.descripcion, s.umb');
-				$this->db->join($this->config->item('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
+				$this->db->join(config('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
 				$this->db->group_by('s.material, m.descripcion, s.umb');
 				$this->db->order_by('s.material, m.descripcion, s.umb');
 			}
@@ -223,8 +223,8 @@ class Stock_sap_fija_model extends Stock_sap_model {
 				->group_by('s.acreedor, p.des_proveedor');
 
 			// tablas
-			$this->db->from($this->config->item('bd_stock_fija').' s');
-			$this->db->join($this->config->item('bd_proveedores').' p', 's.acreedor=p.cod_proveedor', 'left');
+			$this->db->from(config('bd_stock_fija').' s');
+			$this->db->join(config('bd_proveedores').' p', 's.acreedor=p.cod_proveedor', 'left');
 
 			// condiciones
 			// fechas
@@ -256,7 +256,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		$arr_result = $this->db
 			->select('fecha_stock')
 			->order_by('fecha_stock', 'desc')
-			->get($this->config->item('bd_stock_fija_fechas'))
+			->get(config('bd_stock_fija_fechas'))
 			->result_array();
 
 		foreach ($arr_result as $indice => $arr_fecha)
@@ -281,16 +281,16 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	 */
 	private function _genera_reporte_clasificacion($fecha = NULL)
 	{
-		$sql_query = 'INSERT INTO ' . $this->config->item('bd_reporte_clasif');
+		$sql_query = 'INSERT INTO ' . config('bd_reporte_clasif');
 		$sql_query .= " SELECT
 A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
 SUM(E.CANTIDAD) AS CANTIDAD, SUM(E.VALOR) AS MONTO
-FROM " . $this->config->item('bd_clasifalm_sap') . " A
-JOIN " . $this->config->item('bd_clasif_tipoalm_sap') . " B ON A.ID_CLASIF=B.ID_CLASIF
-JOIN " . $this->config->item('bd_tiposalm_sap')       . " C ON B.ID_TIPO=C.ID_TIPO
-JOIN " . $this->config->item('bd_tipoalmacen_sap')    . " D ON C.ID_TIPO=D.ID_TIPO
-JOIN " . $this->config->item('bd_stock_fija')         . " E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.ALMACEN
-JOIN " . $this->config->item('bd_tipo_clasifalm_sap') . " F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
+FROM " . config('bd_clasifalm_sap') . " A
+JOIN " . config('bd_clasif_tipoalm_sap') . " B ON A.ID_CLASIF=B.ID_CLASIF
+JOIN " . config('bd_tiposalm_sap')       . " C ON B.ID_TIPO=C.ID_TIPO
+JOIN " . config('bd_tipoalmacen_sap')    . " D ON C.ID_TIPO=D.ID_TIPO
+JOIN " . config('bd_stock_fija')         . " E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.ALMACEN
+JOIN " . config('bd_tipo_clasifalm_sap') . " F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
 WHERE A.TIPO_OP = ?
 AND E.FECHA_STOCK = ?
 GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR

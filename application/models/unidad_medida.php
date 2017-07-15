@@ -38,7 +38,7 @@ class Unidad_medida extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_unidades'),
+				'model_tabla'        => config('bd_unidades'),
 				'model_label'        => 'Unidad de medida',
 				'model_label_plural' => 'Unidades de medida',
 				'model_order_by'     => 'unidad',

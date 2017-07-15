@@ -38,7 +38,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_tip_material_trabajo_toa'),
+				'model_tabla'        => config('bd_tip_material_trabajo_toa'),
 				'model_label'        => 'Tipo Material de trabajo',
 				'model_label_plural' => 'Tipos Material de trabajo',
 				'model_order_by'     => 'desc_tip_material',
@@ -63,7 +63,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => 'catalogo',
-						'join_table'    => $this->config->item('bd_catalogo_tip_material_toa'),
+						'join_table'    => config('bd_catalogo_tip_material_toa'),
 						'id_one_table'  => ['id_tip_material_trabajo'],
 						'id_many_table' => ['id_catalogo'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],

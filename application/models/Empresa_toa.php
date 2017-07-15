@@ -38,7 +38,7 @@ class Empresa_toa extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_empresas_toa'),
+				'model_tabla'        => config('bd_empresas_toa'),
 				'model_label'        => 'Empresa TOA',
 				'model_label_plural' => 'Empresas TOA',
 				'model_order_by'     => 'empresa',
@@ -65,7 +65,7 @@ class Empresa_toa extends ORM_Model {
 					'tipo'     => Orm_field::TIPO_HAS_MANY,
 					'relation' => [
 						'model'         => 'tipoalmacen_sap',
-						'join_table'    => $this->config->item('bd_empresas_toa_tiposalm'),
+						'join_table'    => config('bd_empresas_toa_tiposalm'),
 						'id_one_table'  => ['id_empresa'],
 						'id_many_table' => ['id_tipo'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'),
@@ -76,7 +76,7 @@ class Empresa_toa extends ORM_Model {
 					'tipo'     => Orm_field::TIPO_HAS_MANY,
 					'relation' => [
 						'model'         => 'ciudad_toa',
-						'join_table'    => $this->config->item('bd_empresas_ciudades_toa'),
+						'join_table'    => config('bd_empresas_ciudades_toa'),
 						'id_one_table'  => ['id_empresa'],
 						'id_many_table' => ['id_ciudad'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],

@@ -77,7 +77,7 @@ class Despachos_model extends CI_Model {
 			->select_max("des_bodega + ' (' + rut + ')'", 'valor')
 			->group_by('rut')
 			->order_by('valor')
-			->from($this->config->item('bd_despachos_pack'))
+			->from(config('bd_despachos_pack'))
 			->get()
 			->result_array();
 
@@ -149,7 +149,7 @@ class Despachos_model extends CI_Model {
 				->limit($this->limite_facturas)
 				->where('rut', $rut)
 				->like('texto_breve_material', $modelo)
-				->from($this->config->item('bd_despachos_pack'))
+				->from(config('bd_despachos_pack'))
 				->order_by('fecha', 'desc')
 				->get()
 				->result_array();

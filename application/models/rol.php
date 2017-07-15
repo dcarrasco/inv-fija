@@ -38,7 +38,7 @@ class Rol extends ORM_Model {
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => $this->config->item('bd_rol'),
+				'model_tabla'        => config('bd_rol'),
 				'model_label'        => 'Rol',
 				'model_label_plural' => 'Roles',
 				'model_order_by'     => 'rol',
