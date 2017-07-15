@@ -143,57 +143,31 @@ class Despachos_model extends CI_Model {
 	 */
 	public function get_ultimas_facturas($rut = NULL, $modelo = NULL)
 	{
-		if ($rut AND $modelo)
+		if ( ! $rut OR ! $modelo)
 		{
-			$arr_result = $this->db
+			return;
+		}
+
+		$arr_campos_enc = ['operador', 'operador_c', 'rut', 'des_bodega', 'cod_cliente'];
+		$arr_campos_det = ['alm', 'cmv', 'n_doc', 'referencia', 'cod_sap', 'texto_breve_material', 'lote', 'fecha', 'cant'];
+
+		$facturas = collect(
+			$this->db
 				->limit($this->limite_facturas)
 				->where('rut', $rut)
 				->like('texto_breve_material', $modelo)
 				->from(config('bd_despachos_pack'))
 				->order_by('fecha', 'desc')
-				->get()
-				->result_array();
+				->get()->result_array()
+		);
 
-			$arr_facturas = [];
+		$facturas_enc = collect($facturas->first())->only($arr_campos_enc)->all();
 
-			$arr_facturas['datos'] = [];
-			$arr_campos_enc = ['operador', 'operador_c', 'rut', 'des_bodega', 'cod_cliente'];
-			foreach($arr_campos_enc as $campo)
-			{
-				$arr_facturas['datos'][$campo] = '';
-			}
+		$facturas_det = $facturas->map(function($factura) use($arr_campos_det) {
+			return collect($factura)->only($arr_campos_det)->all();
+		})->all();
 
-			$arr_campos_det = ['alm', 'cmv', 'n_doc', 'referencia', 'cod_sap', 'texto_breve_material', 'lote', 'fecha', 'cant'];
-			for($i = 0; $i < $this->limite_facturas; $i++)
-			{
-				$arr_facturas['factura_' . $i] = [];
-				foreach($arr_campos_det as $campo)
-				{
-					$arr_facturas['factura_' . $i][$campo] = '';
-				}
-			}
-
-			$i = 0;
-			foreach($arr_result as $factura)
-			{
-				if ($i === 0)
-				{
-					foreach($arr_campos_enc as $campo)
-					{
-						$arr_facturas['datos'][$campo] = $factura[$campo];
-					}
-				}
-
-				foreach($arr_campos_det as $campo)
-				{
-					$arr_facturas['factura_' . $i][$campo] = $factura[$campo];
-				}
-
-				$i++;
-			}
-
-			return $arr_facturas;
-		}
+		return ['datos' => $facturas_enc, 'facturas' => $facturas_det];
 	}
 
 }

@@ -47,19 +47,19 @@
 		<tbody>
 		<?php foreach($facturas as $modelo => $datos): ?>
 			<tr>
-				<td><?= $modelo; ?></td>
-				<td><?= $datos['datos']['operador_c']; ?></td>
-				<td class="text-center"><?= $datos['datos']['rut']; ?> <?= $datos['datos']['des_bodega']; ?></td>
-				<td class="text-center"><?= $datos['datos']['cod_cliente']; ?></td>
+				<td><?= $modelo ?></td>
+				<td><?= $datos['datos']['operador_c'] ?></td>
+				<td class="text-center"><?= $datos['datos']['rut'] ?> <?= $datos['datos']['des_bodega'] ?></td>
+				<td class="text-center"><?= $datos['datos']['cod_cliente'] ?></td>
 
-				<?php for($i=0; $i<$this->despachos_model->limite_facturas; $i++): ?>
+				<?php foreach ($datos['facturas'] as $factura): ?>
 				<td class="text-center">
-					<?= substr($datos['factura_'.$i]['fecha'],0,10); ?>
-					<br/><?= $datos['factura_'.$i]['n_doc']; ?>
-					<br/><?= $datos['factura_'.$i]['cod_sap']; ?>
-					<br/><?= fmt_cantidad($datos['factura_'.$i]['cant']); ?>
+					<?= substr($factura['fecha'],0,10) ?>
+					<br/><?= $factura['n_doc'] ?>
+					<br/><?= $factura['cod_sap'] ?>
+					<br/><?= fmt_cantidad($factura['cant']) ?>
 				</td>
-				<?php endfor; ?>
+				<?php endforeach; ?>
 			</tr>
 		<?php endforeach; ?>
 		</tbody>
