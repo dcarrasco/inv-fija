@@ -133,12 +133,12 @@ class Catalogo extends ORM_Model {
 			->update($this->get_model_tabla(), ['pmp' => 0]);
 
 		// selecciona maxima fecha del stock_sap_fija
-		$arr_max_fecha = $this->db
-			->select('max(fecha_stock) as fecha_stock', FALSE)
+		$max_fecha = $this->db
+			->select_max('fecha_stock')
 			->get(config('bd_stock_fija'))
-			->row();
-
-		$max_fecha = fmt_fecha_db($arr_max_fecha->fecha_stock);
+			->row()
+			->fecha_stock;
+		$max_fecha = fmt_fecha_db($max_fecha);
 
 		// crea tabla temporal con ultimos precios
 		if ($this->db->table_exists($tabla_temporal_precios))
