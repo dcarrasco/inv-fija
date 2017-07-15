@@ -13,6 +13,14 @@
  *
  */
 
+if ( ! function_exists('dump'))
+{
+	function dump()
+	{
+		call_user_func_array('dbg', func_get_args());
+	}
+}
+// --------------------------------------------------------------------
 
 if ( ! function_exists('dbg'))
 {
