@@ -154,19 +154,10 @@ class Analisis_series_model extends CI_Model {
 	 */
 	public function get_historia($series = '')
 	{
-		$reporte = '';
-
-		$arr_series = $this->_series_list_to_array($series);
-
-		if (count($arr_series) > 0)
-		{
-			foreach($arr_series as $serie)
-			{
-				$reporte .= $this->table->generate($this->_get_historia_serie($serie));
-			}
-		}
-
-		return $reporte;
+		return collect($this->_series_list_to_array($series))
+			->map(function($serie) {
+				return $this->table->generate($this->_get_historia_serie($serie));
+			})->implode();
 	}
 
 	// --------------------------------------------------------------------
