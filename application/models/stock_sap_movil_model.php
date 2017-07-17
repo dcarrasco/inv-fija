@@ -401,21 +401,18 @@ class Stock_sap_movil_model extends Stock_sap_model {
 	 */
 	public function get_data_combo_fechas()
 	{
-		$arr_result = $this->db
+		$fechas = $this->db
 			->select('fecha_stock')
 			->order_by('fecha_stock', 'desc')
 			->get(config('bd_stock_movil_fechas'))
 			->result_array();
 
-		foreach ($arr_result as $indice => $arr_fecha)
-		{
-			$arr_result[$indice] = [
-				'llave' => fmt_fecha_db($arr_fecha['fecha_stock']),
-				'valor' => fmt_fecha($arr_fecha['fecha_stock']),
-			];
-		}
+		$fechas = collect($fechas)->pluck('fecha_stock')
+			->map(function($fecha) {
+				return ['llave' => fmt_fecha_db($fecha), 'valor' => fmt_fecha($fecha)];
+			})->all();
 
-		return form_array_format($arr_result);
+		return form_array_format($fechas);
 	}
 
 	// --------------------------------------------------------------------

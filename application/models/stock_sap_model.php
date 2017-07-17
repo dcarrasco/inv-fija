@@ -238,21 +238,14 @@ class Stock_sap_model extends CI_Model {
 	 */
 	public function get_combo_fechas_db()
 	{
-		$arr_fecha_tmp = $this->get_data_combo_fechas();
-		$arr_fecha = ['ultimodia' => [], 'todas' => $arr_fecha_tmp];
+		$fechas = $this->get_data_combo_fechas();
+		$ultimo_dia = collect($fechas)
+			->map(function($fecha, $llave) {return substr($llave, 0, 6);})
+			->unique()
+			->map(function($fecha, $llave) {return fmt_fecha($llave);})
+			->all();
 
-		$anno_mes_ant = '';
-		foreach($arr_fecha_tmp as $llave => $valor)
-		{
-			if ($anno_mes_ant !== substr($llave, 0, 6))
-			{
-				$arr_fecha['ultimodia'][$llave] = $valor;
-			}
-
-			$anno_mes_ant = substr($llave, 0, 6);
-		}
-
-		return $arr_fecha;
+		return ['ultimodia' => $ultimo_dia, 'todas' => $fechas];
 	}
 
 

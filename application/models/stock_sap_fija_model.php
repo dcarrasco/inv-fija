@@ -98,7 +98,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		if (in_array('material', $mostrar))
 		{
 			$this->db->select('s.material, m.descripcion, s.umb');
-			$this->db->join(config('bd_catalogos') . ' m', 's.material=m.catalogo', 'left', FALSE);
+			$this->db->join(config('bd_catalogos').' m', 's.material=m.catalogo', 'left', FALSE);
 			$this->db->group_by('s.material, m.descripcion, s.umb');
 			$this->db->order_by('s.material, m.descripcion, s.umb');
 		}
@@ -124,15 +124,15 @@ class Stock_sap_fija_model extends Stock_sap_model {
 		// tablas
 		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
 		{
-			$this->db->from(config('bd_stock_fija') . ' s');
-			$this->db->join(config('bd_tipoalmacen_sap') . ' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
-			$this->db->join(config('bd_tiposalm_sap') . ' t', 't.id_tipo=ta.id_tipo');
-			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
+			$this->db->from(config('bd_stock_fija').' s');
+			$this->db->join(config('bd_tipoalmacen_sap').' ta', 's.almacen=ta.cod_almacen and s.centro=ta.centro');
+			$this->db->join(config('bd_tiposalm_sap').' t', 't.id_tipo=ta.id_tipo');
+			$this->db->join(config('bd_almacenes_sap').' a', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
 		}
 		else
 		{
-			$this->db->from(config('bd_stock_fija') . ' s');
-			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
+			$this->db->from(config('bd_stock_fija').' s');
+			$this->db->join(config('bd_almacenes_sap').' a', 'a.centro=s.centro and a.cod_almacen=s.almacen', 'left');
 		}
 
 		// condiciones
@@ -206,7 +206,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 			if (in_array('material', $mostrar))
 			{
 				$this->db->select('s.material, m.descripcion, s.umb');
-				$this->db->join(config('bd_catalogos') . ' m', 's.material=m.catalogo', 'left');
+				$this->db->join(config('bd_catalogos').' m', 's.material=m.catalogo', 'left');
 				$this->db->group_by('s.material, m.descripcion, s.umb');
 				$this->db->order_by('s.material, m.descripcion, s.umb');
 			}
@@ -253,21 +253,18 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	 */
 	public function get_data_combo_fechas()
 	{
-		$arr_result = $this->db
+		$fechas = $this->db
 			->select('fecha_stock')
 			->order_by('fecha_stock', 'desc')
 			->get(config('bd_stock_fija_fechas'))
 			->result_array();
 
-		foreach ($arr_result as $indice => $arr_fecha)
-		{
-			$arr_result[$indice] = [
-				'llave' => fmt_fecha_db($arr_fecha['fecha_stock']),
-				'valor' => fmt_fecha($arr_fecha['fecha_stock']),
-			];
-		}
+		$fechas = collect($fechas)->pluck('fecha_stock')
+			->map(function($fecha) {
+				return ['llave' => fmt_fecha_db($fecha), 'valor' => fmt_fecha($fecha)];
+			})->all();
 
-		return form_array_format($arr_result);
+		return form_array_format($fechas);
 	}
 
 
@@ -281,7 +278,7 @@ class Stock_sap_fija_model extends Stock_sap_model {
 	 */
 	private function _genera_reporte_clasificacion($fecha = NULL)
 	{
-		$sql_query = 'INSERT INTO ' . config('bd_reporte_clasif');
+		$sql_query = 'INSERT INTO '.config('bd_reporte_clasif');
 		$sql_query .= " SELECT
 A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
 SUM(E.CANTIDAD) AS CANTIDAD, SUM(E.VALOR) AS MONTO
