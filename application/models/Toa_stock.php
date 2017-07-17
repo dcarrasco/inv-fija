@@ -137,7 +137,7 @@ class Toa_stock extends CI_Model {
 					->filter(function($stock) use ($almacen) {
 						return $stock['centro'].$stock['almacen'] === $almacen['centro'].$almacen['cod_almacen'];
 					})->map_with_keys(function($stock) {
-						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
+						return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
 					})->all();
 
 				$actuaciones = $arr_dias->merge($stock_almacen);
@@ -244,7 +244,7 @@ class Toa_stock extends CI_Model {
 					->filter(function($stock) use ($tecnico) {
 						return $stock['acreedor'] === $tecnico->id_tecnico;
 					})->map_with_keys(function($stock) {
-						return [substr(fmt_fecha($stock['fecha']), 8, 2) => $stock['dato']];
+						return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
 					})->all();
 
 				$actuaciones = $arr_dias->merge($stock_tecnico);

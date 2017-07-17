@@ -456,7 +456,7 @@ class Toa_model extends CI_Model {
 						return $dato['tecnico'] === $tecnico->id_tecnico;
 					})
 					->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+						return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
 					});
 
 				return [$tecnico->id_tecnico => [
@@ -581,7 +581,7 @@ class Toa_model extends CI_Model {
 				$consumo_material = $datos->filter(function($dato) use ($material) {
 						return $dato['material'] === $material['material'];
 					})->map_with_keys(function($dato) {
-						return [substr(fmt_fecha($dato['fecha']), 8, 2) => $dato['dato']];
+						return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
 					});
 
 				return [
