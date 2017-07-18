@@ -163,6 +163,38 @@ class Inventario extends ORM_Model {
 		$this->db->delete(config('bd_detalle_inventario'), ['id_inventario' => $this->id]);
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera los inventarios para desplegar en combobox
+	 *
+	 * @return array Arreglo con inventarios para usar en combobox
+	 */
+	public function get_combo_inventarios()
+	{
+		$inventarios = collect(
+			$this->db
+				->from(config('bd_inventarios').' a')
+				->join(config('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
+				->order_by('desc_tipo_inventario, nombre')
+				->get()->result_array()
+		);
+
+		return $inventarios->pluck('desc_tipo_inventario')
+			->unique()
+			->map_with_keys(function($tipo_inventario) use ($inventarios) {
+				return [
+					$tipo_inventario => $inventarios
+						->filter(function($inventario) use ($tipo_inventario) {
+							return $inventario['desc_tipo_inventario'] === $tipo_inventario;
+						})->map_with_keys(function($inventario) {
+							return [$inventario['id'] => $inventario['nombre']];
+						})->all()
+				];
+			})->all();
+	}
+
+
 
 	// --------------------------------------------------------------------
 

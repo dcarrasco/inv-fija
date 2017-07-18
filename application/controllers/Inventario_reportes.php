@@ -45,7 +45,6 @@ class Inventario_reportes extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('inventario_model');
 		$this->lang->load('inventario');
 
 		$this->set_menu_modulo([
@@ -105,19 +104,20 @@ class Inventario_reportes extends Controller_base {
 	 */
 	public function listado($tipo = 'hoja', $param1 = '')
 	{
+		$inventario = new Inventario_reporte;
 		// define reglas para usar set_value, y ejecuta validación de formulario
-		$this->form_validation->set_rules($this->inventario_model->reportes_validation)->run();
+		$this->form_validation->set_rules($inventario->reportes_validation)->run();
 
-		$id_inventario = request('inv_activo', $this->inventario_model->get_id_inventario_activo());
+		$id_inventario = request('inv_activo', $inventario->get_id_inventario_activo());
 
-		$datos_hoja = $this->inventario_model->get_reporte($tipo, $id_inventario, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
-		$arr_campos = $this->inventario_model->get_campos_reporte($tipo);
+		$datos_hoja = $inventario->get_reporte($tipo, $id_inventario, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
+		$arr_campos = $inventario->get_campos_reporte($tipo);
 
 		app_render_view('inventario/reporte', [
 			'menu_modulo'       => $this->get_menu_modulo($tipo),
 			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
-			'combo_inventarios' => $this->inventario_model->get_combo_inventarios(),
-			'inventario_activo' => $this->inventario_model->get_id_inventario_activo(),
+			'combo_inventarios' => $inventario->get_combo_inventarios(),
+			'inventario_activo' => $inventario->get_id_inventario_activo(),
 			'id_inventario'     => $id_inventario,
 		]);
 	}

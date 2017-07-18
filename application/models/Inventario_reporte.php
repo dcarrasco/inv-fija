@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Inventario_model extends CI_Model {
+class Inventario_reporte extends Inventario {
 
 	/**
 	 * Reglas de validación para los reportes
@@ -52,51 +52,23 @@ class Inventario_model extends CI_Model {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Devuelve el identificador del inventario activo
-	 *
-	 * @return integer ID del inventario activo
-	 */
-	public function get_id_inventario_activo()
+	public function form_imprime_inventario_validation()
 	{
-		return $this->db
-			->where('activo', 1)
-			->get(config('bd_inventarios'))
-			->row()
-			->id;
+		return [
+			[
+				'field' => 'pag_desde',
+				'label' => $this->lang->line('inventario_print_label_page_from'),
+				'rules' => 'trim|required|greater_than[0]',
+			],
+			[
+				'field' => 'pag_hasta',
+				'label' => $this->lang->line('inventario_print_label_page_to'),
+				'rules' => 'trim|required|greater_than[0]',
+			],
+		];
 	}
 
 	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera los inventarios para desplegar en combobox
-	 *
-	 * @return array Arreglo con inventarios para usar en combobox
-	 */
-	public function get_combo_inventarios()
-	{
-		$inventarios = collect(
-			$this->db
-				->from(config('bd_inventarios').' a')
-				->join(config('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
-				->order_by('desc_tipo_inventario, nombre')
-				->get()->result_array()
-		);
-
-		return $inventarios->pluck('desc_tipo_inventario')
-			->unique()
-			->map_with_keys(function($tipo_inventario) use ($inventarios) {
-				return [
-					$tipo_inventario => $inventarios
-						->filter(function($inventario) use ($tipo_inventario) {
-							return $inventario['desc_tipo_inventario'] === $tipo_inventario;
-						})->map_with_keys(function($inventario) {
-							return [$inventario['id'] => $inventario['nombre']];
-						})->all()
-				];
-			})->all();
-	}
-
 
 	// =====================================================================================================
 	// REPORTES
@@ -125,7 +97,7 @@ class Inventario_model extends CI_Model {
 	/**
 	 * Genera porción select para suma de stocks
 	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
-	 * @return Inventario_model
+	 * @return \Inventario
 	 */
 	protected function _db_select_sum_cantidades($incl_ajustes = '0')
 	{
@@ -148,7 +120,7 @@ class Inventario_model extends CI_Model {
 	/**
 	 * Genera porción select para stocks
 	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
-	 * @return Inventario_model
+	 * @return \Inventario
 	 */
 	protected function _db_select_cantidades($incl_ajustes = '0')
 	{
@@ -172,7 +144,7 @@ class Inventario_model extends CI_Model {
 	/**
 	 * Genera porción from para reporte inventarios
 	 * @param  integer $id_inventario Indicador del inventario
-	 * @return Inventario_model
+	 * @return \Inventario
 	 */
 	protected function _db_base_reporte($id_inventario = 0)
 	{
@@ -190,7 +162,7 @@ class Inventario_model extends CI_Model {
 	 * Genera filtro para registros sin diferencias de stock
 	 * @param  string $incl_ajustes Indicador si se incluyen los ajustes de inventario
 	 * @param  string $elim_sin_dif Indicador filtrarán los registros sin diferencias de inventario
-	 * @return Inventario_model
+	 * @return \Inventario
 	 */
 	protected function _db_elim_sin_diferencia($incl_ajustes = '0', $elim_sin_dif = '0')
 	{
@@ -730,5 +702,5 @@ class Inventario_model extends CI_Model {
 	}
 
 }
-/* End of file inventario_model.php */
-/* Location: ./application/models/inventario_model.php */
+/* End of file inventario_reporte.php */
+/* Location: ./application/models/inventario_reporte.php */

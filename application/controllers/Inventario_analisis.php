@@ -289,21 +289,8 @@ class Inventario_analisis extends Controller_base {
 
 	public function imprime_inventario_validate()
 	{
-		$valida_form_imprime_inventario = [
-			[
-				'field' => 'pag_desde',
-				'label' => $this->lang->line('inventario_print_label_page_from'),
-				'rules' => 'trim|required|greater_than[0]',
-			],
-			[
-				'field' => 'pag_hasta',
-				'label' => $this->lang->line('inventario_print_label_page_to'),
-				'rules' => 'trim|required|greater_than[0]',
-			],
-		];
-
 		route_validation(
-			$this->form_validation->set_rules($valida_form_imprime_inventario)->run()
+			$this->form_validation->set_rules((new Inventario_reporte)->form_imprime_inventario_validation())->run()
 		);
 
 		redirect($this->router->class.'/imprime_hojas/'
