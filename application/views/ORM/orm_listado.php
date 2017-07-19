@@ -35,15 +35,13 @@
 			</tr>
 		</thead>
 		<tbody>
-			<?php foreach ($modelos as $o): ?>
+			<?php foreach ($modelos as $obj_modelo): ?>
 				<tr>
-					<?php foreach ($o as $campo => $valor): ?>
-						<?php if ($o->get_mostrar_lista($campo)): ?>
-							<td><?= $o->get_valor_field($campo); ?></td>
-						<?php endif; ?>
+					<?php foreach ($obj_modelo->get_model_fields(TRUE) as $campo => $valor): ?>
+						<td><?= $obj_modelo->get_valor_field($campo); ?></td>
 					<?php endforeach; ?>
 					<td class="text-center">
-						<a href="{url_editar}<?= $o->get_model_id(); ?>{url_params}" class="">
+						<a href="{url_editar}<?= $obj_modelo->get_model_id(); ?>{url_params}" class="">
 							<!-- <span class="fa fa-edit"></span> -->
 							{_orm_link_edit_}
 						</a>
@@ -64,8 +62,7 @@ $(document).ready(function() {
 	if ($('#filtro').val() != '')
 	{
 		$('#filtro').addClass('search_found');
-		$('#btn_filtro').removeClass('btn-default');
-		$('#btn_filtro').addClass('btn-primary');
+		$('#btn_filtro').removeClass('btn-default').addClass('btn-primary');
 	}
 });
 </script>

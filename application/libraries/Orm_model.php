@@ -343,8 +343,15 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return array Arreglo con los campos del modelo
 	 */
-	public function get_model_fields()
+	public function get_model_fields($filtrar_listado = FALSE)
 	{
+		if ($filtrar_listado)
+		{
+			return collect($this->_model_fields)->filter(function($campo) {
+					return $campo->get_mostrar_lista();
+				})->all();
+		}
+
 		return $this->_model_fields;
 	}
 
