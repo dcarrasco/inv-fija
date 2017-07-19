@@ -1,4 +1,6 @@
 <?php
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -24,7 +26,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_sap_fija_model extends Stock_sap_model {
+class Stock_sap_fija extends Stock_sap {
 
 	/**
 	 * Indica el tipo de operación del stock (fijo o movil)

@@ -16,6 +16,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Stock\Almacen_sap;
 use Stock\Tipoalmacen_sap;
+use Stock\Stock_sap_fija;
+use Stock\Stock_sap_movil;
 
 /**
  * Clase Controller Reportes de stock
@@ -96,22 +98,20 @@ class Stock_sap extends Controller_base {
 	 */
 	public function mostrar_stock($tipo_op = '')
 	{
-		$this->load->model('stock_sap_model');
-
 		$arr_mostrar = collect(['fecha', 'tipo_articulo'])
 			->merge(collect(request())
 				->only(['sel_tiposalm','almacen','material','lote','tipo_stock'])
 				->keys()
 			)->all();
 
-		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil() : new Stock_sap_fija();
 		$combo_fechas = $stock->get_combo_fechas();
 
 		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
 			? (new Tipoalmacen_sap)->get_combo_tiposalm($tipo_op)
 			: (new Almacen_sap)->get_combo_almacenes($tipo_op);
 
-		$is_form_valid = $this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation)->run();
+		$is_form_valid = $this->form_validation->set_rules($stock->stock_sap_validation)->run();
 
 		$data = [
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
@@ -174,7 +174,7 @@ class Stock_sap extends Controller_base {
 	 */
 	public function transito($tipo_op = 'FIJA')
 	{
-		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil() : new Stock_sap_fija();
 
 		$tabla_stock = '';
 
@@ -231,7 +231,7 @@ class Stock_sap extends Controller_base {
 
 		$combo_operacion = ['FIJA' => 'Fija', 'MOVIL' => 'Movil'];
 
-		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil() : new Stock_sap_fija();
 		$combo_fechas = $stock->get_combo_fechas();
 
 		$reporte = $stock->reporte_clasificacion($tipo_op, $fechas, $borrar_datos);
@@ -272,12 +272,12 @@ class Stock_sap extends Controller_base {
 	 */
 	public function ajax_fechas($tipo_op = 'MOVIL', $tipo_fecha = 'ultimodia')
 	{
-		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
-		$arr_fechas = $stock->get_combo_fechas();
+		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil() : new Stock_sap_fija();
+		$fechas = $stock->get_combo_fechas();
 
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($arr_fechas[$tipo_fecha]));
+			->set_output(form_print_options($fechas[$tipo_fecha]));
 	}
 
 
@@ -292,17 +292,13 @@ class Stock_sap extends Controller_base {
 	 */
 	public function ajax_almacenes($tipo_op = 'MOVIL', $tipo_alm = 'sel_tiposalm')
 	{
-		$this->load->model('stock_sap_model');
-		$almacen_sap = new Almacen_sap;
-		$tipoalmacen_sap = new Tipoalmacen_sap;
-
-		$arr_almacenes = ($tipo_alm === 'sel_tiposalm')
-			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
-			: $almacen_sap->get_combo_almacenes($tipo_op);
+		$almacenes = ($tipo_alm === 'sel_tiposalm')
+			? (new Tipoalmacen_sap)->get_combo_tiposalm($tipo_op)
+			: (new Almacen_sap)->get_combo_almacenes($tipo_op);
 
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($arr_almacenes));
+			->set_output(form_print_options($almacenes));
 	}
 
 
