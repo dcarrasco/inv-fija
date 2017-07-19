@@ -1,4 +1,6 @@
 <?php
+namespace Acl;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Usuario
@@ -114,7 +119,7 @@ class Usuario extends ORM_Model {
 				'rol' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
-						'model'         => 'rol',
+						'model'         => rol::class,
 						'join_table'    => config('bd_usuario_rol'),
 						'id_one_table'  => ['id_usuario'],
 						'id_many_table' => ['id_rol'],

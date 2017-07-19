@@ -1,4 +1,6 @@
 <?php
+namespace Acl;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Rol
@@ -47,7 +52,7 @@ class Rol extends ORM_Model {
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'id_app' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'app'],
+					'relation'    => ['model' => app::class],
 					'texto_ayuda' => 'Aplicaci&oacute;n a la que pertenece el rol.',
 					'onchange'    => form_onchange('id_app', 'modulo', 'acl_config/get_select_modulo'),
 				],
@@ -68,7 +73,7 @@ class Rol extends ORM_Model {
 				'modulo' => [
 					'tipo'     => Orm_field::TIPO_HAS_MANY,
 					'relation' => [
-						'model'         => 'modulo',
+						'model'         => modulo::class,
 						'join_table'    => 'acl_rol_modulo',
 						'id_one_table'  => ['id_rol'],
 						'id_many_table' => ['id_modulo'],

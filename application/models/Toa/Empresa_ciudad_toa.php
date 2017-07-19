@@ -1,4 +1,6 @@
 <?php
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Empresa Ciudad TOA
@@ -48,20 +53,20 @@ class Empresa_ciudad_toa extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => 'empresa_toa'],
+					'relation'       => ['model' => empresa_toa::class],
 					'texto_ayuda'    => 'Seleccione una empresa TOA.',
 				],
 				'id_ciudad' => [
 					'tipo'           => Orm_field::TIPO_HAS_ONE,
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => 'ciudad_toa'],
+					'relation'       => ['model' => ciudad_toa::class],
 					'texto_ayuda'    => 'Seleccione una Ciudad TOA.',
 				],
 				'almacenes' => [
 					'tipo'     => Orm_field::TIPO_HAS_MANY,
 					'relation' => [
-						'model'         => 'almacen_sap',
+						'model'         => \Stock\almacen_sap::class,
 						'join_table'    => config('bd_empresas_ciudades_almacenes_toa'),
 						'id_one_table'  => ['id_empresa', 'id_ciudad'],
 						'id_many_table' => ['centro', 'cod_almacen'],

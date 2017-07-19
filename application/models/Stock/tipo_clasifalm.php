@@ -1,4 +1,6 @@
 <?php
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Tipo de Clasificacion Almacen
@@ -45,14 +50,14 @@ class Tipo_clasifalm extends ORM_Model {
 			],
 			'campos' => [
 				'id_tipoclasif' => [
-						'label'            => 'id',
-						'tipo'             => Orm_field::TIPO_INT,
-						'largo'            => 10,
-						'texto_ayuda'      => '',
-						'es_id'            => TRUE,
-						'es_obligatorio'   => TRUE,
-						'es_unico'         => TRUE,
-						'es_autoincrement' => TRUE,
+					'label'            => 'id',
+					'tipo'             => Orm_field::TIPO_INT,
+					'largo'            => 10,
+					'texto_ayuda'      => '',
+					'es_id'            => TRUE,
+					'es_obligatorio'   => TRUE,
+					'es_unico'         => TRUE,
+					'es_autoincrement' => TRUE,
 				],
 				'tipo' => [
 					'label'          => 'Tipo Clasificaci&oacute;n de Almac&eacute;n',

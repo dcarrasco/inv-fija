@@ -35,6 +35,13 @@ class Inventario_config extends Orm_controller {
 	 */
 	public $llave_modulo  = 'config2';
 
+	/**
+	 * Namespace de los modelos
+	 *
+	 * @var string
+	 */
+	protected $model_namespace = '\\Inventario\\';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -113,8 +120,8 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function ubicacion_tipo_ubicacion($pagina = 0)
 	{
-		$tipo_inventario = new Tipo_inventario;
-		$this->load->model('ubicacion_model');
+		$tipo_inventario = new Inventario\Tipo_inventario;
+		$this->load->model('inventario/ubicacion_model');
 
 		$this->load->library('pagination');
 		$limite_por_pagina = 15;

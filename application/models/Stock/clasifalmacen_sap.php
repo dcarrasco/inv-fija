@@ -1,4 +1,6 @@
 <?php
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Clasificacion de Almacenes
@@ -45,14 +50,14 @@ class Clasifalmacen_sap extends ORM_Model {
 			],
 			'campos' => [
 				'id_clasif' => [
-						'label'            => 'id',
-						'tipo'             => Orm_field::TIPO_INT,
-						'largo'            => 10,
-						'texto_ayuda'      => '',
-						'es_id'            => TRUE,
-						'es_obligatorio'   => TRUE,
-						'es_unico'         => TRUE,
-						'es_autoincrement' => TRUE,
+					'label'            => 'id',
+					'tipo'             => Orm_field::TIPO_INT,
+					'largo'            => 10,
+					'texto_ayuda'      => '',
+					'es_id'            => TRUE,
+					'es_obligatorio'   => TRUE,
+					'es_unico'         => TRUE,
+					'es_autoincrement' => TRUE,
 				],
 				'clasificacion' => [
 					'label'          => 'Clasificaci&oacute;n de Almac&eacute;n',
@@ -98,7 +103,7 @@ class Clasifalmacen_sap extends ORM_Model {
 				],
 				'id_tipoclasif' => [
 					'tipo'     => Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => 'tipo_clasifalm'],
+					'relation' => ['model' => tipo_clasifalm::class],
 				],
 				'tipo_op' => [
 					'label'          => 'Tipo operaci&oacute;n',
@@ -115,7 +120,7 @@ class Clasifalmacen_sap extends ORM_Model {
 				'tiposalm' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
-						'model'         => 'tipoalmacen_sap',
+						'model'         => tipoalmacen_sap::class,
 						'join_table'    => config('bd_clasif_tipoalm_sap'),
 						'id_one_table'  => ['id_clasif'],
 						'id_many_table' => ['id_tipo'],

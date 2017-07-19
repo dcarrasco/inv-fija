@@ -516,6 +516,8 @@ $config['proxy_ips'] = '';
  */
 function orm_models_autoload($class)
 {
+	$class = str_replace('\\', '/', $class);
+
 	if (file_exists(APPPATH.'models/'.$class.'.php'))
 	{
 		include_once(APPPATH.'models/'.$class.'.php');

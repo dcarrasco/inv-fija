@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Inventario\Inventario;
+use Inventario\detalle_inventario;
+
 /**
  * Clase Controller Análisis de inventarios
  * *

@@ -35,6 +35,13 @@ class Toa_config extends Orm_controller {
 	 */
 	public $llave_modulo  = 'config_toa';
 
+	/**
+	 * Namespace de los modelos
+	 *
+	 * @var string
+	 */
+	protected $model_namespace = '\\Toa\\';
+
 	// --------------------------------------------------------------------
 
 	/**

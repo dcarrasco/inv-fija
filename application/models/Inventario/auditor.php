@@ -1,4 +1,5 @@
 <?php
+namespace inventario;
 /**
  * INVENTARIO FIJA
  *
@@ -14,71 +15,75 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \ORM_Field;
+
 /**
- * Clase Modelo Proveedor
+ * Clase Modelo Auditor
  *
  * Basada en modelo ORM
  *
  * @category CodeIgniter
- * @package  ACL
+ * @package  InventarioFija
  * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
  * @license  MIT License
  * @link     localhost:1520
  *
  */
-class Proveedor extends ORM_Model {
+class Auditor extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_proveedor Identificador del modulo
+	 * @param  integer $id_auditor Identificador del auditor
 	 * @return void
 	 */
-	public function __construct($id_proveedor = NULL)
+	public function __construct($id_auditor = NULL)
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_proveedores'),
-				'model_label'        => 'Proveedor',
-				'model_label_plural' => 'Proveedores',
-				'model_order_by'     => 'des_proveedor',
+				'model_tabla'        => config('bd_auditores'),
+				'model_label'        => 'Auditor',
+				'model_label_plural' => 'Auditores',
+				'model_order_by'     => 'nombre',
 			],
 			'campos' => [
-				'cod_proveedor' => [
-					'label'          => 'C&oacute;digo del proveedor',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'des_proveedor' => [
-					'label'          => 'Nombre del proveedor',
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'nombre' => [
+					'label'          => 'Nombre del auditor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
 					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => FALSE,
+					'es_unico'       => TRUE
+				],
+				'activo' => [
+					'label'          => 'Activo',
+					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
+					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
+					'es_obligatorio' => TRUE,
+					'default'        => 1
 				],
 			],
 		];
 
-		parent::__construct($id_proveedor);
+		parent::__construct($id_auditor);
 	}
+
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve representación string del modelo
 	 *
-	 * @return string Proveedor
+	 * @return string Auditor
 	 */
 	public function __toString()
 	{
-		return (string) $this->des_proveedor;
+		return (string) $this->nombre;
 	}
 
+
 }
-/* End of file proveedor.php */
-/* Location: ./application/models/proveedor.php */
+/* End of file auditor.php */
+/* Location: ./application/models/auditor.php */

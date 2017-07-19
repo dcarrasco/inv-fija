@@ -35,6 +35,13 @@ class Acl_config extends Orm_controller {
 	 */
 	public $llave_modulo  = 'acl_config';
 
+	/**
+	 * Namespace de los modelos
+	 *
+	 * @var string
+	 */
+	protected $model_namespace = '\\Acl\\';
+
 	// --------------------------------------------------------------------
 
 	/**

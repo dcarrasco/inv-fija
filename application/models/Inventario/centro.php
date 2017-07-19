@@ -1,4 +1,6 @@
 <?php
+namespace Inventario;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,8 +16,11 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \ORM_Field;
+
 /**
- * Clase Modelo Almacén
+ * Clase Modelo Centro
  *
  * Basada en modelo ORM
  *
@@ -26,29 +31,29 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Almacen extends ORM_Model {
+class Centro extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_almacen Identificador del almacen
+	 * @param  string $id_centro Identificador del catalogo
 	 * @return void
 	 */
-	public function __construct($id_almacen = NULL)
+	public function __construct($id_centro = NULL)
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_almacenes'),
-				'model_label'        => 'Almac&eacute;n',
-				'model_label_plural' => 'Almacenes',
-				'model_order_by'     => 'almacen',
+				'model_tabla'        => config('bd_centros'),
+				'model_label'        => 'Centro',
+				'model_label_plural' => 'Centros',
+				'model_order_by'     => 'centro',
 			],
 			'campos' => [
-				'almacen' => [
-					'label'          => 'Almac&eacute;n',
+				'centro' => [
+					'label'          => 'Centro',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
-					'texto_ayuda'    => 'Nombre del almac&eacute;n. M&aacute;ximo 10 caracteres.',
+					'texto_ayuda'    => 'Nombre del centro. M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
@@ -56,22 +61,21 @@ class Almacen extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_almacen);
+		parent::__construct($id_centro);
 	}
-
 
 	// --------------------------------------------------------------------
 
 	/**
 	 * Devuelve representación string del modelo
 	 *
-	 * @return string Almacén
+	 * @return string Centro
 	 */
 	public function __toString()
 	{
-		return (string) $this->almacen;
+		return (string) $this->centro;
 	}
 
 }
-/* End of file almacen.php */
-/* Location: ./application/models/almacen.php */
+/* End of file centro.php */
+/* Location: ./application/models/centro.php */

@@ -1,4 +1,6 @@
 <?php
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Tipo Material de trabajos TOA
@@ -62,7 +67,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
-						'model'         => 'catalogo',
+						'model'         => \Inventario\catalogo::class,
 						'join_table'    => config('bd_catalogo_tip_material_toa'),
 						'id_one_table'  => ['id_tip_material_trabajo'],
 						'id_many_table' => ['id_catalogo'],

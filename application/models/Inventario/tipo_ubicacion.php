@@ -1,4 +1,6 @@
 <?php
+namespace Inventario;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Tipo de Ubicacion
@@ -47,7 +52,7 @@ class Tipo_ubicacion extends ORM_Model {
 				'id'              => ['tipo' => Orm_field::TIPO_ID],
 				'tipo_inventario' => [
 					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => ['model' => 'tipo_inventario'],
+					'relation'       => ['model' => tipo_inventario::class],
 					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
 					'es_obligatorio' => TRUE,
 				],

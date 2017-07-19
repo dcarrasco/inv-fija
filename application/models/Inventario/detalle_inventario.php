@@ -1,4 +1,6 @@
 <?php
+namespace Inventario;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Detalle de inventario
@@ -56,7 +61,7 @@ class Detalle_inventario extends ORM_Model {
 				'id'            => ['tipo' => Orm_field::TIPO_ID],
 				'id_inventario' => [
 					'tipo'     => Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => 'inventario'],
+					'relation' => ['model' => inventario::class],
 				],
 				'hoja' => [
 					'label'          => 'Hoja',
@@ -81,7 +86,7 @@ class Detalle_inventario extends ORM_Model {
 				],
 				'catalogo' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'catalogo'],
+					'relation'    => ['model' => catalogo::class],
 					'texto_ayuda' => 'Cat&aacute;logo del material.',
 				],
 				'descripcion' => [
@@ -100,15 +105,15 @@ class Detalle_inventario extends ORM_Model {
 				],
 				'centro' => [
 					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => 'centro'],
+					'relation' => ['model' => centro::class],
 				],
 				'almacen' => [
 					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => 'almacen'],
+					'relation' => ['model' => almacen::class],
 				],
 				'um' => [
 					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => 'unidad_medida'],
+					'relation' => ['model' => unidad_medida::class],
 				],
 				'stock_sap' => [
 					'label'          => 'Stock SAP del material',
@@ -126,13 +131,13 @@ class Detalle_inventario extends ORM_Model {
 				],
 				'digitador' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'usuario'],
+					'relation'    => ['model' => \Acl\usuario::class],
 					'texto_ayuda' => 'Digitador de la hoja.',
 				],
 				'auditor' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
 					'relation'    => [
-						'model'      => 'auditor',
+						'model'      => auditor::class,
 						'conditions' => ['activo' => 1],
 					],
 					'texto_ayuda' => 'Auditor de la hoja.',
@@ -262,13 +267,9 @@ class Detalle_inventario extends ORM_Model {
 			->get($this->get_model_tabla())
 			->result_array();
 
-		$detalles_collection = new Collection();
-		foreach($arr_detalles as $linea_detalle)
-		{
-			$detalles_collection->add_item(new Detalle_inventario($linea_detalle));
-		}
-
-		return $detalles_collection;
+		return collect($arr_detalles)->map(function($linea_detalle) {
+			return new Detalle_inventario($linea_detalle);
+		});
 	}
 
 	// --------------------------------------------------------------------

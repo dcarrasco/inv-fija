@@ -101,16 +101,12 @@ class Stock_sap extends Controller_base {
 				->keys()
 			)->all();
 
-		$tabla_stock = '';
-		$datos_grafico = [];
 		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil_model() : new Stock_sap_fija_model();
-		$almacen_sap = new Almacen_sap;
-		$tipoalmacen_sap = new Tipoalmacen_sap;
+		$combo_fechas = $stock->get_combo_fechas();
 
-		$combo_fechas    = $stock->get_combo_fechas();
 		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
-			? $tipoalmacen_sap->get_combo_tiposalm($tipo_op)
-			: $almacen_sap->get_combo_almacenes($tipo_op);
+			? (new Tipoalmacen_sap)->get_combo_tiposalm($tipo_op)
+			: (new Almacen_sap)->get_combo_almacenes($tipo_op);
 
 		$is_form_valid = $this->form_validation->set_rules($this->stock_sap_model->stock_sap_validation)->run();
 
@@ -121,7 +117,7 @@ class Stock_sap extends Controller_base {
 			'combo_fechas'    => $combo_fechas[request('sel_fechas', 'ultimodia')],
 			'tipo_op'         => $tipo_op,
 			'arr_mostrar'     => $arr_mostrar,
-			'datos_grafico'   => $datos_grafico,
+			'datos_grafico'   => [],
 		];
 
 		if (request('excel'))
@@ -187,8 +183,7 @@ class Stock_sap extends Controller_base {
 		$arr_filtrar_todos = ['fecha', 'almacen', 'tipo_stock', 'material', 'lote'];
 		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
 
-		$this->form_validation->set_rules('fecha[]', 'Fechas', 'required');
-		$is_form_valid = $this->form_validation->run();
+		$is_form_valid = $this->form_validation->set_rules('fecha[]', 'Fechas', 'required')->run();
 
 		if ($is_form_valid)
 		{

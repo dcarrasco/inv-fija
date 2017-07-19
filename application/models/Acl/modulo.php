@@ -1,4 +1,6 @@
 <?php
+namespace Acl;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Modulo Aplicaciones
@@ -47,7 +52,7 @@ class Modulo extends ORM_Model {
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'id_app' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'app'],
+					'relation'    => ['model' => app::class],
 					'texto_ayuda' => 'Aplicaci&oacute;n a la que pertenece el m&oacute;dulo.',
 				],
 				'modulo' => [

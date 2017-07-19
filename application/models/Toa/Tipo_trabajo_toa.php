@@ -1,4 +1,5 @@
 <?php
+namespace Toa;
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +14,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Tipo de trabajo TOA

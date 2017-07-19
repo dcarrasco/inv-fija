@@ -1,4 +1,6 @@
 <?php
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Técnico TOA
@@ -71,13 +76,13 @@ class Tecnico_toa extends ORM_Model {
 				],
 				'id_empresa' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'empresa_toa'],
+					'relation'    => ['model' => empresa_toa::class],
 					'texto_ayuda' => 'Empresa a la que pertenece el t&eacute;cnico.',
 					'onchange'    => form_onchange('id_empresa', 'id_ciudad', 'toa_config/get_select_ciudad'),
 				],
 				'id_ciudad' => [
 					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => 'Ciudad_toa'],
+					'relation'    => ['model' => Ciudad_toa::class],
 					'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
 				],
 			],

@@ -1,4 +1,6 @@
 <?php
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,72 +16,74 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \ORM_Field;
+
 /**
- * Clase Modelo Unidad de medida
+ * Clase Modelo Proveedor
  *
  * Basada en modelo ORM
  *
  * @category CodeIgniter
- * @package  InventarioFija
+ * @package  ACL
  * @author   Daniel Carrasco <danielcarrasco17@gmail.com>
  * @license  MIT License
  * @link     localhost:1520
  *
  */
-class Unidad_medida extends ORM_Model {
+class Proveedor extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_unidad_medida Identificador del modulo
+	 * @param  string $id_proveedor Identificador del modulo
 	 * @return void
 	 */
-	public function __construct($id_unidad_medida = NULL)
+	public function __construct($id_proveedor = NULL)
 	{
 		$this->_model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_unidades'),
-				'model_label'        => 'Unidad de medida',
-				'model_label_plural' => 'Unidades de medida',
-				'model_order_by'     => 'unidad',
+				'model_tabla'        => config('bd_proveedores'),
+				'model_label'        => 'Proveedor',
+				'model_label_plural' => 'Proveedores',
+				'model_order_by'     => 'des_proveedor',
 			],
 			'campos' => [
-				'unidad' => [
-					'label'          => 'Unidad',
+				'cod_proveedor' => [
+					'label'          => 'C&oacute;digo del proveedor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 10,
-					'texto_ayuda'    => 'Unidad de medida. M&aacute;ximo 10 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
 					'es_id'          => TRUE,
 					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
+					'es_unico'       => TRUE,
 				],
-				'desc_unidad' => [
-					'label'          => 'Descripci&oacute;n unidad de medida',
+				'des_proveedor' => [
+					'label'          => 'Nombre del proveedor',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
+					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
 					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
+					'es_unico'       => FALSE,
 				],
 			],
 		];
 
-		parent::__construct($id_unidad_medida);
+		parent::__construct($id_proveedor);
 	}
 
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve representación string de la unidad de medida
+	 * Devuelve representación string del modelo
 	 *
-	 * @return string Unidad de medida
+	 * @return string Proveedor
 	 */
 	public function __toString()
 	{
-		return (string) $this->desc_unidad;
+		return (string) $this->des_proveedor;
 	}
 
 }
-
-/* End of file unidad_medida.php */
-/* Location: ./application/models/unidad_medida.php */
+/* End of file proveedor.php */
+/* Location: ./application/models/proveedor.php */

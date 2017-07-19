@@ -1,4 +1,6 @@
 <?php
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +15,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use \ORM_Model;
+use \ORM_Field;
 
 /**
  * Clase Modelo Almacén SAP
@@ -68,10 +73,10 @@ class Almacen_sap extends ORM_Model {
 					'es_obligatorio' => TRUE,
 				],
 				'uso_almacen' => [
-						'label'          => 'Uso Almac&eacute;n',
-						'tipo'           => Orm_field::TIPO_CHAR,
-						'largo'          => 50,
-						'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
+					'label'          => 'Uso Almac&eacute;n',
+					'tipo'           => Orm_field::TIPO_CHAR,
+					'largo'          => 50,
+					'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
 				],
 				'responsable' => [
 					'label'          => 'Responsable',
@@ -94,7 +99,7 @@ class Almacen_sap extends ORM_Model {
 				'tipos' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
-						'model'         => 'tipoalmacen_sap',
+						'model'         => tipoalmacen_sap::class,
 						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
 						'join_table'    => config('bd_tipoalmacen_sap'),
 						'id_one_table'  => ['centro', 'cod_almacen'],
