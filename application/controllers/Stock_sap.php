@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Almacen_sap;
+use Stock\Tipoalmacen_sap;
+
 /**
  * Clase Controller Reportes de stock
  *

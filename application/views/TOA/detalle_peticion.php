@@ -140,7 +140,7 @@
 				<label class="control-label col-sm-2 col-xs-3">Tipo de trabajo</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php $tt = new Tipo_trabajo_toa(strtoupper($reporte['arr_peticion_toa']['XA_WORK_TYPE'])); echo $tt->mostrar_info(); ?>
+						<?php $tt = new Toa\Tipo_trabajo_toa(strtoupper($reporte['arr_peticion_toa']['XA_WORK_TYPE'])); echo $tt->mostrar_info(); ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Origen Peticion</label>

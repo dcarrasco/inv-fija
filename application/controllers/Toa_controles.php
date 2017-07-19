@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Empresa_toa;
+use Toa\Tipo_trabajo_toa;
+
 /**
  * Clase Controller Reporte de consumos TOA
  *

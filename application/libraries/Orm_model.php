@@ -264,9 +264,16 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return string Nombre del modelo
 	 */
-	public function get_model_nombre()
+	public function get_model_nombre($full_name = TRUE)
 	{
-		return $this->_model_nombre;
+		if ($full_name)
+		{
+			return $this->_model_nombre;
+		}
+
+		$arr_model_nombre = explode('\\', $this->_model_nombre);
+
+		return $arr_model_nombre[count($arr_model_nombre) - 1];
 	}
 
 	// --------------------------------------------------------------------
@@ -703,7 +710,7 @@ class Orm_model implements IteratorAggregate {
 			'base_url'    => site_url(
 				$this->router->class . '/' .
 				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
-				$this->get_model_nombre()
+				$this->get_model_nombre(FALSE)
 			),
 			'first_link'  => $this->lang->line('orm_pag_first'),
 			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->_model_page_results + 1) . ')',

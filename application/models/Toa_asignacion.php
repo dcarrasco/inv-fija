@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Clase_movimiento;
+
 /**
  * Clase Modelo TOA Asignacion
  * *
