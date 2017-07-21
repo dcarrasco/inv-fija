@@ -118,7 +118,7 @@ class Tecnico_toa extends ORM_Model {
 				'id_ciudad' => [
 					'tipo'     => Orm_field::TIPO_HAS_ONE,
 					'relation' => [
-						'model'      => 'Ciudad_toa',
+						'model'      => Ciudad_toa::class,
 						'conditions' => ['id_ciudad' => $arr_ciudades],
 					],
 					'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
