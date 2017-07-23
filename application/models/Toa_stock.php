@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Tecnico_toa;
+
 /**
  * Clase Modelo Stock TOA
  * *
@@ -232,11 +234,9 @@ class Toa_stock extends CI_Model {
 			return NULL;
 		}
 
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 		$stock = $this->_get_stock_tecnicos($empresa, $anomes, $dato_desplegar);
-
 		$arr_dias = collect(get_arr_dias_mes($anomes));
+		$arr_tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
 		return collect($arr_tecnicos)
 			->map_with_keys(function($tecnico) use ($arr_dias, $stock) {

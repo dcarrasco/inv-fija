@@ -14,6 +14,7 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Tecnico_toa;
 use Stock\Clase_movimiento;
 
 /**
@@ -505,8 +506,7 @@ class Toa_asignacion extends CI_Model {
 
 		$datos = $this->db->get()->result_array();
 
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$arr_tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
 		return $arr_tecnicos
 			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
@@ -545,7 +545,7 @@ class Toa_asignacion extends CI_Model {
 	{
 		return array_merge(
 			['000' => 'Todos los movimientos'],
-			(new Clase_movimiento)->find('list', [
+			Clase_movimiento::create()->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_asignaciones],
 				'opc_ini'    => FALSE,
 			])

@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Ciudad_toa;
+use Toa\Empresa_ciudad_toa;
+
 /**
  * Clase Controller Configuracion de TOA
  *
@@ -100,13 +103,10 @@ class Toa_config extends Orm_controller {
 	 */
 	public function get_select_ciudad($id_empresa = NULL)
 	{
-		$empresa_ciudad = new Empresa_ciudad_toa;
-		$ciudad = new Ciudad_toa;
-
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($ciudad->find('list', [
-				'conditions' => ['id_ciudad' => $empresa_ciudad->arr_ciudades_por_empresa($id_empresa)],
+			->set_output(form_print_options(Ciudad_toa::create()->find('list', [
+				'conditions' => ['id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)],
 				'opc_ini'    => FALSE,
 			])));
 	}

@@ -447,8 +447,7 @@ class Detalle_inventario extends ORM_Model {
 		$ci =& get_instance();
 
 		// recupera el inventario activo
-		$inventario = new Inventario;
-		$id_inventario = $inventario->get_id_inventario_activo();
+		$id_inventario = Inventario::create()->get_id_inventario_activo();
 
 		// recupera el nombre del material
 		$material = new Catalogo(request('catalogo'));

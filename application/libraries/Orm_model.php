@@ -162,6 +162,18 @@ class Orm_model implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Crea una instancia del modelo y la devuelve
+	 *
+	 * @return static
+	 */
+	public static function create()
+	{
+		return new static;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Configuración del modelo
 	 * Define las propiedades basicas de un nuevo modelo
 	 *

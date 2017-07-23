@@ -119,11 +119,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
@@ -150,11 +148,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_asignacion->get_combo_movimientos_asignacion(),
 			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
@@ -177,11 +173,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
@@ -206,11 +200,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_stock->controles_stock_empresa_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles_stock', [
 			'menu_modulo'          => $this->get_menu_modulo('stock'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 			'anomes'               => request('mes'),
@@ -235,11 +227,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_stock->controles_stock_tecnicos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles_stock_tecnicos', [
 			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'combo_dato_mostrar'   => $this->toa_stock->combo_mostrar_stock_tecnicos,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
@@ -305,14 +295,10 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_materiales_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-		$tipo_trabajo = new Tipo_trabajo_toa();
-
-
 		app_render_view('toa/controles_materiales_tipo_trabajo', [
 			'menu_modulo'              => $this->get_menu_modulo('materiales'),
-			'combo_empresas'           => $empresa_toa->find('list'),
-			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], $tipo_trabajo->find('list', ['opc_ini' => FALSE])),
+			'combo_empresas'           => Empresa_toa::create()->find('list'),
+			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], Tipo_trabajo_toa::create()->find('list', ['opc_ini' => FALSE])),
 			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => request('mes'),

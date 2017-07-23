@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+	use Inventario\Tipo_inventario;
+
 /**
  * Clase Controller Configuracion Inventario
  *
@@ -120,7 +122,6 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function ubicacion_tipo_ubicacion($pagina = 0)
 	{
-		$tipo_inventario = new Inventario\Tipo_inventario;
 		$this->load->model('inventario/ubicacion_model');
 
 		$this->load->library('pagination');
@@ -190,7 +191,7 @@ class Inventario_config extends Orm_controller {
 			app_render_view('ubicacion_tipo_ubicacion', [
 				'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 				'datos_hoja'             => $datos_hoja,
-				'combo_tipos_inventario' => $tipo_inventario->find('list'),
+				'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
 				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 				'links_paginas'          => $this->pagination->create_links(),
 			]);

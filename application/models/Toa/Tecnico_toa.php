@@ -111,8 +111,7 @@ class Tecnico_toa extends ORM_Model {
 	{
 		if ($this->id_empresa AND $this->uri->segment(2) === 'editar')
 		{
-			$empresa_ciudad = new Empresa_ciudad_toa;
-			$arr_ciudades = $empresa_ciudad->arr_ciudades_por_empresa($this->id_empresa);
+			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa);
 
 			$arr_config_ciudad = [
 				'id_ciudad' => [

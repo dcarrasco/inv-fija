@@ -15,8 +15,8 @@
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Stock\Almacen_sap;
-use Stock\Tipoalmacen_sap;
 use Stock\Stock_sap_fija;
+use Stock\Tipoalmacen_sap;
 use Stock\Stock_sap_movil;
 
 /**
@@ -108,8 +108,8 @@ class Stock_sap extends Controller_base {
 		$combo_fechas = $stock->get_combo_fechas();
 
 		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
-			? (new Tipoalmacen_sap)->get_combo_tiposalm($tipo_op)
-			: (new Almacen_sap)->get_combo_almacenes($tipo_op);
+			? Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)
+			: Almacen_sap::create()->get_combo_almacenes($tipo_op);
 
 		$is_form_valid = $this->form_validation->set_rules($stock->stock_sap_validation)->run();
 
@@ -293,14 +293,13 @@ class Stock_sap extends Controller_base {
 	public function ajax_almacenes($tipo_op = 'MOVIL', $tipo_alm = 'sel_tiposalm')
 	{
 		$almacenes = ($tipo_alm === 'sel_tiposalm')
-			? (new Tipoalmacen_sap)->get_combo_tiposalm($tipo_op)
-			: (new Almacen_sap)->get_combo_almacenes($tipo_op);
+			? Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)
+			: Almacen_sap::create()->get_combo_almacenes($tipo_op);
 
 		$this->output
 			->set_content_type('text')
 			->set_output(form_print_options($almacenes));
 	}
-
 
 
 }
