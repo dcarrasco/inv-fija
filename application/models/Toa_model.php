@@ -160,11 +160,9 @@ class Toa_model extends CI_Model {
 	 */
 	public function get_combo_movimientos_consumo()
 	{
-		$cmv = new Clase_movimiento;
-
 		return array_merge(
 			['000' => 'Todos los movimientos'],
-			$cmv->find('list', [
+			(new Clase_movimiento)->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,

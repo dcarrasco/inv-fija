@@ -543,20 +543,16 @@ class Toa_asignacion extends CI_Model {
 	 */
 	public function get_combo_movimientos_asignacion()
 	{
-		$cmv = new Clase_movimiento;
-
 		return array_merge(
 			['000' => 'Todos los movimientos'],
-			$cmv->find('list', [
+			(new Clase_movimiento)->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_asignaciones],
 				'opc_ini'    => FALSE,
 			])
 		);
 	}
 
-
-
 }
 
-/* End of file Toa_model.php */
-/* Location: ./application/models/Toa_model.php */
+/* End of file Toa_asignacion.php */
+/* Location: ./application/models/Toa_asignacion.php */
