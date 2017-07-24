@@ -41,12 +41,12 @@ class Tecnico_toa extends ORM_Model {
 	 */
 	public function __construct($id_tecnico = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tecnicos_toa'),
-				'model_label'        => 'T&eacute;cnico TOA',
-				'model_label_plural' => 'T&eacute;cnicos TOA',
-				'model_order_by'     => 'tecnico',
+				'tabla'        => config('bd_tecnicos_toa'),
+				'label'        => 'T&eacute;cnico TOA',
+				'label_plural' => 'T&eacute;cnicos TOA',
+				'order_by'     => 'tecnico',
 			],
 			'campos' => [
 				'id_tecnico' => [

@@ -41,12 +41,12 @@ class Familia extends ORM_Model {
 	 */
 	public function __construct($id_familia = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_familias'),
-				'model_label'        => 'Familia',
-				'model_label_plural' => 'Familias',
-				'model_order_by'     => 'codigo',
+				'tabla'        => config('bd_familias'),
+				'label'        => 'Familia',
+				'label_plural' => 'Familias',
+				'order_by'     => 'codigo',
 			],
 			'campos' => [
 				'codigo' => [

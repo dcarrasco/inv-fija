@@ -41,12 +41,12 @@ class Centro extends ORM_Model {
 	 */
 	public function __construct($id_centro = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_centros'),
-				'model_label'        => 'Centro',
-				'model_label_plural' => 'Centros',
-				'model_order_by'     => 'centro',
+				'tabla'        => config('bd_centros'),
+				'label'        => 'Centro',
+				'label_plural' => 'Centros',
+				'order_by'     => 'centro',
 			],
 			'campos' => [
 				'centro' => [

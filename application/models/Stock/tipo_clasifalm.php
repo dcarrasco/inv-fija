@@ -41,12 +41,12 @@ class Tipo_clasifalm extends ORM_Model {
 	 */
 	public function __construct($id_tipoclasif = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tipo_clasifalm_sap'),
-				'model_label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
-				'model_label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
-				'model_order_by'     => 'tipo',
+				'tabla'        => config('bd_tipo_clasifalm_sap'),
+				'label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
+				'label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
+				'order_by'     => 'tipo',
 			],
 			'campos' => [
 				'id_tipoclasif' => [

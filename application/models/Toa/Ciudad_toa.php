@@ -41,12 +41,12 @@ class Ciudad_toa extends ORM_Model {
 	 */
 	public function __construct($id_ciudad = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_ciudades_toa'),
-				'model_label'        => 'Ciudad TOA',
-				'model_label_plural' => 'Ciudades TOA',
-				'model_order_by'     => 'orden',
+				'tabla'        => config('bd_ciudades_toa'),
+				'label'        => 'Ciudad TOA',
+				'label_plural' => 'Ciudades TOA',
+				'order_by'     => 'orden',
 			],
 			'campos' => [
 				'id_ciudad' => [

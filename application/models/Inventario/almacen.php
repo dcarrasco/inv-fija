@@ -41,12 +41,12 @@ class Almacen extends ORM_Model {
 	 */
 	public function __construct($id_almacen = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_almacenes'),
-				'model_label'        => 'Almac&eacute;n',
-				'model_label_plural' => 'Almacenes',
-				'model_order_by'     => 'almacen',
+				'tabla'        => config('bd_almacenes'),
+				'label'        => 'Almac&eacute;n',
+				'label_plural' => 'Almacenes',
+				'order_by'     => 'almacen',
 			],
 			'campos' => [
 				'almacen' => [

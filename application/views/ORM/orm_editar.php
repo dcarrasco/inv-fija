@@ -5,12 +5,12 @@
 		<fieldset>
 
 			<legend>
-				<?php if ($modelo->get_model_id()): ?>
+				<?php if ($modelo->get_id()): ?>
 					{_orm_title_edit_}
 				<?php else: ?>
 					{_orm_title_create_}
 				<?php endif ?>
-				<?= $modelo->get_model_label() ?>
+				<?= $modelo->get_label() ?>
 			</legend>
 
 			{validation_errors}
@@ -34,9 +34,9 @@
 						</a>
 					</div>
 
-					<?php if ($modelo->get_model_id()): ?>
+					<?php if ($modelo->get_id()): ?>
 					<div class="pull-left">
-						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?= sprintf('{_orm_js_delete_confirm_}', strtolower($modelo->get_model_label()), strtoupper($modelo)); ?>');">
+						<button type="submit" class="btn btn-danger" name="borrar" value="borrar" onclick="return confirm('<?= sprintf('{_orm_js_delete_confirm_}', strtolower($modelo->get_label()), strtoupper($modelo)); ?>');">
 							<span class="fa fa-trash-o"></span>
 							{_orm_button_delete_}
 						</button>

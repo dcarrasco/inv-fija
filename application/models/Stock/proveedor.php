@@ -41,12 +41,12 @@ class Proveedor extends ORM_Model {
 	 */
 	public function __construct($id_proveedor = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_proveedores'),
-				'model_label'        => 'Proveedor',
-				'model_label_plural' => 'Proveedores',
-				'model_order_by'     => 'des_proveedor',
+				'tabla'        => config('bd_proveedores'),
+				'label'        => 'Proveedor',
+				'label_plural' => 'Proveedores',
+				'order_by'     => 'des_proveedor',
 			],
 			'campos' => [
 				'cod_proveedor' => [

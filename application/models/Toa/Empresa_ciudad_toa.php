@@ -41,12 +41,12 @@ class Empresa_ciudad_toa extends ORM_Model {
 	 */
 	public function __construct($id_empresa = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_empresas_ciudades_toa'),
-				'model_label'        => 'Empresa ciudad TOA',
-				'model_label_plural' => 'Empresas ciudades TOA',
-				'model_order_by'     => 'id_empresa, id_ciudad',
+				'tabla'        => config('bd_empresas_ciudades_toa'),
+				'label'        => 'Empresa ciudad TOA',
+				'label_plural' => 'Empresas ciudades TOA',
+				'order_by'     => 'id_empresa, id_ciudad',
 			],
 			'campos' => [
 				'id_empresa' => [

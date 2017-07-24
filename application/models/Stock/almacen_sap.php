@@ -41,12 +41,12 @@ class Almacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_almacen = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_almacenes_sap'),
-				'model_label'        => 'Almac&eacute;n',
-				'model_label_plural' => 'Almacenes',
-				'model_order_by'     => 'centro, cod_almacen',
+				'tabla'        => config('bd_almacenes_sap'),
+				'label'        => 'Almac&eacute;n',
+				'label_plural' => 'Almacenes',
+				'order_by'     => 'centro, cod_almacen',
 			],
 			'campos' => [
 				'centro' => [
@@ -167,7 +167,7 @@ class Almacen_sap extends ORM_Model {
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
-				->from($this->get_model_tabla().' a')
+				->from($this->get_tabla().' a')
 				->join(config('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
 				->where_in('ta.id_tipo', explode($this->_separador_campos, $filtro))
 				->get()->result_array();

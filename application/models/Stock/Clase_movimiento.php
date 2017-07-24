@@ -40,12 +40,12 @@ class Clase_movimiento extends ORM_Model {
 	 */
 	public function __construct($cmv = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_cmv_sap'),
-				'model_label'        => 'Clase de movimiento',
-				'model_label_plural' => 'Clases de movimiento',
-				'model_order_by'     => 'cmv',
+				'tabla'        => config('bd_cmv_sap'),
+				'label'        => 'Clase de movimiento',
+				'label_plural' => 'Clases de movimiento',
+				'order_by'     => 'cmv',
 			],
 			'campos' => [
 				'cmv' => [

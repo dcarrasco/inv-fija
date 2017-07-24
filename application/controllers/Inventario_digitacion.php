@@ -130,13 +130,13 @@ class Inventario_digitacion extends Controller_base {
 
 		if (request('formulario') === 'buscar')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_field_validation_rules('hoja');
+			$nuevo_detalle_inventario->set_field_validation_rules('auditor');
 		}
 		elseif (request('formulario') === 'inventario')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_field_validation_rules('hoja');
+			$nuevo_detalle_inventario->set_field_validation_rules('auditor');
 			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion($hoja_detalle_inventario));
 		}
 

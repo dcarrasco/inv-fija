@@ -1,0 +1,14 @@
+{
+    "name": "dcarrasco/invfija",
+    "type": "project",
+    "require-dev": {
+        "symfony/var-dumper": "^3.3"
+    },
+    "authors": [
+        {
+            "name": "Daniel Carrasco",
+            "email": "danielcarrasco17@gmail.com"
+        }
+    ],
+    "require": {}
+}

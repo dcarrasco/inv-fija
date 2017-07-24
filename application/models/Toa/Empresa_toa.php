@@ -40,12 +40,12 @@ class Empresa_toa extends ORM_Model {
 	 */
 	public function __construct($id_empresa = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_empresas_toa'),
-				'model_label'        => 'Empresa TOA',
-				'model_label_plural' => 'Empresas TOA',
-				'model_order_by'     => 'empresa',
+				'tabla'        => config('bd_empresas_toa'),
+				'label'        => 'Empresa TOA',
+				'label_plural' => 'Empresas TOA',
+				'order_by'     => 'empresa',
 			],
 			'campos' => [
 				'id_empresa' => [

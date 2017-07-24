@@ -41,12 +41,12 @@ class Modulo extends ORM_Model {
 	 */
 	public function __construct($id_modulo = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_modulos'),
-				'model_label'        => 'M&oacute;dulo',
-				'model_label_plural' => 'M&oacute;dulos',
-				'model_order_by'     => 'id_app, orden, modulo',
+				'tabla'        => config('bd_modulos'),
+				'label'        => 'M&oacute;dulo',
+				'label_plural' => 'M&oacute;dulos',
+				'order_by'     => 'id_app, orden, modulo',
 			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],

@@ -50,12 +50,12 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function __construct($id_detalle = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_detalle_inventario'),
-				'model_label'        => 'Detalle inventario',
-				'model_label_plural' => 'Detalles inventario',
-				'model_order_by'     => 'id',
+				'tabla'        => config('bd_detalle_inventario'),
+				'label'        => 'Detalle inventario',
+				'label_plural' => 'Detalles inventario',
+				'order_by'     => 'id',
 			],
 			'campos' => [
 				'id'            => ['tipo' => Orm_field::TIPO_ID],
@@ -228,7 +228,7 @@ class Detalle_inventario extends ORM_Model {
 			->select_max('auditor')
 			->where('id_inventario', $id_inventario)
 			->where('hoja', $hoja)
-			->get($this->get_model_tabla())
+			->get($this->get_tabla())
 			->row()
 			->auditor;
 	}
@@ -263,8 +263,8 @@ class Detalle_inventario extends ORM_Model {
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
-			->limit($this->per_page_ajustes, ($pagina-1)*$this->get_model_page_results())
-			->get($this->get_model_tabla())
+			->limit($this->per_page_ajustes, ($pagina-1)*$this->get_page_results())
+			->get($this->get_tabla())
 			->result_array();
 
 		return collect($arr_detalles)->map(function($linea_detalle) {
@@ -290,7 +290,7 @@ class Detalle_inventario extends ORM_Model {
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
-			->count_all_results($this->get_model_tabla());
+			->count_all_results($this->get_tabla());
 
 		$this->load->library('pagination');
 		$this->pagination->initialize([
@@ -408,14 +408,14 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_validation_editar()
 	{
-		$this->set_validation_rules_field('ubicacion');
-		$this->set_validation_rules_field('hu');
-		$this->set_validation_rules_field('catalogo');
-		$this->set_validation_rules_field('lote');
-		$this->set_validation_rules_field('centro');
-		$this->set_validation_rules_field('almacen');
-		$this->set_validation_rules_field('um');
-		$this->set_validation_rules_field('stock_fisico');
+		$this->set_field_validation_rules('ubicacion');
+		$this->set_field_validation_rules('hu');
+		$this->set_field_validation_rules('catalogo');
+		$this->set_field_validation_rules('lote');
+		$this->set_field_validation_rules('centro');
+		$this->set_field_validation_rules('almacen');
+		$this->set_field_validation_rules('um');
+		$this->set_field_validation_rules('stock_fisico');
 	}
 
 	// --------------------------------------------------------------------
@@ -427,9 +427,9 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_validation_editar_mobile()
 	{
-		$this->set_validation_rules_field('stock_fisico');
-		$this->set_validation_rules_field('hu');
-		$this->set_validation_rules_field('observacion');
+		$this->set_field_validation_rules('stock_fisico');
+		$this->set_field_validation_rules('hu');
+		$this->set_field_validation_rules('observacion');
 	}
 
 	// --------------------------------------------------------------------

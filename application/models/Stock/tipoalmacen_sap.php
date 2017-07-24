@@ -41,12 +41,12 @@ class Tipoalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_tipo_alm_sap = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tiposalm_sap'),
-				'model_label'        => 'Tipo Almac&eacute;n',
-				'model_label_plural' => 'Tipos de Almac&eacute;n',
-				'model_order_by'     => 'tipo_op, tipo',
+				'tabla'        => config('bd_tiposalm_sap'),
+				'label'        => 'Tipo Almac&eacute;n',
+				'label_plural' => 'Tipos de Almac&eacute;n',
+				'order_by'     => 'tipo_op, tipo',
 			],
 			'campos' => [
 				'id_tipo' => [
@@ -142,7 +142,7 @@ class Tipoalmacen_sap extends ORM_Model {
 			->select('id_tipo as llave, tipo as valor')
 			->order_by('tipo')
 			->where('tipo_op', $tipo_op)
-			->get($this->get_model_tabla())
+			->get($this->get_tabla())
 			->result_array();
 
 		return form_array_format($arr_result);

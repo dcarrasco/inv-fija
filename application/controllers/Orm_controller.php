@@ -64,12 +64,12 @@ class Orm_controller extends Controller_base {
 
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
 		$modelo = new $nombre_modelo_full;
-		$modelo->set_model_filtro($filtro);
+		$modelo->set_filtro($filtro);
 
 		app_render_view('ORM/orm_listado', [
 			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
-			'modelos'     => $modelo->list_paginated($page),
+			'modelos'     => $modelo->paginate($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => url_params(),
@@ -118,12 +118,12 @@ class Orm_controller extends Controller_base {
 		if (request('grabar'))
 		{
 			$modelo->grabar();
-			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
+			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_label(), $modelo));
 		}
 		elseif (request('borrar'))
 		{
 			$modelo->borrar();
-			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
+			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_label(), $modelo));
 		}
 
 		$url_params = url_params();

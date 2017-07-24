@@ -40,12 +40,12 @@ class Auditor extends ORM_Model {
 	 */
 	public function __construct($id_auditor = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_auditores'),
-				'model_label'        => 'Auditor',
-				'model_label_plural' => 'Auditores',
-				'model_order_by'     => 'nombre',
+				'tabla'        => config('bd_auditores'),
+				'label'        => 'Auditor',
+				'label_plural' => 'Auditores',
+				'order_by'     => 'nombre',
 			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],

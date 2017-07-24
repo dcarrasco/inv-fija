@@ -41,12 +41,12 @@ class Clasifalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_clasif_almacen = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_clasifalm_sap'),
-				'model_label'        => 'Clasificaci&oacute;n Almac&eacute;n',
-				'model_label_plural' => 'Clasificaci&oacute;n de Almacenes',
-				'model_order_by'     => 'tipo_op, orden, clasificacion',
+				'tabla'        => config('bd_clasifalm_sap'),
+				'label'        => 'Clasificaci&oacute;n Almac&eacute;n',
+				'label_plural' => 'Clasificaci&oacute;n de Almacenes',
+				'order_by'     => 'tipo_op, orden, clasificacion',
 			],
 			'campos' => [
 				'id_clasif' => [

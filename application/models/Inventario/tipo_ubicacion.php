@@ -41,12 +41,12 @@ class Tipo_ubicacion extends ORM_Model {
 	 */
 	public function __construct($id_tipo_ubicacion = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tipo_ubicacion'),
-				'model_label'        => 'Tipo de ubicaci&oacute;n',
-				'model_label_plural' => 'Tipos de ubicaci&oacute;n',
-				'model_order_by'     => 'tipo_inventario, tipo_ubicacion',
+				'tabla'        => config('bd_tipo_ubicacion'),
+				'label'        => 'Tipo de ubicaci&oacute;n',
+				'label_plural' => 'Tipos de ubicaci&oacute;n',
+				'order_by'     => 'tipo_inventario, tipo_ubicacion',
 			],
 			'campos' => [
 				'id'              => ['tipo' => Orm_field::TIPO_ID],

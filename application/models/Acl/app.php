@@ -41,12 +41,12 @@ class App extends ORM_Model {
 	 */
 	public function __construct($id_app = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_app'),
-				'model_label'        => 'Aplicaci&oacute;n',
-				'model_label_plural' => 'Aplicaciones',
-				'model_order_by'     => 'app',
+				'tabla'        => config('bd_app'),
+				'label'        => 'Aplicaci&oacute;n',
+				'label_plural' => 'Aplicaciones',
+				'order_by'     => 'app',
 			],
 			'campos' => [
 				'id'  => ['tipo' => Orm_field::TIPO_ID],

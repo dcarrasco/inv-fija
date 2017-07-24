@@ -41,12 +41,12 @@ class Catalogo extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_catalogos'),
-				'model_label'        => 'Cat&aacute;logo',
-				'model_label_plural' => 'Cat&aacute;logos',
-				'model_order_by'     => 'catalogo',
+				'tabla'        => config('bd_catalogos'),
+				'label'        => 'Cat&aacute;logo',
+				'label_plural' => 'Cat&aacute;logos',
+				'order_by'     => 'catalogo',
 			],
 			'campos' => [
 				'catalogo' => [
@@ -135,7 +135,7 @@ class Catalogo extends ORM_Model {
 
 		// actualiza precios nulos --> 0
 		$this->db->where('pmp is null')
-			->update($this->get_model_tabla(), ['pmp' => 0]);
+			->update($this->get_tabla(), ['pmp' => 0]);
 
 		// selecciona maxima fecha del stock_sap_fija
 		$max_fecha = $this->db
@@ -161,7 +161,7 @@ class Catalogo extends ORM_Model {
 
 		//actualiza los precios
 		$this->db->query(
-			'UPDATE '.$this->get_model_tabla().' '.
+			'UPDATE '.$this->get_tabla().' '.
 			'SET fija_catalogos.pmp=s.pmp '.
 			'FROM '.$tabla_temporal_precios.' as s '.
 			'WHERE catalogo=s.material'
@@ -170,7 +170,7 @@ class Catalogo extends ORM_Model {
 		// cuenta los precios actualizados
 		$cant_regs = $this->db->query(
 			'SELECT count(*) as cant '.
-			'FROM '.$this->get_model_tabla().' as c '.
+			'FROM '.$this->get_tabla().' as c '.
 			'JOIN '.$tabla_temporal_precios.' as t on c.catalogo=t.material'
 		)->row()->cant;
 

@@ -41,12 +41,12 @@ class Tipo_inventario extends ORM_Model {
 	 */
 	public function __construct($id_tipo_inventario = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tipos_inventario'),
-				'model_label'        => 'Tipo de inventario',
-				'model_label_plural' => 'Tipos de inventario',
-				'model_order_by'     => 'desc_tipo_inventario',
+				'tabla'        => config('bd_tipos_inventario'),
+				'label'        => 'Tipo de inventario',
+				'label_plural' => 'Tipos de inventario',
+				'order_by'     => 'desc_tipo_inventario',
 			],
 			'campos' => [
 				'id_tipo_inventario' => [

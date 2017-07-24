@@ -41,12 +41,12 @@ class Usuario_sap extends ORM_Model {
 	 */
 	public function __construct($id_usuario_sap = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_usuarios_sap'),
-				'model_label'        => 'Usuario SAP',
-				'model_label_plural' => 'Usuarios SAP',
-				'model_order_by'     => 'usuario',
+				'tabla'        => config('bd_usuarios_sap'),
+				'label'        => 'Usuario SAP',
+				'label_plural' => 'Usuarios SAP',
+				'order_by'     => 'usuario',
 			],
 			'campos' => [
 				'usuario' => [

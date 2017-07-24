@@ -41,12 +41,12 @@ class Rol extends ORM_Model {
 	 */
 	public function __construct($id_rol = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_rol'),
-				'model_label'        => 'Rol',
-				'model_label_plural' => 'Roles',
-				'model_order_by'     => 'rol',
+				'tabla'        => config('bd_rol'),
+				'label'        => 'Rol',
+				'label_plural' => 'Roles',
+				'order_by'     => 'rol',
 			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],

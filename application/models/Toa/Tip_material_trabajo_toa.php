@@ -41,12 +41,12 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tip_material = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_tip_material_trabajo_toa'),
-				'model_label'        => 'Tipo Material de trabajo',
-				'model_label_plural' => 'Tipos Material de trabajo',
-				'model_order_by'     => 'desc_tip_material',
+				'tabla'        => config('bd_tip_material_trabajo_toa'),
+				'label'        => 'Tipo Material de trabajo',
+				'label_plural' => 'Tipos Material de trabajo',
+				'order_by'     => 'desc_tip_material',
 			],
 			'campos' => [
 				'id'                => ['tipo' => Orm_field::TIPO_ID],

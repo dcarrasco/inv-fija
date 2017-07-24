@@ -41,12 +41,12 @@ class Usuario extends ORM_Model {
 	 */
 	public function __construct($id_usuario = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_usuarios'),
-				'model_label'        => 'Usuario',
-				'model_label_plural' => 'Usuarios',
-				'model_order_by'     => 'nombre',
+				'tabla'        => config('bd_usuarios'),
+				'label'        => 'Usuario',
+				'label_plural' => 'Usuarios',
+				'order_by'     => 'nombre',
 			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],

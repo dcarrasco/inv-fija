@@ -43,126 +43,126 @@ class Orm_field {
 	 *
 	 * @var  string
 	 */
-	private $_nombre = '';
+	protected $nombre = '';
 
 	/**
 	 * Nombre del tabla del campo
 	 *
 	 * @var  string
 	 */
-	private $_tabla_bd = '';
+	protected $tabla_bd = '';
 
 	/**
 	 * Nombre del campo en la tabla
 	 *
 	 * @var  string
 	 */
-	private $_nombre_bd = '';
+	protected $nombre_bd = '';
 
 	/**
 	 * Nombre del campo (etiqueta)
 	 *
 	 * @var  string
 	 */
-	private $_label = '';
+	protected $label = '';
 
 	/**
 	 * Texto de ayuda del campo
 	 *
 	 * @var  string
 	 */
-	private $_texto_ayuda = '';
+	protected $texto_ayuda = '';
 
 	/**
 	 * Valor por defecto del campo
 	 *
 	 * @var  string
 	 */
-	private $_default = '';
+	protected $default = '';
 
 	/**
 	 * Indica si el campo se muestra en la listado
 	 *
 	 * @var  boolean
 	 */
-	private $_mostrar_lista = TRUE;
+	protected $mostrar_lista = TRUE;
 
 	/**
 	 * Indica si imprime un script en el evento de cambio del elemento del formulario
 	 *
 	 * @var  string
 	 */
-	private $_onchange = '';
+	protected $onchange = '';
 
 	/**
 	 * Tipo del campo
 	 *
 	 * @var  string
 	 */
-	private $_tipo = Orm_field::TIPO_CHAR;
+	protected $tipo = Orm_field::TIPO_CHAR;
 
 	/**
 	 * Largo del campo
 	 *
 	 * @var  string
 	 */
-	private $_largo = 10;
+	protected $largo = 10;
 
 	/**
 	 * Cantidad de decimales del campo
 	 *
 	 * @var  string
 	 */
-	private $_decimales = 2;
+	protected $decimales = 2;
 
 	/**
 	 * Formato del campo
 	 *
 	 * @var  string
 	 */
-	private $_formato = '';
+	protected $formato = '';
 
 	/**
 	 * Lista de los valores válidos para el campo
 	 *
 	 * @var  array
 	 */
-	private $_choices = [];
+	protected $choices = [];
 
 	/**
 	 * Arreglo con los datos de la relación
 	 *
 	 * @var  array
 	 */
-	private $_relation = [];
+	protected $relation = [];
 
 	/**
 	 * Indica si el campo es ID
 	 *
 	 * @var  boolean
 	 */
-	private $_es_id = FALSE;
+	protected $es_id = FALSE;
 
 	/**
 	 * Indica si el campo es obligatorio
 	 *
 	 * @var  boolean
 	 */
-	private $_es_obligatorio = FALSE;
+	protected $es_obligatorio = FALSE;
 
 	/**
 	 * Indica si el valor del campo debe ser único
 	 *
 	 * @var  boolean
 	 */
-	private $_es_unico = FALSE;
+	protected $es_unico = FALSE;
 
 	/**
 	 * Indica si el campo es auto-incremental
 	 *
 	 * @var  boolean
 	 */
-	private $_es_autoincrement = FALSE;
+	protected $es_autoincrement = FALSE;
 
 
 	// --------------------------------------------------------------------
@@ -176,42 +176,41 @@ class Orm_field {
 	 **/
 	public function __construct($nombre = '', $param = [])
 	{
-		$this->_nombre    = $nombre;
-		$this->_nombre_bd = $nombre;
-		$this->_label     = $nombre;
+		$this->nombre    = $nombre;
+		$this->nombre_bd = $nombre;
+		$this->label     = $nombre;
 
-		collect($param)->each(function($param_value, $param_index) {
-			$llave = (substr($param_index, 0, 1) !== '_' ? '_' : '').$param_index;
-			if (isset($this->{$llave}))
+		collect($param)->each(function($value, $index) {
+			if (isset($this->{$index}))
 			{
-				$this->{$llave} = $param_value;
+				$this->{$index} = $value;
 			}
 		});
 
-		if ($this->_tipo === Orm_field::TIPO_INT AND $this->_default === '')
+		if ($this->tipo === Orm_field::TIPO_INT AND $this->default === '')
 		{
-			$this->_default = 0;
+			$this->default = 0;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_HAS_ONE)
+		if ($this->tipo === Orm_field::TIPO_HAS_ONE)
 		{
-			$this->_es_obligatorio = TRUE;
+			$this->es_obligatorio = TRUE;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_DATETIME)
+		if ($this->tipo === Orm_field::TIPO_DATETIME)
 		{
-			$this->_largo = 20;
+			$this->largo = 20;
 		}
 
 		if ($nombre === 'id')
 		{
-			$this->_tipo  = Orm_field::TIPO_ID;
-			$this->_largo = 10;
+			$this->tipo  = Orm_field::TIPO_ID;
+			$this->largo = 10;
 
-			$this->_es_id            = TRUE;
-			$this->_es_obligatorio   = TRUE;
-			$this->_es_unico         = TRUE;
-			$this->_es_autoincrement = TRUE;
+			$this->es_id            = TRUE;
+			$this->es_obligatorio   = TRUE;
+			$this->es_unico         = TRUE;
+			$this->es_autoincrement = TRUE;
 		}
 	}
 
@@ -222,7 +221,7 @@ class Orm_field {
 	 */
 	public function get_tipo()
 	{
-		return $this->_tipo;
+		return $this->tipo;
 	}
 
 	/**
@@ -232,18 +231,18 @@ class Orm_field {
 	 */
 	public function get_label()
 	{
-		if ($this->_tipo === Orm_field::TIPO_HAS_ONE)
+		if ($this->tipo === Orm_field::TIPO_HAS_ONE)
 		{
-			$relation_model = new $this->_relation['model'];
-			return $relation_model->get_model_label();
+			$relation_model = new $this->relation['model'];
+			return $relation_model->get_label();
 		}
-		if ($this->_tipo === Orm_field::TIPO_HAS_MANY)
+		if ($this->tipo === Orm_field::TIPO_HAS_MANY)
 		{
-			$relation_model = new $this->_relation['model'];
-			return $relation_model->get_model_label_plural();
+			$relation_model = new $this->relation['model'];
+			return $relation_model->get_label_plural();
 		}
 
-		return $this->_label;
+		return $this->label;
 	}
 
 	/**
@@ -253,7 +252,7 @@ class Orm_field {
 	 */
 	public function get_nombre_bd()
 	{
-		return $this->_nombre_bd;
+		return $this->nombre_bd;
 	}
 
 	/**
@@ -263,7 +262,7 @@ class Orm_field {
 	 */
 	public function get_mostrar_lista()
 	{
-		return $this->_mostrar_lista;
+		return $this->mostrar_lista;
 	}
 
 	/**
@@ -273,7 +272,7 @@ class Orm_field {
 	 */
 	public function get_es_id()
 	{
-		return $this->_es_id;
+		return $this->es_id;
 	}
 
 	/**
@@ -283,7 +282,7 @@ class Orm_field {
 	 */
 	public function get_es_unico()
 	{
-		return $this->_es_unico;
+		return $this->es_unico;
 	}
 
 	/**
@@ -293,7 +292,7 @@ class Orm_field {
 	 */
 	public function get_es_obligatorio()
 	{
-		return $this->_es_obligatorio;
+		return $this->es_obligatorio;
 	}
 
 	/**
@@ -303,7 +302,7 @@ class Orm_field {
 	 */
 	public function get_es_autoincrement()
 	{
-		return $this->_es_autoincrement;
+		return $this->es_autoincrement;
 	}
 
 	/**
@@ -313,7 +312,7 @@ class Orm_field {
 	 */
 	public function get_texto_ayuda()
 	{
-		return $this->_texto_ayuda;
+		return $this->texto_ayuda;
 	}
 
 	/**
@@ -323,7 +322,7 @@ class Orm_field {
 	 */
 	public function get_relation()
 	{
-		return $this->_relation;
+		return $this->relation;
 	}
 
 	/**
@@ -334,7 +333,7 @@ class Orm_field {
 	 */
 	public function set_relation($arr_relation)
 	{
-		$this->_relation = $arr_relation;
+		$this->relation = $arr_relation;
 	}
 
 
@@ -355,17 +354,17 @@ class Orm_field {
 
 		$id_prefix  = 'id_';
 
-		$valor_field = ($valor === '' AND $this->_default !== '') ? $this->_default : $valor;
-		$valor_field = request($this->_nombre, $valor_field);
+		$valor_field = ($valor === '' AND $this->default !== '') ? $this->default : $valor;
+		$valor_field = request($this->nombre, $valor_field);
 
 		$arr_param = [
-			'name'        => $this->_nombre,
-			'id'          => $id_prefix . $this->_nombre,
+			'name'        => $this->nombre,
+			'id'          => $id_prefix . $this->nombre,
 			'class'       => 'form-control '.$clase_adic,
 			'value'       => $valor_field,
-			'maxlength'   => $this->_largo,
-			'size'        => $this->_largo,
-			'placeholder' => $ci->lang->line('orm_placeholder').strtolower($this->_label),
+			'maxlength'   => $this->largo,
+			'size'        => $this->largo,
+			'placeholder' => $ci->lang->line('orm_placeholder').strtolower($this->label),
 		];
 
 		$status_feedback = '';
@@ -376,29 +375,29 @@ class Orm_field {
 			$status_feedback = '<span class="glyphicon glyphicon-'.$icon_feedback.' form-control-feedback'.$icon_color.'" aria-hidden="true"></span>';
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_ID
-			OR ($this->_es_id AND $valor_field !== '' AND $valor_field !== NULL)
-			OR ($this->_es_id AND $this->_es_autoincrement))
+		if ($this->tipo === Orm_field::TIPO_ID
+			OR ($this->es_id AND $valor_field !== '' AND $valor_field !== NULL)
+			OR ($this->es_id AND $this->es_autoincrement))
 		{
-			$param_adic = ' id="'.$id_prefix.$this->_nombre.'"';
+			$param_adic = ' id="'.$id_prefix.$this->nombre.'"';
 
-			$valor_desplegar = ($this->_tipo === Orm_field::TIPO_HAS_ONE) ? (string) $this->_relation['model'] : $valor_field;
+			$valor_desplegar = ($this->tipo === Orm_field::TIPO_HAS_ONE) ? (string) $this->relation['model'] : $valor_field;
 
 			$form = '<p class="form-control-static">'.$valor_desplegar.'</p>';
-			$form .= form_hidden($this->_nombre, $valor_field, $param_adic);
+			$form .= form_hidden($this->nombre, $valor_field, $param_adic);
 
 			return $form;
 		}
 
-		if ( ! empty($this->_choices))
+		if ( ! empty($this->choices))
 		{
-			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" class="form-control '.$clase_adic.'"';
-			$param_adic .= ($this->_onchange !== '') ? ' onchange="'.$this->_onchange.'"' : '';
+			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
+			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->onchange.'"' : '';
 
-			return form_dropdown($this->_nombre, $this->_choices, $valor_field, $param_adic);
+			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_CHAR AND $this->_largo >= 100)
+		if ($this->tipo === Orm_field::TIPO_CHAR AND $this->largo >= 100)
 		{
 			unset($arr_param['size']);
 			$arr_param['cols'] = '50';
@@ -407,64 +406,64 @@ class Orm_field {
 			return form_textarea($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_CHAR OR $this->_tipo === Orm_field::TIPO_DATETIME)
+		if ($this->tipo === Orm_field::TIPO_CHAR OR $this->tipo === Orm_field::TIPO_DATETIME)
 		{
 			return form_input($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_INT)
+		if ($this->tipo === Orm_field::TIPO_INT)
 		{
 			return form_number($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === 'password')
+		if ($this->tipo === 'password')
 		{
 			return form_password($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === 'picture')
+		if ($this->tipo === 'picture')
 		{
 			return form_picture($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_REAL)
+		if ($this->tipo === Orm_field::TIPO_REAL)
 		{
-			$arr_param['size'] = $this->_largo + $this->_decimales + 1;
+			$arr_param['size'] = $this->largo + $this->decimales + 1;
 
 			return form_input($arr_param).$status_feedback;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_BOOLEAN)
+		if ($this->tipo === Orm_field::TIPO_BOOLEAN)
 		{
 			$valor = (boolean) $valor;
 
-			$form = '<label class="radio-inline" for="'.$id_prefix.$this->_nombre.'_1">';
-			$form .= form_radio($this->_nombre, 1, $valor_field, 'id='.$id_prefix.$this->_nombre.'_1');
+			$form = '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_1">';
+			$form .= form_radio($this->nombre, 1, $valor_field, 'id='.$id_prefix.$this->nombre.'_1');
 			$form .= $ci->lang->line('orm_radio_yes');
 			$form .= '</label>';
 
-			$form .= '<label class="radio-inline" for="'.$id_prefix.$this->_nombre.'_0">';
-			$form .= form_radio($this->_nombre, 0, ! $valor_field, 'id='.$id_prefix.$this->_nombre.'_0');
+			$form .= '<label class="radio-inline" for="'.$id_prefix.$this->nombre.'_0">';
+			$form .= form_radio($this->nombre, 0, ! $valor_field, 'id='.$id_prefix.$this->nombre.'_0');
 			$form .= $ci->lang->line('orm_radio_no');
 			$form .= '</label>';
 
 			return $form;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_HAS_ONE)
+		if ($this->tipo === Orm_field::TIPO_HAS_ONE)
 		{
-			$nombre_rel_modelo = $this->_relation['model'];
+			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 
-			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" class="form-control '.$clase_adic.'"';
-			$param_adic .= ($this->_onchange !== '') ? ' onchange="'.$this->_onchange.'"' : '';
+			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
+			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->onchange.'"' : '';
 
-			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
-				? ['conditions' => $this->_relation['conditions'], 'opc_ini' => FALSE]
+			$dropdown_conditions = array_key_exists('conditions', $this->relation)
+				? ['conditions' => $this->relation['conditions'], 'opc_ini' => FALSE]
 				: [];
 
 			$form = form_dropdown(
-				$this->_nombre,
+				$this->nombre,
 				$modelo_rel->find('list', $dropdown_conditions, FALSE),
 				$valor_field,
 				$param_adic
@@ -473,25 +472,25 @@ class Orm_field {
 			return $form;
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_HAS_MANY)
+		if ($this->tipo === Orm_field::TIPO_HAS_MANY)
 		{
-			$nombre_rel_modelo = $this->_relation['model'];
+			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 
-			$param_adic = ' id="'.$id_prefix.$this->_nombre.'" size="7" class="form-control '.$clase_adic.'"';
+			$param_adic = ' id="'.$id_prefix.$this->nombre.'" size="7" class="form-control '.$clase_adic.'"';
 
-			$dropdown_conditions = array_key_exists('conditions', $this->_relation)
-				? ['conditions' => $this->_relation['conditions']]
+			$dropdown_conditions = array_key_exists('conditions', $this->relation)
+				? ['conditions' => $this->relation['conditions']]
 				: [];
 
 			$dropdown_conditions['opc_ini'] = FALSE;
 
 			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
-			//$form = form_multiselect($this->_nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = request($this->_nombre) ? request($this->_nombre) : $valor_field;
+			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
+			$opciones = request($this->nombre) ? request($this->nombre) : $valor_field;
 
 			$form = form_multiselect(
-				$this->_nombre.'[]',
+				$this->nombre.'[]',
 				$modelo_rel->find('list', $dropdown_conditions, FALSE),
 				$opciones,
 				$param_adic
@@ -513,32 +512,32 @@ class Orm_field {
 	{
 		$ci =& get_instance();
 
-		if ($this->_tipo === Orm_field::TIPO_BOOLEAN)
+		if ($this->tipo === Orm_field::TIPO_BOOLEAN)
 		{
 			return ($valor === 1) ? $ci->lang->line('orm_radio_yes') : $ci->lang->line('orm_radio_no');
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_HAS_ONE)
+		if ($this->tipo === Orm_field::TIPO_HAS_ONE)
 		{
-			return (string) $this->_relation['model'];
+			return (string) $this->relation['model'];
 		}
 
-		if ($this->_tipo === Orm_field::TIPO_HAS_MANY)
+		if ($this->tipo === Orm_field::TIPO_HAS_MANY)
 		{
 			return '<ul class="formatted_has_many">'
-				. array_get($this->_relation, 'data')
+				. array_get($this->relation, 'data')
 					->concat(function($obj_modelo) { return '<li>'.(string)$obj_modelo.'</li>'; })
 				. '</ul>';
 		}
 
-		if (count($this->_choices) > 0)
+		if (count($this->choices) > 0)
 		{
-			return array_get($this->_choices, $valor, NULL);
+			return array_get($this->choices, $valor, NULL);
 		}
 
-		if ($this->_formato)
+		if ($this->formato)
 		{
-			list($tipo_formato, $dec_formato) = explode(',', $this->_formato);
+			list($tipo_formato, $dec_formato) = explode(',', $this->formato);
 
 			if ($tipo_formato === 'monto')
 			{
@@ -566,54 +565,54 @@ class Orm_field {
 	 */
 	public function get_bd_attrib()
 	{
-		if ($this->_tipo === Orm_field::TIPO_ID)
+		if ($this->tipo === Orm_field::TIPO_ID)
 		{
 			return [
 				'type'           => 'INT',
-				'constraint'     => $this->_largo,
-				'auto_increment' => $this->_es_autoincrement,
-				'null'           => $this->_es_obligatorio,
+				'constraint'     => $this->largo,
+				'auto_increment' => $this->es_autoincrement,
+				'null'           => $this->es_obligatorio,
 			];
 		}
-		elseif ($this->_tipo === Orm_field::TIPO_CHAR)
+		elseif ($this->tipo === Orm_field::TIPO_CHAR)
 		{
 			return [
 				'type'       => 'VARCHAR',
-				'constraint' => $this->_largo,
-				'default'    => $this->_default,
-				'null'       => $this->_es_obligatorio,
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
 			];
 		}
-		elseif ($this->_tipo === 'text')
+		elseif ($this->tipo === 'text')
 		{
 			return [
 				'type'       => 'TEXT',
-				'constraint' => $this->_largo,
-				'default'    => $this->_default,
-				'null'       => $this->_es_obligatorio,
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
 			];
 		}
-		elseif ($this->_tipo === Orm_field::TIPO_INT)
+		elseif ($this->tipo === Orm_field::TIPO_INT)
 		{
 			return [
 				'type'       => 'INT',
-				'constraint' => $this->_largo,
-				'default'    => $this->_default,
-				'null'       => $this->_es_obligatorio,
+				'constraint' => $this->largo,
+				'default'    => $this->default,
+				'null'       => $this->es_obligatorio,
 			];
 		}
-		elseif ($this->_tipo === Orm_field::TIPO_BOOLEAN)
+		elseif ($this->tipo === Orm_field::TIPO_BOOLEAN)
 		{
 			return [
 				'type'       => 'BIT',
-				'null'       => $this->_es_obligatorio,
+				'null'       => $this->es_obligatorio,
 			];
 		}
-		elseif ($this->_tipo === Orm_field::TIPO_DATETIME)
+		elseif ($this->tipo === Orm_field::TIPO_DATETIME)
 		{
 			$bd_attrib = [
 				'type'       => 'DATETIME',
-				'null'       => $this->_es_obligatorio,
+				'null'       => $this->es_obligatorio,
 			];
 		}
 	}

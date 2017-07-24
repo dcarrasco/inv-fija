@@ -41,12 +41,12 @@ class Unidad_medida extends ORM_Model {
 	 */
 	public function __construct($id_unidad_medida = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_unidades'),
-				'model_label'        => 'Unidad de medida',
-				'model_label_plural' => 'Unidades de medida',
-				'model_order_by'     => 'unidad',
+				'tabla'        => config('bd_unidades'),
+				'label'        => 'Unidad de medida',
+				'label_plural' => 'Unidades de medida',
+				'order_by'     => 'unidad',
 			],
 			'campos' => [
 				'unidad' => [

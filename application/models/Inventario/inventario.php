@@ -41,12 +41,12 @@ class Inventario extends ORM_Model {
 	 */
 	public function __construct($id_inventario = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_inventarios'),
-				'model_label'        => 'Inventario',
-				'model_label_plural' => 'Inventarios',
-				'model_order_by'     => 'nombre',
+				'tabla'        => config('bd_inventarios'),
+				'label'        => 'Inventario',
+				'label_plural' => 'Inventarios',
+				'order_by'     => 'nombre',
 			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
@@ -104,7 +104,7 @@ class Inventario extends ORM_Model {
 		{
 			$this->db
 				->where('id <>', (int) $this->id)
-				->update($this->get_model_tabla(), ['activo' => 0]);
+				->update($this->get_tabla(), ['activo' => 0]);
 		}
 	}
 
@@ -120,7 +120,7 @@ class Inventario extends ORM_Model {
 	{
 		$this->find('first', ['conditions' => ['activo' => 1]]);
 
-		return (int) $this->get_model_id();
+		return (int) $this->get_id();
 	}
 
 
