@@ -871,6 +871,8 @@ class Orm_model implements IteratorAggregate {
 				})->all();
 
 		$this->find('first', ['conditions' => $arr_condiciones], $recupera_relation);
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -1073,6 +1075,8 @@ class Orm_model implements IteratorAggregate {
 					$this->values[$nombre_campo] = $arr_data[$nombre_campo];
 				}
 			});
+
+		return $this;
 	}
 
 

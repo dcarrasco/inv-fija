@@ -112,10 +112,8 @@ class Inventario_analisis extends Controller_base {
 	 */
 	private function _get_datos_inventario()
 	{
-		$inventario_activo = new Inventario;
-		$this->_id_inventario = $inventario_activo->get_id_inventario_activo();
-		$inventario_activo->find_id($this->_id_inventario);
-		$this->_nombre_inventario = $inventario_activo->nombre;
+		$this->_id_inventario     = Inventario::create()->get_id_inventario_activo();
+		$this->_nombre_inventario = Inventario::create()->find_id($this->_id_inventario)->nombre;
 	}
 
 
@@ -129,21 +127,17 @@ class Inventario_analisis extends Controller_base {
 	public function ajustes()
 	{
 		$this->_get_datos_inventario();
+
 		$pagina = request('page', 1);
 		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
-
-		// recupera el detalle de registros con diferencias
-		$detalle_ajustes = new Detalle_inventario;
-		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
-		$links_paginas = $detalle_ajustes->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
 		app_render_view('inventario/ajustes', [
 			'menu_modulo'     => $this->get_menu_modulo('ajustes'),
 			'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
-			'detalle_ajustes' => $detalles,
-			'ocultar_reg'     => $ocultar_reg,
+			'detalle_ajustes' => Detalle_inventario::create()->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
+			'links_paginas'   => Detalle_inventario::create()->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
 			'pag'             => $pagina,
-			'links_paginas'   => $links_paginas,
+			'ocultar_reg'     => $ocultar_reg,
 			'url_form'        => site_url("{$this->router->class}/update_ajustes".url_params()),
 		]);
 	}
@@ -158,24 +152,21 @@ class Inventario_analisis extends Controller_base {
 	public function update_ajustes()
 	{
 		$this->_get_datos_inventario();
-		$pagina = request('page');
+
+		$pagina = request('page', 1);
 		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
 
 		// recupera el detalle de registros con diferencias
-		$detalle_ajustes = new Detalle_inventario;
-		$detalles = $detalle_ajustes->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
+		$detalles = Detalle_inventario::create()->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
 		route_validation($this->form_validation
-			->set_rules($detalle_ajustes->get_validation_ajustes($detalles))
+			->set_rules(Detalle_inventario::create()->rules_ajustes($detalles))
 			->run()
 		);
 
-		if (request('formulario') === 'ajustes')
-		{
-			$cant_modif = $detalle_ajustes->update_ajustes($detalles);
-			set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
-				: '');
-		}
+		$cant_modif = Detalle_inventario::create()->update_ajustes($detalles);
+		set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
+			: '');
 
 		redirect("{$this->router->class}/ajustes".url_params());
 	}

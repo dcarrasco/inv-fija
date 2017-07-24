@@ -18,6 +18,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use \ORM_Model;
 use \ORM_Field;
+use \Collection;
 
 /**
  * Clase Modelo Detalle de inventario
@@ -38,7 +39,7 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @var integer
 	 */
-	private $per_page_ajustes = 50;
+	protected $page_ajustes = 50;
 
 	// --------------------------------------------------------------------
 
@@ -263,7 +264,7 @@ class Detalle_inventario extends ORM_Model {
 				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
 				: 'stock_fisico - stock_sap <> 0',
 				NULL, FALSE)
-			->limit($this->per_page_ajustes, ($pagina-1)*$this->get_page_results())
+			->limit($this->page_ajustes, ($pagina-1)*$this->get_page_results())
 			->get($this->get_tabla())
 			->result_array();
 
@@ -313,11 +314,11 @@ class Detalle_inventario extends ORM_Model {
 			'num_tag_open'    => '<li>',
 			'num_tag_close'   => '</li>',
 
-			'per_page'    => $this->per_page_ajustes,
+			'per_page'    => $this->page_ajustes,
 			'total_rows'  => $total_rows,
 			'base_url'    => site_url("{$this->router->class}/ajustes"),
 			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo ('.(int)($total_rows / $this->per_page_ajustes).')',
+			'last_link'   => 'Ultimo ('.(int)($total_rows / $this->page_ajustes).')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 
@@ -338,28 +339,25 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  Collection $data_collection Colección de objetos con el conjunto de datos a validar
 	 * @return array                       Arreglo con reglas de validación
 	 */
-	public function get_validation_ajustes(Collection $data_collection)
+	public function rules_ajustes(Collection $data_collection)
 	{
-		$arr_validation = [];
+		$rules = [];
 
-		if ($data_collection->length())
-		{
-			foreach($data_collection as $linea_detalle)
-			{
-				array_push($arr_validation, [
-					'field' => 'stock_ajuste_'.$linea_detalle->id,
-					'label' => 'cantidad',
-					'rules' => 'trim|integer'
-				]);
-				array_push($arr_validation, [
-					'field' => 'observacion_'.$linea_detalle->id,
-					'label' => 'observacion',
-					'rules' => 'trim'
-				]);
-			}
-		}
+		$data_collection->each(function($linea_detalle) use (&$rules) {
+			array_push($rules, [
+				'field' => 'stock_ajuste_'.$linea_detalle->id,
+				'label' => 'cantidad',
+				'rules' => 'trim|integer'
+			]);
+			array_push($rules, [
+				'field' => 'observacion_'.$linea_detalle->id,
+				'label' => 'observacion',
+				'rules' => 'trim'
+			]);
 
-		return $arr_validation;
+		});
+
+		return $rules;
 	}
 
 	// --------------------------------------------------------------------
@@ -370,33 +368,29 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  Collection $data_collection Colección de objetos con el conjunto de datos a validar
 	 * @return array                       Arreglo con reglas de validación
 	 */
-	public function get_validation_digitacion(Collection $data_collection)
+	public function rules_digitacion(Collection $data_collection)
 	{
-		$arr_validation = [];
+		$rules = [];
 
-		if ($data_collection->length() > 0)
-		{
-			foreach($data_collection as $linea_detalle)
-			{
-				array_push($arr_validation, [
-					'field' => 'stock_fisico_'.$linea_detalle->id,
-					'label' => 'Cantidad',
-					'rules' => 'trim|required|integer|greater_than[-1]'
-				]);
-				array_push($arr_validation, [
-					'field' => 'hu'.$linea_detalle->id,
-					'label' => 'HU',
-					'rules' => 'trim'
-				]);
-				array_push($arr_validation, [
-					'field' => 'observacion'.$linea_detalle->id,
-					'label' => 'Observacion',
-					'rules' => 'trim'
-				]);
-			}
-		}
+		$data_collection->each(function($linea_detalle) use (&$rules) {
+			array_push($rules, [
+				'field' => 'stock_fisico_'.$linea_detalle->id,
+				'label' => 'Cantidad',
+				'rules' => 'trim|required|integer|greater_than[-1]'
+			]);
+			array_push($rules, [
+				'field' => 'hu_'.$linea_detalle->id,
+				'label' => 'HU',
+				'rules' => 'trim'
+			]);
+			array_push($rules, [
+				'field' => 'observacion_'.$linea_detalle->id,
+				'label' => 'Observacion',
+				'rules' => 'trim'
+			]);
+		});
 
-		return $arr_validation;
+	return $rules;
 	}
 
 	// --------------------------------------------------------------------
@@ -494,22 +488,18 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function update_ajustes(Collection $data_collection)
 	{
-		$cant_modif = 0;
-
-		foreach($data_collection as $linea_detalle)
-		{
-			if ( (int) request('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste OR
-				trim(request('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste) )
-			{
-				$linea_detalle->stock_ajuste = (int) request('stock_ajuste_'.$linea_detalle->id);
-				$linea_detalle->glosa_ajuste = trim(request('observacion_'.$linea_detalle->id));
-				$linea_detalle->fecha_ajuste = date('Y-m-d H:i:s');
-				$linea_detalle->grabar();
-				$cant_modif += 1;
-			}
-		}
-
-		return $cant_modif;
+		return $data_collection
+			->filter(function($linea_detalle) {
+				return ((int) request('stock_ajuste_'.$linea_detalle->id) !== (int) $linea_detalle->stock_ajuste)
+					OR (trim(request('observacion_'.$linea_detalle->id)) !== trim($linea_detalle->glosa_ajuste));
+			})->map(function($linea_detalle) {
+				return $linea_detalle
+					->fill([
+						'stock_ajuste' => (int) request('stock_ajuste_'.$linea_detalle->id),
+						'glosa_ajuste' => trim(request('observacion_'.$linea_detalle->id)),
+						'fecha_ajuste' => date('Y-m-d H:i:s'),
+					])->grabar();
+			})->count();
 	}
 
 
@@ -526,24 +516,17 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function update_digitacion($id_inventario = 0, $hoja = 0, $id_usr = 0)
 	{
-		$cant_modif = 0;
-
-		foreach($this->get_hoja($id_inventario, $hoja) as $linea_detalle)
-		{
-			$linea_detalle->fill([
-				'digitador'          => $id_usr,
-				'auditor'            => request('auditor'),
-				'stock_fisico'       => request('stock_fisico_'.$linea_detalle->id),
-				'hu'                 => request('hu_'.$linea_detalle->id),
-				'observacion'        => request('observacion_'.$linea_detalle->id),
-				'fecha_modificacion' => date('Y-m-d H:i:s'),
-			]);
-
-			$linea_detalle->grabar();
-			$cant_modif += 1;
-		}
-
-		return $cant_modif;
+		return $this->get_hoja($id_inventario, $hoja)
+			->map(function($linea_detalle) use ($id_usr) {
+				return $linea_detalle->fill([
+					'digitador'          => $id_usr,
+					'auditor'            => request('auditor'),
+					'stock_fisico'       => request('stock_fisico_'.$linea_detalle->id),
+					'hu'                 => request('hu_'.$linea_detalle->id),
+					'observacion'        => request('observacion_'.$linea_detalle->id),
+					'fecha_modificacion' => date('Y-m-d H:i:s'),
+				])->grabar();
+			})->count();
 	}
 }
 /* End of file detalle_inventario.php */

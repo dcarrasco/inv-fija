@@ -134,7 +134,8 @@ class Inventario extends ORM_Model {
 	public function get_inventario_activo()
 	{
 		$inventario_activo = $this->get_id_inventario_activo();
-		$this->find_id($inventario_activo);
+
+		return $this->find_id($inventario_activo);
 	}
 
 
