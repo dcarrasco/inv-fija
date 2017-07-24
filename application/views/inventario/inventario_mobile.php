@@ -56,9 +56,9 @@
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario as $linea_det): ?>
 				<tr>
-					<td class="text-center" nowrap><?= anchor('inventario_digitacion/ingreso_mobile/'.$hoja.'/'.$linea_det->id,$linea_det->get_valor_field('ubicacion')); ?></td>
+					<td class="text-center" nowrap><?= anchor('inventario_digitacion/ingreso_mobile/'.$hoja.'/'.$linea_det->id,$linea_det->get_field_value('ubicacion')); ?></td>
 					<td class="text-center"><?= $linea_det->catalogo; ?></td>
-					<td><?= $linea_det->get_valor_field('descripcion'); ?></td>
+					<td><?= $linea_det->get_field_value('descripcion'); ?></td>
 					<td class="text-right"><?= fmt_cantidad($linea_det->stock_sap); ?></td>
 					<td class="text-right"><?= fmt_cantidad($linea_det->stock_fisico); ?></td>
 				</tr>

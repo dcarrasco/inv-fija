@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Almacen_sap;
+use Stock\Tipoalmacen_sap;
+
 /**
  * Clase Controller Configuracion de stock
  *
@@ -34,6 +37,13 @@ class Stock_config extends Orm_controller {
 	 * @var  string
 	 */
 	public $llave_modulo  = 'config_stock';
+
+	/**
+	 * Namespace de los modelos
+	 *
+	 * @var string
+	 */
+	protected $model_namespace = '\\Stock\\';
 
 	// --------------------------------------------------------------------
 
@@ -102,11 +112,9 @@ class Stock_config extends Orm_controller {
 	 */
 	public function almacenes_no_ingresados()
 	{
-		$almacen = new Almacen_sap;
-
 		app_render_view('stock_sap/almacenes_no_ingresados', [
 			'menu_modulo' => $this->get_menu_modulo('almacenes_no_ingresados'),
-			'almacenes'   => $almacen->almacenes_no_ingresados(),
+			'almacenes'   => Almacen_sap::create()->almacenes_no_ingresados(),
 		]);
 	}
 
@@ -120,11 +128,9 @@ class Stock_config extends Orm_controller {
 	 */
 	public function get_select_tipoalmacen($tipo_op = '')
 	{
-		$tipoalm = new Tipoalmacen_sap;
-
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($tipoalm->get_combo_tiposalm($tipo_op)));
+			->set_output(form_print_options(Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)));
 	}
 
 
@@ -138,11 +144,9 @@ class Stock_config extends Orm_controller {
 	 */
 	public function get_select_almacen($tipo_op = '')
 	{
-		$almacen = new Almacen_sap;
-
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($almacen->get_combo_almacenes($tipo_op)));
+			->set_output(form_print_options(Almacen_sap::create()->get_combo_almacenes($tipo_op)));
 	}
 
 }

@@ -46,8 +46,7 @@ class Orm_controller extends Controller_base {
 	 */
 	public function index()
 	{
-		$arr_keys = array_keys($this->menu_opciones);
-		$this->listado($arr_keys[0]);
+		$this->listado(collect($this->menu_opciones)->keys()->first());
 	}
 
 	// --------------------------------------------------------------------
@@ -63,13 +62,14 @@ class Orm_controller extends Controller_base {
 		$filtro = request('filtro');
 		$page   = request('page');
 
-		$modelo = new $nombre_modelo;
-		$modelo->set_model_filtro($filtro);
+		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
+		$modelo = new $nombre_modelo_full;
+		$modelo->set_filtro($filtro);
 
 		app_render_view('ORM/orm_listado', [
 			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
-			'modelos'     => $modelo->list_paginated($page),
+			'modelos'     => $modelo->paginate($page),
 			'orm_filtro'  => $filtro,
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => url_params(),
@@ -87,7 +87,8 @@ class Orm_controller extends Controller_base {
 	 */
 	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
-		$modelo = new $nombre_modelo($id_modelo);
+		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
+		$modelo = new $nombre_modelo_full($id_modelo);
 		$url_params = url_params();
 
 		app_render_view('ORM/orm_editar', [
@@ -109,19 +110,20 @@ class Orm_controller extends Controller_base {
 	 */
 	public function update($nombre_modelo = '', $id_modelo = NULL)
 	{
-		$modelo = new $nombre_modelo($id_modelo);
+		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
+		$modelo = new $nombre_modelo_full($id_modelo);
 		route_validation($modelo->valida_form());
 		$modelo->recuperar_post();
 
 		if (request('grabar'))
 		{
 			$modelo->grabar();
-			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_model_label(), $modelo));
+			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_label(), $modelo));
 		}
 		elseif (request('borrar'))
 		{
 			$modelo->borrar();
-			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_model_label(), $modelo));
+			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_label(), $modelo));
 		}
 
 		$url_params = url_params();

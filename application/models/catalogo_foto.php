@@ -36,12 +36,12 @@ class Catalogo_foto extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		$this->_model_config = [
+		$this->model_config = [
 			'modelo' => [
-				'model_tabla'        => config('bd_catalogos_fotos'),
-				'model_label'        => 'Cat&aacute;logo foto',
-				'model_label_plural' => 'Cat&aacute;logos fotos',
-				'model_order_by'     => 'catalogo',
+				'tabla'        => config('bd_catalogos_fotos'),
+				'label'        => 'Cat&aacute;logo foto',
+				'label_plural' => 'Cat&aacute;logos fotos',
+				'order_by'     => 'catalogo',
 			],
 			'campos' => [
 				'catalogo' => [

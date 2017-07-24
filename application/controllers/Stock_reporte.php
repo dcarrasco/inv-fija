@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Tipoalmacen_sap;
+
 /**
  * Clase Controller Reportes de stock
  *
@@ -100,8 +102,6 @@ class Stock_reporte extends Controller_base {
 	{
 		$arr_campos = [];
 		$datos_hoja = [];
-		$tipoalmacen_sap = new Tipoalmacen_sap;
-
 		$view = 'listado';
 
 		// define reglas de validacion
@@ -124,7 +124,7 @@ class Stock_reporte extends Controller_base {
 			'filtro_dif'       => '',
 			'arr_campos'       => $arr_campos,
 			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
-			'combo_tipo_alm'   => $tipoalmacen_sap->get_combo_tiposalm(request('tipo_op', 'MOVIL')),
+			'combo_tipo_alm'   => Tipoalmacen_sap::create()->get_combo_tiposalm(request('tipo_op', 'MOVIL')),
 			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
 			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
 		]);

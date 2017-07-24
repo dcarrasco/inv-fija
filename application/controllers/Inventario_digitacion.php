@@ -14,6 +14,10 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Inventario\catalogo;
+use Inventario\Inventario;
+use Inventario\detalle_inventario;
+
 /**
  * Clase Controller Digitacion Inventario
  *
@@ -126,13 +130,13 @@ class Inventario_digitacion extends Controller_base {
 
 		if (request('formulario') === 'buscar')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_field_validation_rules('hoja');
+			$nuevo_detalle_inventario->set_field_validation_rules('auditor');
 		}
 		elseif (request('formulario') === 'inventario')
 		{
-			$nuevo_detalle_inventario->set_validation_rules_field('hoja');
-			$nuevo_detalle_inventario->set_validation_rules_field('auditor');
+			$nuevo_detalle_inventario->set_field_validation_rules('hoja');
+			$nuevo_detalle_inventario->set_field_validation_rules('auditor');
 			$this->form_validation->set_rules($detalle_inventario->get_validation_digitacion($hoja_detalle_inventario));
 		}
 
@@ -237,7 +241,6 @@ class Inventario_digitacion extends Controller_base {
 	{
 		$detalle_inventario = new Detalle_inventario;
 
-		$catalogo = new Catalogo;
 		$arr_catalogo = ['' => 'Buscar y seleccionar material...'];
 
 		if ($id_registro)
@@ -297,11 +300,9 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function ajax_act_agr_materiales($filtro = '')
 	{
-		$material = new Catalogo;
-
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options($material->find('list', ['filtro' => $filtro])));
+			->set_output(form_print_options(Catalogo::create()->find('list', ['filtro' => $filtro])));
 	}
 
 }

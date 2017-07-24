@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Tecnico_toa;
+use Stock\Clase_movimiento;
+
 /**
  * Clase Modelo Movimientos fija
  * *
@@ -158,11 +161,9 @@ class Toa_model extends CI_Model {
 	 */
 	public function get_combo_movimientos_consumo()
 	{
-		$cmv = new Clase_movimiento;
-
 		return array_merge(
 			['000' => 'Todos los movimientos'],
-			$cmv->find('list', [
+			Clase_movimiento::create()->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,
@@ -444,11 +445,10 @@ class Toa_model extends CI_Model {
 			return NULL;
 		}
 
-		$tecnicos = new Tecnico_toa();
-		$arr_tecnicos = $tecnicos->find('all', ['conditions' => ['id_empresa' => $empresa]]);
-
 		$arr_dias = collect(get_arr_dias_mes($anomes));
 		$datos    = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
+
+		$arr_tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
 		return $arr_tecnicos
 			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
@@ -1067,6 +1067,35 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->where('b.id_tecnico is NULL')
 			->where('d.resource_name is not NULL')
+			->get()->result_array();
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera técnicos sin definición de ciudad a partir de los cierres
+	 *
+	 * @return array Técnicos sin ciudad
+	 */
+	public function tecnicos_sin_ciudad()
+	{
+		return $this->db
+			->distinct()
+			->select('c.empresa')
+			->select('b.*')
+			->select('d.xa_original_agency')
+			->select('d.contractor_company')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->where('a.fecha_contabilizacion >= dateadd(day, -15, convert(date, getdate()))')
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->where('b.id_ciudad is NULL')
+			->where('d.xa_original_agency is not NULL')
+			->order_by('c.empresa, b.id_tecnico')
 			->get()->result_array();
 	}
 

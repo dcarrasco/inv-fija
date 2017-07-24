@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Empresa_toa;
+
 /**
  * Clase Controller Reporte de consumos TOA
  *
@@ -68,15 +70,13 @@ class Toa_panel extends Controller_base {
 	 */
 	public function panel()
 	{
-		$empresa_toa = new Empresa_toa();
-
 		$is_form_valid = $this->form_validation
 			->set_data(request())
 			->set_rules($this->toa_model->panel_validation)
 			->run();
 
 		$datos = [
-			'combo_empresas' => array_merge($empresa_toa->find('list'),	['***' => 'Todas']),
+			'combo_empresas' => array_merge(Empresa_toa::create()->find('list'), ['***' => 'Todas']),
 			'form_validated' => FALSE,
 		];
 

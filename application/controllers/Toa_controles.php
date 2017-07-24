@@ -14,6 +14,12 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Ciudad_toa;
+use Toa\Empresa_toa;
+use Toa\Tecnico_toa;
+use Toa\Tipo_trabajo_toa;
+use Toa\Empresa_ciudad_toa;
+
 /**
  * Clase Controller Reporte de consumos TOA
  *
@@ -82,6 +88,11 @@ class Toa_controles extends Controller_base {
 				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
 				'icon'  => 'users'
 			],
+			'tecnicos_sin_ciudad' => [
+				'url'   => $this->router->class . '/tecnicos_sin_ciudad',
+				'texto' => $this->lang->line('toa_controles_ciudades_tecnicos'),
+				'icon'  => 'map-marker'
+			],
 			'clientes' => [
 				'url'   => $this->router->class . '/clientes',
 				'texto' => $this->lang->line('toa_controles_clientes'),
@@ -116,11 +127,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
@@ -147,11 +156,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_asignacion->get_combo_movimientos_asignacion(),
 			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
@@ -174,11 +181,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_consumos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
 			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
@@ -203,11 +208,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_stock->controles_stock_empresa_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles_stock', [
 			'menu_modulo'          => $this->get_menu_modulo('stock'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock',
 			'anomes'               => request('mes'),
@@ -232,11 +235,9 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_stock->controles_stock_tecnicos_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-
 		app_render_view('toa/controles_stock_tecnicos', [
 			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
-			'combo_empresas'       => $empresa_toa->find('list'),
+			'combo_empresas'       => Empresa_toa::create()->find('list'),
 			'combo_dato_desplegar' => $this->toa_stock->combo_unidades_stock,
 			'combo_dato_mostrar'   => $this->toa_stock->combo_mostrar_stock_tecnicos,
 			'url_detalle_dia'      => 'toa_controles/detalle_stock_tecnico',
@@ -302,14 +303,10 @@ class Toa_controles extends Controller_base {
 			->set_rules($this->toa_model->controles_materiales_validation)
 			->run();
 
-		$empresa_toa = new Empresa_toa();
-		$tipo_trabajo = new Tipo_trabajo_toa();
-
-
 		app_render_view('toa/controles_materiales_tipo_trabajo', [
 			'menu_modulo'              => $this->get_menu_modulo('materiales'),
-			'combo_empresas'           => $empresa_toa->find('list'),
-			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], $tipo_trabajo->find('list', ['opc_ini' => FALSE])),
+			'combo_empresas'           => Empresa_toa::create()->find('list'),
+			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], Tipo_trabajo_toa::create()->find('list', ['opc_ini' => FALSE])),
 			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => request('mes'),
@@ -343,6 +340,65 @@ class Toa_controles extends Controller_base {
 		]);
 	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza ciudades para técnicos sin ciudad
+	 *
+	 * @return void
+	 */
+	public function tecnicos_sin_ciudad()
+	{
+		$msg_agregar = '';
+		$tecnicos_sin_ciudad = $this->toa_model->tecnicos_sin_ciudad();
+		$empresas = collect($tecnicos_sin_ciudad)
+			->pluck('id_empresa')
+			->unique()
+			->map_with_keys(function($id_empresa) {
+				return [$id_empresa =>
+					Ciudad_toa::create()->find('list', ['conditions' => [
+						'id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)
+					]])
+				];
+			})
+			->all();
+
+		app_render_view('toa/controles_tecnicos_sin_ciudad', [
+			'menu_modulo' => $this->get_menu_modulo('tecnicos_sin_ciudad'),
+			'msg_agregar' => $msg_agregar,
+			'url_form'    => site_url("{$this->router->class}/actualiza_tecnicos_sin_ciudad"),
+			'tecnicos'    => $tecnicos_sin_ciudad,
+			'empresas'    => $empresas,
+		]);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza los técnicos sin ciudad
+	 *
+	 * @return redirect
+	 */
+	public function actualiza_tecnicos_sin_ciudad()
+	{
+		$tecnicos = collect(collect(request())->get('tecnico'));
+		$ciudades = collect(collect(request())->get('ciudad'));
+
+		$modificar = $tecnicos->map_with_keys(function($id_tecnico, $id_registro) use ($ciudades) {
+			return [$id_tecnico => $ciudades->get($id_registro)];
+		})->filter(function($id_ciudad) {
+			return $id_ciudad !== '';
+		})->each(function($id_ciudad, $id_tecnico) {
+			$tecnico = new Tecnico_toa($id_tecnico);
+			$tecnico->fill(['id_ciudad' => $id_ciudad]);
+			$tecnico->grabar();
+		})->count();
+
+		set_message(sprintf($this->lang->line('toa_controles_ciudades_agregadas'), $modificar));
+
+		redirect("{$this->router->class}/tecnicos_sin_ciudad");
+	}
 
 	// --------------------------------------------------------------------
 

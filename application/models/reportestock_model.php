@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Almacen_sap;
+use Stock\Tipoalmacen_sap;
+
 /**
  * Clase Modelo Proveedor
  *
@@ -927,12 +930,9 @@ class Reportestock_model extends CI_Model {
 	{
 		$param = explode('-', $tipo);
 
-		$almacen_sap = new Almacen_sap;
-		$tipoalmacen_sap = new Tipoalmacen_sap;
-
 		return ($param[1] === 'TIPOALM') ?
-			$tipoalmacen_sap->get_combo_tiposalm($param[0]) :
-			$almacen_sap->get_combo_almacenes($param[0], $filtro);
+			Tipoalmacen_sap::create()->get_combo_tiposalm($param[0]) :
+			Almacen_sap::create()->get_combo_almacenes($param[0], $filtro);
 	}
 
 

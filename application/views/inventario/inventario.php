@@ -75,7 +75,7 @@
 			<?php foreach ($detalle_inventario as $linea_det): ?>
 				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>
 					<td class="text-center" nowrap>
-						<?= $linea_det->get_valor_field('ubicacion') ?>
+						<?= $linea_det->get_field_value('ubicacion') ?>
 
 						<?php if ($linea_det->reg_nuevo === 'S'):?>
 							<a href="<?= site_url("{$this->router->class}/editar/{$hoja}/{$id_auditor}/{$linea_det->id}") ?>" class="btn btn-default btn-xs">
@@ -93,10 +93,10 @@
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
 					<td class="text-center"><?= $linea_det->catalogo ?></td>
-					<td class="text_left"><?= $linea_det->get_valor_field('descripcion') ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('lote') ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('centro') ?></td>
-					<td class="text-center"><?= $linea_det->get_valor_field('almacen') ?></td>
+					<td class="text_left"><?= $linea_det->get_field_value('descripcion') ?></td>
+					<td class="text-center"><?= $linea_det->get_field_value('lote') ?></td>
+					<td class="text-center"><?= $linea_det->get_field_value('centro') ?></td>
+					<td class="text-center"><?= $linea_det->get_field_value('almacen') ?></td>
 					<td class="text-center"><?= $linea_det->um ?></td>
 					<td class="text-right"><?= fmt_cantidad($linea_det->stock_sap) ?></td>
 					<td class="text-center col-md-1 <?= form_has_error_class("stock_fisico_{$linea_det->id}") ?>">

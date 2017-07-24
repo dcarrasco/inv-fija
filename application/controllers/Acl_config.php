@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Acl\modulo;
+
 /**
  * Clase Controller Configuracion ACL (access control list)
  *
@@ -34,6 +36,13 @@ class Acl_config extends Orm_controller {
 	 * @var  string
 	 */
 	public $llave_modulo  = 'acl_config';
+
+	/**
+	 * Namespace de los modelos
+	 *
+	 * @var string
+	 */
+	protected $model_namespace = '\\Acl\\';
 
 	// --------------------------------------------------------------------
 
@@ -85,11 +94,9 @@ class Acl_config extends Orm_controller {
 	 */
 	public function get_select_modulo($id_app = '')
 	{
-		$modulo = new modulo;
-
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($modulo->find('list', [
+			->set_output(form_print_options(modulo::create()->find('list', [
 				'conditions' => ['id_app' => $id_app],
 				'opc_ini'    => FALSE,
 			])));
