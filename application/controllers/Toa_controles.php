@@ -352,6 +352,14 @@ class Toa_controles extends Controller_base {
 	{
 		$msg_agregar = '';
 		$tecnicos_sin_ciudad = $this->toa_model->tecnicos_sin_ciudad();
+
+		$tecnicos = collect($tecnicos_sin_ciudad)->map(function($tecnicos) {
+			$tecnico_toa = new Tecnico_toa($tecnicos['id_tecnico']);
+			$tecnicos['empresa_tecnico'] = $tecnico_toa->id_empresa;
+
+			return $tecnicos;
+		});
+
 		$empresas = collect($tecnicos_sin_ciudad)
 			->pluck('id_empresa')
 			->unique()
@@ -368,7 +376,7 @@ class Toa_controles extends Controller_base {
 			'menu_modulo' => $this->get_menu_modulo('tecnicos_sin_ciudad'),
 			'msg_agregar' => $msg_agregar,
 			'url_form'    => site_url("{$this->router->class}/actualiza_tecnicos_sin_ciudad"),
-			'tecnicos'    => $tecnicos_sin_ciudad,
+			'tecnicos'    => $tecnicos,
 			'empresas'    => $empresas,
 		]);
 	}
@@ -384,14 +392,18 @@ class Toa_controles extends Controller_base {
 	{
 		$tecnicos = collect(collect(request())->get('tecnico'));
 		$ciudades = collect(collect(request())->get('ciudad'));
+		$empresas = collect(collect(request())->get('empresa'));
 
-		$modificar = $tecnicos->map_with_keys(function($id_tecnico, $id_registro) use ($ciudades) {
-			return [$id_tecnico => $ciudades->get($id_registro)];
-		})->filter(function($id_ciudad) {
-			return $id_ciudad !== '';
-		})->each(function($id_ciudad, $id_tecnico) {
+		$modificar = $tecnicos->map_with_keys(function($id_tecnico, $id_registro) use ($ciudades, $empresas) {
+			return [$id_tecnico => [
+				'ciudad' => $ciudades->get($id_registro),
+				'empresa'=> $empresas->get($id_registro),
+			]];
+		})->filter(function($update_tecnico) {
+			return $update_tecnico['ciudad'] !== '';
+		})->each(function($update_tecnico, $id_tecnico) {
 			$tecnico = new Tecnico_toa($id_tecnico);
-			$tecnico->fill(['id_ciudad' => $id_ciudad]);
+			$tecnico->fill(['id_ciudad' => $update_tecnico['ciudad'], 'id_empresa' => $update_tecnico['empresa']]);
 			$tecnico->grabar();
 		})->count();
 

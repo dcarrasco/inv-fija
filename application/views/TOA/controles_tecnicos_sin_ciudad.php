@@ -11,20 +11,21 @@
 						<th>ID T&eacute;cnico</th>
 						<th>Nombre T&eacute;cnico</th>
 						<th>Rut T&eacute;cnico</th>
-						<th class="text-center">Empresa TOA</th>
+						<th class="text-center">Empresa T&eacute;cnico</th>
 						<th>Agencia</th>
 						<th>Ciudad</th>
 					</tr>
 				</thead>
 				<tbody>
 				<?php foreach ($tecnicos as $tecnico): ?>
-					<?= form_hidden('tecnico[]', $tecnico['id_tecnico']) ?>
 					<tr>
+						<?= form_hidden('tecnico[]', $tecnico['id_tecnico']) ?>
+						<?= form_hidden('empresa[]', $tecnico['contractor_company']) ?>
 						<td><?= $tecnico['empresa'] ?></td>
 						<td><?= $tecnico['id_tecnico'] ?></td>
 						<td><?= $tecnico['tecnico'] ?></td>
 						<td><?= fmt_rut($tecnico['rut']) ?></td>
-						<td class="text-center"><?= $tecnico['contractor_company'] ?></td>
+						<td class="text-center"><?= $tecnico['empresa_tecnico'] ?></td>
 						<td><?= $tecnico['xa_original_agency'] ?></td>
 						<td><?= form_dropdown('ciudad[]', $empresas[$tecnico['id_empresa']], '', ['class'=>'form-control']) ?></td>
 					</tr>
