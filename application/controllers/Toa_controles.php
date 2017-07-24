@@ -360,8 +360,8 @@ class Toa_controles extends Controller_base {
 			return $tecnicos;
 		});
 
-		$empresas = collect($tecnicos_sin_ciudad)
-			->pluck('id_empresa')
+		$empresas = collect($tecnicos)
+			->pluck('contractor_company')
 			->unique()
 			->map_with_keys(function($id_empresa) {
 				return [$id_empresa =>

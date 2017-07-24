@@ -7,11 +7,11 @@
 			<table class="table table-striped table-hover table-condensed">
 				<thead>
 					<tr>
-						<th>Empresa</th>
 						<th>ID T&eacute;cnico</th>
 						<th>Nombre T&eacute;cnico</th>
 						<th>Rut T&eacute;cnico</th>
 						<th class="text-center">Empresa T&eacute;cnico</th>
+						<th>Empresa</th>
 						<th>Agencia</th>
 						<th>Ciudad</th>
 					</tr>
@@ -21,13 +21,13 @@
 					<tr>
 						<?= form_hidden('tecnico[]', $tecnico['id_tecnico']) ?>
 						<?= form_hidden('empresa[]', $tecnico['contractor_company']) ?>
-						<td><?= $tecnico['empresa'] ?></td>
 						<td><?= $tecnico['id_tecnico'] ?></td>
 						<td><?= $tecnico['tecnico'] ?></td>
 						<td><?= fmt_rut($tecnico['rut']) ?></td>
 						<td class="text-center"><?= $tecnico['empresa_tecnico'] ?></td>
+						<td><?= $tecnico['empresa'] ?></td>
 						<td><?= $tecnico['xa_original_agency'] ?></td>
-						<td><?= form_dropdown('ciudad[]', $empresas[$tecnico['id_empresa']], '', ['class'=>'form-control']) ?></td>
+						<td><?= form_dropdown('ciudad[]', $empresas[$tecnico['contractor_company']], '', ['class'=>'form-control']) ?></td>
 					</tr>
 				<?php endforeach ?>
 				</tbody>
