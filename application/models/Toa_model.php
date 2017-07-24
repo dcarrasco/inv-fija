@@ -1074,6 +1074,35 @@ class Toa_model extends CI_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera técnicos sin definición de ciudad a partir de los cierres
+	 *
+	 * @return array Técnicos sin ciudad
+	 */
+	public function tecnicos_sin_ciudad()
+	{
+		return $this->db
+			->distinct()
+			->select('c.empresa')
+			->select('b.*')
+			->select('d.xa_original_agency')
+			->select('d.contractor_company')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->where('a.fecha_contabilizacion >= dateadd(day, -15, convert(date, getdate()))')
+			->where_in('codigo_movimiento', $this->movimientos_consumo)
+			->where_in('centro', $this->centros_consumo)
+			->where('b.id_ciudad is NULL')
+			->where('d.xa_original_agency is not NULL')
+			->order_by('c.empresa, b.id_tecnico')
+			->get()->result_array();
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Agrega nuevos técnicos a partir de un arreglo
 	 *
 	 * @param  array  $arr_nuevos_tecnicos Arreglo a de tecnicos a agregar

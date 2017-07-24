@@ -14,8 +14,11 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Toa\Ciudad_toa;
 use Toa\Empresa_toa;
+use Toa\Tecnico_toa;
 use Toa\Tipo_trabajo_toa;
+use Toa\Empresa_ciudad_toa;
 
 /**
  * Clase Controller Reporte de consumos TOA
@@ -84,6 +87,11 @@ class Toa_controles extends Controller_base {
 				'url'   => $this->router->class . '/nuevos_tecnicos',
 				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
 				'icon'  => 'users'
+			],
+			'tecnicos_sin_ciudad' => [
+				'url'   => $this->router->class . '/tecnicos_sin_ciudad',
+				'texto' => $this->lang->line('toa_controles_ciudades_tecnicos'),
+				'icon'  => 'map-marker'
 			],
 			'clientes' => [
 				'url'   => $this->router->class . '/clientes',
@@ -332,6 +340,65 @@ class Toa_controles extends Controller_base {
 		]);
 	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza ciudades para técnicos sin ciudad
+	 *
+	 * @return void
+	 */
+	public function tecnicos_sin_ciudad()
+	{
+		$msg_agregar = '';
+		$tecnicos_sin_ciudad = $this->toa_model->tecnicos_sin_ciudad();
+		$empresas = collect($tecnicos_sin_ciudad)
+			->pluck('id_empresa')
+			->unique()
+			->map_with_keys(function($id_empresa) {
+				return [$id_empresa =>
+					Ciudad_toa::create()->find('list', ['conditions' => [
+						'id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)
+					]])
+				];
+			})
+			->all();
+
+		app_render_view('toa/controles_tecnicos_sin_ciudad', [
+			'menu_modulo' => $this->get_menu_modulo('tecnicos_sin_ciudad'),
+			'msg_agregar' => $msg_agregar,
+			'url_form'    => site_url("{$this->router->class}/actualiza_tecnicos_sin_ciudad"),
+			'tecnicos'    => $tecnicos_sin_ciudad,
+			'empresas'    => $empresas,
+		]);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Actualiza los técnicos sin ciudad
+	 *
+	 * @return redirect
+	 */
+	public function actualiza_tecnicos_sin_ciudad()
+	{
+		$tecnicos = collect(collect(request())->get('tecnico'));
+		$ciudades = collect(collect(request())->get('ciudad'));
+
+		$modificar = $tecnicos->map_with_keys(function($id_tecnico, $id_registro) use ($ciudades) {
+			return [$id_tecnico => $ciudades->get($id_registro)];
+		})->filter(function($id_ciudad) {
+			return $id_ciudad !== '';
+		})->each(function($id_ciudad, $id_tecnico) {
+			$tecnico = new Tecnico_toa($id_tecnico);
+			$tecnico->fill(['id_ciudad' => $id_ciudad]);
+			$tecnico->grabar();
+		})->count();
+
+		set_message(sprintf($this->lang->line('toa_controles_ciudades_agregadas'), $modificar));
+
+		redirect("{$this->router->class}/tecnicos_sin_ciudad");
+	}
 
 	// --------------------------------------------------------------------
 
