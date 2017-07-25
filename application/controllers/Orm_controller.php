@@ -88,12 +88,11 @@ class Orm_controller extends Controller_base {
 	public function editar($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
-		$modelo = new $nombre_modelo_full($id_modelo);
 		$url_params = url_params();
 
 		app_render_view('ORM/orm_editar', [
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
-			'modelo'        => $modelo,
+			'modelo'        => new $nombre_modelo_full($id_modelo),
 			'url_form'      => site_url("{$this->router->class}/update/{$nombre_modelo}/{$id_modelo}{$url_params}"),
 			'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
 		]);
@@ -112,21 +111,17 @@ class Orm_controller extends Controller_base {
 	{
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
 		$modelo = new $nombre_modelo_full($id_modelo);
-		route_validation($modelo->valida_form());
 		$modelo->recuperar_post();
 
-		if (request('grabar'))
-		{
-			$modelo->grabar();
-			set_message(sprintf($this->lang->line('orm_msg_save_ok'), $modelo->get_label(), $modelo));
-		}
-		elseif (request('borrar'))
-		{
-			$modelo->borrar();
-			set_message(sprintf($this->lang->line('orm_msg_delete_ok'), $modelo->get_label(), $modelo));
-		}
+		route_validation($modelo->valida_form());
 
 		$url_params = url_params();
+		$mensaje = request('grabar') ? 'orm_msg_save_ok' : 'orm_msg_delete_ok';
+		$accion  = request('grabar') ? 'grabar' : 'borrar';
+
+		$modelo->{$accion}();
+		set_message(sprintf($this->lang->line($mensaje), $modelo->get_label(), $modelo));
+
 		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}
 

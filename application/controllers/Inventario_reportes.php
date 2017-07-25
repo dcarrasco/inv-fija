@@ -108,7 +108,7 @@ class Inventario_reportes extends Controller_base {
 	{
 		$inventario = new Inventario_reporte;
 		// define reglas para usar set_value, y ejecuta validación de formulario
-		$this->form_validation->set_rules($inventario->reportes_validation)->run();
+		$this->form_validation->set_rules($inventario->rules_reporte)->run();
 
 		$id_inventario = request('inv_activo', $inventario->get_id_inventario_activo());
 
@@ -119,7 +119,6 @@ class Inventario_reportes extends Controller_base {
 			'menu_modulo'       => $this->get_menu_modulo($tipo),
 			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
 			'combo_inventarios' => $inventario->get_combo_inventarios(),
-			'inventario_activo' => $inventario->get_id_inventario_activo(),
 			'id_inventario'     => $id_inventario,
 		]);
 	}

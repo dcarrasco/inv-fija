@@ -438,21 +438,16 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
 	{
-		$ci =& get_instance();
-
-		// recupera el inventario activo
 		$id_inventario = Inventario::create()->get_id_inventario_activo();
-
-		// recupera el nombre del material
-		$material = new Catalogo(request('catalogo'));
+		$material      = new Catalogo(request('catalogo'));
+		$id_auditor    = $this->get_auditor_hoja($id_inventario, $hoja);
 
 		if ($id_detalle)
 		{
 			$this->find_id($id_detalle);
 		}
-		$id_auditor = $this->get_auditor_hoja($id_inventario, $hoja);
 
-		$this->fill([
+		return $this->fill([
 			'id'                 => (int) $id_detalle,
 			'id_inventario'      => (int) $id_inventario,
 			'hoja'               => (int) $hoja,
@@ -466,7 +461,7 @@ class Detalle_inventario extends ORM_Model {
 			'um'                 => strtoupper(request('um')),
 			'stock_sap'          => 0,
 			'stock_fisico'       => (int) request('stock_fisico'),
-			'digitador'          => (int) $ci->acl_model->get_id_usr(),
+			'digitador'          => (int) $this->acl_model->get_id_usr(),
 			'auditor'            => (int) $id_auditor,
 			'reg_nuevo'          => 'S',
 			'fecha_modificacion' => date('Y-m-d H:i:s'),

@@ -148,12 +148,11 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_max_hoja_inventario()
 	{
-		$registro = $this->db
+		return $this->db
 			->select('max(hoja) as max_hoja')
 			->get_where(config('bd_detalle_inventario'), ['id_inventario' => $this->id])
-			->row();
-
-		return ($registro->max_hoja);
+			->row()
+			->max_hoja;
 	}
 
 

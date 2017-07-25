@@ -33,7 +33,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @var array
 	 */
-	public $reportes_validation = [
+	public $rules_reporte = [
 		['field' => 'inv_activo',    'label' => 'Inventario activo', 'rules' => 'trim'],
 		['field' => 'elim_sin_dif',  'label' => 'Ocultar registros sin diferencias', 'rules' => 'trim'],
 		['field' => 'incl_ajustes',  'label' => 'Incluir ajustes de inventario', 'rules' => 'trim'],
@@ -54,7 +54,7 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
-	public function form_imprime_inventario_validation()
+	public function rules_imprime_inventario()
 	{
 		return [
 			[

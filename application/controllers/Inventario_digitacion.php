@@ -230,14 +230,10 @@ class Inventario_digitacion extends Controller_base {
 	public function update($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
 		$detalle_inventario = new Detalle_inventario($id_registro);
-		$detalle_inventario->get_relation_fields();
-		$detalle_inventario->hoja = $hoja;
-		$nombre_digitador  = $detalle_inventario->get_nombre_digitador();
+		$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
 		$detalle_inventario->get_validation_editar();
 		route_validation($this->form_validation->run());
-
-		$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
 		if (request('accion') === 'agregar')
 		{
@@ -250,8 +246,7 @@ class Inventario_digitacion extends Controller_base {
 			set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
 		}
 
-		log_message('debug', 'Class: Inventario_digitacion; Metodo: editar; Query: '.$this->db->last_query());
-		// redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
+		redirect("{$this->router->class}/ingreso/{$hoja}/".time());
 	}
 
 	// --------------------------------------------------------------------
