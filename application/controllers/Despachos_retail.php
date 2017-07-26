@@ -43,7 +43,6 @@ class Despachos_retail extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('despachos_model');
 		$this->lang->load('despachos');
 	}
 
@@ -70,18 +69,21 @@ class Despachos_retail extends Controller_base {
 	public function retail($rut_retail = NULL)
 	{
 		$arr_facturas  = [];
-		$is_form_valid = $this->form_validation->set_rules($this->despachos_model->validation_rules)->run();
+		$despachos = new Despachos;
+
+		$is_form_valid = $this->form_validation->set_rules($despachos->validation_rules)->run();
 
 		if ($is_form_valid)
 		{
-			$this->despachos_model->limite_facturas = request('max_facturas', $this->despachos_model->limite_facturas);
-			$arr_facturas = $this->despachos_model->get_listado_ultimas_facturas(request('rut_retail'), request('modelos'));
+			$despachos->limite_facturas = request('max_facturas', $despachos->limite_facturas);
+			$arr_facturas = $despachos->get_listado_ultimas_facturas(request('rut_retail'), request('modelos'));
 		}
 
 		app_render_view('despachos/retail', [
-			'combo_retail'       => $this->despachos_model->get_combo_rut_retail(),
-			'combo_max_facturas' => $this->despachos_model->get_combo_cantidad_facturas(),
+			'combo_retail'       => $despachos->get_combo_rut_retail(),
+			'combo_max_facturas' => $despachos->get_combo_cantidad_facturas(),
 			'facturas'           => $arr_facturas,
+			'limite_facturas'    => $despachos->limite_facturas,
 		]);
 	}
 

@@ -38,7 +38,7 @@
 				<th>operador</th>
 				<th class="text-center">retail</th>
 				<th class="text-center">cod_cliente</th>
-				<?php for($i=0; $i<$this->despachos_model->limite_facturas; $i++): ?>
+				<?php for($i=0; $i<$limite_facturas; $i++): ?>
 				<th class="text-center">factura <?= $i+1; ?></th>
 				<?php endfor; ?>
 			</tr>

@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Despachos_model extends CI_Model {
+class Despachos extends ORM_Model {
 
 	/**
 	 * Limite de facturas a recuperar
@@ -171,5 +171,5 @@ class Despachos_model extends CI_Model {
 	}
 
 }
-/* End of file despachos_model.php */
-/* Location: ./application/models/despachos_model.php */
+/* End of file Despachos.php */
+/* Location: ./application/models/Despachos.php */
