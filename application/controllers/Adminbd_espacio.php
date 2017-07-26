@@ -43,7 +43,6 @@ class Adminbd_espacio extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('adminbd_model');
 		$this->lang->load('adminbd');
 	}
 
@@ -79,24 +78,18 @@ class Adminbd_espacio extends Controller_base {
 
 		$arr_espacio = collect($bases_datos)
 			->map(function($base) {
-				return $this->adminbd_model->get_tables_sizes($base);
+				return Adminbd::create()->get_tables_sizes($base);
 			})
 			->flatten(1)
 			->sort(function($elem_a, $elem_b) {
 				return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
 			});
 
-		$arr_sum = [
-			'RowCounts'     => 0,
-			'TotalSpaceKB'  => 0,
-			'UsedSpaceKB'   => 0,
-			'UnusedSpaceKB' => 0,
-		];
+		$campos_sumables = ['RowCounts', 'TotalSpaceKB', 'UsedSpaceKB', 'UnusedSpaceKB'];
 
-		$arr_sum = collect($arr_sum)->map(function($sum_init, $sum_key) use ($arr_espacio) {
-			return $arr_espacio->sum($sum_key);
+		$arr_sum = collect($campos_sumables)->map_with_keys(function($campo) use ($arr_espacio) {
+			return [$campo => $arr_espacio->sum($campo)];
 		})->all();
-
 
 		app_render_view('admindb/espacio', [
 			'tablas'  => $arr_espacio,

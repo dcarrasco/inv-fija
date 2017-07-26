@@ -24,21 +24,21 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Adminbd_model extends CI_Model {
+class Adminbd extends ORM_Model {
 
 	/**
 	 * Objeto de base de datos con perfil administrador
 	 *
 	 * @var object
 	 */
-	private $_db_object;
+	private $dbo;
 
 	/**
 	 * Reglas de validación formulario exportar tablas
 	 *
 	 * @var array
 	 */
-	public $validation_exportar_tablas = [
+	public $rules_exportar_tablas = [
 		[
 			'field' => 'tabla',
 			'label' => 'Tabla',
@@ -67,41 +67,33 @@ class Adminbd_model extends CI_Model {
 	 */
 	public function get_running_queries()
 	{
-		$this->_db_object = $this->load->database('adminbd', TRUE);
+		$this->dbo = $this->load->database('adminbd', TRUE);
 
-		$arr_final = [];
-		$arr_users = [];
-		$arr_users_tmp = $this->_db_object
+		$users_result = $this->dbo
 			->query('sp_who2 "active"')
 			->result_array();
 
-		foreach ($arr_users_tmp as $registro)
-		{
-			if (trim($registro['Login']) !== 'sa' AND trim($registro['Login']) !== '')
-			{
-				if ( ! (trim($registro['Login']) === 'patripio' AND trim($registro['ProgramName']) === 'PHP freetds'))
-				{
-					$arr_users[trim($registro['SPID'])] = $registro;
-				}
-			}
-		}
-
-		$arr_queries = [];
-		$arr_queries_tmp = $this->_db_object
+		$process_result = $this->dbo
 			->query('SELECT  * FROM sys.dm_exec_requests CROSS APPLY sys.dm_exec_sql_text(sql_handle)')
 			->result_array();
 
-		foreach ($arr_queries_tmp as $registro)
-		{
-			$arr_queries[trim($registro['session_id'])] = $registro;
-		}
+		$users = collect($users_result)
+			->filter(function($registro) {
+				return trim($registro['Login']) !== 'sa'
+					AND trim($registro['Login']) !== ''
+					AND ! (trim($registro['Login']) === 'patripio' AND trim($registro['ProgramName']) === 'PHP freetds');
+			})->map_with_keys(function($registro) {
+				return [trim($registro['SPID']) => $registro];
+			})->all();
 
-		foreach($arr_users as $llave => $valor)
-		{
-			$arr_final[$llave] = array_merge($arr_users[$llave], $arr_queries[$llave]);
-		}
-
-		return $arr_final;
+		return collect($process_result)
+			->map_with_keys(function($process) {
+				return [trim($process['session_id']) => $process];
+			})->map(function($process, $process_id) use ($users) {
+				return array_merge(array_get($users, $process_id, []), $process);
+			})->filter(function($process) {
+				return array_key_exists('SPID', $process);
+			})->all();
 	}
 
 
@@ -183,9 +175,9 @@ class Adminbd_model extends CI_Model {
 	 */
 	public function get_tables_sizes($base_datos = 'bd_logistica')
 	{
-		$this->_db_object = $this->load->database('adminbd', TRUE);
+		$this->dbo = $this->load->database('adminbd', TRUE);
 
-		$this->_db_object->query('use '.$base_datos);
+		$this->dbo->query('use '.$base_datos);
 
 		$sql_tables_sizes = "SELECT
 	'$base_datos' AS DataBaseName,
@@ -214,7 +206,7 @@ GROUP BY
 ORDER BY
     TotalSpaceKB desc";
 
-	$result = $this->_db_object->query($sql_tables_sizes)->result_array();
+	$result = $this->dbo->query($sql_tables_sizes)->result_array();
 
 	$this->db->query('use '.$this->db->database);
 
@@ -223,5 +215,5 @@ ORDER BY
 
 
 }
-/* End of file adminbd_model.php */
-/* Location: ./application/models/adminbd_model.php */
+/* End of file Adminbd.php */
+/* Location: ./application/models/Adminbd.php */

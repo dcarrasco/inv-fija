@@ -45,7 +45,6 @@ class Adminbd_exportartablas extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('adminbd_model');
 		$this->lang->load('adminbd');
 	}
 
@@ -84,24 +83,21 @@ class Adminbd_exportartablas extends Controller_base {
 		}
 
 		// reglas de validacion formulario
-		$is_form_valid = $this->form_validation->set_rules($this->adminbd_model->validation_exportar_tablas)->run();
+		$is_form_valid = $this->form_validation->set_rules(Adminbd::create()->rules_exportar_tablas)->run();
 
-		if ($is_form_valid)
+		if ($is_form_valid AND $this->db->table_exists($tabla))
 		{
-			if ($this->db->table_exists($tabla))
+			if (request('campo') AND request('filtro'))
 			{
-				if (request('campo') AND request('filtro'))
-				{
-					$this->db->where(request('campo'), request('filtro'));
-				}
-
-				$result_string = $this->dbutil->csv_from_result($this->db->get($tabla));
+				$this->db->where(request('campo'), request('filtro'));
 			}
+
+			$result_string = $this->dbutil->csv_from_result($this->db->get($tabla));
 		}
 
 		$data = [
-			'combo_tablas' => $this->adminbd_model->get_table_list(),
-			'combo_campos' => $tabla ? $this->adminbd_model->get_fields_list($tabla) : [],
+			'combo_tablas' => Adminbd::create()->get_table_list(),
+			'combo_campos' => $tabla ? Adminbd::create()->get_fields_list($tabla) : [],
 			'result_string' => $result_string,
 		];
 

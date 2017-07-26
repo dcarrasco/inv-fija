@@ -43,7 +43,6 @@ class Adminbd_queries extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('adminbd_model');
 		$this->lang->load('adminbd');
 	}
 
@@ -71,7 +70,7 @@ class Adminbd_queries extends Controller_base {
 		$reload_secs = 15;
 
 		app_render_view('admindb/queries', [
-			'queries_data' => $this->adminbd_model->get_running_queries(),
+			'queries_data' => Adminbd::create()->get_running_queries(),
 			'extra_styles' => $reload_secs > 0 ? "<meta http-equiv=\"refresh\" content=\"{$reload_secs};URL='".$this->router->class."'\">" : '',
 			'actualizado_el' => date('Y-m-d H:i:s'),
 		]);
