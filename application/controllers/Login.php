@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Acl\Acl;
+
 /**
  * Clase Controller Login ACL
  *
@@ -36,8 +38,6 @@ class Login extends Controller_base {
 		parent::__construct();
 
 		$this->lang->load('login');
-
-		$this->load->model('acl_model');
 		$this->load->helper('cookie');
 
 	}
@@ -64,55 +64,67 @@ class Login extends Controller_base {
 	public function login()
 	{
 		// si el usuario ya está logueado, redireccionar a la app
-		if ($this->acl_model->is_user_logged())
+		if (Acl::create()->is_user_logged())
 		{
-			redirect($this->acl_model->get_redirect_app());
+			redirect(Acl::create()->get_redirect_app());
 		}
 
-		$this->acl_model->delete_old_captchas();
-		$this->acl_model->delete_session_data();
+		Acl::create()->delete_old_captchas();
+		Acl::create()->delete_session_data();
 
-		$is_form_valid = $this->form_validation->set_rules($this->acl_model->login_validation)->run();
-
-		if ($is_form_valid)
-		{
-			$usuario      = request('usr');
-			$password     = request('pwd');
-			$captcha_word = request('captcha');
-			$remember_me  = request('remember_me');
-
-			// si el usuario existe y no tiene fijada una clave, lo obligamos a fijarla
-			if ($this->acl_model->existe_usuario($usuario) AND ! $this->acl_model->tiene_clave($usuario))
-			{
-				redirect('login/cambio_password/' . $usuario);
-			}
-
-			// si el usuario debe validar captcha
-			$captcha_valido = $this->acl_model->use_captcha($usuario)
-				? $this->acl_model->validar_captcha($captcha_word, $this->session->session_id)
-				: TRUE;
-
-			// si el usuario valida correctamente, redireccionamos a la app
-			if ($captcha_valido AND $this->acl_model->login($usuario, $password, $remember_me === 'remember'))
-			{
-				if ($remember_me === 'remember')
-				{
-					$this->acl_model->set_rememberme_cookie($usuario);
-				}
-				redirect($this->acl_model->get_redirect_app());
-			}
-
-			set_message($this->lang->line('login_error_usr_pwd'), 'danger');
-		}
-
-		$captcha_img  = $this->acl_model->get_captcha_img(request('usr'));
+		$captcha_img = Acl::create()->get_captcha_img(request('usr'));
 
 		app_render_view('ACL/login', [
-			'usar_captcha' => $captcha_img !== '',
 			'captcha_img'  => $captcha_img,
 			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
 			'vista_login'  => TRUE,
+			'url_login'    => site_url("{$this->router->class}/do_login/"),
 		]);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function do_login()
+	{
+		$rules = Acl::create()->use_captcha(request('usr'))
+			? array_merge(Acl::create()->rules_login, Acl::create()->rules_captcha)
+			: Acl::create()->rules_login;
+		$this->form_validation->set_rules($rules);
+
+		route_validation($this->form_validation->set_rules(Acl::create()->rules_login)->run());
+
+		$usuario      = request('usr');
+		$password     = request('pwd');
+		$captcha_word = request('captcha');
+		$remember_me  = request('remember_me');
+
+		// si el usuario existe y no tiene fijada una clave, lo obligamos a fijarla
+		if (Acl::create()->existe_usuario($usuario) AND ! Acl::create()->tiene_clave($usuario))
+		{
+			redirect('login/cambio_password/' . $usuario);
+		}
+
+		// si el usuario debe validar captcha
+		$captcha_valido = Acl::create()->use_captcha($usuario)
+			? Acl::create()->validar_captcha($captcha_word, $this->session->session_id)
+			: TRUE;
+
+		// si el usuario valida correctamente, redireccionamos a la app
+		if ($captcha_valido AND Acl::create()->login($usuario, $password, $remember_me === 'remember'))
+		{
+			if ($remember_me === 'remember')
+			{
+				Acl::create()->set_rememberme_cookie($usuario);
+			}
+
+			redirect(Acl::create()->get_redirect_app());
+		}
+
+		set_message($this->lang->line('login_error_usr_pwd'), 'danger');
+		$this->session->set_flashdata('old_request', array_merge($this->input->post(), $this->input->get()));
+
+		redirect('login');
 	}
 
 
@@ -125,8 +137,8 @@ class Login extends Controller_base {
 	 */
 	public function logout()
 	{
-		$this->acl_model->delete_session_data();
-		$this->acl_model->delete_cookie_data();
+		Acl::create()->delete_session_data();
+		Acl::create()->delete_cookie_data();
 		redirect('login/');
 	}
 
@@ -141,38 +153,46 @@ class Login extends Controller_base {
 	 */
 	public function cambio_password($usr_param = '')
 	{
-		$this->form_validation->set_rules($this->acl_model->change_password_validation);
-
-		if ( ! $this->acl_model->tiene_clave(request('usr')))
-		{
-			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
-		}
-
-		if ($this->form_validation->run())
-		{
-			if ( ! $this->acl_model->check_user_credentials(request('usr'), request('pwd_old')))
-			{
-				set_message($this->lang->line('login_error_usr_pwd'), 'danger');
-			}
-
-			if ($this->acl_model->cambio_clave(request('usr'), request('pwd_old'), request('pwd_new1')))
-			{
-				set_message($this->lang->line('login_success_pwd_changed'));
-
-				redirect('login');
-			}
-		}
-
 		$usuario = request('usr', $usr_param);
 
 		app_render_view('ACL/cambio_password', [
 			'usr'               => $usuario,
-			'tiene_clave_class' => $this->acl_model->tiene_clave($usuario) ? '' : ' disabled',
+			'tiene_clave_class' => Acl::create()->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => request('usr') ? TRUE : FALSE,
 			'extra_styles'      => '<style type="text/css">body {margin-top: 40px;}</style>',
 			'arr_vistas'        => ['ACL/cambio_password'],
 			'vista_login'       => TRUE,
+			'url_form'          => site_url("{$this->router->class}/do_cambio_password/{$usuario}"),
 		]);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function do_cambio_password($usr_param = '')
+	{
+		$this->form_validation->set_rules(Acl::create()->change_password_validation);
+
+		if ( ! Acl::create()->tiene_clave(request('usr')))
+		{
+			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
+		}
+
+		route_validation($this->form_validation->run());
+
+		if ( ! Acl::create()->check_user_credentials(request('usr'), request('pwd_old')))
+		{
+			set_message($this->lang->line('login_error_usr_pwd'), 'danger');
+		}
+
+		if (Acl::create()->cambio_clave(request('usr'), request('pwd_old'), request('pwd_new1')))
+		{
+			set_message($this->lang->line('login_success_pwd_changed'));
+
+			redirect('login');
+		}
+
+		$this->session->set_flashdata('old_request', array_merge($this->input->post(), $this->input->get()));
+		redirect('cambio_password');
 	}
 
 }

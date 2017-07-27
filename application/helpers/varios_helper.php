@@ -112,7 +112,7 @@ if ( ! function_exists('menu_app'))
 		// carga objeto global CI
 		$ci =& get_instance();
 
-		$arr_modulos = $ci->acl_model->get_user_menu();
+		$arr_modulos = \Acl\Acl::create()->get_user_menu();
 
 		$arr_apps = [];
 		$arr_mods = [];
@@ -177,7 +177,7 @@ if ( ! function_exists('titulo_modulo'))
 		$ci =& get_instance();
 		$url_actual = $ci->uri->segment(1);
 
-		$modulo_selected = collect($ci->acl_model->get_user_menu())
+		$modulo_selected = collect(\Acl\Acl::create()->get_user_menu())
 			->filter(function($item) use ($url_actual) {
 				return array_get($item, 'url') === $url_actual;
 			})->first();
@@ -252,7 +252,7 @@ if ( ! function_exists('app_render_view'))
 		$datos['navbar_menu']     = $vista_login ? [] : menu_app();
 		$datos['titulo_modulo']   = titulo_modulo();
 		$datos['logout_url']      = site_url('login/logout');
-		$datos['user_firstname']  = $ci->acl_model->get_user_firstname();
+		$datos['user_firstname']  = \Acl\Acl::create()->get_user_firstname();
 		$datos['app_navbar']      = $ci->parser->parse('common/app_navbar', $datos, TRUE);
 		$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : NULL;
 

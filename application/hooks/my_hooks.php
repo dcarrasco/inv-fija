@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \Acl\Acl;
+
 /**
  * Clase Hook Funcionalidad a ejecutar en todos los controladores
  * *
@@ -42,7 +44,6 @@ class MY_Hooks {
 		// }
 
 		$ci =& get_instance();
-		$ci->load->model('acl_model');
 		$ci->config->load('inv-fija');
 
 		$whitelist_classes = ['login', 'migration'];
@@ -51,7 +52,7 @@ class MY_Hooks {
 
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
-		if ( ! in_array($class, $whitelist_classes) AND ! $ci->acl_model->autentica_modulo($llave_modulo))
+		if ( ! in_array($class, $whitelist_classes) AND ! Acl::create()->autentica_modulo($llave_modulo))
 		{
 			redirect('login/');
 		}

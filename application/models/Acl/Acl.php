@@ -1,4 +1,7 @@
 <?php
+
+namespace Acl;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +17,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \Orm_Model;
+use \Orm_Field;
+
 /**
  * Clase Modelo ACL
  * *
@@ -24,14 +30,14 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Acl_model extends CI_Model {
+class Acl extends Orm_Model {
 
 	/**
 	 * Reglas para formulario login
 	 *
 	 * @var array
 	 */
-	public $login_validation = [
+	public $rules_login = [
 		[
 			'field' => 'usr',
 			'label' => 'Usuario',
@@ -48,6 +54,17 @@ class Acl_model extends CI_Model {
 			'rules' => 'trim'
 		],
 	];
+
+	/**
+	 * Reglas para formulario login, campo captcha
+	 *
+	 * @var array
+	 */
+	public $rules_captcha = [[
+		'field' => 'captcha',
+		'label' => 'Palabra distorsionada',
+		'rules' => 'trim|required'
+	]];
 
 	/**
 	 * Reglas para formulario cambiar password
@@ -356,7 +373,7 @@ class Acl_model extends CI_Model {
 				'username' => (string) $usuario,
 			])->row();
 
-		$login_attempts = isset($row_user) ? $row_user->login_errors : 0;
+		$login_attempts = isset($row_user) ? (int) $row_user->login_errors : 0;
 
 		return (boolean) ($login_attempts > $this->login_failed_attempts);
 	}
@@ -887,5 +904,5 @@ class Acl_model extends CI_Model {
 
 
 }
-/* End of file acl_model.php */
-/* Location: ./application/models/acl_model.php */
+/* End of file Acl.php */
+/* Location: ./application/models/Acl.php */

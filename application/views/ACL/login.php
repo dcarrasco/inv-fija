@@ -17,7 +17,7 @@
 			{msg_alerta}
 		</div>
 
-		<?= form_open('login', 'id="frm_login" class="form-horizontal"'); ?>
+		<?= form_open($url_login, 'id="frm_login" class="form-horizontal"'); ?>
 
 			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('usr'); ?>">
 				<label class="control-label" for="usr">
@@ -28,7 +28,7 @@
 				</div>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('pwd'); ?>">
+			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('pwd') ?>">
 				<label class="control-label" for="pwd">{_login_input_password_}</label>
 				<div class="controls">
 					<?= form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
@@ -41,8 +41,8 @@
 				</div>
 			</div>
 
-			<?php if ($usar_captcha): ?>
-				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('catpcha'); ?>">
+			<?php if ( ! empty($captcha_img)): ?>
+				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('captcha') ?>">
 					<label class="control-label" for="pwd">{_login_input_captcha_}</label>
 					<div class="controls">
 						<?= form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>

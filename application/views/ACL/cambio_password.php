@@ -17,7 +17,7 @@
 			{msg_alerta}
 		</div>
 
-		<?= form_open('login/cambio_password/' . $usr, 'id="frm_login" class="form-horizontal"'); ?>
+		<?= form_open($url_form, 'id="frm_login" class="form-horizontal"'); ?>
 
 
 			<div class="control-group col-md-8 col-md-offset-2 <?= form_has_error_class('usr'); ?>">
