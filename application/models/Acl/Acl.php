@@ -170,6 +170,12 @@ class Acl extends Orm_Model {
 			// crea session con los datos del usuario
 			$this->_set_session_data($usuario, $remember);
 
+			// fijamos el token
+			if ($remember)
+			{
+				$this->set_rememberme_cookie($usuario);
+			}
+
 			return TRUE;
 		}
 		else

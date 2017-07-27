@@ -17,43 +17,35 @@
 			{msg_alerta}
 		</div>
 
-		<?= form_open($url_login, 'id="frm_login" class="form-horizontal"'); ?>
+		<?= form_open($url_login, 'id="frm_login"'); ?>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('usr'); ?>">
-				<label class="control-label" for="usr">
-					{_login_input_user_}
-				</label>
-				<div class="controls">
-					<?= form_input('usr', request('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
-				</div>
+			<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('usr'); ?>">
+				<label for="usr">{_login_input_user_}</label>
+				<?= form_input('usr', request('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('pwd') ?>">
-				<label class="control-label" for="pwd">{_login_input_password_}</label>
-				<div class="controls">
-					<?= form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
-				</div>
+			<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('pwd') ?>">
+				<label for="pwd">{_login_input_password_}</label>
+				<?= form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
 			</div>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+			<div class="form-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="pull-right">
 					<?= anchor('#', '{_login_link_change_password_}', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 
 			<?php if ( ! empty($captcha_img)): ?>
-				<div class="control-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('captcha') ?>">
-					<label class="control-label" for="pwd">{_login_input_captcha_}</label>
-					<div class="controls">
-						<?= form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
-					</div>
-					<div class="controls">
-						{captcha_img}
-					</div>
+				<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('captcha') ?>">
+					<label for="pwd">{_login_input_captcha_}</label>
+					<?= form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
+				</div>
+				<div class="form-group col-md-8 col-md-offset-2 col-xs-12 text-center <?= form_has_error_class('captcha') ?>">
+					{captcha_img}
 				</div>
 			<?php endif ?>
 
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+			<div class="form-group col-md-8 col-md-offset-2 col-xs-12">
 				<div class="checkbox">
 					<label>
 						<?= form_checkbox('remember_me', 'remember', request('remember_me')); ?>

@@ -68,7 +68,6 @@ class Stock_analisis_series extends Controller_base {
 	public function historia()
 	{
 		$this->load->model('analisis_series_model');
-		$this->load->model('acl_model');
 
 		$datos = [
 			'datos_show_mov'       => '',
@@ -131,7 +130,6 @@ class Stock_analisis_series extends Controller_base {
 	public function trafico_por_mes()
 	{
 		$this->load->model('analisis_series_model');
-		$this->load->model('acl_model');
 
 		app_render_view('stock_sap/analisis_series_trafico_view', [
 			'combo_mes'     => $this->analisis_series_model->get_meses_trafico(),

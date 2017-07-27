@@ -87,12 +87,13 @@ class Login extends Controller_base {
 
 	public function do_login()
 	{
-		$rules = Acl::create()->use_captcha(request('usr'))
-			? array_merge(Acl::create()->rules_login, Acl::create()->rules_captcha)
-			: Acl::create()->rules_login;
+		$rules = array_merge(
+			Acl::create()->rules_login,
+			Acl::create()->use_captcha(request('usr')) ? Acl::create()->rules_captcha : []
+		);
 		$this->form_validation->set_rules($rules);
 
-		route_validation($this->form_validation->set_rules(Acl::create()->rules_login)->run());
+		route_validation($this->form_validation->run());
 
 		$usuario      = request('usr');
 		$password     = request('pwd');
@@ -113,11 +114,6 @@ class Login extends Controller_base {
 		// si el usuario valida correctamente, redireccionamos a la app
 		if ($captcha_valido AND Acl::create()->login($usuario, $password, $remember_me === 'remember'))
 		{
-			if ($remember_me === 'remember')
-			{
-				Acl::create()->set_rememberme_cookie($usuario);
-			}
-
 			redirect(Acl::create()->get_redirect_app());
 		}
 
