@@ -38,13 +38,13 @@
 				<label class="control-label col-sm-2 col-xs-3">ID Petici&oacute;n</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['appt_number']; ?>
+						<?= array_get($reporte, 'peticion_toa.appt_number') ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Fecha</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= fmt_fecha($reporte['arr_peticion_toa']['date']); ?>
+						<?= fmt_fecha(array_get($reporte, 'peticion_toa.date')) ?>
 					</p>
 				</div>
 			</div>
@@ -53,13 +53,13 @@
 				<label class="control-label col-sm-2 col-xs-3">RUT</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= anchor('toa_consumos/ver_peticiones/total_cliente/f1/f2/'.$reporte['arr_peticion_toa']['customer_number'], fmt_rut($reporte['arr_peticion_toa']['customer_number'])); ?>
+						<?= anchor('toa_consumos/ver_peticiones/total_cliente/f1/f2/'.array_get($reporte, 'peticion_toa.customer_number'), fmt_rut(array_get($reporte, 'peticion_toa.customer_number'))) ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Nombre</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['cname']; ?>
+						<?= array_get($reporte, 'peticion_toa.cname') ?>
 					</p>
 				</div>
 			</div>
@@ -68,13 +68,13 @@
 				<label class="control-label col-sm-2 col-xs-3">Tel&eacute;fono</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['cphone']; ?>
+						<?= array_get($reporte, 'peticion_toa.cphone') ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Celular</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['ccell']; ?>
+						<?= array_get($reporte, 'peticion_toa.ccell') ?>
 					</p>
 				</div>
 			</div>
@@ -83,13 +83,13 @@
 				<label class="control-label col-sm-2 col-xs-3">e-mail</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['cemail']; ?>
+						<?= array_get($reporte, 'peticion_toa.cemail') ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Direcci&oacute;n</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['caddress']; ?>
+						<?= array_get($reporte, 'peticion_toa.caddress') ?>
 					</p>
 				</div>
 			</div>
@@ -98,13 +98,13 @@
 				<label class="control-label col-sm-2 col-xs-3">Agencia</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['XA_ORIGINAL_AGENCY']; ?>
+						<?= array_get($reporte, 'peticion_toa.XA_ORIGINAL_AGENCY') ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Ciudad</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['ccity']; ?>
+						<?= array_get($reporte, 'peticion_toa.ccity') ?>
 					</p>
 				</div>
 			</div>
@@ -113,9 +113,12 @@
 				<label class="control-label col-sm-2 col-xs-3">Tecnolog&iacute;as</label>
 				<div class="col-sm-10 col-xs-9">
 					<p class="form-control-static">
-						<span class="label label-default">BA</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_BROADBAND_TECHNOLOGY']; ?></span>
-						<span class="label label-default">STB</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_TELEPHONE_TECHNOLOGY']; ?></span>
-						<span class="label label-default">TV</span><span class="label label-info"><?= $reporte['arr_peticion_toa']['XA_TV_TECHNOLOGY']; ?></span>
+						<span class="label label-default">BA</span>
+						<span class="label label-info"><?= array_get($reporte, 'peticion_toa.XA_BROADBAND_TECHNOLOGY') ?></span>
+						<span class="label label-default">STB</span>
+						<span class="label label-info"><?= array_get($reporte, 'peticion_toa.XA_TELEPHONE_TECHNOLOGY') ?></span>
+						<span class="label label-default">TV</span>
+						<span class="label label-info"><?= array_get($reporte, 'peticion_toa.XA_TV_TECHNOLOGY') ?></span>
 					</p>
 				</div>
 			</div>
@@ -124,14 +127,14 @@
 				<label class="control-label col-sm-2 col-xs-3">Empresa</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['empresa']; ?>
+						<?= array_get($reporte, 'peticion_toa.empresa') ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">T&eacute;cnico</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= anchor('toa_config/listado/tecnico_toa?filtro='.$reporte['arr_peticion_toa']['Resource_External_ID'], $reporte['arr_peticion_toa']['Resource_External_ID']) ?>
-						<?= $reporte['arr_peticion_toa']['Resource_Name']; ?>
+						<?= anchor('toa_config/listado/tecnico_toa?filtro='.array_get($reporte, 'peticion_toa.Resource_External_ID'), array_get($reporte, 'peticion_toa.Resource_External_ID')) ?>
+						<?= array_get($reporte, 'peticion_toa.Resource_Name') ?>
 					</p>
 				</div>
 			</div>
@@ -140,13 +143,13 @@
 				<label class="control-label col-sm-2 col-xs-3">Tipo de trabajo</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?php $tt = new Toa\Tipo_trabajo_toa(strtoupper($reporte['arr_peticion_toa']['XA_WORK_TYPE'])); echo $tt->mostrar_info(); ?>
+						<?php Toa\Tipo_trabajo_toa::create()->find_id(strtoupper(array_get($reporte, 'peticion_toa.XA_WORK_TYPE'))) ?>
 					</p>
 				</div>
 				<label class="control-label col-sm-2 col-xs-3">Origen Peticion</label>
 				<div class="col-sm-4 col-xs-9">
 					<p class="form-control-static">
-						<?= $reporte['arr_peticion_toa']['XA_CHANNEL_ORIGIN']; ?>
+						<?= array_get($reporte, 'peticion_toa.XA_CHANNEL_ORIGIN') ?>
 					</p>
 				</div>
 			</div>
@@ -166,7 +169,7 @@
 				</a>
 			</div>
 			<div class="panel-body collapse in" id="panel_sap">
-			<?php if (count($reporte['arr_materiales_sap']) > 0): ?>
+			<?php if (count($reporte['materiales_sap']) > 0): ?>
 				<table class="table table-striped table-hover table-condensed reporte">
 					<thead>
 						<tr>
@@ -188,7 +191,7 @@
 					</thead>
 					<tbody>
 					<?php $nlinea = 0; $sum_cant = 0; $sum_monto = 0; ?>
-					<?php foreach ($reporte['arr_materiales_sap'] as $linea_detalle): ?>
+					<?php foreach ($reporte['materiales_sap'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
 							<td class="text-center"><?= $linea_detalle['material']; ?></td>
@@ -241,7 +244,7 @@
 				</a>
 			</div>
 			<div class="panel-body collapse in" id="panel_toa">
-			<?php if (count($reporte['arr_materiales_toa']) > 0): ?>
+			<?php if (count($reporte['materiales_toa']) > 0): ?>
 				<table class="table table-striped table-hover table-condensed reporte">
 					<thead>
 						<tr>
@@ -257,7 +260,7 @@
 					</thead>
 					<tbody>
 					<?php $nlinea = 0; $sum_cant = 0; ?>
-					<?php foreach ($reporte['arr_materiales_toa'] as $linea_detalle): ?>
+					<?php foreach ($reporte['materiales_toa'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
 							<td class="text-center"><?= $linea_detalle['XI_SAP_CODE']; ?></td>
@@ -299,7 +302,7 @@
 				</a>
 			</div>
 			<div class="panel-body collapse in" id="panel_vpi">
-			<?php if (count($reporte['arr_materiales_vpi']) > 0): ?>
+			<?php if (count($reporte['materiales_vpi']) > 0): ?>
 				<table class="table table-striped table-hover table-condensed reporte">
 					<thead>
 						<tr>
@@ -313,7 +316,7 @@
 					</thead>
 					<tbody>
 					<?php $nlinea = 0; $sum_cant = 0; ?>
-					<?php foreach ($reporte['arr_materiales_vpi'] as $linea_detalle): ?>
+					<?php foreach ($reporte['materiales_vpi'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
 							<td class="text-center"><?= $linea_detalle['ps_id']; ?></td>
@@ -350,7 +353,7 @@
 				</a>
 			</div>
 			<div class="panel-body collapse in" id="panel_repara">
-			<?php if (count($reporte['arr_peticion_repara']) > 0): ?>
+			<?php if (count($reporte['peticion_repara']) > 0): ?>
 				<table class="table table-striped table-hover table-condensed reporte">
 					<thead>
 						<tr>
@@ -365,7 +368,7 @@
 					</thead>
 					<tbody>
 					<?php $nlinea = 0; ?>
-					<?php foreach ($reporte['arr_peticion_repara'] as $linea_detalle): ?>
+					<?php foreach ($reporte['peticion_repara'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
 							<td class="text-center">STB</td>

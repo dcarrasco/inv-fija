@@ -1,4 +1,7 @@
 <?php
+
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +17,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \ORM_Field;
 use Toa\Tecnico_toa;
 use Stock\Clase_movimiento;
 
@@ -27,14 +32,14 @@ use Stock\Clase_movimiento;
  * @link     localhost:1520
  *
  */
-class Toa_asignacion extends CI_Model {
+class Asignacion_toa extends ORM_Model {
 
 	/**
 	 * Arreglo con validación formulario consumos
 	 *
 	 * @var array
 	 */
-	public $asignacion_validation = [
+	public $rules = [
 		['field' => 'sel_reporte', 'label' => 'Reporte',     'rules' => 'required'],
 		['field' => 'fecha_desde', 'label' => 'Fecha desde', 'rules' => 'required'],
 		['field' => 'fecha_hasta', 'label' => 'Fecha hasta', 'rules' => 'required'],
@@ -554,5 +559,5 @@ class Toa_asignacion extends CI_Model {
 
 }
 
-/* End of file Toa_asignacion.php */
-/* Location: ./application/models/Toa_asignacion.php */
+/* End of file Asignacion_toa.php */
+/* Location: ./application/models/Toa/Asignacion_toa.php */

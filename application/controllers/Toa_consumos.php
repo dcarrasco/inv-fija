@@ -14,6 +14,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+
+use Toa\Consumo_toa;
+
 /**
  * Clase Controller Reporte de consumos TOA
  *
@@ -43,7 +46,6 @@ class Toa_consumos extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_consumo');
 		$this->lang->load('toa');
 	}
 
@@ -70,12 +72,12 @@ class Toa_consumos extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_consumo->consumos_validation)
+			->set_rules(Consumo_toa::create()->consumos_validation)
 			->run();
 
 		app_render_view('toa/consumos', [
-			'combo_reportes' => $this->toa_consumo->tipos_reporte_consumo,
-			'reporte'        => $this->toa_consumo->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
+			'combo_reportes' => Consumo_toa::create()->tipos_reporte_consumo,
+			'reporte'        => Consumo_toa::create()->consumos_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('sort')),
 		]);
 
 	}
@@ -95,9 +97,7 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
-		$this->load->model('toa_model');
-
-		$datos_peticiones = $this->toa_model->peticiones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
+		$datos_peticiones = Consumo_toa::create()->peticiones($tipo_reporte, $param1, $param2, $param3, $param4);
 
 		$this->load->library('googlemaps');
 		$this->googlemaps->initialize([
@@ -113,7 +113,7 @@ class Toa_consumos extends Controller_base {
 		});
 
 		app_render_view('toa/peticiones', [
-			'reporte'      => $this->toa_model->reporte_peticiones_toa($datos_peticiones),
+			'reporte'      => Consumo_toa::create()->reporte_peticiones($datos_peticiones),
 			'google_maps'  => $this->googlemaps->create_map(),
 		]);
 	}
@@ -124,31 +124,30 @@ class Toa_consumos extends Controller_base {
 	/**
 	 * Despliega detalle de una peticion
 	 *
-	 * @param  string $peticion Identificador de la peticion
+	 * @param  string $id_peticion Identificador de la peticion
 	 * @return void
 	 */
-	public function detalle_peticion($peticion = NULL)
+	public function detalle_peticion($id_peticion = NULL)
 	{
-		$this->load->model('toa_model');
 		$this->load->library('googlemaps');
 		$this->googlemaps->initialize([
 			'map_css' => 'height: 350px',
 		]);
 
-		$peticion = ( ! $peticion) ? request('peticion') : $peticion;
-		$arr_peticiones = $this->toa_model->detalle_peticion_toa($peticion);
+		$id_peticion = ( ! $id_peticion) ? request('peticion') : $id_peticion;
+		$peticion = Consumo_toa::create()->detalle_peticion($id_peticion);
 
 		$this->googlemaps->add_marker([
-			'lat'   => array_get($arr_peticiones, 'arr_peticion_toa.acoord_y'),
-			'lng'   => array_get($arr_peticiones, 'arr_peticion_toa.acoord_x'),
-			'title' => array_get($arr_peticiones, 'arr_peticion_toa.cname'),
+			'lat'   => array_get($peticion, 'peticion_toa.acoord_y'),
+			'lng'   => array_get($peticion, 'peticion_toa.acoord_x'),
+			'title' => array_get($peticion, 'peticion_toa.cname'),
 		]);
 
-		set_message(($peticion AND ! $arr_peticiones) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
+		set_message(($id_peticion AND ! $peticion) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
 
 		app_render_view('toa/detalle_peticion', [
-			'tipo_peticion' => strtoupper(substr($peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
-			'reporte'       => $arr_peticiones,
+			'tipo_peticion' => strtoupper(substr($id_peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
+			'reporte'       => $peticion,
 			'google_maps'   => $this->googlemaps->create_map(),
 		]);
 	}
