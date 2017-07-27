@@ -48,11 +48,11 @@
 		<?php foreach($facturas as $modelo => $datos): ?>
 			<tr>
 				<td><?= $modelo ?></td>
-				<td><?= $datos['datos']['operador_c'] ?></td>
-				<td class="text-center"><?= $datos['datos']['rut'] ?> <?= $datos['datos']['des_bodega'] ?></td>
-				<td class="text-center"><?= $datos['datos']['cod_cliente'] ?></td>
+				<td><?= array_get($datos, 'datos.operador_c') ?></td>
+				<td class="text-center"><?= array_get($datos, 'datos.rut') ?> <?= array_get($datos, 'datos.des_bodega') ?></td>
+				<td class="text-center"><?= array_get($datos, 'datos.cod_cliente') ?></td>
 
-				<?php foreach ($datos['facturas'] as $factura): ?>
+				<?php foreach (array_get($datos, 'facturas', []) as $factura): ?>
 				<td class="text-center">
 					<?= substr($factura['fecha'],0,10) ?>
 					<br/><?= $factura['n_doc'] ?>

@@ -33,7 +33,7 @@ class Despachos extends ORM_Model {
 	 */
 	public $limite_facturas = 5;
 
-	public $validation_rules = [
+	public $rules = [
 		[
 			'field' => 'rut_retail',
 			'label' => 'RUT Retail',

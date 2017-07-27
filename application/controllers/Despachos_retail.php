@@ -71,7 +71,7 @@ class Despachos_retail extends Controller_base {
 		$arr_facturas  = [];
 		$despachos = new Despachos;
 
-		$is_form_valid = $this->form_validation->set_rules($despachos->validation_rules)->run();
+		$is_form_valid = $this->form_validation->set_rules($despachos->rules)->run();
 
 		if ($is_form_valid)
 		{
