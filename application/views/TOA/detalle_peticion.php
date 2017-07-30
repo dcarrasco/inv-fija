@@ -249,6 +249,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">item</th>
+							<th class="text-center">tipo material</th>
 							<th class="text-center">cod mat</th>
 							<th class="text-left">material</th>
 							<th class="text-center">serie</th>
@@ -263,6 +264,7 @@
 					<?php foreach ($reporte['materiales_toa'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center"><?= $linea_detalle['desc_tip_material']; ?></td>
 							<td class="text-center"><?= $linea_detalle['XI_SAP_CODE']; ?></td>
 							<td class="text-left"><?= $linea_detalle['XI_SAP_CODE_DESCRIPTION']; ?></td>
 							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['invsn']; ?>"><?= $linea_detalle['invsn']; ?></a></td>
@@ -307,6 +309,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">item</th>
+							<th class="text-center">tipo material</th>
 							<th class="text-center">ID PS</th>
 							<th class="text-left">descripcion PS</th>
 							<th class="text-center">ID Op Comercial</th>
@@ -319,6 +322,7 @@
 					<?php foreach ($reporte['materiales_vpi'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
+							<td class="text-center"><?= $linea_detalle['desc_tip_material']; ?></td>
 							<td class="text-center"><?= $linea_detalle['ps_id']; ?></td>
 							<td class="text-left"><?= $linea_detalle['desc_producto_servicio']; ?></td>
 							<td class="text-center"><?= $linea_detalle['cod_opco']; ?></td>

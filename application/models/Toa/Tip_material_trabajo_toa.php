@@ -44,8 +44,8 @@ class Tip_material_trabajo_toa extends ORM_Model {
 		$this->model_config = [
 			'modelo' => [
 				'tabla'        => config('bd_tip_material_trabajo_toa'),
-				'label'        => 'Tipo Material de trabajo',
-				'label_plural' => 'Tipos Material de trabajo',
+				'label'        => 'Tipo de Material',
+				'label_plural' => 'Tipos de Material',
 				'order_by'     => 'desc_tip_material',
 			],
 			'campos' => [
@@ -73,7 +73,18 @@ class Tip_material_trabajo_toa extends ORM_Model {
 						'id_many_table' => ['id_catalogo'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],
 					],
-					'texto_ayuda'    => 'Tipo de material TOA.',
+					'texto_ayuda'    => 'Material TOA.',
+				],
+				'ps_vpi' => [
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
+					'relation'       => [
+						'model'         => Ps_vpi_toa::class,
+						'join_table'    => config('bd_ps_tip_material_toa'),
+						'id_one_table'  => ['id_tip_material'],
+						'id_many_table' => ['ps_id'],
+						//'conditions'    => ['id_app' => '@field_value:id_app'],
+					],
+					'texto_ayuda'    => 'PS VPI.',
 				],
 			],
 		];

@@ -703,16 +703,22 @@ class Consumo_toa extends ORM_Model {
 			->get()->result_array();
 
 		$materiales_toa = $this->db
+			->select('a.*, c.desc_tip_material')
+			->from(config('bd_materiales_peticiones_toa').' a')
+			->join(config('bd_catalogo_tip_material_toa').' b', 'a.XI_SAP_CODE=b.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left', FALSE)
 			->where('aid', array_get($peticion_toa, 'aid'))
-			->order_by('XI_SAP_CODE')
-			->get(config('bd_materiales_peticiones_toa'))
-			->result_array();
+			->order_by('c.desc_tip_material, XI_SAP_CODE')
+			->get()->result_array();
 
 		$materiales_vpi = $this->db
+			->select('a.*, c.desc_tip_material')
+			->from(config('bd_peticiones_vpi').' a')
+			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
+			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->where('appt_number', $id_peticion)
-			->order_by('ps_id')
-			->get(config('bd_peticiones_vpi'))
-			->result_array();
+			->order_by('c.desc_tip_material, a.ps_id')
+			->get()->result_array();
 
 		$peticion_repara = $this->db->from(config('bd_peticiones_toa'))
 			->select('a_complete_reason_rep_minor_stb as stb_clave')

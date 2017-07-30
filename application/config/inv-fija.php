@@ -112,6 +112,8 @@ $config['bd_tip_material_trabajo_toa']  = BD_TOA.'toa_tip_material_trabajo';
 $config['bd_catalogo_tip_material_toa'] = BD_TOA.'toa_catalogo_tip_material';
 $config['bd_resumen_panel_toa']         = BD_TOA.'toa_resumen_panel';
 $config['bd_uso_toa']                   = BD_TOA.'toa_reporte_uso';
+$config['bd_ps_vpi_toa']                = BD_TOA.'toa_ps_vpi';
+$config['bd_ps_tip_material_toa']       = BD_TOA.'toa_ps_tip_material';
 
 
 /* End of file inv-fija.php */

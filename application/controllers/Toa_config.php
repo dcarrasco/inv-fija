@@ -90,6 +90,11 @@ class Toa_config extends Orm_controller {
 				'texto' => $this->lang->line('toa_config_menu_empresa_ciudad'),
 				'icon'  => 'map-marker',
 			],
+			'ps_vpi_toa' => [
+				'url'   => $this->router->class . '/listado/ps_vpi_toa',
+				'texto' => $this->lang->line('toa_config_menu_ps_vpi'),
+				'icon'  => 'map-marker',
+			],
 		]);
 	}
 
