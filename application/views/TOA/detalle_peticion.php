@@ -285,6 +285,7 @@
 							<th></th>
 							<th></th>
 							<th></th>
+							<th></th>
 							<th class="text-center"><?= fmt_cantidad($sum_cant) ?></th>
 						</tr>
 					</tfoot>
@@ -334,6 +335,7 @@
 					</tbody>
 					<tfoot>
 						<tr>
+							<th></th>
 							<th></th>
 							<th></th>
 							<th></th>
