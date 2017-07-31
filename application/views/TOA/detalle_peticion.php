@@ -174,6 +174,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">item</th>
+							<th class="text-center">tipo mat</th>
 							<th class="text-center">cod mat</th>
 							<th class="text-left">material</th>
 							<th class="text-center">serie</th>
@@ -181,8 +182,7 @@
 							<th class="text-center">lote</th>
 							<th class="text-center">valor</th>
 							<th class="text-center">doc SAP</th>
-							<th class="text-center">mov SAP</th>
-							<th class="text-center">desc mov SAP</th>
+							<th class="text-center">movimiento SAP</th>
 							<th class="text-center">PEP</th>
 							<th class="text-center">unidad</th>
 							<th class="text-center">cantidad</th>
@@ -194,19 +194,23 @@
 					<?php foreach ($reporte['materiales_sap'] as $linea_detalle): ?>
 						<tr>
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
-							<td class="text-center"><?= $linea_detalle['material']; ?></td>
-							<td class="text-left"><?= $linea_detalle['texto_material']; ?></td>
-							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['serie_toa']; ?>"><?= $linea_detalle['serie_toa']; ?></a></td>
-							<td class="text-center"><?= $linea_detalle['centro']; ?></td>
-							<td class="text-center"><?= $linea_detalle['lote']; ?></td>
-							<td class="text-center"><?= $linea_detalle['valor']; ?></td>
-							<td class="text-center"><?= $linea_detalle['documento_material']; ?></td>
-							<td class="text-center"><?= $linea_detalle['codigo_movimiento']; ?></td>
-							<td class="text-center"><?= $linea_detalle['texto_movimiento']; ?></td>
-							<td class="text-center"><?= $linea_detalle['elemento_pep']; ?></td>
-							<td class="text-center"><?= $linea_detalle['umb']; ?></td>
-							<td class="text-center"><?= fmt_cantidad($linea_detalle['cant']); ?></td>
-							<td class="text-center"><?= fmt_monto($linea_detalle['monto']); ?></td>
+							<td class="text-center"><?= $linea_detalle['desc_tip_material'] ?></td>
+							<td class="text-center"><?= $linea_detalle['material'] ?></td>
+							<td class="text-left"><?= $linea_detalle['texto_material'] ?></td>
+							<td class="text-center">
+								<a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['serie_toa'] ?>"><?= $linea_detalle['serie_toa'] ?></a>
+							</td>
+							<td class="text-center"><?= $linea_detalle['centro'] ?></td>
+							<td class="text-center"><?= $linea_detalle['lote'] ?></td>
+							<td class="text-center"><?= $linea_detalle['valor'] ?></td>
+							<td class="text-center"><?= $linea_detalle['documento_material'] ?></td>
+							<td class="text-center">
+								<?= $linea_detalle['codigo_movimiento'] ?> - <?= $linea_detalle['texto_movimiento'] ?>
+							</td>
+							<td class="text-center"><?= $linea_detalle['elemento_pep'] ?></td>
+							<td class="text-center"><?= $linea_detalle['umb'] ?></td>
+							<td class="text-center"><?= fmt_cantidad($linea_detalle['cant']) ?></td>
+							<td class="text-center"><?= fmt_monto($linea_detalle['monto']) ?></td>
 						</tr>
 						<?php $nlinea += 1; $sum_cant += $linea_detalle['cant']; $sum_monto += $linea_detalle['monto']; ?>
 					<?php endforeach; ?>

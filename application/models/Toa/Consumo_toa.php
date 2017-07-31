@@ -693,13 +693,16 @@ class Consumo_toa extends ORM_Model {
 			->select('a.vale_acomp')
 			->select('a.carta_porte')
 			->select('a.usuario')
+			->select('e.desc_tip_material')
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->join(config('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' e', 'd.id_tip_material=e.id', 'left', FALSE)
 			->where('referencia', $id_peticion)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo)
-			->order_by('a.material, a.codigo_movimiento')
+			->order_by('e.desc_tip_material, a.material, a.codigo_movimiento')
 			->get()->result_array();
 
 		$materiales_toa = $this->db
