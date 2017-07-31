@@ -92,10 +92,10 @@ class Catalogo extends ORM_Model {
 				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
-						'model'         => \Toa\Tip_material_trabajo_toa::class,
+						'model'         => \Toa\Tip_material_toa::class,
 						'join_table'    => config('bd_catalogo_tip_material_toa'),
 						'id_one_table'  => ['id_catalogo'],
-						'id_many_table' => ['id_tip_material_trabajo'],
+						'id_many_table' => ['id_tip_material'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],
 					],
 					'texto_ayuda'    => 'Tipo de material TOA.',

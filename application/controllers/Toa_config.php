@@ -75,9 +75,9 @@ class Toa_config extends Orm_controller {
 				'texto' => $this->lang->line('toa_config_menu_tipo_trabajo'),
 				'icon'  => 'television',
 			],
-			'tip_material_trabajo_toa' => [
-				'url'   => $this->router->class . '/listado/tip_material_trabajo_toa',
-				'texto' => $this->lang->line('toa_config_menu_tipo_material_trabajo'),
+			'tip_material_toa' => [
+				'url'   => $this->router->class . '/listado/tip_material_toa',
+				'texto' => $this->lang->line('toa_config_menu_tipo_material'),
 				'icon'  => 'object-group',
 			],
 			'ciudad_toa' => [

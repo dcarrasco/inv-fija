@@ -31,7 +31,7 @@ use \ORM_Field;
  * @link     localhost:1520
  *
  */
-class Tip_material_trabajo_toa extends ORM_Model {
+class Tip_material_toa extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
@@ -43,7 +43,7 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	{
 		$this->model_config = [
 			'modelo' => [
-				'tabla'        => config('bd_tip_material_trabajo_toa'),
+				'tabla'        => config('bd_tip_material_toa'),
 				'label'        => 'Tipo de Material',
 				'label_plural' => 'Tipos de Material',
 				'order_by'     => 'desc_tip_material',
@@ -64,12 +64,19 @@ class Tip_material_trabajo_toa extends ORM_Model {
 					'largo'          => 20,
 					'texto_ayuda'    => 'Color o clase que identifica el tipo de material. M&aacute;ximo 50 caracteres.',
 				],
+				'uso_vpi' => [
+					'label'          => 'Uso VPI',
+					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
+					'texto_ayuda'    => 'Indica se el tipo de material es usado en control VPI.',
+					'es_obligatorio' => TRUE,
+					'default'        => 0
+				],
 				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
 						'model'         => \Inventario\catalogo::class,
 						'join_table'    => config('bd_catalogo_tip_material_toa'),
-						'id_one_table'  => ['id_tip_material_trabajo'],
+						'id_one_table'  => ['id_tip_material'],
 						'id_many_table' => ['id_catalogo'],
 						//'conditions'    => ['id_app' => '@field_value:id_app'],
 					],
@@ -105,5 +112,5 @@ class Tip_material_trabajo_toa extends ORM_Model {
 	}
 
 }
-/* End of file Tip_material_trabajo_toa.php */
-/* Location: ./application/models/Tip_material_trabajo_toa.php */
+/* End of file Tip_material_toa.php */
+/* Location: ./application/models/Toa/Tip_material_toa.php */

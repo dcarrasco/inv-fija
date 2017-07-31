@@ -378,7 +378,7 @@ class Toa_model extends CI_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->join(config('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' e', 'd.id_tip_material_trabajo = e.id', 'left')
+			->join(config('bd_tip_material_toa').' e', 'd.id_tip_material = e.id', 'left')
 			->get()->result_array();
 	}
 
@@ -498,7 +498,7 @@ class Toa_model extends CI_Model {
 			->where_in('centro', $this->centros_consumo)
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material=b.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left')
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
 			->order_by('c.desc_tip_material, a.material')
 			->get()->result_array();
 	}

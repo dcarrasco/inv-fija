@@ -213,21 +213,21 @@ class Consumo_toa extends ORM_Model {
 		$select = [
 			'desc_tip_material',
 			'ume',
-			'id_tip_material_trabajo',
+			'id_tip_material',
 		];
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
 			->order_by($this->reporte->get_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
 
 		$campos = array_merge([
 				'desc_tip_material' => ['titulo' => 'Tipo material'],
 				'ume'               => ['titulo' => 'Unidad'],
 			],
-			$this->_texto_link($fecha_desde, $fecha_hasta, 'tip_material', ['id_tip_material_trabajo'])
+			$this->_texto_link($fecha_desde, $fecha_hasta, 'tip_material', ['id_tip_material'])
 		);
 
 		return [$datos, $campos];
@@ -246,7 +246,7 @@ class Consumo_toa extends ORM_Model {
 			->group_by($select)
 			->order_by($this->reporte->get_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo = c.id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -523,7 +523,7 @@ class Consumo_toa extends ORM_Model {
 		}
 		elseif ($tipo_reporte === 'tip_material')
 		{
-			$this->db->where('id_tip_material_trabajo', $param3);
+			$this->db->where('id_tip_material', $param3);
 		}
 		elseif ($tipo_reporte === 'lote')
 		{
@@ -613,7 +613,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
 			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
 			->join(config('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' f', 'e.id_tip_material_trabajo = f.id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' f', 'e.id_tip_material=f.id', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
 	}
@@ -706,7 +706,7 @@ class Consumo_toa extends ORM_Model {
 			->select('a.*, c.desc_tip_material')
 			->from(config('bd_materiales_peticiones_toa').' a')
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.XI_SAP_CODE=b.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material_trabajo=c.id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id and c.uso_vpi=1', 'left', FALSE)
 			->where('aid', array_get($peticion_toa, 'aid'))
 			->order_by('c.desc_tip_material, XI_SAP_CODE')
 			->get()->result_array();
@@ -715,7 +715,7 @@ class Consumo_toa extends ORM_Model {
 			->select('a.*, c.desc_tip_material')
 			->from(config('bd_peticiones_vpi').' a')
 			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
-			->join(config('bd_tip_material_trabajo_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->where('appt_number', $id_peticion)
 			->order_by('c.desc_tip_material, a.ps_id')
 			->get()->result_array();
