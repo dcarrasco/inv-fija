@@ -249,7 +249,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">item</th>
-							<th class="text-center">tipo material</th>
+							<th class="text-center">tipo material VPI</th>
 							<th class="text-center">cod mat</th>
 							<th class="text-left">material</th>
 							<th class="text-center">serie</th>
@@ -310,7 +310,7 @@
 					<thead>
 						<tr>
 							<th class="text-center">item</th>
-							<th class="text-center">tipo material</th>
+							<th class="text-center">tipo material VPI</th>
 							<th class="text-center">ID PS</th>
 							<th class="text-left">descripcion PS</th>
 							<th class="text-center">ID Op Comercial</th>
