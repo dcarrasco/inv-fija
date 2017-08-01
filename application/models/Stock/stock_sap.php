@@ -122,14 +122,16 @@ class Stock_sap extends \ORM_Model {
 		{
 			$arr_campos['fecha_stock'] = ['titulo' => 'fecha stock', 'tipo' => 'fecha'];
 		}
-		if (in_array('sel_tiposalm', $mostrar))
+
+		if (in_array('sel_tiposalm', $mostrar) AND request('sel_tiposalm') !== 'sel_almacenes')
 		{
 			$arr_campos['tipo_almacen'] = ['titulo' => 'tipo almacen'];
 		}
-		if (in_array('almacen', $mostrar))
+
+		if (in_array('almacen', $mostrar) OR request('sel_tiposalm') === 'sel_almacenes')
 		{
 			$arr_campos['centro'] = ['titulo' => 'centro'];
-			$arr_campos['cod_almacen'] = ['titulo' => 'cod almacen'];
+			$arr_campos['almacen'] = ['titulo' => 'cod almacen'];
 			$arr_campos['des_almacen'] = ['titulo' => 'des almacen'];
 		}
 		if (in_array('acreedor', $mostrar))
