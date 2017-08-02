@@ -589,7 +589,7 @@ class Consumo_toa extends ORM_Model {
 				->get()->result_array();
 		}
 
-		return $this->db
+		$reporte_peticiones = $this->db
 			->select('min(a.fecha_contabilizacion) as fecha')
 			->select('a.referencia')
 			->select('a.carta_porte')
@@ -616,7 +616,34 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tip_material_toa').' f', 'e.id_tip_material=f.id', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
+
+		$peticiones =collect($reporte_peticiones)->pluck('referencia')->all();
+		$uso = $this->uso_peticiones($peticiones);
+
+		return collect($reporte_peticiones)->map(function($peticion) use ($uso) {
+			return array_merge($peticion, ['uso' => array_get($uso, $peticion['referencia'])]);
+		});
 	}
+
+	// --------------------------------------------------------------------
+
+	public function uso_peticiones($peticiones = [])
+	{
+		return collect($this->db
+			->select('appt_number')->group_by('appt_number')
+			->select("sum(case uso when 'OK' then 1 else 0 end) as OK")
+			->select('count(*) as TOTAL')
+			->where_in('appt_number', $peticiones)
+			->get(config('bd_uso_toa_dia'))
+			->result_array()
+			)->map_with_keys(function($peticion) {
+				$uso = (int) (100*$peticion['OK']/$peticion['TOTAL']);
+				$class = ($uso >= 90) ? 'success' : (($uso >= 80) ? 'warning' : 'danger');
+
+				return [$peticion['appt_number'] => "<span class=\"label label-$class\">$uso%</span>" ];
+			})->all();
+	}
+
 
 	// --------------------------------------------------------------------
 
@@ -642,6 +669,7 @@ class Consumo_toa extends ORM_Model {
 		$arr_campos['tecnico']    = ['titulo' => 'Nombre Tecnico'];
 		$arr_campos['cant']       = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['monto']      = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+		$arr_campos['uso']        = ['titulo' => '%Uso', 'class' => 'text-center'];
 		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
