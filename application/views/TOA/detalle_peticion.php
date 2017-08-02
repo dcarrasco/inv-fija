@@ -9,16 +9,11 @@
 			{validation_errors}
 
 			<div class="form-group <?= form_has_error_class('pag_desde'); ?>">
-				<label class="control-label col-sm-4">{_toa_consumo_peticion_label_}</label>
-				<div class="col-sm-8">
+				<label class="control-label col-sm-3">{_toa_consumo_peticion_label_}</label>
+				<div class="col-sm-6">
 					<?= form_input('peticion', request('peticion'), 'class="form-control"'); ?>
 				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label col-sm-4">
-				</label>
-				<div class="col-sm-8">
+				<div class="col-sm-3">
 					<button name="submit" type="submit" class="btn btn-primary pull-right" id="btn_buscar">
 						<span class="fa fa-search"></span>
 						{_toa_consumo_peticion_search_button_}
