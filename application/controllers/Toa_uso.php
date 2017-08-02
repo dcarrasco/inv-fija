@@ -50,15 +50,15 @@ class Toa_uso extends Controller_base {
 		$this->lang->load('toa');
 
 		$this->set_menu_modulo([
-			'genera' => [
-				'url'   => $this->router->class . '/genera',
-				'texto' => $this->lang->line('uso_menu_genera'),
-				'icon'  => 'list'
-			],
 			'reporte' => [
 				'url'   => $this->router->class . '/uso',
 				'texto' => $this->lang->line('uso_menu_reporte'),
 				'icon'  => 'bar-chart'
+			],
+			'genera' => [
+				'url'   => $this->router->class . '/genera',
+				'texto' => $this->lang->line('uso_menu_genera'),
+				'icon'  => 'list'
 			],
 			'evolucion_tecnico' => [
 				'url'   => $this->router->class . '/evolucion_tecnico',

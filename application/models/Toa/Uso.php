@@ -66,6 +66,7 @@ class Uso extends ORM_Model {
 	 */
 	public $combo_mostrar = [
 		'tipo_pet' => 'Tipos Peticion',
+		'tipo_mat' => 'Tipos Materiales',
 		'empresa'  => 'Empresas',
 		'agencia'  => 'Agencias',
 		'tecnico'  => 'Tecnicos',
@@ -379,42 +380,69 @@ class Uso extends ORM_Model {
 
 		// Borra mes del reporte
 		$this->db->where('mes', $mes)->delete(config('bd_uso_toa'));
+		$this->db->where('mes', $mes)->delete(config('bd_uso_toa_dia'));
+		$this->db->truncate(config('bd_uso_toa_vpi'));
+		$this->db->truncate(config('bd_uso_toa_toa'));
 
-		// Genera reporte
-		$this->db->query("insert into ".config('bd_uso_toa')."
-select distinct
-	substring(p.date,1,7) as mes,
-	p.date as fecha,
-	case substring(p.appt_number,1,3) when 'INC' then 'REPARA' else 'INSTALA' end as tipo_pet,
-	p.appt_number,
-	p.xa_original_agency as agencia,
-	p.resource_external_id as tecnico,
-	p.contractor_company as empresa,
-	d.aid,
-	NULL as tipo_mat,
-	'OK' as uso,
-	1 as cant_appt
-from ".config('bd_peticiones_toa')." p
-left join ".config('bd_materiales_peticiones_toa')." d on p.aid=d.aid
-where p.date like '{$mes}%'
-	and p.astatus='complete'"
-			);
+		// Peticiones VPI
+		$select_stmt = $this->db
+			->select('a.fecha, a.appt_number, a.xa_original_agency as agencia, a.resource_external_id as tecnico, a.contractor_company as empresa, a.ps_id, a.pspe_cantidad, a.desc_producto_servicio, a.desc_operacion_comercial, c.desc_tip_material')
+			->from(config('bd_peticiones_vpi').' a')
+			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left')
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
+			->like('a.fecha', $mes, 'after')
+			->where('a.astatus', 'complete')
+			->where('c.uso_vpi', 1)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_vpi'). ' '.$select_stmt);
 
-		// Actualiza uso
-		$this->db->set('uso', 'NOK')
-			->where('aid', NULL)
-			->where('mes',$mes)
-			->update(config('bd_uso_toa'));
+		// Peticiones TOA
+		$select_stmt = $this->db
+			->select("substring(a.date,1,7) as mes, a.date as fecha, case substring(a.appt_number,1,3) when 'INC' then 'REPARA' else 'INSTALA' end as tipo_pet, a.appt_number, a.xa_original_agency as agencia, a.resource_external_id as tecnico, a.contractor_company as empresa, a.aid, d.desc_tip_material as tipo_mat, NULL as uso,  0 as cant_appt, 0 as cant_vpi, sum(cast(quantity as int)) as cant_toa, 0 as cant_sap", FALSE)
+			->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_materiales_peticiones_toa').' b', 'a.aid=b.aid', 'left')
+			->join(config('bd_catalogo_tip_material_toa').' c', 'b.xi_sap_code=c.id_catalogo', 'left')
+			->join(config('bd_tip_material_toa').' d', 'c.id_tip_material=d.id', 'left')
+			->like('a.date', $mes, 'after')
+			->where('a.astatus', 'complete')
+			->where('d.uso_vpi', 1)
+			->group_by('a.date, a.appt_number, a.xa_original_agency, a.resource_external_id, a.contractor_company, a.aid, d.desc_tip_material')
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_toa'). ' '.$select_stmt);
 
-		// Resumen del mes
-		$this->db->query("insert into ".config('bd_uso_toa')."
-select
-	mes, NULL, tipo_pet, NULL, agencia, tecnico, empresa, NULL, NULL, uso, sum(cant_appt)
-from ".config('bd_uso_toa')."
-where mes='{$mes}'
-  and fecha is not null
-group by mes, tipo_pet, agencia, tecnico, empresa, uso"
-		);
+		// Procesa peticiones por dia
+		$select_stmt = $this->db
+			->select("substring(fecha,1,7) as mes, fecha, case substring(appt_number,1,3) when 'INC' then 'REPARA' else 'INSTALA' end as tipo_pet, appt_number, agencia, tecnico, empresa, NULL as aid, desc_tip_material, NULL as uso, 0 as cant_appt, sum(pspe_cantidad) as cant_vpi, 0 as cant_toa, 0 as cant_sap", FALSE)
+			->from(config('bd_uso_toa_vpi'))
+			->group_by('fecha, appt_number, agencia, tecnico, empresa, desc_tip_material')
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+
+		// Actualiza peticiones con informacion de uso toa
+		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r LEFT JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes}'");
+
+		// Actualiza cantidades NULL a 0
+		$this->db->set('cant_toa', 0)
+			->where('mes', $mes)
+			->where('cant_toa', NULL)
+			->update(config('bd_uso_toa_dia'));
+
+		// Actualiza peticiones OK y NOK
+		$this->db->query('UPDATE '.config('bd_uso_toa_dia')." SET uso=case when cant_vpi=cant_toa then 'OK' else 'NOK' end, cant_appt=1 WHERE mes='{$mes}'");
+
+		// Puebla tabla mes
+		$select_stmt = $this->db
+			->select('mes, NULL as fecha, tipo_pet, NULL as appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso,
+sum(cant_appt) as cant_appt, sum(cant_vpi) as cant_vpi, sum(cant_toa) as cant_toa, sum(cant_sap) as cant_sap', FALSE)
+			->from(config('bd_uso_toa_dia'))
+			->where('mes', $mes)
+			->group_by('mes, tipo_pet, agencia, tecnico, empresa, aid, tipo_mat, uso')
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa'). ' '.$select_stmt);
+
+		// Borra tablas temporales
+		// $this->db->truncate(config('bd_uso_toa_vpi'));
+		// $this->db->truncate(config('bd_uso_toa_toa'));
 
 		$cantidad = $this->db->where('mes', $mes)
 			->from(config('bd_uso_toa'))
