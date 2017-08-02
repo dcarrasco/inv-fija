@@ -421,6 +421,13 @@ class Uso extends ORM_Model {
 		// Actualiza peticiones con informacion de uso toa
 		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r LEFT JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes}'");
 
+		// Corrige uso de 2 o mas modem en VPI (Modem Speedy)
+		$this->db->set('cant_vpi', 1)
+			->where('mes', $mes)
+			->where('cant_vpi', 2)
+			->where('tipo_mat', 'Modem')
+			->update(config('bd_uso_toa_dia'));
+
 		// Actualiza cantidades NULL a 0
 		$this->db->set('cant_toa', 0)
 			->where('mes', $mes)
