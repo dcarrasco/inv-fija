@@ -509,25 +509,26 @@ class Consumo_toa extends ORM_Model {
 			return '';
 		}
 
-		$arr_data = [];
-
 		$this->db
 			->where('fecha_contabilizacion>=', $param1)
 			->where('fecha_contabilizacion<=', $param2)
 			->where_in('codigo_movimiento', $this->movimientos_consumo)
 			->where_in('centro', $this->centros_consumo);
 
-		if ($tipo_reporte === 'material')
+		$reportes = [
+			'material'     => 'material',
+			'tip_material' => 'id_tip_material',
+			'lote'         => 'lote',
+			'tecnicos'     =>'cliente',
+			'ciudades'     => 'id_ciudad',
+			'empresas'     => 'vale_acomp',
+			'tipo_trabajo' => 'carta_porte',
+			'clientes'     => 'd.customer_number'
+		];
+
+		if (array_key_exists($tipo_reporte, $reportes))
 		{
-			$this->db->where('material', $param3);
-		}
-		elseif ($tipo_reporte === 'tip_material')
-		{
-			$this->db->where('id_tip_material', $param3);
-		}
-		elseif ($tipo_reporte === 'lote')
-		{
-			$this->db->where('lote', $param3);
+			$this->db->where($reportes[$tipo_reporte], $param3);
 		}
 		elseif ($tipo_reporte === 'lote-material')
 		{
@@ -539,27 +540,6 @@ class Consumo_toa extends ORM_Model {
 			$this->db->where('codigo_movimiento', $param3);
 			$this->db->where('elemento_pep', $param4);
 		}
-		elseif ($tipo_reporte === 'tecnicos')
-		{
-			$this->db->where('cliente', $param3);
-		}
-		elseif ($tipo_reporte === 'ciudades')
-		{
-			$this->db->where('id_ciudad', $param3);
-		}
-		elseif ($tipo_reporte === 'empresas')
-		{
-			$this->db->where('vale_acomp', $param3);
-		}
-		elseif ($tipo_reporte === 'tipo_trabajo')
-		{
-			$this->db->where('carta_porte', $param3);
-		}
-		elseif ($tipo_reporte === 'clientes')
-		{
-			$this->db->where('d.customer_number', $param3);
-		}
-
 		elseif ($tipo_reporte === 'total_cliente')
 		{
 			$this->db->reset_query();
@@ -567,47 +547,32 @@ class Consumo_toa extends ORM_Model {
 				->from(config('bd_peticiones_toa').' p')
 				->join(config('bd_movimientos_sap_fija').' m', 'm.referencia=p.appt_number', 'left')
 				->where('customer_number', $param3)
-				->select('p.date as fecha')
-				->select('p.appt_number as referencia')
-				->select('upper(p.xa_work_type) as carta_porte', FALSE)
-				->select('p.contractor_company as empresa')
-				->select('p.resource_external_id as cliente')
-				->select('p.resource_name as tecnico')
-				->select('p.acoord_x')
-				->select('p.acoord_y')
+				->select('p.date as fecha')->group_by('p.date')
+				->select('p.appt_number as referencia')->group_by('p.appt_number')
+				->select('upper(p.xa_work_type) as carta_porte', FALSE)->group_by('p.xa_work_type')
+				->select('p.contractor_company as empresa')->group_by('p.contractor_company')
+				->select('p.resource_external_id as cliente')->group_by('p.resource_external_id')
+				->select('p.resource_name as tecnico')->group_by('p.resource_name')
+				->select('p.acoord_x')->group_by('p.acoord_x')
+				->select('p.acoord_y')->group_by('p.acoord_y')
 				->select("'ver detalle' as texto_link")
 				->select('sum(-m.cantidad_en_um) as cant', FALSE)
 				->select('sum(-m.importe_ml) as monto', FALSE)
-				->group_by('p.date')
-				->group_by('p.appt_number')
-				->group_by('p.xa_work_type')
-				->group_by('p.contractor_company')
-				->group_by('p.resource_external_id')
-				->group_by('p.resource_name')
-				->group_by('p.acoord_x')
-				->group_by('p.acoord_y')
 				->get()->result_array();
 		}
 
 		$reporte_peticiones = $this->db
 			->select('min(a.fecha_contabilizacion) as fecha')
-			->select('a.referencia')
-			->select('a.carta_porte')
-			->select('c.empresa')
-			->select('a.cliente')
-			->select('b.tecnico')
-			->select('d.acoord_x')
-			->select('d.acoord_y')
+			->select('a.referencia')->group_by('a.referencia')
+			->select('a.carta_porte')->group_by('a.carta_porte')
+			->select('c.empresa')->group_by('c.empresa')
+			->select('a.cliente')->group_by('a.cliente')
+			->select('b.tecnico')->group_by('b.tecnico')
+			->select('d.acoord_x')->group_by('d.acoord_x')
+			->select('d.acoord_y')->group_by('d.acoord_y')
 			->select("'ver detalle' as texto_link")
 			->select_sum('(-a.cantidad_en_um)', 'cant')
 			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('a.referencia')
-			->group_by('a.carta_porte')
-			->group_by('c.empresa')
-			->group_by('a.cliente')
-			->group_by('b.tecnico')
-			->group_by('d.acoord_x')
-			->group_by('d.acoord_y')
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
@@ -640,7 +605,7 @@ class Consumo_toa extends ORM_Model {
 				$uso = (int) (100*$peticion['OK']/$peticion['TOTAL']);
 				$class = ($uso >= 90) ? 'success' : (($uso >= 80) ? 'warning' : 'danger');
 
-				return [$peticion['appt_number'] => "<span class=\"label label-$class\">$uso%</span>" ];
+				return [$peticion['appt_number'] => "<span class=\"label label-{$class}\">{$uso}%</span>" ];
 			})->all();
 	}
 
