@@ -158,26 +158,44 @@ class Asignacion_toa extends ORM_Model {
 
 		$campos_reporte = [
 			'tecnicos' => [
-				'empresa' => ['titulo' => 'Empresa'],
-				'cliente' => ['titulo' => 'Cod Tecnico'],
-				'tecnico' => ['titulo' => 'Nombre Tecnico'],
-				'cant'    => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
-				'monto'   => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
-				'texto_link' => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['cliente']],
+				'empresa'    => ['titulo' => 'Empresa'],
+				'cliente'    => ['titulo' => 'Cod Tecnico'],
+				'tecnico'    => ['titulo' => 'Nombre Tecnico'],
+				'cant'       => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'      => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link' => [
+					'titulo'         => '',
+					'tipo'           => 'link_registro',
+					'class'          => 'text-right',
+					'href'           => "toa_asignaciones/ver_asignaciones/tecnicos/$fecha_desde/$fecha_hasta",
+					'href_registros' => ['cliente']
+				],
 			],
 			'material' => [
 				'material'       => ['titulo' => 'Cod material'],
 				'texto_material' => ['titulo' => 'Desc material'],
 				'cant'           => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
 				'monto'          => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
-				'texto_link'     => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['material']],
+				'texto_link'     => [
+					'titulo'         => '',
+					'tipo'           => 'link_registro',
+					'class'          => 'text-right',
+					'href'           => "toa_asignaciones/ver_asignaciones/material/$fecha_desde/$fecha_hasta",
+					'href_registros' => ['material']
+				],
 			],
 			'lote' => [
-				'valor' => ['titulo' => 'Valor'],
-				'lote'  => ['titulo' => 'Lote'],
-				'cant'  => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
-				'monto' => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
-				'texto_link' => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote']],
+				'valor'      => ['titulo' => 'Valor'],
+				'lote'       => ['titulo' => 'Lote'],
+				'cant'       => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'      => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link' => [
+					'titulo'         => '',
+					'tipo'           => 'link_registro',
+					'class'          => 'text-right',
+					'href'           => "toa_asignaciones/ver_asignaciones/lote/$fecha_desde/$fecha_hasta",
+					'href_registros' => ['lote']
+				],
 			],
 			'lote-material' => [
 				'valor'          => ['titulo' => 'Valor'],
@@ -186,7 +204,13 @@ class Asignacion_toa extends ORM_Model {
 				'texto_material' => ['titulo' => 'Desc material'],
 				'cant'           => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
 				'monto'          => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
-				'texto_link'     => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote-material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote','material']],
+				'texto_link'     => [
+					'titulo'         => '',
+					'tipo'           => 'link_registro',
+					'class'          => 'text-right',
+					'href'           => "toa_asignaciones/ver_asignaciones/lote-material/$fecha_desde/$fecha_hasta",
+					'href_registros' => ['lote','material']
+				],
 			],
 			'detalle' => [
 				'fecha'              => ['titulo' => 'Fecha', 'tipo' => 'fecha'],
