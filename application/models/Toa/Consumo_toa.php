@@ -603,9 +603,13 @@ class Consumo_toa extends ORM_Model {
 			->result_array()
 			)->map_with_keys(function($peticion) {
 				$uso = (int) (100*$peticion['OK']/$peticion['TOTAL']);
-				$class = ($uso >= 90) ? 'success' : (($uso >= 80) ? 'warning' : 'danger');
+				$class = ($uso >= 90)
+					? 'check-circle text-success' :
+					(($uso >= 80)
+						? 'minus-circle text-warning'
+						: 'times-circle text-danger');
 
-				return [$peticion['appt_number'] => "<span class=\"label label-{$class}\">{$uso}%</span>" ];
+				return [$peticion['appt_number'] => "<i class=\"fa fa-{$class}\"></i>" ];
 			})->all();
 	}
 
@@ -638,6 +642,18 @@ class Consumo_toa extends ORM_Model {
 		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Indica si la peticion es de instalacion o reparacion
+	 * @param  string $peticion ID de la peticion
+	 * @return boolean
+	 */
+	public function es_peticion_instala($peticion = NULL)
+	{
+		return substr($peticion, 0, 3) !== 'INC';
 	}
 
 	// --------------------------------------------------------------------
@@ -707,36 +723,40 @@ class Consumo_toa extends ORM_Model {
 			->order_by('c.desc_tip_material, XI_SAP_CODE')
 			->get()->result_array();
 
-		$materiales_vpi = $this->db
-			->select('a.*, c.desc_tip_material')
-			->from(config('bd_peticiones_vpi').' a')
-			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
-			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
-			->where('appt_number', $id_peticion)
-			->order_by('c.desc_tip_material, a.ps_id')
-			->get()->result_array();
+		$materiales_vpi = ! $this->es_peticion_instala($id_peticion)
+			? []
+			: $this->db
+				->select('a.*, c.desc_tip_material')
+				->from(config('bd_peticiones_vpi').' a')
+				->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
+				->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
+				->where('appt_number', $id_peticion)
+				->order_by('c.desc_tip_material, a.ps_id')
+				->get()->result_array();
 
-		$peticion_repara = $this->db->from(config('bd_peticiones_toa'))
-			->select('a_complete_reason_rep_minor_stb as stb_clave')
-			->select('a.rev_clave as stb_rev_clave')
-			->select('a.descripcion as stb_descripcion')
-			->select('a.agrupacion_cs as stb_agrupacion_cs')
-			->select('a.ambito as stb_ambito')
-			->select('a_complete_reason_rep_minor_ba as ba_clave')
-			->select('b.rev_clave as ba_rev_clave')
-			->select('b.descripcion as ba_descripcion')
-			->select('b.agrupacion_cs as ba_agrupacion_cs')
-			->select('b.ambito as ba_ambito')
-			->select('a_complete_reason_rep_minor_tv as tv_clave')
-			->select('c.rev_clave as tv_rev_clave')
-			->select('c.descripcion as tv_descripcion')
-			->select('c.agrupacion_cs as tv_agrupacion_cs')
-			->select('c.ambito as tv_ambito')
-			->join(config('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
-			->join(config('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
-			->join(config('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
-			->where('appt_number', $id_peticion)
-			->get()->result_array();
+		$peticion_repara = $this->es_peticion_instala($id_peticion)
+			? []
+			: $this->db->from(config('bd_peticiones_toa'))
+				->select('a_complete_reason_rep_minor_stb as stb_clave')
+				->select('a.rev_clave as stb_rev_clave')
+				->select('a.descripcion as stb_descripcion')
+				->select('a.agrupacion_cs as stb_agrupacion_cs')
+				->select('a.ambito as stb_ambito')
+				->select('a_complete_reason_rep_minor_ba as ba_clave')
+				->select('b.rev_clave as ba_rev_clave')
+				->select('b.descripcion as ba_descripcion')
+				->select('b.agrupacion_cs as ba_agrupacion_cs')
+				->select('b.ambito as ba_ambito')
+				->select('a_complete_reason_rep_minor_tv as tv_clave')
+				->select('c.rev_clave as tv_rev_clave')
+				->select('c.descripcion as tv_descripcion')
+				->select('c.agrupacion_cs as tv_agrupacion_cs')
+				->select('c.ambito as tv_ambito')
+				->join(config('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
+				->join(config('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
+				->join(config('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
+				->where('appt_number', $id_peticion)
+				->get()->result_array();
 
 		return [
 			'peticion_toa'   => $peticion_toa,
