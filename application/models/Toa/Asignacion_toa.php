@@ -99,6 +99,31 @@ class Asignacion_toa extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Filtra un asignaciones para un rango de fechas
+	 *
+	 * @param  string  $fecha_desde  Fecha inicio
+	 * @param  string  $fecha_hasta  Fecha fin
+	 * @param  boolean $filtra_signo Indica si filtramos por signo del movimiento
+	 * @return void
+	 */
+	protected function rango_asignaciones($fecha_desde, $fecha_hasta, $filtra_signo = TRUE)
+	{
+		if ($filtra_signo)
+		{
+			$this->db->where('a.signo', 'NEG');
+		}
+
+		return $this->db
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<=', $fecha_hasta)
+			->where_in('a.codigo_movimiento', $this->movimientos_asignaciones)
+			->where_in('a.centro', $this->centros_asignacion)
+			->from(config('bd_movimientos_sap_fija').' a');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Devuelve las asignaciones realizados en TOA
 	 *
 	 * @param  string $tipo_reporte Tipo de reporte a desplegar
@@ -115,185 +140,110 @@ class Asignacion_toa extends ORM_Model {
 			return '';
 		}
 
-		$arr_data = [];
+		$select_fields = [
+			'tecnicos' => "c.empresa, a.cliente, b.tecnico, 'ver asignaciones' as texto_link, sum(-a.cantidad_en_um) as cant, sum(-a.importe_ml) as monto",
+			'material' => "material, texto_material, 'ver asignaciones' as texto_link, sum(-cantidad_en_um) as cant, sum(-importe_ml) as monto",
+			'lote' => "valor, lote, 'ver asignaciones' as texto_link, sum(-cantidad_en_um) as cant, sum(-importe_ml) as monto",
+			'lote-material' => "valor, lote, material, texto_material, 'ver asignaciones' as texto_link, sum(-cantidad_en_um) as cant, sum(-importe_ml) as monto",
+			'detalle' => 'a.fecha_contabilizacion as fecha, a.referencia, c.empresa, a.cliente, b.tecnico, a.codigo_movimiento, a.texto_movimiento, a.elemento_pep, a.documento_material, a.centro, a.material, a.texto_material, a.lote, a.valor, a.umb, (-a.cantidad_en_um) as cant, (-a.importe_ml) as monto, a.usuario',
+		];
 
-		$this->db
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<=', $fecha_hasta)
-			->where_in('a.codigo_movimiento', $this->movimientos_asignaciones)
-			->where_in('a.centro', $this->centros_asignacion)
-			->where('a.signo','NEG');
+		$group_by_fields = [
+			'tecnicos' => ['c.empresa', 'a.cliente', 'b.tecnico'],
+			'material' => ['material', 'texto_material'],
+			'lote'     => ['valor', 'lote'],
+			'lote-material' => ['valor', 'lote', 'material', 'texto_material'],
+			'detalle'  => [],
+		];
+
+		$campos_reporte = [
+			'tecnicos' => [
+				'empresa' => ['titulo' => 'Empresa'],
+				'cliente' => ['titulo' => 'Cod Tecnico'],
+				'tecnico' => ['titulo' => 'Nombre Tecnico'],
+				'cant'    => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'   => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link' => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['cliente']],
+			],
+			'material' => [
+				'material'       => ['titulo' => 'Cod material'],
+				'texto_material' => ['titulo' => 'Desc material'],
+				'cant'           => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'          => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link'     => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['material']],
+			],
+			'lote' => [
+				'valor' => ['titulo' => 'Valor'],
+				'lote'  => ['titulo' => 'Lote'],
+				'cant'  => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto' => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link' => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote']],
+			],
+			'lote-material' => [
+				'valor'          => ['titulo' => 'Valor'],
+				'lote'           => ['titulo' => 'Lote'],
+				'material'       => ['titulo' => 'Cod material'],
+				'texto_material' => ['titulo' => 'Desc material'],
+				'cant'           => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'          => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'texto_link'     => ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote-material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote','material']],
+			],
+			'detalle' => [
+				'fecha'              => ['titulo' => 'Fecha', 'tipo' => 'fecha'],
+				'referencia'         => ['titulo' => 'Numero Peticion'],
+				'empresa'            => ['titulo' => 'Empresa'],
+				'cliente'            => ['titulo' => 'Cod Tecnico'],
+				'tecnico'            => ['titulo' => 'Nombre Tecnico'],
+				'codigo_movimiento'  => ['titulo' => 'Cod Movimiento'],
+				'texto_movimiento'   => ['titulo' => 'Desc Movimiento'],
+				'elemento_pep'       => ['titulo' => 'PEP'],
+				'documento_material' => ['titulo' => 'Documento SAP'],
+				'centro'             => ['titulo' => 'Centro'],
+				'material'           => ['titulo' => 'Cod material'],
+				'texto_material'     => ['titulo' => 'Desc material'],
+				'lote'               => ['titulo' => 'Lote'],
+				'valor'              => ['titulo' => 'Valor'],
+				'umb'                => ['titulo' => 'Unidad'],
+				'cant'               => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+				'monto'              => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+				'usuario'            => ['titulo' => 'Usuario SAP'],
+			],
+		];
+
+		$order_fields = [
+			'tecnicos'      => 'empresa',
+			'material'      => 'material',
+			'lote'          => 'valor',
+			'lote-material' => 'valor',
+			'detalle'       => 'referencia',
+		];
 
 		$orden_tipo = ($orden_tipo === '') ? 'ASC' : $orden_tipo;
+		$orden_campo = empty($orden_campo) ? array_get($order_fields, $tipo_reporte) : $orden_campo;
 
-		if ($tipo_reporte === 'detalle')
+		if ($tipo_reporte === 'tecnicos')
 		{
-			$orden_campo = empty($orden_campo) ? 'referencia' : $orden_campo;
-
-			$arr_data = $this->db
-				->select('a.fecha_contabilizacion as fecha')
-				->select('a.referencia')
-				->select('c.empresa')
-				->select('a.cliente')
-				->select('b.tecnico')
-				->select('a.codigo_movimiento')
-				->select('a.texto_movimiento')
-				->select('a.elemento_pep')
-				->select('a.documento_material')
-				->select('a.centro')
-				->select('a.material')
-				->select('a.texto_material')
-				->select('a.lote')
-				->select('a.valor')
-				->select('a.umb')
-				->select('(-a.cantidad_en_um) as cant', FALSE)
-				->select('(-a.importe_ml) as monto', FALSE)
-				->select('a.usuario')
-				->from(config('bd_movimientos_sap_fija').' a')
+			$this->db
 				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				//->order_by($orden_campo, $orden_tipo)
-				->get()->result_array();
-
-			$arr_campos = [];
-			$arr_campos['fecha']              = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-			$arr_campos['referencia']         = ['titulo' => 'Numero Peticion'];
-			$arr_campos['empresa']            = ['titulo' => 'Empresa'];
-			$arr_campos['cliente']            = ['titulo' => 'Cod Tecnico'];
-			$arr_campos['tecnico']            = ['titulo' => 'Nombre Tecnico'];
-			$arr_campos['codigo_movimiento']  = ['titulo' => 'Cod Movimiento'];
-			$arr_campos['texto_movimiento']   = ['titulo' => 'Desc Movimiento'];
-			$arr_campos['elemento_pep']       = ['titulo' => 'PEP'];
-			$arr_campos['documento_material'] = ['titulo' => 'Documento SAP'];
-			$arr_campos['centro']             = ['titulo' => 'Centro'];
-			$arr_campos['material']           = ['titulo' => 'Cod material'];
-			$arr_campos['texto_material']     = ['titulo' => 'Desc material'];
-			$arr_campos['lote']               = ['titulo' => 'Lote'];
-			$arr_campos['valor']              = ['titulo' => 'Valor'];
-			$arr_campos['umb']                = ['titulo' => 'Unidad'];
-			$arr_campos['cant']               = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-			$arr_campos['monto']              = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-			$arr_campos['usuario']            = ['titulo' => 'Usuario SAP'];
-			$this->reporte->set_order_campos($arr_campos, 'referencia');
-
-			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+				->join(config('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left');
 		}
-		elseif ($tipo_reporte === 'material')
+		elseif ($tipo_reporte === 'detalle')
 		{
-			$orden_campo = empty($orden_campo) ? 'material' : $orden_campo;
-
-			$arr_data = $this->db
-				->select('material')
-				->select('texto_material')
-				->select("'ver asignaciones' as texto_link")
-				->select_sum('(-cantidad_en_um)', 'cant')
-				->select_sum('(-importe_ml)', 'monto')
-				->group_by('material')
-				->group_by('texto_material')
-				//->order_by($orden_campo, $orden_tipo)
-				->from(config('bd_movimientos_sap_fija').' a')
-				->get()->result_array();
-
-			$arr_campos = [];
-			$arr_campos['material']       = ['titulo' => 'Cod material'];
-			$arr_campos['texto_material'] = ['titulo' => 'Desc material'];
-			$arr_campos['cant']           = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-			$arr_campos['monto']          = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-			$arr_campos['texto_link']     = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['material']];
-			$this->reporte->set_order_campos($arr_campos, 'material');
-
-			return $this->reporte->genera_reporte($arr_campos, $arr_data);
-		}
-		elseif ($tipo_reporte === 'lote')
-		{
-			$orden_campo = empty($orden_campo) ? 'valor' : $orden_campo;
-
-			$arr_data = $this->db
-				->select('valor')
-				->select('lote')
-				->select("'ver asignaciones' as texto_link")
-				->select_sum('(-cantidad_en_um)', 'cant')
-				->select_sum('(-importe_ml)', 'monto')
-				->group_by('valor')
-				->group_by('lote')
-				//->order_by($orden_campo, $orden_tipo)
-				->from(config('bd_movimientos_sap_fija').' a')
-				->get()->result_array();
-
-			$arr_campos = [];
-			$arr_campos['valor'] = ['titulo' => 'Valor'];
-			$arr_campos['lote']  = ['titulo' => 'Lote'];
-			$arr_campos['cant']  = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-			$arr_campos['monto'] = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-			$arr_campos['texto_link'] = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote']];
-			$this->reporte->set_order_campos($arr_campos, 'valor');
-
-			return $this->reporte->genera_reporte($arr_campos, $arr_data);
-		}
-		elseif ($tipo_reporte === 'lote-material')
-		{
-			$orden_campo = empty($orden_campo) ? 'valor' : $orden_campo;
-
-			$arr_data = $this->db
-				->select('valor')
-				->select('lote')
-				->select('material')
-				->select('texto_material')
-				->select("'ver asignaciones' as texto_link")
-				->select_sum('(-cantidad_en_um)', 'cant')
-				->select_sum('(-importe_ml)', 'monto')
-				->group_by('valor')
-				->group_by('lote')
-				->group_by('material')
-				->group_by('texto_material')
-				//->order_by($orden_campo, $orden_tipo)
-				->from(config('bd_movimientos_sap_fija').' a')
-				->get()->result_array();
-
-			$arr_campos = [];
-			$arr_campos['valor']          = ['titulo' => 'Valor'];
-			$arr_campos['lote']           = ['titulo' => 'Lote'];
-			$arr_campos['material']       = ['titulo' => 'Cod material'];
-			$arr_campos['texto_material'] = ['titulo' => 'Desc material'];
-			$arr_campos['cant']           = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-			$arr_campos['monto']          = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-			$arr_campos['texto_link']     = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/lote-material/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['lote','material']];
-			$this->reporte->set_order_campos($arr_campos, 'valor');
-
-			return $this->reporte->genera_reporte($arr_campos, $arr_data);
-		}
-		elseif ($tipo_reporte === 'tecnicos')
-		{
-			$orden_campo = empty($orden_campo) ? 'empresa' : $orden_campo;
-
-			$arr_data = $this->db
-				->select('c.empresa')
-				->select('a.cliente')
-				->select('b.tecnico')
-				->select("'ver asignaciones' as texto_link")
-				->select_sum('(-a.cantidad_en_um)', 'cant')
-				->select_sum('(-a.importe_ml)', 'monto')
-				->group_by('c.empresa')
-				->group_by('a.cliente')
-				->group_by('b.tecnico')
-				->from(config('bd_movimientos_sap_fija').' a')
+			$this->db
 				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
-				->join(config('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
-				//->order_by($orden_campo, $orden_tipo)
-				->get()->result_array();
-
-			$arr_campos = [];
-			$arr_campos['empresa'] = ['titulo' => 'Empresa'];
-			$arr_campos['cliente'] = ['titulo' => 'Cod Tecnico'];
-			$arr_campos['tecnico'] = ['titulo' => 'Nombre Tecnico'];
-			$arr_campos['cant']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-			$arr_campos['monto']   = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-			$arr_campos['texto_link'] = ['titulo' => '', 'tipo' => 'link_registro', 'class' => 'text-right', 'href' => 'toa_asignaciones/ver_asignaciones/tecnicos/'.$fecha_desde.'/'.$fecha_hasta, 'href_registros' => ['cliente']];
-			$this->reporte->set_order_campos($arr_campos, 'empresa');
-
-			return $this->reporte->genera_reporte($arr_campos, $arr_data);
+				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left');
 		}
+
+		$arr_data = $this->rango_asignaciones($fecha_desde, $fecha_hasta)
+			->select(array_get($select_fields, $tipo_reporte), FALSE)
+			->group_by(array_get($group_by_fields, $tipo_reporte))
+			->get()->result_array();
+
+		$arr_campos = array_get($campos_reporte, $tipo_reporte);
+		$this->reporte->set_order_campos($arr_campos, $orden_campo);
+
+		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
 	// --------------------------------------------------------------------
@@ -315,22 +265,15 @@ class Asignacion_toa extends ORM_Model {
 			return '';
 		}
 
-		$arr_data = [];
+		$filtros = [
+			'material' => 'a.material',
+			'lote'     => 'a.lote',
+			'tecnicos' => 'a.cliente',
+		];
 
-		$this->db
-			->where('a.fecha_contabilizacion>=', $param1)
-			->where('a.fecha_contabilizacion<=', $param2)
-			->where_in('a.codigo_movimiento', $this->movimientos_asignaciones)
-			->where_in('a.centro', $this->centros_asignacion)
-			->where('a.signo', 'NEG');
-
-		if ($tipo_reporte === 'material')
+		if (array_key_exists($tipo_reporte, $filtros))
 		{
-			$this->db->where('a.material', $param3);
-		}
-		elseif ($tipo_reporte === 'lote')
-		{
-			$this->db->where('a.lote', $param3);
+			$this->db->where($filtros[$tipo_reporte], $param3);
 		}
 		elseif ($tipo_reporte === 'lote-material')
 		{
@@ -342,40 +285,10 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->where('a.codigo_movimiento', $param3);
 			$this->db->where('a.elemento_pep', $param4);
 		}
-		elseif ($tipo_reporte === 'tecnicos')
-		{
-			$this->db->where('a.cliente', $param3);
-		}
 
-		$arr_data = $this->db
-			->select('convert(varchar(20), a.fecha_contabilizacion, 112) as fecha')
-			->select('a.documento_material')
-			->select('c.empresa')
-			->select('a.cliente')
-			->select('b.tecnico')
-			->select('a.centro')
-			->select('a.almacen')
-			->select('d.des_almacen')
-			->select('a.material')
-			->select('a.texto_material')
-			->select('a.valor')
-			->select('a.lote')
-			->select("'ver detalle' as texto_link")
-			->select_sum('(-a.cantidad_en_um)', 'cant')
-			->select_sum('(-a.importe_ml)', 'monto')
-			->group_by('a.fecha_contabilizacion')
-			->group_by('a.documento_material')
-			->group_by('c.empresa')
-			->group_by('a.cliente')
-			->group_by('b.tecnico')
-			->group_by('a.centro')
-			->group_by('a.almacen')
-			->group_by('d.des_almacen')
-			->group_by('a.material')
-			->group_by('a.texto_material')
-			->group_by('a.valor')
-			->group_by('a.lote')
-			->from(config('bd_movimientos_sap_fija').' a')
+		$arr_data = $this->rango_asignaciones($param1, $param2)
+			->select("convert(varchar(20), a.fecha_contabilizacion, 112) as fecha, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote, 'ver detalle' as texto_link, sum(-a.cantidad_en_um) as cant, sum(-a.importe_ml) as monto", FALSE)
+			->group_by('a.fecha_contabilizacion, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->join(config('bd_almacenes_sap').' d', 'a.centro=d.centro and a.almacen=d.cod_almacen', 'left')
@@ -409,7 +322,6 @@ class Asignacion_toa extends ORM_Model {
 		return $this->reporte->genera_reporte($arr_campos, $arr_data);
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -426,34 +338,12 @@ class Asignacion_toa extends ORM_Model {
 			return [];
 		}
 
-		return $this->db
-			->select('a.fecha_contabilizacion as fecha')
-			->select('a.referencia')
-			->select('c.empresa')
-			->select('a.cliente')
-			->select('b.tecnico')
-			->select('a.codigo_movimiento')
-			->select('a.texto_movimiento')
-			->select('a.elemento_pep')
-			->select('a.documento_material')
-			->select('a.centro')
-			->select('a.almacen')
-			->select('a.material')
-			->select('a.texto_material')
-			->select('a.lote')
-			->select('a.valor')
-			->select('a.umb')
-			->select('(a.cantidad_en_um) as cant', FALSE)
-			->select('(a.importe_ml) as monto', FALSE)
-			->select('a.usuario')
-			->from(config('bd_movimientos_sap_fija').' a')
+		return $this->rango_asignaciones($fecha, $fecha, FALSE)
+			->select('a.fecha_contabilizacion as fecha, a.referencia, c.empresa, a.cliente, b.tecnico, a.codigo_movimiento, a.texto_movimiento, a.elemento_pep, a.documento_material, a.centro, a.almacen, a.material, a.texto_material, a.lote, a.valor, a.umb, (a.cantidad_en_um) as cant, (a.importe_ml) as monto, a.usuario', FALSE)
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			//->order_by($orden_campo, $orden_tipo)
-			->where('fecha_contabilizacion', $fecha)
 			->where('documento_material', $peticion)
-			->where_in('codigo_movimiento', $this->movimientos_asignaciones)
-			->where_in('centro', $this->centros_asignacion)
 			->order_by('material, cantidad_en_um')
 			->get()->result_array();
 	}
@@ -486,20 +376,6 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
 
-		$this->db
-			->select('a.fecha_contabilizacion as fecha')
-			->select('a.cliente')
-			->group_by('a.fecha_contabilizacion')
-			->group_by('a.cliente')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_asignaciones)
-			->where_in('centro', $this->centros_asignacion)
-			->where('almacen', NULL)
-			->from(config('bd_movimientos_sap_fija').' a')
-			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE);
-
 		if (in_array($dato_desplegar, ['unidades', 'monto']))
 		{
 			$this->db->select_sum($dato_desplegar === 'unidades' ? 'a.cantidad_en_um' : 'a.importe_ml', 'dato');
@@ -509,11 +385,19 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->select('count(*) as dato', FALSE);
 		}
 
-		$datos = $this->db->get()->result_array();
+		$datos = $this->rango_asignaciones($fecha_desde, $fecha_hasta, FALSE)
+			->select('a.fecha_contabilizacion as fecha')
+			->select('a.cliente')
+			->group_by('a.fecha_contabilizacion')
+			->group_by('a.cliente')
+			->where('b.id_empresa', $empresa)
+			->where('almacen', NULL)
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->get()->result_array();
 
-		$arr_tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
-		return $arr_tecnicos
+		return $tecnicos
 			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
 				$datos_tecnico = collect($datos)
 					->filter(function($dato) use ($tecnico) {

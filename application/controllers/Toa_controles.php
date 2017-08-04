@@ -17,6 +17,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 use Toa\Ciudad_toa;
 use Toa\Empresa_toa;
 use Toa\Tecnico_toa;
+use Toa\Asignacion_toa;
 use Toa\Tipo_trabajo_toa;
 use Toa\Empresa_ciudad_toa;
 
@@ -149,8 +150,6 @@ class Toa_controles extends Controller_base {
 	 */
 	public function asignaciones()
 	{
-		$this->load->model('toa_asignacion');
-
 		$this->form_validation
 			->set_data(request())
 			->set_rules($this->toa_model->controles_consumos_validation)
@@ -159,11 +158,11 @@ class Toa_controles extends Controller_base {
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
 			'combo_empresas'       => Empresa_toa::create()->find('list'),
-			'combo_filtro_trx'     => $this->toa_asignacion->get_combo_movimientos_asignacion(),
-			'combo_dato_desplegar' => $this->toa_asignacion->combo_unidades_asignacion,
+			'combo_filtro_trx'     => Asignacion_toa::create()->get_combo_movimientos_asignacion(),
+			'combo_dato_desplegar' => Asignacion_toa::create()->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_asignacion->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Asignacion_toa::create()->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
 		]);
 	}
 
