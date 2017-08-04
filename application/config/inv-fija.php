@@ -115,8 +115,10 @@ $config['bd_uso_toa']                   = BD_TOA.'toa_reporte_uso';
 $config['bd_uso_toa_dia']               = BD_TOA.'toa_reporte_uso_dia';
 $config['bd_uso_toa_vpi']               = BD_TOA.'toa_reporte_uso_vpi';
 $config['bd_uso_toa_toa']               = BD_TOA.'toa_reporte_uso_toa';
+$config['bd_uso_toa_repara']            = BD_TOA.'toa_reporte_uso_repara';
 $config['bd_ps_vpi_toa']                = BD_TOA.'toa_ps_vpi';
 $config['bd_ps_tip_material_toa']       = BD_TOA.'toa_ps_tip_material';
+$config['bd_claves_cierre_tip_material_toa'] = BD_TOA.'toa_claves_cierre_tip_material';
 
 
 /* End of file inv-fija.php */

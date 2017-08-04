@@ -438,19 +438,59 @@ class Uso extends ORM_Model {
 			->where('tipo_mat', 'Modem')
 			->update(config('bd_uso_toa_dia'));
 
+		// Agrega peticiones de REPARA
+		$select_stmt = $this->db
+			->select('mes, fecha, tipo_pet, appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso, cant_appt, cant_vpi, cant_toa, cant_sap')
+			->from(config('bd_uso_toa_toa'))
+			->where('mes', $mes)
+			->where('tipo_pet', 'REPARA')
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+
+		// Peticiones repara
+		$select_stmt = $this->db
+			->select("substring(a.date,1,7) as mes, a.date as fecha, 'REPARA' as tipo_pet, a.appt_number, a.xa_original_agency as agencia, a.resource_external_id as tecnico, a.contractor_company as empresa, a.aid, c.desc_tip_material as tipo_mat, NULL as uso, 0 as cant_appt, 1 as cant_vpi, 0 as cant_toa, 0 as cant_sap", FALSE)
+			->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_claves_cierre_tip_material_toa').' b', "case when a_complete_reason_rep_minor_stb is null then '' else a_complete_reason_rep_minor_stb end + case when a_complete_reason_rep_minor_ba is null then '' else a_complete_reason_rep_minor_ba end + case when a_complete_reason_rep_minor_tv is null then '' else a_complete_reason_rep_minor_tv end = b.clave", 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
+			->like('a.date', $mes, 'after')
+			->where('a.astatus', 'complete')
+			->where("substring(appt_number,1,3)='INC'", NULL, FALSE)
+			->where('c.uso_vpi', 1)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_repara'). ' '.$select_stmt);
+
+		// Actualiza peticiones con informacion de uso REPARA
+		$this->db->query('UPDATE d SET d.cant_vpi=r.cant_vpi FROM '.config('bd_uso_toa_dia').' d LEFT JOIN '.config('bd_uso_toa_repara')." r on d.appt_number=r.appt_number and d.tipo_mat=r.tipo_mat WHERE d.mes='{$mes}'");
+
+		// Agrega registros en TOA que no están en VPI
+		$select_stmt = $this->db
+			->select('r.*')
+			->from(config('bd_uso_toa_repara').' r')
+			->join(config('bd_uso_toa_dia').' d', 'r.appt_number=d.appt_number and r.tipo_mat=d.tipo_mat', 'left')
+			->where('d.appt_number', NULL)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+
 		// Actualiza cantidades NULL a 0
 		$this->db->set('cant_toa', 0)
 			->where('mes', $mes)
 			->where('cant_toa', NULL)
 			->update(config('bd_uso_toa_dia'));
 
+		// Actualiza cantidades NULL a 0
+		$this->db->set('cant_vpi', 0)
+			->where('mes', $mes)
+			->where('cant_vpi', NULL)
+			->update(config('bd_uso_toa_dia'));
+
+
 		// Actualiza peticiones OK y NOK
 		$this->db->query('UPDATE '.config('bd_uso_toa_dia')." SET uso=case when cant_vpi=cant_toa then 'OK' else 'NOK' end, cant_appt=1 WHERE mes='{$mes}'");
 
 		// Puebla tabla mes
 		$select_stmt = $this->db
-			->select('mes, NULL as fecha, tipo_pet, NULL as appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso,
-sum(cant_appt) as cant_appt, sum(cant_vpi) as cant_vpi, sum(cant_toa) as cant_toa, sum(cant_sap) as cant_sap', FALSE)
+			->select('mes, NULL as fecha, tipo_pet, NULL as appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso, sum(cant_appt) as cant_appt, sum(cant_vpi) as cant_vpi, sum(cant_toa) as cant_toa, sum(cant_sap) as cant_sap', FALSE)
 			->from(config('bd_uso_toa_dia'))
 			->where('mes', $mes)
 			->group_by('mes, tipo_pet, agencia, tecnico, empresa, aid, tipo_mat, uso')

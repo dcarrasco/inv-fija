@@ -22,6 +22,7 @@ $lang['toa_config_menu_tipo_material']  = 'Tipos de material';
 $lang['toa_config_menu_ciudad']         = 'Ciudades';
 $lang['toa_config_menu_empresa_ciudad'] = 'Empresas-Ciudades';
 $lang['toa_config_menu_ps_vpi']         = 'PS VPI';
+$lang['toa_config_menu_clave_cierre']   = 'Claves de cierre';
 
 $lang['toa_controles_tecnicos']              = 'Actuaciones T&eacute;cnicos';
 $lang['toa_controles_asignaciones']          = 'Asignaciones a t&eacute;cnicos';

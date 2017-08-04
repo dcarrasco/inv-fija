@@ -93,6 +93,17 @@ class Tip_material_toa extends ORM_Model {
 					],
 					'texto_ayuda'    => 'PS VPI.',
 				],
+				'clave_cierre' => [
+					'tipo'           => Orm_field::TIPO_HAS_MANY,
+					'relation'       => [
+						'model'         => Clave_cierre::class,
+						'join_table'    => config('bd_claves_cierre_tip_material_toa'),
+						'id_one_table'  => ['id_tip_material'],
+						'id_many_table' => ['clave'],
+						//'conditions'    => ['id_app' => '@field_value:id_app'],
+					],
+					'texto_ayuda'    => 'Claves cierre.',
+				],
 			],
 		];
 

@@ -93,7 +93,12 @@ class Toa_config extends Orm_controller {
 			'ps_vpi_toa' => [
 				'url'   => $this->router->class . '/listado/ps_vpi_toa',
 				'texto' => $this->lang->line('toa_config_menu_ps_vpi'),
-				'icon'  => 'map-marker',
+				'icon'  => 'list',
+			],
+			'clave_cierre' => [
+				'url'   => $this->router->class . '/listado/clave_cierre',
+				'texto' => $this->lang->line('toa_config_menu_clave_cierre'),
+				'icon'  => 'list',
 			],
 		]);
 	}
