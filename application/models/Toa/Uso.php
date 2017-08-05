@@ -378,11 +378,18 @@ class Uso extends ORM_Model {
 
 		$mes = substr($mes, 0, 4).'-'.substr($mes, 4, 2);
 
+		$rows = [];
+
 		// Borra mes del reporte
 		$this->db->where('mes', $mes)->delete(config('bd_uso_toa'));
+		$rows['borra_reporte_mes'] = $this->db->affected_rows();
+
 		$this->db->where('mes', $mes)->delete(config('bd_uso_toa_dia'));
+		$rows['borra_reporte_dia'] = $this->db->affected_rows();
+
 		$this->db->truncate(config('bd_uso_toa_vpi'));
 		$this->db->truncate(config('bd_uso_toa_toa'));
+		$this->db->truncate(config('bd_uso_toa_repara'));
 
 		// Peticiones VPI
 		$select_stmt = $this->db
@@ -395,6 +402,7 @@ class Uso extends ORM_Model {
 			->where('c.uso_vpi', 1)
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_vpi'). ' '.$select_stmt);
+		$rows['peticiones_vpi'] = $this->db->affected_rows();
 
 		// Peticiones TOA
 		$select_stmt = $this->db
@@ -409,6 +417,7 @@ class Uso extends ORM_Model {
 			->group_by('a.date, a.appt_number, a.xa_original_agency, a.resource_external_id, a.contractor_company, a.aid, d.desc_tip_material')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_toa'). ' '.$select_stmt);
+		$rows['peticiones_toa'] = $this->db->affected_rows();
 
 		// Procesa peticiones por dia
 		$select_stmt = $this->db
@@ -417,9 +426,11 @@ class Uso extends ORM_Model {
 			->group_by('fecha, appt_number, agencia, tecnico, empresa, desc_tip_material')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+		$rows['peticiones_toa_dia'] = $this->db->affected_rows();
 
 		// Actualiza peticiones con informacion de uso toa
-		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r LEFT JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes}'");
+		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes}'");
+		$rows['actualiza_peticiones_toa_dia'] = $this->db->affected_rows();
 
 		// Agrega registros en TOA que no están en VPI
 		$select_stmt = $this->db
@@ -430,6 +441,7 @@ class Uso extends ORM_Model {
 			->where("substring(t.appt_number,1,3)<>'INC'")
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+		$rows['actualiza_peticiones_toa_con_vpi'] = $this->db->affected_rows();
 
 		// Corrige uso de 2 o mas modem en VPI (Modem Speedy)
 		$this->db->set('cant_vpi', 1)
@@ -437,6 +449,7 @@ class Uso extends ORM_Model {
 			->where('cant_vpi', 2)
 			->where('tipo_mat', 'Modem')
 			->update(config('bd_uso_toa_dia'));
+		$rows['corrige_modem_x2'] = $this->db->affected_rows();
 
 		// Agrega peticiones de REPARA
 		$select_stmt = $this->db
@@ -446,6 +459,7 @@ class Uso extends ORM_Model {
 			->where('tipo_pet', 'REPARA')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+		$rows['peticiones_toa_repara'] = $this->db->affected_rows();
 
 		// Peticiones repara
 		$select_stmt = $this->db
@@ -459,9 +473,11 @@ class Uso extends ORM_Model {
 			->where('c.uso_vpi', 1)
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_repara'). ' '.$select_stmt);
+		$rows['peticiones_toa_repara2'] = $this->db->affected_rows();
 
 		// Actualiza peticiones con informacion de uso REPARA
-		$this->db->query('UPDATE d SET d.cant_vpi=r.cant_vpi FROM '.config('bd_uso_toa_dia').' d LEFT JOIN '.config('bd_uso_toa_repara')." r on d.appt_number=r.appt_number and d.tipo_mat=r.tipo_mat WHERE d.mes='{$mes}'");
+		$this->db->query('UPDATE d SET d.cant_vpi=r.cant_vpi FROM '.config('bd_uso_toa_dia').' d JOIN '.config('bd_uso_toa_repara')." r on d.appt_number=r.appt_number and d.tipo_mat=r.tipo_mat WHERE d.mes='{$mes}'");
+		$rows['actualiza_peticiones_repara'] = $this->db->affected_rows();
 
 		// Agrega registros en TOA que no están en VPI
 		$select_stmt = $this->db
@@ -471,6 +487,7 @@ class Uso extends ORM_Model {
 			->where('d.appt_number', NULL)
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
+		$rows['actualiza_peticiones_repara2'] = $this->db->affected_rows();
 
 		// Actualiza cantidades NULL a 0
 		$this->db->set('cant_toa', 0)
@@ -487,6 +504,7 @@ class Uso extends ORM_Model {
 
 		// Actualiza peticiones OK y NOK
 		$this->db->query('UPDATE '.config('bd_uso_toa_dia')." SET uso=case when cant_vpi=cant_toa then 'OK' else 'NOK' end, cant_appt=1 WHERE mes='{$mes}'");
+		$rows['actualiza_ok_nok'] = $this->db->affected_rows();
 
 		// Puebla tabla mes
 		$select_stmt = $this->db
@@ -496,17 +514,18 @@ class Uso extends ORM_Model {
 			->group_by('mes, tipo_pet, agencia, tecnico, empresa, aid, tipo_mat, uso')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa'). ' '.$select_stmt);
+		$rows['agrega_registros_mes'] = $this->db->affected_rows();
 
 		// Borra tablas temporales
-		// $this->db->truncate(config('bd_uso_toa_vpi'));
-		// $this->db->truncate(config('bd_uso_toa_toa'));
+		$this->db->truncate(config('bd_uso_toa_vpi'));
+		$this->db->truncate(config('bd_uso_toa_toa'));
+		$this->db->truncate(config('bd_uso_toa_repara'));
 
-		$cantidad = $this->db->where('mes', $mes)
-			->from(config('bd_uso_toa'))
-			->count_all_results();
-		$cantidad = fmt_cantidad($cantidad);
+		$mensaje = collect($rows)->map(function($cant, $step_key) {
+			return '<li>'.str_replace('_', ' ', $step_key).' ('.fmt_cantidad($cant).' registros) </li>';
+		})->implode();
 
-		return "Generado reporte de uso del mes {$mes} con {$cantidad} registros.";
+		return "<ul>$mensaje</ul>";
 	}
 
 
