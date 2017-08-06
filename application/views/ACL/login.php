@@ -1,12 +1,8 @@
 <div class="row">
 
-	<div class="col-md-6 col-md-offset-3 col-xs-12 well">
-		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
+	<div class="col-md-4 col-md-offset-4 col-xs-12 well">
+		<div class="control-group text-center">
 			<h2>{_login_form_title_}</h2>
-		</div>
-
-		<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-			<hr>
 		</div>
 
 		<div class="col-md-12">
@@ -19,47 +15,40 @@
 
 		<?= form_open($url_login, 'id="frm_login"'); ?>
 
-			<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('usr'); ?>">
+			<div class="form-group col-md-12 <?= form_has_error_class('usr'); ?>">
 				<label for="usr">{_login_input_user_}</label>
-				<?= form_input('usr', request('usr'),'maxlength="45" class="form-control" tabindex="1" autofocus'); ?>
+				<?= form_input('usr', request('usr'),'maxlength="45" class="form-control input-lg" tabindex="1" autofocus'); ?>
 			</div>
 
-			<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('pwd') ?>">
+			<div class="form-group col-md-12 <?= form_has_error_class('pwd') ?>">
 				<label for="pwd">{_login_input_password_}</label>
-				<?= form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control" autocomplete="off"'); ?>
+				<?= form_password('pwd', '','maxlength="45" size="40" tabindex="2" class="form-control input-lg" autocomplete="off"'); ?>
 			</div>
 
-			<div class="form-group col-md-8 col-md-offset-2 col-xs-12">
+			<div class="form-group col-md-12">
+				<div class="checkbox col-md-6">
+					<label>
+						<?= form_checkbox('remember_me', 'remember', request('remember_me')); ?>
+						{_login_check_remember_me_}
+					</label>
+				</div>
 				<div class="pull-right">
 					<?= anchor('#', '{_login_link_change_password_}', 'id="lnk_cambio_password"'); ?>
 				</div>
 			</div>
 
 			<?php if ( ! empty($captcha_img)): ?>
-				<div class="form-group col-md-8 col-md-offset-2 col-xs-12 <?= form_has_error_class('captcha') ?>">
+				<div class="form-group col-md-12 <?= form_has_error_class('captcha') ?>">
 					<label for="pwd">{_login_input_captcha_}</label>
-					<?= form_input('captcha', '','maxlength="15" tabindex="3" class="form-control"'); ?>
+					<?= form_input('captcha', '','maxlength="15" tabindex="3" class="form-control input-lg"'); ?>
 				</div>
-				<div class="form-group col-md-8 col-md-offset-2 col-xs-12 text-center <?= form_has_error_class('captcha') ?>">
+				<div class="form-group col-md-12 text-center <?= form_has_error_class('captcha') ?>">
 					{captcha_img}
 				</div>
 			<?php endif ?>
 
-			<div class="form-group col-md-8 col-md-offset-2 col-xs-12">
-				<div class="checkbox">
-					<label>
-						<?= form_checkbox('remember_me', 'remember', request('remember_me')); ?>
-						{_login_check_remember_me_}
-					</label>
-				</div>
-			</div>
-
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-				<hr>
-			</div>
-
-			<div class="control-group col-md-8 col-md-offset-2 col-xs-12">
-				<button type="submit" name="btn_submit" class="btn btn-success pull-right col-md-6">
+			<div class="form-group col-md-12">
+				<button type="submit" name="btn_submit" class="btn btn-success btn-lg btn-block">
 					{_login_button_login_} &nbsp; <span class="fa fa-sign-in"></span>
 				</button>
 			</div>

@@ -76,7 +76,7 @@ class Login extends Controller_base {
 
 		app_render_view('ACL/login', [
 			'captcha_img'  => $captcha_img,
-			'extra_styles' => '<style type="text/css">body {margin-top: 40px;}</style>',
+			'extra_styles' => '<style type="text/css">body {margin-top: 80px; background-image: url("'.site_url('img/tch-background.jpg').'"); }</style>',
 			'vista_login'  => TRUE,
 			'url_login'    => site_url("{$this->router->class}/do_login/"),
 		]);
@@ -155,7 +155,7 @@ class Login extends Controller_base {
 			'usr'               => $usuario,
 			'tiene_clave_class' => Acl::create()->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => request('usr') ? TRUE : FALSE,
-			'extra_styles'      => '<style type="text/css">body {margin-top: 40px;}</style>',
+			'extra_styles'      => '<style type="text/css">body {margin-top: 80px; background-image: url("'.site_url('img/tch-background.jpg').'"); }</style>',
 			'arr_vistas'        => ['ACL/cambio_password'],
 			'vista_login'       => TRUE,
 			'url_form'          => site_url("{$this->router->class}/do_cambio_password/{$usuario}"),

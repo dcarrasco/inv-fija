@@ -1,7 +1,7 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-$lang['login_form_title']           = 'Ingreso';
+$lang['login_form_title']           = 'Iniciar sesi&oacute;n';
 $lang['login_input_user']           = 'Usuario';
 $lang['login_input_password']       = 'Clave';
 $lang['login_input_captcha']        = 'Palabra distorsionada';
