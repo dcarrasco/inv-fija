@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" style="margin-top: 80px;">
 
 	<div class="col-md-4 col-md-offset-4 col-xs-12 well">
 		<div class="control-group text-center">

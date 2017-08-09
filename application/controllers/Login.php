@@ -76,7 +76,7 @@ class Login extends Controller_base {
 
 		app_render_view('ACL/login', [
 			'captcha_img'  => $captcha_img,
-			'extra_styles' => '<style type="text/css">body {margin-top: 80px; background-image: url("'.site_url('img/tch-background.jpg').'"); background-size: cover;}</style>',
+			'extra_styles' => '<style type="text/css">body {background-image: url("'.site_url('img/tch-background.jpg').'"); background-size: cover;}</style>',
 			'vista_login'  => TRUE,
 			'url_login'    => site_url("{$this->router->class}/do_login/"),
 		]);
@@ -91,9 +91,8 @@ class Login extends Controller_base {
 			Acl::create()->rules_login,
 			Acl::create()->use_captcha(request('usr')) ? Acl::create()->rules_captcha : []
 		);
-		$this->form_validation->set_rules($rules);
 
-		route_validation($this->form_validation->run());
+		route_validation($this->form_validation->set_rules($rules)->run());
 
 		$usuario      = request('usr');
 		$password     = request('pwd');
@@ -155,7 +154,7 @@ class Login extends Controller_base {
 			'usr'               => $usuario,
 			'tiene_clave_class' => Acl::create()->tiene_clave($usuario) ? '' : ' disabled',
 			'ocultar_password'  => request('usr') ? TRUE : FALSE,
-			'extra_styles'      => '<style type="text/css">body {margin-top: 80px; background-image: url("'.site_url('img/tch-background.jpg').'"); background-size: cover;}</style>',
+			'extra_styles'      => '<style type="text/css">body {background-image: url("'.site_url('img/tch-background.jpg').'"); background-size: cover;}</style>',
 			'arr_vistas'        => ['ACL/cambio_password'],
 			'vista_login'       => TRUE,
 			'url_form'          => site_url("{$this->router->class}/do_cambio_password/{$usuario}"),
