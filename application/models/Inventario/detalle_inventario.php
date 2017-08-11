@@ -16,6 +16,7 @@ namespace Inventario;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \Acl\Acl;
 use \ORM_Model;
 use \ORM_Field;
 use \Collection;
@@ -461,7 +462,7 @@ class Detalle_inventario extends ORM_Model {
 			'um'                 => strtoupper(request('um')),
 			'stock_sap'          => 0,
 			'stock_fisico'       => (int) request('stock_fisico'),
-			'digitador'          => (int) $this->acl_model->get_id_usr(),
+			'digitador'          => (int) Acl::create()->get_id_usr(),
 			'auditor'            => (int) $id_auditor,
 			'reg_nuevo'          => 'S',
 			'fecha_modificacion' => date('Y-m-d H:i:s'),
