@@ -14,6 +14,7 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Acl\Acl;
 use Inventario\catalogo;
 use Inventario\Inventario;
 use Inventario\detalle_inventario;
@@ -119,7 +120,7 @@ class Inventario_digitacion extends Controller_base {
 
 		route_validation($this->form_validation->run());
 
-		$id_usuario_login = $this->acl_model->get_id_usr();
+		$id_usuario_login = Acl::create()->get_id_usr();
 		$cant_modif = Detalle_inventario::create()->update_digitacion($inventario->get_id(), $hoja, $id_usuario_login);
 		set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 
@@ -183,8 +184,8 @@ class Inventario_digitacion extends Controller_base {
 		{
 			$detalle_inventario->recuperar_post();
 			$detalle_inventario->fill([
-				'digitador' => $this->acl_model->get_id_usr(),
-				'auditor'   => $this->acl_model->get_id_usr(),
+				'digitador' => Acl::create()->get_id_usr(),
+				'auditor'   => Acl::create()->get_id_usr(),
 				'fecha_modificacion' => date('Y-m-d H:i:s'),
 			]);
 			$detalle_inventario->grabar();
