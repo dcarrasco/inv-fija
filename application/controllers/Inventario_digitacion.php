@@ -79,6 +79,11 @@ class Inventario_digitacion extends Controller_base {
 			return $this->hoja_mobile($hoja);
 		}
 
+		if ( ! empty(request('hoja')))
+		{
+			redirect($this->router->class.'/ingreso/'.request('hoja'));
+		}
+
 		// recupera el inventario activo
 		$hoja = empty($hoja) ? 1 : $hoja;
 		$inventario = Inventario::create()->get_inventario_activo();
