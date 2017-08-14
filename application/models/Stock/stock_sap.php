@@ -1,6 +1,8 @@
 <?php
 namespace Stock;
 
+use \Reporte;
+
 /**
  * INVENTARIO FIJA
  *
@@ -27,6 +29,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  *
  */
 class Stock_sap extends \ORM_Model {
+
+	use Reporte;
 
 	/**
 	 * Indica el tipo de operación del stock (fijo o movil)
@@ -198,9 +202,11 @@ class Stock_sap extends \ORM_Model {
 				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
 			}
 		}
-		$this->reporte->set_order_campos($arr_campos, 'fecha_stock');
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_result);
+		$this->datos_reporte  = $arr_result;
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'fecha_stock');
+
+		return $this->genera_reporte();
 	}
 
 

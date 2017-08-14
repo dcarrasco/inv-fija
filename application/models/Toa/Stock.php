@@ -1,4 +1,7 @@
 <?php
+
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +17,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \Reporte;
+use \ORM_Model;
 use Toa\Tecnico_toa;
 
 /**
@@ -26,7 +31,9 @@ use Toa\Tecnico_toa;
  * @link     localhost:1520
  *
  */
-class Toa_stock extends CI_Model {
+class Stock extends ORM_Model {
+
+	use Reporte;
 
 	/**
 	 * Arreglo con validación formulario controles stock empresa
@@ -307,7 +314,7 @@ class Toa_stock extends CI_Model {
 
 		list($centro, $almacen) = explode('-', $centro_almacen);
 
-		$arr_data = $this->db
+		$this->datos_reporte = $this->db
 			->select('a.fecha_stock as fecha')
 			->select('d.tipo')
 			->select('a.centro')
@@ -344,9 +351,10 @@ class Toa_stock extends CI_Model {
 		$arr_campos['estado']      = ['titulo' => 'Estado'];
 		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-		$this->reporte->set_order_campos($arr_campos, 'material');
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'material');
+
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
@@ -365,7 +373,7 @@ class Toa_stock extends CI_Model {
 			return NULL;
 		}
 
-		$arr_data = $this->db
+		$this->datos_reporte = $this->db
 			->select('a.fecha_stock as fecha')
 			->select('a.centro')
 			->select('a.acreedor')
@@ -397,12 +405,13 @@ class Toa_stock extends CI_Model {
 		$arr_campos['estado']      = ['titulo' => 'Estado'];
 		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-		$this->reporte->set_order_campos($arr_campos, 'material');
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'material');
+
+		return $this->genera_reporte();
 	}
 
 }
 
-/* End of file Toa_stock.php */
-/* Location: ./application/models/Toa_stock.php */
+/* End of file Stock.php */
+/* Location: ./application/models/Toa/Stock.php */

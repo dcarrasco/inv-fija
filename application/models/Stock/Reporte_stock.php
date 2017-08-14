@@ -1,4 +1,7 @@
 <?php
+
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +17,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \Reporte;
 use Stock\Almacen_sap;
 use Stock\Tipoalmacen_sap;
 
@@ -27,7 +32,9 @@ use Stock\Tipoalmacen_sap;
  * @link     localhost:1520
  *
  */
-class Reportestock_model extends CI_Model {
+class Reporte_stock extends ORM_Model {
+
+	use Reporte;
 
 	/**
 	 * Arreglo de reglas de validación reporte permanencia
@@ -260,7 +267,7 @@ class Reportestock_model extends CI_Model {
 				->join(config('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left')
 				->join(config('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
 				->group_by('t.tipo, t.id_tipo')
-				->order_by($this->reporte->get_order_by($config['orden']));
+				->order_by($this->get_order_by($config['orden']));
 
 
 			// FILTROS
@@ -312,7 +319,7 @@ class Reportestock_model extends CI_Model {
 			$arr_reporte = $this->db->get()->result_array();
 		}
 
-		return $arr_reporte;
+		$this->datos_reporte = $arr_reporte;
 	}
 
 	// --------------------------------------------------------------------
@@ -325,7 +332,7 @@ class Reportestock_model extends CI_Model {
 	public function get_config_reporte_permanencia()
 	{
 		return [
-			'orden'   => request('sort', '+tipo'),
+			'orden'   => empty(request('sort')) ? '+tipo' : request('sort'),
 			'filtros' => [
 				'tipo_alm'   => request('tipo_alm'),
 				'estado_sap' => request('estado_sap'),
@@ -403,9 +410,7 @@ class Reportestock_model extends CI_Model {
 
 		}
 
-		$this->reporte->set_order_campos($arr_campos, 'tipo');
-
-		return $arr_campos;
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'tipo');
 	}
 
 	// --------------------------------------------------------------------
@@ -501,9 +506,8 @@ class Reportestock_model extends CI_Model {
 			'modificado_por' => ['titulo' => 'Modificado por'],
 			'nom_usuario'    => ['titulo' => 'Nombre usuario'],
 		];
-		$this->reporte->set_order_campos($arr_campos, 'tipo');
 
-		return $arr_campos;
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'tipo');
 	}
 
 	// --------------------------------------------------------------------
@@ -632,7 +636,7 @@ class Reportestock_model extends CI_Model {
 		{
 		}
 
-		return $this->db->get()->result_array();
+		$this->datos_reporte = $this->db->get()->result_array();
 	}
 
 
@@ -1064,9 +1068,7 @@ class Reportestock_model extends CI_Model {
 		$arr_campos['usuario']      = ['titulo' => 'Usuario'];
 		$arr_campos['nom_usuario']  = ['titulo' => 'Nom usuario'];
 
-		$this->reporte->set_order_campos($arr_campos, 'fecha');
-
-		return $arr_campos;
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'fecha');
 	}
 
 	// --------------------------------------------------------------------
@@ -1187,13 +1189,12 @@ class Reportestock_model extends CI_Model {
 			$this->db->where_in('m.'.$mov_cmv.'', $arr_filtros['cmv']);
 			$this->db->where_in($arr_filtro_almacenes[$arr_filtros['tipo_alm']], $arr_filtros['almacenes']);
 			$this->db->where_in($arr_filtro_materiales[$arr_filtros['tipo_mat']], $arr_filtros['materiales']);
-			$this->db->order_by($this->reporte->get_order_by($order_by));
+			$this->db->order_by($this->get_order_by($order_by));
 
 			$arr_reporte = $this->db->get()->result_array();
 		}
 
-		return $arr_reporte;
-
+		$this->datos_reporte = $arr_reporte;
 	}
 
 	// --------------------------------------------------------------------
@@ -1279,5 +1280,5 @@ class Reportestock_model extends CI_Model {
 
 }
 
-/* End of file reportestock_model.php */
-/* Location: ./application/models/reportestock_model.php */
+/* End of file Reporte_stock.php */
+/* Location: ./application/models/Stock/Reporte_stock.php */

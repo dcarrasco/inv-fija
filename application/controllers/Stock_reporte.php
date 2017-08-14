@@ -14,6 +14,7 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Reporte_stock;
 use Stock\Tipoalmacen_sap;
 
 /**
@@ -49,8 +50,6 @@ class Stock_reporte extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->load->model('reportestock_model');
 		$this->lang->load('stock');
 
 		$this->set_menu_modulo([
@@ -104,29 +103,31 @@ class Stock_reporte extends Controller_base {
 		$datos_hoja = [];
 		$view = 'listado';
 
+		$reporte = new Reporte_stock;
+
 		// define reglas de validacion
-		$is_form_valid = $this->form_validation->set_rules($this->reportestock_model->permanencia_validation)->run();
+		$is_form_valid = $this->form_validation->set_rules($reporte->permanencia_validation)->run();
 
 		if ($is_form_valid)
 		{
 			if ($tipo === 'permanencia')
 			{
-				$arr_campos = $this->reportestock_model->get_campos_reporte_permanencia();
-				$datos_hoja = $this->reportestock_model->get_reporte_permanencia($this->reportestock_model->get_config_reporte_permanencia());
+				$reporte->get_campos_reporte_permanencia();
+				$reporte->get_reporte_permanencia($reporte->get_config_reporte_permanencia());
 			}
 		}
 
 		app_render_view('stock_sap/reporte', [
 			'menu_modulo'      => $this->get_menu_modulo($tipo),
-			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
+			'reporte'          => $reporte->genera_reporte(),
 			'tipo_reporte'     => $view,
 			'nombre_reporte'   => $tipo,
 			'filtro_dif'       => '',
 			'arr_campos'       => $arr_campos,
-			'fecha_reporte'    => $this->reportestock_model->get_fecha_reporte(),
+			'fecha_reporte'    => $reporte->get_fecha_reporte(),
 			'combo_tipo_alm'   => Tipoalmacen_sap::create()->get_combo_tiposalm(request('tipo_op', 'MOVIL')),
-			'combo_estado_sap' => $this->reportestock_model->combo_estado_sap(),
-			'combo_tipo_mat'   => $this->reportestock_model->combo_tipo_mat(),
+			'combo_estado_sap' => $reporte->combo_estado_sap(),
+			'combo_tipo_mat'   => $reporte->combo_tipo_mat(),
 		]);
 	}
 
@@ -139,15 +140,14 @@ class Stock_reporte extends Controller_base {
 	 */
 	public function detalle()
 	{
-		$detalle_series = $this->reporte->genera_reporte(
-			$this->reportestock_model->get_campos_reporte_detalle_series(),
-			$this->reportestock_model->get_detalle_series(request())
-		);
+		$reporte = new Reporte_stock;
+		$reporte->get_campos_reporte_detalle_series();
+		$reporte->get_detalle_series(request());
 
 		app_render_view('stock_sap/detalle_series', [
 			'menu_modulo'        => $this->get_menu_modulo('permanencia'),
 			'menu_configuracion' => '',
-			'detalle_series'     => $detalle_series,
+			'detalle_series'     => $reporte->genera_reporte(),
 		]);
 
 	}
@@ -169,9 +169,9 @@ class Stock_reporte extends Controller_base {
 
 		$centro = request('sel_centro', 'CL03');
 
-		$arr_treemap = $this->reportestock_model->get_treemap_permanencia($centro);
-		$arr_treemap_cantidad = $this->reportestock_model->arr_query2treemap('cantidad', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'cant', 'perm');
-		$arr_treemap_valor = $this->reportestock_model->arr_query2treemap('valor', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'valor', 'perm');
+		$arr_treemap = Reporte_stock::create()->get_treemap_permanencia($centro);
+		$arr_treemap_cantidad = Reporte_stock::create()->arr_query2treemap('cantidad', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'cant', 'perm');
+		$arr_treemap_valor = Reporte_stock::create()->arr_query2treemap('valor', $arr_treemap, ['tipo', 'alm', 'marca', 'modelo'], 'valor', 'perm');
 
 		app_render_view('stock_sap/treemap', [
 			'menu_modulo'           => $this->get_menu_modulo('mapastock'),
@@ -190,7 +190,9 @@ class Stock_reporte extends Controller_base {
 	 */
 	public function movhist()
 	{
-		$this->form_validation->set_rules($this->reportestock_model->movhist_validation)->run();
+		$reporte = new Reporte_stock;
+
+		$this->form_validation->set_rules($reporte->movhist_validation)->run();
 
 		$param_tipo_fecha     = request('tipo_fecha', 'ANNO');
 		$param_tipo_alm       = request('tipo_alm', 'MOVIL-TIPOALM');
@@ -198,8 +200,8 @@ class Stock_reporte extends Controller_base {
 		$param_tipo_cruce_alm = request('tipo_cruce_alm', 'alm');
 		$param_sort           = request('sort', '+fecha');
 
-		$arr_campos    = $this->reportestock_model->get_campos_reporte_movhist();
-		$datos_reporte = $this->reportestock_model->get_reporte_movhist([
+		$reporte->get_campos_reporte_movhist();
+		$reporte->get_reporte_movhist([
 			'filtros' => [
 				'tipo_fecha'     => $param_tipo_fecha,
 				'fechas'         => request('fechas'),
@@ -215,14 +217,14 @@ class Stock_reporte extends Controller_base {
 
 		app_render_view('stock_sap/movhist', [
 			'menu_modulo'      => $this->get_menu_modulo('movhist'),
-			'combo_tipo_fecha' => $this->reportestock_model->get_combo_tipo_fecha(),
-			'combo_fechas'     => $this->reportestock_model->get_combo_fechas($param_tipo_fecha),
-			'combo_cmv'        => $this->reportestock_model->get_combo_cmv(),
-			'combo_tipo_alm'   => $this->reportestock_model->get_combo_tipo_alm(),
-			'combo_almacenes'  => $this->reportestock_model->get_combo_almacenes($param_tipo_alm),
-			'combo_tipo_mat'   => $this->reportestock_model->get_combo_tipo_mat(),
-			'combo_materiales' => $this->reportestock_model->get_combo_materiales($param_tipo_mat),
-			'reporte'          => $this->reporte->genera_reporte($arr_campos, $datos_reporte),
+			'combo_tipo_fecha' => $reporte->get_combo_tipo_fecha(),
+			'combo_fechas'     => $reporte->get_combo_fechas($param_tipo_fecha),
+			'combo_cmv'        => $reporte->get_combo_cmv(),
+			'combo_tipo_alm'   => $reporte->get_combo_tipo_alm(),
+			'combo_almacenes'  => $reporte->get_combo_almacenes($param_tipo_alm),
+			'combo_tipo_mat'   => $reporte->get_combo_tipo_mat(),
+			'combo_materiales' => $reporte->get_combo_materiales($param_tipo_mat),
+			'reporte'          => $reporte->genera_reporte(),
 		]);
 	}
 
@@ -238,7 +240,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_tipo_fecha($tipo)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_tipo_fecha($tipo)));
 	}
 
 
@@ -255,7 +257,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_fechas($tipo, $filtro)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_fechas($tipo, $filtro)));
 	}
 
 
@@ -271,7 +273,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_tipo_alm($tipo)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_tipo_alm($tipo)));
 	}
 
 
@@ -288,7 +290,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_almacenes($tipo, $filtro)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_almacenes($tipo, $filtro)));
 	}
 
 
@@ -304,7 +306,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_tipo_mat($tipo)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_tipo_mat($tipo)));
 	}
 
 
@@ -321,7 +323,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->reportestock_model->get_combo_materiales($tipo, $filtro)));
+			->set_output(json_encode(Reporte_stock::create()->get_combo_materiales($tipo, $filtro)));
 	}
 
 
@@ -337,9 +339,9 @@ class Stock_reporte extends Controller_base {
 	{
 		app_render_view('stock_sap/est03', [
 			'menu_modulo' => $this->get_menu_modulo('est03'),
-			'almacenes'   => $this->reportestock_model->get_almacenes_est03(),
-			'marcas'      => $this->reportestock_model->get_marcas_est03(),
-			'reporte'     => $this->reportestock_model->get_stock_est03(),
+			'almacenes'   => Reporte_stock::create()->get_almacenes_est03(),
+			'marcas'      => Reporte_stock::create()->get_marcas_est03(),
+			'reporte'     => Reporte_stock::create()->get_stock_est03(),
 		]);
 	}
 

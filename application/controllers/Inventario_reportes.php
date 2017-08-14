@@ -106,18 +106,15 @@ class Inventario_reportes extends Controller_base {
 	 */
 	public function listado($tipo = 'hoja', $param1 = '')
 	{
-		$inventario = new Inventario_reporte;
 		// define reglas para usar set_value, y ejecuta validación de formulario
-		$this->form_validation->set_rules($inventario->rules_reporte)->run();
+		$this->form_validation->set_rules(Inventario_reporte::create()->rules_reporte)->run();
 
-		$id_inventario = request('inv_activo', $inventario->get_id_inventario_activo());
-
-		$datos_hoja = $inventario->get_reporte($tipo, $id_inventario, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
-		$arr_campos = $inventario->get_campos_reporte($tipo);
+		$id_inventario = request('inv_activo', Inventario_reporte::create()->get_id_inventario_activo());
+		$inventario = new Inventario_reporte($id_inventario);
 
 		app_render_view('inventario/reporte', [
 			'menu_modulo'       => $this->get_menu_modulo($tipo),
-			'reporte'           => $this->reporte->genera_reporte($arr_campos, $datos_hoja),
+			'reporte'           => $inventario->reporte($tipo, $param1),
 			'combo_inventarios' => $inventario->get_combo_inventarios(),
 			'id_inventario'     => $id_inventario,
 		]);

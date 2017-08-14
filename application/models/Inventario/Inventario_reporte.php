@@ -14,6 +14,9 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
+
+use \Reporte;
+
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
@@ -27,6 +30,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  *
  */
 class Inventario_reporte extends Inventario {
+
+	use Reporte;
 
 	/**
 	 * Reglas de validación para los reportes
@@ -47,9 +52,9 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct($id_inventario = NULL)
 	{
-		parent::__construct();
+		parent::__construct($id_inventario);
 	}
 
 	// --------------------------------------------------------------------
@@ -69,6 +74,17 @@ class Inventario_reporte extends Inventario {
 			],
 		];
 	}
+
+	// --------------------------------------------------------------------
+
+	public function reporte($tipo, $param1)
+	{
+		$this->datos_reporte = $this->get_reporte($tipo, $this->id, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
+		$this->campos_reporte = $this->get_campos_reporte($tipo);
+
+		return $this->genera_reporte();
+	}
+
 
 	// --------------------------------------------------------------------
 
@@ -202,7 +218,7 @@ class Inventario_reporte extends Inventario {
 			->join(config('bd_usuarios').' d', 'd.id = di.digitador', 'left')
 			->join(config('bd_auditores').' a', 'a.id = di.auditor', 'left')
 			->group_by('di.hoja, d.nombre, a.nombre')
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -235,7 +251,7 @@ class Inventario_reporte extends Inventario {
 			->select('di.almacen')
 			->select('di.um')
 			->where('di.hoja', $hoja)
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -267,7 +283,7 @@ class Inventario_reporte extends Inventario {
 			->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre")
 			->group_by("f.codigo + '_' + sf.codigo")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -300,7 +316,7 @@ class Inventario_reporte extends Inventario {
 			->select("c.pmp * {$min_sap_fisico} as v_coincidente")
 			->select("c.pmp * (SUM({$stock_fisico}) - {$min_sap_fisico}) as v_sobrante")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
@@ -339,7 +355,7 @@ class Inventario_reporte extends Inventario {
 			->select("pmp * ({$min_sap_fisico}) as v_coincidente")
 			->select("pmp * (stock_fisico - {$min_sap_fisico}) as v_sobrante")
 			->where('di.catalogo', $catalogo)
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -365,7 +381,7 @@ class Inventario_reporte extends Inventario {
 		$this->db->select('di.ubicacion')
 			->select_max('fecha_modificacion', 'fecha')
 			->group_by('di.ubicacion')
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -396,7 +412,7 @@ class Inventario_reporte extends Inventario {
 			->join(config('bd_tipo_ubicacion').' t', 't.id=ut.id_tipo_ubicacion', 'left')
 			->group_by('t.tipo_ubicacion')
 			->group_by('di.ubicacion')
-			->order_by($this->reporte->get_order_by($orden_campo));
+			->order_by($this->get_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -513,17 +529,15 @@ class Inventario_reporte extends Inventario {
 	 */
 	public function get_campos_reporte_hoja()
 	{
-		$arr_campos = [
+		$campos = [
 			'hoja'      => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
 			'auditor'   => ['titulo' => 'Auditor'],
 			'digitador' => ['titulo' => 'Digitador'],
 		];
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
+		$campos = array_merge($campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'hoja');
-
-		return $arr_campos;
+		return $this->set_order_campos($campos, 'hoja');
 	}
 
 
@@ -536,7 +550,7 @@ class Inventario_reporte extends Inventario {
 	 */
 	public function get_campos_reporte_detalle_hoja()
 	{
-		$arr_campos = [
+		$campos = [
 			'ubicacion'   => ['titulo' => 'Ubicacion'],
 			'catalogo'    => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
 			'descripcion' => ['titulo' => 'Descripcion'],
@@ -545,11 +559,9 @@ class Inventario_reporte extends Inventario {
 			'almacen'     => ['titulo' => 'Almacen'],
 		];
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
+		$campos = array_merge($campos, $this->_get_campos_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
-
-		return $arr_campos;
+		return $this->set_order_campos($campos, 'ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -575,9 +587,7 @@ class Inventario_reporte extends Inventario {
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'catalogo');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'catalogo');
 	}
 
 
@@ -602,9 +612,7 @@ class Inventario_reporte extends Inventario {
 			'v_sobrante'    => ['titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor'],
 		];
 
-		$this->reporte->set_order_campos($arr_campos, 'catalogo');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'catalogo');
 	}
 
 	// --------------------------------------------------------------------
@@ -626,9 +634,7 @@ class Inventario_reporte extends Inventario {
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -646,9 +652,7 @@ class Inventario_reporte extends Inventario {
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'ubicacion');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -667,9 +671,7 @@ class Inventario_reporte extends Inventario {
 
 		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$this->reporte->set_order_campos($arr_campos, 'tipo_ubicacion');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'tipo_ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -698,9 +700,7 @@ class Inventario_reporte extends Inventario {
 			'glosa_ajuste' => ['titulo' => 'Observaci&oacute;n'],
 		];
 
-		$this->reporte->set_order_campos($arr_campos, 'catalogo');
-
-		return $arr_campos;
+		return $this->set_order_campos($arr_campos, 'catalogo');
 	}
 
 }

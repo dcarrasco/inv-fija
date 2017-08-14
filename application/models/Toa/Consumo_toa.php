@@ -18,6 +18,7 @@ namespace Toa;
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use \ORM_Model;
+use \Reporte;
 
 /**
  * Clase Modelo Movimientos fija
@@ -30,6 +31,8 @@ use \ORM_Model;
  *
  */
 class Consumo_toa extends ORM_Model {
+
+	use Reporte;
 
 	/**
 	 * Movimientos validos de consumos TOA
@@ -150,7 +153,7 @@ class Consumo_toa extends ORM_Model {
 		$datos = $this->db->select($select, FALSE)
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp = c.id_empresa', 'left', FALSE)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = [
@@ -178,35 +181,7 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
-	private function _get_datos_consumo_peticion($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
-	{
-		$select = [
-			'a.referencia',
-			'a.carta_porte',
-			'c.empresa',
-			'a.cliente',
-			'b.tecnico',
-		];
-
-		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
-			->group_by($select)
-			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
-			->join(config('bd_empresas_toa').' c', 'a.vale_acomp = c.id_empresa', 'left', FALSE)
-			->order_by($this->reporte->get_order_by($orden_campo))
-			->get()->result_array();
-
-		$campos = [
-			'referencia'  => ['titulo' => 'Numero peticion', 'tipo' => 'link', 'href' => 'toa_consumos/detalle_peticion/'],
-			'carta_porte' => ['titulo' => 'Tipo trabajo'],
-			'empresa'     => ['titulo' => 'Empresa'],
-			'cliente'     => ['titulo' => 'Cod Tecnico'],
-			'tecnico'     => ['titulo' => 'Nombre Tecnico'],
-			'cant'        => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
-			'monto'       => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
-		];
-
-		return [$datos, $campos];
-	}
+	// --------------------------------------------------------------------
 
 	private function _get_datos_consumo_tip_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
@@ -218,7 +193,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
@@ -233,6 +208,8 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
+	// --------------------------------------------------------------------
+
 	private function _get_datos_consumo_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -244,7 +221,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
@@ -261,6 +238,8 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
+	// --------------------------------------------------------------------
+
 	private function _get_datos_consumo_lote($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -270,7 +249,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -283,6 +262,7 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
+	// --------------------------------------------------------------------
 
 	private function _get_datos_consumo_lote_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
@@ -295,7 +275,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -310,6 +290,8 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
+	// --------------------------------------------------------------------
+
 	private function _get_datos_consumo_pep($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -320,7 +302,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->reporte->get_order_by($orden_campo))
+			->order_by($this->get_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -333,6 +315,8 @@ class Consumo_toa extends ORM_Model {
 
 		return [$datos, $campos];
 	}
+
+	// --------------------------------------------------------------------
 
 	private function _get_datos_consumo_tecnicos($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
@@ -348,7 +332,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by '.$this->reporte->get_order_by($orden_campo);
+		$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by '.$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -362,6 +346,8 @@ class Consumo_toa extends ORM_Model {
 
 		return [$datos, $campos];
 	}
+
+	// --------------------------------------------------------------------
 
 	private function _get_datos_consumo_ciudades($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
@@ -378,7 +364,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->join(config('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
 			->get_compiled_select();
-		$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by '.$this->reporte->get_order_by($orden_campo);
+		$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by '.$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -391,6 +377,8 @@ class Consumo_toa extends ORM_Model {
 
 		return [$datos, $campos];
 	}
+
+	// --------------------------------------------------------------------
 
 	private function _get_datos_consumo_empresas($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
@@ -405,7 +393,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by '.$this->reporte->get_order_by($orden_campo);
+		$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by '.$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -418,6 +406,8 @@ class Consumo_toa extends ORM_Model {
 		return [$datos, $campos];
 	}
 
+	// --------------------------------------------------------------------
+
 	private function _get_datos_consumo_tipo_trabajo($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -428,7 +418,7 @@ class Consumo_toa extends ORM_Model {
 		$query = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
 			->get_compiled_select();
-		$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by '.$this->reporte->get_order_by($orden_campo);
+		$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by '.$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -484,10 +474,11 @@ class Consumo_toa extends ORM_Model {
 		];
 
 		$orden_campo = empty($orden_campo) ? array_get($orden_reporte, $tipo_reporte) : $orden_campo;
-		list($datos, $campos) = call_user_func_array([$this, "_get_datos_consumo_{$tipo_reporte}"], [$orden_campo, $fecha_desde, $fecha_hasta]);
-		$this->reporte->set_order_campos($campos, $orden_campo);
+		list($this->datos_reporte, $campos) = call_user_func_array([$this, "_get_datos_consumo_{$tipo_reporte}"], [$orden_campo, $fecha_desde, $fecha_hasta]);
 
-		return $this->reporte->genera_reporte($campos, $datos);
+		$this->campos_reporte = $this->set_order_campos($campos, $orden_campo);
+
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
@@ -639,9 +630,11 @@ class Consumo_toa extends ORM_Model {
 		$arr_campos['cant']       = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
 		$arr_campos['monto']      = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
 		$arr_campos['uso']        = ['titulo' => '%Uso', 'class' => 'text-center'];
-		$this->reporte->set_order_campos($arr_campos, 'referencia');
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		$this->datos_reporte  = $arr_data;
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'referencia');
+
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
@@ -766,9 +759,6 @@ class Consumo_toa extends ORM_Model {
 			'peticion_repara' => $peticion_repara,
 		];
 	}
-
-
-
 
 }
 

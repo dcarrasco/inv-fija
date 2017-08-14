@@ -17,6 +17,7 @@ namespace Toa;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \Reporte;
 use \ORM_Model;
 use \ORM_Field;
 use Toa\Tecnico_toa;
@@ -33,6 +34,8 @@ use Stock\Clase_movimiento;
  *
  */
 class Asignacion_toa extends ORM_Model {
+
+	use Reporte;
 
 	/**
 	 * Arreglo con validación formulario consumos
@@ -259,15 +262,16 @@ class Asignacion_toa extends ORM_Model {
 				->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left');
 		}
 
-		$arr_data = $this->rango_asignaciones($fecha_desde, $fecha_hasta)
+		$this->datos_reporte = $this->rango_asignaciones($fecha_desde, $fecha_hasta)
 			->select(array_get($select_fields, $tipo_reporte), FALSE)
 			->group_by(array_get($group_by_fields, $tipo_reporte))
 			->get()->result_array();
 
 		$arr_campos = array_get($campos_reporte, $tipo_reporte);
-		$this->reporte->set_order_campos($arr_campos, $orden_campo);
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		$this->campos_reporte = $this->set_order_campos($arr_campos, $orden_campo);
+
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
@@ -310,7 +314,7 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->where('a.elemento_pep', $param4);
 		}
 
-		$arr_data = $this->rango_asignaciones($param1, $param2)
+		$this->datos_reporte = $this->rango_asignaciones($param1, $param2)
 			->select("convert(varchar(20), a.fecha_contabilizacion, 112) as fecha, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote, 'ver detalle' as texto_link, sum(-a.cantidad_en_um) as cant, sum(-a.importe_ml) as monto", FALSE)
 			->group_by('a.fecha_contabilizacion, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
@@ -341,9 +345,9 @@ class Asignacion_toa extends ORM_Model {
 			'href'           => 'toa_asignaciones/detalle_asignacion',
 			'href_registros' => ['fecha','documento_material']
 		];
-		$this->reporte->set_order_campos($arr_campos, 'documento_material');
+		$this->campos_reporte = $this->set_order_campos($arr_campos, 'documento_material');
 
-		return $this->reporte->genera_reporte($arr_campos, $arr_data);
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
