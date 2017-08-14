@@ -79,10 +79,9 @@ class Inventario_reporte extends Inventario {
 
 	public function reporte($tipo, $param1)
 	{
-		$this->datos_reporte = $this->get_reporte($tipo, $this->id, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1);
-		$this->campos_reporte = $this->get_campos_reporte($tipo);
-
-		return $this->genera_reporte();
+		return $this->get_reporte($tipo, $param1)
+			->get_campos_reporte($tipo)
+			->genera_reporte();
 	}
 
 
@@ -102,12 +101,14 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $param1        Parámetros adicionales
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte($reporte = '', $id_inventario = 0, $sort_by = NULL, $incl_ajustes = '0', $elim_sin_dif = '0', $param1 = NULL)
+	protected function get_reporte($reporte = '', $param1 = NULL)
 	{
-		return call_user_func_array(
+		$this->datos_reporte = call_user_func_array(
 			[$this, 'get_reporte_'.$reporte],
-			[$id_inventario, $sort_by, $incl_ajustes, $elim_sin_dif, $param1]
+			[$this->id, request('sort'), request('incl_ajustes'), request('elim_sin_dif'), $param1]
 		);
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -205,7 +206,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_hoja($id_inventario = 0, $orden_campo = '+hoja', $incl_ajustes = '0', $elim_sin_dif = '0')
+	protected function get_reporte_hoja($id_inventario = 0, $orden_campo = '+hoja', $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+hoja' : $orden_campo;
 
@@ -234,7 +235,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  integer $hoja          numero de la hoja del inventario
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = '+ubicacion',
+	protected function get_reporte_detalle_hoja($id_inventario = 0, $orden_campo = '+ubicacion',
 												$incl_ajustes = '0', $elim_sin_dif = '0', $hoja = 0)
 	{
 		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
@@ -266,7 +267,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_material($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
+	protected function get_reporte_material($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 
@@ -298,7 +299,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_material_faltante($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
+	protected function get_reporte_material_faltante($id_inventario = 0, $orden_campo = '+catalogo',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 		$stock_fisico = ($incl_ajustes === '1') ? '(di.stock_fisico+di.stock_ajuste)' : 'di.stock_fisico';
@@ -338,7 +339,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $catalogo      catalogo a buscar
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_detalle_material($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0', $catalogo = '')
+	protected function get_reporte_detalle_material($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0', $catalogo = '')
 	{
 		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
 		$min_sap_fisico = '(0.5 * ((stock_sap + stock_fisico) - abs(stock_sap - stock_fisico)))';
@@ -370,7 +371,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  Indica si mostrar o no registros sin diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_ubicacion($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
+	protected function get_reporte_ubicacion($id_inventario = 0, $orden_campo = '+ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+ubicacion' : $orden_campo;
 
@@ -396,7 +397,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
 	 * @return array                  arreglo con el detalle del reporte
 	 */
-	public function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = '+tipo_ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
+	protected function get_reporte_tipos_ubicacion($id_inventario = 0, $orden_campo = '+tipo_ubicacion',  $incl_ajustes = '0', $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+tipo_ubicacion' : $orden_campo;
 
@@ -428,7 +429,7 @@ class Inventario_reporte extends Inventario {
 	 * @param  string  $elim_sin_dif  Elimina registros sin diferencias
 	 * @return array                  Reporte de ajustes de inventario
 	 */
-	public function get_reporte_ajustes($id_inventario = 0, $orden_campo = '+catalogo',  $elim_sin_dif = '0')
+	protected function get_reporte_ajustes($id_inventario = 0, $orden_campo = '+catalogo',  $elim_sin_dif = '0')
 	{
 		$orden_campo = empty($orden_campo) ? '+catalogo' : $orden_campo;
 
@@ -464,9 +465,11 @@ class Inventario_reporte extends Inventario {
 	 * @param  string $reporte Nombre del reporte
 	 * @return array          Arreglo de campos
 	 */
-	public function get_campos_reporte($reporte)
+	protected function get_campos_reporte($reporte)
 	{
-		return call_user_func_array([$this, 'get_campos_reporte_'.$reporte], []);
+		$this->campos_reporte = call_user_func_array([$this, 'get_campos_reporte_'.$reporte], []);
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -527,7 +530,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_hoja()
+	protected function get_campos_reporte_hoja()
 	{
 		$campos = [
 			'hoja'      => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
@@ -548,7 +551,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_detalle_hoja()
+	protected function get_campos_reporte_detalle_hoja()
 	{
 		$campos = [
 			'ubicacion'   => ['titulo' => 'Ubicacion'],
@@ -571,7 +574,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_material()
+	protected function get_campos_reporte_material()
 	{
 		$arr_campos = [];
 
@@ -598,7 +601,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_material_faltante()
+	protected function get_campos_reporte_material_faltante()
 	{
 		$arr_campos = [
 			'catalogo'      => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
@@ -622,7 +625,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_detalle_material()
+	protected function get_campos_reporte_detalle_material()
 	{
 		$arr_campos = [
 			'catalogo'    => ['titulo' => 'Catalogo'],
@@ -644,7 +647,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_ubicacion()
+	protected function get_campos_reporte_ubicacion()
 	{
 		$arr_campos = [
 			'ubicacion' => ['titulo' => 'Ubicaci&oacute;n'],
@@ -662,7 +665,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_tipos_ubicacion()
+	protected function get_campos_reporte_tipos_ubicacion()
 	{
 		$arr_campos = [
 			'tipo_ubicacion' => ['titulo' => 'Tipo Ubicacion', 'tipo' => 'subtotal'],
@@ -681,7 +684,7 @@ class Inventario_reporte extends Inventario {
 	 *
 	 * @return array Arreglo de campos
 	 */
-	public function get_campos_reporte_ajustes()
+	protected function get_campos_reporte_ajustes()
 	{
 		$arr_campos = [
 			'catalogo'     => ['titulo' => 'Material'],
