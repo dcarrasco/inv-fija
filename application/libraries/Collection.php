@@ -430,7 +430,7 @@ class Collection implements IteratorAggregate {
 		$items = is_array($items) ? $items : [$items];
 
 		reset($items);
-		// si la primera llave del arreglo es 0, usamos arrat merge
+		// si la primera llave del arreglo es 0, usamos array merge
 		if (key($items) === 0)
 		{
 			$this->items = array_merge($this->items, $items);
@@ -457,6 +457,8 @@ class Collection implements IteratorAggregate {
 	*/
 	public function only($items = [])
 	{
+		$items = $items instanceof Collection ? $items->all() : $items;
+
 		return new static(array_intersect_key($this->items, array_flip((array) $items)));
 	}
 
