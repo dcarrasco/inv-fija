@@ -56,6 +56,46 @@ class Stock_sap extends \ORM_Model {
 		],
 	];
 
+	/**
+	 * Campos disponibles para el reporte
+	 * @var array
+	 */
+	protected $campos = [
+		'fecha_stock'   => ['titulo' => 'fecha stock', 'tipo' => 'fecha'],
+		'tipo_almacen'  => ['titulo' => 'tipo almacen'],
+		'centro'        => ['titulo' => 'centro'],
+		'cod_almacen'   => ['titulo' => 'cod almacen'],
+		'des_almacen'   => ['titulo' => 'des almacen'],
+		'acreedor'      => ['titulo' => 'proveedor'],
+		'des_proveedor' => ['titulo' => 'des proveedor'],
+		'cod_articulo'  => ['titulo' => 'material'],
+		'material'      => ['titulo' => 'material'],
+		'descripcion'   => ['titulo' => 'desc material'],
+		'lote'          => ['titulo' => 'lote'],
+		'tipo_articulo' => ['titulo' => 'tipo articulo'],
+		'LU'            => ['titulo' => 'cant LU', 'class' => 'text-right', 'tipo' => 'numero'],
+		'BQ'            => ['titulo' => 'cant BQ', 'class' => 'text-right', 'tipo' => 'numero'],
+		'CC'            => ['titulo' => 'cant CC', 'class' => 'text-right', 'tipo' => 'numero'],
+		'TT'            => ['titulo' => 'cant TT', 'class' => 'text-right', 'tipo' => 'numero'],
+		'OT'            => ['titulo' => 'cant OT', 'class' => 'text-right', 'tipo' => 'numero'],
+		'VAL_LU'        => ['titulo' => 'valor LU', 'class' => 'text-right', 'tipo' => 'valor'],
+		'VAL_BQ'        => ['titulo' => 'valor BQ', 'class' => 'text-right', 'tipo' => 'valor'],
+		'VAL_CC'        => ['titulo' => 'valor CC', 'class' => 'text-right', 'tipo' => 'valor'],
+		'VAL_TT'        => ['titulo' => 'valor TT', 'class' => 'text-right', 'tipo' => 'valor'],
+		'VAL_OT'        => ['titulo' => 'valor OT', 'class' => 'text-right', 'tipo' => 'valor'],
+		'total'         => ['titulo' => 'cant total', 'class' => 'text-right', 'tipo' => 'numero'],
+		'VAL_total'     => ['titulo' => 'valor total', 'class' => 'text-right', 'tipo' => 'valor'],
+		'estado'        => ['titulo' => 'estado'],
+		'cantidad'      => ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'],
+		'monto'         => ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'],
+		'EQUIPOS'       => ['titulo' => 'cant equipos', 'class' => 'text-right', 'tipo' => 'numero'],
+		'VAL_EQUIPOS'   => ['titulo' => 'valor equipos', 'class' => 'text-right', 'tipo' => 'valor'],
+		'SIMCARD'       => ['titulo' => 'cant simcard', 'class' => 'text-right', 'tipo' => 'numero'],
+		'VAL_SIMCARD'   => ['titulo' => 'valor simcard', 'class' => 'text-right', 'tipo' => 'valor'],
+		'OTROS'         => ['titulo' => 'cant otros', 'class' => 'text-right', 'tipo' => 'numero'],
+		'VAL_OTROS'     => ['titulo' => 'valor otros', 'class' => 'text-right', 'tipo' => 'valor'],
+	];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -68,10 +108,6 @@ class Stock_sap extends \ORM_Model {
 		parent::__construct();
 
 		$this->load->helper('html');
-		$this->load->library('table');
-		$this->table->set_template([
-			'table_open' => '<table class="table table-striped table-hover table-condensed reporte">',
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -99,9 +135,10 @@ class Stock_sap extends \ORM_Model {
 	 */
 	public function reporte($mostrar = [], $filtrar = [])
 	{
-		$arr_stock = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
+		$this->datos_reporte = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
+		$this->campos_reporte = $this->campos_reporte_stock($mostrar);
 
-		return $this->format_table_stock($arr_stock, $mostrar, $filtrar);
+		return $this->genera_reporte();
 	}
 
 	// --------------------------------------------------------------------
@@ -111,102 +148,38 @@ class Stock_sap extends \ORM_Model {
 	 *
 	 * @param  array $arr_result Resultado de la query de stock
 	 * @param  array $mostrar    Campos a mostrar en el reporte
-	 * @param  array $filtrar    Filtros de datos del reporte
 	 * @return string            HTML de la tabla del reporte
 	 */
-	protected function format_table_stock($arr_result = [], $mostrar = [], $filtrar = [])
+	protected function campos_reporte_stock($mostrar = [])
 	{
-		if (count($arr_result) > 0)
-		{
-			$campos_resultado = $arr_result[0];
-		}
+		$campos = collect([])
+			->merge(in_array('fecha', $mostrar) ? ['fecha_stock'] : [])
+			->merge((in_array('sel_tiposalm', $mostrar) AND request('sel_tiposalm') !== 'sel_almacenes')
+				? ['tipo_almacen']
+				: []
+			)
+			->merge((in_array('almacen', $mostrar) OR request('sel_tiposalm') === 'sel_almacenes')
+				? ['centro', 'cod_almacen', 'des_almacen']
+				: []
+			)
+			->merge(in_array('acreedor', $mostrar) ? ['acreedor', 'des_proveedor'] : [])
+			->merge(in_array('material', $mostrar)
+				? ($this->tipo_op === 'MOVIL' ? ['cod_articulo'] : ['material', 'descripcion'])
+				: []
+			)
+			->merge(in_array('lote', $mostrar) ? ['lote'] : [])
+			->merge(in_array('tipo_stock', $mostrar)
+				? ($this->tipo_op === 'MOVIL'
+					? ['tipo_articulo', 'LU', 'BQ', 'CC', 'TT', 'OT', 'VAL_LU', 'VAL_BQ', 'VAL_CC', 'VAL_TT', 'VAL_OT', 'total', 'VAL_total']
+					: ['estado', 'cantidad', 'monto']
+				)
+				: ($this->tipo_op === 'MOVIL'
+					? ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS']
+					: ['cantidad', 'monto']
+				)
+			);
 
-		$arr_campos = [];
-		if (in_array('fecha', $mostrar))
-		{
-			$arr_campos['fecha_stock'] = ['titulo' => 'fecha stock', 'tipo' => 'fecha'];
-		}
-
-		if (in_array('sel_tiposalm', $mostrar) AND request('sel_tiposalm') !== 'sel_almacenes')
-		{
-			$arr_campos['tipo_almacen'] = ['titulo' => 'tipo almacen'];
-		}
-
-		if (in_array('almacen', $mostrar) OR request('sel_tiposalm') === 'sel_almacenes')
-		{
-			$arr_campos['centro'] = ['titulo' => 'centro'];
-			$arr_campos['almacen'] = ['titulo' => 'cod almacen'];
-			$arr_campos['des_almacen'] = ['titulo' => 'des almacen'];
-		}
-		if (in_array('acreedor', $mostrar))
-		{
-			$arr_campos['acreedor'] = ['titulo' => 'proveedor'];
-			$arr_campos['des_proveedor'] = ['titulo' => 'des proveedor'];
-		}
-		if (in_array('material', $mostrar))
-		{
-			if (array_key_exists('cod_articulo', $campos_resultado))
-			{
-				$arr_campos['cod_articulo'] = ['titulo' => 'material'];
-			}
-			else
-			{
-				$arr_campos['material'] = ['titulo' => 'material'];
-				$arr_campos['descripcion'] = ['titulo' => 'desc material'];
-
-			}
-		}
-		if (in_array('lote', $mostrar))
-		{
-			$arr_campos['lote'] = ['titulo' => 'lote'];
-		}
-		if (in_array('tipo_stock', $mostrar))
-		{
-			if (array_key_exists('LU', $campos_resultado))
-			{
-				$arr_campos['tipo_articulo'] = ['titulo' => 'tipo articulo'];
-				$arr_campos['LU'] = ['titulo' => 'cant LU', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['BQ'] = ['titulo' => 'cant BQ', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['CC'] = ['titulo' => 'cant CC', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['TT'] = ['titulo' => 'cant TT', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['OT'] = ['titulo' => 'cant OT', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['VAL_LU'] = ['titulo' => 'valor LU', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['VAL_BQ'] = ['titulo' => 'valor BQ', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['VAL_CC'] = ['titulo' => 'valor CC', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['VAL_TT'] = ['titulo' => 'valor TT', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['VAL_OT'] = ['titulo' => 'valor OT', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['total'] = ['titulo' => 'cant total', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['VAL_total'] = ['titulo' => 'valor total', 'class' => 'text-right', 'tipo' => 'valor'];
-			}
-			else
-			{
-				$arr_campos['estado'] = ['titulo' => 'estado'];
-				$arr_campos['cantidad'] = ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
-			}
-		}
-		else
-		{
-			if (array_key_exists('EQUIPOS', $campos_resultado))
-			{
-				$arr_campos['EQUIPOS'] = ['titulo' => 'cant equipos', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['VAL_EQUIPOS'] = ['titulo' => 'valor equipos', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['SIMCARD'] = ['titulo' => 'cant simcard', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['VAL_SIMCARD'] = ['titulo' => 'valor simcard', 'class' => 'text-right', 'tipo' => 'valor'];
-				$arr_campos['OTROS'] = ['titulo' => 'cant otros', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['VAL_OTROS'] = ['titulo' => 'valor otros', 'class' => 'text-right', 'tipo' => 'valor'];
-			}
-			elseif (array_key_exists('cantidad', $campos_resultado))
-			{
-				$arr_campos['cantidad'] = ['titulo' => 'cantidad', 'class' => 'text-right', 'tipo' => 'numero'];
-				$arr_campos['monto'] = ['titulo' => 'valor', 'class' => 'text-right', 'tipo' => 'valor'];
-			}
-		}
-
-		$this->datos_reporte  = $arr_result;
-		$this->campos_reporte = $this->set_order_campos($arr_campos, 'fecha_stock');
-
-		return $this->genera_reporte();
+		return $this->set_order_campos(collect($this->campos)->only($campos)->all(), 'fecha_stock');
 	}
 
 

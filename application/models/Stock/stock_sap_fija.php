@@ -75,14 +75,14 @@ class Stock_sap_fija extends Stock_sap {
 
 			if (in_array('almacen', $mostrar))
 			{
-				$this->db->select('ta.centro, ta.cod_almacen as almacen, a.des_almacen');
+				$this->db->select('ta.centro, ta.cod_almacen as cod_almacen, a.des_almacen');
 				$this->db->group_by('ta.centro, ta.cod_almacen, a.des_almacen');
 				$this->db->order_by('ta.centro, ta.cod_almacen, a.des_almacen');
 			}
 		}
 		else
 		{
-			$this->db->select('s.centro, s.almacen, a.des_almacen');
+			$this->db->select('s.centro, s.almacen as cod_almacen, a.des_almacen');
 			$this->db->group_by('s.centro, s.almacen, a.des_almacen');
 			$this->db->order_by('s.centro, s.almacen, a.des_almacen');
 		}
