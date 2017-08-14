@@ -474,53 +474,73 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
-	protected function _get_campos_sum_stock($incl_ajustes = '0')
+	protected function get_all_campos_reporte()
 	{
-		$arr_campos = [];
+		return collect([
+			'nombre_fam'       => ['titulo' => 'Familia', 'tipo' => 'subtotal'],
+			'catalogo'         => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
+			'descripcion'      => ['titulo' => 'Descripcion'],
+			'um'               => ['titulo' => 'UM'],
+			'pmp'              => ['titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp'],
+			'hoja'             => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
+			'auditor'          => ['titulo' => 'Auditor'],
+			'digitador'        => ['titulo' => 'Digitador'],
+			'tipo_ubicacion'   => ['titulo' => 'Tipo Ubicacion', 'tipo' => 'subtotal'],
+			'ubicacion'        => ['titulo' => 'Ubicacion'],
+			'lote'             => ['titulo' => 'Lote'],
+			'centro'           => ['titulo' => 'Centro'],
+			'almacen'          => ['titulo' => 'Almacen'],
+			'tipo'             => ['titulo' => 'Tipo Dif', 'class' => 'text-center'],
+			'glosa_ajuste'     => ['titulo' => 'Observaci&oacute;n'],
 
-		$arr_campos['sum_stock_sap'] = ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'];
-		$arr_campos['sum_stock_fisico'] = ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'];
-		if ($incl_ajustes === '1')
-		{
-			$arr_campos['sum_stock_ajuste'] = ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'];
-		}
-		$arr_campos['sum_stock_diff'] = ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'];
+			'q_faltante'       => ['titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero'],
+			'q_coincidente'    => ['titulo' => 'Cant Coincidente', 'class' => 'text-center', 'tipo' => 'numero'],
+			'q_sobrante'       => ['titulo' => 'Cant Sobrante', 'class' => 'text-center', 'tipo' => 'numero'],
+			'v_faltante'       => ['titulo' => 'Valor Faltante', 'class' => 'text-center', 'tipo' => 'valor'],
+			'v_coincidente'    => ['titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor'],
+			'v_sobrante'       => ['titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor'],
 
-		$arr_campos['sum_valor_sap'] = ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'];
-		$arr_campos['sum_valor_fisico'] = ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'];
-		if ($incl_ajustes === '1')
-		{
-			$arr_campos['sum_valor_ajuste'] = ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'];
-		}
-		$arr_campos['sum_valor_diff'] = ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'];
+			'sum_stock_sap'    => ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'],
+			'sum_stock_fisico' => ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'],
+			'sum_stock_ajuste' => ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'],
+			'sum_stock_diff'   => ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'],
+			'sum_valor_sap'    => ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'],
+			'sum_valor_fisico' => ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'],
+			'sum_valor_ajuste' => ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'],
+			'sum_valor_diff'   => ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'],
 
-		return $arr_campos;
+			'stock_sap'        => ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_fisico'     => ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_ajuste'     => ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'],
+			'stock_diff'       => ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'],
+			'valor_sap'        => ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'],
+			'valor_fisico'     => ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'],
+			'valor_ajuste'     => ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'],
+			'valor_diff'       => ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'],
+		]);
+	}
+	// --------------------------------------------------------------------
 
+	protected function _get_campos_sum_stock($incl_ajustes = FALSE)
+	{
+		return $this->get_all_campos_reporte()->only(['sum_stock_sap', 'sum_stock_fisico'])
+			->merge($incl_ajustes ? $this->get_all_campos_reporte()->only(['sum_stock_ajuste']) : [])
+			->merge($this->get_all_campos_reporte()->only(['sum_stock_diff', 'sum_valor_sap','sum_valor_fisico']))
+			->merge($incl_ajustes ? $this->get_all_campos_reporte()->only(['sum_valor_ajuste']) : [])
+			->merge($this->get_all_campos_reporte()->only(['sum_valor_diff']))
+			->all();
 	}
 
 	// --------------------------------------------------------------------
 
-	protected function _get_campos_stock($incl_ajustes = '0')
+	protected function _get_campos_stock($incl_ajustes = FALSE)
 	{
-		$arr_campos = [];
-
-		$arr_campos['stock_sap'] = ['titulo' => 'Cant SAP', 'class' => 'text-center', 'tipo' => 'numero'];
-		$arr_campos['stock_fisico'] = ['titulo' => 'Cant Fisico', 'class' => 'text-center', 'tipo' => 'numero'];
-		if ($incl_ajustes === '1')
-		{
-			$arr_campos['stock_ajuste'] = ['titulo' => 'Cant Ajuste', 'class' => 'text-center', 'tipo' => 'numero'];
-		}
-		$arr_campos['stock_diff'] = ['titulo' => 'Cant Dif', 'class' => 'text-center', 'tipo' => 'numero_dif'];
-
-		$arr_campos['valor_sap'] = ['titulo' => 'Valor SAP', 'class' => 'text-center', 'tipo' => 'valor'];
-		$arr_campos['valor_fisico'] = ['titulo' => 'Valor Fisico', 'class' => 'text-center', 'tipo' => 'valor'];
-		if ($incl_ajustes === '1')
-		{
-			$arr_campos['valor_ajuste'] = ['titulo' => 'Valor Ajuste', 'class' => 'text-center', 'tipo' => 'valor'];
-		}
-		$arr_campos['valor_diff'] = ['titulo' => 'Valor Dif', 'class' => 'text-center', 'tipo' => 'valor_dif'];
-
-		return $arr_campos;
+		return $this->get_all_campos_reporte()->only(['stock_sap', 'stock_fisico'])
+			->merge($incl_ajustes ? $this->get_all_campos_reporte()->only(['stock_ajuste']) : [])
+			->merge($this->get_all_campos_reporte()->only(['stock_diff', 'valor_sap', 'valor_fisico']))
+			->merge($incl_ajustes ? $this->get_all_campos_reporte()->only(['valor_ajuste']) : [])
+			->merge($this->get_all_campos_reporte()->only(['valor_diff']))
+			->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -532,13 +552,9 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_hoja()
 	{
-		$campos = [
-			'hoja'      => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
-			'auditor'   => ['titulo' => 'Auditor'],
-			'digitador' => ['titulo' => 'Digitador'],
-		];
-
-		$campos = array_merge($campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
+		$campos = $this->get_all_campos_reporte()
+			->only(['hoja', 'auditor', 'digitador'])
+			->merge($this->_get_campos_sum_stock(request('incl_ajustes')));
 
 		return $this->set_order_campos($campos, 'hoja');
 	}
@@ -553,16 +569,9 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_detalle_hoja()
 	{
-		$campos = [
-			'ubicacion'   => ['titulo' => 'Ubicacion'],
-			'catalogo'    => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
-			'descripcion' => ['titulo' => 'Descripcion'],
-			'lote'        => ['titulo' => 'Lote'],
-			'centro'      => ['titulo' => 'Centro'],
-			'almacen'     => ['titulo' => 'Almacen'],
-		];
-
-		$campos = array_merge($campos, $this->_get_campos_stock(request('incl_ajustes')));
+		$campos = $this->get_all_campos_reporte()
+			->only(['ubicacion', 'catalogo', 'descripcion', 'lote', 'centro', 'almacen'])
+			->merge($this->_get_campos_stock(request('incl_ajustes')));
 
 		return $this->set_order_campos($campos, 'ubicacion');
 	}
@@ -576,21 +585,12 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_material()
 	{
-		$arr_campos = [];
+		$campos = collect([])
+			->merge(request('incl_familias') ? $this->get_all_campos_reporte()->only(['nombre_fam']) : [])
+			->merge($this->get_all_campos_reporte()->only(['catalogo', 'descripcion', 'um', 'pmp']))
+			->merge($this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		if (request('incl_familias') === '1')
-		{
-			$arr_campos['nombre_fam'] = ['titulo' => 'Familia', 'tipo' => 'subtotal'];
-		}
-
-		$arr_campos['catalogo'] = ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'];
-		$arr_campos['descripcion'] = ['titulo' => 'Descripcion'];
-		$arr_campos['um'] = ['titulo' => 'UM'];
-		$arr_campos['pmp'] = ['titulo' => 'PMP', 'class' => 'text-center', 'tipo' => 'valor_pmp'];
-
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
-
-		return $this->set_order_campos($arr_campos, 'catalogo');
+		return $this->set_order_campos($campos, 'catalogo');
 	}
 
 
@@ -603,19 +603,10 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_material_faltante()
 	{
-		$arr_campos = [
-			'catalogo'      => ['titulo' => 'Catalogo', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_material/'],
-			'descripcion'   => ['titulo' => 'Descripcion'],
-			'um'            => ['titulo' => 'UM'],
-			'q_faltante'    => ['titulo' => 'Cant Faltante', 'class' => 'text-center', 'tipo' => 'numero'],
-			'q_coincidente' => ['titulo' => 'Cant Coincidente', 'class' => 'text-center', 'tipo' => 'numero'],
-			'q_sobrante'    => ['titulo' => 'Cant Sobrante', 'class' => 'text-center', 'tipo' => 'numero'],
-			'v_faltante'    => ['titulo' => 'Valor Faltante', 'class' => 'text-center', 'tipo' => 'valor'],
-			'v_coincidente' => ['titulo' => 'Valor Coincidente', 'class' => 'text-center', 'tipo' => 'valor'],
-			'v_sobrante'    => ['titulo' => 'Valor Sobrante', 'class' => 'text-center', 'tipo' => 'valor'],
-		];
+		$campos = $this->get_all_campos_reporte()
+			->only(['catalogo', 'descripcion', 'um', 'q_faltante', 'q_coincidente', 'q_sobrante', 'v_faltante', 'v_coincidente', 'v_sobrante']);
 
-		return $this->set_order_campos($arr_campos, 'catalogo');
+		return $this->set_order_campos($campos, 'catalogo');
 	}
 
 	// --------------------------------------------------------------------
@@ -627,17 +618,11 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_detalle_material()
 	{
-		$arr_campos = [
-			'catalogo'    => ['titulo' => 'Catalogo'],
-			'descripcion' => ['titulo' => 'Descripcion'],
-			'ubicacion'   => ['titulo' => 'Ubicacion'],
-			'hoja' => ['titulo' => 'Hoja', 'tipo' => 'link', 'href' => $this->router->class . '/listado/detalle_hoja/'],
-			'lote' => ['titulo' => 'lote'],
-		];
+		$campos = $this->get_all_campos_reporte()
+			->only(['catalogo', 'descripcion', 'ubicacion', 'hoja', 'lote'])
+			->merge($this->_get_campos_stock(request('incl_ajustes')));
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_stock(request('incl_ajustes')));
-
-		return $this->set_order_campos($arr_campos, 'ubicacion');
+		return $this->set_order_campos($campos, 'ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -649,13 +634,11 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_ubicacion()
 	{
-		$arr_campos = [
-			'ubicacion' => ['titulo' => 'Ubicaci&oacute;n'],
-		];
+		$campos = $this->get_all_campos_reporte()
+			->only(['ubicacion'])
+			->merge($this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
-
-		return $this->set_order_campos($arr_campos, 'ubicacion');
+		return $this->set_order_campos($campos, 'ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -667,14 +650,11 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_tipos_ubicacion()
 	{
-		$arr_campos = [
-			'tipo_ubicacion' => ['titulo' => 'Tipo Ubicacion', 'tipo' => 'subtotal'],
-			'ubicacion'      => ['titulo' => 'Ubicacion'],
-		];
+		$campos = $this->get_all_campos_reporte()
+			->only(['tipo_ubicacion', 'ubicacion'])
+			->merge($this->_get_campos_sum_stock(request('incl_ajustes')));
 
-		$arr_campos = array_merge($arr_campos, $this->_get_campos_sum_stock(request('incl_ajustes')));
-
-		return $this->set_order_campos($arr_campos, 'tipo_ubicacion');
+		return $this->set_order_campos($campos, 'tipo_ubicacion');
 	}
 
 	// --------------------------------------------------------------------
@@ -686,24 +666,10 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function get_campos_reporte_ajustes()
 	{
-		$arr_campos = [
-			'catalogo'     => ['titulo' => 'Material'],
-			'descripcion'  => ['titulo' => 'Descripci&oacute;n material'],
-			'lote'         => ['titulo' => 'Lote'],
-			'centro'       => ['titulo' => 'Centro'],
-			'almacen'      => ['titulo' => 'Almacen'],
-			'ubicacion'    => ['titulo' => 'Ubicaci&oacute;n'],
-			'hoja'         => ['titulo' => 'Hoja'],
-			'um'           => ['titulo' => 'UM'],
-			'stock_sap'    => ['titulo' => 'Stock SAP', 'class' => 'text-center', 'tipo' => 'numero'],
-			'stock_fisico' => ['titulo' => 'Stock F&iacute;sico', 'class' => 'text-center', 'tipo' => 'numero'],
-			'stock_ajuste' => ['titulo' => 'Stock Ajuste', 'class' => 'text-center', 'tipo' => 'numero'],
-			'stock_diff'   => ['titulo' => 'Stock Dif', 'class' => 'text-center', 'tipo' => 'numero'],
-			'tipo'         => ['titulo' => 'Tipo Dif', 'class' => 'text-center'],
-			'glosa_ajuste' => ['titulo' => 'Observaci&oacute;n'],
-		];
+		$campos = $this->get_all_campos_reporte()
+			->only(['catalogo', 'descripcion', 'lote', 'centro', 'almacen', 'ubicacion', 'hoja', 'um', 'stock_sap', 'stock_fisico', 'stock_ajuste', 'stock_diff', 'tipo', 'glosa_ajuste']);
 
-		return $this->set_order_campos($arr_campos, 'catalogo');
+		return $this->set_order_campos($campos, 'catalogo');
 	}
 
 }
