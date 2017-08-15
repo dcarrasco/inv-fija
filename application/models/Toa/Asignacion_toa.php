@@ -393,7 +393,6 @@ class Asignacion_toa extends ORM_Model {
 			return NULL;
 		}
 
-		$arr_dias = get_arr_dias_mes($anomes);
 
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
@@ -423,31 +422,28 @@ class Asignacion_toa extends ORM_Model {
 			->get()->result_array();
 
 		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$dias     = collect(get_arr_dias_mes($anomes));
 
-		return $tecnicos
-			->map_with_keys(function($tecnico) use ($arr_dias, $datos) {
-				$datos_tecnico = collect($datos)
-					->filter(function($dato) use ($tecnico) {
-						return $dato['cliente'] === $tecnico->id_tecnico;
-					})
-					->map_with_keys(function($dato) {
-						return [substr($dato['fecha'], 8, 2) => $dato['dato']];
-					});
-
-				return [$tecnico->id_tecnico => [
-					'nombre'       => $tecnico->tecnico,
-					'rut'          => $tecnico->rut,
-					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
-					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-					'actuaciones'  => collect($arr_dias)->merge($datos_tecnico)->all(),
-				]];
+		return $tecnicos->map_with_keys(function($tecnico) use ($dias, $datos) {
+			$datos_tecnico = collect($datos)->filter(function($dato) use ($tecnico) {
+				return $dato['cliente'] === $tecnico->id_tecnico;
 			})
-			->filter(function($tecnico) {
-				return collect($tecnico['actuaciones'])->sum() !== 0;
-			})
-			->sort(function($tecnico1, $tecnico2) {
-				return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
+			->map_with_keys(function($dato) {
+				return [substr($dato['fecha'], 8, 2) => $dato['dato']];
 			});
+
+			return [$tecnico->id_tecnico => [
+				'nombre'       => $tecnico->tecnico,
+				'rut'          => $tecnico->rut,
+				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
+				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+				'actuaciones'  => $dias->merge($datos_tecnico)->all(),
+			]];
+		})->filter(function($tecnico) {
+			return collect($tecnico['actuaciones'])->sum() !== 0;
+		})->sort(function($tecnico1, $tecnico2) {
+			return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
+		});
 	}
 
 	// --------------------------------------------------------------------
