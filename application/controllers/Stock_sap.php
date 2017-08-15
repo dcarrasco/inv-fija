@@ -111,7 +111,7 @@ class Stock_sap extends Controller_base {
 			? Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)
 			: Almacen_sap::create()->get_combo_almacenes($tipo_op);
 
-		$is_form_valid = $this->form_validation->set_rules($stock->stock_sap_validation)->run();
+		$is_form_valid = $this->form_validation->set_rules($stock->rules_stock_sap)->run();
 
 		$data = [
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),

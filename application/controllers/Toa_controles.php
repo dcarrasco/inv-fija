@@ -203,7 +203,7 @@ class Toa_controles extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules(Stock::create()->controles_stock_empresa_validation)
+			->set_rules(Stock::create()->rules_stock_empresa)
 			->run();
 
 		app_render_view('toa/controles_stock', [
@@ -228,7 +228,7 @@ class Toa_controles extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules(Stock::create()->controles_stock_tecnicos_validation)
+			->set_rules(Stock::create()->rules_stock_tecnicos)
 			->run();
 
 		app_render_view('toa/controles_stock_tecnicos', [
