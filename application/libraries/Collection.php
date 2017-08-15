@@ -538,6 +538,23 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Transforma las llaves a lowecase
+	 *
+	 * @return Collection
+	 */
+	public function result_keys_to_lower()
+	{
+		return $this->map(function($result) {
+			return collect($result)->map_with_keys(function($value, $index) {
+				return [strtolower($index) => $value];
+			})->all();
+		})->all();
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Get the values of a given key
 	 *
 	 * @param  string|array $value Valor a recuperar

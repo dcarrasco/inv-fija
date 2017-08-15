@@ -40,7 +40,7 @@ class Stock extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $controles_stock_empresa_validation = [
+	public $rules_stock_empresa = [
 		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
@@ -63,7 +63,7 @@ class Stock extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $controles_stock_tecnicos_validation = [
+	public $rules_stock_tecnicos = [
 		[
 			'field' => 'empresa',
 			'label' => 'Empresa',
@@ -106,6 +106,29 @@ class Stock extends ORM_Model {
 		'datos' => 'S&oacute;lo con datos',
 	];
 
+	/**
+	 * Campos para reporte
+	 *
+	 * @var array
+	 */
+	protected $campos = [
+		'fecha_stock' => ['titulo' => 'Fecha', 'tipo' => 'fecha'],
+		'tipo'        => ['titulo' => 'Tipo Almac&eacute;n'],
+		'centro'      => ['titulo' => 'Centro'],
+		'almacen'     => ['titulo' => 'Almac&eacute;n'],
+		'des_almacen' => ['titulo' => 'Desc Almac&eacute;n'],
+		'acreedor'    => ['titulo' => 'Cod T&eacute;cnico'],
+		'tecnico'     => ['titulo' => 'Nombre T&eacute;cnico'],
+		'material'    => ['titulo' => 'Material'],
+		'descripcion' => ['titulo' => 'Desc Material'],
+		'lote'        => ['titulo' => 'Lote'],
+		'umb'         => ['titulo' => 'Unidad'],
+		'estado'      => ['titulo' => 'Estado'],
+		'cantidad'    => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+		'valor'       => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+	];
+
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -135,31 +158,28 @@ class Stock extends ORM_Model {
 			return NULL;
 		}
 
-		$almacenes = $this->_get_almacenes($empresa);
-		$stock = $this->_get_stock_almacenes($empresa, $anomes, $dato_desplegar);
+		$almacenes = collect($this->get_datos_almacenes($empresa));
+		$stock     = collect($this->get_datos_stock_almacenes($empresa, $anomes, $dato_desplegar));
+		$dias      = collect(get_arr_dias_mes($anomes));
 
-		$arr_dias = collect(get_arr_dias_mes($anomes));
+		return $almacenes->map_with_keys(function($almacen) use ($dias, $stock) {
+			$actuaciones = $dias->merge($stock
+				->filter(function($stock) use ($almacen) {
+					return $stock['centro'].$stock['almacen'] === $almacen['centro'].$almacen['cod_almacen'];
+				})->map_with_keys(function($stock) {
+					return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
+				})
+			);
 
-		return collect($almacenes)
-			->map_with_keys(function($almacen) use ($arr_dias, $stock) {
-				$stock_almacen = collect($stock)
-					->filter(function($stock) use ($almacen) {
-						return $stock['centro'].$stock['almacen'] === $almacen['centro'].$almacen['cod_almacen'];
-					})->map_with_keys(function($stock) {
-						return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
-					})->all();
-
-				$actuaciones = $arr_dias->merge($stock_almacen);
-
-				return [$almacen['centro'].$almacen['cod_almacen'] => [
-					'tipo'        => $almacen['tipo'],
-					'centro'      => $almacen['centro'],
-					'cod_almacen' => $almacen['cod_almacen'],
-					'des_almacen' => $almacen['des_almacen'],
-					'actuaciones' => $actuaciones->all(),
-					'con_datos'   => $actuaciones->sum(),
-				]];
-			})->all();
+			return [$almacen['centro'].$almacen['cod_almacen'] => [
+				'tipo'        => $almacen['tipo'],
+				'centro'      => $almacen['centro'],
+				'cod_almacen' => $almacen['cod_almacen'],
+				'des_almacen' => $almacen['des_almacen'],
+				'actuaciones' => $actuaciones->all(),
+				'con_datos'   => $actuaciones->sum(),
+			]];
+		});
 	}
 
 	// --------------------------------------------------------------------
@@ -170,7 +190,7 @@ class Stock extends ORM_Model {
 	 * @param  string $empresa Empresa a recuperar los almacenes
 	 * @return array           Arreglo con almacenes
 	 */
-	private function _get_almacenes($empresa = NULL)
+	private function get_datos_almacenes($empresa = NULL)
 	{
 		return $this->db
 			->select('d.tipo')
@@ -195,7 +215,7 @@ class Stock extends ORM_Model {
 	 * @param  string $dato_desplegar Indica el tipo de datos a recuperar (montos o cantidades)
 	 * @return array                  Arreglo con el stock
 	 */
-	private function _get_stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
+	private function get_datos_stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
@@ -241,20 +261,19 @@ class Stock extends ORM_Model {
 			return NULL;
 		}
 
-		$stock = $this->_get_stock_tecnicos($empresa, $anomes, $dato_desplegar);
-		$arr_dias = collect(get_arr_dias_mes($anomes));
-		$arr_tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$stock    = collect($this->get_datos_stock_tecnicos($empresa, $anomes, $dato_desplegar));
+		$dias     = collect(get_arr_dias_mes($anomes));
+		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
-		return collect($arr_tecnicos)
-			->map_with_keys(function($tecnico) use ($arr_dias, $stock) {
-				$stock_tecnico = collect($stock)
+		return collect($tecnicos)
+			->map_with_keys(function($tecnico) use ($dias, $stock) {
+				$actuaciones = $dias->merge($stock
 					->filter(function($stock) use ($tecnico) {
 						return $stock['acreedor'] === $tecnico->id_tecnico;
 					})->map_with_keys(function($stock) {
 						return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
-					})->all();
-
-				$actuaciones = $arr_dias->merge($stock_tecnico);
+					})
+				);
 
 				return [$tecnico->id_tecnico => [
 					'tecnico'     => $tecnico->tecnico,
@@ -262,7 +281,7 @@ class Stock extends ORM_Model {
 					'actuaciones' => $actuaciones->all(),
 					'con_datos'   => $actuaciones->sum(),
 				]];
-			})->all();
+			});
 	}
 
 	// --------------------------------------------------------------------
@@ -275,7 +294,7 @@ class Stock extends ORM_Model {
 	 * @param  string $dato_desplegar Tipo de datos a recuperar (montos o cantidades)
 	 * @return array                  Arreglo con el stock de los técnicos
 	 */
-	private function _get_stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
+	private function get_datos_stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
@@ -314,19 +333,7 @@ class Stock extends ORM_Model {
 
 		list($centro, $almacen) = explode('-', $centro_almacen);
 
-		$this->datos_reporte = $this->db
-			->select('a.fecha_stock as fecha')
-			->select('d.tipo')
-			->select('a.centro')
-			->select('a.almacen')
-			->select('b.des_almacen')
-			->select('a.material')
-			->select('e.descripcion')
-			->select('a.lote')
-			->select('a.umb')
-			->select('a.estado')
-			->select('a.cantidad')
-			->select('a.valor')
+		$this->datos_reporte = collect($this->db
 			->from(config('bd_stock_fija').' a')
 			->join(config('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
 			->join(config('bd_tipoalmacen_sap').' c', 'a.centro=c.centro and a.almacen=c.cod_almacen', 'left')
@@ -336,21 +343,10 @@ class Stock extends ORM_Model {
 			->where('a.centro', $centro)
 			->where('a.almacen', $almacen)
 			->where('d.es_sumable', 1)
-			->get()->result_array();
+			->get()->result_array())->result_keys_to_lower();
 
-		$arr_campos = [];
-		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-		$arr_campos['tipo']        = ['titulo' => 'Tipo Almac&eacute;n'];
-		$arr_campos['centro']      = ['titulo' => 'Centro'];
-		$arr_campos['almacen']     = ['titulo' => 'Almac&eacute;n'];
-		$arr_campos['des_almacen'] = ['titulo' => 'Desc Almac&eacute;n'];
-		$arr_campos['material']    = ['titulo' => 'Material'];
-		$arr_campos['descripcion'] = ['titulo' => 'Desc Material'];
-		$arr_campos['lote']        = ['titulo' => 'Lote'];
-		$arr_campos['umb']         = ['titulo' => 'Unidad'];
-		$arr_campos['estado']      = ['titulo' => 'Estado'];
-		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+		$arr_campos = collect($this->campos)
+			->only(['fecha_stock', 'tipo', 'centro', 'almacen', 'des_almacen', 'material', 'descripcion', 'lote', 'umb', 'estado', 'cantidad', 'valor']);
 
 		$this->campos_reporte = $this->set_order_campos($arr_campos, 'material');
 
@@ -373,38 +369,17 @@ class Stock extends ORM_Model {
 			return NULL;
 		}
 
-		$this->datos_reporte = $this->db
-			->select('a.fecha_stock as fecha')
-			->select('a.centro')
-			->select('a.acreedor')
-			->select('b.tecnico')
-			->select('a.material')
-			->select('c.descripcion')
-			->select('a.lote')
-			->select('a.umb')
-			->select('a.estado')
-			->select('a.cantidad')
-			->select('a.valor')
+		$this->datos_reporte = collect($this->db
 			->from(config('bd_stock_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->where('a.fecha_stock=', $fecha)
 			->where('a.acreedor', $id_tecnico)
 			->order_by('material, lote')
-			->get()->result_array();
+			->get()->result_array())->result_keys_to_lower();
 
-		$arr_campos = [];
-		$arr_campos['fecha']       = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-		$arr_campos['centro']      = ['titulo' => 'Centro'];
-		$arr_campos['acreedor']    = ['titulo' => 'Cod T&eacute;cnico'];
-		$arr_campos['tecnico']     = ['titulo' => 'Nombre T&eacute;cnico'];
-		$arr_campos['material']    = ['titulo' => 'Material'];
-		$arr_campos['descripcion'] = ['titulo' => 'Desc Material'];
-		$arr_campos['lote']        = ['titulo' => 'Lote'];
-		$arr_campos['umb']         = ['titulo' => 'Unidad'];
-		$arr_campos['estado']      = ['titulo' => 'Estado'];
-		$arr_campos['cantidad']    = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-		$arr_campos['valor']       = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
+		$arr_campos = collect($this->campos)
+			->only(['fecha_stock', 'centro', 'acreedor', 'tecnico', 'material', 'descripcion', 'lote', 'umb', 'estado', 'cantidad', 'valor']);
 
 		$this->campos_reporte = $this->set_order_campos($arr_campos, 'material');
 

@@ -164,7 +164,7 @@ trait Reporte {
 	 */
 	public function genera_reporte()
 	{
-		$datos = $this->datos_reporte;
+		$datos = collect($this->datos_reporte);
 
 		$campos = collect($this->campos_reporte)->map(function ($elem) {
 			$elem['tipo'] = array_get($elem, 'tipo', 'texto');
@@ -186,7 +186,7 @@ trait Reporte {
 				->filter(function($campo) use ($campos_totalizables) {
 					return in_array($campo['tipo'], $campos_totalizables);
 				})->map(function($elem, $campo) use ($datos) {
-					return collect($datos)->sum($campo);
+					return $datos->sum($campo);
 				})->all(),
 			'subtotal' => [],
 		];
@@ -195,7 +195,7 @@ trait Reporte {
 		$ci->table->set_heading($this->_reporte_linea_encabezado($campos));
 
 		// --- CUERPO REPORTE ---
-		collect($datos)->each(function($linea, $num_linea) use ($campos, $ci){
+		$datos->each(function($linea, $num_linea) use ($campos, $ci){
 			$ci->table->add_row($this->_reporte_linea_datos($linea, $campos, $num_linea + 1));
 		});
 

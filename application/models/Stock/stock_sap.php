@@ -43,7 +43,7 @@ class Stock_sap extends \ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $stock_sap_validation = [
+	public $rules_stock_sap = [
 		[
 			'field' => 'fecha[]',
 			'label' => 'Fechas',
@@ -146,9 +146,8 @@ class Stock_sap extends \ORM_Model {
 	/**
 	 * Crea la tabla del reporte de stock
 	 *
-	 * @param  array $arr_result Resultado de la query de stock
-	 * @param  array $mostrar    Campos a mostrar en el reporte
-	 * @return string            HTML de la tabla del reporte
+	 * @param  array $mostrar Campos a mostrar en el reporte
+	 * @return string         HTML de la tabla del reporte
 	 */
 	protected function campos_reporte_stock($mostrar = [])
 	{
@@ -223,10 +222,12 @@ class Stock_sap extends \ORM_Model {
 	{
 		$fechas = $this->get_data_combo_fechas();
 		$ultimo_dia = collect($fechas)
-			->map(function($fecha, $llave) {return substr($llave, 0, 6);})
-			->unique()
-			->map(function($fecha, $llave) {return fmt_fecha($llave);})
-			->all();
+			->map(function($fecha, $llave) {
+				return substr($llave, 0, 6);
+			})->unique()
+			->map(function($fecha, $llave) {
+				return fmt_fecha($llave);
+			})->all();
 
 		return ['ultimodia' => $ultimo_dia, 'todas' => $fechas];
 	}
