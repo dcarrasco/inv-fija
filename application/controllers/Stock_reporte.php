@@ -106,7 +106,7 @@ class Stock_reporte extends Controller_base {
 		$reporte = new Reporte_stock;
 
 		// define reglas de validacion
-		$is_form_valid = $this->form_validation->set_rules($reporte->permanencia_validation)->run();
+		$is_form_valid = $this->form_validation->set_rules($reporte->rules_permanencia)->run();
 
 		if ($is_form_valid)
 		{
@@ -192,7 +192,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$reporte = new Reporte_stock;
 
-		$this->form_validation->set_rules($reporte->movhist_validation)->run();
+		$this->form_validation->set_rules($reporte->rules_movhist)->run();
 
 		$param_tipo_fecha     = request('tipo_fecha', 'ANNO');
 		$param_tipo_alm       = request('tipo_alm', 'MOVIL-TIPOALM');

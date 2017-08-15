@@ -41,7 +41,7 @@ class Reporte_stock extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $permanencia_validation = [
+	public $rules_permanencia = [
 		[
 			'field' => 'tipo_alm[]',
 			'label' => 'Almacenes',
@@ -94,7 +94,7 @@ class Reporte_stock extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $movhist_validation = [
+	public $rules_movhist = [
 		[
 			'field' => 'tipo_fecha',
 			'label' => '',
