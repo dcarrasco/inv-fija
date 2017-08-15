@@ -692,72 +692,35 @@ class Reporte_stock extends ORM_Model {
 	 */
 	public function arr_query2treemap($tipo = 'cantidad', $arr_treemap = [], $arr_nodos = [], $campo_size = '', $campo_color = '')
 	{
-		$arr_final = [];
-
 		$tipo = ($tipo === 'cantidad') ? 'cantidad' : 'valor';
+		$cant_niveles = count($arr_nodos);
+		$padre = 'TOTAL';
 
-		if(count($arr_treemap) > 0 AND count($arr_nodos) > 0)
-		{
-			$campo_item = array_pop($arr_nodos);
-			$campo_padre = array_pop($arr_nodos);
+		$datos = collect([["'TOTAL',null", 0, 0]])
+			->merge(collect($arr_nodos)
+				->map(function($campo, $indice) use (&$padre, $arr_treemap, $campo_size, $campo_color, $cant_niveles) {
+					$campo_padre  = $padre;
+					$padre        = $campo;
+					$ultimo_nivel = ($indice + 1 === $cant_niveles);
 
-			foreach($arr_treemap as $registro)
-			{
-				array_push($arr_final, [
-					"'{$registro[$campo_item]}'",
-					"'{$registro[$campo_padre]}'",
-					(int) $registro[$campo_size],
-					$registro[$campo_color]
-				]);
-			}
+					return collect($arr_treemap)
+						->map(function($dato) use ($campo, $campo_padre, $campo_size, $campo_color, $ultimo_nivel) {
+							return [
+								"'".$dato[$campo]."'",
+								$campo_padre === 'TOTAL' ? "'TOTAL'" : "'".$dato[$campo_padre]."'",
+								$ultimo_nivel ? (int) $dato[$campo_size] : 0,
+								$ultimo_nivel ? $dato[$campo_color] : 0,
+							];
+						})
+						->unique();
+				})->flatten(1)
+			)
+			->map(function($dato) {
+				return '[' . collect($dato)->implode(',') . ']';
+			})
+			->implode(',');
 
-			$campo_item = $campo_padre;
-
-			while (count($arr_nodos) > 0)
-			{
-				$campo_padre = array_pop($arr_nodos);
-				$arr_tmp = [];
-				$arr_tmp2 = $arr_final;
-
-				foreach($arr_treemap as $registro)
-				{
-					$arr_v = ["'{$registro[$campo_item]}'", "'{$registro[$campo_padre]}'", 0, 0];
-
-					if( ! in_array($arr_v, $arr_tmp))
-					{
-						array_push($arr_tmp, $arr_v);
-					}
-				}
-
-				$arr_final = [];
-				$arr_final = array_merge($arr_tmp, $arr_tmp2);
-				$campo_item = $campo_padre;
-			}
-
-			$campo_padre = "'TOTAL'";
-			$arr_tmp = [];
-			$arr_tmp2 = $arr_final;
-			foreach($arr_treemap as $regitro)
-			{
-				$arr_v = ["'{$regitro[$campo_item]}'", $campo_padre, 0, 0];
-				if( ! in_array($arr_v, $arr_tmp))
-				{
-					array_push($arr_tmp, $arr_v);
-				}
-			}
-			$arr_final = [];
-			$arr_tmp3 = [[$campo_padre, 'null', 0, 0]];
-			$arr_final = array_merge($arr_tmp3, $arr_tmp, $arr_tmp2);
-
-			$salida = "['Item','Padre','".$tipo."','Antiguedad'],\n";
-			foreach($arr_final as $registro)
-			{
-				$salida .= '[' . implode($registro, ',') . "],\n";
-			}
-
-			return "[{$salida}]";
-
-		}
+		return ("[['Item','Padre','".$tipo."','Antiguedad'],\n{$datos}]");
 	}
 
 
@@ -812,7 +775,7 @@ class Reporte_stock extends ORM_Model {
 	 */
 	public function get_combo_fechas($tipo_fecha = 'ANNO', $filtro = '')
 	{
-		$arr_filtro = explode('~', urldecode($filtro));
+		$arr_filtro = explode($this->separador_campos, urldecode($filtro));
 
 		if ($tipo_fecha === 'ANNO')
 		{
@@ -988,7 +951,7 @@ class Reporte_stock extends ORM_Model {
 	 */
 	public function get_combo_materiales($tipo = 'TIPO', $filtro = '')
 	{
-		$arr_filtro = explode('~', urldecode($filtro));
+		$arr_filtro = explode($this->separador_campos, urldecode($filtro));
 
 		if ($tipo === 'TIPO')
 		{
@@ -1117,9 +1080,9 @@ class Reporte_stock extends ORM_Model {
 		{
 			$arr_filtro_almacenes = [
 				'MOVIL-TIPOALM' => 't.id_tipo',
-				'MOVIL-ALM'     => "m.{$mov_centro}+'~'+m.{$mov_alm}",
+				'MOVIL-ALM'     => "m.{$mov_centro}+'{$this->separador_campos}'+m.{$mov_alm}",
 				'FIJA-TIPOALM'  => 't.id_tipo',
-				'FIJA-ALM'      => "m.{$mov_centro}+'~'+m.{$mov_alm}",
+				'FIJA-ALM'      => "m.{$mov_centro}+'{$this->separador_campos}'+m.{$mov_alm}",
 			];
 		}
 		else

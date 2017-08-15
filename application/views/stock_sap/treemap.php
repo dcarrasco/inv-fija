@@ -12,6 +12,10 @@
 			<?= form_radio('sel_centro', 'CL15', set_radio('sel_centro','CL15')); ?>
 			CL15
 		</label>
+		<label class="radio-inline">
+			<?= form_radio('sel_centro', 'CL25', set_radio('sel_centro','CL25')); ?>
+			CL25
+		</label>
 		<?= form_close(); ?>
 	</div>
 	<div class="form-group">
