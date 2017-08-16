@@ -193,21 +193,19 @@ class Toa_model extends CI_Model {
 		$datos    = collect($this->_datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
 		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 
-		return collect($tecnicos)->map_with_keys(function($tecnico) use ($dias, $datos) {
-			$actuaciones = $dias->merge($datos
-				->filter(function($dato) use ($tecnico) {
-					return $dato['tecnico'] === $tecnico->id_tecnico;
-				})->map_with_keys(function($dato) {
-					return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
-				})
-			);
+		return $tecnicos->map_with_keys(function($tecnico) use ($dias, $datos) {
+			$actuaciones = $datos->filter(function($dato) use ($tecnico) {
+				return $dato['tecnico'] === $tecnico->id_tecnico;
+			})->map_with_keys(function($dato) {
+				return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
+			});
 
 			return [$tecnico->id_tecnico => [
 				'nombre'       => $tecnico->tecnico,
 				'rut'          => $tecnico->rut,
 				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-				'actuaciones'  => $actuaciones,
+				'actuaciones'  => $dias->merge($actuaciones),
 			]];
 		})->filter(function($tecnico) {
 			return collect($tecnico['actuaciones'])->sum() !== 0;
