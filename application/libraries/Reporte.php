@@ -366,6 +366,45 @@ trait Reporte {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve arreglo result formateado para presentación por mes
+	 *
+	 * @param  array $data Datos del result
+	 * @return Collection  Collección con el resultado
+	 */
+	public function result_to_month_table($data)
+	{
+		if ( ! $data)
+		{
+			return;
+		}
+
+		$data = collect($data);
+
+		$anomes = $data->pluck('fecha')
+			->map(function($fecha) {
+				return fmt_fecha($fecha, 'Ym');
+			})->unique()->first();
+
+		$dias = collect(get_arr_dias_mes($anomes));
+
+		return $data->pluck('llave')
+			->sort()
+			->unique()
+			->map_with_keys(function($llave) use ($dias, $data) {
+				$data_llave = $data->filter(function($dato) use ($llave) {
+					return $dato['llave'] === $llave;
+				})->map_with_keys(function($dato) {
+					return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
+				});
+
+				return [$llave => $dias->merge($data_llave)->all()];
+			});
+
+	}
+
 
 }
 /* libraries Reporte.php */

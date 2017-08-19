@@ -391,6 +391,21 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Dump la coleccion
+	 *
+	 * @return $this
+	 */
+	public function dump()
+	{
+		dump($this);
+
+		return $this;
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
 	* Flatten la coleccion a sólo un nivel
 	*
 	* @param  integer $profundidad Indica cuantos niveles se hara flatten

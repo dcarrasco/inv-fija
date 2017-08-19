@@ -69,12 +69,12 @@
 				<th>unidad</th>
 				<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 					<th class="text-center">
-						<?= $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+						<?= dias_de_la_semana(date('w', strtotime($anomes.$dia_act))); ?>
 						<?= $dia_act; ?>
 						<?php $tot_col[$dia_act] = 0; ?>
 					</th>
 				<?php endforeach; ?>
-				<th>Tot Mes</th>
+				<th class="text-center">Tot Mes</th>
 			</tr>
 			</thead>
 

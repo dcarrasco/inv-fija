@@ -16,6 +16,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Toa\Stock;
 use Toa\Ciudad_toa;
+use Toa\Consumo_toa;
 use Toa\Empresa_toa;
 use Toa\Tecnico_toa;
 use Toa\Asignacion_toa;
@@ -51,7 +52,6 @@ class Toa_controles extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_model');
 		$this->lang->load('toa');
 
 		$this->set_menu_modulo([
@@ -126,19 +126,18 @@ class Toa_controles extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_consumos_validation)
+			->set_rules(Consumo_toa::create()->rules_controles_consumos)
 			->run();
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
 			'combo_empresas'       => Empresa_toa::create()->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_consumo,
+			'combo_filtro_trx'     => Consumo_toa::create()->combo_movimientos_consumo(),
+			'combo_dato_desplegar' => Consumo_toa::create()->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_model->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Consumo_toa::create()->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
 		]);
-
 	}
 
 
@@ -153,7 +152,7 @@ class Toa_controles extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_consumos_validation)
+			->set_rules(Consumo_toa::create()->rules_controles_consumos)
 			->run();
 
 		app_render_view('toa/controles', [
@@ -178,17 +177,17 @@ class Toa_controles extends Controller_base {
 	{
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_consumos_validation)
+			->set_rules(Consumo_toa::create()->rules_controles_consumos)
 			->run();
 
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
 			'combo_empresas'       => Empresa_toa::create()->find('list'),
-			'combo_filtro_trx'     => $this->toa_model->get_combo_movimientos_consumo(),
-			'combo_dato_desplegar' => $this->toa_model->combo_unidades_materiales_consumidos,
+			'combo_filtro_trx'     => Consumo_toa::create()->combo_movimientos_consumo(),
+			'combo_dato_desplegar' => Consumo_toa::create()->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => request('mes'),
-			'control'              => $this->toa_model->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Consumo_toa::create()->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
 		]);
 	}
 
@@ -290,6 +289,8 @@ class Toa_controles extends Controller_base {
 	 */
 	public function materiales()
 	{
+		$this->load->model('toa_model');
+
 		$this->form_validation
 			->set_data(request())
 			->set_rules($this->toa_model->controles_materiales_validation)
@@ -317,12 +318,15 @@ class Toa_controles extends Controller_base {
 	public function nuevos_tecnicos()
 	{
 		$msg_agregar = '';
-		$nuevos_tecnicos = $this->toa_model->nuevos_tecnicos();
+		$nuevos_tecnicos = Tecnico_toa::create()->nuevos_tecnicos();
 
 		if (request('agregar'))
 		{
-			$this->toa_model->agrega_nuevos_tecnicos($nuevos_tecnicos);
-			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), count($nuevos_tecnicos)));
+			$nuevos_tecnicos->each(function($tecnico) {
+				$tecnico->grabar();
+			});
+
+			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $nuevos_tecnicos->count()));
 		}
 
 		app_render_view('toa/controles_nuevos_tecnicos', [
@@ -343,16 +347,9 @@ class Toa_controles extends Controller_base {
 	public function tecnicos_sin_ciudad()
 	{
 		$msg_agregar = '';
-		$tecnicos_sin_ciudad = $this->toa_model->tecnicos_sin_ciudad();
+		$tecnicos_sin_ciudad = Tecnico_toa::create()->tecnicos_sin_ciudad();
 
-		$tecnicos = collect($tecnicos_sin_ciudad)->map(function($tecnicos) {
-			$tecnico_toa = new Tecnico_toa($tecnicos['id_tecnico']);
-			$tecnicos['empresa_tecnico'] = $tecnico_toa->id_empresa;
-
-			return $tecnicos;
-		});
-
-		$empresas = collect($tecnicos)
+		$empresas = collect($tecnicos_sin_ciudad)
 			->pluck('contractor_company')
 			->unique()
 			->map_with_keys(function($id_empresa) {
@@ -368,7 +365,7 @@ class Toa_controles extends Controller_base {
 			'menu_modulo' => $this->get_menu_modulo('tecnicos_sin_ciudad'),
 			'msg_agregar' => $msg_agregar,
 			'url_form'    => site_url("{$this->router->class}/actualiza_tecnicos_sin_ciudad"),
-			'tecnicos'    => $tecnicos,
+			'tecnicos'    => $tecnicos_sin_ciudad,
 			'empresas'    => $empresas,
 		]);
 	}
@@ -413,6 +410,8 @@ class Toa_controles extends Controller_base {
 	 */
 	public function clientes()
 	{
+		$this->load->model('toa_model');
+
 		$this->form_validation
 			->set_data(request())
 			->set_rules($this->toa_model->controles_clientes_validation)

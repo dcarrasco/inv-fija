@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="col-md-offset-1 col-md-10">
+	<div class="col-md-12">
 		{msg_agregar}
 
 		<?php if (count($tecnicos) > 0): ?>
@@ -19,14 +19,14 @@
 				<tbody>
 				<?php foreach ($tecnicos as $tecnico): ?>
 					<tr>
-						<?= form_hidden('tecnico[]', $tecnico['id_tecnico']) ?>
+						<?= form_hidden('tecnico[]', $tecnico['tecnico']->id_tecnico) ?>
 						<?= form_hidden('empresa[]', $tecnico['contractor_company']) ?>
-						<td><?= $tecnico['id_tecnico'] ?></td>
-						<td><?= $tecnico['tecnico'] ?></td>
-						<td><?= fmt_rut($tecnico['rut']) ?></td>
-						<td class="text-center"><?= $tecnico['empresa_tecnico'] ?></td>
+						<td><?= $tecnico['tecnico']->id_tecnico; ?></td>
+						<td><?= $tecnico['tecnico']->tecnico ?></td>
+						<td><?= fmt_rut($tecnico['tecnico']->rut) ?></td>
+						<td class="text-center"><?= $tecnico['tecnico']->id_empresa ?></td>
 						<td><?= $tecnico['empresa'] ?></td>
-						<td><?= $tecnico['xa_original_agency'] ?></td>
+						<td><?= $tecnico['original_agency'] ?></td>
 						<td><?= form_dropdown('ciudad[]', $empresas[$tecnico['contractor_company']], '', ['class'=>'form-control']) ?></td>
 					</tr>
 				<?php endforeach ?>

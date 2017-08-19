@@ -159,25 +159,16 @@ class Stock extends ORM_Model {
 		}
 
 		$almacenes = collect($this->get_datos_almacenes($empresa));
-		$stock     = collect($this->get_datos_stock_almacenes($empresa, $anomes, $dato_desplegar));
-		$dias      = collect(get_arr_dias_mes($anomes));
+		$stock = $this->result_to_month_table($this->get_datos_stock_almacenes($empresa, $anomes, $dato_desplegar));
 
-		return $almacenes->map_with_keys(function($almacen) use ($dias, $stock) {
-			$actuaciones = $dias->merge($stock
-				->filter(function($stock) use ($almacen) {
-					return $stock['centro'].$stock['almacen'] === $almacen['centro'].$almacen['cod_almacen'];
-				})->map_with_keys(function($stock) {
-					return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
-				})
-			);
-
+		return $almacenes->map_with_keys(function($almacen) use ($stock) {
 			return [$almacen['centro'].$almacen['cod_almacen'] => [
 				'tipo'        => $almacen['tipo'],
 				'centro'      => $almacen['centro'],
 				'cod_almacen' => $almacen['cod_almacen'],
 				'des_almacen' => $almacen['des_almacen'],
-				'actuaciones' => $actuaciones->all(),
-				'con_datos'   => $actuaciones->sum(),
+				'actuaciones' => $stock->get($almacen['centro'].$almacen['cod_almacen']),
+				// 'con_datos'   => collect($stock->get($almacen['centro'].$almacen['cod_almacen']))->sum(),
 			]];
 		});
 	}
@@ -215,17 +206,14 @@ class Stock extends ORM_Model {
 	 * @param  string $dato_desplegar Indica el tipo de datos a recuperar (montos o cantidades)
 	 * @return array                  Arreglo con el stock
 	 */
-	private function get_datos_stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
+	protected function get_datos_stock_almacenes($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
 		return $this->db
 			->select('a.fecha_stock as fecha')
-			->select('d.tipo')
-			->select('a.centro')
-			->select('a.almacen')
-			->select('b.des_almacen')
+			->select('a.centro+a.almacen as llave', FALSE)
 			->select_sum(($dato_desplegar === 'unidades') ? 'a.cantidad' : 'a.valor', 'dato')
 			->from(config('bd_stock_fija').' a')
 			->join(config('bd_almacenes_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
@@ -236,10 +224,7 @@ class Stock extends ORM_Model {
 			->where('a.fecha_stock<', $fecha_hasta)
 			->where('e.id_empresa', $empresa)
 			->group_by('a.fecha_stock')
-			->group_by('d.tipo')
-			->group_by('a.centro')
-			->group_by('a.almacen')
-			->group_by('b.des_almacen')
+			->group_by('a.centro+a.almacen', FALSE)
 			->get()->result_array();
 	}
 
@@ -261,27 +246,17 @@ class Stock extends ORM_Model {
 			return NULL;
 		}
 
-		$stock    = collect($this->get_datos_stock_tecnicos($empresa, $anomes, $dato_desplegar));
-		$dias     = collect(get_arr_dias_mes($anomes));
 		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
+		$stock = $this->result_to_month_table($this->get_datos_stock_tecnicos($empresa, $anomes, $dato_desplegar));
 
-		return collect($tecnicos)
-			->map_with_keys(function($tecnico) use ($dias, $stock) {
-				$actuaciones = $dias->merge($stock
-					->filter(function($stock) use ($tecnico) {
-						return $stock['acreedor'] === $tecnico->id_tecnico;
-					})->map_with_keys(function($stock) {
-						return [fmt_fecha($stock['fecha'], 'd') => $stock['dato']];
-					})
-				);
-
-				return [$tecnico->id_tecnico => [
-					'tecnico'     => $tecnico->tecnico,
-					'rut'         => $tecnico->rut,
-					'actuaciones' => $actuaciones->all(),
-					'con_datos'   => $actuaciones->sum(),
-				]];
-			});
+		return $tecnicos->map_with_keys(function($tecnico) use ($stock) {
+			return [$tecnico->id_tecnico => [
+				'tecnico'     => $tecnico->tecnico,
+				'rut'         => $tecnico->rut,
+				'actuaciones' => $stock->get($tecnico->id_tecnico, []),
+				'con_datos'   => collect($stock->get($tecnico->id_tecnico))->sum(),
+			]];
+		});
 	}
 
 	// --------------------------------------------------------------------
@@ -294,15 +269,14 @@ class Stock extends ORM_Model {
 	 * @param  string $dato_desplegar Tipo de datos a recuperar (montos o cantidades)
 	 * @return array                  Arreglo con el stock de los técnicos
 	 */
-	private function get_datos_stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
+	protected function get_datos_stock_tecnicos($empresa = NULL, $anomes = NULL, $dato_desplegar = 'monto')
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
 		return $this->db
 			->select('a.fecha_stock as fecha')
-			->select('a.acreedor')
-			->select('b.rut')
+			->select('a.acreedor as llave')
 			->select_sum(($dato_desplegar === 'unidades') ? 'a.cantidad' : 'a.valor', 'dato')
 			->from(config('bd_stock_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left', FALSE)
@@ -311,7 +285,6 @@ class Stock extends ORM_Model {
 			->where('b.id_empresa', $empresa)
 			->group_by('a.fecha_stock')
 			->group_by('a.acreedor')
-			->group_by('b.rut')
 			->get()->result_array();
 	}
 

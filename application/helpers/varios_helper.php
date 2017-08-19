@@ -887,6 +887,47 @@ if ( ! function_exists('get_fecha_hasta'))
 	}
 }
 
+if ( ! function_exists('dias_de_la_semana'))
+{
+	/**
+	 * Devuelve arreglo con nombre los días de la semana
+	 *
+	 * @return array
+	 */
+	function dias_de_la_semana($dia)
+	{
+		return array_get([
+			'0' => 'Do',
+			'1' => 'Lu',
+			'2' => 'Ma',
+			'3' => 'Mi',
+			'4' => 'Ju',
+			'5' => 'Vi',
+			'6' => 'Sa',
+		], $dia);
+	}
+}
+
+	// --------------------------------------------------------------------
+
+if ( ! function_exists('clase_cumplimiento_consumos'))
+{
+	/**
+	 * Devuelve la clase pintar el cumplimiento diario
+	 *
+	 * @param  integer $porcentaje_cumplimiento % de cumplimiento
+	 * @return string                           Clase
+	 */
+	function clase_cumplimiento_consumos($porcentaje_cumplimiento = 0)
+	{
+		return $porcentaje_cumplimiento >= 0.9
+			? 'success'
+			: $porcentaje_cumplimiento >= 0.6
+				? 'warning'
+				: 'danger';
+	}
+}
+
 // --------------------------------------------------------------------
 
 if ( ! function_exists('genera_captcha_word'))

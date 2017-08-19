@@ -67,7 +67,7 @@
 					<th>T&eacute;cnico</th>
 					<?php foreach ($datos['actuaciones'] as $dia_act => $cant_act): ?>
 						<th class="text-center">
-							<?= $this->toa_model->dias_de_la_semana[date('w', strtotime($anomes.$dia_act))]; ?>
+							<?= dias_de_la_semana(date('w', strtotime($anomes.$dia_act))); ?>
 							<?= $dia_act; ?>
 						</th>
 					<?php $tot_col[$dia_act] = 0; ?>

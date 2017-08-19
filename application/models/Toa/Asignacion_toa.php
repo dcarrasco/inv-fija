@@ -413,7 +413,7 @@ class Asignacion_toa extends ORM_Model {
 
 		$datos = $this->rango_asignaciones($fecha_desde, $fecha_hasta, FALSE)
 			->select('a.fecha_contabilizacion as fecha')
-			->select('a.cliente')
+			->select('a.cliente as llave')
 			->group_by('a.fecha_contabilizacion')
 			->group_by('a.cliente')
 			->where('b.id_empresa', $empresa)
@@ -422,22 +422,15 @@ class Asignacion_toa extends ORM_Model {
 			->get()->result_array();
 
 		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
-		$dias     = collect(get_arr_dias_mes($anomes));
+		$datos    = $this->result_to_month_table(collect($datos));
 
-		return $tecnicos->map_with_keys(function($tecnico) use ($dias, $datos) {
-			$datos_tecnico = collect($datos)->filter(function($dato) use ($tecnico) {
-				return $dato['cliente'] === $tecnico->id_tecnico;
-			})
-			->map_with_keys(function($dato) {
-				return [substr($dato['fecha'], 8, 2) => $dato['dato']];
-			});
-
+		return $tecnicos->map_with_keys(function($tecnico) use ($datos) {
 			return [$tecnico->id_tecnico => [
 				'nombre'       => $tecnico->tecnico,
 				'rut'          => $tecnico->rut,
 				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
 				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-				'actuaciones'  => $dias->merge($datos_tecnico)->all(),
+				'actuaciones'  => $datos->get($tecnico->id_tecnico),
 			]];
 		})->filter(function($tecnico) {
 			return collect($tecnico['actuaciones'])->sum() !== 0;
@@ -445,6 +438,7 @@ class Asignacion_toa extends ORM_Model {
 			return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
 		});
 	}
+
 
 	// --------------------------------------------------------------------
 

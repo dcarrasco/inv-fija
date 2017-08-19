@@ -15,10 +15,10 @@
 				<tbody>
 				<?php foreach ($nuevos_tecnicos as $tecnico): ?>
 					<tr>
-						<td><?= $tecnico['id_tecnico']; ?></td>
-						<td><?= $tecnico['tecnico']; ?></td>
-						<td><?= $tecnico['rut']; ?></td>
-						<td><?= $tecnico['id_empresa']; ?></td>
+						<td><?= $tecnico->id_tecnico; ?></td>
+						<td><?= $tecnico->tecnico; ?></td>
+						<td><?= fmt_rut($tecnico->rut); ?></td>
+						<td><?= $tecnico->id_empresa; ?></td>
 					</tr>
 				<?php endforeach ?>
 				</tbody>

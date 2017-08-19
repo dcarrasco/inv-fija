@@ -107,6 +107,12 @@ class Tecnico_toa extends ORM_Model {
 	}
 
 	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera las ciudades asociadas a un técnico
+	 *
+	 * @return $this
+	 */
 	public function get_ciudades_tecnico()
 	{
 		if ($this->id_empresa AND $this->uri->segment(2) === 'editar')
@@ -129,7 +135,79 @@ class Tecnico_toa extends ORM_Model {
 		}
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera nuevos técnicos a partir de los cierres
+	 *
+	 * @return array Técnicos nuevos
+	 */
+	public function nuevos_tecnicos()
+	{
+		$dias_hasta = -10;
+
+		$data = collect($this->db
+			->distinct()
+			->select('a.cliente as id_tecnico')
+			->select('d.resource_name as tecnico')
+			->select('a.vale_acomp as id_empresa')
+			->select('d.resource_external_id as rut')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->where("a.fecha_contabilizacion >= dateadd(day, {$dias_hasta}, convert(date, getdate()))")
+			->where_in('codigo_movimiento', Consumo_toa::create()->movimientos_consumo)
+			->where_in('centro', Consumo_toa::create()->centros_consumo)
+			->where('b.id_tecnico is NULL')
+			->where('d.resource_name is not NULL')
+			->get()->result_array()
+		);
+
+		return $data->map(function($result_row) {
+			return static::create()->fill($result_row);
+		});
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera técnicos sin definición de ciudad a partir de los cierres
+	 *
+	 * @return array Técnicos sin ciudad
+	 */
+	public function tecnicos_sin_ciudad()
+	{
+		$dias_hasta = -10;
+
+		$data = $this->db
+			->distinct()
+			->select('c.empresa')
+			->select('b.*')
+			->select('d.xa_original_agency')
+			->select('d.contractor_company')
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->where("a.fecha_contabilizacion >= dateadd(day, {$dias_hasta}, convert(date, getdate()))")
+			->where_in('codigo_movimiento', Consumo_toa::create()->movimientos_consumo)
+			->where_in('centro', Consumo_toa::create()->centros_consumo)
+			->where('b.id_ciudad is NULL')
+			->where('d.xa_original_agency is not NULL')
+			->order_by('c.empresa, b.id_tecnico')
+			->get()->result_array();
+
+		return collect($data)->map(function($result_row) {
+			return [
+				'tecnico'            => new static($result_row['id_tecnico']),
+				'original_agency'    => $result_row['xa_original_agency'],
+				'contractor_company' => $result_row['contractor_company'],
+				'empresa'            => $result_row['empresa'],
+			];
+		});
+	}
 
 }
-/* End of file tecnico_toa.php */
-/* Location: ./application/models/tecnico_toa.php */
+
+/* End of file Tecnico_toa.php */
+/* Location: ./application/models/Toa/Tecnico_toa.php */
