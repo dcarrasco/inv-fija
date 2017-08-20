@@ -107,6 +107,17 @@ class Consumo_toa extends ORM_Model {
 	];
 
 	/**
+	 * Arreglo con validación formulario controles clientes
+	 *
+	 * @var array
+	 */
+	public $rules_controles_clientes = [
+		['field' => 'cliente',     'label' => 'Cliente', 'rules' => 'trim'],
+		['field' => 'fecha_desde', 'label' => 'Fecha desde', 'rules' => 'required'],
+		['field' => 'fecha_hasta', 'label' => 'Fecha hasta', 'rules' => 'required'],
+	];
+
+	/**
 	 * Campos comunes reporte consumo
 	 *
 	 * @var array
@@ -1010,6 +1021,46 @@ class Consumo_toa extends ORM_Model {
 			'peticion_repara' => $peticion_repara,
 		];
 	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Control de clientes
+	 *
+	 * @param  string $cliente     Cliente a buscar
+	 * @param  string $fecha_desde Fecha incial para buscar
+	 * @param  string $fecha_hasta Fecha final para buscar
+	 * @return void
+	 */
+	public function consumo_clientes($cliente = NULL, $fecha_desde = NULL, $fecha_hasta = NULL)
+	{
+		if (! $fecha_desde OR ! $fecha_hasta)
+		{
+			return NULL;
+		}
+
+		$this->db
+			->limit(100)
+			->select('customer_number')
+			->select_max('cname')
+			->select('count(*) as cantidad', FALSE)
+			->where('date>=', $fecha_desde)
+			->where('date<=', $fecha_hasta)
+			->where('astatus', 'complete')
+			->where('customer_number IS NOT NULL')
+			->group_by('customer_number')
+			->order_by('cantidad', 'desc');
+
+		if ($cliente)
+		{
+			$this->db->like('cname', strtoupper($cliente));
+		}
+
+		return $this->db
+			->get(config('bd_peticiones_toa'))
+			->result_array();
+	}
+
 
 }
 

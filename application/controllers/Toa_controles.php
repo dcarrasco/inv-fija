@@ -410,21 +410,20 @@ class Toa_controles extends Controller_base {
 	 */
 	public function clientes()
 	{
-		$this->load->model('toa_model');
-
-		$this->form_validation
++		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_clientes_validation)
+			->set_rules(Consumo_toa::create()->rules_controles_clientes)
 			->run();
 
 		app_render_view('toa/controles_clientes', [
 			'menu_modulo'     => $this->get_menu_modulo('clientes'),
 			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
-			'clientes'        => $this->toa_model->clientes(request('cliente'), request('fecha_desde'), request('fecha_hasta'), request('dato')),
+			'clientes'        => Consumo_toa::create()->consumo_clientes(request('cliente'), request('fecha_desde'), request('fecha_hasta'), request('dato')),
 			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-','',request('fecha_desde')).'/'.str_replace('-','',request('fecha_hasta')).'/',
 		]);
 	}
 
 }
+
 /* End of file Toa_controles.php */
 /* Location: ./application/controllers/Toa_controles.php */
