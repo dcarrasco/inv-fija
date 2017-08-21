@@ -265,7 +265,7 @@
 							<td class="text-center text-muted"><?= $nlinea+1; ?></td>
 							<td class="text-center"><?= $linea_detalle['desc_tip_material']; ?></td>
 							<td class="text-center"><?= $linea_detalle['XI_SAP_CODE']; ?></td>
-							<td class="text-left"><?= $linea_detalle['XI_SAP_CODE_DESCRIPTION']; ?></td>
+							<td class="text-left"><?= $linea_detalle['XI_SAP_CODE_DESCRIPTION'] ? $linea_detalle['XI_SAP_CODE_DESCRIPTION'] : $linea_detalle['type_text']; ?></td>
 							<td class="text-center"><a href="#" class="detalle-serie" data-serie="<?= $linea_detalle['invsn']; ?>"><?= $linea_detalle['invsn']; ?></a></td>
 							<td class="text-center"><?= $linea_detalle['I_INSTALL_DATE']; ?></td>
 							<td class="text-center"><?= $linea_detalle['XI_BULK_SAP']; ?></td>

@@ -988,10 +988,11 @@ class Consumo_toa extends ORM_Model {
 			->get()->result_array();
 
 		$materiales_toa = $this->db
-			->select('a.*, c.desc_tip_material')
+			->select('a.*, c.desc_tip_material, d.*')
 			->from(config('bd_materiales_peticiones_toa').' a')
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.XI_SAP_CODE=b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id and c.uso_vpi=1', 'left', FALSE)
+			->join(config('bd_type_list_toa').' d', 'a.invtype=d.type_id', 'left', FALSE)
 			->where('aid', array_get($peticion_toa, 'aid'))
 			->order_by('c.desc_tip_material, XI_SAP_CODE')
 			->get()->result_array();
