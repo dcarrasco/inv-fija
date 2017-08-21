@@ -123,7 +123,7 @@
 			<?php $tot_lin = 0; ?>
 			<?php foreach ($count_col as $material => $count): ?>
 				<?php $porcentaje = $count / $num_lin; ?>
-				<th class="text-center <?= $this->toa_model->clase_cumplimiento_consumos($porcentaje) ?>"><?= fmt_cantidad(100*$porcentaje, 0, TRUE); ?>%</th>
+				<th class="text-center <?= clase_cumplimiento_consumos($porcentaje) ?>"><?= fmt_cantidad(100*$porcentaje, 0, TRUE); ?>%</th>
 			<?php endforeach; ?>
 		</tr>
 	</tfoot>

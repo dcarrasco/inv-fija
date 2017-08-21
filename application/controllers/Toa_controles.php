@@ -289,21 +289,19 @@ class Toa_controles extends Controller_base {
 	 */
 	public function materiales()
 	{
-		$this->load->model('toa_model');
-
 		$this->form_validation
 			->set_data(request())
-			->set_rules($this->toa_model->controles_materiales_validation)
+			->set_rules(Consumo_toa::create()->rules_controles_materiales)
 			->run();
 
 		app_render_view('toa/controles_materiales_tipo_trabajo', [
 			'menu_modulo'              => $this->get_menu_modulo('materiales'),
 			'combo_empresas'           => Empresa_toa::create()->find('list'),
-			'combo_tipos_trabajo'      => array_merge(['000' => 'Todos'], Tipo_trabajo_toa::create()->find('list', ['opc_ini' => FALSE])),
-			'combo_dato_desplegar'     => $this->toa_model->combo_unidades_materiales_tipo_trabajo,
+			'combo_tipos_trabajo'      => collect(['000' => 'Todos'])->merge(Tipo_trabajo_toa::create()->find('list', ['opc_ini' => FALSE]))->all(),
+			'combo_dato_desplegar'     => Consumo_toa::create()->combo_unidades_materiales_tipo_trabajo,
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => request('mes'),
-			'materiales_tipos_trabajo' => $this->toa_model->materiales_tipos_trabajo(request('empresa'), request('mes'), request('tipo_trabajo'), request('dato')),
+			'materiales_tipos_trabajo' => Consumo_toa::create()->materiales_tipos_trabajo(request('empresa'), request('mes'), request('tipo_trabajo'), request('dato')),
 		]);
 	}
 

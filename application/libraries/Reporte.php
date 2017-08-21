@@ -378,7 +378,7 @@ trait Reporte {
 	{
 		if ( ! $data)
 		{
-			return;
+			return collect([]);
 		}
 
 		$data = collect($data);

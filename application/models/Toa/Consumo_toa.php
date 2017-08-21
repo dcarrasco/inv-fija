@@ -73,18 +73,6 @@ class Consumo_toa extends ORM_Model {
 	];
 
 	/**
-	 * Arreglo con validación formulario controles consumo
-	 *
-	 * @var array
-	 */
-	public $rules_controles_consumos = [
-		['field' => 'empresa',    'label' => 'Empresa', 'rules' => 'required'],
-		['field' => 'mes',        'label' => 'Mes','rules' => 'required'],
-		['field' => 'filtro_trx', 'label' => 'Filtro transaccion', 'rules' => 'required'],
-		['field' => 'dato',       'label' => 'Dato a desplegar', 'rules' => 'required'],
-	];
-
-	/**
 	 * Combo de unidades reporte control tecnicos
 	 *
 	 * @var array
@@ -93,6 +81,16 @@ class Consumo_toa extends ORM_Model {
 		'peticiones' => 'Cantidad de peticiones',
 		'unidades'   => 'Suma de unidades',
 		'monto'      => 'Suma de montos',
+	];
+
+	/**
+	 * Combo de unidades reporte control materiales por tipo de trabajo
+	 *
+	 * @var array
+	 */
+	public $combo_unidades_materiales_tipo_trabajo = [
+		'unidades'     => 'Suma de unidades',
+		'monto'        => 'Suma de montos',
 	];
 
 	/**
@@ -118,6 +116,31 @@ class Consumo_toa extends ORM_Model {
 	];
 
 	/**
+	 * Arreglo con validación formulario controles consumo
+	 *
+	 * @var array
+	 */
+	public $rules_controles_consumos = [
+		['field' => 'empresa',    'label' => 'Empresa', 'rules' => 'required'],
+		['field' => 'mes',        'label' => 'Mes','rules' => 'required'],
+		['field' => 'filtro_trx', 'label' => 'Filtro transaccion', 'rules' => 'required'],
+		['field' => 'dato',       'label' => 'Dato a desplegar', 'rules' => 'required'],
+	];
+
+	/**
+	 * Arreglo con validación formulario controles materiales
+	 *
+	 * @var array
+	 */
+	public $rules_controles_materiales = [
+		['field' => 'empresa',      'label' => 'Empresa', 'rules' => 'required'],
+		['field' => 'mes',          'label' => 'Mes', 'rules' => 'required'],
+		['field' => 'tipo_trabajo', 'label' => 'Tipos de trabajo', 'rules' => 'required'],
+		['field' => 'dato',         'label' => 'Dato a desplegar', 'rules' => 'required'],
+	];
+
+
+	/**
 	 * Campos comunes reporte consumo
 	 *
 	 * @var array
@@ -138,7 +161,6 @@ class Consumo_toa extends ORM_Model {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->helper('date');
 	}
 
 	// --------------------------------------------------------------------
@@ -150,14 +172,12 @@ class Consumo_toa extends ORM_Model {
 	 */
 	public function combo_movimientos_consumo()
 	{
-		return array_merge(
-			['000' => 'Todos los movimientos'],
-			Clase_movimiento::create()->find('list', [
+		return collect(['000' => 'Todos los movimientos'])
+			->merge(Clase_movimiento::create()->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,
-			])
-		);
+			]))->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -199,6 +219,28 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	protected function datos_movimientos_consumo($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
+	{
+		$fecha_desde = $anomes.'01';
+		$fecha_hasta = get_fecha_hasta($anomes);
+
+		if ($filtro_trx AND $filtro_trx !== '000')
+		{
+			$this->db->where('codigo_movimiento', $filtro_trx);
+		}
+
+		return $this->db
+			->from(config('bd_movimientos_sap_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
+			->where('a.fecha_contabilizacion>=', $fecha_desde)
+			->where('a.fecha_contabilizacion<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			->where_in('a.codigo_movimiento', $this->movimientos_consumo)
+			->where_in('a.centro', $this->centros_consumo);
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve datos de consumos de técnicos por dia
 	 *
@@ -236,7 +278,7 @@ class Consumo_toa extends ORM_Model {
 		}
 		else
 		{
-			$query = $this->db
+			$query = $this->datos_movimientos_consumo($empresa, $anomes)
 				->select('a.fecha_contabilizacion as fecha')
 				->select('a.cliente as tecnico')
 				->select('a.referencia')
@@ -245,13 +287,7 @@ class Consumo_toa extends ORM_Model {
 				->group_by('a.fecha_contabilizacion')
 				->group_by('a.cliente')
 				->group_by('a.referencia')
-				->where('a.fecha_contabilizacion>=', $fecha_desde)
-				->where('a.fecha_contabilizacion<', $fecha_hasta)
-				->where('b.id_empresa', $empresa)
 				->where('codigo_movimiento', $filtro_trx)
-				->where_in('centro', $this->centros_consumo)
-				->from(config('bd_movimientos_sap_fija').' a')
-				->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 				->get_compiled_select();
 
 			$arr_dato_desplegar = [
@@ -285,15 +321,13 @@ class Consumo_toa extends ORM_Model {
 		}
 
 		$materiales = collect($this->datos_materiales_consumidos($empresa, $anomes, $filtro_trx, $dato_desplegar));
-		$datos = $this->result_to_month_table($materiales
-			->map(function($material) {
-				return [
-					'fecha' => $material['fecha'],
-					'llave' => $material['material'],
-					'dato' => $material['dato']
-				];
-			})
-		);
+		$datos = $this->result_to_month_table($materiales->map(function($material) {
+			return [
+				'fecha' => $material['fecha'],
+				'llave' => $material['material'],
+				'dato'  => $material['dato']
+			];
+		}));
 
 		return $materiales->map(function($datos) {
 			return [
@@ -335,33 +369,17 @@ class Consumo_toa extends ORM_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '000')
-		{
-			$this->db->where('codigo_movimiento', $filtro_trx);
-		}
 
-		return $this->db
-			->select('a.fecha_contabilizacion as fecha')
-			->select('a.material')
+		return $this->datos_movimientos_consumo($empresa, $anomes, $filtro_trx)
+			->select('a.fecha_contabilizacion as fecha')->group_by('a.fecha_contabilizacion')
+			->select('a.material')->group_by('a.material')
 			->select('c.descripcion')
-			->select('a.ume')
-			->select('e.desc_tip_material')
-			->select('e.color')
+			->select('a.ume')->group_by('a.ume')
+			->select('e.desc_tip_material')->group_by('e.desc_tip_material')
+			->select('e.color')->group_by('e.color')
 			->select_sum(($dato_desplegar === 'monto') ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
-			->group_by('a.fecha_contabilizacion')
-			->group_by('a.material')
 			->group_by('c.descripcion')
-			->group_by('a.ume')
-			->group_by('e.desc_tip_material')
-			->group_by('e.color')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('b.id_empresa', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_consumo)
-			->where_in('centro', $this->centros_consumo)
 			// ->where('almacen', NULL)
-			->from(config('bd_movimientos_sap_fija').' a')
-			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)
 			->join(config('bd_catalogo_tip_material_toa').' d', 'a.material=d.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' e', 'd.id_tip_material = e.id', 'left')
@@ -1059,6 +1077,85 @@ class Consumo_toa extends ORM_Model {
 		return $this->db
 			->get(config('bd_peticiones_toa'))
 			->result_array();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve matriz de materiales por tipos de trabajo
+	 *
+	 * @param  string $empresa        Empresa a consultar
+	 * @param  string $anomes         Mes a consultar, formato YYYYMM
+	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
+	 * @param  string $dato_desplegar Tipo de dato a desplegar
+	 * @return array                  Arreglo con los datos del reporte
+	 */
+	public function materiales_tipos_trabajo($empresa = NULL, $anomes = NULL, $tipo_trabajo = NULL, $dato_desplegar = 'unidad')
+	{
+		if ( ! $empresa OR ! $anomes OR ! $tipo_trabajo)
+		{
+			return NULL;
+		}
+		$arr_dias = get_arr_dias_mes($anomes);
+
+		$datos       = collect($this->get_datos_materiales($empresa, $anomes, $tipo_trabajo, $dato_desplegar));
+		$referencias = $datos->pluck('referencia')->unique()->sort();
+		$materiales  = $datos->map_with_keys(function($material) {
+			return [$material['material'] => [
+				'material'          => $material['material'],
+				'texto_material'    => $material['texto_material'],
+				'desc_tip_material' => $material['desc_tip_material'],
+				'color'             => $material['color'],
+			]];
+		})->unique()
+		->sort(function($material1, $material2) {
+			return $material1['desc_tip_material'].$material1['material'] > $material2['desc_tip_material'].$material2['material'];
+		});
+
+		return $referencias->map_with_keys(function($referencia) use ($materiales, $datos) {
+				$data_referencia = $datos->filter(function($data) use ($referencia) {
+					return $data['referencia'] === $referencia;
+				});
+
+				$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
+					$data_material = $data_referencia->first(function($data) use ($material) {
+						return $data['material'] === $material['material'];
+					});
+
+					return [
+						'texto_material'    => $material['texto_material'],
+						'desc_tip_material' => $material['desc_tip_material'],
+						'color'             => $material['color'],
+						'fecha'             => array_get($data_material, 'fecha'),
+						'dato'              => array_get($data_material, 'dato'),
+					];
+				});
+
+				return [$referencia => $datos_referencia];
+			});
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function get_datos_materiales($empresa, $anomes, $tipo_trabajo, $dato_desplegar)
+	{
+		if ($tipo_trabajo !== '000')
+		{
+			$this->db->where('a.carta_porte', $tipo_trabajo);
+		}
+
+		return $this->datos_movimientos_consumo($empresa, $anomes)
+			->select('a.referencia')->group_by('a.referencia')
+			->select('a.material')->group_by('a.material')
+			->select('a.texto_material')->group_by('a.texto_material')
+			->select('a.fecha_contabilizacion as fecha')->group_by('a.fecha_contabilizacion')
+			->select('d.desc_tip_material')->group_by('d.desc_tip_material')
+			->select('d.color')->group_by('d.color')
+			->select_sum($dato_desplegar === 'monto' ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
+			->order_by('referencia, material')
+			->join(config('bd_catalogo_tip_material_toa').' c', 'a.material=c.id_catalogo', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' d', 'c.id_tip_material=d.id', 'left')
+			->get()->result_array();
 	}
 
 

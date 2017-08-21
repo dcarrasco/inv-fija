@@ -70,16 +70,6 @@ class Toa_model extends CI_Model {
 	];
 
 	/**
-	 * Combo de unidades reporte control materiales por tipo de trabajo
-	 *
-	 * @var array
-	 */
-	public $combo_unidades_materiales_tipo_trabajo = [
-		'unidades'     => 'Suma de unidades',
-		'monto'        => 'Suma de montos',
-	];
-
-	/**
 	 * Arreglo con validación formulario panel
 	 *
 	 * @var array
@@ -88,19 +78,6 @@ class Toa_model extends CI_Model {
 		['field' => 'empresa', 'label' => 'Empresa', 'rules' => 'required'],
 		['field' => 'mes',     'label' => 'Mes',     'rules' => 'required'],
 	];
-
-	/**
-	 * Arreglo con validación formulario controles materiales
-	 *
-	 * @var array
-	 */
-	public $controles_materiales_validation = [
-		['field' => 'empresa',      'label' => 'Empresa', 'rules' => 'required'],
-		['field' => 'mes',          'label' => 'Mes', 'rules' => 'required'],
-		['field' => 'tipo_trabajo', 'label' => 'Tipos de trabajo', 'rules' => 'required'],
-		['field' => 'dato',         'label' => 'Dato a desplegar', 'rules' => 'required'],
-	];
-
 
 	// --------------------------------------------------------------------
 
@@ -115,150 +92,6 @@ class Toa_model extends CI_Model {
 		$this->load->helper('date');
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve combo con las clases de movimiento de consumo
-	 *
-	 * @return array Clases de movimiento de consumo
-	 */
-	public function get_combo_movimientos_consumo()
-	{
-		return array_merge(
-			['000' => 'Todos los movimientos'],
-			Clase_movimiento::create()->find('list', [
-				'conditions' => ['cmv' => $this->movimientos_consumo],
-				'order_by'   => 'des_cmv',
-				'opc_ini'    => FALSE,
-			])
-		);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve matriz de materiales por tipos de trabajo
-	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
-	 */
-	public function materiales_tipos_trabajo($empresa = NULL, $anomes = NULL, $tipo_trabajo = NULL, $dato_desplegar = 'unidad')
-	{
-		if ( ! $empresa OR ! $anomes OR ! $tipo_trabajo)
-		{
-			return NULL;
-		}
-		$arr_dias = get_arr_dias_mes($anomes);
-
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = get_fecha_hasta($anomes);
-
-		$referencias = collect($this->_get_referencias_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo));
-		$materiales = collect($this->_get_materiales_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo));
-		$arr_data = collect($this->_get_datos_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo, $dato_desplegar));
-
-		return $referencias->flatten()->map_with_keys(function($referencia) use ($materiales, $arr_data) {
-			$data_referencia = $arr_data->filter(function($data) use ($referencia) {
-				return $data['referencia'] === $referencia;
-			});
-
-			$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
-				$data_material = $data_referencia->first(function($data) use ($material) {
-					return $data['material'] === $material['material'];
-				});
-
-				return [
-					'texto_material'    => $material['texto_material'],
-					'desc_tip_material' => $material['desc_tip_material'],
-					'color'             => $material['color'],
-					'fecha'             => array_get($data_material, 'fecha'),
-					'dato'              => array_get($data_material, 'dato'),
-				];
-			});
-
-			return [$referencia => $datos_referencia];
-		});
-	}
-
-
-	// --------------------------------------------------------------------
-
-	private function _get_referencias_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo)
-	{
-		if ($tipo_trabajo !== '000')
-		{
-			$this->db->where('a.carta_porte', $tipo_trabajo);
-		}
-
-		return $this->db
-			->distinct()
-			->select('a.referencia')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('a.vale_acomp', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_consumo)
-			->where_in('centro', $this->centros_consumo)
-			->from(config('bd_movimientos_sap_fija').' a')
-			->order_by('referencia')
-			->get()->result_array();
-	}
-
-	// --------------------------------------------------------------------
-
-	private function _get_materiales_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo)
-	{
-		if ($tipo_trabajo !== '000')
-		{
-			$this->db->where('a.carta_porte', $tipo_trabajo);
-		}
-
-		return $this->db
-			->distinct()
-			->select('a.material')
-			->select('a.texto_material')
-			->select('c.desc_tip_material')
-			->select('c.color')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('a.vale_acomp', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_consumo)
-			->where_in('centro', $this->centros_consumo)
-			->from(config('bd_movimientos_sap_fija').' a')
-			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material=b.id_catalogo', 'left', FALSE)
-			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
-			->order_by('c.desc_tip_material, a.material')
-			->get()->result_array();
-	}
-
-	// --------------------------------------------------------------------
-
-	private function _get_datos_materiales($empresa, $fecha_desde, $fecha_hasta, $tipo_trabajo, $dato_desplegar)
-	{
-		if ($tipo_trabajo !== '000')
-		{
-			$this->db->where('a.carta_porte', $tipo_trabajo);
-		}
-
-		return $this->db
-			->select('a.referencia')
-			->select('a.material')
-			->select('a.fecha_contabilizacion as fecha')
-			->select_sum($dato_desplegar === 'monto' ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
-			->group_by('a.referencia')
-			->group_by('a.material')
-			->group_by('a.fecha_contabilizacion')
-			->where('a.fecha_contabilizacion>=', $fecha_desde)
-			->where('a.fecha_contabilizacion<', $fecha_hasta)
-			->where('a.vale_acomp', $empresa)
-			->where_in('codigo_movimiento', $this->movimientos_consumo)
-			->where_in('centro', $this->centros_consumo)
-			->from(config('bd_movimientos_sap_fija').' a')
-			->order_by('referencia, material')
-			->get()->result_array();
-	}
 
 	// --------------------------------------------------------------------
 
