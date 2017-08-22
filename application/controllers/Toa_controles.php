@@ -351,13 +351,10 @@ class Toa_controles extends Controller_base {
 			->pluck('contractor_company')
 			->unique()
 			->map_with_keys(function($id_empresa) {
-				return [$id_empresa =>
-					Ciudad_toa::create()->find('list', ['conditions' => [
-						'id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)
-					]])
-				];
-			})
-			->all();
+				return [$id_empresa => Ciudad_toa::create()->find('list', [
+					'conditions' => ['id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)]
+				])];
+			})->all();
 
 		app_render_view('toa/controles_tecnicos_sin_ciudad', [
 			'menu_modulo' => $this->get_menu_modulo('tecnicos_sin_ciudad'),
