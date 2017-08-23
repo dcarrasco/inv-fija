@@ -1,4 +1,7 @@
 <?php
+
+namespace Toa;
+
 /**
  * INVENTARIO FIJA
  *
@@ -28,53 +31,14 @@ use Stock\Clase_movimiento;
  * @link     localhost:1520
  *
  */
-class Toa_model extends CI_Model {
-
-	/**
-	 * Movimientos validos de consumos TOA
-	 *
-	 * @var array
-	 */
-	public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'];
-	// public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z33'];
-	// Z33 devolucion de materiales: viene con un idtecnico distinto
-	// public $movimientos_consumo = ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89', 'Z81', 'Z82', 'Z83', 'Z84'];
-	// Z81 CAPEX  Z82 ANULA CAPEX  / Z83 OPEX y Z84 ANULA OPEX   Regularizaciones Manuales
-
-	/**
-	 * Centros validos de consumos TOA
-	 *
-	 * @var array
-	 */
-	public $centros_consumo = ['CH32', 'CH33'];
-
-	/**
-	 * Combo de unidades reporte control tecnicos
-	 *
-	 * @var array
-	 */
-	public $combo_unidades_consumo = [
-		'peticiones' => 'Cantidad de peticiones',
-		'unidades'   => 'Suma de unidades',
-		'monto'      => 'Suma de montos',
-	];
-
-	/**
-	 * Combo de unidades reporte control materiales consumidos
-	 *
-	 * @var array
-	 */
-	public $combo_unidades_materiales_consumidos = [
-		'unidades' => 'Suma de unidades',
-		'monto'    => 'Suma de montos',
-	];
+class Panel extends \ORM_Model {
 
 	/**
 	 * Arreglo con validación formulario panel
 	 *
 	 * @var array
 	 */
-	public $panel_validation = [
+	public $rules = [
 		['field' => 'empresa', 'label' => 'Empresa', 'rules' => 'required'],
 		['field' => 'mes',     'label' => 'Mes',     'rules' => 'required'],
 	];
@@ -157,26 +121,24 @@ class Toa_model extends CI_Model {
 	 */
 	public function get_resumen_panel_gchart($indicador = NULL, $empresa = NULL, $anomes = NULL)
 	{
-		$arr_indicador = ( ! is_array($indicador)) ? ['Data' => $indicador] : $indicador;
+		$indicador = ( ! is_array($indicador)) ? ['Data' => $indicador] : $indicador;
+		$num_mes   = (int) substr($anomes, 4, 2);
+		$num_ano   = (int) substr($anomes, 0, 4);
 
-		$arr_datos = [];
-		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
-		{
-			$arr_datos[$llave_indicador] = $this->get_resumen_panel($valor_indicador, $empresa, $anomes);
-		}
+		$datos = collect($indicador)->map(function($indicador, $indicador_key) use ($empresa, $anomes) {
+			return $this->get_resumen_panel($indicador, $empresa, $anomes);
+		})->map(function($dato) {
+			return collect($dato)->map_with_keys(function($dato) {
+				return [(int) $dato['dia'] => $dato['valor']];
+			})->all();
+		});
 
-		$num_mes = (int) substr($anomes, 4, 2);
-		$num_ano = (int) substr($anomes, 0, 4);
-		$arr_indicador_vacio = array_fill_keys(array_keys($arr_indicador), 0);
-		$arr_peticiones = array_fill(1, days_in_month($num_mes, $num_ano), $arr_indicador_vacio);
-
-		foreach ($arr_indicador as $llave_indicador => $valor_indicador)
-		{
-			foreach($arr_datos[$llave_indicador] as $registro)
-			{
-				$arr_peticiones[(int) $registro['dia']][$llave_indicador] = $registro['valor'];
-			}
-		}
+		$arr_peticiones = collect(array_fill(1, days_in_month($num_mes, $num_ano), 0))
+			->map(function($item, $item_key) use ($datos, $indicador, $num_mes, $num_ano) {
+				return collect($indicador)->map(function($indicador, $indicador_key) use ($item_key, $datos) {
+					return array_get($datos->get($indicador_key), $item_key, 0);
+				})->all();
+		})->all();
 
 		return $this->gchart_data($arr_peticiones);
 	}
@@ -233,7 +195,7 @@ class Toa_model extends CI_Model {
 	{
 		$sum_indicador1 = $this->get_resumen_usage($indicador1, $empresa, $anomes);
 		$sum_indicador2 = $this->get_resumen_usage($indicador2, $empresa, $anomes);
-		$usage = ($sum_indicador2 === 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
+		$usage = ($sum_indicador2 == 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
 		$usage = $usage > 100 ? 100 : (int) $usage;
 
 		return ($this->gchart_data(['usa' => $usage, 'no usa' => 100 - $usage]));
@@ -303,7 +265,7 @@ class Toa_model extends CI_Model {
 
 		return $this->gchart_data([
 			'actual' => $valor_indicador,
-			'proy'   => (int) ($valor_indicador/$porc_mes) - $valor_indicador
+			'proy'   => $porc_mes == 0 ? 0 : (int) ($valor_indicador/$porc_mes) - $valor_indicador
 		]);
 	}
 
@@ -354,5 +316,5 @@ class Toa_model extends CI_Model {
 
 }
 
-/* End of file Toa_model.php */
-/* Location: ./application/models/Toa_model.php */
+/* End of file Panel.php */
+/* Location: ./application/models/Toa/Panel.php */
