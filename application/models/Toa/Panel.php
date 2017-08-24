@@ -277,42 +277,28 @@ class Panel extends \ORM_Model {
 	 * @param  array $arr_orig Arreglo a formatear
 	 * @return string
 	 */
-	public function gchart_data($arr_orig = [])
+	public function gchart_data($datos = [])
 	{
-
-		if ( ! $arr_orig)
+		if ( ! $datos)
 		{
 			return NULL;
 		}
 
-		$func_agrega_comillas = function($elem) {return "'".$elem."'";};
-		$func_nulos_a_cero    = function($elem) {return is_null($elem) ? 0 : $elem;};
-		$num_registro = 0;
+		$agrega_comillas = function($elem) {return "'".$elem."'";};
+		$nulos_a_cero    = function($elem) {return is_null($elem) ? 0 : $elem;};
 
-		foreach ($arr_orig as $num_dia => $valor)
-		{
-			if ( ! is_array($valor))
-			{
-				$valor = ['Data' => $valor];
-			}
+		$datos = collect($datos)->map(function($dato, $dato_key) {
+			return ! is_array($dato) ? ['Data' => $dato] : $dato;
+		});
 
-			// titulo
-			if ($num_registro === 0)
-			{
-				$arrjs = "[['Dia', ".collect(array_keys($valor))->map($func_agrega_comillas)->implode(',').']';
-			}
-
-			// agregamos los datos del día
-			$arrjs .= ", ['{$num_dia}',".collect($valor)->map($func_nulos_a_cero)->implode(',').']';
-			$num_registro += 1;
-		}
-
-		$arrjs .= ']';
-
-		return $arrjs;
+		return "[['Dia',"
+			.collect($datos->first())->keys()->map($agrega_comillas)->implode(',')
+			.'],'
+			.collect($datos)->map(function($dato, $dato_key) use ($nulos_a_cero) {
+				return "['{$dato_key}',".collect($dato)->map($nulos_a_cero)->implode(',').']';
+			})->implode(',')
+			.']';
 	}
-
-
 
 }
 
