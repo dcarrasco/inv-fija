@@ -92,7 +92,7 @@ class Login extends Controller_base {
 			Acl::create()->use_captcha(request('usr')) ? Acl::create()->rules_captcha : []
 		);
 
-		route_validation($this->form_validation->set_rules($rules)->run());
+		route_validation($rules);
 
 		$usuario      = request('usr');
 		$password     = request('pwd');
@@ -165,14 +165,12 @@ class Login extends Controller_base {
 
 	public function do_cambio_password($usr_param = '')
 	{
-		$this->form_validation->set_rules(Acl::create()->change_password_validation);
+		$rules = array_merge(
+			Acl::create()->change_password_validation,
+			Acl::create()->tiene_clave(request('usr')) ? [] :  [['field'=>'pwd_old', 'label'=>'Clave Anterior', 'rules'=>'trim']]
+		);
 
-		if ( ! Acl::create()->tiene_clave(request('usr')))
-		{
-			$this->form_validation->set_rules('pwd_old', 'Clave Anterior', 'trim');
-		}
-
-		route_validation($this->form_validation->run());
+		route_validation($rules);
 
 		if ( ! Acl::create()->check_user_credentials(request('usr'), request('pwd_old')))
 		{

@@ -69,17 +69,13 @@ class Toa_asignaciones extends Controller_base {
 	 */
 	public function asignaciones()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Asignacion_toa::create()->rules)
-			->run();
+		form_validation(Asignacion_toa::create()->rules);
 
 		app_render_view('toa/consumos', [
 			'combo_reportes' => Asignacion_toa::create()->tipos_reporte_asignaciones,
 			'reporte'        => Asignacion_toa::create()->asignaciones_toa(request('sel_reporte'), request('fecha_desde'), request('fecha_hasta'), request('order_by'), request('order_sort')),
 		]);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -102,7 +98,6 @@ class Toa_asignaciones extends Controller_base {
 
 
 	}
-
 
 	// --------------------------------------------------------------------
 

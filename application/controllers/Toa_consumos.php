@@ -70,10 +70,7 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function consumos()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->consumos_validation)
-			->run();
+		form_validation(Consumo_toa::create()->consumos_validation);
 
 		app_render_view('toa/consumos', [
 			'combo_reportes' => Consumo_toa::create()->tipos_reporte_consumo,

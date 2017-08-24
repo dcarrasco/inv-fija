@@ -72,17 +72,13 @@ class Toa_panel extends Controller_base {
 	{
 		$panel = new Panel;
 
-		$is_form_valid = $this->form_validation
-			->set_data(request())
-			->set_rules($panel->rules)
-			->run();
 
 		$datos = [
 			'combo_empresas' => collect(Empresa_toa::create()->find('list'))->merge(['***' => 'Todas'])->all(),
 			'form_validated' => FALSE,
 		];
 
-		if ($is_form_valid)
+		if (form_validation($panel->rules))
 		{
 			$sel_empresa = request('empresa');
 			$sel_mes     = request('mes');

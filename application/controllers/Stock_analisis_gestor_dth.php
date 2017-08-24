@@ -71,7 +71,7 @@ class Stock_analisis_gestor_dth extends Controller_base {
 		$this->load->model('log_gestor_model');
 		$datos = [];
 
-		$this->form_validation->set_rules($this->log_gestor_model->validation_rules)->run();
+		form_validation($this->log_gestor_model->validation_rules);
 
 		$arr_filtro_cas = [];
 

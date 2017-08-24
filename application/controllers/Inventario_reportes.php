@@ -107,7 +107,7 @@ class Inventario_reportes extends Controller_base {
 	public function listado($tipo = 'hoja', $param1 = '')
 	{
 		// define reglas para usar set_value, y ejecuta validación de formulario
-		$this->form_validation->set_rules(Inventario_reporte::create()->rules_reporte)->run();
+		form_validation(Inventario_reporte::create()->rules_reporte);
 
 		$id_inventario = request('inv_activo', Inventario_reporte::create()->get_id_inventario_activo());
 		$inventario = new Inventario_reporte($id_inventario);

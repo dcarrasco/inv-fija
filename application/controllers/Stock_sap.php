@@ -105,17 +105,16 @@ class Stock_sap extends Controller_base {
 			)->all();
 
 		$stock = ($tipo_op === 'MOVIL') ? new Stock_sap_movil() : new Stock_sap_fija();
-		$combo_fechas = $stock->get_combo_fechas();
 
+		$combo_fechas    = $stock->get_combo_fechas();
 		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
 			? Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)
 			: Almacen_sap::create()->get_combo_almacenes($tipo_op);
-
-		$is_form_valid = $this->form_validation->set_rules($stock->rules_stock_sap)->run();
+		$tabla_stock = form_validation($stock->rules_stock_sap) ? $stock->reporte($arr_mostrar, request()) : '';
 
 		$data = [
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
-			'tabla_stock'     => $is_form_valid ? $stock->reporte($arr_mostrar, request()) : '',
+			'tabla_stock'     => $tabla_stock,
 			'combo_almacenes' => $combo_almacenes,
 			'combo_fechas'    => $combo_fechas[request('sel_fechas', 'ultimodia')],
 			'tipo_op'         => $tipo_op,
@@ -186,9 +185,8 @@ class Stock_sap extends Controller_base {
 		$arr_filtrar_todos = ['fecha', 'almacen', 'tipo_stock', 'material', 'lote'];
 		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
 
-		$is_form_valid = $this->form_validation->set_rules('fecha[]', 'Fechas', 'required')->run();
 
-		if ($is_form_valid)
+		if (form_validation([['field'=>'fecha[]', 'label'=>'Fechas', 'rules'=>'required']]))
 		{
 			$tabla_stock = $stock->get_stock_transito($arr_mostrar, $arr_filtrar);
 		}

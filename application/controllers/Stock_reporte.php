@@ -105,16 +105,10 @@ class Stock_reporte extends Controller_base {
 
 		$reporte = new Reporte_stock;
 
-		// define reglas de validacion
-		$is_form_valid = $this->form_validation->set_rules($reporte->rules_permanencia)->run();
-
-		if ($is_form_valid)
+		if (form_validation($reporte->rules_permanencia) AND $tipo === 'permanencia')
 		{
-			if ($tipo === 'permanencia')
-			{
-				$reporte->get_campos_reporte_permanencia();
-				$reporte->get_reporte_permanencia($reporte->get_config_reporte_permanencia());
-			}
+			$reporte->get_campos_reporte_permanencia();
+			$reporte->get_reporte_permanencia($reporte->get_config_reporte_permanencia());
 		}
 
 		app_render_view('stock_sap/reporte', [
@@ -162,11 +156,6 @@ class Stock_reporte extends Controller_base {
 	 */
 	public function mapastock()
 	{
-		$this->form_validation
-			->set_rules('sel_centro', '', 'trim')
-			->set_rules('sel_treemap_type', '', 'trim')
-			->run();
-
 		$centro = request('sel_centro', 'CL03');
 
 		$arr_treemap = Reporte_stock::create()->get_treemap_permanencia($centro);
@@ -192,7 +181,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$reporte = new Reporte_stock;
 
-		$this->form_validation->set_rules($reporte->rules_movhist)->run();
+		form_validation($reporte->rules_movhist);
 
 		$param_tipo_fecha     = request('tipo_fecha', 'ANNO');
 		$param_tipo_alm       = request('tipo_alm', 'MOVIL-TIPOALM');

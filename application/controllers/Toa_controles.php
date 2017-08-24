@@ -124,10 +124,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function consumos()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->rules_controles_consumos)
-			->run();
+		form_validation(Consumo_toa::create()->rules_controles_consumos);
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('consumos'),
@@ -150,10 +147,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function asignaciones()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->rules_controles_consumos)
-			->run();
+		form_validation(Consumo_toa::create()->rules_controles_consumos);
 
 		app_render_view('toa/controles', [
 			'menu_modulo'          => $this->get_menu_modulo('asignaciones'),
@@ -175,10 +169,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function materiales_consumidos()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->rules_controles_consumos)
-			->run();
+		form_validation(Consumo_toa::create()->rules_controles_consumos);
 
 		app_render_view('toa/control_materiales_consumidos', [
 			'menu_modulo'          => $this->get_menu_modulo('materiales_consumidos'),
@@ -200,10 +191,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function stock()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Stock::create()->rules_stock_empresa)
-			->run();
+		form_validation(Stock::create()->rules_stock_empresa);
 
 		app_render_view('toa/controles_stock', [
 			'menu_modulo'          => $this->get_menu_modulo('stock'),
@@ -225,10 +213,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function stock_tecnicos()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Stock::create()->rules_stock_tecnicos)
-			->run();
+		form_validation(Stock::create()->rules_stock_tecnicos);
 
 		app_render_view('toa/controles_stock_tecnicos', [
 			'menu_modulo'          => $this->get_menu_modulo('stock_tecnicos'),
@@ -289,10 +274,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function materiales()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->rules_controles_materiales)
-			->run();
+		form_validation(Consumo_toa::create()->rules_controles_materiales);
 
 		app_render_view('toa/controles_materiales_tipo_trabajo', [
 			'menu_modulo'              => $this->get_menu_modulo('materiales'),
@@ -405,10 +387,7 @@ class Toa_controles extends Controller_base {
 	 */
 	public function clientes()
 	{
-+		$this->form_validation
-			->set_data(request())
-			->set_rules(Consumo_toa::create()->rules_controles_clientes)
-			->run();
++		form_validation(Consumo_toa::create()->rules_controles_clientes);
 
 		app_render_view('toa/controles_clientes', [
 			'menu_modulo'     => $this->get_menu_modulo('clientes'),

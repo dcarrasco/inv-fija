@@ -15,6 +15,11 @@
 
 if ( ! function_exists('dump'))
 {
+	/**
+	 * Debug de variables
+	 *
+	 * @return void
+	 */
 	function dump()
 	{
 		call_user_func_array('dbg', func_get_args());
@@ -713,6 +718,14 @@ if ( ! function_exists('request'))
 
 if ( ! function_exists('array_get'))
 {
+	/**
+	 * Devuelve el valor de un elemento de un arreglo
+	 * @param  array  $arreglo Arreglo a buscar el valor
+	 * @param  string $indice  Indice a recuperar
+	 * @param  mixed  $default Valor por defecto en caso de no encontrar el valor
+	 *
+	 * @return mixed
+	 */
 	function array_get($arreglo = [], $indice = NULL, $default = NULL)
 	{
 		if ( ! is_array($arreglo))
@@ -752,6 +765,7 @@ if ( ! function_exists('map'))
 {
 	/**
 	 * Wrapper de la función array_map
+	 *
 	 * @param  mixed &$data Arreglo con datos
 	 * @param  mixed &$f    Funcion a ejecutar
 	 * @return array        Resultado de array_map
@@ -763,18 +777,39 @@ if ( ! function_exists('map'))
 }
 
 // --------------------------------------------------------------------
+if ( ! function_exists('form_validation'))
+{
+	/**
+	 * Valida los datos del request contra un arreglo
+	 *
+	 * @param  array $rules Reglas a validar
+	 * @return boolean      Indicador de exito de la validación
+	 */
+	function form_validation($rules = [])
+	{
+		$ci =& get_instance();
+
+		return $ci->form_validation->set_data(request())->set_rules($rules)->run();
+	}
+}
+
+
+// --------------------------------------------------------------------
 
 if ( ! function_exists('route_validation'))
 {
 	/**
-	 * [route_validation description]
+	 * Ejecuta validación y vuelve hacia atrás en caso que no sea válido
 	 *
-	 * @param  boolean $is_valid [description]
-	 * @return [type]            [description]
+	 * @param  mixed $is_valid Resultado de la validación o arreglo a con reglas a validar
+	 *
+	 * @return void
 	 */
 	function route_validation($is_valid = FALSE)
 	{
 		$ci = &get_instance();
+
+		$is_valid = is_array($is_valid) ? form_validation($is_valid) : $is_valid;
 
 		if ( ! $is_valid)
 		{
@@ -887,6 +922,8 @@ if ( ! function_exists('get_fecha_hasta'))
 	}
 }
 
+// --------------------------------------------------------------------
+
 if ( ! function_exists('dias_de_la_semana'))
 {
 	/**
@@ -908,7 +945,7 @@ if ( ! function_exists('dias_de_la_semana'))
 	}
 }
 
-	// --------------------------------------------------------------------
+// --------------------------------------------------------------------
 
 if ( ! function_exists('clase_cumplimiento_consumos'))
 {

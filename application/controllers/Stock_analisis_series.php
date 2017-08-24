@@ -78,9 +78,8 @@ class Stock_analisis_series extends Controller_base {
 			'datos_show_gdth'      => '',
 		];
 
-		$is_form_valid = $this->form_validation->set_rules($this->analisis_series_model->validation_analisis)->run();
 
-		if ($is_form_valid)
+		if (form_validation($this->analisis_series_model->validation_analisis))
 		{
 			$series = request('series');
 

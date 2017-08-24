@@ -157,10 +157,7 @@ class Inventario_analisis extends Controller_base {
 		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
 		$detalles    = Detalle_inventario::create()->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina);
 
-		route_validation($this->form_validation
-			->set_rules(Detalle_inventario::create()->rules_ajustes($detalles))
-			->run()
-		);
+		route_validation(Detalle_inventario::create()->rules_ajustes($detalles));
 
 		$cant_modif = Detalle_inventario::create()->update_ajustes($detalles);
 
@@ -284,9 +281,7 @@ class Inventario_analisis extends Controller_base {
 
 	public function imprime_inventario_validate()
 	{
-		route_validation($this->form_validation->set_rules(
-			Inventario_reporte::create()->rules_imprime_inventario()
-		)->run());
+		route_validation(Inventario_reporte::create()->rules_imprime_inventario());
 
 		redirect($this->router->class.'/imprime_hojas/'
 			.request('pag_desde').'/'

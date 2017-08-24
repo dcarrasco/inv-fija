@@ -71,9 +71,7 @@ class Despachos_retail extends Controller_base {
 		$arr_facturas  = [];
 		$despachos = new Despachos;
 
-		$is_form_valid = $this->form_validation->set_rules($despachos->rules)->run();
-
-		if ($is_form_valid)
+		if (form_validation($despachos->rules))
 		{
 			$despachos->limite_facturas = request('max_facturas', $despachos->limite_facturas);
 			$arr_facturas = $despachos->get_listado_ultimas_facturas(request('rut_retail'), request('modelos'));

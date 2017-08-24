@@ -83,7 +83,7 @@ class Adminbd_exportartablas extends Controller_base {
 		}
 
 		// reglas de validacion formulario
-		$is_form_valid = $this->form_validation->set_rules(Adminbd::create()->rules_exportar_tablas)->run();
+		$is_form_valid = form_validation(Adminbd::create()->rules_exportar_tablas);
 
 		if ($is_form_valid AND $this->db->table_exists($tabla))
 		{

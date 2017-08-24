@@ -89,10 +89,7 @@ class Toa_uso extends Controller_base {
 	 */
 	public function uso()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Uso::create()->rules_uso)
-			->run();
+		form_validation(Uso::create()->rules_uso);
 
 		app_render_view('toa/uso', [
 			'menu_modulo'    => $this->get_menu_modulo('reporte'),
@@ -167,11 +164,7 @@ class Toa_uso extends Controller_base {
 	 */
 	public function do_genera()
 	{
-		route_validation(
-			$this->form_validation->set_data(request())
-				->set_rules(Uso::create()->rules_genera)
-				->run()
-		);
+		route_validation(Uso::create()->rules_genera);
 
 		$mensaje = Uso::create()->genera_reporte(request('mes'));
 		set_message($mensaje);
@@ -183,10 +176,7 @@ class Toa_uso extends Controller_base {
 
 	public function evolucion_tecnico()
 	{
-		$this->form_validation
-			->set_data(request())
-			->set_rules(Uso::create()->rules_evolucion_uso_tecnico)
-			->run();
+		form_validation(Uso::create()->rules_evolucion_uso_tecnico);
 
 		app_render_view('toa/evolucion_uso_tecnico', [
 			'menu_modulo'    => $this->get_menu_modulo('evolucion_tecnico'),
