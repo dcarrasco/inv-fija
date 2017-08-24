@@ -160,7 +160,6 @@ class Inventario_analisis extends Controller_base {
 		route_validation(Detalle_inventario::create()->rules_ajustes($detalles));
 
 		$cant_modif = Detalle_inventario::create()->update_ajustes($detalles);
-
 		set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
 			: '');
 

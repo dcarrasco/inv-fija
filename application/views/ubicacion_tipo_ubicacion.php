@@ -9,7 +9,7 @@
 
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="display: none;">
-		<?= form_open('','id=frm_agregar')?>
+		<?= form_open($url_form,'id=frm_agregar')?>
 		<?= form_hidden('formulario','agregar'); ?>
 
 		<div class="row">
@@ -44,7 +44,7 @@
 
 <div class="row">
 	<div class="">
-		<?= form_open('', 'id="frm_usuarios"'); ?>
+		<?= form_open($url_form, 'id="frm_usuarios"'); ?>
 		<?= form_hidden('formulario','editar'); ?>
 		<table class="table table-hover table-condensed table-striped">
 			<thead>
@@ -95,7 +95,7 @@
 		</a>
 	</div> <!-- fin content-module-footer -->
 
-	<?= form_open('','id="frm_borrar"'); ?>
+	<?= form_open($url_form,'id="frm_borrar"'); ?>
 		<?= form_hidden('formulario','borrar'); ?>
 		<?= form_hidden('id_borrar'); ?>
 	<?= form_close(); ?>
