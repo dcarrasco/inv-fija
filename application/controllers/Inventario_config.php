@@ -14,7 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-	use Inventario\Tipo_inventario;
+use Inventario\Ubicacion;
+use Inventario\Tipo_inventario;
 
 /**
  * Clase Controller Configuracion Inventario
@@ -122,31 +123,25 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function ubicacion_tipo_ubicacion($pagina = 0)
 	{
-		$this->load->model('inventario/ubicacion_model');
 		$this->load->library('pagination');
+		$this->pagination->initialize(Ubicacion::create()->pagination_config());
 
-		$limite_por_pagina = 15;
-		$this->pagination->initialize($this->_ubicacion_pagination_config());
+		$datos_hoja = Ubicacion::create()->get_ubicacion_tipo_ubicacion(Ubicacion::create()->get_page_results(), $pagina);
 
-		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($this->_ubicacion_limite_por_pagina(), $pagina);
+		$arr_combo_tipo_ubic = collect($datos_hoja)->pluck('tipo_inventario')
+			->unique()
+			->map_with_keys(function($item) {
+				return [$item => Ubicacion::create()->get_combo_tipos_ubicacion($item)];
+			})->all();
 
-		if ($this->form_validation->run() === FALSE)
-		{
-			$arr_combo_tipo_ubic = collect($datos_hoja)->pluck('tipo_inventario')
-				->unique()
-				->map_with_keys(function($item) {
-					return [$item => $this->ubicacion_model->get_combo_tipos_ubicacion($item)];
-				})->all();
-
-			app_render_view('ubicacion_tipo_ubicacion', [
-				'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
-				'datos_hoja'             => $datos_hoja,
-				'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
-				'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
-				'links_paginas'          => $this->pagination->create_links(),
-				'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion/{$pagina}",
-			]);
-		}
+		app_render_view('ubicacion_tipo_ubicacion', [
+			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
+			'datos_hoja'             => $datos_hoja,
+			'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
+			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
+			'links_paginas'          => $this->pagination->create_links(),
+			'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion/{$pagina}",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -231,44 +226,6 @@ class Inventario_config extends Orm_controller {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve la configuración del paginador de ubicaciones
-	 * @return array
-	 */
-	private function _ubicacion_pagination_config()
-	{
-		return [
-			'total_rows'  => $this->ubicacion_model->total_ubicacion_tipo_ubicacion(),
-			'per_page'    => $this->_ubicacion_limite_por_pagina(),
-			'base_url'    => site_url($this->router->class . '/ubicacion_tipo_ubicacion'),
-			'uri_segment' => 3,
-			'num_links'   => 5,
-
-			'full_tag_open'   => '<ul class="pagination">',
-			'flil_tag_close'  => '</ul>',
-
-			'first_tag_open'  => '<li>',
-			'first_tag_close' => '</li>',
-			'last_tag_open'   => '<li>',
-			'last_tag_close'  => '</li>',
-			'next_tag_open'   => '<li>',
-			'next_tag_close'  => '</li>',
-			'prev_tag_open'   => '<li>',
-			'prev_tag_close'  => '</li>',
-			'cur_tag_open'    => '<li class="active"><a href="#">',
-			'cur_tag_close'   => '</a></li>',
-			'num_tag_open'    => '<li>',
-			'num_tag_close'   => '</li>',
-
-			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo',
-			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
-			'next_link'   => '<span class="fa fa-chevron-right"></span>',
-		];
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Devuelve string JSON con las ubicaciones libres
 	 *
 	 * @param  string $tipo_inventario Tipo de inventario a buscar
@@ -276,8 +233,7 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function get_json_ubicaciones_libres($tipo_inventario = '')
 	{
-		$this->load->model('inventario/ubicacion_model');
-		$arr_ubic = $this->ubicacion_model->get_ubicaciones_libres($tipo_inventario);
+		$arr_ubic = Ubicacion::create()->get_ubicaciones_libres($tipo_inventario);
 
 		$this->output
 			->set_content_type('application/json')
@@ -294,8 +250,7 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function get_json_tipo_ubicacion($tipo_inventario = '')
 	{
-		$this->load->model('inventario/ubicacion_model');
-		$arr_ubic = $this->ubicacion_model->get_combo_tipos_ubicacion($tipo_inventario);
+		$arr_ubic = Ubicacion::create()->get_combo_tipos_ubicacion($tipo_inventario);
 
 		$this->output
 			->set_content_type('application/json')

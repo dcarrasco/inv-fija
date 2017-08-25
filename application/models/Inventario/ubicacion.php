@@ -1,4 +1,6 @@
 <?php
+namespace Inventario;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +16,9 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use \ORM_Model;
+use \ORM_Field;
+
 /**
  * Clase Modelo Ubicacion
  *
@@ -24,7 +29,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Ubicacion_model extends CI_Model {
+class Ubicacion extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
@@ -34,6 +39,8 @@ class Ubicacion_model extends CI_Model {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->page_results = 15;
 	}
 
 	// --------------------------------------------------------------------
@@ -218,6 +225,45 @@ class Ubicacion_model extends CI_Model {
 		return $arr_validacion;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve la configuración del paginador de ubicaciones
+	 * @return array
+	 */
+	public function pagination_config()
+	{
+		return [
+			'total_rows'  => $this->total_ubicacion_tipo_ubicacion(),
+			'per_page'    => $this->page_results,
+			'base_url'    => site_url($this->router->class . '/ubicacion_tipo_ubicacion'),
+			'uri_segment' => 3,
+			'num_links'   => 5,
+
+			'full_tag_open'   => '<ul class="pagination">',
+			'flil_tag_close'  => '</ul>',
+
+			'first_tag_open'  => '<li>',
+			'first_tag_close' => '</li>',
+			'last_tag_open'   => '<li>',
+			'last_tag_close'  => '</li>',
+			'next_tag_open'   => '<li>',
+			'next_tag_close'  => '</li>',
+			'prev_tag_open'   => '<li>',
+			'prev_tag_close'  => '</li>',
+			'cur_tag_open'    => '<li class="active"><a href="#">',
+			'cur_tag_close'   => '</a></li>',
+			'num_tag_open'    => '<li>',
+			'num_tag_close'   => '</li>',
+
+			'first_link'  => 'Primero',
+			'last_link'   => 'Ultimo',
+			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
+			'next_link'   => '<span class="fa fa-chevron-right"></span>',
+		];
+	}
+
+
 }
-/* End of file ubicacion_model.php */
-/* Location: ./application/models/ubicacion_model.php */
+/* End of file ubicacion.php */
+/* Location: ./application/models/ubicacion.php */
