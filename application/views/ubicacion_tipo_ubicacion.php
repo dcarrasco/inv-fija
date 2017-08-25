@@ -1,5 +1,5 @@
 <div class="row">
-	<div class="text-right">
+	<div class="col-md-12 text-right" id="btn_agregar_ubicacion">
 		<a href="#" class="btn btn-primary" id="btn_mostrar_agregar">
 			<span class="fa fa-plus-circle"></span>
 			Agregar ubicacion
@@ -8,43 +8,54 @@
 </div>
 
 <div class="row">
-	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="display: none;">
-		<?= form_open($url_form,'id=frm_agregar')?>
-		<?= form_hidden('formulario','agregar'); ?>
+	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="{display_form_agregar}">
 
-		<div class="row">
-			<div class="col-md-4">
-				Tipo de Inventario
-				<?= form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, request('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
-				<?= form_error('agr-tipo_inventario'); ?>
-			</div>
-			<div class="col-md-4">
-				Ubicacion
-				<?= form_multiselect('agr-ubicacion[]', [], request('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
-				<?= form_error('agr-ubicacion'); ?>
-			</div>
-			<div class="col-md-4">
-				Tipo de Ubicacion
-				<?= form_dropdown('agr-tipo_ubicacion', ['' => 'Seleccione tipo ubicacion...'], request('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
-				<?= form_error('agr-tipo_ubicacion'); ?>
-			</div>
-		</div>
+		<fieldset>
+			<legend>{_inventario_config_add_ubicaciones_}</legend>
 
-		<div class="row">
-			<div class="pull-right">
-				<a href="#" class="btn btn-primary" id="btn_agregar">
-					<span class="fa fa-check"></span>
-					Agregar
-				</a>
+
+			<?= form_open($url_form,'id=frm_agregar')?>
+			<?= form_hidden('formulario','agregar'); ?>
+
+			{validation_errors}
+
+			<div class="row">
+				<div class="col-md-4 form-group <?= form_has_error_class('agr-tipo_inventario') ?>">
+					<label class="control-label">Tipo de Inventario</label>
+					<?= form_dropdown('agr-tipo_inventario', $combo_tipos_inventario, request('agr-tipo_inventario'), 'class="form-control input-sm"'); ?>
+					<?= form_error('agr-tipo_inventario'); ?>
+				</div>
+				<div class="col-md-4 form-group <?= form_has_error_class('agr-ubicacion[]') ?>">
+					<label class="control-label">Ubicaci&oacute;n</label>
+					<?= form_multiselect('agr-ubicacion[]', [], request('agr-ubicacion[]'), 'size="15" class="form-control input-sm"'); ?>
+					<?= form_error('agr-ubicacion'); ?>
+				</div>
+				<div class="col-md-4 form-group <?= form_has_error_class('agr-tipo_ubicacion') ?>">
+					<label class="control-label">Tipo de Ubicaci&oacute;n</label>
+					<?= form_dropdown('agr-tipo_ubicacion', ['' => 'Seleccione tipo ubicacion...'], request('agr-tipo_ubicacion'), 'class="form-control input-sm"'); ?>
+					<?= form_error('agr-tipo_ubicacion'); ?>
+				</div>
 			</div>
-		</div>
-		<?= form_close(); ?>
+
+			<div class="row">
+				<div class="col-md-12 text-right">
+					<a href="#" class="btn btn-primary" id="btn_agregar">
+						<span class="fa fa-check"></span> Agregar
+					</a>
+					<a href="#" class="btn btn-default" id="btn_cancelar">
+						<span class="fa fa-ban"></span> Cancelar
+					</a>
+				</div>
+			</div>
+			<?= form_close(); ?>
+
+		</fieldset>
 	</div> <!-- fin content-module-main-agregar -->
 </div>
 
 <div class="row">
-	<div class="">
-		<?= form_open($url_form, 'id="frm_usuarios"'); ?>
+	<div class="col-md-12">
+		<?= form_open($url_form, 'id="frm-ubicaciones"'); ?>
 		<?= form_hidden('formulario','editar'); ?>
 		<table class="table table-hover table-condensed table-striped">
 			<thead>
@@ -58,22 +69,23 @@
 			</thead>
 			<tbody>
 				<?php foreach ($datos_hoja as $reg): ?>
-				<tr>
+				<tr class="<?= $errors_id->has($reg['id']) ? 'danger' : '' ?>">
 					<td><?= $reg['id']; ?></td>
+						<div class="form-group ">
 					<td>
-						<?= form_dropdown($reg['id'].'-tipo_inventario', $combo_tipos_inventario, request($reg['id'].'-tipo_inventario', $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
-						<?= form_error($reg['id'].'-tipo_inventario'); ?>
+						<?= form_dropdown("tipo_inventario[{$reg['id']}]", $combo_tipos_inventario, request("tipo_inventario[{$reg['id']}]", $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
+						<?= errors("tipo_inventario[{$reg['id']}]"); ?>
 					</td>
 					<td>
-						<?= form_dropdown($reg['id'].'-tipo_ubicacion', $combo_tipos_ubicacion[$reg['tipo_inventario']], request($reg['id'].'-tipo_ubicacion', $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
-						<?= form_error($reg['id'].'-tipo_ubicacion'); ?>
+						<?= form_dropdown("tipo_ubicacion[{$reg['id']}]", $combo_tipos_ubicacion[$reg['tipo_inventario']], request("tipo_ubicacion[{$reg['id']}]", $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
+						<?= errors("tipo_ubicacion[{$reg['id']}]"); ?>
 					</td>
 					<td>
-						<?= form_input($reg['id'].'-ubicacion', request($reg['id'].'-ubicacion', $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
-						<?= form_error($reg['id'].'-ubicacion'); ?>
+						<?= form_input("ubicacion[{$reg['id']}]", request("ubicacion[{$reg['id']}]", $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
+						<?= errors("ubicacion[{$reg['id']}]"); ?>
 					</td>
 					<td>
-						<a href="#" class="btn btn-default btn-sm" id="btn_borrar" id-borrar="<?= $reg['id']; ?>">
+						<a href="#" class="btn btn-default btn-sm" id="btn-borrar" data-rowid="<?= $reg['id']; ?>">
 							<span class="fa fa-trash"></span>
 						</a>
 					</td>
@@ -83,17 +95,19 @@
 		</table>
 		<?= form_close(); ?>
 
+		<div class="row">
+			<div class="col-md-12 text-right">
+				<a href="#" class="btn btn-primary" id="btn-guardar">
+					<span class="fa fa-check"></span> Guardar
+				</a>
+			</div>
+		</div>
+
 		<div class="text-center">
 			<?= ($links_paginas != '') ? $links_paginas : ''; ?>
 		</div>
 	</div> <!-- fin content-module-main -->
 
-	<div class="pull-right">
-		<a href="#" class="btn btn-primary" id="btn_guardar">
-			<span class="fa fa-check"></span>
-			Guardar
-		</a>
-	</div> <!-- fin content-module-footer -->
 
 	<?= form_open($url_form,'id="frm_borrar"'); ?>
 		<?= form_hidden('formulario','borrar'); ?>
@@ -111,12 +125,19 @@
 
 		$('#btn_mostrar_agregar').click(function (event) {
 			event.preventDefault();
-			$('div#form_agregar').toggle();
+			$('div#form_agregar').slideToggle(300);
+			$('div#btn_agregar_ubicacion').toggle();
 		});
 
-		$('#btn_guardar').click(function (event) {
+		$('#btn_cancelar').click(function (event) {
 			event.preventDefault();
-			$('form#frm_usuarios').submit();
+			$('div#form_agregar').slideToggle(300);
+			$('div#btn_agregar_ubicacion').toggle();
+		});
+
+		$('#btn-guardar').click(function (event) {
+			event.preventDefault();
+			$('#frm-ubicaciones').submit();
 		});
 
 		$('#btn_agregar').click(function (event) {
@@ -124,10 +145,10 @@
 			$('form#frm_agregar').submit();
 		});
 
-		$('a.boton-borrar').click(function (event) {
+		$('#frm-ubicaciones>table>tbody>tr>td>a').click(function (event) {
 			event.preventDefault();
-			var id_borrar = $(this).attr('id-borrar');
-			if (confirm('Seguro que desea borrar el usuario id=' + id_borrar)) {
+			var id_borrar = $(this).data('rowid');
+			if (confirm('Seguro que desea borrar la ubicacion con id=' + id_borrar)) {
 				$('form#frm_borrar input[name="id_borrar"]').val(id_borrar);
 				$('form#frm_borrar').submit();
 			}

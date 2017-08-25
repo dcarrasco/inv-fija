@@ -11,6 +11,7 @@ $lang['inventario_config_menu_ubicaciones']       = 'Ubicaciones';
 $lang['inventario_config_menu_centros']           = 'Centros';
 $lang['inventario_config_menu_almacenes']         = 'Almacenes';
 $lang['inventario_config_menu_unidades_medida']   = 'Unidades de medida';
+$lang['inventario_config_add_ubicaciones']        = 'Agregar ubicaci&oacute;n';
 
 $lang['inventario_menu_reporte_hoja']      = 'Hoja';
 $lang['inventario_menu_reporte_mat']       = 'Material';

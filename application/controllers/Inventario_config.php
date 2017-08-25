@@ -134,6 +134,13 @@ class Inventario_config extends Orm_controller {
 				return [$item => Ubicacion::create()->get_combo_tipos_ubicacion($item)];
 			})->all();
 
+		$errors_id = $this->errors->map_with_keys(function($linea, $linea_key) {
+			preg_match('/\[(?<id>\d+)\]/', $linea_key, $matches);
+			return [array_get($matches, 'id') => array_get($matches, 'id')];
+		})->unique();
+
+		$display_form_agregar = request('formulario') === 'agregar' ? '' : 'display: none;';
+
 		app_render_view('ubicacion_tipo_ubicacion', [
 			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 			'datos_hoja'             => $datos_hoja,
@@ -141,6 +148,8 @@ class Inventario_config extends Orm_controller {
 			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 			'links_paginas'          => $this->pagination->create_links(),
 			'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion/{$pagina}",
+			'display_form_agregar'   => $display_form_agregar,
+			'errors_id'              => $errors_id,
 		]);
 	}
 
@@ -153,61 +162,43 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function update_ubicacion_tipo_ubicacion($pagina = 0)
 	{
-		$this->load->model('inventario/ubicacion_model');
-		$datos_hoja = $this->ubicacion_model->get_ubicacion_tipo_ubicacion($this->_ubicacion_limite_por_pagina(), $pagina);
+		$datos_hoja = Ubicacion::create()->get_ubicacion_tipo_ubicacion(Ubicacion::create()->get_page_results(), $pagina);
 
 		$rules = [
-			'editar'  => $this->ubicacion_model->get_validation_edit($datos_hoja),
-			'agregar' => $this->ubicacion_model->get_validation_add(),
+			'editar'  => Ubicacion::create()->get_validation_edit($datos_hoja),
+			'agregar' => Ubicacion::create()->get_validation_add(),
 			'borrar'  => [['field'=>'id_borrar', 'label'=>'', 'rules'=>'trim|required']],
 		];
+
 		route_validation(array_get($rules, request('formulario'), []));
 
 		if (request('formulario') === 'editar')
 		{
-			$cant_modif = 0;
+			$cant_modif = collect($datos_hoja)->filter(function($registro) {
+				$id = $registro['id'];
+				return request('tipo_inventario')[$id] !== $registro['tipo_inventario']
+					OR request('ubicacion')[$id] !== $registro['ubicacion']
+					OR request('tipo_ubicacion')[$id] !== $registro['id_tipo_ubicacion'];
+			})->each(function($registro) {
+				$id = $registro['id'];
+				Ubicacion::create()->guardar_ubicacion_tipo_ubicacion($registro['id'], request('tipo_inventario')[$id], request('ubicacion')[$id], request('tipo_ubicacion')[$id]);
+			})->count();
 
-			foreach($datos_hoja as $registro)
-			{
-				if ((request($registro['id'].'-tipo_inventario') !== $registro['tipo_inventario']) OR
-					(request($registro['id'].'-ubicacion')       !== $registro['ubicacion']) OR
-					(request($registro['id'].'-tipo_ubicacion')  !== $registro['id_tipo_ubicacion']))
-				{
-					$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
-						$registro['id'],
-						request($registro['id'] . '-tipo_inventario'),
-						request($registro['id'] . '-ubicacion'),
-						request($registro['id'] . '-tipo_ubicacion')
-					);
-					$cant_modif += 1;
-				}
-			}
-			set_message(
-				($cant_modif > 0)
-					? $cant_modif . ' inventario(s) modificados correctamente'
-					: ''
-			);
+			set_message(($cant_modif > 0) ? $cant_modif . ' inventario(s) modificados correctamente' : '');
 		}
 		elseif (request('formulario') === 'agregar')
 		{
-			$count = 0;
+			$count = collect(request('agr-ubicacion'))
+				->each(function($ubicacion) {
+					Ubicacion::create()
+						->guardar_ubicacion_tipo_ubicacion(0, request('agr-tipo_inventario'), $ubicacion, request('agr-tipo_ubicacion'));
+				})->count();
 
-			foreach(request('agr-ubicacion') as $valor)
-			{
-				$this->ubicacion_model->guardar_ubicacion_tipo_ubicacion(
-					0,
-					request('agr-tipo_inventario'),
-					$valor,
-					request('agr-tipo_ubicacion')
-				);
-				$count += 1;
-			}
-
-			set_message('Se agregaron ' . $count . ' ubicaciones correctamente');
+			set_message("Se agregaron {$count} ubicaciones correctamente");
 		}
 		elseif (request('formulario') === 'borrar')
 		{
-			$this->ubicacion_model->borrar_ubicacion_tipo_ubicacion(request('id_borrar'));
+			Ubicacion::create()->borrar_ubicacion_tipo_ubicacion(request('id_borrar'));
 			set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
 		}
 

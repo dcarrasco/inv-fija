@@ -201,28 +201,27 @@ class Ubicacion extends ORM_Model {
 	 */
 	public function get_validation_edit($arr_datos)
 	{
-		$arr_validacion = [];
-
-		foreach($arr_datos as $registro)
-		{
-			array_push($arr_validacion, [
-				'field' => $registro['id'].'-tipo_inventario',
-				'label' => 'Tipo de inventario',
-				'rules' => 'trim|required'
-			]);
-			array_push($arr_validacion, [
-				'field' => $registro['id'].'-tipo_ubicacion',
-				'label' => 'Tipo Ubicacion',
-				'rules' => 'trim|required'
-			]);
-			array_push($arr_validacion, [
-				'field' => $registro['id'].'-ubicacion',
-				'label' => 'Ubicacion',
-				'rules' => 'trim|required'
-			]);
-		}
-
-		return $arr_validacion;
+		return collect($arr_datos)->map(function($registro) {
+			$id = $registro['id'];
+			return  [
+				[
+					'field' => "tipo_inventario[{$id}]",
+					'label' => 'Tipo de inventario',
+					'rules' => 'trim|required'
+				],
+				[
+					'field' => "tipo_ubicacion[{$id}]",
+					'label' => 'Tipo Ubicacion',
+					'rules' => 'trim|required'
+				],
+				[
+					'field' => "ubicacion[{$id}]",
+					'label' => 'Ubicacion',
+					'rules' => 'trim|required'
+				],
+			];
+		})->flatten(1)
+		->all();
 	}
 
 	// --------------------------------------------------------------------
