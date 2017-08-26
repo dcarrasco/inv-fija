@@ -78,7 +78,7 @@ class Login extends Controller_base {
 			'captcha_img'  => $captcha_img,
 			'extra_styles' => '<style type="text/css">body {background-image: url("'.site_url('img/tch-background.jpg').'"); background-size: cover;}</style>',
 			'vista_login'  => TRUE,
-			'url_login'    => site_url("{$this->router->class}/do_login/"),
+			'url_login'    => site_url("{$this->router->class}/do_login"),
 		]);
 	}
 
@@ -113,7 +113,7 @@ class Login extends Controller_base {
 		// si el usuario valida correctamente, redireccionamos a la app
 		if ($captcha_valido AND Acl::create()->login($usuario, $password, $remember_me === 'remember'))
 		{
-			redirect(Acl::create()->get_redirect_app());
+			redirect(request('redirect_to', Acl::create()->get_redirect_app()));
 		}
 
 		set_message($this->lang->line('login_error_usr_pwd'), 'danger');

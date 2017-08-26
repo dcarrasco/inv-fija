@@ -793,33 +793,17 @@ class Acl extends Orm_Model {
 	 * Autentica el uso de un módulo de la aplicacion
 	 *
 	 * @param  string $modulo Modulo a autenticar
-	 * @return void
+	 * @return boolean
 	 */
 	public function autentica_modulo($modulo = '')
 	{
 		if ( ! $this->session->userdata('user') OR  ! $this->session->userdata('modulos'))
 		{
-			if ( ! $this->input->cookie('login_token'))
-			{
-				redirect('login');
-			}
-			else
-			{
-				return $this->_login_rememberme_cookie();
-			}
+			return $this->input->cookie('login_token') ? $this->_login_rememberme_cookie() : FALSE;
 		}
 		else
 		{
-			$arr_modulos = json_decode($this->session->userdata('modulos'));
-
-			if ( ! in_array($modulo, $arr_modulos))
-			{
-				redirect('login');
-			}
-			else
-			{
-				return TRUE;
-			}
+			return in_array($modulo, json_decode($this->session->userdata('modulos')));
 		}
 	}
 
@@ -899,13 +883,13 @@ class Acl extends Orm_Model {
 	/**
 	 * Recupera la app para redireccionar al usuario
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_redirect_app()
 	{
 		$arr_menu = $this->_get_menu_usuario($this->get_user());
 
-		redirect(array_get(collect($arr_menu)->first(), 'url', 'login/'));
+		return array_get(collect($arr_menu)->first(), 'url', 'login/');
 	}
 
 

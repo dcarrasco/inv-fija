@@ -49,12 +49,11 @@ class MY_Hooks {
 		$whitelist_classes = ['login', 'migration'];
 
 		$class = $ci->router->fetch_class();
-
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
 		if ( ! in_array($class, $whitelist_classes) AND ! Acl::create()->autentica_modulo($llave_modulo))
 		{
-			redirect('login/');
+			redirect('login?redirect_to='.uri_string());
 		}
 
 		if (ENVIRONMENT !== 'production')

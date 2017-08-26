@@ -14,6 +14,7 @@
 		</div>
 
 		<?= form_open($url_login, 'id="frm_login"'); ?>
+			<?= form_hidden('redirect_to', request('redirect_to')); ?>
 
 			<div class="form-group col-md-12 <?= form_has_error_class('usr'); ?>">
 				<label for="usr">{_login_input_user_}</label>
