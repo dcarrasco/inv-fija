@@ -13,20 +13,6 @@
  *
  */
 
-if ( ! function_exists('dump'))
-{
-	/**
-	 * Debug de variables
-	 *
-	 * @return void
-	 */
-	function dump()
-	{
-		call_user_func_array('dbg', func_get_args());
-	}
-}
-// --------------------------------------------------------------------
-
 if ( ! function_exists('dbg'))
 {
 	/**
@@ -36,57 +22,28 @@ if ( ! function_exists('dbg'))
 	 */
 	function dbg()
 	{
-		$colores_texto = [
-			'llave_array' => 'tomato',
-			'numero'      => 'blue',
-			'texto'       => 'limegreen',
-			'boolean'     => 'rebeccapurple',
-			'array'       => 'red',
-		];
-
-		foreach (func_get_args() as $item)
-		{
-			ob_start();
-			var_dump($item);
-			$dump = ob_get_contents();
-			ob_end_clean();
-			$dump = preg_replace(
-				[
-					'/=>\n[ ]+/i',
-					'/\n/',
-					'/ /i',
-					'/\n/i',
-					'/\["([\w:\(\)\/_\-. ]*)"\]/i',
-					'/\[(\d*)\]/i',
-					'/(int|float)\(([\d\.]*)\)/i',
-					'/bool\((\w*)\)/i',
-					'/string\((\w*)\)&nbsp;\"([\w\.\\,\-~\/%:+><\&\$#@\*{}\[\]=;?\' \(\)\|]*)\"/i',
-					'/array\(([\d\.]*)\)/i',
-				],
-				[
-					' => ',
-					'<br/>',
-					'&nbsp;',
-					'<br/>',
-					'<span style="color:'.$colores_texto['llave_array'].'">["$1"]</span>',
-					'<span style="color:'.$colores_texto['llave_array'].'">[$1]</span>',
-					'<span style="color:'.$colores_texto['numero'].'"><i>$1</i>($2)</span>',
-					'<span style="color:'.$colores_texto['boolean'].'"><i>bool</i>($1)</span>',
-					'<span style="color:'.$colores_texto['texto'].'"><i>string</i>($1)&nbsp;"$2"</span>',
-					'<span style="color:'.$colores_texto['array'].'"><i>array</i>($1)</span>',
-				],
-				$dump
-			);
-
-			echo get_instance()->parser->parse('common/dbg.php', ['dump'=>$dump], TRUE);
-		}
+		return call_user_func_array('\Formatter::print_debug', func_get_args());
 	}
 }
 
+// --------------------------------------------------------------------
+
+if ( ! function_exists('dump'))
+{
+	/**
+	 * Debug de variables
+	 *
+	 * @return void
+	 */
+	function dump()
+	{
+		return call_user_func_array('dbg', func_get_args());
+	}
+}
 
 // --------------------------------------------------------------------
 
-if ( ! function_exists('dbg_die'))
+if ( ! function_exists('dd'))
 {
 	/**
 	 * Debug de variables y para la ejecución del programa
@@ -95,7 +52,7 @@ if ( ! function_exists('dbg_die'))
 	 */
 	function dd()
 	{
-		call_user_func_array('dbg', func_get_args());
+		call_user_func_array('dump', func_get_args());
 		die();
 	}
 }
@@ -408,19 +365,27 @@ if ( ! function_exists('errors'))
 	}
 }
 
-
 // --------------------------------------------------------------------
 
 if ( ! function_exists('url_params'))
 {
-	function url_params($arr_params = [])
+	/**
+	 * Transforma un arreglo en una cadena de parametros url
+	 *
+	 * @param  array $params Arreglo con los parámetros
+	 * @return string
+	 */
+	function url_params($params = [])
 	{
-		$ci =& get_instance();
-		$url_params = http_build_query((count($arr_params) === 0) ? $ci->input->get() : $arr_params);
+		$url_params = http_build_query(count($params) === 0
+			? get_instance()->input->get()
+			: $params
+		);
 
 		return empty($url_params) ? '' : '?'.$url_params;
 	}
 }
+
 // --------------------------------------------------------------------
 
 if ( ! function_exists('fmt_cantidad'))
@@ -436,23 +401,7 @@ if ( ! function_exists('fmt_cantidad'))
 	 */
 	function fmt_cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
-		if ( ! is_numeric($valor))
-		{
-			return NULL;
-		}
-
-		$cero = $mostrar_cero ? '0' : '';
-		$valor_formateado = ($valor === 0) ? $cero : number_format($valor, $decimales, ',', '.');
-
-		$format_start = '';
-		$format_end   = '';
-		if ($format_diff)
-		{
-			$format_start = ($valor > 0) ? '<strong><span class="text-success">+' : (($valor < 0 ) ? '<strong><span class="text-danger">' : '');
-			$format_end   = ($valor === 0) ? '' : '</span></strong>';
-		}
-
-		return $format_start.$valor_formateado.$format_end;
+		return \Formatter::cantidad($valor, $decimales, $mostrar_cero, $format_diff);
 	}
 }
 
@@ -474,36 +423,9 @@ if ( ! function_exists('fmt_monto'))
 	 */
 	function fmt_monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
-		if ( ! is_numeric($monto))
-		{
-			return NULL;
-		}
-
-		if ($monto === 0 AND ! $mostrar_cero)
-		{
-			return '';
-		}
-
-		if (strtoupper($unidad) === 'UN')
-		{
-			$valor_formateado = $signo_moneda . '&nbsp;' . number_format($monto, $decimales, ',', '.');
-		}
-		elseif (strtoupper($unidad) === 'MM')
-		{
-			$valor_formateado = 'MM' . $signo_moneda . '&nbsp;' . number_format($monto/1000000, ($monto > 10000000) ? 0 : 1, ',', '.');
-		}
-
-		$format_start = '';
-		$format_end   = '';
-		if ($format_diff)
-		{
-			$format_start = ($monto > 0) ? '<strong><span class="text-success">+' : (($monto < 0 ) ? '<strong><span class="text-danger">' : '');
-			$format_end   = ($monto === 0) ? '' : '</span></strong>';
-		}
-
-		return $format_start.$valor_formateado.$format_end;
-
+		return \Formatter::monto($monto, $unidad, $signo_moneda, $decimales, $mostrar_cero, $format_diff);
 	}
+}
 
 // --------------------------------------------------------------------
 
@@ -517,18 +439,7 @@ if ( ! function_exists('fmt_hora'))
 	 */
 	function fmt_hora($segundos_totales = 0)
 	{
-		$separador = ':';
-
-		$hora = (int) ($segundos_totales/3600);
-		$hora = (strlen($hora) === 1) ? '0' . $hora : $hora;
-
-		$minutos = (int) (($segundos_totales - ((int) $hora) *3600)/60);
-		$minutos = (strlen($minutos) === 1) ? '0' . $minutos : $minutos;
-
-		$segundos = (int) ($segundos_totales - ($hora*3600 + $minutos*60));
-		$segundos = (strlen($segundos) === 1) ? '0' . $segundos : $segundos;
-
-		return $hora.$separador.$minutos.$separador.$segundos;
+		return \Formatter::hora($segundos_totales);
 	}
 }
 
@@ -545,17 +456,7 @@ if ( ! function_exists('fmt_fecha'))
 	 */
 	function fmt_fecha($fecha = NULL, $formato = 'Y-m-d')
 	{
-		if ( ! $fecha)
-		{
-			return;
-		}
-
-		if (strlen($fecha) === 8)
-		{
-			$fecha = substr($fecha, 0, 4).'/'.substr($fecha, 4, 2).'/'.substr($fecha, 6, 2);
-		}
-
-		return date_create($fecha)->format($formato);
+		return \Formatter::fecha($fecha, $formato);
 	}
 }
 
@@ -582,27 +483,12 @@ if ( ! function_exists('fmt_rut'))
 	/**
 	 * Formatea un RUT
 	 *
-	 * @param  string $rut RUT a formatear
-	 * @return string      RUT formateado segun formato
+	 * @param  string $numero_rut RUT a formatear
+	 * @return string
 	 */
 	function fmt_rut($numero_rut = NULL)
 	{
-		if ( ! $numero_rut)
-		{
-			return NULL;
-		}
-
-		if (strpos($numero_rut, '-') === FALSE)
-		{
-			$dv_rut     = substr($numero_rut, strlen($numero_rut) - 1, 1);
-			$numero_rut = substr($numero_rut, 0, strlen($numero_rut) - 1);
-		}
-		else
-		{
-			list($numero_rut, $dv_rut) = explode('-', $numero_rut);
-		}
-
-		return fmt_cantidad($numero_rut).'-'.strtoupper($dv_rut);
+		return \Formatter::rut($numero_rut);
 	}
 }
 
@@ -714,11 +600,11 @@ if ( ! function_exists('array_get'))
 		}
 
 		return $arreglo;
-
 	}
 }
 
 // --------------------------------------------------------------------
+
 if ( ! function_exists('form_validation'))
 {
 	/**
@@ -735,7 +621,6 @@ if ( ! function_exists('form_validation'))
 	}
 }
 
-
 // --------------------------------------------------------------------
 
 if ( ! function_exists('route_validation'))
@@ -744,7 +629,6 @@ if ( ! function_exists('route_validation'))
 	 * Ejecuta validación y vuelve hacia atrás en caso que no sea válido
 	 *
 	 * @param  mixed $is_valid Resultado de la validación o arreglo a con reglas a validar
-	 *
 	 * @return void
 	 */
 	function route_validation($is_valid = FALSE)
@@ -834,9 +718,9 @@ if ( ! function_exists('get_arr_dias_mes'))
 
 		$arr_dias = [];
 
-		for($i = 1; $i <= days_in_month($mes, $ano); $i++)
+		for ($i = 1; $i <= days_in_month($mes, $ano); $i++)
 		{
-			$indice_dia = (strlen($i) === 1) ? '0'.$i : ''.$i;
+			$indice_dia = str_pad($i, 2, '0', STR_PAD_LEFT);
 			$arr_dias[$indice_dia] = NULL;
 		}
 
@@ -860,7 +744,6 @@ if ( ! function_exists('get_fecha_hasta'))
 		$ano = (int) substr($anomes, 0, 4);
 
 		return (string) (($mes === 12) ? ($ano+1)*10000+(1)*100+1 : $ano*10000+($mes+1)*100+1);
-
 	}
 }
 
@@ -907,143 +790,6 @@ if ( ! function_exists('clase_cumplimiento_consumos'))
 	}
 }
 
-// --------------------------------------------------------------------
 
-if ( ! function_exists('genera_captcha_word'))
-{
-	/**
-	 * Devuelve una palabra aleatoria para ser usada en el captcha
-	 *
-	 * @return string Palabra aleatoria
-	 */
-	function genera_captcha_word()
-	{
-		$diccionario = [
-			'abiertas','abiertos','aborrece','abrasada','abrazado','abrazara','abreviar','abriendo','abririan','abrumado',
-			'acabadas','acaballa','acabando','acabaras','acabaron','acabasen','acciones','aceitera','acertada','acertado',
-			'acertare','achaques','acogerse','acometer','acometia','acomodar','aconsejo','acontece','acordaba','acordado',
-			'acordara','acosados','acostado','acuerdan','acurruco','adelante','adelanto','adivinar','admirada','admirado',
-			'admitido','adversas','advertid','advertir','advierta','advierte','afanando','afirmaba','afligido','aforrado',
-			'agravios','aguardar','aguardes','agudezas','agujeros','alabanza','alagones','alargaba','albanega','albañil',
-			'alboroto','alborozo','alcaidia','alcanzar','alcarria','alcurnia','alevosia','alevosos','alforjas','alimenta',
-			'aliviado','almendra','almohada','alojaban','alojemos','alquiler','amabades','amanecer','ambrosio','amenazas',
-			'amorosas','amorosos','anchuras','andantes','angelica','angustia','aniquile','anteojos','anterior','antiguas',
-			'antiguos','antojase','apacible','apaleado','aparejos','apartado','apartate','aparteme','apellido','aporrear',
-			'aposento','apostare','apretaba','apuntado','aquellas','aquellos','arabigos','araucana','arcalaus','archivos',
-			'ardiendo','ardiente','arenques','argamasa','armadura','arrieros','arrimada','arrimado','arrojaba','arrojado',
-			'arrullar','asaduras','asentaba','asimesmo','asimismo','asomaron','astillas','atencion','atenuado','aterrada',
-			'atrancar','atrevido','atribuia','aturdido','ausencia','ausentar','aventura','avisarte','ayudaran','ayudarme',
-			'ayudaron','azoguejo','azpeitia','azumbres','balcones','baldones','ballesta','banderas','baronias','barrabas',
-			'bastante','bastardo','batallas','bañadas','bbaladro','bebieron','belianis','bellezas','bellotas','bendecia',
-			'bernardo','berrocal','bizmalle','bodoques','borrasca','bretaña','brevedad','brumadas','bucefalo','burlaron',
-			'buscando','buscaros','buscasen','caballos','cabellos','cabestro','cabreros','callando','calzones','caminaba',
-			'caminase','campaña','cansados','cansarse','cantando','cantidad','capitulo','capparum','cardenal','cargaban',
-			'cargaron','carneros','carreras','cartones','cartujos','castigar','castilla','castillo','catolico','ceguedad',
-			'celillos','cerrados','cerraron','ceñirle','chicoria','chimenea','ciencias','cierrese','cipiones','ciudades',
-			'claridad','clarines','claustro','clerigos','cobardes','cobraria','cocinero','cofradia','cogiendo','colerico',
-			'colgados','colocado','coloquio','columbro','comenzar','cometera','cometido','comiendo','comienza','comienzo',
-			'comieron','comiesen','compadre','comparar','competir','componer','comunico','concebia','concedia','concerto',
-			'concluya','concluye','concluyo','condenar','confesar','confiado','confiesa','confiese','confieso','confirmo',
-			'conforme','confusas','conocera','conocian','conocida','conocido','consejas','consejos','conserve','conservo',
-			'consolar','contadas','contando','contarla','contarle','contarlo','contarse','conteian','contenia','contenta',
-			'contento','contiene','continua','contorno','contrato','convenia','conventa','conviene','corbetas','corcovos',
-			'corellas','coronado','corredor','correrse','corridos','corrillo','cortaria','cortesia','cortezas','cosechas',
-			'coselete','costilla','coyundas','crecidos','creditto','creyendo','criatura','crueldad','cuarenta','cuartana',
-			'cubierta','cubierto','cubrirse','cuentalo','cuentase','cumplais','cumplido','cumplira','curiosos','dadselos',
-			'darasela','debiendo','debieron','decirles','defender','defienda','dejarles','deleitar','delicado','demasias',
-			'denantes','denostar','deparase','deposito','derechas','derechos','derribar','derrumba','desafios','desatino',
-			'descalza','descanso','descargo','describe','descubra','descubre','descuido','desdenes','desdicha','deseaban',
-			'deseamos','deseosos','desfacer','desfecho','desgajar','deshacer','deshecho','deshoras','designio','desigual',
-			'desistir','desmayos','desnudas','desoluto','despacio','despaico','despecho','despedir','despensa','desperto',
-			'despeña','despidio','despojar','despojos','destreza','desvario','desviado','desviase','deteneos','devaneos','
-			devengar','devocion','diamante','dichosas','dichosos','diciendo','dieronle','dieronse','dilatelo','discreta',
-			'discreto','disculpo','discurso','disponga','diversas','diversos','doliendo','doliente','doloroso','domeñar',
-			'domingos','donacion','doncella','dormirla','dosiapor','dulcinea','durables','ejemplos','ejercito','eleccion',
-			'embajada','embarazo','embestir','embistio','embustes','empapado','empinaba','empleada','empresas','enamoran',
-			'enarbolo','encajada','encamino','encantan','encanten','encender','encendia','encendio','encierra','encubria',
-			'encubrio','endechas','enemigos','enfadosa','enfrasco','enfriase','engañan','engañar','engendro','enjalmas',
-			'enmendar','enmienda','enojadas','enojados','enristro','ensalada','ensillar','entender','entendio','enterado',
-			'enterrar','entiende','entiendo','entierro','entonces','entraran','entraron','entregar','enviarle','envidiar',
-			'envilece','epitafio','erizados','erizaron','escalera','escamosa','escogido','escopeta','escriben','escribia',
-			'escribio','escribir','escritas','escritos','escuchar','escudero','escusado','esfuerzo','esgrimir','espaldar',
-			'espaldas','español','especial','esperaba','esperame','espesura','espinazo','espiritu','espolear','espuelas',
-			'esquivas','estabase','estancia','estimada','estomago','estorbar','estraña','estraño','estrecha','estrecho',
-			'estrella','estribos','estudios','estuvose','excusado','extender','extendio','extiende','extraña','extraño',
-			'faltaran','faltarle','faltaron','faltoles','familias','fantasia','fantasma','fatigaba','fatigado','favorece',
-			'fazañas','fermosas','fiadores','ficieron','finisima','finisimo','flamante','flaqueza','follones','formaban',
-			'fortunas','forzadas','frontero','fuesemos','gallarda','gallardo','ganadero','ganancia','garabato','generoso',
-			'gentiles','gigantes','gobernar','gobierno','graciosa','gracioso','graduado','grandeza','gravedad','groseras',
-			'guadiana','guardaba','guardado','guardare','guardese','guijarro','gustando','guzmanes','haberles','habiales',
-			'habiendo','hablando','hablarle','habremos','hacednos','hacernos','hacienda','haciendo','haldudos','hallaban',
-			'hallaren','hallaria','hallarla','hallarle','hallarme','hallaron','hallaros','hallarse','hallasen','hallazgo',
-			'hazañas','hercules','heredado','herirles','hermanas','hermanos','hermosas','hermosos','heroicas','herrados',
-			'hicieran','hicieron','hiciesen','hidalgos','hipolito','hircania','historia','holandas','holgaron','holgarse',
-			'hombruna','homicida','honestos','honrados','honrarle','horadara','horrendo','hubieran','hubieras','hubieron',
-			'hubiesen','humedece','humildad','ignorada','ilustres','imagenes','imaginar','imitando','imprimio','incendio',
-			'incitado','indicios','infantes','infernal','infierno','infinita','infundio','infundir','ingenios','injurias',
-			'injustos','insignia','instante','instinto','intactas','intitula','inutiles','invierno','italiano','justicia',
-			'labrador','ladearme','ladrones','lagrimas','lamentos','lampazos','legitima','legitimo','lenguaje','lentejas',
-			'levadizo','levantar','libertad','libraria','librarle','libreria','licencia','ligadura','ligereza','limitada',
-			'limpiado','limpieza','lindezas','livianas','llamamos','llamando','llamaran','llamaria','llamarla','llamarle',
-			'llamarme','llamaron','llamarse','llegaban','llegando','llegaran','llegaren','llegaron','llegasen','llevaban',
-			'llevadas','llevadle','llevados','llevando','llevaran','llevaria','llevarla','llevarle','llevenme','llorando',
-			'llorosos','lloviese','luciente','ludovico','machacan','maestria','maestros','majadero','maldecia','malditos',
-			'maleante','mambrino','mameluco','mancebos','manchase','manchega','manchego','mandarme','manjares','manteado',
-			'manteles','mantiene','mantuano','maravedi','marchito','marmoles','martinez','mascaras','medicina','medrosos',
-			'mejillas','mejorado','meliflua','memorias','mendozas','meneallo','menearse','menester','menguada','menudear',
-			'mercader','mercedes','merecian','merecido','merezcan','merrezco','miaulina','miembros','mientras','milagros',
-			'militais','ministro','mirabale','mirallos','miserias','misterio','modernos','molieron','molinera','molinero',
-			'momentos','monarcas','moncadas','monstruo','montaban','montaña','morgante','mortales','mostraba','mostrado',
-			'mostrais','mostrara','mostrase','mostruos','muchacha','muchacho','mudables','muestras','muestren','muestres',
-			'multitud','muñaton','muñecas','muñidor','naciones','neguijon','ningunas','ningunos','nombraba','nombrado',
-			'nosotros','notorias','nublados','nuestras','nuestros','obedezca','objecion','obligada','obligado','ofendera',
-			'ofrecere','ofrecian','olicante','olivante','olvidado','olvidase','opresion','ordenado','otorgaba','otorgado',
-			'paciendo','pacifica','pacifico','pagareis','palabras','palmerin','palomino','paradero','pareceme','pareceos',
-			'parecian','parecido','parezcan','pariente','partidas','partidos','partirse','pasajera','pasajero','pasarlas',
-			'pasearse','pastores','pegadiza','pegarles','peligros','pellicos','pensaban','pensados','pensando','pensarlo',
-			'pensaron','pequeña','pequeño','perailes','perdidos','perdiera','perdiese','perdonad','perdonar','perecian',
-			'perezcan','pergenio','permiten','permitio','perpetua','perpetuo','persigue','personas','pertinaz','pesaroso',
-			'pescador','peñasco','piadosas','piadosos','pideselo','pidieran','pintaban','pintados','pintarse','pisuerga',
-			'platicas','platires','podadera','poderosa','poderoso','podremos','pomposas','ponerlos','poniendo','ponzoña',
-			'porfiaba','porquero','porrazos','portales','portugal','porvenir','posesion','posesivo','postizos','potencia',
-			'pradillo','precepto','preciosa','precioso','predicar','pregunte','pregunto','presente','prestaba','prestada',
-			'presteza','presumia','pretendo','prevenir','primeras','primeros','princesa','principe','proceder','procurar',
-			'profesan','profunda','profundo','progreso','projimos','promesas','prometer','prometio','proponia','prosapia',
-			'prosigue','provecho','proveere','pudiendo','pudieran','pudieron','puedeslo','purisimo','pusieron','pusiesen',
-			'pusosela','puñadas','quebrada','quebrado','quedaban','quedamos','quedaran','quedaron','quedarte','quedense',
-			'quejarse','quemados','quemaran','quemasen','querella','queremos','quererla','quererlo','querrias','quiebras',
-			'quieroos','quierote','quijadas','quimeras','quirocia','quisiera','quisiere','quisiese','quitadas','quitando',
-			'quitaran','quitarle','quitarme','quitaron','quitarse','quitarte','raciones','rebaños','rebellas','recibian',
-			'recibida','recibido','recogida','recogido','recorred','redondez','referida','refriega','regalado','regocijo',
-			'relacion','relieves','relumbra','remanece','rematado','remediar','remedios','remendon','remision','remojado',
-			'renuncio','reparaba','replicar','replique','repondio','reportes','reposada','repuesto','requiere','resintio',
-			'resolvio','respetar','respetos','responde','retirate','retirose','reventar','reviente','revolvia','rigurosa',
-			'riguroso','rindiese','riquezas','risueño','robustas','rodillas','rogarale','rondilla','ruibarbo','rusticas',
-			'saavedra','sabidora','sabiendo','sabremos','sabrosas','salarios','salgamos','saliendo','salieron','salpicon',
-			'saludado','sangrias','sanlucar','santidad','sardinas','sazonado','secretos','secundar','sediento','seguiale',
-			'seguidme','seguirle','sensible','sentidos','sentiran','sequedad','servicio','serviria','servirla','servirle',
-			'serviros','señales','señoras','señores','señoria','señuelo','shaberes','siendole','siguelos','siguiese',
-			'siguiole','silencio','simiente','simpleza','singular','sinrazon','sintiose','siquiera','sirviese','soberbia',
-			'soberbio','socarron','socorred','socorrer','socorria','soldados','solicito','soltando','sombrero','sombrios',
-			'sosegada','sosegado','sospecha','soñadas','suadente','suavidad','subiendo','subieron','sucedera','sucedido',
-			'supieron','suspenso','suspiros','sustento','sutileza','tablante','tamaños','tapiasen','tardaban','tardanza',
-			'tarquino','tañendo','temerosa','temeroso','temiades','temiendo','temprano','tendidos','tenedlos','tenganse',
-			'teniendo','terminos','terrible','tiemblan','tirantes','titubear','tocantes','tomarian','tomillas','tormenta',
-			'tornando','tornaron','torralva','tortuoso','trabadas','trabajan','trabajos','trabando','tragedia','traigame',
-			'trajeron','traslaen','trasluce','trataban','tratasen','trayendo','tristeza','triunfar','trocalle','trocaria',
-			'trompeta','tropiezo','trotillo','trueques','trujeron','tuvieron','tuviesen','ufanarte','undecimo','universo',
-			'valedera','valencia','valentia','valeroso','valiente','vencedor','venenosa','venganza','vengarme','vengaros',
-			'veniades','ventanas','venteril','verdades','veriades','vestidos','victoria','viendola','viendole','viendose',
-			'vigesimo','viniendo','vinieron','viniesen','vinosele','virtudes','visitaba','visitado','vizcaina','vizcaino',
-			'vocablos','voluntad','volvamos','volverle','volverse','volverte','volviera','volviere','volviese','volviose',
-			'vomitase','vosotros','vuelvase','vuestras','vuestros','yantaria'
-		];
-
-		return $diccionario[array_rand($diccionario)];
-	}
-}
-
-
-}
 /* helpers varios_helper.php */
 /* Location: ./application/helpers/varios_helper.php */

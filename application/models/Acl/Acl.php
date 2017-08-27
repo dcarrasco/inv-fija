@@ -19,6 +19,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use \Orm_Model;
 use \Orm_Field;
+use \CaptchaWords;
 
 /**
  * Clase Modelo ACL
@@ -344,8 +345,8 @@ class Acl extends Orm_Model {
 
 		$captcha_config = [
 			'img_path'   => './img/captcha/',
-			'img_url'    => base_url() . 'img/captcha/',
-			'word'       => genera_captcha_word(),
+			'img_url'    => base_url().'img/captcha/',
+			'word'       => CaptchaWords::word(),
 			'img_width'  => 260,
 			'img_height' => 50,
 			'font_size'  => 30,
