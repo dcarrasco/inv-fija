@@ -68,24 +68,25 @@
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ($datos_hoja as $reg): ?>
-				<tr class="<?= $errors_id->has($reg['id']) ? 'danger' : '' ?>">
-					<td><?= $reg['id']; ?></td>
-						<div class="form-group ">
+				<?php foreach ($ubicaciones as $ubicacion): ?>
+				<tr class="<?= $errors_id->has($ubicacion->id) ? 'danger' : '' ?>">
 					<td>
-						<?= form_dropdown("tipo_inventario[{$reg['id']}]", $combo_tipos_inventario, request("tipo_inventario[{$reg['id']}]", $reg['tipo_inventario']), 'class="form-control input-sm"'); ?>
-						<?= errors("tipo_inventario[{$reg['id']}]"); ?>
+						<?= $ubicacion->id ?>
 					</td>
 					<td>
-						<?= form_dropdown("tipo_ubicacion[{$reg['id']}]", $combo_tipos_ubicacion[$reg['tipo_inventario']], request("tipo_ubicacion[{$reg['id']}]", $reg['id_tipo_ubicacion']), 'class="form-control input-sm"'); ?>
-						<?= errors("tipo_ubicacion[{$reg['id']}]"); ?>
+						<?= form_dropdown("tipo_inventario[{$ubicacion->id}]", $combo_tipos_inventario, request("tipo_inventario[{$ubicacion->id}]", $ubicacion->tipo_inventario), 'class="form-control input-sm"'); ?>
+						<?= errors("tipo_inventario[{$ubicacion->id}]"); ?>
 					</td>
 					<td>
-						<?= form_input("ubicacion[{$reg['id']}]", request("ubicacion[{$reg['id']}]", $reg['ubicacion']),'maxlength="45" class="form-control input-sm"'); ?>
-						<?= errors("ubicacion[{$reg['id']}]"); ?>
+						<?= form_dropdown("tipo_ubicacion[{$ubicacion->id}]", $combo_tipos_ubicacion[$ubicacion->tipo_inventario], request("tipo_ubicacion[{$ubicacion->id}]", $ubicacion->id_tipo_ubicacion), 'class="form-control input-sm"'); ?>
+						<?= errors("tipo_ubicacion[{$ubicacion->id}]"); ?>
 					</td>
 					<td>
-						<a href="#" class="btn btn-default btn-sm" id="btn-borrar" data-rowid="<?= $reg['id']; ?>">
+						<?= form_input("ubicacion[{$ubicacion->id}]", request("ubicacion[{$ubicacion->id}]", $ubicacion->ubicacion),'maxlength="45" class="form-control input-sm"'); ?>
+						<?= errors("ubicacion[{$ubicacion->id}]"); ?>
+					</td>
+					<td>
+						<a href="#" class="btn btn-default btn-sm" id="btn-borrar" data-rowid="<?= $ubicacion->id; ?>">
 							<span class="fa fa-trash"></span>
 						</a>
 					</td>
@@ -104,7 +105,7 @@
 		</div>
 
 		<div class="text-center">
-			<?= ($links_paginas != '') ? $links_paginas : ''; ?>
+			<?= $ubicaciones->first()->crea_links_paginas(); ?>
 		</div>
 	</div> <!-- fin content-module-main -->
 

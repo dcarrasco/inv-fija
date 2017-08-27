@@ -36,11 +36,40 @@ class Ubicacion extends ORM_Model {
 	 *
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct($id_ubicacion = NULL)
 	{
-		parent::__construct();
+		$this->model_config = [
+			'modelo' => [
+				'tabla'        => config('bd_ubic_tipoubic'),
+				'label'        => 'Ubicaci&oacute;n',
+				'label_plural' => 'Ubicaciones',
+				'order_by'     => 'tipo_inventario, id_tipo_ubicacion, ubicacion',
+			],
+			'campos' => [
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'tipo_inventario' => [
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
+					'es_obligatorio' => TRUE,
+					'relation'       => ['model' => tipo_inventario::class],
+					'texto_ayuda'    => 'Seleccione un tipo de inventario.',
+				],
+				'id_tipo_ubicacion' => [
+					'tipo'           => Orm_field::TIPO_HAS_ONE,
+					'es_obligatorio' => TRUE,
+					'relation'       => ['model' => tipo_ubicacion::class],
+					'texto_ayuda'    => 'Seleccione un tipo de ubicaci&oacute;n.',
+				],
+				'ubicacion' => [
+					'label'          => 'Ubicaci&oacute;n',
+					'tipo'           => Orm_field::TIPO_CHAR,
+					'largo'          => 45,
+					'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
+					'es_obligatorio' => TRUE,
+				],
+			],
+		];
 
-		$this->page_results = 15;
+		parent::__construct($id_ubicacion);
 	}
 
 	// --------------------------------------------------------------------

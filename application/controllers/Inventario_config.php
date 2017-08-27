@@ -118,18 +118,16 @@ class Inventario_config extends Orm_controller {
 	/**
 	 * Asociacion de ubicaciones con el tipo de ubicacion
 	 *
-	 * @param  integer $pagina Numero de pagina a desplegar
 	 * @return nada
 	 */
-	public function ubicacion_tipo_ubicacion($pagina = 0)
+	public function ubicacion_tipo_ubicacion()
 	{
-		$this->load->library('pagination');
-		$this->pagination->initialize(Ubicacion::create()->pagination_config());
+		$ubicaciones = Ubicacion::create()->paginate(request('page'));
 
-		$datos_hoja = Ubicacion::create()->get_ubicacion_tipo_ubicacion(Ubicacion::create()->get_page_results(), $pagina);
-
-		$arr_combo_tipo_ubic = collect($datos_hoja)->pluck('tipo_inventario')
-			->unique()
+		$arr_combo_tipo_ubic = collect($ubicaciones)
+			->map(function($ubicacion) {
+				return $ubicacion->tipo_inventario;
+			})->unique()
 			->map_with_keys(function($item) {
 				return [$item => Ubicacion::create()->get_combo_tipos_ubicacion($item)];
 			})->all();
@@ -143,11 +141,11 @@ class Inventario_config extends Orm_controller {
 
 		app_render_view('ubicacion_tipo_ubicacion', [
 			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
-			'datos_hoja'             => $datos_hoja,
+			'ubicaciones'            => $ubicaciones,
+
 			'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
 			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
-			'links_paginas'          => $this->pagination->create_links(),
-			'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion/{$pagina}",
+			'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion".url_params(),
 			'display_form_agregar'   => $display_form_agregar,
 			'errors_id'              => $errors_id,
 		]);
@@ -163,7 +161,6 @@ class Inventario_config extends Orm_controller {
 	public function update_ubicacion_tipo_ubicacion($pagina = 0)
 	{
 		$datos_hoja = Ubicacion::create()->get_ubicacion_tipo_ubicacion(Ubicacion::create()->get_page_results(), $pagina);
-
 		$rules = [
 			'editar'  => Ubicacion::create()->get_validation_edit($datos_hoja),
 			'agregar' => Ubicacion::create()->get_validation_add(),
@@ -203,15 +200,6 @@ class Inventario_config extends Orm_controller {
 		}
 
 		redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pagina);
-	}
-
-	// --------------------------------------------------------------------
-
-	private function _ubicacion_limite_por_pagina()
-	{
-		$limite_por_pagina = 15;
-
-		return $limite_por_pagina;
 	}
 
 	// --------------------------------------------------------------------
