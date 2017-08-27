@@ -1187,7 +1187,7 @@ class Orm_model implements IteratorAggregate {
 		{
 			foreach ($data_where as $llave => $valor)
 			{
-				$es_insert = ($valor === '' OR $valor === 0) ? TRUE : FALSE;
+				$es_insert = empty($valor) ? TRUE : FALSE;
 			}
 		}
 		else

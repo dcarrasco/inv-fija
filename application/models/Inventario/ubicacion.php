@@ -149,53 +149,6 @@ class Ubicacion extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Guarda registro de ubicacion y tpo de ubica
-	 *
-	 * @param  integer $id_ubicacion      ID de la ubicacion
-	 * @param  string  $tipo_inventario   Tipo de inventario de la ubicacion
-	 * @param  string  $ubicacion         Nombre o descripcion de la ubicacion
-	 * @param  integer $id_tipo_ubicacion ID del tipo de ubicacion
-	 * @return void
-	 */
-	public function guardar_ubicacion_tipo_ubicacion($id_ubicacion = 0, $tipo_inventario = '', $ubicacion = '', $id_tipo_ubicacion = 0)
-	{
-		if ($id_ubicacion === 0)
-		{
-			$this->db->insert(config('bd_ubic_tipoubic'), [
-				'tipo_inventario'   => $tipo_inventario,
-				'ubicacion'         => $ubicacion,
-				'id_tipo_ubicacion' => $id_tipo_ubicacion,
-			]);
-		}
-		else
-		{
-			$this->db->where('id', $id_ubicacion)
-				->update(config('bd_ubic_tipoubic'), [
-					'tipo_inventario'   => $tipo_inventario,
-					'ubicacion'         => $ubicacion,
-					'id_tipo_ubicacion' => $id_tipo_ubicacion,
-				]);
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Borrar ubicacion
-	 *
-	 * @param  integer $id_ubicacion ID de la ubicacion
-	 *
-	 * @return void
-	 */
-	public function borrar_ubicacion_tipo_ubicacion($id_ubicacion = 0)
-	{
-		$this->db->delete(config('bd_ubic_tipoubic'), ['id' => $id_ubicacion]);
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Devuelve arreglo de validacion para el ingreso de una ubicacion
 	 *
 	 * @return array Arreglo de validación
@@ -228,10 +181,10 @@ class Ubicacion extends ORM_Model {
 	 *
 	 * @return array Arreglo de validación
 	 */
-	public function get_validation_edit($arr_datos)
+	public function get_validation_edit($ubicaciones)
 	{
-		return collect($arr_datos)->map(function($registro) {
-			$id = $registro['id'];
+		return collect($ubicaciones)->map(function($ubicacion) {
+			$id = $ubicacion->id;
 			return  [
 				[
 					'field' => "tipo_inventario[{$id}]",
@@ -251,44 +204,6 @@ class Ubicacion extends ORM_Model {
 			];
 		})->flatten(1)
 		->all();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve la configuración del paginador de ubicaciones
-	 * @return array
-	 */
-	public function pagination_config()
-	{
-		return [
-			'total_rows'  => $this->total_ubicacion_tipo_ubicacion(),
-			'per_page'    => $this->page_results,
-			'base_url'    => site_url($this->router->class . '/ubicacion_tipo_ubicacion'),
-			'uri_segment' => 3,
-			'num_links'   => 5,
-
-			'full_tag_open'   => '<ul class="pagination">',
-			'flil_tag_close'  => '</ul>',
-
-			'first_tag_open'  => '<li>',
-			'first_tag_close' => '</li>',
-			'last_tag_open'   => '<li>',
-			'last_tag_close'  => '</li>',
-			'next_tag_open'   => '<li>',
-			'next_tag_close'  => '</li>',
-			'prev_tag_open'   => '<li>',
-			'prev_tag_close'  => '</li>',
-			'cur_tag_open'    => '<li class="active"><a href="#">',
-			'cur_tag_close'   => '</a></li>',
-			'num_tag_open'    => '<li>',
-			'num_tag_close'   => '</li>',
-
-			'first_link'  => 'Primero',
-			'last_link'   => 'Ultimo',
-			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
-			'next_link'   => '<span class="fa fa-chevron-right"></span>',
-		];
 	}
 
 

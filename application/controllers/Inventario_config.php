@@ -91,7 +91,7 @@ class Inventario_config extends Orm_controller {
 				'icon'  => 'th',
 			],
 			'ubicaciones' => [
-				'url'   => $this->router->class . '/ubicacion_tipo_ubicacion',
+				'url'   => $this->router->class . '/ubicacion',
 				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
 				'icon'  => 'map-marker',
 			],
@@ -120,7 +120,7 @@ class Inventario_config extends Orm_controller {
 	 *
 	 * @return nada
 	 */
-	public function ubicacion_tipo_ubicacion()
+	public function ubicacion()
 	{
 		$ubicaciones = Ubicacion::create()->paginate(request('page'));
 
@@ -145,7 +145,9 @@ class Inventario_config extends Orm_controller {
 
 			'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
 			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
-			'url_form'               => "{$this->router->class}/update_ubicacion_tipo_ubicacion".url_params(),
+			'add_url_form'           => "{$this->router->class}/add_ubicacion".url_params(),
+			'update_url_form'        => "{$this->router->class}/update_ubicacion".url_params(),
+			'borrar_url_form'        => "{$this->router->class}/borrar_ubicacion".url_params(),
 			'display_form_agregar'   => $display_form_agregar,
 			'errors_id'              => $errors_id,
 		]);
@@ -153,53 +155,68 @@ class Inventario_config extends Orm_controller {
 
 	// --------------------------------------------------------------------
 	/**
-	 * Ejecuta asociacion de ubicaciones con el tipo de ubicacion
+	 * Agrega asociacion de ubicaciones con el tipo de ubicacion
 	 *
-	 * @param  integer $pagina Numero de pagina a desplegar
-	 * @return nada
+	 * @return redirect
 	 */
-	public function update_ubicacion_tipo_ubicacion($pagina = 0)
+	public function add_ubicacion()
 	{
-		$datos_hoja = Ubicacion::create()->get_ubicacion_tipo_ubicacion(Ubicacion::create()->get_page_results(), $pagina);
-		$rules = [
-			'editar'  => Ubicacion::create()->get_validation_edit($datos_hoja),
-			'agregar' => Ubicacion::create()->get_validation_add(),
-			'borrar'  => [['field'=>'id_borrar', 'label'=>'', 'rules'=>'trim|required']],
-		];
+		route_validation(Ubicacion::create()->get_validation_add());
 
-		route_validation(array_get($rules, request('formulario'), []));
-
-		if (request('formulario') === 'editar')
-		{
-			$cant_modif = collect($datos_hoja)->filter(function($registro) {
-				$id = $registro['id'];
-				return request('tipo_inventario')[$id] !== $registro['tipo_inventario']
-					OR request('ubicacion')[$id] !== $registro['ubicacion']
-					OR request('tipo_ubicacion')[$id] !== $registro['id_tipo_ubicacion'];
-			})->each(function($registro) {
-				$id = $registro['id'];
-				Ubicacion::create()->guardar_ubicacion_tipo_ubicacion($registro['id'], request('tipo_inventario')[$id], request('ubicacion')[$id], request('tipo_ubicacion')[$id]);
+		$count = collect(request('agr-ubicacion'))
+			->each(function($ubicacion) {
+				return Ubicacion::create()->fill([
+					'tipo_inventario'   => request('agr-tipo_inventario'),
+					'id_tipo_ubicacion' => request('agr-tipo_ubicacion'),
+					'ubicacion'         => $ubicacion,
+				])->grabar();
 			})->count();
+		set_message("Se agregaron {$count} ubicaciones correctamente");
 
-			set_message(($cant_modif > 0) ? $cant_modif . ' inventario(s) modificados correctamente' : '');
-		}
-		elseif (request('formulario') === 'agregar')
-		{
-			$count = collect(request('agr-ubicacion'))
-				->each(function($ubicacion) {
-					Ubicacion::create()
-						->guardar_ubicacion_tipo_ubicacion(0, request('agr-tipo_inventario'), $ubicacion, request('agr-tipo_ubicacion'));
-				})->count();
+		redirect($this->router->class.'/ubicacion'.url_params());
+	}
 
-			set_message("Se agregaron {$count} ubicaciones correctamente");
-		}
-		elseif (request('formulario') === 'borrar')
-		{
-			Ubicacion::create()->borrar_ubicacion_tipo_ubicacion(request('id_borrar'));
-			set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
-		}
+	// --------------------------------------------------------------------
+	/**
+	 * Update asociacion de ubicaciones con el tipo de ubicacion
+	 *
+	 * @return redirect
+	 */
+	public function update_ubicacion()
+	{
+		$ubicaciones = Ubicacion::create()->paginate(request('page'));
+		route_validation(Ubicacion::create()->get_validation_edit($ubicaciones));
 
-		redirect($this->router->class . '/ubicacion_tipo_ubicacion/' . $pagina);
+		$cant_modif = collect($ubicaciones)->filter(function($ubicacion) {
+			return array_get(request('tipo_inventario'), $ubicacion->id) !== $ubicacion->tipo_inventario
+				OR array_get(request('tipo_ubicacion'), $ubicacion->id)  !== $ubicacion->id_tipo_ubicacion
+				OR array_get(request('ubicacion'), $ubicacion->id)       !== $ubicacion->ubicacion;
+		})->each(function($ubicacion) {
+			$ubicacion->fill([
+				'tipo_inventario'   => array_get(request('tipo_inventario'), $ubicacion->id),
+				'id_tipo_ubicacion' => array_get(request('tipo_ubicacion'), $ubicacion->id),
+				'ubicacion'         => array_get(request('ubicacion'), $ubicacion->id),
+			])->grabar();
+		})->count();
+		set_message(($cant_modif > 0) ? $cant_modif . ' inventario(s) modificados correctamente' : '');
+
+		redirect($this->router->class.'/ubicacion'.url_params());
+	}
+
+	// --------------------------------------------------------------------
+	/**
+	 * Borra asociacion de ubicaciones con el tipo de ubicacion
+	 *
+	 * @return redirect
+	 */
+	public function borrar_ubicacion()
+	{
+		route_validation([['field'=>'id_borrar', 'label'=>'', 'rules'=>'trim|required']]);
+
+		Ubicacion::create()->fill(request('id_borrar'))->borrar();
+		set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
+
+		redirect($this->router->class.'/ubicacion'.url_params());
 	}
 
 	// --------------------------------------------------------------------

@@ -11,11 +11,9 @@
 	<div class="col-md-10 col-md-offset-1 well" id="form_agregar" style="{display_form_agregar}">
 
 		<fieldset>
+			<?= form_open($add_url_form,'id=frm_agregar')?>
+
 			<legend>{_inventario_config_add_ubicaciones_}</legend>
-
-
-			<?= form_open($url_form,'id=frm_agregar')?>
-			<?= form_hidden('formulario','agregar'); ?>
 
 			{validation_errors}
 
@@ -55,8 +53,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<?= form_open($url_form, 'id="frm-ubicaciones"'); ?>
-		<?= form_hidden('formulario','editar'); ?>
+		<?= form_open($update_url_form, 'id="frm-ubicaciones"'); ?>
 		<table class="table table-hover table-condensed table-striped">
 			<thead>
 				<tr>
@@ -110,8 +107,7 @@
 	</div> <!-- fin content-module-main -->
 
 
-	<?= form_open($url_form,'id="frm_borrar"'); ?>
-		<?= form_hidden('formulario','borrar'); ?>
+	<?= form_open($borrar_url_form,'id="frm_borrar"'); ?>
 		<?= form_hidden('id_borrar'); ?>
 	<?= form_close(); ?>
 
