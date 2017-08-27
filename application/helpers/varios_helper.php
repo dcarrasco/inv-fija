@@ -36,9 +36,6 @@ if ( ! function_exists('dbg'))
 	 */
 	function dbg()
 	{
-		// carga objeto global CI
-		$ci =& get_instance();
-
 		$colores_texto = [
 			'llave_array' => 'tomato',
 			'numero'      => 'blue',
@@ -81,7 +78,7 @@ if ( ! function_exists('dbg'))
 				$dump
 			);
 
-			echo $ci->parser->parse('common/dbg.php', ['dump'=>$dump], TRUE);
+			echo get_instance()->parser->parse('common/dbg.php', ['dump'=>$dump], TRUE);
 		}
 	}
 }
@@ -116,54 +113,31 @@ if ( ! function_exists('menu_app'))
 	{
 		// carga objeto global CI
 		$ci =& get_instance();
+		$modulos = collect(\Acl\Acl::create()->get_user_menu());
 
-		$arr_modulos = \Acl\Acl::create()->get_user_menu();
+		return $modulos->map(function($modulo) {
+			return [
+				'selected' => FALSE,
+				'icono'    => array_get($modulo, 'app_icono'),
+				'app'      => array_get($modulo, 'app'),
+				'modulos'  => [],
+			];
+		})->unique()
+		->map(function($app) use ($modulos, $ci) {
+			$app['modulos'] = $modulos->filter(function($modulo) use ($app) {
+				return $modulo['app'] === $app['app'];
+			})->map(function($modulo) use ($ci) {
+				return [
+					'modulo_url'      => site_url(array_get($modulo, 'url')),
+					'modulo_icono'    => array_get($modulo, 'modulo_icono'),
+					'modulo_nombre'   => array_get($modulo, 'modulo'),
+					'modulo_selected' => array_get($modulo, 'url') === $ci->uri->segment(1) ? 'active' : '',
+				];
+			})->all();
+			$app['selected'] = collect($app['modulos'])->pluck('modulo_selected')->implode();
 
-		$arr_apps = [];
-		$arr_mods = [];
-		$app_ant = '';
-		$app_sel = '';
-
-		if (count($arr_modulos) > 0)
-		{
-			foreach($arr_modulos as $modulo)
-			{
-				if ($modulo['app'] !== $app_ant AND $app_ant !== '')
-				{
-					array_push($arr_apps, [
-						'selected' => $app_sel,
-						'icono'    => $modulo_ant['app_icono'],
-						'app'      => $modulo_ant['app'],
-						'modulos'  => $arr_mods
-					]);
-					$arr_mods = [];
-					$app_sel = '';
-				}
-
-				if ($ci->uri->segment(1) === $modulo['url'])
-				{
-					$app_sel = 'active';
-				}
-
-				array_push($arr_mods, [
-					'modulo_url'      => site_url($modulo['url']),
-					'modulo_icono'    => $modulo['modulo_icono'],
-					'modulo_nombre'   => $modulo['modulo'],
-					'modulo_selected' => ($modulo['url'] === $ci->uri->segment(1)) ? 'active' : '',
-				]);
-
-				$app_ant = $modulo['app'];
-				$modulo_ant = $modulo;
-			}
-			array_push($arr_apps, [
-				'selected' => $app_sel,
-				'icono'    => $modulo_ant['app_icono'],
-				'app'      => $modulo_ant['app'],
-				'modulos'  => $arr_mods
-			]);
-		}
-
-		return $arr_apps;
+			return $app;
+		})->all();
 	}
 }
 
@@ -178,9 +152,7 @@ if ( ! function_exists('titulo_modulo'))
 	 */
 	function titulo_modulo()
 	{
-		// carga objeto global CI
-		$ci =& get_instance();
-		$url_actual = $ci->uri->segment(1);
+		$url_actual = get_instance()->uri->segment(1);
 
 		$modulo_selected = collect(\Acl\Acl::create()->get_user_menu())
 			->filter(function($item) use ($url_actual) {
@@ -262,7 +234,7 @@ if ( ! function_exists('app_render_view'))
 		$datos['app_menu_modulo'] = array_key_exists('menu_modulo', $datos) ? $ci->parser->parse('common/app_menu_modulo', $datos, TRUE) : NULL;
 
 		// otros
-		$datos['msg_alerta']      = $ci->session->flashdata('msg_alerta');
+		$datos['msg_alerta']        = $ci->session->flashdata('msg_alerta');
 		$datos['validation_errors'] = print_validation_errors();
 
 		// vistas
@@ -340,10 +312,7 @@ if ( ! function_exists('set_message'))
 	 */
 	function set_message($mensaje = '', $tipo = 'info')
 	{
-		// carga objeto global CI
-		$ci =& get_instance();
-
-		$ci->session->set_flashdata('msg_alerta', print_message($mensaje, $tipo));
+		return get_instance()->session->set_flashdata('msg_alerta', print_message($mensaje, $tipo));
 	}
 }
 
@@ -390,19 +359,10 @@ if ( ! function_exists('form_array_format'))
 	 */
 	function form_array_format($arreglo = [], $msg_ini = '')
 	{
-		$arr_combo = [];
-
-		if ($msg_ini !== '')
-		{
-			$arr_combo[''] = $msg_ini;
-		}
-
-		foreach($arreglo as $item)
-		{
-			$arr_combo[$item['llave']] = $item['valor'];
-		}
-
-		return $arr_combo;
+		return collect(empty($msg_ini) ? [] : ['' => $msg_ini])
+			->merge(collect($arreglo)->map_with_keys(function($item) {
+				return [$item['llave'] => $item['valor']];
+			}))->all();
 	}
 }
 
@@ -426,7 +386,6 @@ if ( ! function_exists('form_has_error_class'))
 			$ci->errors = collect($ci->form_validation->error_array());
 		}
 
-		// return (form_error($form_field) !== '') ? 'has-error' : 'has-success';
 		return $ci->errors->has($form_field) ? 'has-error' : '';
 	}
 }
@@ -443,8 +402,7 @@ if ( ! function_exists('errors'))
 	 */
 	function errors($form_field = '')
 	{
-		$ci =& get_instance();
-		$error = $ci->errors->get($form_field, '');
+		$error = get_instance()->errors->get($form_field, '');
 
 		return empty($error) ? '' : "<p class=\"text-danger\">{$error}</p>";
 	}
@@ -654,12 +612,12 @@ if ( ! function_exists('collect'))
 {
 	/**
 	 * Wrapper de la función array_map
-	 * @param  array $arr Arreglo con datos
-	 * @return array        Resultado de array_map
+	 * @param  array $arreglo Arreglo con datos
+	 * @return Collection
 	 */
-	function collect($arr = [])
+	function collect($arreglo = [])
 	{
-		return new Collection($arr);
+		return new Collection($arreglo);
 	}
 }
 
@@ -757,22 +715,6 @@ if ( ! function_exists('array_get'))
 
 		return $arreglo;
 
-	}
-}
-// --------------------------------------------------------------------
-
-if ( ! function_exists('map'))
-{
-	/**
-	 * Wrapper de la función array_map
-	 *
-	 * @param  mixed &$data Arreglo con datos
-	 * @param  mixed &$f    Funcion a ejecutar
-	 * @return array        Resultado de array_map
-	 */
-	function map($data, $f)
-	{
-		return array_map($f, $data);
 	}
 }
 
