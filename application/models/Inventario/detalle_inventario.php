@@ -343,12 +343,12 @@ class Detalle_inventario extends ORM_Model {
 		return $data_collection->map(function($linea_detalle) {
 			return [
 				[
-					'field' => "stock_ajuste[{$linea_detalle->id}]",
+					'field' => "stock_ajuste_{$linea_detalle->id}",
 					'label' => 'cantidad',
 					'rules' => 'trim|integer'
 				],
 				[
-					'field' => "observacion[{$linea_detalle->id}]",
+					'field' => "observacion_{$linea_detalle->id}",
 					'label' => 'observacion',
 					'rules' => 'trim'
 				]
