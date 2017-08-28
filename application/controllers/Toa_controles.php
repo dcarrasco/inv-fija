@@ -57,47 +57,47 @@ class Toa_controles extends Controller_base {
 		$this->set_menu_modulo([
 			'consumos' => [
 				'url'   => $this->router->class . '/consumos',
-				'texto' => $this->lang->line('toa_controles_tecnicos'),
+				'texto' => lang('toa_controles_tecnicos'),
 				'icon'  => 'user'
 			],
 			'materiales_consumidos' => [
 				'url'   => $this->router->class . '/materiales_consumidos',
-				'texto' => $this->lang->line('toa_controles_materiales_consumidos'),
+				'texto' => lang('toa_controles_materiales_consumidos'),
 				'icon'  => 'tv'
 			],
 			'materiales' => [
 				'url'   => $this->router->class . '/materiales',
-				'texto' => $this->lang->line('toa_controles_materiales'),
+				'texto' => lang('toa_controles_materiales'),
 				'icon'  => 'file-text-o'
 			],
 			'asignaciones' => [
 				'url'   => $this->router->class . '/asignaciones',
-				'texto' => $this->lang->line('toa_controles_asignaciones'),
+				'texto' => lang('toa_controles_asignaciones'),
 				'icon'  => 'archive'
 			],
 			'stock' => [
 				'url'   => $this->router->class . '/stock',
-				'texto' => $this->lang->line('toa_controles_stock'),
+				'texto' => lang('toa_controles_stock'),
 				'icon'  => 'signal'
 			],
 			'stock_tecnicos' => [
 				'url'   => $this->router->class . '/stock_tecnicos',
-				'texto' => $this->lang->line('toa_controles_stock_tecnicos'),
+				'texto' => lang('toa_controles_stock_tecnicos'),
 				'icon'  => 'truck'
 			],
 			'nuevos_tecnicos' => [
 				'url'   => $this->router->class . '/nuevos_tecnicos',
-				'texto' => $this->lang->line('toa_controles_nuevos_tecnicos'),
+				'texto' => lang('toa_controles_nuevos_tecnicos'),
 				'icon'  => 'users'
 			],
 			'tecnicos_sin_ciudad' => [
 				'url'   => $this->router->class . '/tecnicos_sin_ciudad',
-				'texto' => $this->lang->line('toa_controles_ciudades_tecnicos'),
+				'texto' => lang('toa_controles_ciudades_tecnicos'),
 				'icon'  => 'map-marker'
 			],
 			'clientes' => [
 				'url'   => $this->router->class . '/clientes',
-				'texto' => $this->lang->line('toa_controles_clientes'),
+				'texto' => lang('toa_controles_clientes'),
 				'icon'  => 'users'
 			],
 		]);
@@ -322,7 +322,7 @@ class Toa_controles extends Controller_base {
 				$tecnico->grabar();
 			})->count();
 
-		set_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $nuevos_tecnicos));
+		set_message(sprintf(lang('toa_controles_tecnicos_agregados'), $nuevos_tecnicos));
 
 		redirect("{$this->router->class}/nuevos_tecnicos");
 	}
@@ -384,7 +384,7 @@ class Toa_controles extends Controller_base {
 			$tecnico->grabar();
 		})->count();
 
-		set_message(sprintf($this->lang->line('toa_controles_ciudades_agregadas'), $modificar));
+		set_message(sprintf(lang('toa_controles_ciudades_agregadas'), $modificar));
 
 		redirect("{$this->router->class}/tecnicos_sin_ciudad");
 	}

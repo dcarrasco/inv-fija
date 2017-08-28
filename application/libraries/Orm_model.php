@@ -732,8 +732,8 @@ class Orm_model implements IteratorAggregate {
 				($this->uri->segment(2) ? $this->uri->segment(2) : 'listado') . '/' .
 				$this->get_model_nombre(FALSE)
 			),
-			'first_link'  => $this->lang->line('orm_pag_first'),
-			'last_link'   => $this->lang->line('orm_pag_last') . ' (' . (int)($total_rows / $this->page_results + 1) . ')',
+			'first_link'  => lang('orm_pag_first'),
+			'last_link'   => lang('orm_pag_last') . ' (' . (int)($total_rows / $this->page_results + 1) . ')',
 			'prev_link'   => '<span class="fa fa-chevron-left"></span>',
 			'next_link'   => '<span class="fa fa-chevron-right"></span>',
 

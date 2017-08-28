@@ -120,7 +120,7 @@ class Orm_controller extends Controller_base {
 		$accion  = request('grabar') ? 'grabar' : 'borrar';
 
 		$modelo->{$accion}();
-		set_message(sprintf($this->lang->line($mensaje), $modelo->get_label(), $modelo));
+		set_message(sprintf(lang($mensaje), $modelo->get_label(), $modelo));
 
 		redirect("{$this->router->class}/listado/{$nombre_modelo}{$url_params}");
 	}

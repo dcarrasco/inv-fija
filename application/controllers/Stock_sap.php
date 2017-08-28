@@ -55,22 +55,22 @@ class Stock_sap extends Controller_base {
 		$this->set_menu_modulo([
 			'stock_movil' => [
 				'url'   => $this->router->class . '/mostrar_stock/MOVIL',
-				'texto' => $this->lang->line('stock_sap_menu_movil'),
+				'texto' => lang('stock_sap_menu_movil'),
 				'icon'  => 'mobile',
 			],
 			'stock_fija' => [
 				'url'   => $this->router->class . '/mostrar_stock/FIJA',
-				'texto' => $this->lang->line('stock_sap_menu_fijo'),
+				'texto' => lang('stock_sap_menu_fijo'),
 				'icon'  => 'phone',
 			],
 			'transito_fija' => [
 				'url'   => $this->router->class . '/transito/FIJA',
-				'texto' => $this->lang->line('stock_sap_menu_transito'),
+				'texto' => lang('stock_sap_menu_transito'),
 				'icon'  => 'send',
 			],
 			'reporte_clasif' => [
 				'url'   => $this->router->class . '/reporte_clasif',
-				'texto' => $this->lang->line('stock_sap_menu_clasif'),
+				'texto' => lang('stock_sap_menu_clasif'),
 				'icon'  => 'th',
 			],
 		]);

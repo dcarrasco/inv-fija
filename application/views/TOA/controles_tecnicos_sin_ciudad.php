@@ -45,7 +45,7 @@
 			<?php endif ?>
 
 		<?php else: ?>
-			<?= print_message($this->lang->line('toa_controles_sin_tecnicos')); ?>
+			<?= print_message(lang('toa_controles_sin_tecnicos')); ?>
 		<?php endif ?>
 	</div>
 </div>

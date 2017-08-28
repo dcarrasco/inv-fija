@@ -61,22 +61,22 @@ class Acl_config extends Orm_controller {
 		$this->set_menu_modulo([
 			'usuario' => [
 				'url'   => $this->router->class . '/listado/usuario',
-				'texto' => $this->lang->line('acl_config_menu_usuarios'),
+				'texto' => lang('acl_config_menu_usuarios'),
 				'icon'  => 'user',
 			],
 			'app' => [
 				'url'   => $this->router->class . '/listado/app',
-				'texto' => $this->lang->line('acl_config_menu_aplicaciones'),
+				'texto' => lang('acl_config_menu_aplicaciones'),
 				'icon'  => 'folder-o',
 			],
 			'rol' => [
 				'url'   => $this->router->class . '/listado/rol',
-				'texto' => $this->lang->line('acl_config_menu_roles'),
+				'texto' => lang('acl_config_menu_roles'),
 				'icon'  => 'server',
 			],
 			'modulo' => [
 				'url'   => $this->router->class . '/listado/modulo',
-				'texto' => $this->lang->line('acl_config_menu_modulos'),
+				'texto' => lang('acl_config_menu_modulos'),
 				'icon'  => 'list-alt',
 			],
 		]);

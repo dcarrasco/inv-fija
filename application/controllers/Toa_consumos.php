@@ -140,7 +140,7 @@ class Toa_consumos extends Controller_base {
 			'title' => array_get($peticion, 'peticion_toa.cname'),
 		]);
 
-		set_message(($id_peticion AND ! $peticion) ? $this->lang->line('toa_consumo_peticion_not_found') : '');
+		set_message(($id_peticion AND ! $peticion) ? lang('toa_consumo_peticion_not_found') : '');
 
 		app_render_view('toa/detalle_peticion', [
 			'tipo_peticion' => strtoupper(substr($id_peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',

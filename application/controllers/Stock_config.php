@@ -62,42 +62,42 @@ class Stock_config extends Orm_controller {
 		$this->set_menu_modulo([
 			'almacen_sap' => [
 				'url'   => $this->router->class . '/listado/almacen_sap',
-				'texto' => $this->lang->line('stock_config_menu_alm'),
+				'texto' => lang('stock_config_menu_alm'),
 				'icon'  => 'home',
 			],
 			'tipoalmacen_sap' => [
 				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
-				'texto' => $this->lang->line('stock_config_menu_tipalm'),
+				'texto' => lang('stock_config_menu_tipalm'),
 				'icon'  => 'th',
 			],
 			'clasifalmacen_sap' => [
 				'url'   => $this->router->class . '/listado/clasifalmacen_sap',
-				'texto' => $this->lang->line('stock_config_menu_clasifalm'),
+				'texto' => lang('stock_config_menu_clasifalm'),
 				'icon'  => 'th',
 			],
 			'tipo_clasifalm' => [
 				'url'   => $this->router->class . '/listado/tipo_clasifalm',
-				'texto' => $this->lang->line('stock_config_menu_tipo_clasifalm'),
+				'texto' => lang('stock_config_menu_tipo_clasifalm'),
 				'icon'  => 'th',
 			],
 			'proveedor' => [
 				'url'   => $this->router->class . '/listado/proveedor',
-				'texto' => $this->lang->line('stock_config_menu_proveedores'),
+				'texto' => lang('stock_config_menu_proveedores'),
 				'icon'  => 'shopping-cart',
 			],
 			'usuario_sap' => [
 				'url'   => $this->router->class . '/listado/usuario_sap',
-				'texto' => $this->lang->line('stock_config_menu_usuarios_sap'),
+				'texto' => lang('stock_config_menu_usuarios_sap'),
 				'icon'  => 'user',
 			],
 			'almacenes_no_ingresados' => [
 				'url'   => $this->router->class . '/almacenes_no_ingresados',
-				'texto' => $this->lang->line('stock_config_menu_alm_no_ing'),
+				'texto' => lang('stock_config_menu_alm_no_ing'),
 				'icon'  => 'home',
 			],
 			'clase_movimiento' => [
 				'url'   => $this->router->class . '/listado/clase_movimiento',
-				'texto' => $this->lang->line('stock_config_menu_cmv'),
+				'texto' => lang('stock_config_menu_cmv'),
 				'icon'  => 'th',
 			],
 		]);

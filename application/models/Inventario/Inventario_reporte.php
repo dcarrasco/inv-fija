@@ -64,12 +64,12 @@ class Inventario_reporte extends Inventario {
 		return [
 			[
 				'field' => 'pag_desde',
-				'label' => $this->lang->line('inventario_print_label_page_from'),
+				'label' => lang('inventario_print_label_page_from'),
 				'rules' => 'trim|required|greater_than[0]',
 			],
 			[
 				'field' => 'pag_hasta',
-				'label' => $this->lang->line('inventario_print_label_page_to'),
+				'label' => lang('inventario_print_label_page_to'),
 				'rules' => 'trim|required|greater_than[0]',
 			],
 		];

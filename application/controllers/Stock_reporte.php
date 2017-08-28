@@ -55,22 +55,22 @@ class Stock_reporte extends Controller_base {
 		$this->set_menu_modulo([
 			'permanencia' => [
 				'url'   => $this->router->class . '/listado/permanencia',
-				'texto' => $this->lang->line('stock_perm_menu_perm'),
+				'texto' => lang('stock_perm_menu_perm'),
 				'icon'  => 'clock-o',
 			],
 			'mapastock' => [
 				'url'   => $this->router->class . '/mapastock',
-				'texto' => $this->lang->line('stock_perm_menu_mapa'),
+				'texto' => lang('stock_perm_menu_mapa'),
 				'icon'  => 'globe',
 			],
 			'movhist' => [
 				'url'   => $this->router->class . '/movhist',
-				'texto' => $this->lang->line('stock_perm_menu_movs'),
+				'texto' => lang('stock_perm_menu_movs'),
 				'icon'  => 'calendar',
 			],
 			'est03' => [
 				'url'   => $this->router->class . '/est03',
-				'texto' => $this->lang->line('stock_perm_menu_est03'),
+				'texto' => lang('stock_perm_menu_est03'),
 				'icon'  => 'refresh',
 			],
 		]);

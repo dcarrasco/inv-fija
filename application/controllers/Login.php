@@ -116,7 +116,7 @@ class Login extends Controller_base {
 			redirect(request('redirect_to', Acl::create()->get_redirect_app()));
 		}
 
-		set_message($this->lang->line('login_error_usr_pwd'), 'danger');
+		set_message(lang('login_error_usr_pwd'), 'danger');
 		$this->session->set_flashdata('old_request', array_merge($this->input->post(), $this->input->get()));
 
 		redirect('login');
@@ -174,12 +174,12 @@ class Login extends Controller_base {
 
 		if ( ! Acl::create()->check_user_credentials(request('usr'), request('pwd_old')))
 		{
-			set_message($this->lang->line('login_error_usr_pwd'), 'danger');
+			set_message(lang('login_error_usr_pwd'), 'danger');
 		}
 
 		if (Acl::create()->cambio_clave(request('usr'), request('pwd_old'), request('pwd_new1')))
 		{
-			set_message($this->lang->line('login_success_pwd_changed'));
+			set_message(lang('login_success_pwd_changed'));
 
 			redirect('login');
 		}

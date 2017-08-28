@@ -50,12 +50,12 @@ class Adminbd_logs extends Controller_base {
 		$this->arr_menu = [
 			'borra_log' => [
 				'url'   => $this->router->class . '/borra_log',
-				'texto' => $this->lang->line('adminbd_log_menu_borra'),
+				'texto' => lang('adminbd_log_menu_borra'),
 				'icon'  => 'database',
 			],
 			'indices' => [
 				'url'   => $this->router->class . '/indices',
-				'texto' => $this->lang->line('adminbd_log_menu_indices'),
+				'texto' => lang('adminbd_log_menu_indices'),
 				'icon'  => 'database',
 			],
 		];

@@ -208,6 +208,21 @@ if ( ! function_exists('app_render_view'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('lang'))
+{
+	/**
+	 * Recupera una linea de texto del arreglo de lenguaje
+	 * @param  string $line Linea a recuperar
+	 * @return string
+	 */
+	function lang($line)
+	{
+		return get_instance()->lang->line($line);
+	}
+}
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('print_message'))
 {
 	/**

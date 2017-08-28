@@ -68,23 +68,23 @@ class Inventario_analisis extends Controller_base {
 
 		$this->set_menu_modulo([
 			'ajustes' => [
-				'url'   => $this->router->class . '/ajustes',
-				'texto' => $this->lang->line('inventario_menu_ajustes'),
+				'url'   => $this->router->class.'/ajustes',
+				'texto' => lang('inventario_menu_ajustes'),
 				'icon'  => 'wrench'
 			],
 			'sube_stock' => [
-				'url'   => $this->router->class . '/sube_stock',
-				'texto' => $this->lang->line('inventario_menu_upload'),
+				'url'   => $this->router->class.'/sube_stock',
+				'texto' => lang('inventario_menu_upload'),
 				'icon'  => 'cloud-upload'
 			],
 			'imprime_inventario' => [
-				'url'   => $this->router->class . '/imprime_inventario',
-				'texto' => $this->lang->line('inventario_menu_print'),
+				'url'   => $this->router->class.'/imprime_inventario',
+				'texto' => lang('inventario_menu_print'),
 				'icon'  => 'print'
 			],
 			'actualiza_precios' => [
-				'url'   => $this->router->class . '/actualiza_precios',
-				'texto' => $this->lang->line('inventario_menu_act_precios'),
+				'url'   => $this->router->class.'/actualiza_precios',
+				'texto' => lang('inventario_menu_act_precios'),
 				'icon'  => 'usd'
 			],
 		]);
@@ -160,7 +160,7 @@ class Inventario_analisis extends Controller_base {
 		route_validation(Detalle_inventario::create()->rules_ajustes($detalles));
 
 		$cant_modif = Detalle_inventario::create()->update_ajustes($detalles);
-		set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_adjust_msg_save'), $cant_modif)
+		set_message(($cant_modif > 0) ? sprintf(lang('inventario_adjust_msg_save'), $cant_modif)
 			: '');
 
 		redirect("{$this->router->class}/ajustes".url_params());
@@ -201,7 +201,7 @@ class Inventario_analisis extends Controller_base {
 
 				if ( ! $this->upload->do_upload('upload_file'))
 				{
-					set_message($this->lang->line('inventario_upload_error').' ('.$this->upload->display_errors().')', 'danger');
+					set_message(lang('inventario_upload_error').' ('.$this->upload->display_errors().')', 'danger');
 				}
 				else
 				{

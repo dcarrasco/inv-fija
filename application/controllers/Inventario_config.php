@@ -62,52 +62,52 @@ class Inventario_config extends Orm_controller {
 		$this->set_menu_modulo([
 			'auditor' => [
 				'url'   => $this->router->class . '/listado/auditor/',
-				'texto' => $this->lang->line('inventario_config_menu_auditores'),
+				'texto' => lang('inventario_config_menu_auditores'),
 				'icon'  => 'user',
 			],
 			'familia' => [
 				'url'   => $this->router->class . '/listado/familia',
-				'texto' => $this->lang->line('inventario_config_menu_familias'),
+				'texto' => lang('inventario_config_menu_familias'),
 				'icon'  => 'th',
 			],
 			'catalogo' => [
 				'url'   => $this->router->class . '/listado/catalogo',
-				'texto' => $this->lang->line('inventario_config_menu_materiales'),
+				'texto' => lang('inventario_config_menu_materiales'),
 				'icon'  => 'barcode',
 			],
 			'tipo_inventario' => [
 				'url'   => $this->router->class . '/listado/tipo_inventario',
-				'texto' => $this->lang->line('inventario_config_menu_tipos_inventarios'),
+				'texto' => lang('inventario_config_menu_tipos_inventarios'),
 				'icon'  => 'th',
 			],
 			'inventario' => [
 				'url'   => $this->router->class . '/listado/inventario',
-				'texto' => $this->lang->line('inventario_config_menu_inventarios'),
+				'texto' => lang('inventario_config_menu_inventarios'),
 				'icon'  => 'list',
 			],
 			'tipo_ubicacion' => [
 				'url'   => $this->router->class . '/listado/tipo_ubicacion',
-				'texto' => $this->lang->line('inventario_config_menu_tipo_ubicacion'),
+				'texto' => lang('inventario_config_menu_tipo_ubicacion'),
 				'icon'  => 'th',
 			],
 			'ubicaciones' => [
 				'url'   => $this->router->class . '/ubicacion',
-				'texto' => $this->lang->line('inventario_config_menu_ubicaciones'),
+				'texto' => lang('inventario_config_menu_ubicaciones'),
 				'icon'  => 'map-marker',
 			],
 			'centro' => [
 				'url'   => $this->router->class . '/listado/centro',
-				'texto' => $this->lang->line('inventario_config_menu_centros'),
+				'texto' => lang('inventario_config_menu_centros'),
 				'icon'  => 'th',
 			],
 			'almacen' => [
 				'url'   => $this->router->class . '/listado/almacen',
-				'texto' => $this->lang->line('inventario_config_menu_almacenes'),
+				'texto' => lang('inventario_config_menu_almacenes'),
 				'icon'  => 'home',
 			],
 			'unidad_medida' => [
 				'url'   => $this->router->class . '/listado/unidad_medida',
-				'texto' => $this->lang->line('inventario_config_menu_unidades_medida'),
+				'texto' => lang('inventario_config_menu_unidades_medida'),
 				'icon'  => 'balance-scale',
 			],
 		]);

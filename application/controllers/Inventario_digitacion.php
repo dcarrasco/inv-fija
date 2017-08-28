@@ -127,7 +127,7 @@ class Inventario_digitacion extends Controller_base {
 
 		$id_usuario_login = Acl::create()->get_id_usr();
 		$cant_modif = Detalle_inventario::create()->update_digitacion($inventario->get_id(), $hoja, $id_usuario_login);
-		set_message(($cant_modif > 0) ? sprintf($this->lang->line('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
+		set_message(($cant_modif > 0) ? sprintf(lang('inventario_digit_msg_save'), $cant_modif, $hoja) : '');
 
 		redirect($this->router->class.'/ingreso/'.request('hoja'));
 	}
@@ -195,7 +195,7 @@ class Inventario_digitacion extends Controller_base {
 			]);
 			$detalle_inventario->grabar();
 
-			set_message(sprintf($this->lang->line('inventario_digit_msg_save'), 1, $hoja));
+			set_message(sprintf(lang('inventario_digit_msg_save'), 1, $hoja));
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
 		}
 	}
@@ -244,12 +244,12 @@ class Inventario_digitacion extends Controller_base {
 		if (request('accion') === 'agregar')
 		{
 			$detalle_inventario->grabar();
-			set_message(sprintf($this->lang->line('inventario_digit_msg_add'), $hoja));
+			set_message(sprintf(lang('inventario_digit_msg_add'), $hoja));
 		}
 		else
 		{
 			$detalle_inventario->borrar();
-			set_message(sprintf($this->lang->line('inventario_digit_msg_delete'), $id_registro, $hoja));
+			set_message(sprintf(lang('inventario_digit_msg_delete'), $id_registro, $hoja));
 		}
 
 		redirect("{$this->router->class}/ingreso/{$hoja}/".time());

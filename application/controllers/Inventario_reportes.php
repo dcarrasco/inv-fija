@@ -52,32 +52,32 @@ class Inventario_reportes extends Controller_base {
 		$this->set_menu_modulo([
 			'hoja' => [
 				'url'   => $this->router->class . '/listado/hoja',
-				'texto' => $this->lang->line('inventario_menu_reporte_hoja'),
+				'texto' => lang('inventario_menu_reporte_hoja'),
 				'icon'  => 'file-text-o'
 			],
 			'material' => [
 				'url'   => $this->router->class . '/listado/material',
-				'texto' => $this->lang->line('inventario_menu_reporte_mat'),
+				'texto' => lang('inventario_menu_reporte_mat'),
 				'icon'  => 'barcode'
 			],
 			'material_faltante' => [
 				'url'   => $this->router->class . '/listado/material_faltante',
-				'texto' => $this->lang->line('inventario_menu_reporte_faltante'),
+				'texto' => lang('inventario_menu_reporte_faltante'),
 				'icon'  => 'tasks'
 			],
 			'ubicacion' => [
 				'url'   => $this->router->class . '/listado/ubicacion' ,
-				'texto' => $this->lang->line('inventario_menu_reporte_ubicacion'),
+				'texto' => lang('inventario_menu_reporte_ubicacion'),
 				'icon'  => 'map-marker'
 			],
 			'tipos_ubicacion' => [
 				'url'   => $this->router->class . '/listado/tipos_ubicacion',
-				'texto' => $this->lang->line('inventario_menu_reporte_tip_ubic'),
+				'texto' => lang('inventario_menu_reporte_tip_ubic'),
 				'icon'  => 'th'
 			],
 			'ajustes' => [
 				'url'   => $this->router->class . '/listado/ajustes',
-				'texto' => $this->lang->line('inventario_menu_reporte_ajustes'),
+				'texto' => lang('inventario_menu_reporte_ajustes'),
 				'icon'  => 'wrench'
 			],
 		]);
