@@ -136,7 +136,6 @@ class Inventario_analisis extends Controller_base {
 			'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
 			'detalle_ajustes' => Detalle_inventario::create()->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
 			'links_paginas'   => Detalle_inventario::create()->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
-			'pag'             => $pagina,
 			'ocultar_reg'     => $ocultar_reg,
 			'url_form'        => site_url("{$this->router->class}/update_ajustes".url_params()),
 		]);

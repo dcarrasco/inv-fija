@@ -5,7 +5,7 @@
 	<div class="col-md-6">
 		<div class="pull-right">
 			<?= anchor(
-				"{$this->router->class}/ajustes?ocultar_reg=".(($ocultar_reg === 0) ? '1' : '0').'&page='.$pag,
+				"{$this->router->class}/ajustes?ocultar_reg=".(($ocultar_reg === 0) ? '1' : '0').'&page='.request('page',1),
 				($ocultar_reg === 0) ? '{_inventario_adjust_link_hide_}' : '{_inventario_adjust_link_show_}'
 			); ?>
 		</div>
@@ -16,7 +16,6 @@
 
 <div>
 	<?= form_open($url_form, 'id="frm_inventario"'); ?>
-	<?= form_hidden('formulario','ajustes'); ?>
 
 	<table class="table table-hover table-condensed reporte table-fixed-header">
 
@@ -70,7 +69,7 @@
 					<?php $subtot_sap = 0; $subtot_fisico = 0; $subtot_ajuste = 0; ?>
 				<?php endif; ?>
 
-				<tr class="<?= empty(errors('stock_ajuste_'.$detalle->id)) ? '' : 'danger' ?>">
+				<tr class="<?= empty(errors("stock_ajuste[{$detalle->id}]")) ? '' : 'danger' ?>">
 					<td class="text-center"><?= ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
 					<td class="text-left"><?= ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
 					<td class="text-center"><?= $detalle->lote; ?></td>
@@ -82,9 +81,9 @@
 					<td class="text-center"><?= $detalle->um; ?></td>
 					<td class="text-center"><?= fmt_cantidad($detalle->stock_sap); ?></td>
 					<td class="text-center"><?= fmt_cantidad($detalle->stock_fisico); ?></td>
-					<td class="<?= form_has_error_class('stock_ajuste_'.$detalle->id) ?>">
-						<?= form_input('stock_ajuste_'.$detalle->id, request('stock_ajuste_'.$detalle->id, $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="'.$tab_index.'"'); ?>
-						<?= errors('stock_ajuste_'.$detalle->id); ?>
+					<td class="<?= form_has_error_class("stock_ajuste[{$detalle->id}]") ?>">
+						<?= form_input("stock_ajuste[{$detalle->id}]", request("stock_ajuste", $detalle->stock_ajuste)[$detalle->id], 'class="form-control input-sm text-right" size="5" tabindex="'.$tab_index.'"'); ?>
+						<?= errors("stock_ajuste[{$detalle->id}]"); ?>
 					</td>
 					<td class="text-center">
 						<?= fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>
@@ -108,7 +107,7 @@
 						<?php endif; ?>
 					</td>
 					<td class="text-center">
-						<?= form_input('observacion_'.$detalle->id, request('observacion_'.$detalle->id, $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="'.($tab_index + 10000).'"'); ?>
+						<?= form_input("observacion[{$detalle->id}]", request("observacion[{$detalle->id}]", $detalle->glosa_ajuste), 'class="form-control input-sm" max_length="200" tabindex="'.($tab_index + 10000).'"'); ?>
 					</td>
 				</tr>
 				<?php $sum_sap += $detalle->stock_sap; $sum_fisico += $detalle->stock_fisico; $sum_ajuste += $detalle->stock_ajuste?>

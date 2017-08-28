@@ -40,7 +40,7 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @var integer
 	 */
-	protected $page_ajustes = 50;
+	protected $page_ajustes = 30;
 
 	// --------------------------------------------------------------------
 
@@ -251,6 +251,7 @@ class Detalle_inventario extends ORM_Model {
 
 	/**
 	 * Recupera las lineas de detalle del inventario para ajustar
+	 *
 	 * @param  integer $id_inventario         ID del inventario a consultar
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
 	 * @param  integer $pagina                Pagina a mostrar
@@ -258,14 +259,13 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 1)
 	{
+		$stock_ajuste = $ocultar_regularizadas === 1 ? '+ stock_ajuste ' : '';
+
 		$arr_detalles = $this->db
 			->order_by('catalogo, lote, centro, almacen, ubicacion')
 			->where('id_inventario', $id_inventario)
-			->where(($ocultar_regularizadas === 1)
-				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
-				: 'stock_fisico - stock_sap <> 0',
-				NULL, FALSE)
-			->limit($this->page_ajustes, ($pagina-1)*$this->get_page_results())
+			->where("stock_fisico - stock_sap {$stock_ajuste}<> 0",	NULL, FALSE)
+			->limit($this->page_ajustes, ($pagina-1)*$this->page_ajustes)
 			->get($this->get_tabla())
 			->result_array();
 
@@ -286,12 +286,10 @@ class Detalle_inventario extends ORM_Model {
 	public function get_pagination_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 0)
 	{
 		//determina la cantidad de registros
-		$total_rows = $this->db
+		$stock_ajuste = $ocultar_regularizadas === 1 ? '+ stock_ajuste ' : '';
+		$total_rows   = $this->db
 			->where('id_inventario', $id_inventario)
-			->where(($ocultar_regularizadas === 1)
-				? 'stock_fisico - stock_sap + stock_ajuste <> 0'
-				: 'stock_fisico - stock_sap <> 0',
-				NULL, FALSE)
+			->where("stock_fisico - stock_sap {$stock_ajuste}<> 0",	NULL, FALSE)
 			->count_all_results($this->get_tabla());
 
 		$this->load->library('pagination');
@@ -342,23 +340,21 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function rules_ajustes(Collection $data_collection)
 	{
-		$rules = [];
-
-		$data_collection->each(function($linea_detalle) use (&$rules) {
-			array_push($rules, [
-				'field' => 'stock_ajuste_'.$linea_detalle->id,
-				'label' => 'cantidad',
-				'rules' => 'trim|integer'
-			]);
-			array_push($rules, [
-				'field' => 'observacion_'.$linea_detalle->id,
-				'label' => 'observacion',
-				'rules' => 'trim'
-			]);
-
-		});
-
-		return $rules;
+		return $data_collection->map(function($linea_detalle) {
+			return [
+				[
+					'field' => "stock_ajuste[{$linea_detalle->id}]",
+					'label' => 'cantidad',
+					'rules' => 'trim|integer'
+				],
+				[
+					'field' => "observacion[{$linea_detalle->id}]",
+					'label' => 'observacion',
+					'rules' => 'trim'
+				]
+			];
+		})->flatten(1)
+		->all();
 	}
 
 	// --------------------------------------------------------------------

@@ -569,7 +569,7 @@ if ( ! function_exists('request'))
 			return $ci->request->only($field)->all();
 		}
 
-		return $ci->request->get($field, $default);
+		return array_get($ci->request->all(), $field, $default);
 	}
 }
 
