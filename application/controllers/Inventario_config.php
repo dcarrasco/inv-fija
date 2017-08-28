@@ -137,7 +137,9 @@ class Inventario_config extends Orm_controller {
 			return [array_get($matches, 'id') => array_get($matches, 'id')];
 		})->unique();
 
-		$display_form_agregar = request('formulario') === 'agregar' ? '' : 'display: none;';
+		$display_form_agregar = $this->errors->has(['agr-tipo_inventario', 'agr-ubicacion[]', 'agr-tipo_ubicacion'])
+			? ''
+			: 'display: none;';
 
 		app_render_view('ubicacion_tipo_ubicacion', [
 			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
