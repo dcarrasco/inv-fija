@@ -119,7 +119,7 @@ class Adminbd_exportartablas extends Controller_base {
 	{
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options($this->adminbd_model->get_fields_list($tabla)));
+			->set_output(form_print_options(Adminbd::create()->get_fields_list($tabla)));
 	}
 
 

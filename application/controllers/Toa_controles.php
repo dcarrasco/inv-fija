@@ -297,23 +297,34 @@ class Toa_controles extends Controller_base {
 	 */
 	public function nuevos_tecnicos()
 	{
-		$msg_agregar = '';
 		$nuevos_tecnicos = Tecnico_toa::create()->nuevos_tecnicos();
-
-		if (request('agregar'))
-		{
-			$nuevos_tecnicos->each(function($tecnico) {
-				$tecnico->grabar();
-			});
-
-			$msg_agregar = print_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $nuevos_tecnicos->count()));
-		}
 
 		app_render_view('toa/controles_nuevos_tecnicos', [
 			'menu_modulo'     => $this->get_menu_modulo('nuevos_tecnicos'),
-			'msg_agregar'     => $msg_agregar,
+			'url_form'        => site_url("{$this->router->class}/add_nuevos_tecnicos"),
 			'nuevos_tecnicos' => $nuevos_tecnicos,
 		]);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Agrega nuevos técnicos
+	 *
+	 * @return void
+	 */
+	public function add_nuevos_tecnicos()
+	{
+		$nuevos_tecnicos = Tecnico_toa::create()
+			->nuevos_tecnicos()
+			->each(function($tecnico) {
+				$tecnico->grabar();
+			})->count();
+
+		set_message(sprintf($this->lang->line('toa_controles_tecnicos_agregados'), $nuevos_tecnicos));
+
+		redirect("{$this->router->class}/nuevos_tecnicos");
 	}
 
 

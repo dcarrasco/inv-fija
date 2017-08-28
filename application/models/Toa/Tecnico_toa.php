@@ -130,7 +130,7 @@ class Tecnico_toa extends ORM_Model {
 				],
 			];
 
-			$this->_config_campos($arr_config_ciudad);
+			$this->config_campos($arr_config_ciudad);
 			$this->get_relation_fields();
 		}
 	}

@@ -1,6 +1,5 @@
 <div class="row">
 	<div class="col-md-offset-1 col-md-10">
-		{msg_agregar}
 
 		<?php if (count($nuevos_tecnicos) > 0): ?>
 			<table class="table table-striped table-hover table-condensed">
@@ -25,8 +24,7 @@
 			</table>
 
 			<?php if (empty($msg_agregar)): ?>
-				<?= form_open('','class="form-horizontal"'); ?>
-				<?= form_hidden('agregar', 'agregar'); ?>
+				<?= form_open($url_form,'class="form-horizontal"'); ?>
 				<div class="form-group text-right">
 					<button name="submit" type="submit" class="btn btn-primary" id="btn_imprimir" {update_status}>
 						<span class="fa fa-user-plus"></span>

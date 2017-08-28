@@ -51,17 +51,20 @@ class MY_Hooks {
 		$class = $ci->router->fetch_class();
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';
 
+		// Valida las credenciales del usuario
 		if ( ! in_array($class, $whitelist_classes) AND ! Acl::create()->autentica_modulo($llave_modulo))
 		{
 			redirect('login?redirect_to='.uri_string());
 		}
 
-		if (ENVIRONMENT !== 'production')
+		// despliega el profiler en desarrollo
+		if (ENVIRONMENT !== 'production'
+			AND ! $ci->input->is_ajax_request()
+			AND strpos(uri_string(), 'ajax') === FALSE
+			AND ! $ci->input->is_cli_request()
+		)
 		{
-			if ( ! $ci->input->is_ajax_request() AND strpos(uri_string(), 'ajax') === FALSE AND ! $ci->input->is_cli_request())
-			{
-				$ci->output->enable_profiler(TRUE);
-			}
+			$ci->output->enable_profiler(TRUE);
 		}
 
 		// log información

@@ -43,7 +43,6 @@ class Toa_peticiones extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->load->model('toa_model');
 		$this->lang->load('toa');
 	}
 
