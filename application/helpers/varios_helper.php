@@ -561,7 +561,7 @@ if ( ! function_exists('request'))
 
 		if (is_null($field))
 		{
-			return $ci->request->all();
+			return $ci->request;
 		}
 
 		if (is_array($field))
@@ -632,7 +632,7 @@ if ( ! function_exists('form_validation'))
 	{
 		$ci =& get_instance();
 
-		return $ci->form_validation->set_data(request())->set_rules($rules)->run();
+		return $ci->form_validation->set_data(request()->all())->set_rules($rules)->run();
 	}
 }
 

@@ -136,7 +136,7 @@ class Stock_reporte extends Controller_base {
 	{
 		$reporte = new Reporte_stock;
 		$reporte->get_campos_reporte_detalle_series();
-		$reporte->get_detalle_series(request());
+		$reporte->get_detalle_series(request()->all());
 
 		app_render_view('stock_sap/detalle_series', [
 			'menu_modulo'        => $this->get_menu_modulo('permanencia'),

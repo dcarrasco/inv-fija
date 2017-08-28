@@ -367,9 +367,9 @@ class Toa_controles extends Controller_base {
 	 */
 	public function actualiza_tecnicos_sin_ciudad()
 	{
-		$tecnicos = collect(collect(request())->get('tecnico'));
-		$ciudades = collect(collect(request())->get('ciudad'));
-		$empresas = collect(collect(request())->get('empresa'));
+		$tecnicos = collect(request()->get('tecnico'));
+		$ciudades = collect(request()->get('ciudad'));
+		$empresas = collect(request()->get('empresa'));
 
 		$modificar = $tecnicos->map_with_keys(function($id_tecnico, $id_registro) use ($ciudades, $empresas) {
 			return [$id_tecnico => [

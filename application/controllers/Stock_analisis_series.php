@@ -108,7 +108,7 @@ class Stock_analisis_series extends Controller_base {
 			];
 
 			$datos = collect($arr_reportes)
-				->only(array_keys(request()))
+				->only(request()->keys())
 				->map_with_keys(function($elem, $indice) {
 					return [
 						"datos_{$indice}" => call_user_func_array([$elem['class'], $elem['method']], $elem['params'])

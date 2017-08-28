@@ -99,7 +99,7 @@ class Stock_sap extends Controller_base {
 	public function mostrar_stock($tipo_op = '')
 	{
 		$arr_mostrar = collect(['fecha', 'tipo_articulo'])
-			->merge(collect(request())
+			->merge(request()
 				->only(['sel_tiposalm','almacen','material','lote','tipo_stock'])
 				->keys()
 			)->all();
@@ -110,7 +110,7 @@ class Stock_sap extends Controller_base {
 		$combo_almacenes = (request('sel_tiposalm', 'sel_tiposalm') === 'sel_tiposalm')
 			? Tipoalmacen_sap::create()->get_combo_tiposalm($tipo_op)
 			: Almacen_sap::create()->get_combo_almacenes($tipo_op);
-		$tabla_stock = form_validation($stock->rules_stock_sap) ? $stock->reporte($arr_mostrar, request()) : '';
+		$tabla_stock = form_validation($stock->rules_stock_sap) ? $stock->reporte($arr_mostrar, request()->all()) : '';
 
 		$data = [
 			'menu_modulo'     => $this->get_menu_modulo(($tipo_op === 'MOVIL') ? 'stock_movil' : 'stock_fija'),
@@ -179,11 +179,11 @@ class Stock_sap extends Controller_base {
 
 		$arr_mostrar_todos = ['almacen', 'tipo_stock', 'material', 'lote', 'acreedor', 'des_proveedor'];
 		$arr_mostrar = collect(['fecha', 'almacen', 'acreedor', 'des_proveedor'])
-			->merge(collect(request())->only($arr_mostrar_todos)->keys())
+			->merge(request()->only($arr_mostrar_todos)->keys())
 			->all();
 
 		$arr_filtrar_todos = ['fecha', 'almacen', 'tipo_stock', 'material', 'lote'];
-		$arr_filtrar = collect(request())->only($arr_filtrar_todos)->all();
+		$arr_filtrar = request()->only($arr_filtrar_todos)->all();
 
 
 		if (form_validation([['field'=>'fecha[]', 'label'=>'Fechas', 'rules'=>'required']]))
