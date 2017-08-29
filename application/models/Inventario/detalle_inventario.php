@@ -371,7 +371,7 @@ class Detalle_inventario extends ORM_Model {
 			return [
 				[
 					'field' => 'stock_fisico_'.$linea_detalle->id,
-					'label' => 'Cantidad',
+					'label' => "Cantidad (ubicacion {$linea_detalle->ubicacion}, material {$linea_detalle->catalogo})",
 					'rules' => 'trim|required|integer|greater_than[-1]'
 				],
 				[

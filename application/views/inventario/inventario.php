@@ -73,8 +73,9 @@
 			<?php $sum_sap = 0; $sum_fisico = 0;?>
 			<?php $tab_index = 10; ?>
 			<?php foreach ($detalle_inventario as $linea_det): ?>
+				<?php $text_error = $this->errors->has("stock_fisico_{$linea_det->id}") ? 'text-danger' : ''; ?>
 				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>
-					<td class="text-center" nowrap>
+					<td class="text-center <?=$text_error?>" nowrap>
 						<?= $linea_det->get_field_value('ubicacion') ?>
 
 						<?php if ($linea_det->reg_nuevo === 'S'):?>
@@ -92,20 +93,20 @@
 						<?php endif; ?>
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
-					<td class="text-center"><?= $linea_det->catalogo ?></td>
-					<td class="text_left"><?= $linea_det->get_field_value('descripcion') ?></td>
-					<td class="text-center"><?= $linea_det->get_field_value('lote') ?></td>
-					<td class="text-center"><?= $linea_det->get_field_value('centro') ?></td>
-					<td class="text-center"><?= $linea_det->get_field_value('almacen') ?></td>
-					<td class="text-center"><?= $linea_det->um ?></td>
-					<td class="text-right"><?= fmt_cantidad($linea_det->stock_sap) ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->catalogo ?></td>
+					<td class="text_left <?=$text_error?>"><?= $linea_det->get_field_value('descripcion') ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('lote') ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('centro') ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('almacen') ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->um ?></td>
+					<td class="text-right <?=$text_error?>"><?= fmt_cantidad($linea_det->stock_sap) ?></td>
 					<td class="text-center col-md-1 <?= form_has_error_class("stock_fisico_{$linea_det->id}") ?>">
 						<?= form_input(
 							"stock_fisico_{$linea_det->id}",
 							request("stock_fisico_{$linea_det->id}", $linea_det->stock_fisico),
 							"class=\"input-sm form-control text-right\" tabindex=\"{$tab_index}\""
 						); ?>
-						<?= errors("stock_fisico_{$linea_det->id}") ?>
+						<!-- <?= errors("stock_fisico_{$linea_det->id}") ?> -->
 					</td>
 					<td class="text-center col-md-1">
 						<?= form_input(
