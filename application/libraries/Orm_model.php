@@ -90,6 +90,13 @@ class Orm_model implements IteratorAggregate {
 	protected $page_results = 12;
 
 	/**
+	 * Nombre del registro del numero de pagina
+	 *
+	 * @var string
+	 */
+	protected $page_name = 'page';
+
+	/**
 	 * Filtro para buscar resultados
 	 *
 	 * @var string
@@ -739,7 +746,7 @@ class Orm_model implements IteratorAggregate {
 
 			'reuse_query_string'   => TRUE,
 			'page_query_string'    => TRUE,
-			'query_string_segment' => 'page',
+			'query_string_segment' => $this->page_name,
 			'use_page_numbers'     => TRUE,
 		];
 
@@ -883,14 +890,14 @@ class Orm_model implements IteratorAggregate {
 	 * @param  integer $page Numero de página a recuperar
 	 * @return void
 	 */
-	public function paginate($page = 0)
+	public function paginate($page = NULL)
 	{
-		$page = empty($page) ? 1 : $page;
+		$page = is_null($page) ? request($this->page_name, 1) : $page;
 
 		return $this->find('all', [
 			'filtro' => $this->filtro,
 			'limit'  => $this->page_results,
-			'offset' => ($page-1) * $this->page_results,
+			'offset' => ($page - 1) * $this->page_results,
 		]);
 	}
 

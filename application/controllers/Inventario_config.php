@@ -122,7 +122,7 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function ubicacion()
 	{
-		$ubicaciones = Ubicacion::create()->paginate(request('page'));
+		$ubicaciones = Ubicacion::create()->paginate();
 
 		$arr_combo_tipo_ubic = collect($ubicaciones)
 			->map(function($ubicacion) {
@@ -186,7 +186,7 @@ class Inventario_config extends Orm_controller {
 	 */
 	public function update_ubicacion()
 	{
-		$ubicaciones = Ubicacion::create()->paginate(request('page'));
+		$ubicaciones = Ubicacion::create()->paginate();
 		route_validation(Ubicacion::create()->get_validation_edit($ubicaciones));
 
 		$cant_modif = collect($ubicaciones)->filter(function($ubicacion) {
