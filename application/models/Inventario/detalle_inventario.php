@@ -344,12 +344,12 @@ class Detalle_inventario extends ORM_Model {
 			return [
 				[
 					'field' => "stock_ajuste_{$linea_detalle->id}",
-					'label' => 'cantidad',
+					'label' => "Cantidad (ubicacion {$linea_detalle->ubicacion}, material {$linea_detalle->catalogo})",
 					'rules' => 'trim|integer'
 				],
 				[
 					'field' => "observacion_{$linea_detalle->id}",
-					'label' => 'observacion',
+					'label' => 'Observacion',
 					'rules' => 'trim'
 				]
 			];

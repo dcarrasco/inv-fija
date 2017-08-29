@@ -70,15 +70,15 @@
 					<td>
 						<?= $ubicacion->id ?>
 					</td>
-					<td>
+					<td class="<?= form_has_error_class("tipo_inventario[{$ubicacion->id}]") ?>">
 						<?= form_dropdown("tipo_inventario[{$ubicacion->id}]", $combo_tipos_inventario, request("tipo_inventario[{$ubicacion->id}]", $ubicacion->tipo_inventario), 'class="form-control input-sm"'); ?>
 						<?= errors("tipo_inventario[{$ubicacion->id}]"); ?>
 					</td>
-					<td>
+					<td class="<?= form_has_error_class("tipo_ubicacion[{$ubicacion->id}]") ?>">
 						<?= form_dropdown("tipo_ubicacion[{$ubicacion->id}]", $combo_tipos_ubicacion[$ubicacion->tipo_inventario], request("tipo_ubicacion[{$ubicacion->id}]", $ubicacion->id_tipo_ubicacion), 'class="form-control input-sm"'); ?>
 						<?= errors("tipo_ubicacion[{$ubicacion->id}]"); ?>
 					</td>
-					<td>
+					<td class="<?= form_has_error_class("ubicacion[{$ubicacion->id}]") ?>">
 						<?= form_input("ubicacion[{$ubicacion->id}]", request("ubicacion[{$ubicacion->id}]", $ubicacion->ubicacion),'maxlength="45" class="form-control input-sm"'); ?>
 						<?= errors("ubicacion[{$ubicacion->id}]"); ?>
 					</td>

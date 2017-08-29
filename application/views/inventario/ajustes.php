@@ -46,6 +46,7 @@
 			<?php $tab_index = 10; ?>
 			<?php $cat_ant = ''; ?>
 			<?php foreach ($detalle_ajustes as $detalle): ?>
+				<?php $text_error = $this->errors->has("stock_ajuste_{$detalle->id}") ? 'text-danger' : ''; ?>
 				<?php if ($cat_ant != $detalle->catalogo AND $cat_ant != ''): ?>
 					<tr class="active">
 						<td></td>
@@ -70,25 +71,25 @@
 				<?php endif; ?>
 
 				<tr class="<?= empty(errors("stock_ajuste_{$detalle->id}")) ? '' : 'danger' ?>">
-					<td class="text-center"><?= ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
-					<td class="text-left"><?= ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
-					<td class="text-center"><?= $detalle->lote; ?></td>
-					<td class="text-center"><?= $detalle->centro; ?></td>
-					<td class="text-center"><?= $detalle->almacen; ?></td>
-					<td class="text-center"><?= $detalle->ubicacion; ?></td>
-					<!-- <td class="text-center"><?php //echo $detalle->hu; ?></td> -->
-					<td class="text-center"><?= $detalle->hoja; ?></td>
-					<td class="text-center"><?= $detalle->um; ?></td>
-					<td class="text-center"><?= fmt_cantidad($detalle->stock_sap); ?></td>
-					<td class="text-center"><?= fmt_cantidad($detalle->stock_fisico); ?></td>
-					<td class="<?= form_has_error_class("stock_ajuste[{$detalle->id}]") ?>">
+					<td class="text-center <?=$text_error?>"><?= ($cat_ant != $detalle->catalogo) ? $detalle->catalogo : ''; ?></td>
+					<td class="text-left <?=$text_error?>"><?= ($cat_ant != $detalle->catalogo) ? $detalle->descripcion : ''; ?></td>
+					<td class="text-center <?=$text_error?>"><?= $detalle->lote; ?></td>
+					<td class="text-center <?=$text_error?>"><?= $detalle->centro; ?></td>
+					<td class="text-center <?=$text_error?>"><?= $detalle->almacen; ?></td>
+					<td class="text-center <?=$text_error?>"><?= $detalle->ubicacion; ?></td>
+					<!-- <td class="text-center <?=$text_error?>"><?php //echo $detalle->hu; ?></td> -->
+					<td class="text-center <?=$text_error?>"><?= $detalle->hoja; ?></td>
+					<td class="text-center <?=$text_error?>"><?= $detalle->um; ?></td>
+					<td class="text-center <?=$text_error?>"><?= fmt_cantidad($detalle->stock_sap); ?></td>
+					<td class="text-center <?=$text_error?>"><?= fmt_cantidad($detalle->stock_fisico); ?></td>
+					<td class="<?= form_has_error_class("stock_ajuste_{$detalle->id}") ?>">
 						<?= form_input("stock_ajuste_{$detalle->id}", request("stock_ajuste_{$detalle->id}", $detalle->stock_ajuste), 'class="form-control input-sm text-right" size="5" tabindex="'.$tab_index.'"'); ?>
-						<?= errors("stock_ajuste_{$detalle->id}"); ?>
+						<!-- <?= errors("stock_ajuste_{$detalle->id}"); ?> -->
 					</td>
-					<td class="text-center">
+					<td class="text-center <?=$text_error?>">
 						<?= fmt_cantidad($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste); ?>
 					</td>
-					<td class="text-center">
+					<td class="text-center <?=$text_error?>">
 						<?php if (($detalle->stock_fisico - $detalle->stock_sap + $detalle->stock_ajuste) > 0): ?>
 							<button class="btn btn-default btn-sm btn-warning" style="white-space: nowrap;">
 								<span class="fa fa-question-circle"></span>
