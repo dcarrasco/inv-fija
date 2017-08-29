@@ -74,12 +74,13 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function ingreso($hoja = 0)
 	{
+
 		if ($this->agent->is_mobile())
 		{
 			return $this->hoja_mobile($hoja);
 		}
 
-		if ( ! empty(request('hoja')))
+		if ( $hoja === 0 AND ! empty(request('hoja')))
 		{
 			redirect($this->router->class.'/ingreso/'.request('hoja'));
 		}

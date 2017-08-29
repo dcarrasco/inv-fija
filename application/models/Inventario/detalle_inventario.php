@@ -367,25 +367,26 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function rules_digitacion(Collection $data_collection)
 	{
-		$rules = [];
-
-		$data_collection->each(function($linea_detalle) use (&$rules) {
-			array_push($rules, [
-				'field' => 'stock_fisico_'.$linea_detalle->id,
-				'label' => 'Cantidad',
-				'rules' => 'trim|required|integer|greater_than[-1]'
-			]);
-			array_push($rules, [
-				'field' => 'hu_'.$linea_detalle->id,
-				'label' => 'HU',
-				'rules' => 'trim'
-			]);
-			array_push($rules, [
-				'field' => 'observacion_'.$linea_detalle->id,
-				'label' => 'Observacion',
-				'rules' => 'trim'
-			]);
-		});
+		return $data_collection->map(function($linea_detalle) {
+			return [
+				[
+					'field' => 'stock_fisico_'.$linea_detalle->id,
+					'label' => 'Cantidad',
+					'rules' => 'trim|required|integer|greater_than[-1]'
+				],
+				[
+					'field' => 'hu_'.$linea_detalle->id,
+					'label' => 'HU',
+					'rules' => 'trim'
+				],
+				[
+					'field' => 'observacion_'.$linea_detalle->id,
+					'label' => 'Observacion',
+					'rules' => 'trim'
+				]
+			];
+		})->flatten(1)
+		->all();
 
 	return $rules;
 	}
