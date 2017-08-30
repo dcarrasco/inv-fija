@@ -268,6 +268,7 @@ class Stock_sap_movil extends Stock_sap {
 
 		$arr_result = $this->db->get()->result_array();
 
+
 		$arr_stock_tmp01 = [];
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
 		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
@@ -380,6 +381,29 @@ class Stock_sap_movil extends Stock_sap {
 
 		return $arr_result;
 	}
+
+	// --------------------------------------------------------------------
+
+	public function get_ventas($fecha, $centro, $almacen)
+	{
+		$fecha_fin = $fecha;
+		$fecha_ini = date_create($fecha)->sub(new \DateInterval('P28D'))->format('Ymd');
+		$result = $this->db
+			->select('tm.tipo_movimiento, m.ce, m.alm, m.codigo_sap, sum(m.cantidad*t.signo) as cant', FALSE)
+			->from(config('bd_resmovimientos_sap').' m')
+			->join(config('bd_tipos_movs_cmv').' t', 't.cmv=m.cmv')
+			->join(config('bd_tipos_movimientos').' tm', 'tm.id=t.id_tipo_movimiento')
+			->where('m.fecha >=', $fecha_ini)
+			->where('m.fecha <=', $fecha_fin)
+			->where('m.ce', $centro)
+			->where('m.alm', $almacen)
+			->group_by('tm.tipo_movimiento, m.ce, m.alm, m.codigo_sap')
+			->get()
+			->result_array();
+
+		return collect($result);
+	}
+
 
 	// --------------------------------------------------------------------
 

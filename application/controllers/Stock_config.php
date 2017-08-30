@@ -100,6 +100,16 @@ class Stock_config extends Orm_controller {
 				'texto' => lang('stock_config_menu_cmv'),
 				'icon'  => 'th',
 			],
+			'tipo_movimiento' => [
+				'url'   => $this->router->class . '/listado/tipo_movimiento',
+				'texto' => lang('stock_config_menu_tipos_movs'),
+				'icon'  => 'th',
+			],
+			'tipo_movimiento_cmv' => [
+				'url'   => $this->router->class . '/listado/tipo_movimiento_cmv',
+				'texto' => lang('stock_config_menu_tipos_movs_cmv'),
+				'icon'  => 'th',
+			],
 		]);
 	}
 

@@ -17,6 +17,8 @@ $lang['stock_config_menu_proveedores']  = 'Proveedores';
 $lang['stock_config_menu_usuarios_sap'] = 'Usuarios SAP';
 $lang['stock_config_menu_alm_no_ing']   = 'Almacenes no ingresados';
 $lang['stock_config_menu_cmv']          = 'Clases de movimiento SAP';
+$lang['stock_config_menu_tipos_movs']   = 'Tipos de movimientos SAP';
+$lang['stock_config_menu_tipos_movs_cmv'] = 'Tipos y clases de movimientos SAP';
 
 $lang['stock_analisis_params']               = 'Par&aacute;metros consulta';
 $lang['stock_analisis_label_series']         = 'Series';

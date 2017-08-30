@@ -30,7 +30,7 @@ use \ORM_Field;
  * @link     localhost:1520
  *
  */
-class Clase_movimiento extends ORM_Model {
+class Tipo_movimiento extends ORM_Model {
 
 	/**
 	 * Constructor de la clase
@@ -38,37 +38,29 @@ class Clase_movimiento extends ORM_Model {
 	 * @param  string $id_tipoclasif Identificador del modulo
 	 * @return void
 	 */
-	public function __construct($cmv = NULL)
+	public function __construct($id = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
-				'tabla'        => config('bd_cmv_sap'),
-				'label'        => 'Clase de movimiento',
-				'label_plural' => 'Clases de movimiento',
-				'order_by'     => 'cmv',
+				'tabla'        => config('bd_tipos_movimientos'),
+				'label'        => 'Tipo de movimiento',
+				'label_plural' => 'Tipos de movimiento',
+				'order_by'     => 'tipo_movimiento',
 			],
 			'campos' => [
-				'cmv' => [
-					'label'          => 'C&oacute;digo movimiento',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'C&oacute;digo del movimiento. M&aacute;ximo 10 caracteres',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'des_cmv' => [
-					'label'          => 'Descripci&oacute;n del movimiento',
+				'id'     => ['tipo' => Orm_field::TIPO_ID],
+				'tipo_movimiento' => [
+					'label'          => 'Tipo de movimiento',
 					'tipo'           => Orm_field::TIPO_CHAR,
 					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del movimiento. M&aacute;ximo 50 caracteres.',
+					'texto_ayuda'    => 'Tipo de movimiento. M&aacute;ximo 50 caracteres',
 					'es_obligatorio' => TRUE,
-					//'es_unico'       => TRUE
+					'es_unico'       => TRUE
 				],
 			],
 		];
 
-		parent::__construct($cmv);
+		parent::__construct($id);
 	}
 
 	// --------------------------------------------------------------------
@@ -80,9 +72,9 @@ class Clase_movimiento extends ORM_Model {
 	 */
 	public function __toString()
 	{
-		return "{$this->cmv} {$this->des_cmv}";
+		return (string) $this->tipo_movimiento;
 	}
 
 }
-/* End of file Clase_movimiento.php */
-/* Location: ./application/models/Clase_movimiento.php */
+/* End of file Tipo_movimiento.php */
+/* Location: ./application/models/Stock/Tipo_movimiento.php */

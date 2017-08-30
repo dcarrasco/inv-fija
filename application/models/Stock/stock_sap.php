@@ -138,6 +138,36 @@ class Stock_sap extends \ORM_Model {
 		$this->datos_reporte = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
 		$this->campos_reporte = $this->campos_reporte_stock($mostrar);
 
+		if (count($filtrar['fecha'])===1 AND count($filtrar['almacenes'])===1 and in_array('material', $mostrar))
+		{
+			$fecha = collect($filtrar['fecha'])->first();
+			$centro_alm = collect($filtrar['almacenes'])->first();
+			list($centro, $almacen) = explode('~', $centro_alm );
+			$ventas = $this->get_ventas($fecha, $centro, $almacen);
+
+			$this->datos_reporte = collect($this->datos_reporte)->map(function($stock) use($ventas) {
+				$material = array_get($stock, 'cod_articulo');
+				$venta_mat = $ventas->first(function($venta) use ($material) {
+					return $venta['codigo_sap'] === $material;
+				});
+				$stock['ventas_eq'] = array_get($venta_mat, 'cant', 0);
+				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? 0 : 28*$stock['EQUIPOS']/$stock['ventas_eq'];
+				return $stock;
+			})->all();
+
+			$this->campos_reporte = collect($this->campos_reporte)->merge([
+				'ventas_eq' => [
+					'titulo' => 'ventas28',
+					'class'  => 'text-right',
+					'tipo'   => 'numero',
+				],
+				'rotacion_eq' => [
+					'titulo' => 'DOI',
+					'class'  => 'text-right',
+					'tipo'   => 'numero',
+					]])->all();
+		}
+
 		return $this->genera_reporte();
 	}
 
