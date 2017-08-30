@@ -94,6 +94,8 @@ class Stock_sap extends \ORM_Model {
 		'VAL_SIMCARD'   => ['titulo' => 'valor simcard', 'class' => 'text-right', 'tipo' => 'valor'],
 		'OTROS'         => ['titulo' => 'cant otros', 'class' => 'text-right', 'tipo' => 'numero'],
 		'VAL_OTROS'     => ['titulo' => 'valor otros', 'class' => 'text-right', 'tipo' => 'valor'],
+		'ventas_eq'     => ['titulo' => 'Ventas 28', 'class' => 'text-right', 'tipo' => 'numero'],
+		'rotacion_eq'   => ['titulo' => 'DOI', 'class' => 'text-right', 'tipo' => 'doi'],
 	];
 
 	// --------------------------------------------------------------------
@@ -135,8 +137,8 @@ class Stock_sap extends \ORM_Model {
 	 */
 	public function reporte($mostrar = [], $filtrar = [])
 	{
-		$this->datos_reporte = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
-		$this->campos_reporte = $this->campos_reporte_stock($mostrar);
+		// $this->datos_reporte = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
+		$this->datos_reporte = $this->get_stock($mostrar, $filtrar);
 
 		if (count($filtrar['fecha'])===1 AND count($filtrar['almacenes'])===1 and in_array('material', $mostrar))
 		{
@@ -151,22 +153,12 @@ class Stock_sap extends \ORM_Model {
 					return $venta['codigo_sap'] === $material;
 				});
 				$stock['ventas_eq'] = array_get($venta_mat, 'cant', 0);
-				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? 0 : 28*$stock['EQUIPOS']/$stock['ventas_eq'];
+				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
 				return $stock;
 			})->all();
-
-			$this->campos_reporte = collect($this->campos_reporte)->merge([
-				'ventas_eq' => [
-					'titulo' => 'ventas28',
-					'class'  => 'text-right',
-					'tipo'   => 'numero',
-				],
-				'rotacion_eq' => [
-					'titulo' => 'DOI',
-					'class'  => 'text-right',
-					'tipo'   => 'numero',
-					]])->all();
 		}
+
+		$this->campos_reporte = $this->campos_reporte_stock($mostrar);
 
 		return $this->genera_reporte();
 	}
@@ -181,32 +173,36 @@ class Stock_sap extends \ORM_Model {
 	 */
 	protected function campos_reporte_stock($mostrar = [])
 	{
+		$mostrar = collect($mostrar);
+dump($mostrar);
 		$campos = collect([])
-			->merge(in_array('fecha', $mostrar) ? ['fecha_stock'] : [])
-			->merge((in_array('sel_tiposalm', $mostrar) AND request('sel_tiposalm') !== 'sel_almacenes')
+			->merge($mostrar->contains('fecha') ? ['fecha_stock'] : [])
+			->merge(($mostrar->contains('sel_tiposalm') AND request('sel_tiposalm') !== 'sel_almacenes')
 				? ['tipo_almacen']
 				: []
 			)
-			->merge((in_array('almacen', $mostrar) OR request('sel_tiposalm') === 'sel_almacenes')
+			->merge(($mostrar->contains('almacen') OR request('sel_tiposalm') === 'sel_almacenes')
 				? ['centro', 'cod_almacen', 'des_almacen']
 				: []
 			)
-			->merge(in_array('acreedor', $mostrar) ? ['acreedor', 'des_proveedor'] : [])
-			->merge(in_array('material', $mostrar)
+			->merge($mostrar->contains('acreedor') ? ['acreedor', 'des_proveedor'] : [])
+			->merge($mostrar->contains('material')
 				? ($this->tipo_op === 'MOVIL' ? ['cod_articulo'] : ['material', 'descripcion'])
 				: []
 			)
-			->merge(in_array('lote', $mostrar) ? ['lote'] : [])
-			->merge(in_array('tipo_stock', $mostrar)
+			->merge($mostrar->contains('lote') ? ['lote'] : [])
+			->merge($mostrar->contains('tipo_stock')
 				? ($this->tipo_op === 'MOVIL'
 					? ['tipo_articulo', 'LU', 'BQ', 'CC', 'TT', 'OT', 'VAL_LU', 'VAL_BQ', 'VAL_CC', 'VAL_TT', 'VAL_OT', 'total', 'VAL_total']
 					: ['estado', 'cantidad', 'monto']
 				)
 				: ($this->tipo_op === 'MOVIL'
-					? ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS']
+					? ($mostrar->contains('material')
+						? ['total', 'VAL_total']
+						: ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS'])
 					: ['cantidad', 'monto']
 				)
-			);
+			)->merge($mostrar->contains('material') ? ['ventas_eq', 'rotacion_eq'] : '');
 
 		return $this->set_order_campos(collect($this->campos)->only($campos)->all(), 'fecha_stock');
 	}

@@ -85,6 +85,18 @@ trait Reporte {
 					($valor_desplegar === '') ? ' ' : $valor_desplegar
 				);
 			},
+			'doi' => function($valor) {
+				$color = is_null($valor)
+					? 'danger'
+					: ($valor <= 65
+						? 'success'
+						: ($valor <= 90
+							? 'warning'
+							: 'danger'));
+
+				return fmt_cantidad($valor, $valor < 10 ? 1 : 0, TRUE)
+					." <i class=\"fa fa-circle text-{$color}\"></i>";
+			},
 		];
 	}
 

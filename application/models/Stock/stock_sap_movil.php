@@ -57,34 +57,43 @@ class Stock_sap_movil extends Stock_sap {
 	 */
 	public function get_stock($mostrar = [], $filtrar = [])
 	{
-		$arr_result = [];
+		$mostrar = collect($mostrar);
+		$filtrar = collect($filtrar);
 
+		$result = $this->result_stock($mostrar, $filtrar);
+
+		return $this->procesa_result_stock($result, $mostrar, $filtrar);
+	}
+
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera stock operación movil desde la BD
+	 *
+	 * @param  array $mostrar Collection con campos a mostrar
+	 * @param  array $filtrar Collection con campos a filtrar
+	 * @return array
+	 */
+	protected function result_stock($mostrar, $filtrar)
+	{
 		// fecha stock
-		if (in_array('fecha', $mostrar))
+		if ($mostrar->contains('fecha'))
 		{
-			if (in_array('material', $mostrar))
-			{
-				$this->db->select('s.fecha_stock');
-				$this->db->group_by('s.fecha_stock');
-				$this->db->order_by('fecha_stock');
-			}
-			else
-			{
-				$this->db->select('s.fecha_stock');
-				$this->db->group_by('s.fecha_stock');
-				$this->db->order_by('fecha_stock');
-			}
+			$this->db->select('s.fecha_stock');
+			$this->db->group_by('s.fecha_stock');
+			$this->db->order_by('fecha_stock');
 		}
 
 		// tipo de almacen
-		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
+		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
 		{
 			$this->db->select('t.tipo as tipo_almacen');
 			$this->db->group_by('t.tipo');
 			$this->db->order_by('t.tipo');
 
 			// almacenes
-			if (in_array('almacen', $mostrar))
+			if ($mostrar->contains('almacen'))
 			{
 				$this->db->select('ta.centro, ta.cod_almacen, a.des_almacen');
 				$this->db->group_by('ta.centro, ta.cod_almacen, a.des_almacen');
@@ -99,7 +108,7 @@ class Stock_sap_movil extends Stock_sap {
 		}
 
 		// lotes
-		if (in_array('lote', $mostrar))
+		if ($mostrar->contains('lote'))
 		{
 			$this->db->select('s.lote');
 			$this->db->group_by('s.lote');
@@ -107,9 +116,9 @@ class Stock_sap_movil extends Stock_sap {
 		}
 
 		// tipos de articulos
-		if (in_array('tipo_articulo', $mostrar))
+		if ($mostrar->contains('tipo_articulo'))
 		{
-			if (in_array('material', $mostrar))
+			if ($mostrar->contains('material'))
 			{
 				$this->db->select("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END as tipo_articulo", FALSE);
 				$this->db->group_by("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", FALSE);
@@ -123,7 +132,7 @@ class Stock_sap_movil extends Stock_sap {
 		}
 
 		// materiales
-		if (in_array('material', $mostrar))
+		if ($mostrar->contains('material'))
 		{
 			$this->db->select('s.cod_articulo');
 			$this->db->group_by('s.cod_articulo');
@@ -132,9 +141,9 @@ class Stock_sap_movil extends Stock_sap {
 
 
 		// cantidades y tipos de stock
-		if (in_array('tipo_stock', $mostrar))
+		if ($mostrar->contains('tipo_stock'))
 		{
-			if (in_array('material', $mostrar))
+			if ($mostrar->contains('material'))
 			{
 				$this->db->select_sum('s.libre_utilizacion', 'LU');
 				$this->db->select_sum('s.bloqueado', 'BQ');
@@ -164,7 +173,7 @@ class Stock_sap_movil extends Stock_sap {
 			}
 		}
 
-		if (in_array('material', $mostrar))
+		if ($mostrar->contains('material'))
 		{
 			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)', 'total');
 			$this->db->select_sum('(s.VAL_LU + s.VAL_BQ + s.VAL_CQ + s.VAL_TT + s.VAL_OT)', 'VAL_total');
@@ -176,13 +185,13 @@ class Stock_sap_movil extends Stock_sap {
 		}
 
 		// tablas
-		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
+		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
 		{
 			$this->db->from(config('bd_tiposalm_sap') . ' t');
 			$this->db->join(config('bd_tipoalmacen_sap') . ' ta', 'ta.id_tipo = t.id_tipo');
 			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
 
-			if (in_array('material', $mostrar))
+			if ($mostrar->contains('material'))
 			{
 				$this->db->join(config('bd_stock_movil') . ' s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
 				//$this->db->join(config('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
@@ -194,7 +203,7 @@ class Stock_sap_movil extends Stock_sap {
 		}
 		else
 		{
-			if (in_array('material', $mostrar))
+			if ($mostrar->contains('material'))
 			{
 				$this->db->from(config('bd_stock_movil') . ' s');
 				$this->db->join(config('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'", 'left');
@@ -212,19 +221,19 @@ class Stock_sap_movil extends Stock_sap {
 
 		// condiciones
 		// fechas
-		if (array_key_exists('fecha', $filtrar))
+		if ($filtrar->has('fecha'))
 		{
-			$this->db->where_in('s.fecha_stock', $filtrar['fecha']);
+			$this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
 		}
 
 		// tipos de almacen
-		if ($filtrar['sel_tiposalm'] === 'sel_tiposalm')
+		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
 		{
-			$this->db->where_in('t.id_tipo', $filtrar['almacenes']);
+			$this->db->where_in('t.id_tipo', $filtrar->get('almacenes'));
 		}
 		else
 		{
-			$this->db->where_in("s.centro + '~' + s.cod_bodega", $filtrar['almacenes']);
+			$this->db->where_in("s.centro + '~' + s.cod_bodega", $filtrar->get('almacenes'));
 		}
 
 		// tipos de articulo
@@ -237,26 +246,26 @@ class Stock_sap_movil extends Stock_sap {
 
 		//$this->db->where('s.origen', 'SAP');
 
-		if (in_array('tipo_stock', $mostrar))
+		if ($mostrar->contains('tipo_stock'))
 		{
 			$arr_filtro_tipo_stock = [];
 
-			if (in_array('tipo_stock_equipos', $filtrar))
+			if ($filtrar->contains('tipo_stock_equipos'))
 			{
 				array_push($arr_filtro_tipo_stock, 'EQUIPOS');
 			}
 
-			if (in_array('tipo_stock_simcard', $filtrar))
+			if ($filtrar->contains('tipo_stock_simcard'))
 			{
 				array_push($arr_filtro_tipo_stock, 'SIMCARD');
 			}
 
-			if (in_array('tipo_stock_otros', $filtrar))
+			if ($fitrar->has('tipo_stock_otros'))
 			{
 				array_push($arr_filtro_tipo_stock, 'OTROS');
 			}
 
-			if (in_array('material', $mostrar))
+			if ($mostrar->contains('material'))
 			{
 				$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", $arr_filtro_tipo_stock);
 			}
@@ -266,13 +275,31 @@ class Stock_sap_movil extends Stock_sap {
 			}
 		}
 
-		$arr_result = $this->db->get()->result_array();
+		return $this->db->get()->result_array();
+	}
 
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera stock operación movil
+	 *
+	 * @param  array $result  Arreglo con datos de stock
+	 * @param  array $mostrar Collection con campos a mostrar
+	 * @param  array $filtrar Collection con campos a filtrar
+	 * @return array          Arreglo con stock
+	 */
+	protected function procesa_result_stock($arr_result = [], $mostrar = [], $filtrar = [])
+	{
+		if ($mostrar->contains('material'))
+		{
+			return $arr_result;
+		}
 
 		$arr_stock_tmp01 = [];
 		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
 		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
-		if (in_array('tipo_articulo', $mostrar) AND  ! in_array('tipo_stock', $mostrar))
+		if ($mostrar->contains('tipo_articulo') AND  ! $mostrar->contains('tipo_stock'))
 		{
 			foreach($arr_result as $registro)
 			{
