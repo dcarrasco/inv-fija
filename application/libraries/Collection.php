@@ -286,6 +286,19 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Determina si un elemento existe en la colección
+	 *
+	 * @param  string $elem Elemento a buscar
+	 * @return boolean        Indicador de existencia del indice
+	 */
+	public function contains($elem = NULL)
+	{
+		return in_array($elem, $this->items);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Transforma una colección en un string
 	 *
 	 * @param  string $glue String para concatenar los elementos de la coleccion
