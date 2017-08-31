@@ -65,6 +65,7 @@ class Stock_sap extends \ORM_Model {
 		'tipo_almacen'  => ['titulo' => 'tipo almacen'],
 		'centro'        => ['titulo' => 'centro'],
 		'cod_almacen'   => ['titulo' => 'cod almacen'],
+		'cod_bodega'    => ['titulo' => 'cod almacen'],
 		'des_almacen'   => ['titulo' => 'des almacen'],
 		'acreedor'      => ['titulo' => 'proveedor'],
 		'des_proveedor' => ['titulo' => 'des proveedor'],
@@ -144,7 +145,7 @@ class Stock_sap extends \ORM_Model {
 		{
 			$fecha = collect($filtrar['fecha'])->first();
 			$centro_alm = collect($filtrar['almacenes'])->first();
-			list($centro, $almacen) = explode('~', $centro_alm );
+			list($centro, $almacen) = explode($this->separador_campos, $centro_alm );
 			$ventas = $this->get_ventas($fecha, $centro, $almacen);
 
 			$this->datos_reporte = collect($this->datos_reporte)->map(function($stock) use($ventas) {
@@ -152,7 +153,7 @@ class Stock_sap extends \ORM_Model {
 				$venta_mat = $ventas->first(function($venta) use ($material) {
 					return $venta['codigo_sap'] === $material;
 				});
-				$stock['ventas_eq'] = array_get($venta_mat, 'cant', 0);
+				$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
 				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
 				return $stock;
 			})->all();
@@ -174,7 +175,7 @@ class Stock_sap extends \ORM_Model {
 	protected function campos_reporte_stock($mostrar = [])
 	{
 		$mostrar = collect($mostrar);
-dump($mostrar);
+
 		$campos = collect([])
 			->merge($mostrar->contains('fecha') ? ['fecha_stock'] : [])
 			->merge(($mostrar->contains('sel_tiposalm') AND request('sel_tiposalm') !== 'sel_almacenes')
@@ -182,7 +183,7 @@ dump($mostrar);
 				: []
 			)
 			->merge(($mostrar->contains('almacen') OR request('sel_tiposalm') === 'sel_almacenes')
-				? ['centro', 'cod_almacen', 'des_almacen']
+				? ['centro', 'cod_bodega', 'des_almacen']
 				: []
 			)
 			->merge($mostrar->contains('acreedor') ? ['acreedor', 'des_proveedor'] : [])

@@ -77,205 +77,89 @@ class Stock_sap_movil extends Stock_sap {
 	 */
 	protected function result_stock($mostrar, $filtrar)
 	{
+		$select_tipo_articulo = "
+CASE
+	WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD'
+	WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS'
+	ELSE 'OTROS'
+END";
+
+		// SELECT ==============================================================
 		// fecha stock
-		if ($mostrar->contains('fecha'))
-		{
-			$this->db->select('s.fecha_stock');
-			$this->db->group_by('s.fecha_stock');
-			$this->db->order_by('fecha_stock');
-		}
+		$mostrar->contains('fecha') AND $this->db
+			->select('s.fecha_stock')->group_by('s.fecha_stock')->order_by('s.fecha_stock');
 
 		// tipo de almacen
-		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
-		{
-			$this->db->select('t.tipo as tipo_almacen');
-			$this->db->group_by('t.tipo');
-			$this->db->order_by('t.tipo');
+		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') AND $this->db
+			->select('t.tipo as tipo_almacen')->group_by('t.tipo')->order_by('t.tipo');
 
-			// almacenes
-			if ($mostrar->contains('almacen'))
-			{
-				$this->db->select('ta.centro, ta.cod_almacen, a.des_almacen');
-				$this->db->group_by('ta.centro, ta.cod_almacen, a.des_almacen');
-				$this->db->order_by('ta.centro, ta.cod_almacen, a.des_almacen');
-			}
-		}
-		else
+		// almacenes
+		if ($filtrar->get('sel_tiposalm') === 'sel_almacenes' OR $mostrar->contains('almacen'))
 		{
-			$this->db->select('a.centro, s.cod_bodega as cod_almacen, a.des_almacen');
-			$this->db->group_by('a.centro, s.cod_bodega, a.des_almacen');
-			$this->db->order_by('a.centro, s.cod_bodega, a.des_almacen');
+			$this->db->select('a.centro')->group_by('a.centro')->order_by('a.centro');
+			$this->db->select('s.cod_bodega')->group_by('s.cod_bodega')->order_by('s.cod_bodega');
+			$this->db->select('a.des_almacen')->group_by('a.des_almacen')->order_by('a.des_almacen');
 		}
 
 		// lotes
-		if ($mostrar->contains('lote'))
-		{
-			$this->db->select('s.lote');
-			$this->db->group_by('s.lote');
-			$this->db->order_by('lote');
-		}
+		$mostrar->contains('lote') AND $this->db
+			->select('s.lote')->group_by('s.lote')->order_by('lote');
 
 		// tipos de articulos
-		if ($mostrar->contains('tipo_articulo'))
-		{
-			if ($mostrar->contains('material'))
-			{
-				$this->db->select("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END as tipo_articulo", FALSE);
-				$this->db->group_by("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", FALSE);
-			}
-			else
-			{
-				$this->db->select('s.tipo_articulo');
-				$this->db->group_by('s.tipo_articulo');
-				$this->db->order_by('tipo_articulo');
-			}
-		}
+		$mostrar->contains('tipo_articulo') AND $this->db
+			->select("{$select_tipo_articulo} as tipo_articulo", FALSE)->group_by($select_tipo_articulo, FALSE);
 
 		// materiales
-		if ($mostrar->contains('material'))
-		{
-			$this->db->select('s.cod_articulo');
-			$this->db->group_by('s.cod_articulo');
-			$this->db->order_by('s.cod_articulo');
-		}
-
+		$mostrar->contains('material') AND $this->db->select('s.cod_articulo')->group_by('s.cod_articulo')->order_by('s.cod_articulo');
 
 		// cantidades y tipos de stock
-		if ($mostrar->contains('tipo_stock'))
-		{
-			if ($mostrar->contains('material'))
-			{
-				$this->db->select_sum('s.libre_utilizacion', 'LU');
-				$this->db->select_sum('s.bloqueado', 'BQ');
-				$this->db->select_sum('s.contro_calidad', 'CC');
-				$this->db->select_sum('s.transito_traslado', 'TT');
-				$this->db->select_sum('s.otros', 'OT');
+		$this->db->select(
+			$mostrar->contains('tipo_stock')
+				? 'sum(s.libre_utilizacion) as LU, sum(s.bloqueado) as BQ, sum(s.contro_calidad) as CC, sum(s.transito_traslado) as TT, sum(s.otros) as OT, sum(s.VAL_LU) as VAL_LU, sum(s.VAL_BQ) as VAL_BQ, sum(s.VAL_CQ) as VAL_CC, sum(s.VAL_TT) as VAL_TT, sum(s.VAL_OT) as VAL_OT'
+				: 'sum(s.libre_utilizacion+s.bloqueado+s.contro_calidad+s.transito_traslado+s.otros) as total, sum(s.VAL_LU+s.VAL_BQ+s.VAL_CQ+s.VAL_TT+s.VAL_OT) as VAL_total'
+			, FALSE);
 
-				$this->db->select_sum('(s.VAL_LU)', 'VAL_LU');
-				$this->db->select_sum('(s.VAL_BQ)', 'VAL_BQ');
-				$this->db->select_sum('(s.VAL_CQ)', 'VAL_CC');
-				$this->db->select_sum('(s.VAL_TT)', 'VAL_TT');
-				$this->db->select_sum('(s.VAL_OT)', 'VAL_OT');
-			}
-			else
-			{
-				$this->db->select_sum('s.LU', 'LU');
-				$this->db->select_sum('s.BQ', 'BQ');
-				$this->db->select_sum('s.CC', 'CC');
-				$this->db->select_sum('s.TT', 'TT');
-				$this->db->select_sum('s.OT', 'OT');
+		// TABLAS ==============================================================
+		$this->db->from(config('bd_stock_movil').' s')
+			->join(config('bd_almacenes_sap').' a', 'a.centro=s.centro and a.cod_almacen=s.cod_bodega', 'left');
 
-				$this->db->select_sum('s.V_LU', 'VAL_LU');
-				$this->db->select_sum('s.V_BQ', 'VAL_BQ');
-				$this->db->select_sum('s.V_CC', 'VAL_CC');
-				$this->db->select_sum('s.V_TT', 'VAL_TT');
-				$this->db->select_sum('s.V_OT', 'VAL_OT');
-			}
-		}
+		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') AND $this->db
+				->join(config('bd_tipoalmacen_sap').' ta', 's.centro=ta.centro and s.cod_bodega=ta.cod_almacen')
+				->join(config('bd_tiposalm_sap').' t', 't.id_tipo = ta.id_tipo');
 
-		if ($mostrar->contains('material'))
-		{
-			$this->db->select_sum('(s.libre_utilizacion + s.bloqueado + s.contro_calidad + s.transito_traslado + s.otros)', 'total');
-			$this->db->select_sum('(s.VAL_LU + s.VAL_BQ + s.VAL_CQ + s.VAL_TT + s.VAL_OT)', 'VAL_total');
-		}
-		else
-		{
-			$this->db->select_sum('s.cant', 'total');
-			$this->db->select_sum('s.monto', 'VAL_total');
-		}
-
-		// tablas
-		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
-		{
-			$this->db->from(config('bd_tiposalm_sap') . ' t');
-			$this->db->join(config('bd_tipoalmacen_sap') . ' ta', 'ta.id_tipo = t.id_tipo');
-			$this->db->join(config('bd_almacenes_sap') . ' a', 'a.centro = ta.centro and a.cod_almacen=ta.cod_almacen', 'left');
-
-			if ($mostrar->contains('material'))
-			{
-				$this->db->join(config('bd_stock_movil') . ' s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
-				//$this->db->join(config('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'",'left');
-			}
-			else
-			{
-				$this->db->join(config('bd_stock_movil_res01') . ' s', 's.centro = ta.centro and s.cod_bodega=ta.cod_almacen');
-			}
-		}
-		else
-		{
-			if ($mostrar->contains('material'))
-			{
-				$this->db->from(config('bd_stock_movil') . ' s');
-				$this->db->join(config('bd_pmp') . ' p', "p.centro = s.centro and p.material=s.cod_articulo and p.lote=s.lote and p.estado_stock='01'", 'left');
-				$this->db->join(config('bd_almacenes_sap') . ' a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
-			}
-			else
-			{
-				$this->db->from(config('bd_stock_movil_res01') . ' s');
-				$this->db->join(config('bd_almacenes_sap') . ' a', 's.centro=a.centro and s.cod_bodega=a.cod_almacen', 'left');
-			}
-
-
-		}
-
-
-		// condiciones
+		// CONDICIONES =========================================================
 		// fechas
-		if ($filtrar->has('fecha'))
-		{
-			$this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
-		}
+		$filtrar->has('fecha') AND $this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
 
 		// tipos de almacen
-		if ($filtrar->get('sel_tiposalm') === 'sel_tiposalm')
+		$this->db
+			->where_in(
+				$filtrar->get('sel_tiposalm') === 'sel_tiposalm'
+					? 't.id_tipo' : "s.centro+'{$this->separador_campos}'+s.cod_bodega",
+				$filtrar->get('almacenes'))
+			->where('s.origen', 'SAP');
+
+		$filtro_tipo_articulo = [];
+
+		if ($filtrar->has('tipo_articulo_equipos'))
 		{
-			$this->db->where_in('t.id_tipo', $filtrar->get('almacenes'));
-		}
-		else
-		{
-			$this->db->where_in("s.centro + '~' + s.cod_bodega", $filtrar->get('almacenes'));
-		}
-
-		// tipos de articulo
-		/*
-		if (array_key_exists('tipo_articulo', $filtrar))
-		{
-			$this->db->where_in('tipo_articulo', $filtrar['tipo_articulo']);
-		}
-		*/
-
-		//$this->db->where('s.origen', 'SAP');
-
-		if ($mostrar->contains('tipo_stock'))
-		{
-			$arr_filtro_tipo_stock = [];
-
-			if ($filtrar->contains('tipo_stock_equipos'))
-			{
-				array_push($arr_filtro_tipo_stock, 'EQUIPOS');
-			}
-
-			if ($filtrar->contains('tipo_stock_simcard'))
-			{
-				array_push($arr_filtro_tipo_stock, 'SIMCARD');
-			}
-
-			if ($fitrar->has('tipo_stock_otros'))
-			{
-				array_push($arr_filtro_tipo_stock, 'OTROS');
-			}
-
-			if ($mostrar->contains('material'))
-			{
-				$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", $arr_filtro_tipo_stock);
-			}
-			else
-			{
-				$this->db->where_in('s.tipo_articulo', $arr_filtro_tipo_stock);
-			}
+			$filtro_tipo_articulo[] = 'EQUIPOS';
 		}
 
-		return $this->db->get()->result_array();
+		if ($filtrar->has('tipo_articulo_simcard'))
+		{
+			$filtro_tipo_articulo[] = 'SIMCARD';
+		}
+
+		if ($filtrar->has('tipo_articulo_otros'))
+		{
+			$filtro_tipo_articulo[] = 'OTROS';
+		}
+
+		$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", $filtro_tipo_articulo);
+
+
+		return collect($this->db->get()->result_array());
 	}
 
 
@@ -284,129 +168,56 @@ class Stock_sap_movil extends Stock_sap {
 	/**
 	 * Recupera stock operación movil
 	 *
-	 * @param  array $result  Arreglo con datos de stock
+	 * @param  array $result  Collection con datos de stock
 	 * @param  array $mostrar Collection con campos a mostrar
 	 * @param  array $filtrar Collection con campos a filtrar
 	 * @return array          Arreglo con stock
 	 */
-	protected function procesa_result_stock($arr_result = [], $mostrar = [], $filtrar = [])
+	protected function procesa_result_stock($result, $mostrar = [], $filtrar = [])
 	{
 		if ($mostrar->contains('material'))
 		{
-			return $arr_result;
+			return $result;
 		}
 
-		$arr_stock_tmp01 = [];
-		// si tenemos tipos de articulo y no tenemos el detalle de estados de stock,
-		// entonces hacemos columnas con los totales de tipos_articulo (equipos, simcards y otros)
-		if ($mostrar->contains('tipo_articulo') AND  ! $mostrar->contains('tipo_stock'))
-		{
-			foreach($arr_result as $registro)
-			{
-				$arr_reg = [];
-				$llave_total = '';
-				$valor_total = 0;
-				$valor_monto = 0;
 
-				foreach ($registro as $campo_key => $campo_val)
-				{
-					if ($campo_key === 'tipo_articulo')
-					{
-						$llave_total = $campo_val;
-					}
-					elseif ($campo_key === 'total')
-					{
-						$valor_total = $campo_val;
-					}
-					elseif ($campo_key === 'VAL_total')
-					{
-						$valor_monto = $campo_val;
-					}
-					else
-					{
-						$arr_reg[$campo_key] = $campo_val;
-					}
-				}
-				$arr_reg[$llave_total] = $valor_total;
-				$arr_reg['VAL_' . $llave_total] = $valor_monto;
-				array_push($arr_stock_tmp01, $arr_reg);
-			}
+		// agrega llave
+		$result = collect($result)->map(function($registro) {
+			$reg = $registro;
+			unset($reg['tipo_articulo']);
+			unset($reg['total']);
+			unset($reg['VAL_total']);
+			$registro['_llave_'] = collect($reg)->implode();
 
-			$arr_stock = [];
-			$llave_ant = '';
-			$i = 0;
+			return $registro;
+		});
 
-			foreach($arr_stock_tmp01 as $registro)
-			{
-				$i += 1;
-				$llave_act = '';
-				$llave_total = '';
-				$llave_monto = '';
-				$valor_total = 0;
-				$valor_monto = 0;
+		// registro unicos
+		$result_temp = collect($result)->map(function($registro) {
+			unset($registro['tipo_articulo']);
+			unset($registro['total']);
+			unset($registro['VAL_total']);
+			$registro['EQUIPOS']     = 0;
+			$registro['VAL_EQUIPOS'] = 0;
+			$registro['SIMCARD']     = 0;
+			$registro['VAL_SIMCARD'] = 0;
+			$registro['OTROS']       = 0;
+			$registro['VAL_OTROS']   = 0;
 
-				// determina la llave actual y el valor del campo total
-				$arr_tmp = [];
-				foreach ($registro as $campo_key => $campo_val)
-				{
-					if ($campo_key === 'EQUIPOS' OR $campo_key === 'OTROS' OR $campo_key === 'SIMCARD')
-					{
-						$llave_total = $campo_key;
-						$valor_total = $campo_val;
-					}
-					elseif ($campo_key === 'VAL_EQUIPOS' OR $campo_key === 'VAL_OTROS' OR $campo_key === 'VAL_SIMCARD')
-					{
-						$llave_monto = $campo_key;
-						$valor_monto = $campo_val;
-					}
-					else
-					{
-						$llave_act .= $campo_val;
-						$arr_tmp[$campo_key] = $campo_val;
-					}
-				}
+			return $registro;
+		})->unique();
 
-				// si la llave es distinta y no es el primer registro, agregamos el arreglo anterior
-				// y guardamos los nuevos valores en el arreglo anterior
-				if ($llave_act !== $llave_ant)
-				{
-					if ($i !== 1)
-					{
-						//echo "i: $i llave_act: $llave_act llave_ant: $llave_ant<br>";
-						array_push($arr_stock, $arr_ant);
-					}
+		return $result_temp->map(function($registro) use ($result) {
+			$regs = $result->filter(function($reg) use ($registro) {
+				return $reg['_llave_'] === $registro['_llave_'];
+			});
 
-					$arr_ant = [];
-					$arr_ant = $arr_tmp;
-					$arr_ant['EQUIPOS']     = 0;
-					$arr_ant['VAL_EQUIPOS'] = 0;
-					$arr_ant['SIMCARD']     = 0;
-					$arr_ant['VAL_SIMCARD'] = 0;
-					$arr_ant['OTROS']       = 0;
-					$arr_ant['VAL_OTROS']   = 0;
-					$arr_ant[$llave_total] = $valor_total;
-					$arr_ant[$llave_monto] = $valor_monto;
-
-					$llave_ant = $llave_act;
-				}
-				// si la llave es la misma, solo agregamos el valor de equipos, otros o simcard
-				else
-				{
-					$arr_ant[$llave_total] = $valor_total;
-					$arr_ant[$llave_monto] = $valor_monto;
-				}
-			}
-
-			// finalmente agregamos el ultimo valor del arreglo anterior
-			if ($i > 0)
-			{
-				array_push($arr_stock, $arr_ant);
-			}
-
-			$arr_result = $arr_stock;
-		}
-
-		return $arr_result;
+			$regs->each(function($reg) use(&$registro) {
+				$registro[$reg['tipo_articulo']] = $reg['total'];
+				$registro['VAL_'.$reg['tipo_articulo']] = $reg['VAL_total'];
+			});
+			return $registro;
+		});
 	}
 
 	// --------------------------------------------------------------------

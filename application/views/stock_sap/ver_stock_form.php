@@ -94,15 +94,15 @@
 						<?php if ($tipo_op === 'MOVIL'): ?>
 						<div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_equipos', 'tipo_stock_equipos', request('tipo_stock_equipos', TRUE)); ?>
+								<?= form_checkbox('tipo_articulo_equipos', '1', request('tipo_articulo_equipos', request()->count() > 0 ? FALSE : TRUE)); ?>
 								{_stock_sap_radio_equipos_}
 							</div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_simcard', 'tipo_stock_simcard', request('tipo_stock_simcard', TRUE)); ?>
+								<?= form_checkbox('tipo_articulo_simcard', '1', request('tipo_articulo_simcard', request()->count() > 0 ? FALSE : TRUE)); ?>
 								{_stock_sap_radio_sim_}
 							</div>
 							<div class="checkbox-inline">
-								<?= form_checkbox('tipo_stock_otros', 'tipo_stock_otros', request('tipo_stock_otros', TRUE)); ?>
+								<?= form_checkbox('tipo_articulo_otros', '1', request('tipo_articulo_otros', request()->count() > 0 ? FALSE : TRUE)); ?>
 								{_stock_sap_radio_otros_}
 							</div>
 						</div>
