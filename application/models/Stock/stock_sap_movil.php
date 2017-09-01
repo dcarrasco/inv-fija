@@ -259,6 +259,7 @@ END";
 			->where('m.fecha <=', $fecha_fin)
 			->where('m.ce', $centro)
 			->where('m.alm', $almacen)
+			->where('tm.tipo_movimiento', 'Venta CL25')
 			->group_by('tm.tipo_movimiento, m.ce, m.alm, m.codigo_sap')
 			->get()
 			->result_array();
