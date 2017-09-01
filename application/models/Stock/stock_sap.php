@@ -184,7 +184,7 @@ class Stock_sap extends \ORM_Model {
 						: ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS'])
 					: ['cantidad', 'monto']
 				)
-			)->merge($mostrar->contains('material' AND ! $mostrar->contains('tipo_stock')) ? ['ventas_eq', 'rotacion_eq'] : '');
+			)->merge(($mostrar->contains('material') AND ! $mostrar->contains('tipo_stock')) ? ['ventas_eq', 'rotacion_eq'] : []);
 
 		return $this->set_order_campos(collect($this->campos)->only($campos)->all(), 'fecha_stock');
 	}

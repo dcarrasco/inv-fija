@@ -63,29 +63,24 @@ class Stock_sap_movil extends Stock_sap {
 
 		$result = $this->procesa_result_stock($result, $mostrar, $filtrar);
 
-		if (count($filtrar->get('fecha')) === 1
-			AND count($filtrar->get('almacenes')) === 1
-			AND $mostrar->contains('material')
-			AND ! $mostrar->contains('tipo_stock')
-		)
-		{
-			$fecha = collect($filtrar->get('fecha'))->first();
-			$centro_alm = collect($filtrar->get('almacenes'))->first();
-			list($centro, $almacen) = explode($this->separador_campos, $centro_alm);
+		$ventas = $this->get_ventas($mostrar, $filtrar);
 
-			$ventas = $this->get_ventas($fecha, $centro, $almacen);
+		$result = collect($result)->map(function($stock) use($ventas) {
+			$material = array_get($stock, 'cod_articulo');
+			$fecha    = fmt_fecha(array_get($stock, 'fecha_stock'), 'Ymd');
+			$ce_alm   = array_get($stock, 'centro').array_get($stock, 'cod_bodega');
 
-			$result = collect($result)->map(function($stock) use($ventas) {
-				$material = array_get($stock, 'cod_articulo');
-				$venta_mat = $ventas->first(function($venta) use ($material) {
-					return $venta['codigo_sap'] === $material;
-				});
-				$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
-				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
+			$venta_mat = $ventas->first(function($venta) use ($material, $fecha, $ce_alm) {
+				return $venta['codigo_sap']        === $material
+					AND $venta['fecha']            === $fecha
+					AND $venta['ce'].$venta['alm'] === $ce_alm;
+			});
 
-				return $stock;
-			})->all();
-		}
+			$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
+			$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
+
+			return $stock;
+		})->all();
 
 		return $result;
 
@@ -232,12 +227,31 @@ END";
 
 	// --------------------------------------------------------------------
 
-	public function get_ventas($fecha, $centro, $almacen)
+	public function get_ventas($mostrar, $filtrar)
+	{
+		if ($mostrar->contains('material') AND ! $mostrar->contains('tipo_stock'))
+		{
+			$fechas = collect($filtrar->get('fecha'));
+			$centros_almacenes = collect($filtrar->get('almacenes'));
+
+			return $fechas->map(function($fecha) use ($centros_almacenes) {
+				return $centros_almacenes->map(function($centro_alm) use ($fecha) {
+					return $this->get_ventas_fecha_almacen($fecha, $centro_alm);
+				})->flatten(1);
+			})->flatten(1);
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_ventas_fecha_almacen($fecha, $centro_almacen)
 	{
 		$fecha_fin = $fecha;
 		$fecha_ini = date_create($fecha)->sub(new \DateInterval('P28D'))->format('Ymd');
+		list($centro, $almacen) = explode($this->separador_campos, $centro_almacen);
+
 		$result = $this->db
-			->select('tm.tipo_movimiento, m.ce, m.alm, m.codigo_sap, sum(m.cantidad*t.signo) as cant', FALSE)
+			->select($fecha_fin.' as fecha, tm.tipo_movimiento, m.ce, m.alm, m.codigo_sap, sum(m.cantidad*t.signo) as cant', FALSE)
 			->from(config('bd_resmovimientos_sap').' m')
 			->join(config('bd_tipos_movs_cmv').' t', 't.cmv=m.cmv')
 			->join(config('bd_tipos_movimientos').' tm', 'tm.id=t.id_tipo_movimiento')
