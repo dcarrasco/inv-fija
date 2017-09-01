@@ -59,10 +59,36 @@ class Stock_sap_movil extends Stock_sap {
 	{
 		$mostrar = collect($mostrar);
 		$filtrar = collect($filtrar);
+		$result  = $this->result_stock($mostrar, $filtrar);
 
-		$result = $this->result_stock($mostrar, $filtrar);
+		$result = $this->procesa_result_stock($result, $mostrar, $filtrar);
 
-		return $this->procesa_result_stock($result, $mostrar, $filtrar);
+		if (count($filtrar->get('fecha')) === 1
+			AND count($filtrar->get('almacenes')) === 1
+			AND $mostrar->contains('material')
+			AND ! $mostrar->contains('tipo_stock')
+		)
+		{
+			$fecha = collect($filtrar->get('fecha'))->first();
+			$centro_alm = collect($filtrar->get('almacenes'))->first();
+			list($centro, $almacen) = explode($this->separador_campos, $centro_alm);
+
+			$ventas = $this->get_ventas($fecha, $centro, $almacen);
+
+			$result = collect($result)->map(function($stock) use($ventas) {
+				$material = array_get($stock, 'cod_articulo');
+				$venta_mat = $ventas->first(function($venta) use ($material) {
+					return $venta['codigo_sap'] === $material;
+				});
+				$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
+				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
+
+				return $stock;
+			})->all();
+		}
+
+		return $result;
+
 	}
 
 
@@ -114,9 +140,10 @@ END";
 
 		// cantidades y tipos de stock
 		$this->db->select(
-			$mostrar->contains('tipo_stock')
-				? 'sum(s.libre_utilizacion) as LU, sum(s.bloqueado) as BQ, sum(s.contro_calidad) as CC, sum(s.transito_traslado) as TT, sum(s.otros) as OT, sum(s.VAL_LU) as VAL_LU, sum(s.VAL_BQ) as VAL_BQ, sum(s.VAL_CQ) as VAL_CC, sum(s.VAL_TT) as VAL_TT, sum(s.VAL_OT) as VAL_OT'
-				: 'sum(s.libre_utilizacion+s.bloqueado+s.contro_calidad+s.transito_traslado+s.otros) as total, sum(s.VAL_LU+s.VAL_BQ+s.VAL_CQ+s.VAL_TT+s.VAL_OT) as VAL_total'
+			($mostrar->contains('tipo_stock')
+				? 'sum(s.libre_utilizacion) as LU, sum(s.bloqueado) as BQ, sum(s.contro_calidad) as CC, sum(s.transito_traslado) as TT, sum(s.otros) as OT, sum(s.VAL_LU) as VAL_LU, sum(s.VAL_BQ) as VAL_BQ, sum(s.VAL_CQ) as VAL_CC, sum(s.VAL_TT) as VAL_TT, sum(s.VAL_OT) as VAL_OT, '
+				: '')
+			.'sum(s.libre_utilizacion+s.bloqueado+s.contro_calidad+s.transito_traslado+s.otros) as total, sum(s.VAL_LU+s.VAL_BQ+s.VAL_CQ+s.VAL_TT+s.VAL_OT) as VAL_total'
 			, FALSE);
 
 		// TABLAS ==============================================================
@@ -132,36 +159,20 @@ END";
 		$filtrar->has('fecha') AND $this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
 
 		// tipos de almacen
-		$this->db
-			->where_in(
-				$filtrar->get('sel_tiposalm') === 'sel_tiposalm'
-					? 't.id_tipo' : "s.centro+'{$this->separador_campos}'+s.cod_bodega",
-				$filtrar->get('almacenes'))
-			->where('s.origen', 'SAP');
+		$this->db->where_in(
+			$filtrar->get('sel_tiposalm') === 'sel_tiposalm'
+				? 't.id_tipo' : "s.centro+'{$this->separador_campos}'+s.cod_bodega",
+			$filtrar->get('almacenes')
+		);
 
-		$filtro_tipo_articulo = [];
-
-		if ($filtrar->has('tipo_articulo_equipos'))
-		{
-			$filtro_tipo_articulo[] = 'EQUIPOS';
-		}
-
-		if ($filtrar->has('tipo_articulo_simcard'))
-		{
-			$filtro_tipo_articulo[] = 'SIMCARD';
-		}
-
-		if ($filtrar->has('tipo_articulo_otros'))
-		{
-			$filtro_tipo_articulo[] = 'OTROS';
-		}
-
-		$this->db->where_in("CASE WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD' WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS' ELSE 'OTROS' END", $filtro_tipo_articulo);
-
+		// tipos de articulo
+		$this->db->where_in($select_tipo_articulo, $filtrar
+			->only(['tipo_articulo_equipos','tipo_articulo_simcard','tipo_articulo_otros'])
+			->all()
+		)->where('s.origen', 'SAP');
 
 		return collect($this->db->get()->result_array());
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -175,11 +186,10 @@ END";
 	 */
 	protected function procesa_result_stock($result, $mostrar = [], $filtrar = [])
 	{
-		if ($mostrar->contains('material'))
+		if ($mostrar->contains('material') OR $mostrar->contains('tipo_stock'))
 		{
 			return $result;
 		}
-
 
 		// agrega llave
 		$result = collect($result)->map(function($registro) {
@@ -369,7 +379,6 @@ GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO
 ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 
 		return $this->db->query($sql_query, [$tipo_op, $fecha]);
-
 	}
 
 

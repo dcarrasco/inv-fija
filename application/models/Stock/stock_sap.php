@@ -140,25 +140,6 @@ class Stock_sap extends \ORM_Model {
 	{
 		// $this->datos_reporte = cached_query('mostrar_stock'.$this->tipo_op.serialize($mostrar).serialize($filtrar), $this, 'get_stock', [$mostrar, $filtrar]);
 		$this->datos_reporte = $this->get_stock($mostrar, $filtrar);
-
-		if (count($filtrar['fecha'])===1 AND count($filtrar['almacenes'])===1 and in_array('material', $mostrar))
-		{
-			$fecha = collect($filtrar['fecha'])->first();
-			$centro_alm = collect($filtrar['almacenes'])->first();
-			list($centro, $almacen) = explode($this->separador_campos, $centro_alm );
-			$ventas = $this->get_ventas($fecha, $centro, $almacen);
-
-			$this->datos_reporte = collect($this->datos_reporte)->map(function($stock) use($ventas) {
-				$material = array_get($stock, 'cod_articulo');
-				$venta_mat = $ventas->first(function($venta) use ($material) {
-					return $venta['codigo_sap'] === $material;
-				});
-				$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
-				$stock['rotacion_eq'] = empty($stock['ventas_eq']) ? NULL : 28*$stock['total']/$stock['ventas_eq'];
-				return $stock;
-			})->all();
-		}
-
 		$this->campos_reporte = $this->campos_reporte_stock($mostrar);
 
 		return $this->genera_reporte();
@@ -203,7 +184,7 @@ class Stock_sap extends \ORM_Model {
 						: ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS'])
 					: ['cantidad', 'monto']
 				)
-			)->merge($mostrar->contains('material') ? ['ventas_eq', 'rotacion_eq'] : '');
+			)->merge($mostrar->contains('material' AND ! $mostrar->contains('tipo_stock')) ? ['ventas_eq', 'rotacion_eq'] : '');
 
 		return $this->set_order_campos(collect($this->campos)->only($campos)->all(), 'fecha_stock');
 	}
