@@ -61,52 +61,52 @@ class Stock_config extends Orm_controller {
 
 		$this->set_menu_modulo([
 			'almacen_sap' => [
-				'url'   => $this->router->class . '/listado/almacen_sap',
+				'url'   => "{$this->router->class}/listado/almacen_sap",
 				'texto' => lang('stock_config_menu_alm'),
 				'icon'  => 'home',
 			],
 			'tipoalmacen_sap' => [
-				'url'   => $this->router->class . '/listado/tipoalmacen_sap',
+				'url'   => "{$this->router->class}/listado/tipoalmacen_sap",
 				'texto' => lang('stock_config_menu_tipalm'),
 				'icon'  => 'th',
 			],
 			'clasifalmacen_sap' => [
-				'url'   => $this->router->class . '/listado/clasifalmacen_sap',
+				'url'   => "{$this->router->class}/listado/clasifalmacen_sap",
 				'texto' => lang('stock_config_menu_clasifalm'),
 				'icon'  => 'th',
 			],
 			'tipo_clasifalm' => [
-				'url'   => $this->router->class . '/listado/tipo_clasifalm',
+				'url'   => "{$this->router->class}/listado/tipo_clasifalm",
 				'texto' => lang('stock_config_menu_tipo_clasifalm'),
 				'icon'  => 'th',
 			],
 			'proveedor' => [
-				'url'   => $this->router->class . '/listado/proveedor',
+				'url'   => "{$this->router->class}/listado/proveedor",
 				'texto' => lang('stock_config_menu_proveedores'),
 				'icon'  => 'shopping-cart',
 			],
 			'usuario_sap' => [
-				'url'   => $this->router->class . '/listado/usuario_sap',
+				'url'   => "{$this->router->class}/listado/usuario_sap",
 				'texto' => lang('stock_config_menu_usuarios_sap'),
 				'icon'  => 'user',
 			],
 			'almacenes_no_ingresados' => [
-				'url'   => $this->router->class . '/almacenes_no_ingresados',
+				'url'   => "{$this->router->class}/almacenes_no_ingresados",
 				'texto' => lang('stock_config_menu_alm_no_ing'),
 				'icon'  => 'home',
 			],
 			'clase_movimiento' => [
-				'url'   => $this->router->class . '/listado/clase_movimiento',
+				'url'   => "{$this->router->class}/listado/clase_movimiento",
 				'texto' => lang('stock_config_menu_cmv'),
 				'icon'  => 'th',
 			],
 			'tipo_movimiento' => [
-				'url'   => $this->router->class . '/listado/tipo_movimiento',
+				'url'   => "{$this->router->class}/listado/tipo_movimiento",
 				'texto' => lang('stock_config_menu_tipos_movs'),
 				'icon'  => 'th',
 			],
 			'tipo_movimiento_cmv' => [
-				'url'   => $this->router->class . '/listado/tipo_movimiento_cmv',
+				'url'   => "{$this->router->class}/listado/tipo_movimiento_cmv",
 				'texto' => lang('stock_config_menu_tipos_movs_cmv'),
 				'icon'  => 'th',
 			],

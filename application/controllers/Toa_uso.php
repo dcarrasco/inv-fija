@@ -51,17 +51,17 @@ class Toa_uso extends Controller_base {
 
 		$this->set_menu_modulo([
 			'reporte' => [
-				'url'   => $this->router->class . '/uso',
+				'url'   => "{$this->router->class}/uso",
 				'texto' => lang('uso_menu_reporte'),
 				'icon'  => 'bar-chart'
 			],
 			'genera' => [
-				'url'   => $this->router->class . '/genera',
+				'url'   => "{$this->router->class}/genera",
 				'texto' => lang('uso_menu_genera'),
 				'icon'  => 'list'
 			],
 			'evolucion_tecnico' => [
-				'url'   => $this->router->class . '/evolucion_tecnico',
+				'url'   => "{$this->router->class}/evolucion_tecnico",
 				'texto' => lang('uso_menu_evolucion_tecnico'),
 				'icon'  => 'user'
 			],

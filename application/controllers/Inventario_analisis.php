@@ -68,22 +68,22 @@ class Inventario_analisis extends Controller_base {
 
 		$this->set_menu_modulo([
 			'ajustes' => [
-				'url'   => $this->router->class.'/ajustes',
+				'url'   => "{$this->router->class}/ajustes",
 				'texto' => lang('inventario_menu_ajustes'),
 				'icon'  => 'wrench'
 			],
 			'sube_stock' => [
-				'url'   => $this->router->class.'/sube_stock',
+				'url'   => "{$this->router->class}/sube_stock",
 				'texto' => lang('inventario_menu_upload'),
 				'icon'  => 'cloud-upload'
 			],
 			'imprime_inventario' => [
-				'url'   => $this->router->class.'/imprime_inventario',
+				'url'   => "{$this->router->class}/imprime_inventario",
 				'texto' => lang('inventario_menu_print'),
 				'icon'  => 'print'
 			],
 			'actualiza_precios' => [
-				'url'   => $this->router->class.'/actualiza_precios',
+				'url'   => "{$this->router->class}/actualiza_precios",
 				'texto' => lang('inventario_menu_act_precios'),
 				'icon'  => 'usd'
 			],

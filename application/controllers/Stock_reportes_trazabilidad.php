@@ -48,11 +48,11 @@ class Stock_reportes_trazabilidad extends Controller_base {
 
 		$this->set_menu_modulo([
 			'perm_consumo' => [
-				'url' => $this->router->class . '/listado/perm_consumo',
+				'url' => "{$this->router->class}/listado/perm_consumo",
 				'texto' => 'Permanencia Consumo'
 			],
 			'det_consumo' => [
-				'url' => $this->router->class . '/listado/det_consumo',
+				'url' => "{$this->router->class}/listado/det_consumo",
 				'texto' => 'Detalle Series Consumo'
 			],
 		]);
