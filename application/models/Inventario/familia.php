@@ -97,4 +97,4 @@ class Familia extends ORM_Model {
 
 }
 /* End of file familia.php */
-/* Location: ./application/models/familia.php */
+/* Location: ./application/models/Inventario/familia.php */

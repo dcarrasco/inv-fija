@@ -185,4 +185,4 @@ class Catalogo extends ORM_Model {
 
 }
 /* End of file catalogo.php */
-/* Location: ./application/models/catalogo.php */
+/* Location: ./application/models/Inventario/catalogo.php */

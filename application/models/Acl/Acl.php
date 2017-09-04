@@ -896,4 +896,4 @@ class Acl extends Orm_Model {
 
 }
 /* End of file Acl.php */
-/* Location: ./application/models/Acl.php */
+/* Location: ./application/models/Acl/Acl.php */

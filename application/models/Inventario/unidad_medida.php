@@ -87,4 +87,4 @@ class Unidad_medida extends ORM_Model {
 }
 
 /* End of file unidad_medida.php */
-/* Location: ./application/models/unidad_medida.php */
+/* Location: ./application/models/Inventario/unidad_medida.php */

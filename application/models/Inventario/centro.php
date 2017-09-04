@@ -78,4 +78,4 @@ class Centro extends ORM_Model {
 
 }
 /* End of file centro.php */
-/* Location: ./application/models/centro.php */
+/* Location: ./application/models/Inventario/centro.php */

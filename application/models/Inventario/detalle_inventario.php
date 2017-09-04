@@ -523,4 +523,4 @@ class Detalle_inventario extends ORM_Model {
 	}
 }
 /* End of file detalle_inventario.php */
-/* Location: ./application/models/detalle_inventario.php */
+/* Location: ./application/models/Inventario/detalle_inventario.php */

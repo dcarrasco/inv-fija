@@ -209,4 +209,4 @@ class Ubicacion extends ORM_Model {
 
 }
 /* End of file ubicacion.php */
-/* Location: ./application/models/ubicacion.php */
+/* Location: ./application/models/Inventario/ubicacion.php */

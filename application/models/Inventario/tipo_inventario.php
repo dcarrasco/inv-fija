@@ -87,4 +87,4 @@ class Tipo_inventario extends ORM_Model {
 }
 
 /* End of file tipo_inventario.php */
-/* Location: ./application/models/tipo_inventario.php */
+/* Location: ./application/models/Inventario/tipo_inventario.php */

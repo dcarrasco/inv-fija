@@ -102,4 +102,4 @@ class Tipo_trabajo_toa extends ORM_Model {
 
 }
 /* End of file Tipo_trabajo_toa.php */
-/* Location: ./application/models/Tipo_trabajo_toa.php */
+/* Location: ./application/models/Toa/Tipo_trabajo_toa.php */

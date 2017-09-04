@@ -674,4 +674,4 @@ class Inventario_reporte extends Inventario {
 
 }
 /* End of file inventario_reporte.php */
-/* Location: ./application/models/inventario_reporte.php */
+/* Location: ./application/models/Inventario/inventario_reporte.php */

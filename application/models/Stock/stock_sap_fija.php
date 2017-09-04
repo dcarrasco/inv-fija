@@ -301,4 +301,4 @@ ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
 
 }
 /* End of file stock_sap_model.php */
-/* Location: ./application/models/stock_sap_model.php */
+/* Location: ./application/models/Stock/stock_sap_model.php */

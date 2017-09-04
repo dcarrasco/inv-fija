@@ -343,4 +343,4 @@ class Inventario extends ORM_Model {
 
 }
 /* End of file inventario.php */
-/* Location: ./application/models/inventario.php */
+/* Location: ./application/models/Inventario/inventario.php */

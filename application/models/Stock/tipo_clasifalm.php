@@ -93,4 +93,4 @@ class Tipo_clasifalm extends ORM_Model {
 
 }
 /* End of file almacen.php */
-/* Location: ./application/models/almacen.php */
+/* Location: ./application/models/Stock/almacen.php */

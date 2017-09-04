@@ -146,4 +146,4 @@ class Usuario extends ORM_Model {
 
 }
 /* End of file usuario.php */
-/* Location: ./application/models/usuario.php */
+/* Location: ./application/models/Acl/usuario.php */

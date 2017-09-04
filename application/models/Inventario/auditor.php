@@ -86,4 +86,4 @@ class Auditor extends ORM_Model {
 
 }
 /* End of file auditor.php */
-/* Location: ./application/models/auditor.php */
+/* Location: ./application/models/Inventario/auditor.php */

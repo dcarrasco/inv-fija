@@ -86,4 +86,4 @@ class Usuario_sap extends ORM_Model {
 
 }
 /* End of file usuario_sap.php */
-/* Location: ./application/models/usuario_sap.php */
+/* Location: ./application/models/Stock/usuario_sap.php */

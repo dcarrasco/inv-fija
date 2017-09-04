@@ -86,4 +86,4 @@ class Proveedor extends ORM_Model {
 
 }
 /* End of file proveedor.php */
-/* Location: ./application/models/proveedor.php */
+/* Location: ./application/models/Stock/proveedor.php */

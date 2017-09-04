@@ -84,4 +84,4 @@ class Tipo_ubicacion extends ORM_Model {
 
 }
 /* End of file tipo_ubicacion.php */
-/* Location: ./application/models/tipo_ubicacion.php */
+/* Location: ./application/models/Inventario/tipo_ubicacion.php */

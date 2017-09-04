@@ -401,4 +401,4 @@ ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 
 }
 /* End of file stock_sap_movil_model.php */
-/* Location: ./application/models/stock_sap_movil_model.php */
+/* Location: ./application/models/Stock/stock_sap_movil_model.php */

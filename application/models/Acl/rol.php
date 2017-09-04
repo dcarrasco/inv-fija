@@ -101,4 +101,4 @@ class Rol extends ORM_Model {
 
 }
 /* End of file rol.php */
-/* Location: ./application/models/rol.php */
+/* Location: ./application/models/Acl/rol.php */

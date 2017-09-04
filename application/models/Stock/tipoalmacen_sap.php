@@ -149,5 +149,5 @@ class Tipoalmacen_sap extends ORM_Model {
 	}
 
 }
-/* End of file almacen.php */
-/* Location: ./application/models/almacen.php */
+/* End of file tipoalmacen_sap.php */
+/* Location: ./application/models/Stock/tipoalmacen_sap.php */

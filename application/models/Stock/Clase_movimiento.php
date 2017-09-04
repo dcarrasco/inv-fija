@@ -85,4 +85,4 @@ class Clase_movimiento extends ORM_Model {
 
 }
 /* End of file Clase_movimiento.php */
-/* Location: ./application/models/Clase_movimiento.php */
+/* Location: ./application/models/Stock/Clase_movimiento.php */
