@@ -23,7 +23,7 @@
 		</tfoot>
 		<tbody>
 		<?php foreach($tablas as $tabla): ?>
-			<tr class="<?= strtoupper(substr($tabla['TableName'], 0, 3)) === 'TMP' ? 'danger' : '' ?>">
+			<tr class="<?= (strpos(strtolower($tabla['TableName']), 'tmp') !== FALSE OR strpos(strtolower($tabla['TableName']), 'respaldo') !== FALSE) ? 'danger' : '' ?>">
 				<td class="text-left"><?= $tabla['DataBaseName']; ?></td>
 				<td class="text-left"><?= $tabla['TableName']; ?></td>
 				<td class="text-right"><?= fmt_cantidad($tabla['RowCounts']); ?></td>
