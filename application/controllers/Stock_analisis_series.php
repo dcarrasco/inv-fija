@@ -1,4 +1,5 @@
 <?php
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +14,9 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use Stock\Analisis_series;
+use Stock\Log_gestor;
 
 /**
  * Clase Controller Analisis series
@@ -67,8 +71,6 @@ class Stock_analisis_series extends Controller_base {
 	 */
 	public function historia()
 	{
-		$this->load->model('analisis_series_model');
-
 		$datos = [
 			'datos_show_mov'       => '',
 			'datos_show_despachos' => '',
@@ -79,12 +81,12 @@ class Stock_analisis_series extends Controller_base {
 		];
 
 
-		if (form_validation($this->analisis_series_model->validation_analisis))
+		if (form_validation(Analisis_series::create()->rules))
 		{
 			$series = request('series');
 
-			$analisis_model = new analisis_series_model;
-			$gestor_model   = new log_gestor_model;
+			$analisis_model = new Analisis_series;
+			$gestor_model   = new Log_gestor;
 
 			$arr_reportes = [
 				'show_mov' => [
@@ -128,11 +130,9 @@ class Stock_analisis_series extends Controller_base {
 	 */
 	public function trafico_por_mes()
 	{
-		$this->load->model('analisis_series_model');
-
 		app_render_view('stock_sap/analisis_series_trafico_view', [
-			'combo_mes'     => $this->analisis_series_model->get_meses_trafico(),
-			'datos_trafico' => $this->analisis_series_model->get_trafico_mes(request('series'), request('meses'), request('sel_tipo')),
+			'combo_mes'     => Analisis_series::create()->get_meses_trafico(),
+			'datos_trafico' => Analisis_series::create()->get_trafico_mes(request('series'), request('meses'), request('sel_tipo')),
 		]);
 	}
 
@@ -154,11 +154,9 @@ class Stock_analisis_series extends Controller_base {
 	 */
 	public function ajax_trafico_mes($serie = '', $meses = '', $tipo = 'imei')
 	{
-		$this->load->model('analisis_series_model');
-
 		$this->output
 			->set_content_type('application/json')
-			->set_output(json_encode($this->analisis_series_model->get_trafico_mes($serie, $meses, $tipo)));
+			->set_output(json_encode(Analisis_series::create()->get_trafico_mes($serie, $meses, $tipo)));
 	}
 
 

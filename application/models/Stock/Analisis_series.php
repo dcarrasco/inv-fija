@@ -1,4 +1,9 @@
 <?php
+
+namespace Stock;
+
+use \ORM_Model;
+
 /**
  * INVENTARIO FIJA
  *
@@ -24,14 +29,14 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Analisis_series_model extends CI_Model {
+class Analisis_series extends ORM_Model {
 
 	/**
 	 * Arreglo de validacion módulo analisis de series
 	 *
 	 * @var array
 	 */
-	public $validation_analisis = [
+	public $rules = [
 		['field' => 'series', 'label' => 'Series', 'rules' => 'trim|required'],
 		['field' => 'show_mov', 'label' => 'Mostrar Movimientos', 'rules' => ''],
 		['field' => 'ult_mov', 'label' => 'Ultimo movimiento', 'rules' => ''],
@@ -80,29 +85,7 @@ class Analisis_series_model extends CI_Model {
 
 		foreach ($arr_series as $llave => $valor)
 		{
-			$serie_temp = $valor;
-			// Modificaciones de formato SAP
-			if ($tipo === 'SAP')
-			{
-				$serie_temp = preg_replace('/^01/', '1', $serie_temp);
-				$arr_series[$llave] = (strlen($serie_temp) === '19') ? substr($serie_temp, 1, 18) : $serie_temp;
-			}
-			// Modificaciones de formato SCL
-			elseif ($tipo === 'trafico')
-			{
-				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
-				$arr_series[$llave] = substr($serie_temp, 0, 14) . '0';
-			}
-			elseif ($tipo === 'SCL')
-			{
-				$serie_temp = preg_replace('/^1/', '01', $serie_temp);
-				$arr_series[$llave] = $serie_temp;
-			}
-			elseif ($tipo === 'celular')
-			{
-				$arr_series[$llave] = (strlen($valor) === '9') ? substr($valor, 1, 8) : $valor;
-				$arr_series_celular[$llave] = '9'.$arr_series[$llave];
-			}
+			$arr_series[$llave] = $this->format_serie($valor, $tipo);
 		}
 
 		$arr_series = ($tipo === 'celular') ? array_merge($arr_series, $arr_series_celular) : $arr_series;
@@ -110,6 +93,33 @@ class Analisis_series_model extends CI_Model {
 		return $arr_series;
 	}
 
+
+	// --------------------------------------------------------------------
+
+	protected function format_serie($serie = '', $tipo = 'SAP')
+	{
+		switch ($tipo)
+		{
+			case 'SAP':
+				$serie = preg_replace('/^01/', '1', $serie);
+				return strlen($serie) === '19' ? substr($serie, 1, 18) : $serie;
+				break;
+			case 'trafico':
+				$serie = preg_replace('/^1/', '01', $serie);
+				return substr($serie, 0, 14).'0';
+				break;
+			case 'SCL':
+				$serie = preg_replace('/^1/', '01', $serie);
+				return $serie;
+				break;
+			case 'celular':
+				return strlen($valor) === '9' ? substr($valor, 1, 8) : $valor;
+				break;
+			default:
+				return $serie;
+				break;
+		}
+	}
 
 	// --------------------------------------------------------------------
 

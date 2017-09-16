@@ -121,15 +121,10 @@ class Despachos extends ORM_Model {
 	{
 		if ($rut AND $modelos)
 		{
-			$arr_result = [];
-			$arr_modelos = explode("\r\n", $modelos);
-
-			foreach ($arr_modelos as $modelo)
-			{
-				$arr_result[$modelo] = $this->get_ultimas_facturas($rut, $modelo);
-			}
-
-			return $arr_result;
+			return collect(explode("\r\n", $modelos))
+				->map_with_keys(function($modelo) use ($rut) {
+					return [$modelo => $this->get_ultimas_facturas($rut, $modelo)];
+				});
 		}
 	}
 

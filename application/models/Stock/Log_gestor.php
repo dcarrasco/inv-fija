@@ -1,4 +1,7 @@
 <?php
+
+namespace Stock;
+
 /**
  * INVENTARIO FIJA
  *
@@ -14,6 +17,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use ORM_Model;
+
 /**
  * Clase Modelo Inventario
  *
@@ -24,7 +29,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Log_gestor_model extends CI_Model {
+class Log_gestor extends ORM_Model {
 
 	/**
 	 * Arreglo de validacion
