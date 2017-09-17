@@ -36,7 +36,7 @@ class Log_gestor extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	public $validation_rules = [
+	public $rules = [
 		[
 			'field' => 'series',
 			'label' => 'Series',

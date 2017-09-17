@@ -14,6 +14,8 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Stock\Log_gestor;
+
 /**
  * Clase Controller Analisis gestor DTH
  *
@@ -67,11 +69,9 @@ class Stock_analisis_gestor_dth extends Controller_base {
 	 */
 	public function log_gestor()
 	{
-
-		$this->load->model('log_gestor_model');
 		$datos = [];
 
-		form_validation($this->log_gestor_model->validation_rules);
+		form_validation(Log_gestor::create()->rules);
 
 		$arr_filtro_cas = [];
 
@@ -86,7 +86,7 @@ class Stock_analisis_gestor_dth extends Controller_base {
 		}
 
 		app_render_view('stock_sap/analisis_log_gestor_dth_view', [
-			'log' => $this->log_gestor_model->get_log(
+			'log' => Log_gestor::create()->get_log(
 				request('series'),
 				request('set_serie'),
 				request('tipo_reporte'),
