@@ -493,9 +493,97 @@ class Acl extends Orm_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Devuelve arreglo con el menu de las aplicaciones del sistema
+	 *
+	 * @return string    Texto con el menu (<ul>) de las aplicaciones
+	 */
+	public function menu_app()
+	{
+		$modulos = $this->get_user_menu();
+
+		return $modulos
+			->map(function($modulo) {
+				return [
+					'selected' => FALSE,
+					'icono'    => array_get($modulo, 'app_icono'),
+					'app'      => array_get($modulo, 'app'),
+					'modulos'  => [],
+				];
+			})
+			->unique()
+			->map(function($app) use ($modulos) {
+				$app['modulos'] = $modulos
+					->filter(function($modulo) use ($app) {
+						return $modulo['app'] === $app['app'];
+					})
+					->map(function($modulo) {
+						return [
+							'modulo_url'      => site_url(array_get($modulo, 'url')),
+							'modulo_icono'    => array_get($modulo, 'modulo_icono'),
+							'modulo_nombre'   => array_get($modulo, 'modulo'),
+							'modulo_selected' => array_get($modulo, 'url') === $this->uri->segment(1) ? 'active' : '',
+						];
+					})
+					->all();
+				$app['selected'] = collect($app['modulos'])->pluck('modulo_selected')->implode();
+
+				return $app;
+			})
+			->all();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve el titulo del modulo
+	 *
+	 * @return string Titulo del modulo
+	 */
+	public function titulo_modulo()
+	{
+		$url_actual = $this->uri->segment(1);
+
+		$modulo_selected = $this->get_user_menu()
+			->filter(function($item) use ($url_actual) {
+				return array_get($item, 'url') === $url_actual;
+			})
+			->first();
+
+		return "<i class=\"fa fa-{$modulo_selected['modulo_icono']} fa-fw\"></i> {$modulo_selected['modulo']}";
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Reestructura arreglo menu modulo para ser usado en parser
+	 *
+	 * @param  array  $menu         Menu del módulo
+	 * @param  string $mod_selected Módulo seleccionado
+	 * @return array                Arreglo reestructurado
+	 */
+	public function menu_modulo($menu = [], $mod_selected = '')
+	{
+		$mod_selected = array_get($menu, 'mod_selected', $mod_selected);
+
+		return collect(array_get($menu, 'menu', []))
+			->map(function($menu, $menu_key) use ($mod_selected) {
+				return [
+					'menu_key'      => $menu_key,
+					'menu_url'      => site_url($menu['url']),
+					'menu_nombre'   => $menu['texto'],
+					'menu_selected' => ($menu_key === $mod_selected) ? 'active' : '',
+					'menu_icon'     => array_get($menu, 'icon', NULL),
+				];
+			})
+			->all();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Devuelve el menu del usuario desde la session. Si no existe session, la crea
 	 *
-	 * @return string Menu del usuario en formato JSON
+	 * @return Collection
 	 */
 	public function get_user_menu()
 	{
@@ -504,7 +592,7 @@ class Acl extends Orm_Model {
 			$this->_set_session_data($this->get_user());
 		}
 
-		return json_decode($this->session->userdata('menu_app'), TRUE);
+		return collect(json_decode($this->session->userdata('menu_app'), TRUE));
 	}
 
 	// --------------------------------------------------------------------
