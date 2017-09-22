@@ -162,7 +162,7 @@ trait Model_has_form {
 
 		if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->got_relations)
 		{
-			$this->_recuperar_relation_fields();
+			$this->get_relation_fields();
 		}
 
 		return $this->fields[$campo]->get_label();

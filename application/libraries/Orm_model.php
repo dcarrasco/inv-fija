@@ -185,7 +185,7 @@ class Orm_model implements IteratorAggregate {
 		$this->config_campos(array_get($param, 'campos', []));
 
 		$this->campo_id = $this->_determina_campo_id();
-		//$this->_recuperar_relation_fields();
+		//$this->get_relation_fields();
 	}
 
 	// --------------------------------------------------------------------
@@ -478,7 +478,7 @@ class Orm_model implements IteratorAggregate {
 
 			if ($recupera_relation)
 			{
-				$this->_recuperar_relation_fields();
+				$this->get_relation_fields();
 			}
 
 			return $registro;
@@ -490,7 +490,7 @@ class Orm_model implements IteratorAggregate {
 					$obj_modelo = new $this->model_class($registro);
 					if ($recupera_relation)
 					{
-						$obj_modelo->_recuperar_relation_fields($this->relation_objects);
+						$obj_modelo->get_relation_fields($this->relation_objects);
 						$this->_add_relation_fields($obj_modelo);
 					}
 

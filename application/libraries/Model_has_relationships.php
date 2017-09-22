@@ -63,24 +63,12 @@ trait Model_has_relationships {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera los campos relacionados
-	 *
-	 * @return none
-	 */
-	public function get_relation_fields()
-	{
-		$this->_recuperar_relation_fields();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Recupera los modelos dependientes (de las relaciones has_one y has_many)
 	 *
 	 * @param  Collection $relations_collection Coleccion de relacion donde se busca la relacion
 	 * @return void
 	 */
-	protected function _recuperar_relation_fields($relations_collection = NULL)
+	protected function get_relation_fields($relations_collection = NULL)
 	{
 		foreach ($this->fields as $nombre_campo => $obj_campo)
 		{
