@@ -97,6 +97,14 @@ trait Model_has_relationships {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera relación para el tipo de campo HAS_ONE
+	 *
+	 * @param  string     $nombre_campo         Nombre del campo
+	 * @param  ORM_Field  $obj_campo            Campo
+	 * @param  Collection $relations_collection Collection de relación
+	 * @return void
+	 */
 	protected function _recuperar_relation_field_has_one($nombre_campo, $obj_campo, $relations_collection = NULL)
 	{
 		// recupera las propiedades de la relacion
@@ -130,6 +138,14 @@ trait Model_has_relationships {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera relación para el tipo de campo HAS_MANY
+	 *
+	 * @param  string     $nombre_campo         Nombre del campo
+	 * @param  ORM_Field  $obj_campo            Campo
+	 * @param  Collection $relations_collection Collection de relación
+	 * @return void
+	 */
 	protected function _recuperar_relation_field_has_many($nombre_campo, $obj_campo, $relations_collection = NULL)
 	{
 		// recupera las propiedades de la relacion
@@ -191,6 +207,35 @@ trait Model_has_relationships {
 					}
 				}
 			});
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve campos select de una lista para ser consulados como un solo
+	 * campo de la base de datos
+	 *
+	 * @param  array $campos Arreglo con el listado de campos
+	 * @return string        Listado de campos unidos por la BD
+	 */
+	private function _junta_campos_select($campos = [])
+	{
+		$campos = collect($campos);
+
+		if ($campos->count() === 1)
+		{
+			return $campos->first();
+		}
+
+		// CONCAT_WS es especifico para MYSQL
+		if ($this->db->dbdriver === 'mysqli')
+		{
+			$lista_campos = $campos->implode(',');
+
+			return "CONCAT_WS('{$this->separador_campos}',{$lista_campos})";
+		}
+
+		return $campos->implode("+'{$this->separador_campos}'+");
 	}
 
 }
