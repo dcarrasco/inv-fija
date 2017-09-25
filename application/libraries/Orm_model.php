@@ -346,36 +346,6 @@ class Orm_model implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve campos select de una lista para ser consulados como un solo
-	 * campo de la base de datos
-	 *
-	 * @param  array $campos Arreglo con el listado de campos
-	 * @return string        Listado de campos unidos por la BD
-	 */
-	private function _junta_campos_select($campos = [])
-	{
-		$campos = collect($campos);
-
-		if ($campos->count() === 1)
-		{
-			return $campos->first();
-		}
-
-		// CONCAT_WS es especifico para MYSQL
-		if ($this->db->dbdriver === 'mysqli')
-		{
-			$lista_campos = $campos->implode(',');
-
-			return "CONCAT_WS('{$this->separador_campos}',{$lista_campos})";
-		}
-
-		return $campos->implode("+'{$this->separador_campos}'+");
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Puebla el modelo con datos de la base de datos o de un arreglo entregado
 	 *
 	 * @param  mixed $id_modelo ID del registro a recuperar o arreglo con datos

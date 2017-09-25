@@ -67,7 +67,7 @@ trait Model_has_persistance {
 
 			if ($recupera_relation)
 			{
-				$this->_recuperar_relation_fields();
+				$this->get_relation_fields();
 			}
 
 			return $this;
@@ -79,7 +79,7 @@ trait Model_has_persistance {
 
 				if ($recupera_relation)
 				{
-					$obj_modelo->_recuperar_relation_fields($this->relation_objects);
+					$obj_modelo->get_relation_fields($this->relation_objects);
 					$this->_add_relation_fields($obj_modelo);
 				}
 
