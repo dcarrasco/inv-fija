@@ -126,6 +126,25 @@ trait Model_has_attributes {
 		return ! $formatted ? $this->{$campo} : $this->fields[$campo]->get_formatted_value($this->{$campo});
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Puebla los campos del modelo con los valores de un arreglo
+	 *
+	 * @param  array $arr_data Arreglo con los valores
+	 * @return void
+	 */
+	public function fill_from_array($arr_data = [])
+	{
+		collect($this->fields)
+			->only(collect($arr_data)->keys()->all())
+			->each(function($campo, $nombre_campo) use ($arr_data) {
+				$this->values[$nombre_campo] = $campo->cast_value(array_get($arr_data, $nombre_campo));
+			});
+
+		return $this;
+	}
+
 }
 /* End of file model_has_attributes.php */
 /* Location: ./application/libraries/model_has_attributes.php */
