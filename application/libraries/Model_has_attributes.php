@@ -134,12 +134,13 @@ trait Model_has_attributes {
 	 * @param  array $arr_data Arreglo con los valores
 	 * @return void
 	 */
-	public function fill_from_array($arr_data = [])
+	public function fill_from_array($data = [])
 	{
+
 		collect($this->fields)
-			->only(collect($arr_data)->keys()->all())
-			->each(function($campo, $nombre_campo) use ($arr_data) {
-				$this->values[$nombre_campo] = $campo->cast_value(array_get($arr_data, $nombre_campo));
+			->only(collect($data)->keys()->all())
+			->each(function($campo, $nombre_campo) use ($data) {
+				$this->values[$nombre_campo] = $campo->cast_value(array_get($data, $nombre_campo));
 			});
 
 		return $this;

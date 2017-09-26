@@ -237,43 +237,24 @@ trait Model_has_persistance {
 	 */
 	public function grabar()
 	{
-		$data_update  = [];
-		$data_where   = [];
-		$es_auto_id   = FALSE;
-		$es_insert    = FALSE;
+		$fields = collect($this->fields);
 
-		foreach ($this->fields as $nombre => $campo)
-		{
-			if ($campo->get_es_id() AND $campo->get_es_autoincrement())
-			{
-				$es_auto_id = TRUE;
-			}
+		$data_where = $fields->only($this->get_campo_id())
+			->map(function($campo, $nombre) { return $this->{$nombre}; })
+			->all();
 
-			if ($campo->get_es_id())
-			{
-				$data_where[$nombre] = $this->{$nombre};
-			}
-			else
-			{
-				if ($campo->get_tipo() !== Orm_field::TIPO_HAS_MANY)
-				{
-					$data_update[$nombre] = $this->{$nombre};
-				}
-			}
-		}
+		$data_update = $fields->except($this->get_campo_id())
+			->filter(function($campo) { return $campo->get_tipo() !== Orm_field::TIPO_HAS_MANY; })
+			->map(function($campo, $nombre) { return $this->{$nombre}; })
+			->all();
 
-		if ($es_auto_id)
-		{
-			foreach ($data_where as $llave => $valor)
-			{
-				$es_insert = empty($valor) ? TRUE : FALSE;
-			}
-		}
-		else
-		{
-			$es_insert = ($this->db->get_where($this->tabla, $data_where)->row() === NULL)
-							OR ($this->db->get_where($this->tabla, $data_where)->num_rows() === 0);
-		}
+		$es_auto_id = ! $fields->only($this->get_campo_id())
+			->filter(function($campo) { return $campo->get_es_autoincrement(); })
+			->is_empty();
+
+		$es_insert = $es_auto_id
+			? empty(collect($data_where)->sum())
+			: $this->db->get_where($this->tabla, $data_where)->row() === NULL OR $this->db->get_where($this->tabla, $data_where)->num_rows() === 0;
 
 		// NUEVO REGISTRO
 		if ($es_insert)
@@ -286,59 +267,42 @@ trait Model_has_persistance {
 			{
 				$this->db->insert($this->tabla, $data_update);
 
-				foreach ($this->campo_id as $campo_id)
-				{
-					$data_where[$campo_id] = $this->db->insert_id();
-					$this->{$campo_id} = $this->db->insert_id();
-				}
+				$data_where = collect($data_where)
+					->map(function($campo, $campo_id) {
+						$this->values[$campo_id] = $this->db->insert_id();
+						return $this->db->insert_id();
+					})
+					->all();
 			}
 		}
 		// REGISTRO EXISTENTE
 		else
 		{
-			$this->db->where($data_where);
-			$this->db->update($this->tabla, $data_update);
-		}
-
-		// Revisa todos los campos en busqueda de relaciones has_many,
-		// para actualizar la tabla relacionada
-		foreach ($this->fields as $nombre => $campo)
-		{
-			if ($campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
+			if ( ! empty($data_update))
 			{
-				$relation = $campo->get_relation();
-
-				$arr_where_delete = [];
-				$data_where_tmp = $data_where;
-
-				foreach ($relation['id_one_table'] as $id_one_table_key)
-				{
-					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
-				}
-
-				$this->db->delete($relation['join_table'], $arr_where_delete);
-
-				foreach ($this->{$nombre} as $valor_campo)
-				{
-					$arr_values = [];
-					$data_where_tmp = $data_where;
-
-					foreach ($relation['id_one_table'] as $id_one_table_key)
-					{
-						$arr_values[$id_one_table_key] = array_shift($data_where_tmp);
-					}
-
-					$arr_many_valores = explode($this->separador_campos, $valor_campo);
-
-					foreach ($relation['id_many_table'] as $id_many)
-					{
-						$arr_values[$id_many] = array_shift($arr_many_valores);
-					}
-
-					$this->db->insert($relation['join_table'], $arr_values);
-				}
+				$this->db->where($data_where);
+				$this->db->update($this->tabla, $data_update);
 			}
 		}
+
+		$fields->filter(function($campo) { return $campo->get_tipo() === Orm_field::TIPO_HAS_MANY; })
+			->each(function($campo, $nombre_campo) use ($data_where) {
+				$relation = $campo->get_relation();
+
+				$where_delete = collect($relation['id_one_table'])->combine($data_where)->all();
+				$this->db->delete($relation['join_table'], $where_delete);
+
+				collect($this->{$nombre_campo})
+					->map(function($valor_campo) use ($relation, $where_delete) {
+						return collect($relation['id_many_table'])
+							->combine(explode($this->separador_campos, $valor_campo))
+							->merge($where_delete)
+							->all();
+					})
+					->each(function($insert_values) use ($relation) {
+						$this->db->insert($relation['join_table'], $insert_values);
+					});
+			});
 	}
 
 	// --------------------------------------------------------------------
@@ -350,37 +314,21 @@ trait Model_has_persistance {
 	 */
 	public function borrar()
 	{
-		$data_where = [];
+		$fields = collect($this->fields);
 
-		foreach ($this->fields as $nombre => $campo)
-		{
-			if ($campo->get_es_id())
-			{
-				$data_where[$nombre] = $this->{$nombre};
-			}
-		}
+		$data_where = $fields->only($this->get_campo_id())
+			->map(function($campo, $nombre) { return $this->{$nombre}; })
+			->all();
 
 		$this->db->delete($this->tabla, $data_where);
 
-		foreach ($this->fields as $nombre => $campo)
-		{
-			if ($campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
-			{
+		$fields->filter(function($campo) { return $campo->get_tipo() === Orm_field::TIPO_HAS_MANY; })
+			->each(function($campo, $nombre_campo) use ($data_where) {
 				$relation = $campo->get_relation();
-				$arr_where_delete = [];
-				$data_where_tmp = $data_where;
-
-				foreach ($relation['id_one_table'] as $id_one_table_key)
-				{
-					$arr_where_delete[$id_one_table_key] = array_shift($data_where_tmp);
-				}
-
-				$this->db->delete($relation['join_table'], $arr_where_delete);
-			}
-		}
+				$where_delete = collect($relation['id_one_table'])->combine($data_where)->all();
+				$this->db->delete($relation['join_table'], $where_delete);
+			});
 	}
-
-
 
 }
 /* End of file model_has_persistance.php */

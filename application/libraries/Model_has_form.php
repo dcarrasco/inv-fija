@@ -52,7 +52,7 @@ trait Model_has_form {
 		if (is_array($campo))
 		{
 			return collect($campo)->map(function($field) {
-				$this->set_field_validation_rules($field);
+				return $this->set_field_validation_rules($field);
 			});
 		}
 
@@ -68,13 +68,14 @@ trait Model_has_form {
 			: '';
 
 		$campo_rules = $campo;
+
 		if ($field->get_tipo() === Orm_field::TIPO_HAS_MANY)
 		{
 			$reglas = 'trim';
 			$campo_rules = $campo.'[]';
 		}
 
-		$this->form_validation->set_rules($campo_rules, ucfirst($this->get_field_label($campo)), $reglas);
+		return $this->form_validation->set_rules($campo_rules, ucfirst($this->get_field_label($campo)), $reglas);
 	}
 
 	// --------------------------------------------------------------------
@@ -158,12 +159,12 @@ trait Model_has_form {
 	 */
 	public function get_field_label($campo = '')
 	{
-		$tipo = $this->fields[$campo]->get_tipo();
+		// $tipo = $this->fields[$campo]->get_tipo();
 
-		if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->got_relations)
-		{
-			$this->get_relation_fields();
-		}
+		// if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->got_relations)
+		// {
+		// 	$this->get_relation_fields();
+		// }
 
 		return $this->fields[$campo]->get_label();
 	}

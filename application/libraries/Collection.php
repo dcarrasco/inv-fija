@@ -478,7 +478,7 @@ class Collection implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
-	* Junta elementos de la coleccion con nuevos items
+	* Filtra elementos de la coleccion con items
 	*
 	* @param  mixed $items Items a juntar a la coleccion actual
 	* @return mixed
@@ -488,6 +488,31 @@ class Collection implements IteratorAggregate {
 		$items = $items instanceof Collection ? $items->all() : $items;
 
 		return new static(array_intersect_key($this->items, array_flip((array) $items)));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	* Filtra elementos de la coleccion con resto de items
+	*
+	* @param  mixed $items Items a juntar a la coleccion actual
+	* @return mixed
+	*/
+	public function except($items = [])
+	{
+		$items = $items instanceof Collection ? $items->all() : $items;
+
+		$items_collection = $this->items;
+
+		foreach($items_collection as $key => $value)
+		{
+			if (in_array($key, $items))
+			{
+				unset($items_collection[$key]);
+			}
+		}
+
+		return new static($items_collection);
 	}
 
 	// --------------------------------------------------------------------

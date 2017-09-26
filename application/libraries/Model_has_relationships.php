@@ -137,34 +137,51 @@ trait Model_has_relationships {
 	protected function _recuperar_relation_field_has_many($nombre_campo, $obj_campo, $relations_collection = NULL)
 	{
 		// recupera las propiedades de la relacion
-		$arr_props_relation = $obj_campo->get_relation();
-
-		$class_relacionado = $arr_props_relation['model'];
+		$relation = $obj_campo->get_relation();
+		$class_relacionado = $relation['model'];
 		$model_relacionado = new $class_relacionado();
-		$arr_props_relation['model'] = $model_relacionado;
 
-		// genera arreglo where con la llave del modelo
-		$id_values = collect($this->values)->only($this->campo_id)->all();
-		$where_pivot = collect($arr_props_relation['id_one_table'])
-			->map_with_keys(function($id_key) use (&$id_values) {
-				return [$id_key => array_shift($id_values)];
-			})->all();
+		$relation['model'] = $model_relacionado;
+		$pivot_objects = $this->get_pivot_objects($relation, $model_relacionado);
 
-		// recupera la llave del modelo en tabla de la relacion (n:m)
-		$registros_pivot = $this->db
-			->select($this->_junta_campos_select($arr_props_relation['id_many_table']), FALSE)
-			->get_where($arr_props_relation['join_table'], $where_pivot)
-			->result_array();
+		$relation['data']  = $pivot_objects;
 
-		// genera arreglo de condiciones de busqueda
-		$where_related   = collect($registros_pivot)->flatten()->all();
-		$arr_condiciones = [$this->_junta_campos_select($model_relacionado->get_campo_id()) => $where_related];
-		$arr_props_relation['data'] = $model_relacionado->find('all', ['conditions' => $arr_condiciones], FALSE);
+		$this->values[$nombre_campo] = collect($pivot_objects)->map(function($model) {
+			return $model->get_id();
+		})->all();
 
-		$this->values[$nombre_campo] = $where_related;
-		$this->fields[$nombre_campo]->set_relation($arr_props_relation);
+		$this->fields[$nombre_campo]->set_relation($relation);
 		$this->got_relations = TRUE;
 	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera los objetos asociados a una relación MANY TO MANY
+	 *
+	 * @param  array     $relation Datos de la relación
+	 * @param  ORM_Model $model    Modelo ORM de la relación
+	 * @return Collection
+	 */
+	protected function get_pivot_objects($relation = [], $model)
+	{
+		// genera arreglo where con la llave del modelo
+		$where_pivot = collect($relation['id_one_table'])
+			->combine($this->campo_id)
+			->map(function($id) {return $this->{$id};})
+			->all();
+
+		// recupera la llave del modelo en tabla de la relacion (n:m)
+		$where_related = collect($this->db
+			->select($this->_junta_campos_select($relation['id_many_table']), FALSE)
+			->get_where($relation['join_table'], $where_pivot)
+			->result_array())
+			->flatten()
+			->all();
+
+		$arr_condiciones = [$this->_junta_campos_select($model->get_campo_id()) => $where_related];
+
+		return $model->find('all', ['conditions' => $arr_condiciones], FALSE);	}
 
 	// --------------------------------------------------------------------
 
@@ -175,7 +192,7 @@ trait Model_has_relationships {
 	 * @param  mixed $obj_model Objeto del cual se sacan las relaciones
 	 * @return void
 	 */
-	private function _add_relation_fields($obj_model)
+	protected function _add_relation_fields($obj_model)
 	{
 		collect($obj_model->get_fields())
 			->filter(function($campo) {
