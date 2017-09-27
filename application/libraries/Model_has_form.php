@@ -63,8 +63,10 @@ trait Model_has_form {
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_INT)  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_REAL) ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['.$this->tabla.':'.$field->get_nombre_bd().':'.
-				implode($this->separador_campos, $this->get_campo_id()).':'.$this->get_id().']'
+			? '|edit_unique['.$this->tabla
+				.':'.$field->get_nombre_bd()
+				.':'.implode($this->separador_campos, $this->get_campo_id())
+				.':'.$this->get_id().']'
 			: '';
 
 		$campo_rules = $campo;
