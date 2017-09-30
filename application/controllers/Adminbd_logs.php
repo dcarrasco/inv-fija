@@ -1,18 +1,4 @@
-<?php
-/**
- * INVENTARIO FIJA
- *
- * Aplicacion de conciliacion de inventario para la logistica fija.
- *
- * @category  CodeIgniter
- * @package   InventarioFija
- * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
- * @copyright 2015 - DCR
- * @license   MIT License
- * @link      localhost:1520
- *
- */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Revision de logs servidor
