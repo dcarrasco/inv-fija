@@ -393,6 +393,25 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	public function rules_upload()
+	{
+		return [
+			[
+				'field' => 'upload_file',
+				'label' => "Archivo a subir",
+				'rules' => ''
+			],
+			[
+				'field' => 'upload_password',
+				'label' => 'Clave',
+				'rules' => 'trim|required|in_list[logistica2012]'
+			],
+		];
+	}
+
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Setea validación para formulario editar/agregar linea de detalle
 	 *

@@ -66,7 +66,7 @@ class Inventario_reportes extends Controller_base {
 				'icon'  => 'tasks'
 			],
 			'ubicacion' => [
-				'url'   => "{$this->router->class}/listado/ubicacion'",
+				'url'   => "{$this->router->class}/listado/ubicacion",
 				'texto' => lang('inventario_menu_reporte_ubicacion'),
 				'icon'  => 'map-marker'
 			],
