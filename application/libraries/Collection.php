@@ -321,7 +321,7 @@ class Collection implements IteratorAggregate {
 	{
 		if ($callback)
 		{
-			return new static(array_filter($this->items, $callback, ARRAY_FILTER_USE_BOTH));
+			return new static(array_filter($this->items, $callback));
 		}
 
 		return new static(array_filter($this->items));

@@ -144,11 +144,15 @@ class Adminbd extends ORM_Model {
 	public function table_list()
 	{
 		return collect($this->config->config)
-			->filter(function($item, $index) {
-				return strpos($index, 'bd_') !== FALSE AND ! in_array($index, $this->table_blacklist);
+			->map(function($item, $index) {
+				return ['item' => $item, 'index' => $index];
+			})
+			->filter(function($item) {
+				return strpos($item['index'], 'bd_') !== FALSE
+					AND ! in_array($item['index'], $this->table_blacklist);
 			})
 			->map_with_keys(function($item, $index) {
-				return [$item => $index];
+				return [$item['item'] => $item['index']];
 			})
 			->sort()
 			->all();
