@@ -94,24 +94,15 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function ver_peticiones($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
-		$datos_peticiones = Consumo_toa::create()->peticiones($tipo_reporte, $param1, $param2, $param3, $param4);
+		$peticiones = Consumo_toa::create()->peticiones($tipo_reporte, $param1, $param2, $param3, $param4);
 
-		$this->load->library('googlemaps');
-		$this->googlemaps->initialize([
-			'map_css' => 'height: 350px',
-		]);
-
-		collect($datos_peticiones)->each(function($peticion) {
-			$this->googlemaps->add_marker([
-				'lat'   => $peticion['acoord_y'],
-				'lng'   => $peticion['acoord_x'],
-				'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
-			]);
-		});
+		$mapa = (new Google_map(['map_css' => 'height: 350px']))
+			->add_peticiones_markers($peticiones)
+			->create_map();
 
 		app_render_view('toa/peticiones', [
-			'reporte'      => Consumo_toa::create()->reporte_peticiones($datos_peticiones),
-			'google_maps'  => $this->googlemaps->create_map(),
+			'reporte'      => Consumo_toa::create()->reporte_peticiones($peticiones),
+			'google_maps'  => $mapa,
 		]);
 	}
 
@@ -126,26 +117,23 @@ class Toa_consumos extends Controller_base {
 	 */
 	public function detalle_peticion($id_peticion = NULL)
 	{
-		$this->load->library('googlemaps');
-		$this->googlemaps->initialize([
-			'map_css' => 'height: 350px',
-		]);
-
 		$id_peticion = ( ! $id_peticion) ? request('peticion') : $id_peticion;
 		$peticion = Consumo_toa::create()->detalle_peticion($id_peticion);
 
-		$this->googlemaps->add_marker([
-			'lat'   => array_get($peticion, 'peticion_toa.acoord_y'),
-			'lng'   => array_get($peticion, 'peticion_toa.acoord_x'),
-			'title' => array_get($peticion, 'peticion_toa.cname'),
-		]);
+		$mapa = (new Google_map(['map_css' => 'height: 350px']))
+			->add_marker([
+				'lat'   => array_get($peticion, 'peticion_toa.acoord_y'),
+				'lng'   => array_get($peticion, 'peticion_toa.acoord_x'),
+				'title' => array_get($peticion, 'peticion_toa.cname'),
+			])
+			->create_map();
 
 		set_message(($id_peticion AND ! $peticion) ? lang('toa_consumo_peticion_not_found') : '');
 
 		app_render_view('toa/detalle_peticion', [
 			'tipo_peticion' => strtoupper(substr($id_peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
 			'reporte'       => $peticion,
-			'google_maps'   => $this->googlemaps->create_map(),
+			'google_maps'   => $mapa,
 		]);
 	}
 

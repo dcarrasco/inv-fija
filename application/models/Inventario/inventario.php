@@ -239,16 +239,16 @@ class Inventario extends ORM_Model {
 				if (is_array($resultado_procesa_linea))
 				{
 					$resultado_procesa_linea['count'] = $num_linea;
-					$script_carga .= 'subeStock.proc_linea_carga(' . json_encode($resultado_procesa_linea). ");\n";
+					$script_carga .= 'subeStock.proc_linea_carga('.json_encode($resultado_procesa_linea).");\n";
 				}
 			}
 		}
 
-		$msj_termino = 'Total lineas: ' . ($count_ok + $count_error) . ' (OK: ' . $count_ok . '; Error: ' . $count_error . ')';
+		$msj_termino = 'Total lineas: '.($count_ok + $count_error).' (OK: '.$count_ok.'; Error: '.$count_error.')';
 
 		if ($count_error > 0)
 		{
-			$msj_termino .= '<br>Lineas con errores (' . implode(', ', $arr_lineas_error) . ')';
+			$msj_termino .= '<br>Lineas con errores ('.implode(', ', $arr_lineas_error).')';
 		}
 
 		return [

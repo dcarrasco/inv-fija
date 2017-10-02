@@ -24,7 +24,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @license  MIT License
  * @link     localhost:1520
  */
-class Googlemaps {
+class Google_map {
 
 	/**
 	 * Arreglo que contiene los marcadores de posicion
@@ -82,9 +82,12 @@ class Googlemaps {
 	 *
 	 * @return  void
 	 **/
-	public function __construct()
+	public function __construct($config = [])
 	{
-
+		if ( ! empty($config))
+		{
+			return $this->initialize($config);
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -92,14 +95,16 @@ class Googlemaps {
 	/**
 	 * Inicializa el módulo
 	 *
-	 * @param  array $arr_config Arreglo con la configuración del módulo
+	 * @param  array $config Arreglo con la configuración del módulo
 	 * @return void
 	 */
-	public function initialize($arr_config)
+	public function initialize($config = [])
 	{
-		collect($arr_config)->each(function($config_value, $config_key) {
+		collect($config)->each(function($config_value, $config_key) {
 			$this->{'_'.$config_key} = $config_value;
 		});
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -137,6 +142,27 @@ class Googlemaps {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Agrega marcadores desde un arreglo de peticiones TOA
+	 *
+	 * @param array $peticiones Arreglo de peticiones
+	 * @return $this
+	 */
+	public function add_peticiones_markers($peticiones)
+	{
+		collect($peticiones)->each(function($peticion) {
+			$this->add_marker([
+				'lat'   => $peticion['acoord_y'],
+				'lng'   => $peticion['acoord_x'],
+				'title' => $peticion['empresa'].' - '.$peticion['tecnico'].' - '.$peticion['referencia'],
+			]);
+		});
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Agrega un marcador
 	 *
 	 * @param  array $marker Definición del marcador
@@ -155,7 +181,8 @@ class Googlemaps {
 		$marker_config = collect($marker_config)
 			->map(function($marker_item, $index) use ($marker) {
 				return array_get($marker, $index, $marker_item);
-		})->all();
+			})
+			->all();
 
 		if ($marker_config['lat'] !== 0 AND $marker_config['lng'] !== 0
 			AND $marker_config['lat'] !== $marker_config['lng'] )
@@ -168,11 +195,13 @@ class Googlemaps {
 			$this->_txt_js .= "marker_{$n_marker}.setMap(map);\n";
 			$this->_txt_js .= "bounds.extend(marker_{$n_marker}.position);\n\n";
 		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
 
 
 }
-/* End of file Googlemaps.php */
-/* Location: ./application/libraries/Googlemaps.php */
+/* End of file Google_map.php */
+/* Location: ./application/libraries/Google_map.php */

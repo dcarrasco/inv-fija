@@ -1,45 +1,19 @@
 <div class="row">
 	<div class="col-md-10 col-md-offset-1 well">
-		<?= form_open_multipart($this->router->class . '/sube_stock', 'class="form-horizontal" role="form"'); ?>
-		<?= form_hidden('formulario','upload'); ?>
 		<fieldset>
 
 			<legend>{_inventario_upload_label_fieldset_}</legend>
+
+			{validation_errors}
 
 			<div class="form-group">
 				<label class="control-label col-sm-4">{_inventario_upload_label_inventario_}</label>
 				<div class="col-sm-8">
 					<p class="form-control-static">{inventario_id} - {inventario_nombre}</p>
+					<?= print_message('{_inventario_upload_warning_line2_} "{inventario_nombre}".'	, 'warning') ?>
 				</div>
 			</div>
 
-			<?php if (!$show_script_carga): ?>
-			<div class="form-group">
-				<label class="control-label col-sm-4">{_inventario_upload_label_file_}</label>
-				<div class="col-sm-8">
-					<div class="alert alert-danger">
-						<button type="button" class="close" data-dismiss="alert">&times;</button>
-						<p><strong>
-							<span class="fa fa-exclamation-circle"></span>
-							{_inventario_upload_warning_line1_}
-						</strong></p>
-						<p>
-							{_inventario_upload_warning_line2_} "{inventario_nombre}".
-						</p>
-					</div>
-					<?= form_upload('upload_file', '', 'class="form-control" accept=".txt,.csv"'); ?>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label col-sm-4">{_inventario_upload_label_password_}</label>
-				<div class="col-sm-8">
-					<?= form_password('upload_password', '', 'class="form-control"'); ?>
-				</div>
-			</div>
-			<?php endif; ?>
-
-			<?php if ($show_script_carga): ?>
 			<div class="form-group">
 				<label class="control-label col-sm-4">{_inventario_upload_label_progress_}</label>
 				<div class="col-sm-8">
@@ -59,38 +33,19 @@
 					</div>
 				</div>
 			</div>
-			<?php endif; ?>
 
 			<div class="form-group">
 				<label class="control-label col-sm-4">
 				</label>
 				<div class="col-sm-8">
-					<?php if ($show_script_carga): ?>
-						<button class="btn btn-primary pull-right" id="ejecuta_carga">
-							<span class="fa fa-play"></span>
-							{_inventario_upload_button_load_}
-						</button>
-					<?php else: ?>
-					<button type="submit" name="submit" class="btn btn-primary pull-right" id="btn_guardar">
-						<span class="fa fa-cloud-upload"></span>
-						{_inventario_upload_button_upload_}
+					<button class="btn btn-primary pull-right" id="ejecuta_carga">
+						<span class="fa fa-play"></span>
+						{_inventario_upload_button_load_}
 					</button>
-					<?php endif; ?>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label class="control-label col-sm-4">{_inventario_upload_label_format_}</label>
-				<div class="col-sm-8">
-					<pre>
-{_inventario_upload_format_file_}
-					</pre>
 				</div>
 			</div>
 
 		</fieldset>
-		<?= form_close(); ?>
-
 	</div>
 </div>
 

@@ -176,66 +176,70 @@ class Inventario_analisis extends Controller_base {
 	{
 		$this->_get_datos_inventario();
 
-		$upload_path       = '../upload/';
-		$upload_file       = 'sube_stock.txt';
-		$upload_error      = '';
-		$script_carga      = '';
-		$regs_ok           = 0;
-		$regs_error        = 0;
-		$msj_error         = '';
-		$show_script_carga = FALSE;
+		app_render_view('inventario/sube_stock_form', [
+			'menu_modulo'       => $this->get_menu_modulo('sube_stock'),
+			'inventario_id'     => $this->_id_inventario,
+			'inventario_nombre' => $this->_nombre_inventario,
+		]);
+	}
 
-		if (request('formulario') === 'upload')
+	// --------------------------------------------------------------------
+
+	/**
+	 * Realiza la subida de un archivo de stock
+	 *
+	 * @return void
+	 */
+	public function upload()
+	{
+		route_validation(Detalle_inventario::create()->rules_upload());
+
+		$this->_get_datos_inventario();
+		$upload_path = '../upload/';
+		$upload_file = 'sube_stock.txt';
+
+		unlink($upload_path.$upload_file);
+		$this->load->library('upload', [
+			'upload_path'   => $upload_path,
+			'file_name'     => $upload_file,
+			'allowed_types' => 'txt|cvs',
+			'max_size'      => '2000',
+			'overwrite'     => TRUE,
+		]);
+
+		if ( ! $this->upload->do_upload('upload_file'))
 		{
-			if (request('upload_password') === 'logistica2012')
-			{
-				unlink($upload_path.$upload_file);
-				$this->load->library('upload', [
-					'upload_path'   => $upload_path,
-					'allowed_types' => 'txt|cvs',
-					'max_size'      => '2000',
-					'file_name'     => $upload_file,
-					'overwrite'     => TRUE,
-				]);
+			$this->session->set_flashdata('errors', [
+				'upload_file' => $this->upload->display_errors(),
+			]);
 
-				if ( ! $this->upload->do_upload('upload_file'))
-				{
-					set_message(lang('inventario_upload_error').' ('.$this->upload->display_errors().')', 'danger');
-				}
-				else
-				{
-					$upload_data = $this->upload->data();
-					$archivo_cargado = $upload_data['full_path'];
-
-					$inventario = new Inventario($this->_id_inventario);
-					$inventario->borrar_detalle_inventario();
-					$res_procesa_archivo = $inventario->cargar_datos_archivo($archivo_cargado);
-
-					$script_carga = $res_procesa_archivo['script'];
-					$show_script_carga = TRUE;
-					$regs_ok      = $res_procesa_archivo['regs_ok'];
-					$regs_error   = $res_procesa_archivo['regs_error'];
-					$msj_error    = ($regs_error > 0)
-						? '<br><div class="error round">' . $res_procesa_archivo['msj_termino'] . '</div>'
-						: '';
-				}
-			}
+			redirect($this->input->server('HTTP_REFERER'));
 		}
 
-		app_render_view('inventario/sube_stock', [
+		$upload_data = $this->upload->data();
+		$archivo_cargado = $upload_data['full_path'];
+
+		$inventario = new Inventario($this->_id_inventario);
+		$inventario->borrar_detalle_inventario();
+		$res_procesa_archivo = $inventario->cargar_datos_archivo($archivo_cargado);
+
+		$script_carga = $res_procesa_archivo['script'];
+		$regs_ok      = $res_procesa_archivo['regs_ok'];
+		$regs_error   = $res_procesa_archivo['regs_error'];
+		$msj_error    = ($regs_error > 0)
+			? '<br><div class="error round">'.$res_procesa_archivo['msj_termino'].'</div>'
+			: '';
+
+		app_render_view('inventario/sube_stock_do_upload', [
 			'menu_modulo'       => $this->get_menu_modulo('sube_stock'),
 			'inventario_id'     => $this->_id_inventario,
 			'inventario_nombre' => $this->_nombre_inventario,
 			'script_carga'      => $script_carga,
-			'show_script_carga' => $show_script_carga,
+			'show_script_carga' => TRUE,
 			'regs_ok'           => $regs_ok,
 			'regs_error'        => $regs_error,
 			'msj_error'         => $msj_error,
-			'link_config'       => 'config',
-			'link_reporte'      => 'reportes',
-			'link_inventario'   => 'inventario',
 		]);
-
 
 	}
 
@@ -331,20 +335,10 @@ class Inventario_analisis extends Controller_base {
 	 */
 	public function actualiza_precios()
 	{
-		$update_status = '';
-		$cant_actualizada = 0;
-
-		if (request('actualizar') === 'actualizar')
-		{
-			$catalogo = new Catalogo;
-			$cant_actualizada = $catalogo->actualiza_precios();
-			$update_status = ' disabled';
-		}
-
 		app_render_view('inventario/actualiza_precios', [
 			'menu_modulo'      => $this->get_menu_modulo('actualiza_precios'),
-			'update_status'    => $update_status,
-			'cant_actualizada' => $cant_actualizada,
+			'update_status'    => request('actualizar') ? ' disabled' : '',
+			'cant_actualizada' => request('actualizar')	? Catalogo::create()->actualiza_precios() : 0,
 		]);
 	}
 

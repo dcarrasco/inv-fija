@@ -1,18 +1,4 @@
-<?php
-/**
- * INVENTARIO FIJA
- *
- * Aplicacion de conciliacion de inventario para la logistica fija.
- *
- * @category  CodeIgniter
- * @package   InventarioFija
- * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
- * @copyright 2015 - DCR
- * @license   MIT License
- * @link      localhost:1520
- *
- */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Exportar tablas
@@ -70,40 +56,13 @@ class Adminbd_exportartablas extends Controller_base {
 	 */
 	public function exportar()
 	{
-		$this->load->dbutil();
-		$result_string = '';
+		form_validation(Adminbd::create()->rules_exportar_tablas);
 
-		$base_datos = '';
-		$tabla = request('tabla');
-
-		if (strpos($tabla, '..') !== FALSE)
-		{
-			list($base_datos, $tabla) = explode('..', $tabla);
-			$this->db->query('use '.$base_datos);
-		}
-
-		// reglas de validacion formulario
-		$is_form_valid = form_validation(Adminbd::create()->rules_exportar_tablas);
-
-		if ($is_form_valid AND $this->db->table_exists($tabla))
-		{
-			if (request('campo') AND request('filtro'))
-			{
-				$this->db->where(request('campo'), request('filtro'));
-			}
-
-			$result_string = $this->dbutil->csv_from_result($this->db->get($tabla));
-		}
-
-		$data = [
-			'combo_tablas' => Adminbd::create()->get_table_list(),
-			'combo_campos' => $tabla ? Adminbd::create()->get_fields_list($tabla) : [],
-			'result_string' => $result_string,
-		];
-
-		$this->db->query('use '.$this->db->database);
-
-		app_render_view('admindb/exportar_tablas', $data);
+		app_render_view('admindb/exportar_tablas', [
+			'combo_tablas'  => Adminbd::create()->table_list(),
+			'combo_campos'  => Adminbd::create()->fields_list(request('tabla')),
+			'result_string' => Adminbd::create()->table_to_csv(request('tabla')),
+		]);
 	}
 
 
@@ -119,7 +78,7 @@ class Adminbd_exportartablas extends Controller_base {
 	{
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Adminbd::create()->get_fields_list($tabla)));
+			->set_output(form_print_options(Adminbd::create()->fields_list($tabla)));
 	}
 
 

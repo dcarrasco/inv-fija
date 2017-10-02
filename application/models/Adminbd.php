@@ -46,6 +46,43 @@ class Adminbd extends ORM_Model {
 		],
 	];
 
+	/**
+	 * Tablas que no seran recuperadas para exportar
+	 *
+	 * @var array
+	 */
+	protected $table_blacklist = [
+			'bd_usuarios',
+			'bd_app',
+			'bd_modulos',
+			'bd_rol',
+			'bd_usuario_rol',
+			'bd_rol_modulo',
+			'bd_captcha',
+			'bd_pcookies',
+		];
+
+	/**
+	 * Bases de datos para recuperar el espacio utilizado
+	 *
+	 * @var array
+	 */
+	protected $bases_datos = [
+		'BD_Controles',
+		'BD_Inventario',
+		'BD_Logistica',
+		'BD_Planificacion',
+		'BD_Sucursales',
+		'BD_TOA',
+	];
+
+	/**
+	 * Arreglo con los tamaños de las tablas de todas las BD
+	 *
+	 * @var array
+	 */
+	protected $tables_sizes = [];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -104,30 +141,21 @@ class Adminbd extends ORM_Model {
 	 *
 	 * @return array Listado de tablas
 	 */
-	public function get_table_list()
+	public function table_list()
 	{
-		$blacklist = [
-			'bd_usuarios',
-			'bd_app',
-			'bd_modulos',
-			'bd_rol',
-			'bd_usuario_rol',
-			'bd_rol_modulo',
-			'bd_captcha',
-			'bd_pcookies',
-		];
-
-		$arr_list = [];
-		foreach($this->config->config as $index => $value)
-		{
-			if (strpos($index, 'bd_') !== FALSE AND ! in_array($index, $blacklist))
-			{
-				$arr_list[urlencode($value)] = $index;
-			}
-		}
-		asort($arr_list);
-
-		return $arr_list;
+		return collect($this->config->config)
+			->map(function($item, $index) {
+				return ['item' => $item, 'index' => $index];
+			})
+			->filter(function($item) {
+				return strpos($item['index'], 'bd_') !== FALSE
+					AND ! in_array($item['index'], $this->table_blacklist);
+			})
+			->map_with_keys(function($item, $index) {
+				return [$item['item'] => $item['index']];
+			})
+			->sort()
+			->all();
 	}
 
 
@@ -139,9 +167,56 @@ class Adminbd extends ORM_Model {
 	 * @param  string $tabla Nombre de la tabla
 	 * @return array         Listado de campos
 	 */
-	public function get_fields_list($tabla = '')
+	public function fields_list($tabla = '')
 	{
-		$base_datos = '';
+		if (strpos($tabla, '..') !== FALSE)
+		{
+			list($base_datos, $tabla) = explode('..', $tabla);
+			$this->db->query('use '.$base_datos);
+		}
+
+		$fields = $this->db->list_fields($tabla);
+		$this->db->query('use '.$this->db->database);
+
+		return collect($fields)->map_with_keys(function($campo) {
+			return [$campo => $campo];
+		})->all();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve el contenido de una tabla como texto CSV
+	 *
+	 * @param  string $tabla Tabla a extraer
+	 * @return string
+	 */
+	public function table_to_csv($tabla = '')
+	{
+		if (! $this->table_exists($tabla))
+		{
+			return '--- Tabla no existe ---';
+		}
+
+		if (request('campo') AND request('filtro'))
+		{
+			$this->db->where(request('campo'), request('filtro'));
+		}
+
+		$this->load->dbutil();
+		$table_to_csv = $this->dbutil->csv_from_result($this->db->get($tabla));
+
+		return $table_to_csv;
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function table_exists($tabla)
+	{
+		if (empty($tabla))
+		{
+			return FALSE;
+		}
 
 		if (strpos($tabla, '..') !== FALSE)
 		{
@@ -149,20 +224,56 @@ class Adminbd extends ORM_Model {
 			$this->db->query('use '.$base_datos);
 		}
 
-		if ( ! $this->db->table_exists($tabla))
-		{
-			return [];
-		}
-
-		$arr_list = [];
-		foreach ($this->db->list_fields($tabla) as $campo)
-		{
-			$arr_list[$campo] = $campo;
-		}
-
+		$exists = $this->db->table_exists($tabla);
 		$this->db->query('use '.$this->db->database);
 
-		return $arr_list;
+		return $exists;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera el tamaño de las tablas de todas las BD
+	 *
+	 * @return Collection
+	 */
+	public function get_tables_sizes()
+	{
+		if ( ! empty($this->tables_sizes))
+		{
+			return $this->tables_sizes;
+		}
+
+		return $this->tables_sizes = collect($this->bases_datos)
+			->map(function($base) {
+				return $this->database_tables_sizes($base);
+			})
+			->flatten(1)
+			->sort(function($elem_a, $elem_b) {
+				return $elem_a['TotalSpaceKB'] < $elem_b['TotalSpaceKB'] ? 1 : -1;
+			})->all();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Suma los campos de un arreglo de tamaños de tablas
+	 *
+	 * @param  array  $tables_sizes Arreglo con los tamaños de las tablas
+	 * @return array
+	 */
+	public function get_tables_sizes_sums($tables_sizes = [])
+	{
+		if (empty($this->tables_sizes))
+		{
+			$this->get_tables_sizes();
+		}
+
+		$campos_sumables = ['RowCounts', 'TotalSpaceKB', 'UsedSpaceKB', 'UnusedSpaceKB'];
+
+		return collect($campos_sumables)->map_with_keys(function($campo) use ($tables_sizes) {
+			return [$campo => collect($tables_sizes)->sum($campo)];
+		})->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -170,17 +281,32 @@ class Adminbd extends ORM_Model {
 	/**
 	 * Recupera el tamaño de las tablas de una BD
 	 *
-	 * @param  string $tabla Nombre de la base de datos
-	 * @return array         Listado de tablas y tamaños
+	 * @param  string $base_datos Nombre de la base de datos
+	 * @return array              Listado de tablas y tamaños
 	 */
-	public function get_tables_sizes($base_datos = 'bd_logistica')
+	public function database_tables_sizes($base_datos = 'bd_logistica')
 	{
 		$this->dbo = $this->load->database('adminbd', TRUE);
 
 		$this->dbo->query('use '.$base_datos);
+		$sql_tables_sizes = $this->table_size_query($base_datos);
+		$result = $this->dbo->query($sql_tables_sizes)->result_array();
+		$this->db->query('use '.$this->db->database);
 
-		$sql_tables_sizes = "SELECT
-	'$base_datos' AS DataBaseName,
+		return $result;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve query para recuperar el tamaño de las tablas de una base de datos
+	 *
+	 * @param  string $base_datos Base de datos
+	 * @return string
+	 */
+	protected function table_size_query($base_datos = '')
+	{
+		return "SELECT '$base_datos' AS DataBaseName,
     t.NAME AS TableName,
     s.Name AS SchemaName,
     p.rows AS RowCounts,
@@ -206,11 +332,7 @@ GROUP BY
 ORDER BY
     TotalSpaceKB desc";
 
-	$result = $this->dbo->query($sql_tables_sizes)->result_array();
 
-	$this->db->query('use '.$this->db->database);
-
-	return $result;
 	}
 
 
