@@ -320,27 +320,14 @@ class Orm_model implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera los campos que se usarán para listar el modelo
-	 *
-	 * @return array Arreglo de campos
-	 */
-	public function get_campos_listado()
-	{
-		return $this->campos_listado;
-	}
-
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve indicador si el campo se mostrará o no en listaoo
+	 * Devuelve indicador si el campo se mostrará o no en listado
 	 *
 	 * @param string $campo Nombre del campo
 	 * @return boolean Indicador mostrar o no en la lista
 	 */
 	public function get_mostrar_lista($campo = '')
 	{
-		return $this->fields[$campo]->get_mostrar_lista();
+		return (isset($this->fields[$campo])) ? $this->fields[$campo]->get_mostrar_lista() : FALSE;
 	}
 
 	// --------------------------------------------------------------------
