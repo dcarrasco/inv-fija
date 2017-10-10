@@ -120,6 +120,8 @@ class Collection implements IteratorAggregate {
 
 			$this->items[$llave] = $item;
 		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
@@ -136,6 +138,8 @@ class Collection implements IteratorAggregate {
 		{
 			unset($this->items[$llave]);
 		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------

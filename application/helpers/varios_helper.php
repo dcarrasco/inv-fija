@@ -756,9 +756,9 @@ if ( ! function_exists('clase_cumplimiento_consumos'))
 	{
 		return $porcentaje_cumplimiento >= 0.9
 			? 'success'
-			: $porcentaje_cumplimiento >= 0.6
+			: ($porcentaje_cumplimiento >= 0.6
 				? 'warning'
-				: 'danger';
+				: 'danger');
 	}
 }
 
