@@ -530,6 +530,10 @@ function orm_models_autoload($class)
 	{
 		include_once(APPPATH.'libraries/'.$class.'.php');
 	}
+	elseif (file_exists(APPPATH.'tests/'.$class.'.php'))
+	{
+		include_once(APPPATH.'tests/'.$class.'.php');
+	}
 }
 
 spl_autoload_register('orm_models_autoload');
