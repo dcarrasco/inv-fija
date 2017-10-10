@@ -163,6 +163,62 @@ class test_collection extends test_case {
 		$this->test(collect([1,2,3,4,5])->filter(function($el) {return $el<=2;})->all(), $expected);
 	}
 
+	public function test_sum()
+	{
+		$expected = 15;
+
+		$this->test(collect([1,2,3,4,5])->sum(), $expected);
+	}
+
+	public function test_concat()
+	{
+		$expected = '1-2-3-4-5-';
+
+		$this->test(collect([1,2,3,4,5])->concat(function($elem) {return $elem.'-';}), $expected);
+	}
+
+	public function test_sort()
+	{
+		$expected = [1=>1, 0=>2, 3=>3, 2=>4, 4=>5];
+
+		$this->test(collect([2,1,4,3,5])->sort()->all(), $expected);
+	}
+
+	public function test_flatten()
+	{
+		$expected = [1,2,3,4,5,6,7,8,9,10];
+
+		$this->test(collect([[1,2,3], [4,5,6], [7,8,9,10]])->flatten()->all(), $expected);
+	}
+
+	public function test_merge_natural_keys()
+	{
+		$expected = [1,2,3,4,5,6,7,8,9,10];
+
+		$this->test(collect([1,2,3,4,5,6])->merge([7,8,9,10])->all(), $expected);
+	}
+
+	public function test_merge_mixed_keys()
+	{
+		$expected = ['a'=>1, 'b' => 2, 'c' => 3, 'd' => 4];
+
+		$this->test(collect(['a'=>1,'b'=>2,'c'=>33])->merge(['c'=>3,'d'=>4])->all(), $expected);
+	}
+
+	public function test_only()
+	{
+		$expected = [1,2,3,4,5,6];
+
+		$this->test(collect([1,2,3,4,5,6,7,8,9,10])->only([0,1,2,3,4,5])->all(), $expected);
+	}
+
+	public function test_except()
+	{
+		$expected = [6=>7, 7=>8, 8=>9, 9=>10];
+
+		$this->test(collect([1,2,3,4,5,6,7,8,9,10])->except([0,1,2,3,4,5])->all(), $expected);
+	}
+
 
 
 }
