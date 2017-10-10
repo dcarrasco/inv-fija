@@ -120,4 +120,106 @@ class test_orm_field extends test_case {
 		$this->test($field->form_field(), $expected);
 	}
 
+	public function test_orm_field_cast_value_char()
+	{
+		$expected = 'valor';
+		$field = $this->get_field();
+
+		$this->test($field->cast_value('valor'), $expected);
+	}
+
+	public function test_orm_field_cast_value_integer()
+	{
+		$expected = 123;
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
+
+		$this->test($field->cast_value('123'), $expected);
+	}
+
+	public function test_orm_field_cast_value_boolean()
+	{
+		$expected = 0;
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
+
+		$this->test($field->cast_value('FALSE'), $expected);
+	}
+
+	public function test_orm_field_cast_value_datetime()
+	{
+		$expected = '2017-10-10 00:00:00';
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_DATETIME]);
+
+		$this->test($field->cast_value('20171010'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_char()
+	{
+		$expected = 'prueba';
+		$field = $this->get_field();
+
+		$this->test($field->get_formatted_value('prueba'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_integer_sin_formato()
+	{
+		$expected = '1234';
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
+
+		$this->test($field->get_formatted_value('1234'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_integer_con_formato_monto()
+	{
+		$expected = '$&nbsp;1.234';
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'monto,0']);
+
+		$this->test($field->get_formatted_value('1234'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_integer_con_formato_cantidad()
+	{
+		$expected = '1.234,00';
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'cantidad,2']);
+
+		$this->test($field->get_formatted_value('1234'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_integer_con_formato_otro()
+	{
+		$expected = 'XX1234XX';
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'otro,0']);
+
+		$this->test($field->get_formatted_value('1234'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_choices_con_formato()
+	{
+		$expected = 'Valor Traducido';
+		$field = $this->get_field([
+			'choices' => [
+				'valor'      => 'Valor Traducido',
+				'otro_valor' => 'Otro Valor Traducido',
+			],
+		]);
+
+		$this->test($field->get_formatted_value('valor'), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_boolean_true_con_formato()
+	{
+		$expected = lang('orm_radio_yes');
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
+
+		$this->test($field->get_formatted_value(1), $expected);
+	}
+
+	public function test_orm_field_get_formatted_value_boolean_false_con_formato()
+	{
+		$expected = lang('orm_radio_no');
+		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
+
+		$this->test($field->get_formatted_value(0), $expected);
+	}
+
+
 }

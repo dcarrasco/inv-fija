@@ -64,7 +64,7 @@ class MY_Hooks {
 			AND ! $ci->input->is_cli_request()
 		)
 		{
-			$ci->output->enable_profiler(TRUE);
+			// $ci->output->enable_profiler(TRUE);
 		}
 
 		// log información

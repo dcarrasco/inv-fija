@@ -15,13 +15,13 @@ class test_case {
 	/**
 	 * Colores CLI
 	 */
-	const CLI_COLOR_VERDE    = "\033[1;32m";
 	const CLI_COLOR_VERDE_OSC = "\033[0;32m";
-	const CLI_COLOR_ROJO     = "\033[31m";
-	const CLI_COLOR_AMARILLO = "\033[33m";
-	const CLI_COLOR_NORMAL   = "\033[0m";
-	const CLI_FONDO_GRIS     = "\033[47m";
-	const CLI_REVERSE_COLOR  = "\033[7m";
+	const CLI_COLOR_VERDE     = "\033[1;32m";
+	const CLI_COLOR_ROJO      = "\033[31m";
+	const CLI_COLOR_AMARILLO  = "\033[33m";
+	const CLI_COLOR_NORMAL    = "\033[0m";
+	const CLI_FONDO_GRIS      = "\033[47m";
+	const CLI_REVERSE_COLOR   = "\033[7m";
 
 	/**
 	 * Instancia codeigniter
@@ -78,7 +78,9 @@ class test_case {
 	 */
 	protected function print_results()
 	{
-		return is_cli() ? $this->print_cli_result() : $this->print_html_result();
+		$results = $this->results();
+
+		return is_cli() ? $this->print_cli_result($results) : $this->print_html_result($results);
 	}
 
 	// --------------------------------------------------------------------
@@ -88,15 +90,16 @@ class test_case {
 	 *
 	 * @return view
 	 */
-	protected function print_html_result()
+	protected function print_html_result($results_collection)
 	{
-		$test_report = $this->results()
+		$test_report = $results_collection
 			->map(function($result) {
 				return '<tr><td>'.collect($result)->implode('</td><td>').'</td></tr>';
 			})
 			->implode();
 
 		return $this->ci->parser->parse('tests/tests', [
+			'app_title'   => 'inv_fija testing',
 			'base_url'    => base_url(),
 			'test_report' => $test_report,
 		]);
@@ -109,10 +112,8 @@ class test_case {
 	 *
 	 * @return void
 	 */
-	protected function print_cli_result()
+	protected function print_cli_result($results_collection)
 	{
-		$results_collection = $this->results();
-
 		$padding        = $this->cli_padding($results_collection);
 		$separator_line = $this->cli_separator_line($padding);
 		$title_line     = $this->cli_title_line($padding);
@@ -140,7 +141,7 @@ class test_case {
 	 */
 	protected function print_resumen_results()
 	{
-		return is_cli() ? $this->print_cli_resumen_result() : $this->print_html_result();
+		return is_cli() ? $this->print_cli_resumen_result() : $this->print_html_result($this->results());
 	}
 
 	// --------------------------------------------------------------------
@@ -148,21 +149,30 @@ class test_case {
 	protected function print_cli_resumen_result()
 	{
 		$results_collection = $this->results();
-		$cant = $results_collection->count();
-
-		$passed = $results_collection->filter(function($result) {
+		$results_passed = $results_collection->filter(function($result) {
 			return $result['Result'] === static::CLI_COLOR_VERDE.lang('ut_passed').static::CLI_COLOR_NORMAL;
-		})->count();
-
-		$failed = $results_collection->filter(function($result) {
+		});;
+		$results_failed = $results_collection->filter(function($result) {
 			return $result['Result'] === static::CLI_COLOR_ROJO.lang('ut_failed').static::CLI_COLOR_NORMAL;
-		})->count();
+		});
 
-		echo "\nTotal tests ejecutados: {$cant}   ";
-		echo static::CLI_COLOR_VERDE_OSC."  Test OK: {$passed}  ".static::CLI_COLOR_NORMAL;
-		echo "  ";
-		echo $failed ?  static::CLI_REVERSE_COLOR.static::CLI_COLOR_ROJO.static::CLI_FONDO_GRIS."  Test NO OK: {$failed}  ".static::CLI_COLOR_NORMAL : '';
-		echo "\n";
+		$cant   = $results_collection->count();
+		$passed = $results_passed->count();
+		$failed = $results_failed->count();
+
+		$color_passed = static::CLI_COLOR_VERDE_OSC . static::CLI_FONDO_GRIS . static::CLI_REVERSE_COLOR;
+		$color_failed = static::CLI_COLOR_ROJO      . static::CLI_FONDO_GRIS . static::CLI_REVERSE_COLOR;
+		$color_reset  = static::CLI_COLOR_NORMAL;
+
+		echo "\n  Total tests ejecutados: {$cant}   "
+			."{$color_passed}  Tests OK: {$passed}  {$color_reset}  "
+			.($failed ?  "{$color_failed}  Tests NO OK: {$failed}  {$color_reset}" : '')
+			."\n\n";
+
+		if ($failed)
+		{
+			$this->print_cli_result($results_failed);
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -237,11 +247,12 @@ class test_case {
 		return $results = collect($this->unit->result())
 			// recupera nombre de archivo y numero de linea de campo notas
 			->map(function($result) {
-				preg_match('/File: \[([a-zA-Z\d_\.]*)\], Line: \[(\d*)\]/', $result['Notes'], $matches);
+				preg_match('/File: \[([a-zA-Z\d\.:\-_\\\\]*)\], Line: \[(\d*)\]/', $result['Notes'], $matches);
 
 				if (count($matches))
 				{
-					$result['File Name']   = array_get($matches, 1);
+					preg_match('/[a-zA-Z_\d\.]*$/', array_get($matches, 1), $matches2);
+					$result['File Name']   = count($matches2) ? array_get($matches2, 0) : array_get($matches, 1);
 					$result['Line Number'] = array_get($matches, 2);
 					$result['Notes']       = '';
 				}

@@ -502,6 +502,22 @@ class Orm_field {
 
 	// --------------------------------------------------------------------
 
+	public function cast_value($valor)
+	{
+		if (in_array($this->get_tipo(), [Orm_field::TIPO_ID, Orm_field::TIPO_BOOLEAN, Orm_field::TIPO_INT]))
+		{
+			$valor = (int) $valor;
+		}
+		elseif ($this->get_tipo() === Orm_field::TIPO_DATETIME AND $valor !== '')
+		{
+			$valor = date('Y-m-d H:i:s', strtotime($valor));
+		}
+
+		return $valor;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve el valor, formateado de acuerdo al tipo del campo
 	 *
