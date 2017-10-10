@@ -13,6 +13,17 @@
 class test_case {
 
 	/**
+	 * Colores CLI
+	 */
+	const CLI_COLOR_VERDE    = "\033[1;32m";
+	const CLI_COLOR_VERDE_OSC = "\033[0;32m";
+	const CLI_COLOR_ROJO     = "\033[31m";
+	const CLI_COLOR_AMARILLO = "\033[33m";
+	const CLI_COLOR_NORMAL   = "\033[0m";
+	const CLI_FONDO_GRIS     = "\033[47m";
+	const CLI_REVERSE_COLOR  = "\033[7m";
+
+	/**
 	 * Instancia codeigniter
 	 *
 	 * @var object
@@ -118,6 +129,40 @@ class test_case {
 		->implode("\n");
 
 		echo "\n{$separator_line}{$title_line}{$separator_line}{$results}\n{$separator_line}";
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Despliega los resultados de los tests
+	 *
+	 * @return mixed
+	 */
+	protected function print_resumen_results()
+	{
+		return is_cli() ? $this->print_cli_resumen_result() : $this->print_html_result();
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function print_cli_resumen_result()
+	{
+		$results_collection = $this->results();
+		$cant = $results_collection->count();
+
+		$passed = $results_collection->filter(function($result) {
+			return $result['Result'] === static::CLI_COLOR_VERDE.lang('ut_passed').static::CLI_COLOR_NORMAL;
+		})->count();
+
+		$failed = $results_collection->filter(function($result) {
+			return $result['Result'] === static::CLI_COLOR_ROJO.lang('ut_failed').static::CLI_COLOR_NORMAL;
+		})->count();
+
+		echo "\nTotal tests ejecutados: {$cant}   ";
+		echo static::CLI_COLOR_VERDE_OSC."  Test OK: {$passed}  ".static::CLI_COLOR_NORMAL;
+		echo "  ";
+		echo $failed ?  static::CLI_REVERSE_COLOR.static::CLI_COLOR_ROJO.static::CLI_FONDO_GRIS."  Test NO OK: {$failed}  ".static::CLI_COLOR_NORMAL : '';
+		echo "\n";
 	}
 
 	// --------------------------------------------------------------------
@@ -237,9 +282,9 @@ class test_case {
 	{
 		if ($is_cli)
 		{
-			$color = $value === lang('ut_passed') ? "\033[32m" : "\033[31m";
+			$color = $value === lang('ut_passed') ? static::CLI_COLOR_VERDE : static::CLI_COLOR_ROJO;
 
-			return "{$color}{$value}\033[0m";
+			return "{$color}{$value}".static::CLI_COLOR_NORMAL;
 		}
 		else
 		{
@@ -271,14 +316,28 @@ class test_case {
 	 *
 	 * @return void
 	 */
-	public function all_files()
+	public function all_files($detalle = TRUE)
 	{
 		collect(scandir(APPPATH.'/tests'))
 			->filter(function($folder) { return substr($folder, -4) === '.php'; })
 			->map(function($folder)    { return substr($folder, 0, strlen($folder) - 4); })
 			->each(function($folder)   { (new $folder())->all_methods(); });
 
-		$this->print_results();
+		if ($detalle)
+		{
+			return $this->print_results();
+		}
+		else
+		{
+			return $this->print_resumen_results();
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	public function resumen_all_files()
+	{
+		return $this->all_files(FALSE);
 	}
 
 	// --------------------------------------------------------------------
@@ -302,4 +361,19 @@ class test_case {
 		return $this->unit->run($test, $result, $test_name, "File: [{$file}], Line: [{$line}]");
 	}
 
+	// --------------------------------------------------------------------
+
+	public function print_help()
+	{
+		if (is_cli())
+		{
+			echo "\n";
+			echo static::CLI_COLOR_AMARILLO.'Uso:'.static::CLI_COLOR_NORMAL."\n";
+			echo "  php public/index.php tests [opciones]\n\n";
+			echo static::CLI_COLOR_AMARILLO.'Opciones:'.static::CLI_COLOR_NORMAL."\n";
+			echo '  '.static::CLI_COLOR_VERDE.'help'.static::CLI_COLOR_NORMAL."       Muestra esta ayuda\n";
+			echo '  '.static::CLI_COLOR_VERDE.'detalle'.static::CLI_COLOR_NORMAL."    Muestra cada linea de test\n";
+		}
+
+	}
 }
