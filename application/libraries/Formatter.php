@@ -101,11 +101,11 @@ class Formatter {
 
 		if (strtoupper($unidad) === 'UN')
 		{
-			$valor_formateado = $signo_moneda.static::cantidad($monto, $decimales);
+			$valor_formateado = $signo_moneda.static::cantidad($monto, $decimales, $mostrar_cero);
 		}
 		elseif (strtoupper($unidad) === 'MM')
 		{
-			$valor_formateado = 'MM'.$signo_moneda.static::cantidad($monto/1000000, $monto > 10000000 ? 0 : 1);
+			$valor_formateado = 'MM'.$signo_moneda.static::cantidad($monto/1000000, $monto > 10000000 ? 0 : 1, $mostrar_cero);
 		}
 
 		return $format_diff ? static::format_diff($valor_formateado, $monto) : $valor_formateado;

@@ -46,7 +46,7 @@ class MY_Hooks {
 		$ci =& get_instance();
 		$ci->config->load('inv-fija');
 
-		$whitelist_classes = ['login', 'migration'];
+		$whitelist_classes = ['login', 'migration', 'tests'];
 
 		$class = $ci->router->fetch_class();
 		$llave_modulo = property_exists($class, 'llave_modulo') ? $ci->llave_modulo : '';

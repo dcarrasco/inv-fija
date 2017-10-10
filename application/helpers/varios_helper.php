@@ -688,15 +688,10 @@ if ( ! function_exists('get_arr_dias_mes'))
 		$mes = (int) substr($anomes, 4, 2);
 		$ano = (int) substr($anomes, 0, 4);
 
-		$arr_dias = [];
-
-		for ($i = 1; $i <= days_in_month($mes, $ano); $i++)
-		{
-			$indice_dia = str_pad($i, 2, '0', STR_PAD_LEFT);
-			$arr_dias[$indice_dia] = NULL;
-		}
-
-		return $arr_dias;
+		return collect(array_fill(1, days_in_month($mes, $ano), NULL))
+			->map_with_keys(function($valor, $indice) {
+				return [str_pad($indice, 2, '0', STR_PAD_LEFT) => $valor];
+			})->all();
 	}
 }
 
@@ -756,9 +751,9 @@ if ( ! function_exists('clase_cumplimiento_consumos'))
 	{
 		return $porcentaje_cumplimiento >= 0.9
 			? 'success'
-			: $porcentaje_cumplimiento >= 0.6
+			: ($porcentaje_cumplimiento >= 0.6
 				? 'warning'
-				: 'danger';
+				: 'danger');
 	}
 }
 
