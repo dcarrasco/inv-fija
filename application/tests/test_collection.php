@@ -219,6 +219,46 @@ class test_collection extends test_case {
 		$this->test(collect([1,2,3,4,5,6,7,8,9,10])->except([0,1,2,3,4,5])->all(), $expected);
 	}
 
+	public function test_combine()
+	{
+		$expected = ['a'=>1, 'b'=>2, 'c'=>3, 'd'=>4];
 
+		$this->test(collect(['a','b','c','d'])->combine([1,2,3,4])->all(), $expected);
+	}
+
+	public function test_map_with_keys()
+	{
+		$expected = [1=>11, 2=>12, 3=>13, 4=>14];
+
+		$this->test(collect([1,2,3,4])->map_with_keys(function($elem) {return [$elem=>10+$elem];})->all(), $expected);
+	}
+
+	public function test_unique()
+	{
+		$expected = [0 => 1, 1 => 3, 2 => 2, 11 => 5];
+
+		$this->test(collect([1,3,2,3,2,1,2,2,2,3,3,5])->unique()->all(), $expected);
+	}
+
+	public function test_result_keys_to_lower()
+	{
+		$expected = [['a' => 1], ['b' => 2], ['c' => 3], ['d' => 4]];
+
+		$this->test(collect([['A' => 1], ['b' => 2], ['C' => 3], ['D' => 4]])->result_keys_to_lower(), $expected);
+	}
+
+	public function test_pluck()
+	{
+		$expected = [1, 3, 4, NULL];
+
+		$this->test(collect([['campo1'=>1, 'campo2'=>2], ['campo1'=> 3], ['campo1' => 4, 'campo2'=>5], ['campo2' => 6]])->pluck('campo1')->all(), $expected);
+	}
+
+	public function test_first()
+	{
+		$expected = ['campo1'=>1, 'campo2'=>2];
+
+		$this->test(collect([['campo1'=>1, 'campo2'=>2], ['campo1'=> 3], ['campo1' => 4, 'campo2'=>5], ['campo2' => 6]])->first(), $expected);
+	}
 
 }
