@@ -74,12 +74,12 @@ $active_group = 'default';
 $query_builder = TRUE;
 
 $db['default'] = array(
-	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
-	'hostname' => 'sirio',
-	'username' => 'invfija',
-	'password' => 'fijainv2014!',
-	'database' => 'BD_inventario',
-	'dbdriver' => 'pdo',
+	'dsn'      => getenv('DB_DEFAULT_DSN'),
+	'hostname' => getenv('DB_DEFAULT_HOSTNAME'),
+	'username' => getenv('DB_DEFAULT_USERNAME'),
+	'password' => getenv('DB_DEFAULT_PASSWORD'),
+	'database' => getenv('DB_DEFAULT_DATABASE'),
+	'dbdriver' => getenv('DB_DEFAULT_DBDRIVER'),
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),
@@ -96,12 +96,12 @@ $db['default'] = array(
 );
 
 $db['adminbd'] = array(
-	'dsn'      => 'dblib:host=sirio;db_name=BD_inventario',
-	'hostname' => 'sirio',
-	'username' => 'patripio',
-	'password' => 'movi.2015.logistica',
-	'database' => 'BD_inventario',
-	'dbdriver' => 'pdo',
+	'dsn'      => getenv('DB_ADMINBD_DSN'),
+	'hostname' => getenv('DB_ADMINBD_HOSTNAME'),
+	'username' => getenv('DB_ADMINBD_USERNAME'),
+	'password' => getenv('DB_ADMINBD_PASSWORD'),
+	'database' => getenv('DB_ADMINBD_DATABASE'),
+	'dbdriver' => getenv('DB_ADMINBD_DBDRIVER'),
 	'dbprefix' => '',
 	'pconnect' => FALSE,
 	'db_debug' => (ENVIRONMENT !== 'production'),

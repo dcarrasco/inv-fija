@@ -12,6 +12,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 
+$hook['pre_system'] = array(
+	'class'    => 'MY_Hooks',
+	'function' => 'pre_system_hook',
+	'filename' => 'MY_Hooks.php',
+	'filepath' => 'hooks',
+);
+
 $hook['post_controller_constructor'] = array(
 	'class'    => 'MY_Hooks',
 	'function' => 'acl_hook',

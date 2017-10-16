@@ -28,6 +28,12 @@ use \Acl\Acl;
  */
 class MY_Hooks {
 
+	public function pre_system_hook()
+	{
+		$dotenv = new Dotenv\Dotenv(BASEPATH.'../application');
+		$dotenv->load();
+	}
+
 	/**
 	 * Funciones y operaciones ejecutadas con todos los controladores
 	 *

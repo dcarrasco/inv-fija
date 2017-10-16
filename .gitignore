@@ -3,6 +3,7 @@ upload/
 !upload/.gitkeep
 application/cache/
 application/logs/
+application/.env
 public/img/captcha/
 !public/img/captcha/.gitkeep
 vendor/
