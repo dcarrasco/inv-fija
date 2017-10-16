@@ -22,11 +22,11 @@ $config['app_nombre'] = 'Inventario Fija';
 */
 
 // Nombres de las bases de datos
-define('BD_INVENTARIO', 'bd_inventario..');
-define('BD_TOA', 'bd_toa..');
-define('BD_LOGISTICA', 'bd_logistica..');
-define('BD_CONTROLES', 'bd_controles..');
-define('BD_PLANIFICACION', 'bd_planificacion..');
+define('BD_INVENTARIO', getenv('BD_INVENTARIO'));
+define('BD_TOA', getenv('BD_TOA'));
+define('BD_LOGISTICA', getenv('BD_LOGISTICA'));
+define('BD_CONTROLES', getenv('BD_CONTROLES'));
+define('BD_PLANIFICACION', getenv('BD_PLANIFICACION'));
 
 // Inventarios
 $config['bd_usuarios']           = BD_INVENTARIO.'fija_usuarios';

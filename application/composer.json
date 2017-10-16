@@ -10,5 +10,7 @@
             "email": "danielcarrasco17@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^2.4"
+    }
 }
