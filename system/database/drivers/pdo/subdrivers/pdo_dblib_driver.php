@@ -276,11 +276,7 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 
 		// As of SQL Server 2005 (9.0.*) ROW_NUMBER() is supported,
 		// however an ORDER BY clause is required for it to work
-		// =================
-		// elimina version compare por error en dblib
-		// if (version_compare($this->version(), '9', '>=') && $this->qb_offset && ! empty($this->qb_orderby))
-		// =================
-		if ($this->qb_offset && ! empty($this->qb_orderby))
+		if (version_compare($this->version(), '9', '>=') && $this->qb_offset && ! empty($this->qb_orderby))
 		{
 			$orderby = $this->_compile_order_by();
 
@@ -288,7 +284,7 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 			$sql = trim(substr($sql, 0, strrpos($sql, $orderby)));
 
 			// Get the fields to select from our subquery, so that we can avoid CI_rownum appearing in the actual results
-			if (count($this->qb_select) === 0)
+			if (count($this->qb_select) === 0 OR strpos(implode(',', $this->qb_select), '*') !== FALSE)
 			{
 				$select = '*'; // Inevitable
 			}
@@ -338,4 +334,20 @@ class CI_DB_pdo_dblib_driver extends CI_DB_pdo_driver {
 		return ($this->db_debug) ? $this->display_error('db_unsupported_feature') : FALSE;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Database version number
+	 *
+	 * @return      string
+	 */
+	public function version()
+	{
+		if (isset($this->data_cache['version']))
+		{
+			return $this->data_cache['version'];
+		}
+
+		return $this->data_cache['version'] = $this->conn_id->query("SELECT SERVERPROPERTY('ProductVersion') AS ver")->fetchColumn(0);
+	}
 }
