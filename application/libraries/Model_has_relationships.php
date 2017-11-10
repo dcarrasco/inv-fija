@@ -68,7 +68,7 @@ trait Model_has_relationships {
 	 * @param  Collection $relations_collection Coleccion de relacion donde se busca la relacion
 	 * @return void
 	 */
-	protected function get_relation_fields($relations_collection = NULL)
+	public function get_relation_fields($relations_collection = NULL)
 	{
 		foreach ($this->fields as $nombre_campo => $obj_campo)
 		{
