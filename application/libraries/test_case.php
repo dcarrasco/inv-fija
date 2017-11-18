@@ -330,9 +330,9 @@ class test_case {
 	public function all_files($detalle = TRUE)
 	{
 		collect(scandir(APPPATH.'/tests'))
-			->filter(function($folder) { return substr($folder, -4) === '.php'; })
-			->map(function($folder)    { return substr($folder, 0, strlen($folder) - 4); })
-			->each(function($folder)   { (new $folder())->all_methods(); });
+			->filter(function($file) { return substr($file, -4) === '.php'; })
+			->map(function($file)    { return substr($file, 0, strlen($file) - 4); })
+			->each(function($file)   { (new $file())->all_methods(); });
 
 		if ($detalle)
 		{
