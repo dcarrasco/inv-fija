@@ -513,26 +513,21 @@ $config['proxy_ips'] = '';
 
 /**
  * Autoload models y controllers
+ *
+ * @param  string $class Nombre de la clase a cargar
+ * @return void
  */
 function orm_models_autoload($class)
 {
 	$class = str_replace('\\', '/', $class);
 
-	if (file_exists(APPPATH.'models/'.$class.'.php'))
+	foreach(['models', 'controllers', 'libraries', 'tests'] as $path)
 	{
-		include_once(APPPATH.'models/'.$class.'.php');
-	}
-	elseif (file_exists(APPPATH.'controllers/'.$class.'.php'))
-	{
-		include_once(APPPATH.'controllers/'.$class.'.php');
-	}
-	elseif (file_exists(APPPATH.'libraries/'.$class.'.php'))
-	{
-		include_once(APPPATH.'libraries/'.$class.'.php');
-	}
-	elseif (file_exists(APPPATH.'tests/'.$class.'.php'))
-	{
-		include_once(APPPATH.'tests/'.$class.'.php');
+		if (file_exists(APPPATH.$path.'/'.$class.'.php'))
+		{
+			include_once(APPPATH.$path.'/'.$class.'.php');
+			return;
+		}
 	}
 }
 
