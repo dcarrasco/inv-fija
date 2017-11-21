@@ -160,7 +160,7 @@ class test_case {
 		$passed = $results_passed->count();
 		$failed = $results_failed->count();
 
-		$color_passed = static::CLI_COLOR_VERDE_OSC . static::CLI_FONDO_GRIS . static::CLI_REVERSE_COLOR;
+		$color_passed = static::CLI_COLOR_VERDE_OSC . static::CLI_REVERSE_COLOR;
 		$color_failed = static::CLI_COLOR_ROJO      . static::CLI_FONDO_GRIS . static::CLI_REVERSE_COLOR;
 		$color_reset  = static::CLI_COLOR_NORMAL;
 
@@ -329,19 +329,25 @@ class test_case {
 	 */
 	public function all_files($detalle = TRUE)
 	{
+		get_instance()->load->helper('number');
+
+		$tiempo_inicio = new \DateTime();
+
 		collect(scandir(APPPATH.'/tests'))
 			->filter(function($file) { return substr($file, -4) === '.php'; })
 			->map(function($file)    { return substr($file, 0, strlen($file) - 4); })
 			->each(function($file)   { (new $file())->all_methods(); });
 
-		if ($detalle)
+		$tiempo_fin = new \DateTime();
+		$intervalo = $tiempo_inicio->diff($tiempo_fin);
+		$intervalo = $intervalo->s + $intervalo->f;
+
+		if (is_cli())
 		{
-			return $this->print_results();
+			echo "\nTiempo: {$intervalo}, Memoria: ".byte_format(memory_get_usage())."\n";
 		}
-		else
-		{
-			return $this->print_resumen_results();
-		}
+
+		return $detalle ? $this->print_results() : $this->print_resumen_results();
 	}
 
 	// --------------------------------------------------------------------
