@@ -419,6 +419,17 @@ class Collection implements IteratorAggregate {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Dump la coleccion y termina
+	 *
+	 * @return $this
+	 */
+	public function dd()
+	{
+		dd($this);
+	}
 
 	// --------------------------------------------------------------------
 
