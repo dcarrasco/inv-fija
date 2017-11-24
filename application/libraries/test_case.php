@@ -261,16 +261,7 @@ class test_case {
 			})
 			// numera las lineas
 			->map(function($result) use (&$cant) {
-				return [
-					'n'                 => ++$cant,
-					'Test Name'         => $result['Test Name'],
-					'Test Datatype'     => $result['Test Datatype'],
-					'Expected Datatype' => $result['Expected Datatype'],
-					'Result'            => $result['Result'],
-					'File Name'         => $result['File Name'],
-					'Line Number'       => $result['Line Number'],
-					'Notes'             => $result['Notes'],
-				];
+				return array_merge(['n' => ++$cant], $result);
 			})
 			// formatea campo Result para HTML o CLI
 			->map(function($result) use ($is_cli) {
