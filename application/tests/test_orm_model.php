@@ -31,7 +31,7 @@ class test_orm_model extends test_case {
 		];
 	}
 
-	public function test_orm_model_get_model_nombre()
+	public function test_get_model_nombre()
 	{
 		$expected = 'model_test';
 		$model = $this->get_model();
@@ -39,7 +39,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_model_nombre(), $expected);
 	}
 
-	public function test_orm_model_get_tabla()
+	public function test_get_tabla()
 	{
 		$expected = 'model_tabla';
 		$model = $this->get_model();
@@ -47,7 +47,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_tabla(), $expected);
 	}
 
-	public function test_orm_model_get_label()
+	public function test_get_label()
 	{
 		$expected = 'model_label';
 		$model = $this->get_model();
@@ -55,7 +55,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_label(), $expected);
 	}
 
-	public function test_orm_model_get_label_plural()
+	public function test_get_label_plural()
 	{
 		$expected = 'model_label_plural';
 		$model = $this->get_model();
@@ -63,7 +63,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_label_plural(), $expected);
 	}
 
-	public function test_orm_model_get_fields()
+	public function test_get_fields()
 	{
 		$campo01_def = [
 			'label'          => 'label_campo01',
@@ -113,7 +113,7 @@ class test_orm_model extends test_case {
 		$this->test(collect($model->get_fields())->map(function($campo) {return (array) $campo;})->all(), $expected);
 	}
 
-	public function test_orm_model_get_filtro()
+	public function test_get_filtro()
 	{
 		$expected = 'filtro';
 		$model = $this->get_model();
@@ -123,7 +123,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_filtro(), $expected);
 	}
 
-	public function test_orm_model_get_mostrar_lista_campo_existe()
+	public function test_get_mostrar_lista_campo_existe()
 	{
 		$expected = TRUE;
 		$model = $this->get_model();
@@ -131,7 +131,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_mostrar_lista('campo01'), $expected);
 	}
 
-	public function test_orm_model_get_mostrar_lista_campo_no_existe()
+	public function test_get_mostrar_lista_campo_no_existe()
 	{
 		$expected = FALSE;
 		$model = $this->get_model();
@@ -139,7 +139,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_mostrar_lista(), $expected);
 	}
 
-	public function test_orm_model_fill_array()
+	public function test_fill_array()
 	{
 		$expected = $this->get_data01();
 		$model = $this->get_model();
@@ -147,7 +147,7 @@ class test_orm_model extends test_case {
 		$this->test($model->fill($this->get_data01())->get_fields_values(), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_campo_existe()
+	public function test_has_attributes_get_campo_existe()
 	{
 		$expected = 'value01';
 		$model = $this->get_model()->fill(['campo01' => 'value01']);
@@ -155,7 +155,7 @@ class test_orm_model extends test_case {
 		$this->test($model->campo01, $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_campo_no_existe()
+	public function test_has_attributes_get_campo_no_existe()
 	{
 		$expected = NULL;
 		$model = $this->get_model()->fill(['campo01' => 'value01']);
@@ -163,7 +163,7 @@ class test_orm_model extends test_case {
 		$this->test($model->campo02, $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_campo_id()
+	public function test_has_attributes_get_campo_id()
 	{
 		$expected = ['campo01', 'campo02'];
 		$model = $this->get_model();
@@ -171,7 +171,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_campo_id(), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_fields_values()
+	public function test_has_attributes_get_fields_values()
 	{
 		$expected = $this->get_data01();
 		$model = $this->get_model()->fill($this->get_data01());
@@ -179,7 +179,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_fields_values(), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_id()
+	public function test_has_attributes_get_id()
 	{
 		$expected = 'value01~value02';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -187,7 +187,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_id(), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_field_value_char()
+	public function test_has_attributes_get_field_value_char()
 	{
 		$expected = 'value01';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -195,7 +195,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_value('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_field_value_integer()
+	public function test_has_attributes_get_field_value_integer()
 	{
 		$expected = 3;
 		$model = $this->get_model()->fill($this->get_data01());
@@ -203,7 +203,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_value('campo03'), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_field_value_boolean_formatted()
+	public function test_has_attributes_get_field_value_boolean_formatted()
 	{
 		$expected = lang('orm_radio_yes');
 		$model = $this->get_model()->fill($this->get_data01());
@@ -211,7 +211,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_value('campo04'), $expected);
 	}
 
-	public function test_orm_model_has_attributes_get_field_value_boolean_not_formatted()
+	public function test_has_attributes_get_field_value_boolean_not_formatted()
 	{
 		$expected = 1;
 		$model = $this->get_model()->fill($this->get_data01());
@@ -219,7 +219,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_value('campo04', FALSE), $expected);
 	}
 
-	public function test_orm_model_has_attributes_fill_from_array()
+	public function test_has_attributes_fill_from_array()
 	{
 		$expected = $this->get_data01();
 
@@ -231,7 +231,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_fields_values(), $expected);
 	}
 
-	public function test_orm_model_has_form_form_item()
+	public function test_has_form_form_item()
 	{
 		$expected = 'is_string';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -239,7 +239,7 @@ class test_orm_model extends test_case {
 		$this->test($model->form_item('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_form_get_field_label()
+	public function test_has_form_get_field_label()
 	{
 		$expected = 'label_campo01';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -247,7 +247,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_label('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_form_get_field_texto_ayuda()
+	public function test_has_form_get_field_texto_ayuda()
 	{
 		$expected = 'texto_ayuda_campo01';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -255,7 +255,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_texto_ayuda('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_form_field_es_obligatorio()
+	public function test_has_form_field_es_obligatorio()
 	{
 		$expected = TRUE;
 		$model = $this->get_model()->fill($this->get_data01());
@@ -263,7 +263,7 @@ class test_orm_model extends test_case {
 		$this->test($model->field_es_obligatorio('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_form_get_field_marca_obligatorio_TRUE()
+	public function test_has_form_get_field_marca_obligatorio_TRUE()
 	{
 		$expected = ' <span class="text-danger">*</span>';
 		$model = $this->get_model()->fill($this->get_data01());
@@ -271,7 +271,7 @@ class test_orm_model extends test_case {
 		$this->test($model->get_field_marca_obligatorio('campo01'), $expected);
 	}
 
-	public function test_orm_model_has_form_get_field_marca_obligatorio_FALSE()
+	public function test_has_form_get_field_marca_obligatorio_FALSE()
 	{
 		$expected = '';
 		$model = $this->get_model()->fill($this->get_data01());
