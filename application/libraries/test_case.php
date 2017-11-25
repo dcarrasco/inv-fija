@@ -44,12 +44,11 @@ class test_case {
 	 */
 	protected $cli_padding = [
 		'n'                 => 3,
+		'File Name'         => 15,
 		'Test Name'         => 30,
 		'Test Datatype'     => 13,
 		'Expected Datatype' => 17,
 		'Result'            => 2,
-		'File Name'         => 15,
-		'Line Number'       => 11,
 	];
 
 	// --------------------------------------------------------------------
@@ -114,20 +113,36 @@ class test_case {
 	 */
 	protected function print_cli_result($results_collection)
 	{
+		$results_collection = $results_collection->map(function($result) {
+			return [
+				'n'                 => $result['n'],
+				'File Name'         => $result['File Name'].':'.$result['Line Number'],
+				'Test Name'         => $result['Test Name'],
+				'Test Datatype'     => $result['Test Datatype'],
+				'Expected Datatype' => $result['Expected Datatype'],
+				'Result'            => $result['Result'],
+			];
+		});
+
 		$padding        = $this->cli_padding($results_collection);
 		$separator_line = $this->cli_separator_line($padding);
 		$title_line     = $this->cli_title_line($padding);
 
-		$results = $results_collection->map(function($result) use ($padding) {
-			return ' | '.collect($result)
-				->only(['n', 'Test Name', 'Test Datatype', 'Expected Datatype', 'Result', 'File Name', 'Line Number'])
-				->map(function($result, $result_key) use ($padding) {
-					$padding['Result'] += 9;
-					return str_pad($result, array_get($padding, $result_key, 10));
-				})
-				->implode(' | ').' | ';
-		})
-		->implode("\n");
+		$results = $results_collection
+			->map(function($result) {
+				$result['Result'] = $this->format_result($result['Result'], TRUE);
+				return $result;
+			})
+			->map(function($result) use ($padding) {
+				return ' | '.collect($result)
+					->only(['n', 'File Name', 'Test Name', 'Test Datatype', 'Expected Datatype', 'Result'])
+					->map(function($result, $result_key) use ($padding) {
+						return str_pad($result, array_get($padding, $result_key, 10));
+					})
+					->implode(' | ').' | ';
+			})
+			// formatea campo Result para HTML o CLI
+			->implode("\n");
 
 		echo "\n{$separator_line}{$title_line}{$separator_line}{$results}\n{$separator_line}";
 	}
@@ -150,10 +165,10 @@ class test_case {
 	{
 		$results_collection = $this->results();
 		$results_passed = $results_collection->filter(function($result) {
-			return $result['Result'] === static::CLI_COLOR_VERDE.lang('ut_passed').static::CLI_COLOR_NORMAL;
+			return $result['Result'] === lang('ut_passed');
 		});;
 		$results_failed = $results_collection->filter(function($result) {
-			return $result['Result'] === static::CLI_COLOR_ROJO.lang('ut_failed').static::CLI_COLOR_NORMAL;
+			return $result['Result'] === lang('ut_failed');
 		});
 
 		$cant   = $results_collection->count();
@@ -189,10 +204,9 @@ class test_case {
 	{
 		return collect($this->cli_padding)
 			->map(function($item_length, $item_name) use ($results_collection) {
-				$max_length = max($results_collection->pluck($item_name)
+				$max_length = $results_collection->pluck($item_name)
 					->map(function($test) {return strlen($test);})
-					->all()
-				);
+					->max();
 
 				return $max_length > $item_length ? $max_length : $item_length;
 			})->all();
@@ -262,12 +276,6 @@ class test_case {
 			// numera las lineas
 			->map(function($result) use (&$cant) {
 				return array_merge(['n' => ++$cant], $result);
-			})
-			// formatea campo Result para HTML o CLI
-			->map(function($result) use ($is_cli) {
-				$result['Result'] = $this->format_result($result['Result'], $is_cli);
-
-				return $result;
 			});
 	}
 
@@ -335,7 +343,7 @@ class test_case {
 
 		if (is_cli())
 		{
-			echo "\nTiempo: {$intervalo}, Memoria: ".byte_format(memory_get_usage())."\n";
+			echo "\nTiempo: {$intervalo} seg, Memoria: ".byte_format(memory_get_usage())."\n";
 		}
 
 		return $detalle ? $this->print_results() : $this->print_resumen_results();
@@ -359,11 +367,11 @@ class test_case {
 	 */
 	public function test($test, $result)
 	{
-		$file = explode('/', array_get(collect(debug_backtrace())->get(0), 'file'));
+		$file = explode('/', array_get(debug_backtrace(), '0.file'));
 		$file = array_get($file, count($file)-1);
-		$line = array_get(collect(debug_backtrace())->get(0), 'line');
+		$line = array_get(debug_backtrace(), '0.line');
 
-		$test_name = array_get(collect(debug_backtrace())->get(1), 'function');
+		$test_name = array_get(debug_backtrace(), '1.function');
 		$test_name = str_replace('_', ' ', substr($test_name, 5, strlen($test_name)));
 
 		return $this->unit->run($test, $result, $test_name, "File: [{$file}], Line: [{$line}]");
