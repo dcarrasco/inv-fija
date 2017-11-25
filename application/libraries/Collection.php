@@ -373,6 +373,23 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	/**
+	* Saca el maximo valor de la coleccion.
+	*
+	* @param  string  $campo Campo a sacar el valor maximo
+	* @return mixed
+	*/
+	public function max($campo = NULL)
+	{
+		return $this->reduce(function($maximo, $elem) use ($campo) {
+			$valor_campo = is_null($campo) ? $elem : array_get((array) $elem, $campo);
+
+			return $maximo > $valor_campo ? $maximo : $valor_campo;
+		}, 0);
+	}
+
+	// --------------------------------------------------------------------
+
 	public function concat($callback)
 	{
 		if (is_string($callback))

@@ -170,6 +170,13 @@ class test_collection extends test_case {
 		$this->test(collect([1,2,3,4,5])->sum(), $expected);
 	}
 
+	public function test_max()
+	{
+		$expected = 5;
+
+		$this->test(collect([1,4,3,5,0])->max(), $expected);
+	}
+
 	public function test_concat()
 	{
 		$expected = '1-2-3-4-5-';
