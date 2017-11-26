@@ -137,11 +137,10 @@ class test_case {
 				return ' | '.collect($result)
 					->only(['n', 'File Name', 'Test Name', 'Test Datatype', 'Expected Datatype', 'Result'])
 					->map(function($result, $result_key) use ($padding) {
-						return str_pad($result, array_get($padding, $result_key, 10));
+						return str_pad($result, $padding->get($result_key, 10));
 					})
 					->implode(' | ').' | ';
 			})
-			// formatea campo Result para HTML o CLI
 			->implode("\n");
 
 		echo "\n{$separator_line}{$title_line}{$separator_line}{$results}\n{$separator_line}";
@@ -204,12 +203,12 @@ class test_case {
 	{
 		return collect($this->cli_padding)
 			->map(function($item_length, $item_name) use ($results_collection) {
-				$max_length = $results_collection->pluck($item_name)
-					->map(function($test) {return strlen($test);})
-					->max();
-
-				return $max_length > $item_length ? $max_length : $item_length;
-			})->all();
+				return max([$item_length,
+					$results_collection->pluck($item_name)
+						->map(function($test) {return strlen($test);})
+						->max()
+				]);
+			});
 	}
 
 	// --------------------------------------------------------------------
@@ -223,10 +222,10 @@ class test_case {
 	 */
 	protected function cli_separator_line($padding)
 	{
-		return ' +-'.collect($padding)
-			->map(function($item_length) {return str_pad('', $item_length, '-'); })
-			->implode('-+-')
-		."-+\n";
+		return ' +-'
+			.$padding->map(function($item_length) {return str_pad('', $item_length, '-'); })
+				->implode('-+-')
+			."-+\n";
 	}
 
 	// --------------------------------------------------------------------
@@ -240,10 +239,10 @@ class test_case {
 	 */
 	protected function cli_title_line($padding)
 	{
-		return ' | '.collect($padding)
-			->map(function($item_length, $item_key) {return str_pad($item_key, $item_length); })
-			->implode(' | ')
-		." |\n";
+		return ' | '
+			.$padding->map(function($item_length, $item_key) {return str_pad($item_key, $item_length); })
+				->implode(' | ')
+			." |\n";
 	}
 
 	// --------------------------------------------------------------------
