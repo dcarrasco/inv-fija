@@ -21,12 +21,12 @@ class test_varios_helper extends test_case {
 		get_instance()->lang->load('acl_lang');
 		$expected = 'Usuarios';
 
-		$this->test(lang('acl_config_menu_usuarios'), $expected);
+		$this->assert_equals(lang('acl_config_menu_usuarios'), $expected);
 	}
 
 	public function test_print_message()
 	{
-		$this->test(print_message('prueba'), 'is_string');
+		$this->assert_is_string(print_message('prueba'));
 	}
 
 	public function test_form_array_format()
@@ -38,7 +38,7 @@ class test_varios_helper extends test_case {
 			['llave' => 'b', 'valor' => '2', 'otro' => 'otro'],
 			['llave' => 'c', 'valor' => '3', 'otro' => 'otro'],
 		];
-		$this->test(form_array_format($test), $expected);
+		$this->assert_equals(form_array_format($test), $expected);
 	}
 
 	public function test_form_array_format_con_mensaje_ini()
@@ -50,147 +50,145 @@ class test_varios_helper extends test_case {
 			['llave' => 'b', 'valor' => '2', 'otro' => 'otro'],
 			['llave' => 'c', 'valor' => '3', 'otro' => 'otro'],
 		];
-		$this->test(form_array_format($test, 'mensaje ini'), $expected);
+		$this->assert_equals(form_array_format($test, 'mensaje ini'), $expected);
 	}
 
 	public function test_fmt_cantidad_menor_a_1000()
 	{
 		$expected = '500';
 
-		$this->test(fmt_cantidad(500), $expected);
+		$this->assert_equals(fmt_cantidad(500), $expected);
 	}
 
 	public function test_fmt_cantidad_mayor_a_1000()
 	{
 		$expected = '5.000';
 
-		$this->test(fmt_cantidad(5000), $expected);
+		$this->assert_equals(fmt_cantidad(5000), $expected);
 	}
 
 	public function test_fmt_cantidad_mayor_a_1000_con_decimales()
 	{
 		$expected = '5.000,43';
 
-		$this->test(fmt_cantidad(5000.428, 2), $expected);
+		$this->assert_equals(fmt_cantidad(5000.428, 2), $expected);
 	}
 
 	public function test_fmt_cantidad_mostrar_cero()
 	{
 		$expected = '0';
 
-		$this->test(fmt_cantidad(0, 0, TRUE), $expected);
+		$this->assert_equals(fmt_cantidad(0, 0, TRUE), $expected);
 	}
 
 	public function test_fmt_cantidad_no_mostrar_cero()
 	{
 		$expected = '';
 
-		$this->test(fmt_cantidad(0, 0, FALSE), $expected);
+		$this->assert_equals(fmt_cantidad(0, 0, FALSE), $expected);
 	}
 
 	public function test_fmt_monto_menor_a_1000()
 	{
 		$expected = '$&nbsp;500';
 
-		$this->test(fmt_monto(500), $expected);
+		$this->assert_equals(fmt_monto(500), $expected);
 	}
 
 	public function test_fmt_monto_mayor_a_1000()
 	{
 		$expected = '$&nbsp;5.000';
 
-		$this->test(fmt_monto(5000), $expected);
+		$this->assert_equals(fmt_monto(5000), $expected);
 	}
 
 	public function test_fmt_monto_mayor_a_1000_con_decimales()
 	{
 		$expected = '$&nbsp;5.000,43';
 
-		$this->test(fmt_monto(5000.428, 'UN', '$', 2), $expected);
+		$this->assert_equals(fmt_monto(5000.428, 'UN', '$', 2), $expected);
 	}
 
 	public function test_fmt_monto_mostrar_cero()
 	{
 		$expected = '$&nbsp;0';
 
-		$this->test(fmt_monto(0, 'UN', '$', 0, TRUE), $expected);
+		$this->assert_equals(fmt_monto(0, 'UN', '$', 0, TRUE), $expected);
 	}
 
 	public function test_fmt_monto_no_mostrar_cero()
 	{
 		$expected = '';
 
-		$this->test(fmt_monto(0, 'UN', '$', 0, FALSE), $expected);
+		$this->assert_equals(fmt_monto(0, 'UN', '$', 0, FALSE), $expected);
 	}
 
 	public function test_fmt_monto_cambia_signo_moneda()
 	{
 		$expected = 'CLP&nbsp;1.222';
 
-		$this->test(fmt_monto(1222, 'UN', 'CLP'), $expected);
+		$this->assert_equals(fmt_monto(1222, 'UN', 'CLP'), $expected);
 	}
 
 	public function test_fmt_monto_despliega_millones()
 	{
 		$expected = 'MM$&nbsp;222';
 
-		$this->test(fmt_monto(222123123, 'MM'), $expected);
+		$this->assert_equals(fmt_monto(222123123, 'MM'), $expected);
 	}
 
 	public function test_fmt_hora_segundos()
 	{
 		$expected = '00:00:33';
 
-		$this->test(fmt_hora(33), $expected);
+		$this->assert_equals(fmt_hora(33), $expected);
 	}
 
 	public function test_fmt_hora_minutos()
 	{
 		$expected = '00:02:13';
 
-		$this->test(fmt_hora(133), $expected);
+		$this->assert_equals(fmt_hora(133), $expected);
 	}
 
 	public function test_fmt_hora_horas()
 	{
 		$expected = '01:02:13';
 
-		$this->test(fmt_hora(3733), $expected);
+		$this->assert_equals(fmt_hora(3733), $expected);
 	}
 
 	public function test_fmt_fecha()
 	{
 		$expected = '2017-10-11';
 
-		$this->test(fmt_fecha('20171011'), $expected);
+		$this->assert_equals(fmt_fecha('20171011'), $expected);
 	}
 
 	public function test_fmt_fecha_nuevo_formato()
 	{
 		$expected = '2017---10---11';
 
-		$this->test(fmt_fecha('20171011', 'Y---m---d'), $expected);
+		$this->assert_equals(fmt_fecha('20171011', 'Y---m---d'), $expected);
 	}
 
 	public function test_fmt_fecha_db()
 	{
 		$expected = '20171011';
 
-		$this->test(fmt_fecha_db('2017-10-11'), $expected);
+		$this->assert_equals(fmt_fecha_db('2017-10-11'), $expected);
 	}
 
 	public function test_fmt_fecha_db_nulo()
 	{
-		$expected = NULL;
-
-		$this->test(fmt_fecha_db(), $expected);
+		$this->assert_null(fmt_fecha_db());
 	}
 
 	public function test_fmt_rut()
 	{
 		$expected = '13.888.999-8';
 
-		$this->test(fmt_rut('138889998'), $expected);
+		$this->assert_equals(fmt_rut('138889998'), $expected);
 	}
 
 	public function test_array_get_encontrado()
@@ -198,7 +196,7 @@ class test_varios_helper extends test_case {
 		$expected = 3;
 		$array = [1,2,3,4,5];
 
-		$this->test(array_get($array, 2), $expected);
+		$this->assert_equals(array_get($array, 2), $expected);
 	}
 
 	public function test_array_get_no_encontrado()
@@ -206,7 +204,7 @@ class test_varios_helper extends test_case {
 		$expected = NULL;
 		$array = [1,2,3,4,5];
 
-		$this->test(array_get($array, 10), $expected);
+		$this->assert_equals(array_get($array, 10), $expected);
 	}
 
 	public function test_array_get_default()
@@ -214,7 +212,7 @@ class test_varios_helper extends test_case {
 		$expected = 100;
 		$array = [1,2,3,4,5];
 
-		$this->test(array_get($array, 10, 100), $expected);
+		$this->assert_equals(array_get($array, 10, 100), $expected);
 	}
 
 	public function test_array_get_dot_notation()
@@ -229,7 +227,7 @@ class test_varios_helper extends test_case {
 			],
 		];
 
-		$this->test(array_get($array, 'uno.dos.tres'), $expected);
+		$this->assert_equals(array_get($array, 'uno.dos.tres'), $expected);
 	}
 
 	public function test_get_arr_dias_mes()
@@ -243,49 +241,49 @@ class test_varios_helper extends test_case {
 			26   => NULL, 27   => NULL, 28   => NULL, 29   => NULL, 30   => NULL,
 		];
 
-		$this->test(get_arr_dias_mes('201704'), $expected);
+		$this->assert_equals(get_arr_dias_mes('201704'), $expected);
 	}
 
 	public function test_get_fecha_hasta_mismo_anno()
 	{
 		$expected = '20170401';
 
-		$this->test(get_fecha_hasta('201703'), $expected);
+		$this->assert_equals(get_fecha_hasta('201703'), $expected);
 	}
 
 	public function test_get_fecha_hasta_cambia_anno()
 	{
 		$expected = '20170101';
 
-		$this->test(get_fecha_hasta('201612'), $expected);
+		$this->assert_equals(get_fecha_hasta('201612'), $expected);
 	}
 
 	public function test_dias_de_la_semana()
 	{
 		$expected = 'Mi';
 
-		$this->test(dias_de_la_semana(3), $expected);
+		$this->assert_equals(dias_de_la_semana(3), $expected);
 	}
 
 	public function test_clase_cumplimiento_consumos_alto()
 	{
 		$expected = 'success';
 
-		$this->test(clase_cumplimiento_consumos(.95), $expected);
+		$this->assert_equals(clase_cumplimiento_consumos(.95), $expected);
 	}
 
 	public function test_clase_cumplimiento_consumos_medio()
 	{
 		$expected = 'warning';
 
-		$this->test(clase_cumplimiento_consumos(.75), $expected);
+		$this->assert_equals(clase_cumplimiento_consumos(.75), $expected);
 	}
 
 	public function test_clase_cumplimiento_consumos_bajo()
 	{
 		$expected = 'danger';
 
-		$this->test(clase_cumplimiento_consumos(.45), $expected);
+		$this->assert_equals(clase_cumplimiento_consumos(.45), $expected);
 	}
 
 

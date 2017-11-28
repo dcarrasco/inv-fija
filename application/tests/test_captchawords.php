@@ -16,11 +16,14 @@ class test_captchawords extends test_case {
 	    parent::__construct();
 	}
 
-	public function test_word()
+	public function test_word_is_string()
 	{
-		$expected = 'is_string';
+		$this->assert_is_string(\CaptchaWords::word());
+	}
 
-		$this->test(\CaptchaWords::word(), $expected);
+	public function test_word_length()
+	{
+		$this->assert_equals(strlen(\CaptchaWords::word()), 8);
 	}
 
 }

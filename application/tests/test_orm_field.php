@@ -33,81 +33,61 @@ class test_orm_field extends test_case {
 	public function test_get_tipo()
 	{
 		$expected = Orm_field::TIPO_CHAR;
-		$field = $this->get_field();
 
-		$this->test($field->get_tipo(), $expected);
+		$this->assert_equals($this->get_field()->get_tipo(), $expected);
 	}
 
 	public function test_get_label()
 	{
 		$expected = 'label_prueba';
-		$field = $this->get_field();
 
-		$this->test($field->get_label(), $expected);
+		$this->assert_equals($this->get_field()->get_label(), $expected);
 	}
 
 	public function test_get_nombre_bd()
 	{
 		$expected = 'prueba';
-		$field = $this->get_field();
 
-		$this->test($field->get_nombre_bd(), $expected);
+		$this->assert_equals($this->get_field()->get_nombre_bd(), $expected);
 	}
 
 	public function test_get_mostrar_lista()
 	{
-		$expected = TRUE;
-		$field = $this->get_field();
-
-		$this->test($field->get_mostrar_lista(), $expected);
+		$this->assert_true($this->get_field()->get_mostrar_lista());
 	}
 
 	public function test_get_es_id()
 	{
-		$expected = TRUE;
-		$field = $this->get_field();
-
-		$this->test($field->get_es_id(), $expected);
+		$this->assert_true($this->get_field()->get_es_id());
 	}
 
 	public function test_get_es_unico()
 	{
-		$expected = TRUE;
-		$field = $this->get_field();
-
-		$this->test($field->get_es_unico(), $expected);
+		$this->assert_true($this->get_field()->get_es_unico());
 	}
 
 	public function test_get_es_obligatorio()
 	{
-		$expected = TRUE;
-		$field = $this->get_field();
-
-		$this->test($field->get_es_obligatorio(), $expected);
+		$this->assert_true($this->get_field()->get_es_obligatorio());
 	}
 
 	public function test_get_es_autoincrement()
 	{
-		$expected = FALSE;
-		$field = $this->get_field();
-
-		$this->test($field->get_es_autoincrement(), $expected);
+		$this->assert_false($this->get_field()->get_es_autoincrement());
 	}
 
 	public function test_get_texto_ayuda()
 	{
 		$expected = 'texto_ayuda_prueba';
-		$field = $this->get_field();
 
-		$this->test($field->get_texto_ayuda(), $expected);
+		$this->assert_equals($this->get_field()->get_texto_ayuda(), $expected);
 	}
 
 	public function test_get_relation()
 	{
 		$expected = [];
-		$field = $this->get_field();
 
-		$this->test($field->get_relation(), $expected);
+		$this->assert_equals($this->get_field()->get_relation(), $expected);
 	}
 
 	public function xx_test_form_field()
@@ -115,17 +95,15 @@ class test_orm_field extends test_case {
 		$expected = form_input([
 			'name' => 'prueba',
 		]);
-		$field = $this->get_field();
 
-		$this->test($field->form_field(), $expected);
+		$this->assert_equals($this->get_field()->form_field(), $expected);
 	}
 
 	public function test_cast_value_char()
 	{
 		$expected = 'valor';
-		$field = $this->get_field();
 
-		$this->test($field->cast_value('valor'), $expected);
+		$this->assert_equals($this->get_field()->cast_value('valor'), $expected);
 	}
 
 	public function test_cast_value_integer()
@@ -133,7 +111,7 @@ class test_orm_field extends test_case {
 		$expected = 123;
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
 
-		$this->test($field->cast_value('123'), $expected);
+		$this->assert_equals($field->cast_value('123'), $expected);
 	}
 
 	public function test_cast_value_boolean()
@@ -141,7 +119,7 @@ class test_orm_field extends test_case {
 		$expected = 0;
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
 
-		$this->test($field->cast_value('FALSE'), $expected);
+		$this->assert_equals($field->cast_value('FALSE'), $expected);
 	}
 
 	public function test_cast_value_datetime()
@@ -149,7 +127,7 @@ class test_orm_field extends test_case {
 		$expected = '2017-10-10 00:00:00';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_DATETIME]);
 
-		$this->test($field->cast_value('20171010'), $expected);
+		$this->assert_equals($field->cast_value('20171010'), $expected);
 	}
 
 	public function test_get_formatted_value_char()
@@ -157,7 +135,7 @@ class test_orm_field extends test_case {
 		$expected = 'prueba';
 		$field = $this->get_field();
 
-		$this->test($field->get_formatted_value('prueba'), $expected);
+		$this->assert_equals($field->get_formatted_value('prueba'), $expected);
 	}
 
 	public function test_get_formatted_value_integer_sin_formato()
@@ -165,7 +143,7 @@ class test_orm_field extends test_case {
 		$expected = '1234';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
 
-		$this->test($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), $expected);
 	}
 
 	public function test_get_formatted_value_integer_con_formato_monto()
@@ -173,7 +151,7 @@ class test_orm_field extends test_case {
 		$expected = '$&nbsp;1.234';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'monto,0']);
 
-		$this->test($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), $expected);
 	}
 
 	public function test_get_formatted_value_integer_con_formato_cantidad()
@@ -181,7 +159,7 @@ class test_orm_field extends test_case {
 		$expected = '1.234,00';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'cantidad,2']);
 
-		$this->test($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), $expected);
 	}
 
 	public function test_get_formatted_value_integer_con_formato_otro()
@@ -189,7 +167,7 @@ class test_orm_field extends test_case {
 		$expected = 'XX1234XX';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'otro,0']);
 
-		$this->test($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), $expected);
 	}
 
 	public function test_get_formatted_value_choices_con_formato()
@@ -202,7 +180,7 @@ class test_orm_field extends test_case {
 			],
 		]);
 
-		$this->test($field->get_formatted_value('valor'), $expected);
+		$this->assert_equals($field->get_formatted_value('valor'), $expected);
 	}
 
 	public function test_get_formatted_value_boolean_true_con_formato()
@@ -210,7 +188,7 @@ class test_orm_field extends test_case {
 		$expected = lang('orm_radio_yes');
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
 
-		$this->test($field->get_formatted_value(1), $expected);
+		$this->assert_equals($field->get_formatted_value(1), $expected);
 	}
 
 	public function test_get_formatted_value_boolean_false_con_formato()
@@ -218,7 +196,7 @@ class test_orm_field extends test_case {
 		$expected = lang('orm_radio_no');
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
 
-		$this->test($field->get_formatted_value(0), $expected);
+		$this->assert_equals($field->get_formatted_value(0), $expected);
 	}
 
 
