@@ -15,17 +15,17 @@ class test_case {
 	/**
 	 * Colores CLI
 	 */
-	const CLI_COLOR_F_NORMAL  = "\033[0m";
-	const CLI_COLOR_F_BLANCO  = "\033[37m";
-	const CLI_COLOR_B_NORMAL  = "\033[49m";
-	const CLI_COLOR_B_ROJO    = "\033[41m";
-	const CLI_COLOR_B_VERDE   = "\033[42m";
-	const CLI_COLOR_VERDE_OSC = "\033[0;32m";
-	const CLI_COLOR_VERDE     = "\033[1;32m";
-	const CLI_COLOR_ROJO      = "\033[31m";
-	const CLI_COLOR_AMARILLO  = "\033[33m";
-	const CLI_FONDO_GRIS      = "\033[47m";
-	const CLI_REVERSE_COLOR   = "\033[7m";
+	const CLI_COLOR_F_NORMAL   = "\033[0m";
+	const CLI_COLOR_F_BLANCO   = "\033[37m";
+	const CLI_COLOR_F_VERDE    = "\033[1;32m";
+	const CLI_COLOR_F_ROJO     = "\033[31m";
+	const CLI_COLOR_F_AMARILLO = "\033[33m";
+	const CLI_COLOR_B_NORMAL   = "\033[49m";
+	const CLI_COLOR_B_ROJO     = "\033[41m";
+	const CLI_COLOR_B_VERDE    = "\033[42m";
+	const CLI_COLOR_VERDE_OSC  = "\033[0;32m";
+	const CLI_FONDO_GRIS       = "\033[47m";
+	const CLI_REVERSE_COLOR    = "\033[7m";
 
 	/**
 	 * Instancia codeigniter
@@ -246,6 +246,7 @@ class test_case {
 								."  Expected: {$expected_value}\n\n";
 							break;
 			case 'Integer':
+			case 'int':
 							$test_value     = (string) array_get($result, 'Notes.test');
 							$expected_value = (string) array_get($result, 'Notes.result');
 							return "Failed asserting that {$test_value} matches expected {$expected_value}.\n\n";
@@ -365,7 +366,7 @@ class test_case {
 	{
 		if ($is_cli)
 		{
-			$color = $value === lang('ut_passed') ? static::CLI_COLOR_VERDE : static::CLI_COLOR_ROJO;
+			$color = $value === lang('ut_passed') ? static::CLI_COLOR_F_VERDE : static::CLI_COLOR_F_ROJO;
 
 			return "{$color}{$value}".static::CLI_COLOR_F_NORMAL;
 		}
@@ -536,16 +537,35 @@ class test_case {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Testea si un valor contiene otro
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_contains($haystack, $needle)
+	{
+		$strpos = strpos($haystack, $needle);
+		$test = ($strpos !== FALSE) AND is_int($strpos);
+
+		return $this->test($test, TRUE, 'assert_contains');
+	}
+
+	// --------------------------------------------------------------------
+
 	public function print_help()
 	{
 		if (is_cli())
 		{
-			echo "\n";
-			echo static::CLI_COLOR_AMARILLO.'Uso:'.static::CLI_COLOR_F_NORMAL."\n";
-			echo "  php public/index.php tests [opciones]\n\n";
-			echo static::CLI_COLOR_AMARILLO.'Opciones:'.static::CLI_COLOR_F_NORMAL."\n";
-			echo '  '.static::CLI_COLOR_VERDE.'help'.static::CLI_COLOR_F_NORMAL."       Muestra esta ayuda\n";
-			echo '  '.static::CLI_COLOR_VERDE.'detalle'.static::CLI_COLOR_F_NORMAL."    Muestra cada linea de test\n";
+			$titulo = static::CLI_COLOR_F_AMARILLO;
+			$opcion = static::CLI_COLOR_F_VERDE;
+			$reset  = static::CLI_COLOR_F_NORMAL;
+
+			echo "\n{$titulo}Uso:{$reset}\n"
+				."  php public/index.php tests [opciones]\n\n"
+				."{$titulo}Opciones:{$reset}\n"
+				."  {$opcion}help{$reset}       Muestra esta ayuda\n"
+				."  {$opcion}detalle{$reset}    Muestra cada linea de test\n";
 		}
 
 	}

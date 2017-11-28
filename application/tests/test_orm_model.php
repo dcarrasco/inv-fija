@@ -141,6 +141,14 @@ class test_orm_model extends test_case {
 		$this->assert_equals($model->fill($this->get_data01())->get_fields_values(), $expected);
 	}
 
+	public function test_fill_array_non_existent_key()
+	{
+		$expected = $this->get_data01();
+		$fill = array_merge($this->get_data01(), ['campo05' => 'campo05', 'campo06' => 6]);
+
+		$this->assert_equals($this->get_model()->fill($fill)->get_fields_values(), $expected);
+	}
+
 	public function test_has_attributes_get_campo_existe()
 	{
 		$expected = 'value01';

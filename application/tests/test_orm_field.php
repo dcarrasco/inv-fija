@@ -90,13 +90,77 @@ class test_orm_field extends test_case {
 		$this->assert_equals($this->get_field()->get_relation(), $expected);
 	}
 
-	public function xx_test_form_field()
+	public function test_form_field_text_type()
 	{
-		$expected = form_input([
-			'name' => 'prueba',
-		]);
+		$expected = 'is_int';
 
-		$this->assert_equals($this->get_field()->form_field(), $expected);
+		$expected_type = 'type="text"';
+		$this->assert_equals(strpos($this->get_field()->form_field(), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_value_empty()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'value=""';
+		$this->assert_equals(strpos($this->get_field()->form_field(), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_value_non_empty()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'value="abc"';
+		$this->assert_equals(strpos($this->get_field()->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_id()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'id="id_prueba"';
+		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_class()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'class="form-control "';
+		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_maxlength()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'maxlength="4"';
+		$this->assert_equals(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_size()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'size="4"';
+		$this->assert_equals(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_text_placeholder()
+	{
+		$expected = 'is_int';
+
+		$expected_type = 'placeholder="Ingrese label_label_label"';
+		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'), $expected_type), $expected);
+	}
+
+	public function test_form_field_choices()
+	{
+		$expected = 'is_int';
+
+		$expected_type = '<select name="prueba"';
+		$field = $this->get_field(['es_id'=>FALSE, 'es_unico'=>FALSE, 'label'=>'label_label_label', 'choices' => ['a'=>1,'b'=>2,'c'=>3]]);
+		$this->assert_equals(strpos($field->form_field('abc'), $expected_type), $expected);
 	}
 
 	public function test_cast_value_char()
