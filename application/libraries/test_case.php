@@ -15,11 +15,15 @@ class test_case {
 	/**
 	 * Colores CLI
 	 */
+	const CLI_COLOR_F_NORMAL  = "\033[0m";
+	const CLI_COLOR_F_BLANCO  = "\033[37m";
+	const CLI_COLOR_B_NORMAL  = "\033[49m";
+	const CLI_COLOR_B_ROJO    = "\033[41m";
+	const CLI_COLOR_B_VERDE   = "\033[42m";
 	const CLI_COLOR_VERDE_OSC = "\033[0;32m";
 	const CLI_COLOR_VERDE     = "\033[1;32m";
 	const CLI_COLOR_ROJO      = "\033[31m";
 	const CLI_COLOR_AMARILLO  = "\033[33m";
-	const CLI_COLOR_NORMAL    = "\033[0m";
 	const CLI_FONDO_GRIS      = "\033[47m";
 	const CLI_REVERSE_COLOR   = "\033[7m";
 
@@ -160,32 +164,108 @@ class test_case {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Muestra resultados en formato resumen para CLI
+	 *
+	 * @return void
+	 */
 	protected function print_cli_resumen_result()
 	{
 		$results_collection = $this->results();
-		$results_passed = $results_collection->filter(function($result) {
-			return $result['Result'] === lang('ut_passed');
-		});;
-		$results_failed = $results_collection->filter(function($result) {
-			return $result['Result'] === lang('ut_failed');
-		});
+
+		$results_passed = $results_collection
+			->filter(function($result) {return $result['Result'] === lang('ut_passed');});
+
+		$results_failed = $results_collection
+			->filter(function($result) {return $result['Result'] === lang('ut_failed');});
+
+		$tests  = $results_passed
+			->pluck('Notes')
+			->map(function($note) {return array_get($note, 'class').':'.array_get($note, 'function');})
+			->unique()
+			->count();
 
 		$cant   = $results_collection->count();
 		$passed = $results_passed->count();
 		$failed = $results_failed->count();
 
-		$color_passed = static::CLI_COLOR_VERDE_OSC . static::CLI_REVERSE_COLOR;
-		$color_failed = static::CLI_COLOR_ROJO      . static::CLI_FONDO_GRIS . static::CLI_REVERSE_COLOR;
-		$color_reset  = static::CLI_COLOR_NORMAL;
+		$color_passed = static::CLI_COLOR_F_BLANCO . static::CLI_COLOR_B_VERDE;
+		$color_failed = static::CLI_COLOR_F_BLANCO . static::CLI_COLOR_B_ROJO;
+		$color_reset  = static::CLI_COLOR_F_BLANCO . static::CLI_COLOR_B_NORMAL;
 
-		echo "\n  Total tests ejecutados: {$cant}   "
-			."{$color_passed}  Tests OK: {$passed}  {$color_reset}  "
-			.($failed ?  "{$color_failed}  Tests NO OK: {$failed}  {$color_reset}" : '')
-			."\n\n";
+		echo "\n".$this->print_failures_details($results_collection)."\n";
 
-		if ($failed)
+		echo ($failed)
+			? "{$color_failed}FAILURES!\nTests: {$cant}, Failures: {$failed}.{$color_reset}\n"
+			: "{$color_passed}OK ({$tests} tests, {$passed} assertions).{$color_reset}\n";
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Detalles de los tests con fallos
+	 *
+	 * @param  Collection $results Coleccion de resultados
+	 * @return string
+	 */
+	protected function print_failures_details($results)
+	{
+		$count = 0;
+		$failed_results = $results->filter(function($result) {
+			return array_get($result, 'Result') === lang('ut_failed');
+		});
+
+		return $failed_results->count() === 0
+			? ''
+			: 'There was '.$failed_results->count()." failure(s):\n\n"
+				.$failed_results->map(function($result) use (&$count) {
+					return ++$count.') '.array_get($result, 'Notes.class').'::'.array_get($result, 'Notes.function')."\n"
+						.$this->print_error_assert($result)
+						.array_get($result, 'Notes.full_file').':'.array_get($result, 'Notes.line')."\n";
+				})
+				->implode("\n");
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve mensaje de error para un test
+	 *
+	 * @param  mixed $result Resultado esperado
+	 * @return mixed
+	 */
+	public function print_error_assert($result)
+	{
+		switch (array_get($result, 'Expected Datatype'))
 		{
-			$this->print_cli_result($results_failed);
+			case 'Array';
+							$test_value     = json_encode(array_get($result, 'Notes.test'));
+							$expected_value = json_encode(array_get($result, 'Notes.result'));
+							return "Failed asserting that two arrays are equal.\n"
+								."  Test    : {$test_value}\n"
+								."  Expected: {$expected_value}\n\n";
+							break;
+			case 'Integer':
+							$test_value     = (string) array_get($result, 'Notes.test');
+							$expected_value = (string) array_get($result, 'Notes.result');
+							return "Failed asserting that {$test_value} matches expected {$expected_value}.\n\n";
+							break;
+			case 'String':
+							$test_value     = (string) array_get($result, 'Notes.test');
+							$expected_value = (string) array_get($result, 'Notes.result');
+							return "Failed asserting that two strings are equal.\n"
+								."  Test    : \"{$test_value}\"\n"
+								."  Expected: \"{$expected_value}\"\n\n";
+							break;
+			case 'Boolean':
+							$test_value     = array_get($result, 'Notes.test') ? 'true' : 'false';
+							$expected_value = array_get($result, 'Notes.result') ? 'true' : 'false';
+							return "Failed asserting that {$test_value} is {$expected_value}.\n\n";
+							break;
+			case 'Null':
+							$test_value     = array_get($result, 'Notes.test');
+							return "Failed asserting that {$test_value} is null.\n\n";
+							break;
 		}
 	}
 
@@ -260,15 +340,9 @@ class test_case {
 		return $results = collect($this->unit->result())
 			// recupera nombre de archivo y numero de linea de campo notas
 			->map(function($result) {
-				preg_match('/File: \[([a-zA-Z\d\.:\-_\\\\]*)\], Line: \[(\d*)\]/', $result['Notes'], $matches);
-
-				if (count($matches))
-				{
-					preg_match('/[a-zA-Z_\d\.]*$/', array_get($matches, 1), $matches2);
-					$result['File Name']   = count($matches2) ? array_get($matches2, 0) : array_get($matches, 1);
-					$result['Line Number'] = array_get($matches, 2);
-					$result['Notes']       = '';
-				}
+				$result['Notes'] = unserialize($result['Notes']);
+				$result['File Name'] = array_get($result, 'Notes.file');
+				$result['Line Number'] = array_get($result, 'Notes.line');
 
 				return $result;
 			})
@@ -293,7 +367,7 @@ class test_case {
 		{
 			$color = $value === lang('ut_passed') ? static::CLI_COLOR_VERDE : static::CLI_COLOR_ROJO;
 
-			return "{$color}{$value}".static::CLI_COLOR_NORMAL;
+			return "{$color}{$value}".static::CLI_COLOR_F_NORMAL;
 		}
 		else
 		{
@@ -338,11 +412,15 @@ class test_case {
 
 		$tiempo_fin = new \DateTime();
 		$intervalo = $tiempo_inicio->diff($tiempo_fin);
-		$intervalo = $intervalo->s + $intervalo->f;
+
+		$texto_intervalo = $intervalo->s > 0
+			? ($intervalo->s + $intervalo->f).' segundos'
+			: ($intervalo->f*1000).' ms';
 
 		if (is_cli())
 		{
-			echo "\nTiempo: {$intervalo} seg, Memoria: ".byte_format(memory_get_usage())."\n";
+			echo "Codeigniter Unit Testing 1.0.0 by DC\n\n"
+				."Tiempo: {$texto_intervalo}, Memoria: ".byte_format(memory_get_usage())."\n";
 		}
 
 		return $detalle ? $this->print_results() : $this->print_resumen_results();
@@ -360,20 +438,100 @@ class test_case {
 	/**
 	 * Ejecuta un test
 	 *
+	 * @param  mixed  $test   Test a ejecutar
+	 * @param  mixed  $result Resultado esperado
+	 * @param  string $test_type Tipo de assert
+	 * @return mixed
+	 */
+	public function test($test, $result, $test_type = 'assert_equals')
+	{
+		$debug = debug_backtrace();
+
+		$file = explode('/', array_get($debug, '1.file'));
+		$file = array_get($file, count($file)-1);
+
+		$test_name = array_get($debug, '2.function');
+		$test_name = str_replace('_', ' ', substr($test_name, 5, strlen($test_name)));
+
+		$notes = [
+			'file'       => $file,
+			'full_file'  => array_get($debug, '1.file'),
+			'line'       => array_get($debug, '1.line'),
+			'class'      => array_get($debug, '2.class'),
+			'class_type' => array_get($debug, '2.type'),
+			'function'   => array_get($debug, '2.function'),
+			'test_type'  => $test_type,
+			'test'       => $test,
+			'result'     => $result,
+		];
+
+		return $this->unit->run($test, $result, $test_name, serialize($notes));
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si 2 valores son iguales
+	 *
 	 * @param  mixed $test   Test a ejecutar
 	 * @param  mixed $result Resultado esperado
 	 * @return mixed
 	 */
-	public function test($test, $result)
+	public function assert_equals($test, $result)
 	{
-		$file = explode('/', array_get(debug_backtrace(), '0.file'));
-		$file = array_get($file, count($file)-1);
-		$line = array_get(debug_backtrace(), '0.line');
+		return $this->test($test, $result, 'assert_equals');
+	}
 
-		$test_name = array_get(debug_backtrace(), '1.function');
-		$test_name = str_replace('_', ' ', substr($test_name, 5, strlen($test_name)));
+	// --------------------------------------------------------------------
 
-		return $this->unit->run($test, $result, $test_name, "File: [{$file}], Line: [{$line}]");
+	/**
+	 * Testea si un valor es string
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_is_string($test)
+	{
+		return $this->test($test, 'is_string', 'assert_is_string');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor es true
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_true($test)
+	{
+		return $this->test($test, TRUE, 'assert_true');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor es false
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_false($test)
+	{
+		return $this->test($test, FALSE, 'assert_false');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor es NULL
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_null($test)
+	{
+		return $this->test($test, NULL, 'assert_null');
 	}
 
 	// --------------------------------------------------------------------
@@ -383,11 +541,11 @@ class test_case {
 		if (is_cli())
 		{
 			echo "\n";
-			echo static::CLI_COLOR_AMARILLO.'Uso:'.static::CLI_COLOR_NORMAL."\n";
+			echo static::CLI_COLOR_AMARILLO.'Uso:'.static::CLI_COLOR_F_NORMAL."\n";
 			echo "  php public/index.php tests [opciones]\n\n";
-			echo static::CLI_COLOR_AMARILLO.'Opciones:'.static::CLI_COLOR_NORMAL."\n";
-			echo '  '.static::CLI_COLOR_VERDE.'help'.static::CLI_COLOR_NORMAL."       Muestra esta ayuda\n";
-			echo '  '.static::CLI_COLOR_VERDE.'detalle'.static::CLI_COLOR_NORMAL."    Muestra cada linea de test\n";
+			echo static::CLI_COLOR_AMARILLO.'Opciones:'.static::CLI_COLOR_F_NORMAL."\n";
+			echo '  '.static::CLI_COLOR_VERDE.'help'.static::CLI_COLOR_F_NORMAL."       Muestra esta ayuda\n";
+			echo '  '.static::CLI_COLOR_VERDE.'detalle'.static::CLI_COLOR_F_NORMAL."    Muestra cada linea de test\n";
 		}
 
 	}
