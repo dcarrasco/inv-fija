@@ -27,4 +27,17 @@ class tests extends Controller_base {
 		$test->print_help();
 	}
 
+	public function coverage()
+	{
+		$test = new test_case();
+		$test->resumen_all_files();
+		$test->print_coverage();
+	}
+
+	public function rake($detalle = '')
+	{
+		$test = new test_case();
+		$test->rake($detalle);
+	}
+
 }

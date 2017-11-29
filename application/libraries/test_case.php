@@ -27,6 +27,14 @@ class test_case {
 	const CLI_FONDO_GRIS       = "\033[47m";
 	const CLI_REVERSE_COLOR    = "\033[7m";
 
+	const STATS_KEY_NAME    = 'Name';
+	const STATS_KEY_LINES   = 'Lines';
+	const STATS_KEY_LOC     = 'LOC';
+	const STATS_KEY_CLASSES = 'Classes';
+	const STATS_KEY_METHODS = 'Methods';
+	const STATS_KEY_MC      = 'M/C';
+	const STATS_KEY_LOCM    = 'LOC/M';
+
 	/**
 	 * Instancia codeigniter
 	 *
@@ -55,6 +63,13 @@ class test_case {
 		'Result'            => 2,
 	];
 
+	/**
+	 * Contiene el backtrace de todos los test pasa medir % coverage
+	 *
+	 * @var array
+	 */
+	protected $backtrace = [];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -69,7 +84,21 @@ class test_case {
 
 		$this->unit = $this->ci->unit;
 
+		$this->backtrace = collect([]);
+
 		$this->unit->use_strict(TRUE);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve el stack de backtrace
+	 *
+	 * @return Collection
+	 */
+	public function get_backtrace()
+	{
+	    return $this->backtrace;
 	}
 
 	// --------------------------------------------------------------------
@@ -406,10 +435,14 @@ class test_case {
 
 		$tiempo_inicio = new \DateTime();
 
-		collect(scandir(APPPATH.'/tests'))
+		$this->backtrace = collect(scandir(APPPATH.'/tests'))
 			->filter(function($file) { return substr($file, -4) === '.php'; })
-			->map(function($file)    { return substr($file, 0, strlen($file) - 4); })
-			->each(function($file)   { (new $file())->all_methods(); });
+			->map(function($file) { return substr($file, 0, strlen($file) - 4); })
+			->map(function($file) {
+				$test_object = new $file();
+				$test_object->all_methods();
+				return $test_object->get_backtrace()->flatten();
+			})->flatten();
 
 		$tiempo_fin = new \DateTime();
 		$intervalo = $tiempo_inicio->diff($tiempo_fin);
@@ -447,6 +480,12 @@ class test_case {
 	public function test($test, $result, $test_type = 'assert_equals')
 	{
 		$debug = debug_backtrace();
+
+		$this->backtrace->add_item(
+			collect($debug)->map(function($stack) {
+				return array_get($stack, 'file').':'.array_get($stack, 'line');
+			})
+		);
 
 		$file = explode('/', array_get($debug, '1.file'));
 		$file = array_get($file, count($file)-1);
@@ -553,6 +592,282 @@ class test_case {
 
 	// --------------------------------------------------------------------
 
+	public function print_coverage()
+	{
+		$backtrace = $this->sum_backtrace_lines();
+	    dump($backtrace_lines);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function sum_backtrace_lines()
+	{
+		return $this->backtrace
+			// filtra aquellas lineas que no son de APPPATH
+			->filter(function($line) {
+				return strpos($line, APPPATH) !== FALSE;
+			})
+			// ->filter(function($line) {
+			// 	return strpos($line, APPPATH.'tests/') === FALSE;
+			// })
+			->reduce(function($total, $line) {
+				list($file_name, $file_line) = explode(':', $line);
+				return $total->add_item([
+					'file'  => $file_name,
+					'line'  => $file_line,
+					'count' => array_get($total->item($line), 'count', 0) + 1]
+				, $line);
+			}, collect())
+			->reduce(function($total, $line_data) {
+				return $total->add_item($total->get($line_data['file'], collect())->add_item($line_data['count'], $line_data['line']), $line_data['file']);
+			}, collect());
+	}
+
+
+	// --------------------------------------------------------------------
+
+	public function rake($detalle = '')
+	{
+		$file_list = $this->scan_dir(APPPATH);
+		$stats     = $this->file_stats($file_list, $detalle);
+
+		echo $this->print_rake_stats($stats);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function file_stats($file_list, $detalle)
+	{
+		$file_stats = $file_list
+			->map([$this, 'recupera_file_contents'])
+			->map([$this, 'cuenta_lineas'])
+			->map([$this, 'cuenta_loc'])
+			->map([$this, 'cuenta_clases'])
+			->map([$this, 'cuenta_metodos'])
+			->map([$this, 'achica_nombre_archivo']);
+
+		return $this->resumen_file_stats($file_stats, $detalle);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function resumen_file_stats($stats, $detalle)
+	{
+		return $stats
+			->pluck($detalle === 'detalle' ? 'file' : 'folder')
+			->sort()
+			->unique()
+			->map_with_keys(function($folder) {
+				return [$folder => $folder];
+			})
+			->map(function($folder) use ($stats, $detalle) {
+				return $stats->filter(function($file) use ($folder, $detalle) {
+					return $file[$detalle ? 'file' : 'folder'] === $folder;
+				});
+			})
+			->map([$this, 'calcula_stats']);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function recupera_file_contents($file)
+	{
+		return [
+			'file'	=> $file,
+			'content' => collect(explode("\n", file_get_contents($file))),
+		];
+	}
+
+	// --------------------------------------------------------------------
+
+	public function cuenta_lineas($file)
+	{
+		return array_merge($file, [static::STATS_KEY_LINES => array_get($file, 'content', collect())->count()]);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function cuenta_loc($file)
+	{
+		$file_sin_comentarios =array_get($file, 'content', collect())
+			->filter(function($line) {
+				return ! preg_match('/^$|^\s*\/\*\*|\s*\*[ ]*|^\s*\/\/|<?php/', $line);
+			});
+
+		return array_merge($file, [static::STATS_KEY_LOC => $file_sin_comentarios->count()]);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function cuenta_clases($file)
+	{
+		return array_merge($file, [static::STATS_KEY_CLASSES =>
+			array_get($file, 'content', collect())
+				->filter(function($line) {
+					return preg_match('/^\s*class/', $line);
+				})
+				->count()
+		]);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function cuenta_metodos($file)
+	{
+		return array_merge($file, [
+			static::STATS_KEY_METHODS => array_get($file, 'content', collect())
+				->filter(function($line) {
+					return preg_match('/^\s*(public|protected|private) function/', $line);
+				})
+				->count()
+		]);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function achica_nombre_archivo($file)
+	{
+		$file['file'] = substr($file['file'], strlen(APPPATH), strlen($file['file']));
+
+		$file_path = explode('/', $file['file']);
+		$file['folder'] = $file_path[0];
+
+		$file['file'] = substr($file['file'], strlen($file['folder'])+1, strlen($file['file']));
+
+		unset($file['content']);
+
+		return $file;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function calcula_stats($item)
+	{
+		return [
+			static::STATS_KEY_LINES   => $item->pluck(static::STATS_KEY_LINES)->sum(),
+			static::STATS_KEY_LOC     => $item->pluck(static::STATS_KEY_LOC)->sum(),
+			static::STATS_KEY_CLASSES => $item->pluck(static::STATS_KEY_CLASSES)->sum(),
+			static::STATS_KEY_METHODS => $item->pluck(static::STATS_KEY_METHODS)->sum(),
+			static::STATS_KEY_MC      => $item->pluck(static::STATS_KEY_CLASSES)->sum() === 0 ? 0 : (int) ($item->pluck(static::STATS_KEY_METHODS)->sum() / $item->pluck(static::STATS_KEY_CLASSES)->sum()),
+			static::STATS_KEY_LOCM    => $item->pluck(static::STATS_KEY_METHODS)->sum() === 0 ? 0 : (int) ($item->pluck(static::STATS_KEY_LOC)->sum() / $item->pluck(static::STATS_KEY_METHODS)->sum()),
+		];
+	}
+
+	// --------------------------------------------------------------------
+
+	public function scan_dir($path)
+	{
+		$excluded_folders = ['.', '..', 'cache', 'config', 'language', 'logs', 'vendor', 'views'];
+
+		return collect(scandir($path))
+			->filter(function($file) use ($excluded_folders) {
+				return ! in_array($file, $excluded_folders);
+			})
+			->map(function($file) use ($path) {
+				return [
+					'file'           => $file,
+					'extension'      => pathinfo($path.$file, PATHINFO_EXTENSION),
+					'full_file_name' => $path.$file,
+					'file_type'      => filetype($path.$file),
+					'content'        => '',
+				];
+			})
+			->filter(function($file_data) {
+				return array_get($file_data, 'file_type') === 'dir' OR
+					(array_get($file_data, 'file_type') === 'file' AND array_get($file_data, 'extension') === 'php');
+			})
+			->map(function($file_data) {
+				return array_merge($file_data, [
+					'content' => array_get($file_data, 'file_type') === 'dir'
+						? $this->scan_dir(array_get($file_data, 'full_file_name').'/')
+						: '',
+				]);
+			})
+			->map_with_keys(function($file_data) {
+				return [
+					$file_data['full_file_name'] => array_get($file_data, 'content') instanceof Collection
+						? array_get($file_data, 'content')->all()
+						: $file_data['full_file_name']
+				];
+			})->flatten();
+	}
+
+	// --------------------------------------------------------------------
+
+	public function print_rake_stats($stats)
+	{
+		$padding = collect([
+			static::STATS_KEY_NAME    => 20,
+			static::STATS_KEY_LINES   => 7,
+			static::STATS_KEY_LOC     => 7,
+			static::STATS_KEY_CLASSES => 7,
+			static::STATS_KEY_METHODS => 7,
+			static::STATS_KEY_MC      => 7,
+			static::STATS_KEY_LOCM    => 7,
+		]);
+
+		$padding->add_item(
+			max([
+				$padding->get(static::STATS_KEY_NAME),
+				$stats->map(function($stat, $stat_key) {return strlen($stat_key);})->max()
+			]), static::STATS_KEY_NAME);
+
+		$totals = collect()
+			->add_item(collect([collect($stats->first())
+				->map(function($value, $stat_key) use ($stats) {
+					return $stats->pluck($stat_key)->sum();
+				})->all()
+			]), 'Totals')
+			->map([$this, 'calcula_stats']);
+
+		echo "\n".$this->rake_print_title($padding);
+		echo $this->rake_print_stats($stats, $padding);
+		echo $this->rake_print_line($padding);
+		echo $this->rake_print_stats($totals, $padding);
+		echo $this->rake_print_line($padding);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function rake_print_line($padding)
+	{
+		return '+-'
+			.$padding
+				->map(function($padding) {return str_pad('', $padding, '-');})
+				->implode('-+-')
+			.'-+'."\n";
+	}
+
+	// --------------------------------------------------------------------
+
+	public function rake_print_title($padding)
+	{
+		return $this->rake_print_line($padding)
+			.'| '.$padding
+				->map(function($padding, $name) {
+					return str_pad($name, $padding, ' ', $name === static::STATS_KEY_NAME ? STR_PAD_RIGHT : STR_PAD_LEFT);
+				})->implode(' | ')
+			.' |'."\n"
+			.$this->rake_print_line($padding);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function rake_print_stats($stats, $padding)
+	{
+		return $stats->map(function($folder, $folder_name) use ($padding) {
+			return '| '
+				.str_pad(ucfirst($folder_name), $padding->get(static::STATS_KEY_NAME), ' ')
+				.' | '
+				.collect($folder)->map(function($stat, $stat_key) use ($padding) {
+					return str_pad($stat, $padding->get($stat_key), ' ', STR_PAD_LEFT);
+				})->implode(' | ')
+				.' |'."\n";
+		})->implode('');
+	}
+
+	// --------------------------------------------------------------------
+
 	public function print_help()
 	{
 		if (is_cli())
@@ -564,8 +879,10 @@ class test_case {
 			echo "\n{$titulo}Uso:{$reset}\n"
 				."  php public/index.php tests [opciones]\n\n"
 				."{$titulo}Opciones:{$reset}\n"
-				."  {$opcion}help{$reset}       Muestra esta ayuda\n"
-				."  {$opcion}detalle{$reset}    Muestra cada linea de test\n";
+				."  {$opcion}help{$reset}              Muestra esta ayuda.\n"
+				."  {$opcion}detalle{$reset}           Muestra cada linea de test.\n"
+				."  {$opcion}coverage{$reset}          Muestra el % de cobertura de los tests.\n"
+				."  {$opcion}rake [detalle]{$reset}    Muestra estadisticas de la aplicacion.\n";
 		}
 
 	}
