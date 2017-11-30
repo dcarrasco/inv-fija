@@ -34,6 +34,7 @@ class test_case {
 	const STATS_KEY_METHODS = 'Methods';
 	const STATS_KEY_MC      = 'M/C';
 	const STATS_KEY_LOCM    = 'LOC/M';
+	const STATS_KEY_CONTENT = 'Content';
 
 	/**
 	 * Instancia codeigniter
@@ -674,67 +675,64 @@ class test_case {
 	{
 		return [
 			'file'	=> $file,
-			'content' => collect(explode("\n", file_get_contents($file))),
+			static::STATS_KEY_CONTENT => collect(explode("\n", file_get_contents($file))),
 		];
+	}
+
+	// --------------------------------------------------------------------
+
+	public function cuenta_stats($file, $stat_key, $filter)
+	{
+		return array_merge($file, [
+			$stat_key => array_get($file, static::STATS_KEY_CONTENT, collect())
+				->filter($filter)
+				->count()
+		]);
 	}
 
 	// --------------------------------------------------------------------
 
 	public function cuenta_lineas($file)
 	{
-		return array_merge($file, [static::STATS_KEY_LINES => array_get($file, 'content', collect())->count()]);
+		return $this->cuenta_stats($file, static::STATS_KEY_LINES, function($line) {return TRUE;});
 	}
 
 	// --------------------------------------------------------------------
 
 	public function cuenta_loc($file)
 	{
-		$file_sin_comentarios =array_get($file, 'content', collect())
-			->filter(function($line) {
-				return ! preg_match('/^$|^\s*\/\*\*|\s*\*[ ]*|^\s*\/\/|<?php/', $line);
-			});
-
-		return array_merge($file, [static::STATS_KEY_LOC => $file_sin_comentarios->count()]);
+		return $this->cuenta_stats($file, static::STATS_KEY_LOC, function($line) {
+			return ! preg_match('/^\s*$|^\s*\/\*\*|\s*\*[ ]*|^\s*\/\/|<?php/', $line);
+		});
 	}
 
 	// --------------------------------------------------------------------
 
 	public function cuenta_clases($file)
 	{
-		return array_merge($file, [static::STATS_KEY_CLASSES =>
-			array_get($file, 'content', collect())
-				->filter(function($line) {
-					return preg_match('/^\s*class/', $line);
-				})
-				->count()
-		]);
+		return $this->cuenta_stats($file, static::STATS_KEY_CLASSES, function($line) {
+			return preg_match('/^\s*class/', $line);
+		});
 	}
 
 	// --------------------------------------------------------------------
 
 	public function cuenta_metodos($file)
 	{
-		return array_merge($file, [
-			static::STATS_KEY_METHODS => array_get($file, 'content', collect())
-				->filter(function($line) {
-					return preg_match('/^\s*(public|protected|private) function/', $line);
-				})
-				->count()
-		]);
+		return $this->cuenta_stats($file, static::STATS_KEY_METHODS, function($line) {
+			return preg_match('/^\s*(public|protected|private) function/', $line);
+		});
 	}
 
 	// --------------------------------------------------------------------
 
 	public function achica_nombre_archivo($file)
 	{
-		$file['file'] = substr($file['file'], strlen(APPPATH), strlen($file['file']));
+		$file['file']   = substr($file['file'], strlen(APPPATH), strlen($file['file']));
+		$file['folder'] = array_get(explode('/', $file['file']), 0);
+		$file['file']   = substr($file['file'], strlen($file['folder'])+1, strlen($file['file']));
 
-		$file_path = explode('/', $file['file']);
-		$file['folder'] = $file_path[0];
-
-		$file['file'] = substr($file['file'], strlen($file['folder'])+1, strlen($file['file']));
-
-		unset($file['content']);
+		unset($file[static::STATS_KEY_CONTENT]);
 
 		return $file;
 	}
@@ -765,11 +763,11 @@ class test_case {
 			})
 			->map(function($file) use ($path) {
 				return [
-					'file'           => $file,
-					'extension'      => pathinfo($path.$file, PATHINFO_EXTENSION),
-					'full_file_name' => $path.$file,
-					'file_type'      => filetype($path.$file),
-					'content'        => '',
+					'file'                    => $file,
+					'extension'               => pathinfo($path.$file, PATHINFO_EXTENSION),
+					'full_file_name'          => $path.$file,
+					'file_type'               => filetype($path.$file),
+					static::STATS_KEY_CONTENT => '',
 				];
 			})
 			->filter(function($file_data) {
@@ -778,16 +776,17 @@ class test_case {
 			})
 			->map(function($file_data) {
 				return array_merge($file_data, [
-					'content' => array_get($file_data, 'file_type') === 'dir'
+					static::STATS_KEY_CONTENT => array_get($file_data, 'file_type') === 'dir'
 						? $this->scan_dir(array_get($file_data, 'full_file_name').'/')
 						: '',
 				]);
 			})
 			->map_with_keys(function($file_data) {
 				return [
-					$file_data['full_file_name'] => array_get($file_data, 'content') instanceof Collection
-						? array_get($file_data, 'content')->all()
-						: $file_data['full_file_name']
+					$file_data['full_file_name'] =>
+						array_get($file_data, static::STATS_KEY_CONTENT) instanceof Collection
+							? array_get($file_data, static::STATS_KEY_CONTENT)->all()
+							: $file_data['full_file_name']
 				];
 			})->flatten();
 	}
