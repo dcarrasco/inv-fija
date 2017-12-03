@@ -127,7 +127,9 @@ class test_case {
 	{
 		$test_report = $results_collection
 			->map(function($result) {
-				return '<tr><td>'.collect($result)->implode('</td><td>').'</td></tr>';
+				$result['Result'] = $this->format_result(array_get($result, 'Result'));
+
+				return '<tr><td>'.collect($result)->except('Notes')->implode('</td><td>').'</td></tr>';
 			})
 			->implode();
 
