@@ -9,11 +9,19 @@
  * @license  MIT License
  * @link     localhost:1520
  */
+
 class test_collection extends test_case {
 
 	public function __construct()
 	{
 	    parent::__construct();
+	}
+
+	public function test_make_collection()
+	{
+		$expected = 'is_object';
+
+		$this->assert_equals(collect([1,2,3,4,5]), $expected);
 	}
 
 	public function test_make_collection_con_array()

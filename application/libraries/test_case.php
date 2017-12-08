@@ -129,7 +129,7 @@ class test_case {
 			->map(function($result) {
 				$result['Result'] = $this->format_result(array_get($result, 'Result'));
 
-				return '<tr><td>'.collect($result)->except('Notes')->implode('</td><td>').'</td></tr>';
+				return '<tr><td>'.collect($result)->except(['Notes'])->implode('</td><td>').'</td></tr>';
 			})
 			->implode();
 
@@ -268,12 +268,27 @@ class test_case {
 	 */
 	public function print_error_assert($result)
 	{
+		if (substr(array_get($result, 'Notes.result'), 0, 3) === 'is_')
+		{
+			$test_type     = array_get($result, 'Test Datatype');
+			$expected_type = array_get($result, 'Expected Datatype');
+
+			return "Failed asserting that test type {$test_type} equals result type {$expected_type}\n\n";
+		}
+
 		switch (array_get($result, 'Expected Datatype'))
 		{
 			case 'Array';
 							$test_value     = json_encode(array_get($result, 'Notes.test'));
 							$expected_value = json_encode(array_get($result, 'Notes.result'));
 							return "Failed asserting that two arrays are equal.\n"
+								."  Test    : {$test_value}\n"
+								."  Expected: {$expected_value}\n\n";
+							break;
+			case 'Object';
+							$test_value     = serialize(array_get($result, 'Notes.test'));
+							$expected_value = serialize(array_get($result, 'Notes.result'));
+							return "Failed asserting that two ojects are equal.\n"
 								."  Test    : {$test_value}\n"
 								."  Expected: {$expected_value}\n\n";
 							break;
@@ -451,8 +466,8 @@ class test_case {
 		$intervalo = $tiempo_inicio->diff($tiempo_fin);
 
 		$texto_intervalo = $intervalo->s > 0
-			? ($intervalo->s + $intervalo->f).' segundos'
-			: ($intervalo->f*1000).' ms';
+			? ($intervalo->s + (property_exists($intervalo, 'f') ? $intervalo->f : 0)).' segundos'
+			: (property_exists($intervalo, 'f') ? $intervalo->f*1000 : 0).' ms';
 
 		if (is_cli())
 		{
@@ -530,12 +545,25 @@ class test_case {
 	/**
 	 * Testea si un valor es string
 	 *
-	 * @param  mixed $test   Test a ejecutar
+	 * @param  mixed $test Test a ejecutar
 	 * @return mixed
 	 */
 	public function assert_is_string($test)
 	{
 		return $this->test($test, 'is_string', 'assert_is_string');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor es objecto
+	 *
+	 * @param  mixed $test Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_is_object($test)
+	{
+		return $this->test($test, 'is_object', 'assert_is_object');
 	}
 
 	// --------------------------------------------------------------------
