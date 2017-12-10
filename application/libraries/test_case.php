@@ -228,8 +228,8 @@ class test_case {
 		echo "\n".$this->print_failures_details($results_collection)."\n";
 
 		echo ($failed)
-			? "{$color_failed}FAILURES!\nTests: {$cant}, Failures: {$failed}.{$color_reset}\n"
-			: "{$color_passed}OK ({$tests} tests, {$passed} assertions).{$color_reset}\n";
+			? "{$color_failed} FAILURES! \n Tests: {$cant}, Failures: {$failed}. {$color_reset}\n"
+			: "{$color_passed} OK ({$tests} tests, {$passed} assertions). {$color_reset}\n";
 	}
 
 	// --------------------------------------------------------------------
@@ -268,7 +268,7 @@ class test_case {
 	 */
 	public function print_error_assert($result)
 	{
-		if (substr(array_get($result, 'Notes.result'), 0, 3) === 'is_')
+		if (is_string(array_get($result, 'Notes.result')) AND substr(array_get($result, 'Notes.result'), 0, 3) === 'is_')
 		{
 			$test_type     = array_get($result, 'Test Datatype');
 			$expected_type = array_get($result, 'Expected Datatype');
