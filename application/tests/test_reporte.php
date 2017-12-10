@@ -18,9 +18,10 @@ class test_reporte extends test_case {
 
 	public function test_get_order_by()
 	{
-		$reporte = new Repo();
-
-		$this->assert_equals($reporte->get_order_by('+campo1, -campo2, campo3'), 'campo1 ASC, campo2 DESC, campo3 ASC');
+		$this->assert_equals(
+			(new Repo())->get_order_by('+campo1, -campo2, campo3'),
+			'campo1 ASC, campo2 DESC, campo3 ASC'
+		);
 	}
 
 	public function test_result_to_month_table()
@@ -31,9 +32,12 @@ class test_reporte extends test_case {
 			11=>NULL,12=>NULL,13=>NULL,14=>NULL,15=>NULL,16=>NULL,17=>NULL,18=>NULL,19=>NULL,20=>NULL,
 			21=>NULL,22=>NULL,23=>NULL,24=>NULL,25=>NULL,26=>NULL,27=>NULL,28=>NULL,
 		]];
-		$reporte = (new Repo())->result_to_month_table([['fecha' => '20170204', 'dato' => 10, 'llave' => 'llave']])->all();
 
-		$this->assert_equals($reporte, $expected);
+		$this->assert_equals(
+			(new Repo())->result_to_month_table([['fecha' => '20170204', 'dato' => 10, 'llave' => 'llave']])->all(),
+			$expected
+		);
+
 	}
 
 	public function test_formato_reporte_texto()
