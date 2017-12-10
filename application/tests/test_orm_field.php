@@ -18,7 +18,6 @@ class test_orm_field extends test_case {
 
 	protected function get_field($config = [])
 	{
-
 		return new Orm_field('prueba', array_merge([
 			'label'          => 'label_prueba',
 			'tipo'           => Orm_field::TIPO_CHAR,
@@ -32,23 +31,18 @@ class test_orm_field extends test_case {
 
 	public function test_get_tipo()
 	{
-		$expected = Orm_field::TIPO_CHAR;
-
-		$this->assert_equals($this->get_field()->get_tipo(), $expected);
+		$this->assert_equals($this->get_field()->get_tipo(), Orm_field::TIPO_CHAR);
+		$this->assert_equals($this->get_field(['tipo' => Orm_field::TIPO_INT])->get_tipo(), Orm_field::TIPO_INT);
 	}
 
 	public function test_get_label()
 	{
-		$expected = 'label_prueba';
-
-		$this->assert_equals($this->get_field()->get_label(), $expected);
+		$this->assert_equals($this->get_field()->get_label(), 'label_prueba');
 	}
 
 	public function test_get_nombre_bd()
 	{
-		$expected = 'prueba';
-
-		$this->assert_equals($this->get_field()->get_nombre_bd(), $expected);
+		$this->assert_equals($this->get_field()->get_nombre_bd(), 'prueba');
 	}
 
 	public function test_get_mostrar_lista()
@@ -59,184 +53,136 @@ class test_orm_field extends test_case {
 	public function test_get_es_id()
 	{
 		$this->assert_true($this->get_field()->get_es_id());
+		$this->assert_false($this->get_field(['es_id' => FALSE])->get_es_id());
 	}
 
 	public function test_get_es_unico()
 	{
 		$this->assert_true($this->get_field()->get_es_unico());
+		$this->assert_false($this->get_field(['es_unico' => FALSE])->get_es_unico());
 	}
 
 	public function test_get_es_obligatorio()
 	{
 		$this->assert_true($this->get_field()->get_es_obligatorio());
+		$this->assert_false($this->get_field(['es_obligatorio' => FALSE])->get_es_obligatorio());
 	}
 
 	public function test_get_es_autoincrement()
 	{
 		$this->assert_false($this->get_field()->get_es_autoincrement());
+		$this->assert_true($this->get_field(['es_autoincrement' => TRUE])->get_es_autoincrement());
 	}
 
 	public function test_get_texto_ayuda()
 	{
-		$expected = 'texto_ayuda_prueba';
-
-		$this->assert_equals($this->get_field()->get_texto_ayuda(), $expected);
+		$this->assert_equals($this->get_field()->get_texto_ayuda(), 'texto_ayuda_prueba');
 	}
 
 	public function test_get_relation()
 	{
-		$expected = [];
-
-		$this->assert_equals($this->get_field()->get_relation(), $expected);
+		$this->assert_equals($this->get_field()->get_relation(), []);
 	}
 
 	public function test_form_field_text_type()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'type="text"';
-		$this->assert_equals(strpos($this->get_field()->form_field(), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field()->form_field(), 'type="text"'));
 	}
 
 	public function test_form_field_text_value_empty()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'value=""';
-		$this->assert_equals(strpos($this->get_field()->form_field(), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field()->form_field(), 'value=""'));
 	}
 
 	public function test_form_field_text_value_non_empty()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'value="abc"';
-		$this->assert_equals(strpos($this->get_field()->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field()->form_field('abc'), 'value="abc"'));
 	}
 
 	public function test_form_field_text_id()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'id="id_prueba"';
-		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'id="id_prueba"'));
 	}
 
 	public function test_form_field_text_class()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'class="form-control "';
-		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'class="form-control "'));
 	}
 
 	public function test_form_field_text_maxlength()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'maxlength="4"';
-		$this->assert_equals(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'maxlength="4"'));
 	}
 
 	public function test_form_field_text_size()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'size="4"';
-		$this->assert_equals(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'size="4"'));
 	}
 
 	public function test_form_field_text_placeholder()
 	{
-		$expected = 'is_int';
-
-		$expected_type = 'placeholder="Ingrese label_label_label"';
-		$this->assert_equals(strpos($this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'), 'placeholder="Ingrese label_label_label"'));
 	}
 
 	public function test_form_field_choices()
 	{
-		$expected = 'is_int';
-
-		$expected_type = '<select name="prueba"';
 		$field = $this->get_field(['es_id'=>FALSE, 'es_unico'=>FALSE, 'label'=>'label_label_label', 'choices' => ['a'=>1,'b'=>2,'c'=>3]]);
-		$this->assert_equals(strpos($field->form_field('abc'), $expected_type), $expected);
+		$this->assert_is_int(strpos($field->form_field('abc'), '<select name="prueba"'));
 	}
 
 	public function test_cast_value_char()
 	{
-		$expected = 'valor';
-
-		$this->assert_equals($this->get_field()->cast_value('valor'), $expected);
+		$this->assert_equals($this->get_field()->cast_value('valor'), 'valor');
 	}
 
 	public function test_cast_value_integer()
 	{
-		$expected = 123;
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
-
-		$this->assert_equals($field->cast_value('123'), $expected);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_INT])->cast_value('123'), 123);
 	}
 
 	public function test_cast_value_boolean()
 	{
-		$expected = 0;
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
-
-		$this->assert_equals($field->cast_value('FALSE'), $expected);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN])->cast_value('FALSE'), 0);
 	}
 
 	public function test_cast_value_datetime()
 	{
-		$expected = '2017-10-10 00:00:00';
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_DATETIME]);
-
-		$this->assert_equals($field->cast_value('20171010'), $expected);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_DATETIME])->cast_value('20171010'), '2017-10-10 00:00:00');
 	}
 
 	public function test_get_formatted_value_char()
 	{
-		$expected = 'prueba';
-		$field = $this->get_field();
-
-		$this->assert_equals($field->get_formatted_value('prueba'), $expected);
+		$this->assert_equals($this->get_field()->get_formatted_value('prueba'), 'prueba');
 	}
 
 	public function test_get_formatted_value_integer_sin_formato()
 	{
-		$expected = '1234';
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT]);
-
-		$this->assert_equals($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_INT])->get_formatted_value('1234'), '1234');
 	}
 
 	public function test_get_formatted_value_integer_con_formato_monto()
 	{
-		$expected = '$&nbsp;1.234';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'monto,0']);
 
-		$this->assert_equals($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), '$&nbsp;1.234');
 	}
 
 	public function test_get_formatted_value_integer_con_formato_cantidad()
 	{
-		$expected = '1.234,00';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'cantidad,2']);
 
-		$this->assert_equals($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), '1.234,00');
 	}
 
 	public function test_get_formatted_value_integer_con_formato_otro()
 	{
-		$expected = 'XX1234XX';
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'otro,0']);
 
-		$this->assert_equals($field->get_formatted_value('1234'), $expected);
+		$this->assert_equals($field->get_formatted_value('1234'), 'XX1234XX');
 	}
 
 	public function test_get_formatted_value_choices_con_formato()
 	{
-		$expected = 'Valor Traducido';
 		$field = $this->get_field([
 			'choices' => [
 				'valor'      => 'Valor Traducido',
@@ -244,23 +190,14 @@ class test_orm_field extends test_case {
 			],
 		]);
 
-		$this->assert_equals($field->get_formatted_value('valor'), $expected);
+		$this->assert_equals($field->get_formatted_value('valor'), 'Valor Traducido');
 	}
 
-	public function test_get_formatted_value_boolean_true_con_formato()
+	public function test_get_formatted_value_boolean_con_formato()
 	{
-		$expected = lang('orm_radio_yes');
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN])->get_formatted_value(1), lang('orm_radio_yes'));
 
-		$this->assert_equals($field->get_formatted_value(1), $expected);
-	}
-
-	public function test_get_formatted_value_boolean_false_con_formato()
-	{
-		$expected = lang('orm_radio_no');
-		$field = $this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN]);
-
-		$this->assert_equals($field->get_formatted_value(0), $expected);
+		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_BOOLEAN])->get_formatted_value(0), lang('orm_radio_no'));
 	}
 
 

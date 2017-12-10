@@ -569,6 +569,19 @@ class test_case {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Testea si un valor es un entero
+	 *
+	 * @param  mixed $test Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_is_int($test)
+	{
+		return $this->test($test, 'is_int', 'assert_is_int');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Testea si un valor es true
 	 *
 	 * @param  mixed $test   Test a ejecutar
