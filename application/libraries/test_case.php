@@ -279,15 +279,15 @@ class test_case {
 		switch (array_get($result, 'Expected Datatype'))
 		{
 			case 'Array';
-							$test_value     = json_encode(array_get($result, 'Notes.test'));
-							$expected_value = json_encode(array_get($result, 'Notes.result'));
+							$test_value     = str_replace('\\u0000', '', json_encode(array_get($result, 'Notes.test')));
+							$expected_value = str_replace('\\u0000', '', json_encode(array_get($result, 'Notes.result')));
 							return "Failed asserting that two arrays are equal.\n"
 								."  Test    : {$test_value}\n"
 								."  Expected: {$expected_value}\n\n";
 							break;
 			case 'Object';
-							$test_value     = serialize(array_get($result, 'Notes.test'));
-							$expected_value = serialize(array_get($result, 'Notes.result'));
+							$test_value     = str_replace('\\u0000', '', json_encode(array_get($result, 'Notes.test')));
+							$expected_value = str_replace('\\u0000', '', json_encode(array_get($result, 'Notes.result')));
 							return "Failed asserting that two ojects are equal.\n"
 								."  Test    : {$test_value}\n"
 								."  Expected: {$expected_value}\n\n";
@@ -311,7 +311,7 @@ class test_case {
 							return "Failed asserting that {$test_value} is {$expected_value}.\n\n";
 							break;
 			case 'Null':
-							$test_value     = array_get($result, 'Notes.test');
+							$test_value = array_get($result, 'Notes.test');
 							return "Failed asserting that {$test_value} is null.\n\n";
 							break;
 		}
