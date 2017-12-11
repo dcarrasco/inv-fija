@@ -81,6 +81,7 @@ class test_orm_model extends test_case {
 			'tipo'           => Orm_field::TIPO_INT,
 			'largo'          => 10,
 			'texto_ayuda'    => 'texto_ayuda_campo03',
+			'formato'        => 'cantidad,0',
 		];
 
 		$campo04_def = [
@@ -154,28 +155,31 @@ class test_orm_model extends test_case {
 		$model = $this->get_model()->fill($this->get_data01());
 
 		$this->assert_equals($model->get_field_value('campo01'), 'value01');
+		$this->assert_equals($model->get_field_value('campo01', FALSE), 'value01');
 	}
 
 	public function test_has_attributes_get_field_value_integer()
 	{
-		$expected = 3;
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_equals($model->get_field_value('campo03'), 3);
+		$this->assert_equals($model->get_field_value('campo03'), '3');
+		$this->assert_equals($model->get_field_value('campo03', FALSE), 3);
+
+		$model->campo03 = 3000;
+		$this->assert_equals($model->get_field_value('campo03'), '3.000');
+		$this->assert_equals($model->get_field_value('campo03', FALSE), 3000);
 	}
 
-	public function test_has_attributes_get_field_value_boolean_formatted()
+	public function test_has_attributes_get_field_value_boolean()
 	{
 		$model = $this->get_model()->fill($this->get_data01());
 
 		$this->assert_equals($model->get_field_value('campo04'), lang('orm_radio_yes'));
+		$this->assert_equals($model->get_field_value('campo04', FALSE), 1);
 	}
 
 	public function test_has_attributes_get_field_value_boolean_not_formatted()
 	{
-		$model = $this->get_model()->fill($this->get_data01());
-
-		$this->assert_equals($model->get_field_value('campo04', FALSE), 1);
 	}
 
 	public function test_has_attributes_fill_from_array()
@@ -262,6 +266,7 @@ class model_test extends ORM_Model {
 					'tipo'           => Orm_field::TIPO_INT,
 					'largo'          => 10,
 					'texto_ayuda'    => 'texto_ayuda_campo03',
+					'formato'        => 'cantidad,0',
 				],
 				'campo04' => [
 					'label'          => 'label_campo04',

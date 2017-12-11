@@ -160,24 +160,18 @@ class test_orm_field extends test_case {
 		$this->assert_equals($this->get_field(['tipo' => ORM_field::TIPO_INT])->get_formatted_value('1234'), '1234');
 	}
 
-	public function test_get_formatted_value_integer_con_formato_monto()
+	public function test_get_formatted_value_integer_con_formato()
 	{
+		// monto
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'monto,0']);
-
 		$this->assert_equals($field->get_formatted_value('1234'), '$&nbsp;1.234');
-	}
 
-	public function test_get_formatted_value_integer_con_formato_cantidad()
-	{
+		// cantidad
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'cantidad,2']);
-
 		$this->assert_equals($field->get_formatted_value('1234'), '1.234,00');
-	}
 
-	public function test_get_formatted_value_integer_con_formato_otro()
-	{
+		// otro
 		$field = $this->get_field(['tipo' => ORM_field::TIPO_INT, 'formato' => 'otro,0']);
-
 		$this->assert_equals($field->get_formatted_value('1234'), 'XX1234XX');
 	}
 
