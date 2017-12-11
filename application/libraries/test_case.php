@@ -505,7 +505,7 @@ class test_case {
 			})
 		);
 
-		$file = explode('/', array_get($debug, '1.file'));
+		$file = explode('/', str_replace('\\', '/', array_get($debug, '1.file')));
 		$file = array_get($file, count($file)-1);
 
 		$test_name = array_get($debug, '2.function');
