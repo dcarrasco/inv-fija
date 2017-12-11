@@ -35,7 +35,7 @@ class Formatter {
 	 * @param  boolean $format_diff  Indica si formatea valores positivos (verde) y negativos (rojo)
 	 * @return string                Valor formateado
 	 */
-	static public function cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
+	public static function cantidad($valor = 0, $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
 		if ( ! is_numeric($valor))
 		{
@@ -60,7 +60,7 @@ class Formatter {
 	 * @param  string $valor            Valor a formatear
 	 * @return string
 	 */
-	static protected function format_diff($valor_formateado = '', $valor = 0)
+	protected static function format_diff($valor_formateado = '', $valor = 0)
 	{
 		$format_start = $valor > 0
 			? '<strong><span class="text-success">+'
@@ -85,7 +85,7 @@ class Formatter {
 	 * @param  boolean $format_diff  Indica si formatea valores positivos (verde) y negativos (rojo)
 	 * @return string                Monto formateado
 	 */
-	static public function monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
+	public static function monto($monto = 0, $unidad = 'UN', $signo_moneda = '$', $decimales = 0, $mostrar_cero = FALSE, $format_diff = FALSE)
 	{
 		if ( ! is_numeric($monto))
 		{
@@ -119,7 +119,7 @@ class Formatter {
 	 * @param  integer $segundos_totales Cantidad de segundos a formatear
 	 * @return string       Segundos formateados como hora
 	 */
-	static public function hora($segundos_totales = 0)
+	public static function hora($segundos_totales = 0)
 	{
 		$separador = ':';
 		$hora      = str_pad((int) ($segundos_totales/3600), 2, '0', STR_PAD_LEFT);
@@ -138,7 +138,7 @@ class Formatter {
 	 * @param  string $formato Formato a devolver
 	 * @return string          Fecha formateada segun formato
 	 */
-	static public function fecha($fecha = NULL, $formato = 'Y-m-d')
+	public static function fecha($fecha = NULL, $formato = 'Y-m-d')
 	{
 		if ( ! $fecha)
 		{
@@ -161,7 +161,7 @@ class Formatter {
 	 * @param  string $numero_rut RUT a formatear
 	 * @return string
 	 */
-	static public function rut($numero_rut = NULL)
+	public static function rut($numero_rut = NULL)
 	{
 		if ( ! $numero_rut)
 		{
@@ -188,7 +188,7 @@ class Formatter {
 	 *
 	 * @return void
 	 */
-	static public function print_debug()
+	public static function print_debug()
 	{
 		$colores_texto = [
 			'llave_array' => 'tomato',

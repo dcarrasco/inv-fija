@@ -31,7 +31,7 @@ class CaptchaWords {
 	 *
 	 * @return string Palabra aleatoria
 	 */
-	static public function word()
+	public static function word()
 	{
 		$diccionario = [
 			'abiertas','abiertos','aborrece','abrasada','abrazado','abrazara','abreviar','abriendo','abririan','abrumado',

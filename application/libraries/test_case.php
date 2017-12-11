@@ -763,7 +763,7 @@ class test_case {
 	public function cuenta_metodos($file)
 	{
 		return $this->cuenta_stats($file, static::STATS_KEY_METHODS, function($line) {
-			return preg_match('/^\s*(public|protected|private) function/', $line);
+			return preg_match('/^\s*(public|protected|private) (static )?function/', $line);
 		});
 	}
 
