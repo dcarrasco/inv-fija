@@ -268,6 +268,14 @@ class test_case {
 	 */
 	public function print_error_assert($result)
 	{
+		if (array_get($result, 'Notes.test_type') === 'assert_contains')
+		{
+			$haystack = array_get($result, 'Notes.contains_haystack');
+			$needle   = array_get($result, 'Notes.contains_needle');
+
+			return "Failed asserting that '{$haystack}' contains '{$needle}'.\n\n";
+		}
+
 		if (is_string(array_get($result, 'Notes.result')) AND substr(array_get($result, 'Notes.result'), 0, 3) === 'is_')
 		{
 			$test_type     = array_get($result, 'Test Datatype');
@@ -490,12 +498,13 @@ class test_case {
 	/**
 	 * Ejecuta un test
 	 *
-	 * @param  mixed  $test   Test a ejecutar
-	 * @param  mixed  $result Resultado esperado
-	 * @param  string $test_type Tipo de assert
+	 * @param  mixed  $test       Test a ejecutar
+	 * @param  mixed  $result     Resultado esperado
+	 * @param  string $test_type  Tipo de assert
+	 * @param  array  $test_notes Notas del test
 	 * @return mixed
 	 */
-	public function test($test, $result, $test_type = 'assert_equals')
+	public function test($test, $result, $test_type = 'assert_equals', $test_notes = [])
 	{
 		$debug = debug_backtrace();
 
@@ -511,7 +520,7 @@ class test_case {
 		$test_name = array_get($debug, '2.function');
 		$test_name = str_replace('_', ' ', substr($test_name, 5, strlen($test_name)));
 
-		$notes = [
+		$notes = array_merge($test_notes, [
 			'file'       => $file,
 			'full_file'  => array_get($debug, '1.file'),
 			'line'       => array_get($debug, '1.line'),
@@ -521,7 +530,7 @@ class test_case {
 			'test_type'  => $test_type,
 			'test'       => $test,
 			'result'     => $result,
-		];
+		]);
 
 		return $this->unit->run($test, $result, $test_name, serialize($notes));
 	}
@@ -623,15 +632,18 @@ class test_case {
 	/**
 	 * Testea si un valor contiene otro
 	 *
-	 * @param  mixed $test   Test a ejecutar
+	 * @param  string $haystack Texto en el cual se ejecuta la busqueda
+	 * @param  string $needle   Texto a buscar
 	 * @return mixed
 	 */
-	public function assert_contains($haystack, $needle)
+	public function assert_contains($haystack = '', $needle = '')
 	{
 		$strpos = strpos($haystack, $needle);
-		$test = ($strpos !== FALSE) AND is_int($strpos);
+		$test = ($strpos !== FALSE) && is_int($strpos);
 
-		return $this->test($test, TRUE, 'assert_contains');
+		return $this->test($test, TRUE, 'assert_contains',
+			['contains_haystack' => $haystack, 'contains_needle' => $needle]
+		);
 	}
 
 	// --------------------------------------------------------------------

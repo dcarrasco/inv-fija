@@ -86,48 +86,49 @@ class test_orm_field extends test_case {
 
 	public function test_form_field_text_type()
 	{
-		$this->assert_is_int(strpos($this->get_field()->form_field(), 'type="text"'));
+		$this->assert_contains($this->get_field()->form_field(), 'type="text"');
 	}
 
 	public function test_form_field_text_value_empty()
 	{
-		$this->assert_is_int(strpos($this->get_field()->form_field(), 'value=""'));
+		$this->assert_contains($this->get_field()->form_field(), 'value=""');
 	}
 
 	public function test_form_field_text_value_non_empty()
 	{
-		$this->assert_is_int(strpos($this->get_field()->form_field('abc'), 'value="abc"'));
+		$this->assert_contains($this->get_field()->form_field('abc'), 'value="abc"');
 	}
 
 	public function test_form_field_text_id()
 	{
-		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'id="id_prueba"'));
+		$this->assert_contains($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'id="id_prueba"');
 	}
 
 	public function test_form_field_text_class()
 	{
-		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'class="form-control "'));
+		$this->assert_contains($this->get_field(['es_id'=>FALSE])->form_field('abc'), 'class="form-control "');
 	}
 
 	public function test_form_field_text_maxlength()
 	{
-		$this->assert_is_int(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'maxlength="4"'));
+		$this->assert_contains($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'maxlength="4"');
 	}
 
 	public function test_form_field_text_size()
 	{
-		$this->assert_is_int(strpos($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'size="4"'));
+		$this->assert_contains($this->get_field(['largo'=>4, 'es_id'=>FALSE])->form_field('abc'), 'size="4"');
 	}
 
 	public function test_form_field_text_placeholder()
 	{
-		$this->assert_is_int(strpos($this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'), 'placeholder="Ingrese label_label_label"'));
+		$this->assert_contains($this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'), 'placeholder="Ingrese label_label_label"');
 	}
 
 	public function test_form_field_choices()
 	{
 		$field = $this->get_field(['es_id'=>FALSE, 'es_unico'=>FALSE, 'label'=>'label_label_label', 'choices' => ['a'=>1,'b'=>2,'c'=>3]]);
-		$this->assert_is_int(strpos($field->form_field('abc'), '<select name="prueba"'));
+
+		$this->assert_contains($field->form_field('abc'), '<select name="prueba"');
 	}
 
 	public function test_cast_value_char()

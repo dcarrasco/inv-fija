@@ -24,15 +24,15 @@ class test_google_map extends test_case {
 	public function test_create_map_is_string()
 	{
 		$this->assert_is_string((new \Google_map())->create_map());
-		$this->assert_is_int(strpos((new \Google_map())->create_map(), "<script type=\"text/javascript\">"));
-		$this->assert_is_int(strpos((new \Google_map())->create_map(), "map.fitBounds"));
+		$this->assert_contains((new \Google_map())->create_map(), "<script type=\"text/javascript\">");
+		$this->assert_contains((new \Google_map())->create_map(), "map.fitBounds");
 	}
 
 	public function test_add_marker()
 	{
 		$gmap = (new \Google_map())->add_marker(['lat' => 10, 'lng' => 20]);
 
-		$this->assert_is_int(strpos($gmap->create_map(), "LatLng(10, 20)"));
+		$this->assert_contains($gmap->create_map(), "LatLng(10, 20)");
 	}
 
 	public function test_add_peticiones_markers()
@@ -40,7 +40,7 @@ class test_google_map extends test_case {
 		$peticiones = [['acoord_y' => 10, 'acoord_x' => 20, 'empresa' => '', 'tecnico' => '', 'referencia' => '']];
 		$gmap = (new \Google_map())->add_peticiones_markers($peticiones);
 
-		$this->assert_is_int(strpos($gmap->create_map(), "LatLng(10, 20)"));
+		$this->assert_contains($gmap->create_map(), "LatLng(10, 20)");
 	}
 
 }

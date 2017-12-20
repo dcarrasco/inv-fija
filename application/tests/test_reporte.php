@@ -75,18 +75,10 @@ class test_reporte extends test_case {
 		$this->assert_equals($reporte, '$&nbsp;12.345');
 	}
 
-	public function test_formato_reporte_numero_dif_positivo()
+	public function test_formato_reporte_numero_dif()
 	{
-		$reporte = (new Repo())->formato_reporte(12345, ['tipo' => 'numero_dif']);
-
-		$this->assert_is_int(strpos($reporte, '+12.345'));
-	}
-
-	public function test_formato_reporte_numero_dif_negativo()
-	{
-		$reporte = (new Repo())->formato_reporte(-12345, ['tipo' => 'numero_dif']);
-
-		$this->assert_is_int(strpos($reporte, '-12.345'));
+		$this->assert_contains((new Repo())->formato_reporte(12345, ['tipo' => 'numero_dif']), '+12.345');
+		$this->assert_contains((new Repo())->formato_reporte(-12345, ['tipo' => 'numero_dif']), '-12.345');
 	}
 
 	public function test_formato_reporte_link()
