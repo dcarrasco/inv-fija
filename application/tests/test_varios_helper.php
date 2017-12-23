@@ -63,6 +63,7 @@ class test_varios_helper extends test_case {
 	public function test_fmt_hora()
 	{
 		$this->assert_equals(fmt_hora(33), '00:00:33');
+		$this->assert_equals(fmt_hora(60), '00:01:00');
 		$this->assert_equals(fmt_hora(133), '00:02:13');
 		$this->assert_equals(fmt_hora(3733), '01:02:13');
 	}
@@ -94,17 +95,21 @@ class test_varios_helper extends test_case {
 			array_get(['uno' => ['dos' => ['tres' => 3, 'cuatro' => [1,2,3,4,5]]]], 'uno.dos.tres'),
 			3
 		);
+		$this->assert_equals(
+			array_get(['uno' => ['dos' => ['tres' => 3, 'cuatro' => [1,2,3,4,5]]]], 'uno.dos.cuatro.2'),
+			3
+		);
 	}
 
 	public function test_get_arr_dias_mes()
 	{
 		$expected = [
 			'01' => NULL, '02' => NULL, '03' => NULL, '04' => NULL, '05' => NULL,
-			'06' => NULL, '07' => NULL, '08' => NULL, '09' => NULL, 10  => NULL,
-			11   => NULL, 12   => NULL, 13   => NULL, 14   => NULL, 15   => NULL,
-			16   => NULL, 17   => NULL, 18   => NULL, 19   => NULL, 20   => NULL,
-			21   => NULL, 22   => NULL, 23   => NULL, 24   => NULL, 25   => NULL,
-			26   => NULL, 27   => NULL, 28   => NULL, 29   => NULL, 30   => NULL,
+			'06' => NULL, '07' => NULL, '08' => NULL, '09' => NULL, 10 => NULL,
+			11 => NULL, 12 => NULL, 13 => NULL, 14 => NULL, 15 => NULL,
+			16 => NULL, 17 => NULL, 18 => NULL, 19 => NULL, 20 => NULL,
+			21 => NULL, 22 => NULL, 23 => NULL, 24 => NULL, 25 => NULL,
+			26 => NULL, 27 => NULL, 28 => NULL, 29 => NULL, 30 => NULL,
 		];
 
 		$this->assert_equals(get_arr_dias_mes('201704'), $expected);
@@ -118,7 +123,9 @@ class test_varios_helper extends test_case {
 
 	public function test_dias_de_la_semana()
 	{
+		$this->assert_equals(dias_de_la_semana(0), 'Do');
 		$this->assert_equals(dias_de_la_semana(3), 'Mi');
+		$this->assert_equals(dias_de_la_semana(6), 'Sa');
 	}
 
 	public function test_clase_cumplimiento_consumos()
