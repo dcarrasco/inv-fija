@@ -1,5 +1,7 @@
 <?php
 
+use test\test_case;
+
 /**
  * testeo clase collection
  *

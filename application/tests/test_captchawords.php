@@ -1,5 +1,7 @@
 <?php
 
+use test\test_case;
+
 /**
  * testeo clase collection
  *
@@ -13,7 +15,7 @@ class test_captchawords extends test_case {
 
 	public function __construct()
 	{
-	    parent::__construct();
+		parent::__construct();
 	}
 
 	public function test_word_is_string()
