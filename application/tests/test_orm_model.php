@@ -1,6 +1,8 @@
 <?php
 
 use test\test_case;
+use Model\Orm_model;
+use Model\Orm_field;
 
 /**
  * testeo clase collection
@@ -31,6 +33,12 @@ class test_orm_model extends test_case {
 			'campo03' => 3,
 			'campo04' => 1,
 		];
+	}
+
+	public function test_create()
+	{
+		$this->assert_is_object(model_test::create());
+		$this->assert_equals(json_encode(model_test::create()), json_encode(new model_test));
 	}
 
 	public function test_get_model_nombre()

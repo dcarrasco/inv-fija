@@ -1,6 +1,7 @@
 <?php
 
 use test\test_case;
+use Model\Orm_field;
 
 /**
  * testeo clase collection
