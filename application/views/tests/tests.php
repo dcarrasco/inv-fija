@@ -35,7 +35,7 @@
 				<th>Result</th>
 				<th>Filename</th>
 				<th>Line Number</th>
-				<th>Notes</th>
+				<!-- <th>Notes</th> -->
 			</tr>
 		</thead>
 		{test_report}
