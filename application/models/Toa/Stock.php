@@ -17,9 +17,9 @@ namespace Toa;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Reporte;
-use \ORM_Model;
+use Reporte;
 use Toa\Tecnico_toa;
+use Model\Orm_model;
 
 /**
  * Clase Modelo Stock TOA

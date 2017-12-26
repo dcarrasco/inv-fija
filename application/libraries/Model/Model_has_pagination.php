@@ -1,4 +1,7 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+namespace Model;
+
 /**
  * INVENTARIO FIJA
  *
@@ -12,6 +15,7 @@
  * @link      localhost:1520
  *
  */
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Extension de clase CI_Model para usar con administracion de modelo

@@ -17,8 +17,8 @@ namespace Stock;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \ORM_Model;
-use \Reporte;
+use Reporte;
+use Model\Orm_model;
 use Stock\Almacen_sap;
 use Stock\Tipoalmacen_sap;
 

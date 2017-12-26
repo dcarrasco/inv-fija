@@ -17,7 +17,7 @@ namespace Stock;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use ORM_Model;
+use Model\Orm_model;
 
 /**
  * Clase Modelo Inventario

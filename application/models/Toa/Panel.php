@@ -19,6 +19,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Toa\Tecnico_toa;
 use Toa\Consumo_toa;
+use Model\Orm_model;
 use Stock\Clase_movimiento;
 
 /**
@@ -31,7 +32,7 @@ use Stock\Clase_movimiento;
  * @link     localhost:1520
  *
  */
-class Panel extends \ORM_Model {
+class Panel extends ORM_Model {
 
 	/**
 	 * Arreglo con validación formulario panel

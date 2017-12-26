@@ -15,7 +15,7 @@ namespace Inventario;
  *
  */
 
-use \Reporte;
+use Reporte;
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 

@@ -17,9 +17,9 @@ namespace Toa;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Reporte;
-use \ORM_Model;
-use \ORM_Field;
+use Reporte;
+use Model\Orm_model;
+use Model\Orm_field;
 use Toa\Tecnico_toa;
 use Stock\Clase_movimiento;
 

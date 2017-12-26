@@ -17,9 +17,9 @@ namespace Acl;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Orm_Model;
-use \Orm_Field;
-use \CaptchaWords;
+use CaptchaWords;
+use Model\Orm_model;
+use Model\Orm_field;
 
 /**
  * Clase Modelo ACL

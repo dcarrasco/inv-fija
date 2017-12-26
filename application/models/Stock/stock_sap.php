@@ -18,6 +18,8 @@ use \Reporte;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+use Model\Orm_model;
+
 /**
  * Clase Modelo Stock SAP
  *
@@ -28,7 +30,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  * @link     localhost:1520
  *
  */
-class Stock_sap extends \ORM_Model {
+class Stock_sap extends ORM_Model {
 
 	use Reporte;
 

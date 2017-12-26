@@ -2,8 +2,6 @@
 
 namespace Stock;
 
-use \ORM_Model;
-
 /**
  * INVENTARIO FIJA
  *
@@ -18,6 +16,8 @@ use \ORM_Model;
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use Model\Orm_model;
 
 /**
  * Clase Modelo Analisis de series

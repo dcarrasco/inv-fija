@@ -16,10 +16,10 @@ namespace Inventario;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Acl\Acl;
-use \ORM_Model;
-use \ORM_Field;
-use \Collection;
+use Acl\Acl;
+use Collection;
+use Model\Orm_model;
+use Model\Orm_field;
 
 /**
  * Clase Modelo Detalle de inventario

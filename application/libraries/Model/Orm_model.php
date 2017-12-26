@@ -1,4 +1,7 @@
 <?php
+
+namespace Model;
+
 /**
  * INVENTARIO FIJA
  *
@@ -13,6 +16,10 @@
  *
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+use Collection;
+use ArrayIterator;
+use IteratorAggregate;
 
 /**
  * Extension de clase CI_Model para usar con administracion de modelo

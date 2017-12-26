@@ -17,9 +17,9 @@ namespace Toa;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Reporte;
-use \Stock\Clase_movimiento;
-use \ORM_Model;
+use Reporte;
+use Model\Orm_model;
+use Stock\Clase_movimiento;
 
 /**
  * Clase Modelo Movimientos fija

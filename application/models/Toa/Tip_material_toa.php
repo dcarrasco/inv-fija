@@ -16,8 +16,8 @@ namespace Toa;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \ORM_Model;
-use \ORM_Field;
+use Model\Orm_model;
+use Model\Orm_field;
 
 /**
  * Clase Modelo Tipo Material de trabajos TOA

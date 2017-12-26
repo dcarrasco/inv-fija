@@ -14,7 +14,7 @@
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use \Acl\Acl;
+use Acl\Acl;
 
 /**
  * Clase Hook Funcionalidad a ejecutar en todos los controladores

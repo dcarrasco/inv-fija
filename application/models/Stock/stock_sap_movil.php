@@ -16,7 +16,6 @@ namespace Stock;
  */
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-
 /**
  * Clase Modelo Stock SAP
  *
