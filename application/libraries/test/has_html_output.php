@@ -12,7 +12,7 @@ namespace test;
  * @license  MIT License
  * @link     localhost:1520
  */
-trait test_has_html_output {
+trait has_html_output {
 
 	// --------------------------------------------------------------------
 

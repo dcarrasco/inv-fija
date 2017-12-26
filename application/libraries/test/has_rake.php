@@ -14,7 +14,7 @@ use \Collection;
  * @license  MIT License
  * @link     localhost:1520
  */
-trait test_has_rake {
+trait has_rake {
 
 	// --------------------------------------------------------------------
 

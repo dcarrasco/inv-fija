@@ -14,10 +14,10 @@ namespace test;
  */
 class test_case {
 
-	use test_has_rake;
-	use test_has_assertions;
-	use test_has_cli_output;
-	use test_has_html_output;
+	use has_rake;
+	use has_assertions;
+	use has_cli_output;
+	use has_html_output;
 
 
 	/**
