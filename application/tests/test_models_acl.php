@@ -33,7 +33,7 @@ class test_models_acl extends test_case {
 
 		$this->assert_is_object($app);
 		$this->assert_not_empty($app->get_fields());
-		$this->assert_equals(count($app->get_fields()), 6);
+		$this->assert_count($app->get_fields(), 6);
 		$this->assert_is_string((string) $app);
 	}
 
@@ -43,7 +43,7 @@ class test_models_acl extends test_case {
 
 		$this->assert_is_object($modulo);
 		$this->assert_not_empty($modulo->get_fields());
-		$this->assert_equals(count($modulo->get_fields()), 8);
+		$this->assert_count($modulo->get_fields(), 8);
 		$this->assert_is_string((string) $modulo);
 	}
 
@@ -53,7 +53,7 @@ class test_models_acl extends test_case {
 
 		$this->assert_is_object($rol);
 		$this->assert_not_empty($rol->get_fields());
-		$this->assert_equals(count($rol->get_fields()), 5);
+		$this->assert_count($rol->get_fields(), 5);
 		$this->assert_is_string((string) $rol);
 	}
 
@@ -63,7 +63,7 @@ class test_models_acl extends test_case {
 
 		$this->assert_is_object($usuario);
 		$this->assert_not_empty($usuario->get_fields());
-		$this->assert_equals(count($usuario->get_fields()), 10);
+		$this->assert_count($usuario->get_fields(), 10);
 		$this->assert_is_string((string) $usuario);
 	}
 

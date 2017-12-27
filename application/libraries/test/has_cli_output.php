@@ -239,6 +239,16 @@ trait has_cli_output {
 			return "Failed asserting that '{$haystack}' contains '{$needle}'.\n\n";
 		}
 
+		if (array_get($result, 'Notes.test_type') === 'assert_count')
+		{
+			$test = array_get($result, 'Notes.test');
+			$test_type = gettype($test);
+			$test_size = count($test);
+			$expected_value = (string) array_get($result, 'Notes.result');
+
+			return "Failed asserting that {$test_type} size {$test_size} matches expected size {$expected_value}.\n\n";
+		}
+
 		if (array_get($result, 'Notes.test_type') === 'assert_empty')
 		{
 			$test = array_get($result, 'Notes.test');

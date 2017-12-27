@@ -49,7 +49,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($ciudad_toa);
 		$this->assert_not_empty($ciudad_toa->get_fields());
-		$this->assert_equals(count($ciudad_toa->get_fields()), 3);
+		$this->assert_count($ciudad_toa->get_fields(), 3);
 		$this->assert_is_string((string) $ciudad_toa);
 	}
 
@@ -59,7 +59,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($clave_cierre);
 		$this->assert_not_empty($clave_cierre->get_fields());
-		$this->assert_equals(count($clave_cierre->get_fields()), 6);
+		$this->assert_count($clave_cierre->get_fields(), 6);
 		$this->assert_is_string((string) $clave_cierre);
 	}
 
@@ -77,7 +77,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($empresa_ciudad_toa);
 		$this->assert_not_empty($empresa_ciudad_toa->get_fields());
-		$this->assert_equals(count($empresa_ciudad_toa->get_fields()), 3);
+		$this->assert_count($empresa_ciudad_toa->get_fields(), 3);
 		$this->assert_is_string((string) $empresa_ciudad_toa);
 	}
 
@@ -87,7 +87,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($empresa_toa);
 		$this->assert_not_empty($empresa_toa->get_fields());
-		$this->assert_equals(count($empresa_toa->get_fields()), 4);
+		$this->assert_count($empresa_toa->get_fields(), 4);
 		$this->assert_is_string((string) $empresa_toa);
 	}
 
@@ -105,7 +105,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($ps_vpi_toa);
 		$this->assert_not_empty($ps_vpi_toa->get_fields());
-		$this->assert_equals(count($ps_vpi_toa->get_fields()), 3);
+		$this->assert_count($ps_vpi_toa->get_fields(), 3);
 		$this->assert_is_string((string) $ps_vpi_toa);
 	}
 
@@ -123,7 +123,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($tecnico_toa);
 		$this->assert_not_empty($tecnico_toa->get_fields());
-		$this->assert_equals(count($tecnico_toa->get_fields()), 5);
+		$this->assert_count($tecnico_toa->get_fields(), 5);
 		$this->assert_is_string((string) $tecnico_toa);
 	}
 
@@ -133,7 +133,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($tip_material_toa);
 		$this->assert_not_empty($tip_material_toa->get_fields());
-		$this->assert_equals(count($tip_material_toa->get_fields()), 7);
+		$this->assert_count($tip_material_toa->get_fields(), 7);
 		$this->assert_is_string((string) $tip_material_toa);
 	}
 
@@ -143,7 +143,7 @@ class test_models_toa extends test_case {
 
 		$this->assert_is_object($tipo_trabajo_toa);
 		$this->assert_not_empty($tipo_trabajo_toa->get_fields());
-		$this->assert_equals(count($tipo_trabajo_toa->get_fields()), 2);
+		$this->assert_count($tipo_trabajo_toa->get_fields(), 2);
 		$this->assert_is_string((string) $tipo_trabajo_toa);
 	}
 

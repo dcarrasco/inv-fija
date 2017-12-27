@@ -24,7 +24,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($almacen_sap);
 		$this->assert_not_empty($almacen_sap->get_fields());
-		$this->assert_equals(count($almacen_sap->get_fields()), 7);
+		$this->assert_count($almacen_sap->get_fields(), 7);
 		$this->assert_is_string((string) $almacen_sap);
 	}
 
@@ -43,7 +43,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($clase_movimiento);
 		$this->assert_not_empty($clase_movimiento->get_fields());
-		$this->assert_equals(count($clase_movimiento->get_fields()), 2);
+		$this->assert_count($clase_movimiento->get_fields(), 2);
 		$this->assert_is_string((string) $clase_movimiento);
 	}
 
@@ -53,7 +53,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($clasifalmacen_sap);
 		$this->assert_not_empty($clasifalmacen_sap->get_fields());
-		$this->assert_equals(count($clasifalmacen_sap->get_fields()), 8);
+		$this->assert_count($clasifalmacen_sap->get_fields(), 8);
 		$this->assert_is_string((string) $clasifalmacen_sap);
 	}
 
@@ -71,7 +71,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($proveedor);
 		$this->assert_not_empty($proveedor->get_fields());
-		$this->assert_equals(count($proveedor->get_fields()), 2);
+		$this->assert_count($proveedor->get_fields(), 2);
 		$this->assert_is_string((string) $proveedor);
 	}
 
@@ -113,7 +113,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($tipo_clasifalm);
 		$this->assert_not_empty($tipo_clasifalm->get_fields());
-		$this->assert_equals(count($tipo_clasifalm->get_fields()), 3);
+		$this->assert_count($tipo_clasifalm->get_fields(), 3);
 		$this->assert_is_string((string) $tipo_clasifalm);
 	}
 
@@ -123,7 +123,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($tipo_movimiento);
 		$this->assert_not_empty($tipo_movimiento->get_fields());
-		$this->assert_equals(count($tipo_movimiento->get_fields()), 2);
+		$this->assert_count($tipo_movimiento->get_fields(), 2);
 		$this->assert_is_string((string) $tipo_movimiento);
 	}
 
@@ -133,7 +133,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($tipo_movimiento_cmv);
 		$this->assert_not_empty($tipo_movimiento_cmv->get_fields());
-		$this->assert_equals(count($tipo_movimiento_cmv->get_fields()), 3);
+		$this->assert_count($tipo_movimiento_cmv->get_fields(), 3);
 		$this->assert_is_string((string) $tipo_movimiento_cmv);
 	}
 
@@ -143,7 +143,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($tipoalmacen_sap);
 		$this->assert_not_empty($tipoalmacen_sap->get_fields());
-		$this->assert_equals(count($tipoalmacen_sap->get_fields()), 5);
+		$this->assert_count($tipoalmacen_sap->get_fields(), 5);
 		$this->assert_is_string((string) $tipoalmacen_sap);
 	}
 
@@ -153,7 +153,7 @@ class test_models_stock extends test_case {
 
 		$this->assert_is_object($usuario_sap);
 		$this->assert_not_empty($usuario_sap->get_fields());
-		$this->assert_equals(count($usuario_sap->get_fields()), 2);
+		$this->assert_count($usuario_sap->get_fields(), 2);
 		$this->assert_is_string((string) $usuario_sap);
 	}
 

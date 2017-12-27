@@ -24,7 +24,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($almacen);
 		$this->assert_not_empty($almacen->get_fields());
-		$this->assert_equals(count($almacen->get_fields()), 1);
+		$this->assert_count($almacen->get_fields(), 1);
 		$this->assert_is_string((string) $almacen);
 	}
 
@@ -34,7 +34,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($auditor);
 		$this->assert_not_empty($auditor->get_fields());
-		$this->assert_equals(count($auditor->get_fields()), 3);
+		$this->assert_count($auditor->get_fields(), 3);
 		$this->assert_is_string((string) $auditor);
 	}
 
@@ -44,7 +44,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($catalogo);
 		$this->assert_not_empty($catalogo->get_fields());
-		$this->assert_equals(count($catalogo->get_fields()), 5);
+		$this->assert_count($catalogo->get_fields(), 5);
 		$this->assert_is_string((string) $catalogo);
 	}
 
@@ -54,7 +54,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($centro);
 		$this->assert_not_empty($centro->get_fields());
-		$this->assert_equals(count($centro->get_fields()), 1);
+		$this->assert_count($centro->get_fields(), 1);
 		$this->assert_is_string((string) $centro);
 	}
 
@@ -64,7 +64,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($detalle_inventario);
 		$this->assert_not_empty($detalle_inventario->get_fields());
-		$this->assert_equals(count($detalle_inventario->get_fields()), 21);
+		$this->assert_count($detalle_inventario->get_fields(), 21);
 		$this->assert_is_string((string) $detalle_inventario);
 	}
 
@@ -74,7 +74,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($familia);
 		$this->assert_not_empty($familia->get_fields());
-		$this->assert_equals(count($familia->get_fields()), 3);
+		$this->assert_count($familia->get_fields(), 3);
 		$this->assert_is_string((string) $familia);
 	}
 
@@ -84,7 +84,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($inventario);
 		$this->assert_not_empty($inventario->get_fields());
-		$this->assert_equals(count($inventario->get_fields()), 4);
+		$this->assert_count($inventario->get_fields(), 4);
 		$this->assert_is_string((string) $inventario);
 	}
 
@@ -94,7 +94,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($inventario_reporte);
 		$this->assert_not_empty($inventario_reporte->get_fields());
-		$this->assert_equals(count($inventario_reporte->get_fields()), 4);
+		$this->assert_count($inventario_reporte->get_fields(), 4);
 		$this->assert_is_string((string) $inventario_reporte);
 		$this->assert_not_empty($inventario_reporte->rules_reporte);
 	}
@@ -105,7 +105,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($tipo_inventario);
 		$this->assert_not_empty($tipo_inventario->get_fields());
-		$this->assert_equals(count($tipo_inventario->get_fields()), 2);
+		$this->assert_count($tipo_inventario->get_fields(), 2);
 		$this->assert_is_string((string) $tipo_inventario);
 	}
 
@@ -115,7 +115,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($tipo_ubicacion);
 		$this->assert_not_empty($tipo_ubicacion->get_fields());
-		$this->assert_equals(count($tipo_ubicacion->get_fields()), 3);
+		$this->assert_count($tipo_ubicacion->get_fields(), 3);
 		$this->assert_is_string((string) $tipo_ubicacion);
 	}
 
@@ -125,7 +125,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($ubicacion);
 		$this->assert_not_empty($ubicacion->get_fields());
-		$this->assert_equals(count($ubicacion->get_fields()), 4);
+		$this->assert_count($ubicacion->get_fields(), 4);
 		// $this->assert_is_string((string) $ubicacion);
 	}
 
@@ -135,7 +135,7 @@ class test_models_inventario extends test_case {
 
 		$this->assert_is_object($unidad_medida);
 		$this->assert_not_empty($unidad_medida->get_fields());
-		$this->assert_equals(count($unidad_medida->get_fields()), 2);
+		$this->assert_count($unidad_medida->get_fields(), 2);
 		$this->assert_is_string((string) $unidad_medida);
 	}
 

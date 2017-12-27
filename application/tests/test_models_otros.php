@@ -35,7 +35,7 @@ class test_models_otros extends test_case {
 
 		$this->assert_is_object($catalogo_foto);
 		$this->assert_not_empty($catalogo_foto->get_fields());
-		$this->assert_equals(count($catalogo_foto->get_fields()), 2);
+		$this->assert_count($catalogo_foto->get_fields(), 2);
 	}
 
 	public function test_despachos()

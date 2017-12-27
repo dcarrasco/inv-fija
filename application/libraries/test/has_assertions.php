@@ -152,6 +152,22 @@ trait has_assertions {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Testea si un valor es vacio
+	 *
+	 * @param  mixed $item    Test a ejecutar
+	 * @param  mixed $result  Cantidad de elementos
+	 * @return mixed
+	 */
+	public function assert_count($item, $result)
+	{
+		return $this->test(count($item), $result, 'assert_count',
+			['test' => $item]
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Testea si un valor contiene otro
 	 *
 	 * @param  string $haystack Texto en el cual se ejecuta la busqueda
