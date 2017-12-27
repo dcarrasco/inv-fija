@@ -172,7 +172,7 @@ trait has_cli_output {
 		$results_failed = $results_collection
 			->filter(function($result) {return $result['Result'] === lang('ut_failed');});
 
-		$tests  = $results_passed
+		$tests = $results_passed
 			->pluck('Notes')
 			->map(function($note) {return array_get($note, 'class').':'.array_get($note, 'function');})
 			->unique()
@@ -191,7 +191,7 @@ trait has_cli_output {
 		echo "\n".$this->print_failures_details($results_collection)."\n";
 
 		echo ($failed)
-			? "{$color_failed} FAILURES! \n Tests: {$cant}, Failures: {$failed}. {$color_reset}\n"
+			? "{$color_failed} FAILURES! \n Tests: {$tests}, Assertions: {$cant}, Failures: {$failed}. {$color_reset}\n"
 			: "{$color_passed} OK ({$tests} tests, {$passed} assertions). {$color_reset}\n";
 	}
 
