@@ -57,6 +57,19 @@ trait has_assertions {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Testea si un valor es arreglo
+	 *
+	 * @param  mixed $test Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_is_array($test)
+	{
+		return $this->test($test, 'is_array', 'assert_is_array');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Testea si un valor es un entero
 	 *
 	 * @param  mixed $test Test a ejecutar
@@ -104,6 +117,36 @@ trait has_assertions {
 	public function assert_null($test)
 	{
 		return $this->test($test, NULL, 'assert_null');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor es vacio
+	 *
+	 * @param  mixed $test   Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_empty($test)
+	{
+		return $this->test(empty($test), TRUE, 'assert_empty',
+			['test' => $test]
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Testea si un valor no es vacio
+	 *
+	 * @param  mixed $test Test a ejecutar
+	 * @return mixed
+	 */
+	public function assert_not_empty($test)
+	{
+		return $this->test(empty($test), FALSE, 'assert_not_empty',
+			['test' => $test]
+		);
 	}
 
 	// --------------------------------------------------------------------

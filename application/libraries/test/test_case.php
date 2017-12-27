@@ -234,7 +234,7 @@ class test_case {
 		$test_name = array_get($debug, '2.function');
 		$test_name = str_replace('_', ' ', substr($test_name, 5, strlen($test_name)));
 
-		$notes = array_merge($test_notes, [
+		$notes = array_merge([
 			'file'       => $file,
 			'full_file'  => array_get($debug, '1.file'),
 			'line'       => array_get($debug, '1.line'),
@@ -244,7 +244,7 @@ class test_case {
 			'test_type'  => $test_type,
 			'test'       => $test,
 			'result'     => $result,
-		]);
+		], $test_notes);
 
 		return $this->unit->run($test, $result, $test_name, serialize($notes));
 	}

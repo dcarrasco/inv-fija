@@ -239,6 +239,24 @@ trait has_cli_output {
 			return "Failed asserting that '{$haystack}' contains '{$needle}'.\n\n";
 		}
 
+		if (array_get($result, 'Notes.test_type') === 'assert_empty')
+		{
+			$test = array_get($result, 'Notes.test');
+			$test_type = gettype($test);
+			$test = $test_type === 'array' ? json_encode($test) : $test;
+
+			return "Failed asserting that {$test_type} '{$test}' is empty.\n\n";
+		}
+
+		if (array_get($result, 'Notes.test_type') === 'assert_not_empty')
+		{
+			$test = array_get($result, 'Notes.test');
+			$test_type = gettype($test);
+			$test = $test_type === 'array' ? json_encode($test) : $test;
+
+			return "Failed asserting that {$test_type} '{$test}' is not empty.\n\n";
+		}
+
 		if (is_string(array_get($result, 'Notes.result')) AND substr(array_get($result, 'Notes.result'), 0, 3) === 'is_')
 		{
 			$test_type     = array_get($result, 'Test Datatype');
