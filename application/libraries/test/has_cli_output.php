@@ -234,10 +234,10 @@ trait has_cli_output {
 			echo "\n{$titulo}Uso:{$reset}\n"
 				."  php public/index.php tests [opciones]\n\n"
 				."{$titulo}Opciones:{$reset}\n"
-				."  {$opcion}help{$reset}              Muestra esta ayuda.\n"
-				."  {$opcion}detalle{$reset}           Muestra cada linea de test.\n"
-				."  {$opcion}coverage{$reset}          Muestra el % de cobertura de los tests.\n"
-				."  {$opcion}rake [detalle]{$reset}    Muestra estadisticas de la aplicacion.\n";
+				."  {$opcion}help{$reset}                     Muestra esta ayuda.\n"
+				."  {$opcion}detalle{$reset}                  Muestra cada linea de test.\n"
+				."  {$opcion}coverage{$reset}                 Muestra el % de cobertura de los tests.\n"
+				."  {$opcion}rake [detalle] [sort]{$reset}    Muestra estadisticas de la aplicacion.\n";
 		}
 
 	}

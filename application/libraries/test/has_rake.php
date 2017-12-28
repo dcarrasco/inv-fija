@@ -18,12 +18,12 @@ trait has_rake {
 
 	// --------------------------------------------------------------------
 
-	public function rake($detalle = '')
+	public function rake($detalle = '', $sort = '')
 	{
 		$file_list = $this->scan_dir(APPPATH);
 		$stats     = $this->file_stats($file_list, $detalle);
 
-		echo $this->print_rake_stats($stats);
+		echo $this->print_rake_stats($stats, $sort);
 	}
 
 	// --------------------------------------------------------------------
@@ -184,8 +184,10 @@ trait has_rake {
 
 	// --------------------------------------------------------------------
 
-	public function print_rake_stats($stats)
+	public function print_rake_stats($stats, $sort)
 	{
+		$stats = $this->sort_stats($stats, $sort);
+
 		$padding = collect([
 			static::STATS_KEY_NAME    => 20,
 			static::STATS_KEY_LINES   => 7,
@@ -215,6 +217,32 @@ trait has_rake {
 		echo $this->rake_print_line($padding);
 		echo $this->rake_print_stats($totals, $padding);
 		echo $this->rake_print_line($padding);
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function sort_stats($stats, $sort)
+	{
+		$sort = strtolower($sort);
+
+		$columns = [
+			'lines'   => 'Lines',
+			'loc'     => 'LOC',
+			'classes' => 'Classes',
+			'methods' => 'Methods',
+			'mc'      => 'M/C',
+			'locm'    => 'LOC/M',
+		];
+
+		if ($sort === '' OR ! in_array($sort, array_keys($columns)))
+		{
+			return $stats;
+		}
+
+		return $stats
+			->sort(function($stat1, $stat2) use ($sort, $columns) {
+				return $stat1[$columns[$sort]] < $stat2[$columns[$sort]];
+			});
 	}
 
 	// --------------------------------------------------------------------

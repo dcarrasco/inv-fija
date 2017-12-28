@@ -40,9 +40,9 @@ class tests extends Controller_base {
 		$this->test->print_coverage();
 	}
 
-	public function rake($detalle = '')
+	public function rake($detalle = '', $sort = '')
 	{
-		$this->test->rake($detalle);
+		$this->test->rake($detalle, $sort);
 	}
 
 }
