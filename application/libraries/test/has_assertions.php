@@ -25,7 +25,31 @@ trait has_assertions {
 	 */
 	public function assert_equals($test, $result)
 	{
-		return $this->test($test, $result, 'assert_equals');
+		$result_type   = gettype($result);
+		$string_test   = $this->to_string($test);
+		$string_result = $this->to_string($result);
+
+		switch ($result_type)
+		{
+			case 'array':
+			case 'object':
+			case 'string':
+				$error_message = "Failed asserting that two {$result_type}s are equal.\n"
+					."  Test    : {$string_test}\n"
+					."  Expected: {$string_result}\n";
+				break;
+
+			case 'integer':
+				$error_message = "Failed asserting that {$string_test} matches expected {$string_result}.\n";
+				break;
+
+			case 'boolean':
+			case 'NULL':
+				$error_message = "Failed asserting that {$string_test} is {$string_result}.\n";
+				break;
+		}
+
+		return $this->test($test, $result, 'assert_equals', compact('error_message'));
 	}
 
 	// --------------------------------------------------------------------
@@ -38,7 +62,9 @@ trait has_assertions {
 	 */
 	public function assert_is_string($test)
 	{
-		return $this->test($test, 'is_string', 'assert_is_string');
+		return $this->test($test, 'is_string', 'assert_is_string', [
+			'error_message' => 'Failed asserting that test type '.gettype($test)." equals result type string\n",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -51,7 +77,9 @@ trait has_assertions {
 	 */
 	public function assert_is_object($test)
 	{
-		return $this->test($test, 'is_object', 'assert_is_object');
+		return $this->test($test, 'is_object', 'assert_is_object', [
+			'error_message' => 'Failed asserting that test type '.gettype($test)." equals result type object\n",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -64,7 +92,9 @@ trait has_assertions {
 	 */
 	public function assert_is_array($test)
 	{
-		return $this->test($test, 'is_array', 'assert_is_array');
+		return $this->test($test, 'is_array', 'assert_is_array', [
+			'error_message' => 'Failed asserting that test type '.gettype($test)." equals result type array\n",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -77,7 +107,9 @@ trait has_assertions {
 	 */
 	public function assert_is_int($test)
 	{
-		return $this->test($test, 'is_int', 'assert_is_int');
+		return $this->test($test, 'is_int', 'assert_is_int', [
+			'error_message' => 'Failed asserting that test type '.gettype($test)." equals result type integer\n",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -90,7 +122,9 @@ trait has_assertions {
 	 */
 	public function assert_true($test)
 	{
-		return $this->test($test, TRUE, 'assert_true');
+		return $this->test($test, TRUE, 'assert_true', [
+			'error_message' => 'Failed asserting that '.$this->to_string($test)." is true.\n"
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -103,7 +137,9 @@ trait has_assertions {
 	 */
 	public function assert_false($test)
 	{
-		return $this->test($test, FALSE, 'assert_false');
+		return $this->test($test, FALSE, 'assert_false', [
+			'error_message' => 'Failed asserting that '.$this->to_string($test)." is false.\n"
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -116,7 +152,9 @@ trait has_assertions {
 	 */
 	public function assert_null($test)
 	{
-		return $this->test($test, NULL, 'assert_null');
+		return $this->test($test, NULL, 'assert_null', [
+			'error_message' => 'Failed asserting that '.$this->to_string($test)." is NULL.\n"
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -129,9 +167,10 @@ trait has_assertions {
 	 */
 	public function assert_empty($test)
 	{
-		return $this->test(empty($test), TRUE, 'assert_empty',
-			['test' => $test]
-		);
+		return $this->test(empty($test), TRUE, 'assert_empty', [
+			'test' => $test,
+			'error_message' => 'Failed asserting that '.gettype($test)." '".$this->to_string($test)."' is empty.\n"
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -144,9 +183,10 @@ trait has_assertions {
 	 */
 	public function assert_not_empty($test)
 	{
-		return $this->test(empty($test), FALSE, 'assert_not_empty',
-			['test' => $test]
-		);
+		return $this->test(empty($test), FALSE, 'assert_not_empty', [
+			'test' => $test,
+			'error_message' => 'Failed asserting that '.gettype($test)." '".$this->to_string($test)."' is not empty.\n"
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -160,9 +200,10 @@ trait has_assertions {
 	 */
 	public function assert_count($item, $result)
 	{
-		return $this->test(count($item), $result, 'assert_count',
-			['test' => $item]
-		);
+		return $this->test(count($item), $result, 'assert_count', [
+			'test' => $item,
+			'error_message' => 'Failed asserting that '.gettype($item).' size '.count($item)." matches expected size {$result}.\n",
+		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -179,11 +220,43 @@ trait has_assertions {
 		$strpos = strpos($haystack, $needle);
 		$test = ($strpos !== FALSE) && is_int($strpos);
 
-		return $this->test($test, TRUE, 'assert_contains',
-			['contains_haystack' => $haystack, 'contains_needle' => $needle]
-		);
+		return $this->test($test, TRUE, 'assert_contains', [
+			'contains_haystack' => $haystack,
+			'contains_needle'   => $needle,
+			'error_message'     => "Failed asserting that '".$this->to_string($haystack)."' contains '".$this->to_string($needle)."'.\n",
+		]);
 	}
 
+	// --------------------------------------------------------------------
+
+	public function to_string($value)
+	{
+		$type = gettype($value);
+
+		switch ($type)
+		{
+			case 'integer':
+				return $value;
+				break;
+
+			case 'string':
+				return str_replace("\n", "\\n", $value);
+				break;
+
+			case 'array':
+			case 'object':
+				return str_replace('\\u0000', '', json_encode($value));
+				break;
+
+			case 'boolean':
+				return $value ? 'true' : 'false';
+				break;
+
+			case 'NULL':
+				return 'NULL';
+				break;
+		}
+	}
 
 
 }
