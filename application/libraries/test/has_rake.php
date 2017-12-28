@@ -142,8 +142,7 @@ trait has_rake {
 	{
 		$file['file']   = substr($file['file'], strlen(APPPATH), strlen($file['file']));
 		$file['folder'] = array_get(explode('/', $file['file']), 0);
-		$file['file']   = substr($file['file'], strlen($file['folder'])+1, strlen($file['file']));
-
+		// $file['file']   = substr($file['file'], strlen($file['folder'])+1, strlen($file['file']));
 		unset($file[static::STATS_KEY_CONTENT]);
 
 		return $file;
