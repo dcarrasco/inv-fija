@@ -60,11 +60,13 @@ class test_collection extends test_case {
 	public function test_length()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->length(), 5);
+		$this->assert_equals(collect([])->length(), 0);
 	}
 
 	public function test_count()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->count(), 5);
+		$this->assert_equals(collect([])->count(), 0);
 	}
 
 	public function test_key_exists()
@@ -72,11 +74,13 @@ class test_collection extends test_case {
 		$this->assert_true(collect([1,2,3,4,5])->key_exists(2));
 		$this->assert_true(collect(['a'=>1,'b'=>2,'aa'=>3,'bb'=>4])->key_exists('aa'));
 		$this->assert_false(collect([1,2,3,4,5])->key_exists(5));
+		$this->assert_false(collect(['a'=>1,'b'=>2,'aa'=>3,'bb'=>4])->key_exists('cc'));
 	}
 
 	public function test_get_element()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->get(2), 3);
+		$this->assert_equals(collect(['a'=>1,'b'=>2,'aa'=>3,'bb'=>4])->get('aa'), 3);
 		$this->assert_null(collect([1,2,3,4,5])->get(5));
 	}
 
@@ -97,18 +101,23 @@ class test_collection extends test_case {
 	public function test_has()
 	{
 		$this->assert_true(collect(['a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5])->has('e'));
+		$this->assert_true(collect([1,2,3,4,5])->has(1));
 		$this->assert_false(collect(['a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5])->has('f'));
+		$this->assert_false(collect([1,2,3,4,5])->has(10));
 	}
 
 	public function test_contains()
 	{
 		$this->assert_true(collect(['a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5])->contains(5));
+		$this->assert_true(collect([1,2,3,4,5])->contains(1));
 		$this->assert_false(collect(['a'=>1,'b'=>2,'c'=>3,'d'=>4,'e'=>5])->contains(6));
+		$this->assert_false(collect([1,2,3,4,5])->contains(0));
 	}
 
 	public function test_implode()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->implode('-'), '1-2-3-4-5');
+		$this->assert_equals(collect([])->implode('-'), '');
 	}
 
 	public function test_filter()
@@ -121,26 +130,31 @@ class test_collection extends test_case {
 	public function test_sum()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->sum(), 15);
+		$this->assert_equals(collect([])->sum(), 0);
 	}
 
 	public function test_max()
 	{
 		$this->assert_equals(collect([1,4,3,5,0,2])->max(), 5);
+		$this->assert_equals(collect([])->max(), 0);
 	}
 
 	public function test_concat()
 	{
 		$this->assert_equals(collect([1,2,3,4,5])->concat(function($elem) {return $elem.'-';}), '1-2-3-4-5-');
+		$this->assert_equals(collect([])->concat(function($elem) {return $elem.'-';}), '');
 	}
 
 	public function test_sort()
 	{
 		$this->assert_equals(collect([2,1,4,3,5])->sort()->all(), [1=>1, 0=>2, 3=>3, 2=>4, 4=>5]);
+		$this->assert_equals(collect(['a'=>2,'b'=>1,'c'=>4,'d'=>3,'e'=>5])->sort()->all(), ['b'=>1, 'a'=>2, 'd'=>3, 'c'=>4, 'e'=>5]);
 	}
 
 	public function test_flatten()
 	{
 		$this->assert_equals(collect([[1,2,3], [4,5,6], [7,8,9,10]])->flatten()->all(), [1,2,3,4,5,6,7,8,9,10]);
+		$this->assert_equals(collect([[1,[2,[3]]], [4,[5,[6]]], [7,[8,[9,[10]]]]])->flatten()->all(), [1,2,3,4,5,6,7,8,9,10]);
 	}
 
 	public function test_merge()
@@ -211,6 +225,8 @@ class test_collection extends test_case {
 				->pluck('campo1')->all(),
 			[1, 3, 4, NULL]
 		);
+		$this->assert_is_object(collect([])->pluck('a'));
+		$this->assert_empty(collect([])->pluck('a')->all());
 	}
 
 	public function test_first()
@@ -222,6 +238,7 @@ class test_collection extends test_case {
 		);
 
 		$this->assert_equals(collect(['d'=>1,'b'=>2,'c'=>3])->first(), 1);
+		$this->assert_equals(collect([])->first(), NULL);
 	}
 
 }
