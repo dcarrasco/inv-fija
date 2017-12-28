@@ -11,6 +11,11 @@ class tests extends Controller_base {
 	{
 		parent::__construct();
 
+		if (! is_cli())
+		{
+			show_404();
+		}
+
 		$this->test = new test_case();
 	}
 
