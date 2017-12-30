@@ -24,6 +24,11 @@ class test_reporte extends test_case {
 			(new Repo())->get_order_by('+campo1, -campo2, campo3'),
 			'campo1 ASC, campo2 DESC, campo3 ASC'
 		);
+
+		$this->assert_equals((new Repo())->get_order_by('+campo1'), 'campo1 ASC');
+		$this->assert_equals((new Repo())->get_order_by('-campo1'), 'campo1 DESC');
+		$this->assert_equals((new Repo())->get_order_by('campo1'), 'campo1 ASC');
+		$this->assert_equals((new Repo())->get_order_by(''), ' ASC');
 	}
 
 	public function test_result_to_month_table()
@@ -44,7 +49,7 @@ class test_reporte extends test_case {
 
 	public function test_formato_reporte_texto()
 	{
-		$reporte = (new Repo())->formato_reporte('casa', ['tipo' => 'texo']);
+		$reporte = (new Repo())->formato_reporte('casa', ['tipo' => 'texto']);
 
 		$this->assert_equals($reporte, 'casa');
 	}
@@ -96,6 +101,49 @@ class test_reporte extends test_case {
 
 		$this->assert_equals($reporte, '<a href="http://a/b/c/11/22/33">12345</a>');
 	}
+
+	public function test_formato_reporte_link_detalle_series()
+	{
+		$reporte = (new Repo())->formato_reporte(12345, ['tipo'=>'link_detalle_series', 'href'=>'http://a/b/c/'], ['centro'=>'CM11', 'almacen'=>'CH01', 'lote'=>'NUEVO', 'otro'=>'xx'], 'aa');
+
+		$this->assert_equals($reporte, '<a href="http://a/b/c/?centro=CM11&almacen=CH01&lote=NUEVO&permanencia=aa">12.345</a>');
+	}
+
+	public function test_formato_reporte_otro()
+	{
+		$reporte = (new Repo())->formato_reporte('casa', ['tipo' => 'otrootro']);
+
+		$this->assert_equals($reporte, 'casa');
+	}
+
+	public function test_formato_reporte_doi()
+	{
+		$this->assert_equals(
+			(new Repo())->formato_reporte(NULL, ['tipo' => 'doi']),
+			' <i class="fa fa-circle text-danger"></i>'
+		);
+
+		$this->assert_equals(
+			(new Repo())->formato_reporte(2.3, ['tipo' => 'doi']),
+			'2,3 <i class="fa fa-circle text-success"></i>'
+		);
+
+		$this->assert_equals(
+			(new Repo())->formato_reporte(20, ['tipo' => 'doi']),
+			'20 <i class="fa fa-circle text-success"></i>'
+		);
+
+		$this->assert_equals(
+			(new Repo())->formato_reporte(70, ['tipo' => 'doi']),
+			'70 <i class="fa fa-circle text-warning"></i>'
+		);
+
+		$this->assert_equals(
+			(new Repo())->formato_reporte(170, ['tipo' => 'doi']),
+			'170 <i class="fa fa-circle text-danger"></i>'
+		);
+	}
+
 
 
 }
