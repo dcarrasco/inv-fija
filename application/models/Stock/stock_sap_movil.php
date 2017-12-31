@@ -1,10 +1,10 @@
 <?php
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,8 +14,10 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+namespace Stock;
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Stock SAP
  *
@@ -70,9 +72,9 @@ class Stock_sap_movil extends Stock_sap {
 			$ce_alm   = array_get($stock, 'centro').array_get($stock, 'cod_bodega');
 
 			$venta_mat = $ventas->first(function($venta) use ($material, $fecha, $ce_alm) {
-				return $venta['codigo_sap']        === $material
-					AND $venta['fecha']            === $fecha
-					AND $venta['ce'].$venta['alm'] === $ce_alm;
+				return $venta['codigo_sap']       === $material
+					&& $venta['fecha']            === $fecha
+					&& $venta['ce'].$venta['alm'] === $ce_alm;
 			});
 
 			$stock['ventas_eq']   = array_get($venta_mat, 'cant', 0);
@@ -97,8 +99,7 @@ class Stock_sap_movil extends Stock_sap {
 	 */
 	protected function result_stock($mostrar, $filtrar)
 	{
-		$select_tipo_articulo = "
-CASE
+		$select_tipo_articulo = "CASE
 	WHEN (substring(cod_articulo,1,8)='PKGCLOTK' OR substring(cod_articulo,1,2)='TS') THEN 'SIMCARD'
 	WHEN substring(cod_articulo, 1,2) in ('TM','TO','TC','PK','PO') THEN 'EQUIPOS'
 	ELSE 'OTROS'
@@ -106,11 +107,11 @@ END";
 
 		// SELECT ==============================================================
 		// fecha stock
-		$mostrar->contains('fecha') AND $this->db
+		$mostrar->contains('fecha') && $this->db
 			->select('s.fecha_stock')->group_by('s.fecha_stock')->order_by('s.fecha_stock');
 
 		// tipo de almacen
-		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') AND $this->db
+		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') && $this->db
 			->select('t.tipo as tipo_almacen')->group_by('t.tipo')->order_by('t.tipo');
 
 		// almacenes
@@ -122,35 +123,35 @@ END";
 		}
 
 		// lotes
-		$mostrar->contains('lote') AND $this->db
+		$mostrar->contains('lote') && $this->db
 			->select('s.lote')->group_by('s.lote')->order_by('lote');
 
 		// tipos de articulos
-		$mostrar->contains('tipo_articulo') AND $this->db
+		$mostrar->contains('tipo_articulo') && $this->db
 			->select("{$select_tipo_articulo} as tipo_articulo", FALSE)->group_by($select_tipo_articulo, FALSE);
 
 		// materiales
-		$mostrar->contains('material') AND $this->db->select('s.cod_articulo')->group_by('s.cod_articulo')->order_by('s.cod_articulo');
+		$mostrar->contains('material') && $this->db->select('s.cod_articulo')->group_by('s.cod_articulo')->order_by('s.cod_articulo');
 
 		// cantidades y tipos de stock
 		$this->db->select(
 			($mostrar->contains('tipo_stock')
 				? 'sum(s.libre_utilizacion) as LU, sum(s.bloqueado) as BQ, sum(s.contro_calidad) as CC, sum(s.transito_traslado) as TT, sum(s.otros) as OT, sum(s.VAL_LU) as VAL_LU, sum(s.VAL_BQ) as VAL_BQ, sum(s.VAL_CQ) as VAL_CC, sum(s.VAL_TT) as VAL_TT, sum(s.VAL_OT) as VAL_OT, '
 				: '')
-			.'sum(s.libre_utilizacion+s.bloqueado+s.contro_calidad+s.transito_traslado+s.otros) as total, sum(s.VAL_LU+s.VAL_BQ+s.VAL_CQ+s.VAL_TT+s.VAL_OT) as VAL_total'
-			, FALSE);
+			.'sum(s.libre_utilizacion+s.bloqueado+s.contro_calidad+s.transito_traslado+s.otros) as total, sum(s.VAL_LU+s.VAL_BQ+s.VAL_CQ+s.VAL_TT+s.VAL_OT) as VAL_total',
+			FALSE);
 
 		// TABLAS ==============================================================
 		$this->db->from(config('bd_stock_movil').' s')
 			->join(config('bd_almacenes_sap').' a', 'a.centro=s.centro and a.cod_almacen=s.cod_bodega', 'left');
 
-		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') AND $this->db
+		($filtrar->get('sel_tiposalm') === 'sel_tiposalm') && $this->db
 				->join(config('bd_tipoalmacen_sap').' ta', 's.centro=ta.centro and s.cod_bodega=ta.cod_almacen')
 				->join(config('bd_tiposalm_sap').' t', 't.id_tipo = ta.id_tipo');
 
 		// CONDICIONES =========================================================
 		// fechas
-		$filtrar->has('fecha') AND $this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
+		$filtrar->has('fecha') && $this->db->where_in('s.fecha_stock', $filtrar->get('fecha'));
 
 		// tipos de almacen
 		$this->db->where_in(
@@ -187,11 +188,11 @@ END";
 
 		// agrega llave
 		$result = collect($result)->map(function($registro) {
-			$reg = $registro;
-			unset($reg['tipo_articulo']);
-			unset($reg['total']);
-			unset($reg['VAL_total']);
-			$registro['_llave_'] = collect($reg)->implode();
+			$reg_tmp = $registro;
+			unset($reg_tmp['tipo_articulo']);
+			unset($reg_tmp['total']);
+			unset($reg_tmp['VAL_total']);
+			$registro['_llave_'] = collect($reg_tmp)->implode();
 
 			return $registro;
 		});
@@ -212,13 +213,13 @@ END";
 		})->unique();
 
 		return $result_temp->map(function($registro) use ($result) {
-			$regs = $result->filter(function($reg) use ($registro) {
-				return $reg['_llave_'] === $registro['_llave_'];
+			$regs = $result->filter(function($reg_tmp) use ($registro) {
+				return $reg_tmp['_llave_'] === $registro['_llave_'];
 			});
 
-			$regs->each(function($reg) use(&$registro) {
-				$registro[$reg['tipo_articulo']] = $reg['total'];
-				$registro['VAL_'.$reg['tipo_articulo']] = $reg['VAL_total'];
+			$regs->each(function($reg_tmp) use(&$registro) {
+				$registro[$reg_tmp['tipo_articulo']] = $reg_tmp['total'];
+				$registro['VAL_'.$reg_tmp['tipo_articulo']] = $reg_tmp['VAL_total'];
 			});
 			return $registro;
 		});
@@ -226,9 +227,16 @@ END";
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera las ventas
+	 *
+	 * @param  Collection $mostrar Campos a mostrar
+	 * @param  Collection $filtrar Campos a filtrar
+	 * @return Collection
+	 */
 	public function get_ventas($mostrar, $filtrar)
 	{
-		if ($mostrar->contains('material') AND ! $mostrar->contains('tipo_stock'))
+		if ($mostrar->contains('material') && ! $mostrar->contains('tipo_stock'))
 		{
 			$fechas = collect($filtrar->get('fecha'));
 			$centros_almacenes = collect($filtrar->get('almacenes'));
@@ -245,6 +253,13 @@ END";
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera las ventas por fecha de un almacen
+	 *
+	 * @param  string $fecha          Fecha actual
+	 * @param  string $centro_almacen ID de centro y almacen SAP
+	 * @return Collection
+	 */
 	public function get_ventas_fecha_almacen($fecha, $centro_almacen)
 	{
 		$fecha_fin = $fecha;
@@ -324,22 +339,22 @@ END";
 			return '';
 		}
 
-		if ($centro !== '' AND $centro !== '_')
+		if ($centro !== '' && $centro !== '_')
 		{
 			$this->db->where('s.centro', $centro);
 		}
 
-		if ($almacen !== '' AND $almacen !== '_')
+		if ($almacen !== '' && $almacen !== '_')
 		{
 			$this->db->where('s.almacen', $almacen);
 		}
 
-		if ($material !== '' AND $material !== '_')
+		if ($material !== '' && $material !== '_')
 		{
 			$this->db->where('s.material', $material);
 		}
 
-		if ($lote !== '' AND $lote !== '_')
+		if ($lote !== '' && $lote !== '_')
 		{
 			$this->db->where('s.lote', $lote);
 		}
@@ -373,12 +388,12 @@ END";
 	/**
 	 * Inserta registros del reporte de stock por clasificacion en tabla resumen
 	 *
-	 * @param  string $fecha   Fecha del reporte a generar
-	 * @return boolean         Indicador de exito o fallo de la query
+	 * @param  string $fecha Fecha del reporte a generar
+	 * @return boolean       Indicador de exito o fallo de la query
 	 */
 	private function _genera_reporte_clasificacion($fecha = NULL)
 	{
-		$sql_query = "INSERT INTO " . config('bd_reporte_clasif') .
+		$sql_query = 'INSERT INTO '.config('bd_reporte_clasif').
 " SELECT
 A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
 SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
@@ -399,5 +414,5 @@ ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION";
 
 
 }
-/* End of file stock_sap_movil_model.php */
-/* Location: ./application/models/Stock/stock_sap_movil_model.php */
+// End of file stock_sap_movil.php
+// Location: ./models/Stock/stock_sap_movil.php

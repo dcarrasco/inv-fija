@@ -1,11 +1,10 @@
 <?php
-
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,13 +14,15 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Stock;
 
 use Reporte;
 use Model\Orm_model;
 use Stock\Almacen_sap;
 use Stock\Tipoalmacen_sap;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Proveedor
  *
@@ -262,7 +263,7 @@ class Reporte_stock extends ORM_Model {
 				->select('sum(m720) as m720')
 				->select('sum(mas720) as mas720')
 				->select('sum(otro) as otro')
-				->select('sum(total) as \'total\'')
+				->select("sum(total) as 'total'")
 				->from(config('bd_permanencia') . ' as p')
 				->join(config('bd_tipoalmacen_sap') . ' ta', 'ta.centro=p.centro and ta.cod_almacen=p.almacen', 'left')
 				->join(config('bd_tiposalm_sap') . ' t', 'ta.id_tipo=t.id_tipo', 'left')
@@ -276,7 +277,7 @@ class Reporte_stock extends ORM_Model {
 				$this->db->where_in('t.id_tipo', $config['filtros']['tipo_alm']);
 			}
 
-			if (count($config['filtros']['estado_sap']) > 0 AND is_array($config['filtros']['estado_sap']))
+			if (count($config['filtros']['estado_sap']) > 0 && is_array($config['filtros']['estado_sap']))
 			{
 				$this->db
 					->where_in('p.estado_stock', $config['filtros']['estado_sap'])
@@ -284,7 +285,7 @@ class Reporte_stock extends ORM_Model {
 					->group_by('p.estado_stock');
 			}
 
-			if (count($config['filtros']['tipo_mat']) > 0 AND is_array($config['filtros']['tipo_mat']))
+			if (count($config['filtros']['tipo_mat']) > 0 && is_array($config['filtros']['tipo_mat']))
 			{
 				$this->db
 					->where_in('tipo_material', $config['filtros']['tipo_mat'])
@@ -366,7 +367,7 @@ class Reporte_stock extends ORM_Model {
 			$arr_campos['des_almacen'] = ['titulo' => 'Almacen'];
 		}
 
-		if (is_array(request('estado_sap')) AND count(request('estado_sap')) > 0)
+		if (is_array(request('estado_sap')) && count(request('estado_sap')) > 0)
 		{
 			$arr_campos['estado_sap'] = ['titulo' => 'Estado Stock'];
 		}
@@ -376,7 +377,7 @@ class Reporte_stock extends ORM_Model {
 			$arr_campos['lote'] = ['titulo' => 'Lote'];
 		}
 
-		if (is_array(request('tipo_mat')) AND count(request('tipo_mat')) > 0)
+		if (is_array(request('tipo_mat')) && count(request('tipo_mat')) > 0)
 		{
 			$arr_campos['tipo_material'] = ['titulo' => 'Tipo Material'];
 		}
@@ -546,93 +547,93 @@ class Reporte_stock extends ORM_Model {
 		$this->db->order_by('s.almacen');
 		$this->db->order_by('s.material');
 
-		if (array_key_exists('id_tipo', $arr_param) AND $arr_param['id_tipo'] !== '')
+		if (array_key_exists('id_tipo', $arr_param) && $arr_param['id_tipo'] !== '')
 		{
 			$this->db->where('t.id_tipo', $arr_param['id_tipo']);
 		}
 
-		if (array_key_exists('centro', $arr_param) AND $arr_param['centro'] !== '')
+		if (array_key_exists('centro', $arr_param) && $arr_param['centro'] !== '')
 		{
 			$this->db->where('s.centro', $arr_param['centro']);
 		}
 
-		if (array_key_exists('almacen', $arr_param) AND $arr_param['almacen'] !== '')
+		if (array_key_exists('almacen', $arr_param) && $arr_param['almacen'] !== '')
 		{
 			$this->db->where('s.almacen', $arr_param['almacen']);
 		}
 
-		if (array_key_exists('estado_stock', $arr_param) AND $arr_param['estado_stock'] !== '')
+		if (array_key_exists('estado_stock', $arr_param) && $arr_param['estado_stock'] !== '')
 		{
 			$this->db->where('s.estado_stock', $arr_param['estado_stock']);
 		}
 
-		if (array_key_exists('lote', $arr_param) AND $arr_param['lote'] !== '')
+		if (array_key_exists('lote', $arr_param) && $arr_param['lote'] !== '')
 		{
 			$this->db->where('s.lote', $arr_param['lote']);
 		}
 
-		if (array_key_exists('material', $arr_param) AND $arr_param['material'] !== '')
+		if (array_key_exists('material', $arr_param) && $arr_param['material'] !== '')
 		{
 			$this->db->where('s.material', $arr_param['material']);
 		}
 
-		if (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'EQUIPO')
+		if (array_key_exists('tipo_material', $arr_param) && $arr_param['tipo_material'] === 'EQUIPO')
 		{
 			$this->db->where_in('substring(s.material,1,2)', ['TM', 'TC', 'TO', 'PK', 'PO']);
 			$this->db->where('substring(s.material,1,8) <>', 'PKGCLOTK');
 		}
-		elseif (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'SIMCARD')
+		elseif (array_key_exists('tipo_material', $arr_param) && $arr_param['tipo_material'] === 'SIMCARD')
 		{
 			$this->db->where("(substring(s.material,1,2) = 'TS' OR substring(s.material,1,8)='PKGCLOTK')");
 		}
-		elseif (array_key_exists('tipo_material', $arr_param) AND $arr_param['tipo_material'] === 'FIJA')
+		elseif (array_key_exists('tipo_material', $arr_param) && $arr_param['tipo_material'] === 'FIJA')
 		{
 			$this->db->where('substring(s.material,1,3)', '103');
 		}
 
-		if (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm030')
+		if (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm030')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 30);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm060')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm060')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 31);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 60);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm090')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm090')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 61);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 90);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm120')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm120')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 91);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 120);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm180')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm180')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 121);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 180);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm360')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm360')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 181);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 360);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'm720')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'm720')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 361);
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) <=', 720);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'mas720')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'mas720')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) >=', 721);
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'otro')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'otro')
 		{
 			$this->db->where('datediff(dd, modificado_el, fecha_stock) IS NULL');
 		}
-		elseif (array_key_exists('permanencia', $arr_param) AND $arr_param['permanencia'] === 'total')
+		elseif (array_key_exists('permanencia', $arr_param) && $arr_param['permanencia'] === 'total')
 		{
 		}
 
@@ -1049,7 +1050,7 @@ class Reporte_stock extends ORM_Model {
 		$order_by    = array_key_exists('orden', $config) ? $config['orden'] : '';
 		$order_by    = empty($order_by) ? '+fecha' : $order_by;
 
-		$param_ok = $arr_filtros['fechas'] AND $arr_filtros['cmv'] AND $arr_filtros['almacenes'] AND $arr_filtros['materiales'] AND $arr_filtros['tipo_alm'];
+		$param_ok = $arr_filtros['fechas'] && $arr_filtros['cmv'] && $arr_filtros['almacenes'] && $arr_filtros['materiales'] && $arr_filtros['tipo_alm'];
 
 		$tipo_op = in_array($arr_filtros['tipo_alm'], ['MOVIL-TIPOALM', 'MOVIL-ALM']) ? 'MOVIL' : 'FIJA';
 
@@ -1243,5 +1244,5 @@ class Reporte_stock extends ORM_Model {
 
 }
 
-/* End of file Reporte_stock.php */
-/* Location: ./application/models/Stock/Reporte_stock.php */
+// End of file Reporte_stock.php
+// Location: ./models/Stock/Reporte_stock.php

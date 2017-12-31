@@ -1,11 +1,10 @@
 <?php
-
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,10 +14,12 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Stock;
 
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Analisis de series
  *
@@ -96,28 +97,35 @@ class Analisis_series extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Formatea las series de acuerdo a un estandar
+	 *
+	 * @param  string $serie Serie a formatear
+	 * @param  string $tipo  Estandar
+	 * @return string
+	 */
 	protected function format_serie($serie = '', $tipo = 'SAP')
 	{
 		switch ($tipo)
 		{
 			case 'SAP':
-				$serie = preg_replace('/^01/', '1', $serie);
-				return strlen($serie) === '19' ? substr($serie, 1, 18) : $serie;
-				break;
+							$serie = preg_replace('/^01/', '1', $serie);
+							return strlen($serie) === '19' ? substr($serie, 1, 18) : $serie;
+							break;
 			case 'trafico':
-				$serie = preg_replace('/^1/', '01', $serie);
-				return substr($serie, 0, 14).'0';
-				break;
+							$serie = preg_replace('/^1/', '01', $serie);
+							return substr($serie, 0, 14).'0';
+							break;
 			case 'SCL':
-				$serie = preg_replace('/^1/', '01', $serie);
-				return $serie;
-				break;
+							$serie = preg_replace('/^1/', '01', $serie);
+							return $serie;
+							break;
 			case 'celular':
-				return strlen($valor) === '9' ? substr($valor, 1, 8) : $valor;
-				break;
+							return strlen($valor) === '9' ? substr($valor, 1, 8) : $valor;
+							break;
 			default:
-				return $serie;
-				break;
+							return $serie;
+							break;
 		}
 	}
 
@@ -133,7 +141,7 @@ class Analisis_series extends ORM_Model {
 	{
 		$serie15 = '';
 
-		if (strlen($serie) === 14 AND substr($serie, 0, 1) === '1')
+		if (strlen($serie) === 14 && substr($serie, 0, 1) === '1')
 		{
 			$serie15 = '0' . $serie;
 		}
@@ -175,8 +183,8 @@ class Analisis_series extends ORM_Model {
 	/**
 	 * Recupera la historia de un conjunto de series
 	 *
-	 * @param  string $series Listado de series a consultar
-	 * @return array          Arreglo con resultado
+	 * @param  string $serie Series a consultar
+	 * @return array         Arreglo con resultado
 	 */
 	private function _get_historia_serie($serie = '')
 	{
@@ -360,8 +368,8 @@ class Analisis_series extends ORM_Model {
 				->row()
 				->anomes;
 
-			$ano = intval($anomes/100);
-			$mes = $anomes - 100*$ano;
+			$num_ano = intval($anomes/100);
+			$num_mes = $anomes - 100*$num_ano;
 
 			return $this->table->generate(
 				$this->db
@@ -383,7 +391,7 @@ class Analisis_series extends ORM_Model {
 					->join(config('bd_trafico_abocelamist') . ' a', 't.celular = a.num_celular', 'left')
 					->join(config('bd_trafico_clientes') . ' c', 'a.cod_cliente = c.cod_cliente', 'left')
 					->join(config('bd_trafico_causabaja') . ' b', 'a.cod_causabaja = b.cod_causabaja', 'left')
-					->where(['ano' => $ano, 'mes' => $mes])
+					->where(['ano' => $num_ano, 'mes' => $num_mes])
 					->where_in('imei', $arr_series)
 					->order_by('imei, fec_alta')
 					->get()
@@ -423,10 +431,10 @@ class Analisis_series extends ORM_Model {
 	/**
 	 * Recupera el trafico de una serie (imei/celular) para un conjunto de meses
 	 *
-	 * @param  string $series Listado de series a consultar
-	 * @param  array  $meses  Arreglo de meses a consultar
-	 * @param  string $tipo   imei o celular a consultar
-	 * @return array          Arreglo con resultado
+	 * @param  string $series    Listado de series a consultar
+	 * @param  string $str_meses Meses a consultar
+	 * @param  string $tipo      imei o celular a consultar
+	 * @return array
 	 */
 	public function get_trafico_mes($series = '', $str_meses = '', $tipo = 'imei')
 	{
@@ -443,10 +451,10 @@ class Analisis_series extends ORM_Model {
 			$meses = [];
 			$meses = explode('-', $str_meses);
 
-			foreach($meses as $mes)
+			foreach($meses as $num_mes)
 			{
-				$mes_ano = (int) substr($mes, 0, 4);
-				$mes_mes = (int) substr($mes, 4, 2);
+				$mes_ano = (int) substr($num_mes, 0, 4);
+				$mes_mes = (int) substr($num_mes, 4, 2);
 
 				// recupera datos de trafico
 				$this->db->from(config('bd_trafico_mes'));
@@ -455,7 +463,7 @@ class Analisis_series extends ORM_Model {
 
 				foreach($this->db->get()->result_array() as $registro)
 				{
-					$result[$this->_get_dv_imei($registro['imei'])][$registro['celular']][$mes] = ($registro['seg_entrada']+$registro['seg_salida'])/60;
+					$result[$this->_get_dv_imei($registro['imei'])][$registro['celular']][$num_mes] = ($registro['seg_entrada']+$registro['seg_salida'])/60;
 				}
 			}
 		}
@@ -472,9 +480,9 @@ class Analisis_series extends ORM_Model {
 				$result_temp['celular'] = $num_celular;
 				$result_temp['imei'] = $imei;
 
-				foreach($datos_cel as $mes => $trafico)
+				foreach($datos_cel as $num_mes => $trafico)
 				{
-					$result_temp[$mes] = fmt_cantidad($trafico, 1);
+					$result_temp[$num_mes] = fmt_cantidad($trafico, 1);
 				}
 
 				array_push($result_final, $result_temp);
@@ -517,7 +525,7 @@ class Analisis_series extends ORM_Model {
 			->get()->row_array();
 	}
 
-
 }
-/* End of file analisis_series_model.php */
-/* Location: ./application/models/analisis_series_model.php */
+
+// End of file Analisis_series.php
+// Location: ./models/Stock/Analisis_series.php

@@ -1,10 +1,10 @@
 <?php
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,8 +14,10 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+namespace Stock;
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Stock SAP
  *
@@ -178,7 +180,7 @@ class Stock_sap_fija extends Stock_sap {
 	{
 		$arr_result = [];
 
-		if (array_key_exists('fecha', $filtrar) AND count($filtrar['fecha'])>0)
+		if (array_key_exists('fecha', $filtrar) && count($filtrar['fecha'])>0)
 		{
 			// fecha stock
 			if (in_array('fecha', $mostrar))
@@ -300,5 +302,6 @@ ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN";
 	}
 
 }
-/* End of file stock_sap_model.php */
-/* Location: ./application/models/Stock/stock_sap_model.php */
+
+// End of file stock_sap_fija.php
+// Location: ./models/Stock/stock_sap_fija.php

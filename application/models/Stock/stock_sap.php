@@ -1,12 +1,10 @@
 <?php
-namespace Stock;
-
-use \Reporte;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -16,10 +14,13 @@ use \Reporte;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+namespace Stock;
+
+use Reporte;
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Stock SAP
  *
@@ -161,7 +162,7 @@ class Stock_sap extends ORM_Model {
 
 		$campos = collect([])
 			->merge($mostrar->contains('fecha') ? ['fecha_stock'] : [])
-			->merge(($mostrar->contains('sel_tiposalm') AND request('sel_tiposalm') !== 'sel_almacenes')
+			->merge(($mostrar->contains('sel_tiposalm') && request('sel_tiposalm') !== 'sel_almacenes')
 				? ['tipo_almacen']
 				: []
 			)
@@ -186,7 +187,7 @@ class Stock_sap extends ORM_Model {
 						: ['EQUIPOS', 'VAL_EQUIPOS', 'SIMCARD', 'VAL_SIMCARD', 'OTROS', 'VAL_OTROS'])
 					: ['cantidad', 'monto']
 				)
-			)->merge(($mostrar->contains('material') AND ! $mostrar->contains('tipo_stock')) ? ['ventas_eq', 'rotacion_eq'] : []);
+			)->merge(($mostrar->contains('material') && ! $mostrar->contains('tipo_stock')) ? ['ventas_eq', 'rotacion_eq'] : []);
 
 		return $this->set_order_campos(collect($this->campos)->only($campos)->all(), 'fecha_stock');
 	}
@@ -212,7 +213,6 @@ class Stock_sap extends ORM_Model {
 	/**
 	 * Recupera fechas para mostrar en combobox
 	 *
-	 * @param  string $tipo_op Indicador del tipo de operación
 	 * @return array           Fechas
 	 */
 	public function get_combo_fechas()
@@ -225,7 +225,6 @@ class Stock_sap extends ORM_Model {
 	/**
 	 * Recupera fechas para mostrar en combobox
 	 *
-	 * @param  string $tipo_op Indicador del tipo de operación
 	 * @return array           Fechas
 	 */
 	public function get_combo_fechas_db()
@@ -377,76 +376,74 @@ class Stock_sap extends ORM_Model {
 		return NULL;
 	}
 
-/*
-actualiza PMP
-=================================
-UPDATE S
-SET
-	S.VAL_LU = P.PMP_01*S.LIBRE_UTILIZACION,
-	S.VAL_BQ = P.PMP_07*S.BLOQUEADO,
-	S.VAL_CQ = P.PMP_02*S.CONTRO_CALIDAD,
-	S.VAL_TT = P.PMP_06*S.TRANSITO_TRASLADO,
-	S.VAL_OT = 0
-FROM
-STOCK_SCL S
-JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
-WHERE S.FECHA_STOCK='20150331'
+// actualiza PMP
+// =================================
+// UPDATE S
+// SET
+// 	S.VAL_LU = P.PMP_01*S.LIBRE_UTILIZACION,
+// 	S.VAL_BQ = P.PMP_07*S.BLOQUEADO,
+// 	S.VAL_CQ = P.PMP_02*S.CONTRO_CALIDAD,
+// 	S.VAL_TT = P.PMP_06*S.TRANSITO_TRASLADO,
+// 	S.VAL_OT = 0
+// FROM
+// STOCK_SCL S
+// JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
+// WHERE S.FECHA_STOCK='20150331'
 
 
 
 
-SELECT *
-FROM
-STOCK_SCL S
-JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
-WHERE S.FECHA_STOCK='20140930'
+// SELECT *
+// FROM
+// STOCK_SCL S
+// JOIN CP_PMP P ON S.CENTRO=P.CENTRO AND S.COD_ARTICULO=P.MATERIAL AND S.LOTE=P.LOTE
+// WHERE S.FECHA_STOCK='20140930'
 
 
 
 
-REPORTE CLASIFICACION MOVIL
-=========================================
-SELECT
-A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
-SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
-SUM(E.VAL_LU + E.VAL_BQ + E.VAL_CQ + E.VAL_TT + E.VAL_OT) AS MONTO
-FROM CP_CLASIFALM A
-JOIN CP_CLASIF_TIPOALM B ON A.ID_CLASIF=B.ID_CLASIF
-JOIN CP_TIPOSALM C ON B.ID_TIPO=C.ID_TIPO
-JOIN CP_TIPOS_ALMACENES D ON C.ID_TIPO=D.ID_TIPO
-JOIN STOCK_SCL E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.COD_BODEGA
-JOIN CP_TIPO_CLASIFALM F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
-WHERE A.TIPO_OP= ?
-AND E.FECHA_STOCK = ?
-GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
-ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION
+// REPORTE CLASIFICACION MOVIL
+// =========================================
+// SELECT
+// A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
+// SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
+// SUM(E.VAL_LU + E.VAL_BQ + E.VAL_CQ + E.VAL_TT + E.VAL_OT) AS MONTO
+// FROM CP_CLASIFALM A
+// JOIN CP_CLASIF_TIPOALM B ON A.ID_CLASIF=B.ID_CLASIF
+// JOIN CP_TIPOSALM C ON B.ID_TIPO=C.ID_TIPO
+// JOIN CP_TIPOS_ALMACENES D ON C.ID_TIPO=D.ID_TIPO
+// JOIN STOCK_SCL E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.COD_BODEGA
+// JOIN CP_TIPO_CLASIFALM F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
+// WHERE A.TIPO_OP= ?
+// AND E.FECHA_STOCK = ?
+// GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
+// ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION
 
 
 
-SERIES ESTADO 01
-=========================================
-SELECT
-A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
-SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
-SUM(E.VAL_LU + E.VAL_BQ + E.VAL_CQ + E.VAL_TT + E.VAL_OT) AS MONTO,
-SUM(E.LIBRE_UTILIZACION) AS CANTIDAD_01,
-SUM(E.VAL_LU) AS MONTO_01
-FROM CP_CLASIFALM A
-JOIN CP_CLASIF_TIPOALM B ON A.ID_CLASIF=B.ID_CLASIF
-JOIN CP_TIPOSALM C ON B.ID_TIPO=C.ID_TIPO
-JOIN CP_TIPOS_ALMACENES D ON C.ID_TIPO=D.ID_TIPO
-JOIN STOCK_SCL E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.COD_BODEGA
-JOIN CP_TIPO_CLASIFALM F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
-WHERE A.TIPO_OP= 'MOVIL'
-AND E.FECHA_STOCK IN ('20150429','20150331','20150228','20150131',
-'20141231','20141130','20141031','20140930','20140831','20140731','20140630','20140531','20140430','20140331','20140228','20140130')
-AND A.CLASIFICACION IN ('SUC', 'GMC APM WEB', 'CANALES REMOTOS', 'FQ')
-GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
-ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION
-
-*/
+// SERIES ESTADO 01
+// =========================================
+// SELECT
+// A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.CLASIFICACION, F.TIPO, F.COLOR,
+// SUM(E.LIBRE_UTILIZACION + E.BLOQUEADO + E.CONTRO_CALIDAD + E.TRANSITO_TRASLADO + E.OTROS) AS CANTIDAD,
+// SUM(E.VAL_LU + E.VAL_BQ + E.VAL_CQ + E.VAL_TT + E.VAL_OT) AS MONTO,
+// SUM(E.LIBRE_UTILIZACION) AS CANTIDAD_01,
+// SUM(E.VAL_LU) AS MONTO_01
+// FROM CP_CLASIFALM A
+// JOIN CP_CLASIF_TIPOALM B ON A.ID_CLASIF=B.ID_CLASIF
+// JOIN CP_TIPOSALM C ON B.ID_TIPO=C.ID_TIPO
+// JOIN CP_TIPOS_ALMACENES D ON C.ID_TIPO=D.ID_TIPO
+// JOIN STOCK_SCL E ON D.CENTRO=E.CENTRO AND D.COD_ALMACEN=E.COD_BODEGA
+// JOIN CP_TIPO_CLASIFALM F ON A.ID_TIPOCLASIF=F.ID_TIPOCLASIF
+// WHERE A.TIPO_OP= 'MOVIL'
+// AND E.FECHA_STOCK IN ('20150429','20150331','20150228','20150131',
+// '20141231','20141130','20141031','20140930','20140831','20140731','20140630','20140531','20140430','20140331','20140228','20140130')
+// AND A.CLASIFICACION IN ('SUC', 'GMC APM WEB', 'CANALES REMOTOS', 'FQ')
+// GROUP BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION, F.TIPO, F.COLOR
+// ORDER BY A.TIPO_OP, E.FECHA_STOCK, A.ORDEN, A.ID_CLASIF, A.CLASIFICACION
 
 
 }
-/* End of file stock_sap_model.php */
-/* Location: ./application/models/Stock/stock_sap_model.php */
+
+// End of file stock_sap.php
+// Location: ./models/Stock/stock_sap.php

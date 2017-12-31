@@ -1,10 +1,10 @@
 <?php
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,12 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+namespace Stock;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Tipo de Almacen SAP
  *
@@ -149,5 +150,5 @@ class Tipoalmacen_sap extends ORM_Model {
 	}
 
 }
-/* End of file tipoalmacen_sap.php */
-/* Location: ./application/models/Stock/tipoalmacen_sap.php */
+// End of file tipoalmacen_sap.php
+// Location: ./models/Stock/tipoalmacen_sap.php

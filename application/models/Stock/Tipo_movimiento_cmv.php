@@ -1,9 +1,10 @@
 <?php
-namespace Stock;
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -13,11 +14,12 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+namespace Stock;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Clase de Movimiento
  *
@@ -35,10 +37,10 @@ class Tipo_movimiento_cmv extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipoclasif Identificador del modulo
+	 * @param  string $id_tipo_movimiento_cmv Identificador del modulo
 	 * @return void
 	 */
-	public function __construct($id = NULL)
+	public function __construct($id_tipo_movimiento_cmv = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -76,7 +78,7 @@ class Tipo_movimiento_cmv extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id);
+		parent::__construct($id_tipo_movimiento_cmv);
 	}
 
 	// --------------------------------------------------------------------
@@ -92,5 +94,5 @@ class Tipo_movimiento_cmv extends ORM_Model {
 	}
 
 }
-/* End of file Tipo_movimiento_cmv.php */
-/* Location: ./application/models/Stock/Tipo_movimiento_cmv.php */
+// End of file Tipo_movimiento_cmv.php
+// Location: ./models/Stock/Tipo_movimiento_cmv.php

@@ -1,11 +1,10 @@
 <?php
-
-namespace Stock;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,10 +14,12 @@ namespace Stock;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Stock;
 
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Inventario
  *
@@ -142,10 +143,10 @@ class Log_gestor extends ORM_Model {
 							l.serie_deco,
 							l.serie_tarjeta,
 							c.nom_cliente+' '+c.ape1_cliente+' '+ape2_cliente as nombre
-						FROM $tabla_log_dth l
+						FROM {$tabla_log_dth} l
 						LEFT JOIN bd_controles..trafico_clientes c on c.num_ident = l.rut+'-'+l.rut_dv
-						WHERE $campo_where = '$serie'
-							and TIPO_OPERACION_CAS in ($filtro_cas)
+						WHERE {$campo_where} = '{$serie}'
+							and TIPO_OPERACION_CAS in ({$filtro_cas})
 					) T1
 					GROUP BY id_log_deco_tarjeta, fecha_log, estado, peticion, tipo_operacion_cas, telefono, rut, serie_deco, serie_tarjeta
 					ORDER BY serie_deco, id_log_deco_tarjeta";
@@ -160,7 +161,7 @@ class Log_gestor extends ORM_Model {
 					$deco_ant = '';
 					foreach($tmp_array as $registro)
 					{
-						if ($registro['serie_deco'] !== $deco_ant AND $deco_ant !== '')
+						if ($registro['serie_deco'] !== $deco_ant && $deco_ant !== '')
 						{
 							array_push($res_array, $registro_ant);
 						}
@@ -224,5 +225,5 @@ class Log_gestor extends ORM_Model {
 
 }
 
-/* End of file log_gestor_model.php */
-/* Location: ./application/models/log_gestor_model.php */
+// End of file Log_gestor.php
+// Location: ./models/Stock/Log_gestor.php
