@@ -1,11 +1,10 @@
 <?php
-
-namespace Acl;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,12 +14,14 @@ namespace Acl;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Acl;
 
 use CaptchaWords;
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo ACL
  * *
@@ -257,7 +258,7 @@ class Acl extends Orm_Model {
 	 */
 	public function is_user_logged()
 	{
-		if ($this->session->userdata('user') AND $this->session->userdata('modulos'))
+		if ($this->session->userdata('user') && $this->session->userdata('modulos'))
 		{
 			return TRUE;
 		}
@@ -511,10 +512,10 @@ class Acl extends Orm_Model {
 				];
 			})
 			->unique()
-			->map(function($app) use ($modulos) {
-				$app['modulos'] = $modulos
-					->filter(function($modulo) use ($app) {
-						return $modulo['app'] === $app['app'];
+			->map(function($application) use ($modulos) {
+				$application['modulos'] = $modulos
+					->filter(function($modulo) use ($application) {
+						return $modulo['app'] === $application['app'];
 					})
 					->map(function($modulo) {
 						return [
@@ -525,9 +526,9 @@ class Acl extends Orm_Model {
 						];
 					})
 					->all();
-				$app['selected'] = collect($app['modulos'])->pluck('modulo_selected')->implode();
+				$application['selected'] = collect($application['modulos'])->pluck('modulo_selected')->implode();
 
-				return $app;
+				return $application;
 			})
 			->all();
 	}
@@ -981,7 +982,7 @@ class Acl extends Orm_Model {
 		return array_get(collect($arr_menu)->first(), 'url', 'login/');
 	}
 
-
 }
-/* End of file Acl.php */
-/* Location: ./application/models/Acl/Acl.php */
+
+// End of file Acl.php
+// Location: ./models/Acl/Acl.php

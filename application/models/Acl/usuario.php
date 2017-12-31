@@ -1,10 +1,10 @@
 <?php
-namespace Acl;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Acl;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Acl;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Usuario
  *
@@ -58,15 +60,15 @@ class Usuario extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'es_unico'       => TRUE
 				],
-/*
-				'tipo' => [
-					'label'          => 'Descripcion de la Aplicacion',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-*/
+
+				// 'tipo' => [
+				// 	'label'          => 'Descripcion de la Aplicacion',
+				// 	'tipo'           => Orm_field::TIPO_CHAR,
+				// 	'largo'          => 50,
+				// 	'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+				// 	'es_obligatorio' => TRUE,
+				// ],
+
 				'activo' => [
 					'label'          => 'Activo',
 					'tipo'           => Orm_field::TIPO_BOOLEAN,
@@ -145,5 +147,6 @@ class Usuario extends ORM_Model {
 	}
 
 }
-/* End of file usuario.php */
-/* Location: ./application/models/Acl/usuario.php */
+
+// End of file usuario.php
+// Location: ./models/Acl/usuario.php

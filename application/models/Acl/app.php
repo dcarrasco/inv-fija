@@ -1,10 +1,10 @@
 <?php
-namespace Acl;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,12 @@ namespace Acl;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+namespace Acl;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo App (Aplicacion)
  *
@@ -104,5 +105,6 @@ class App extends ORM_Model {
 	}
 
 }
-/* End of file app.php */
-/* Location: ./application/models/Acl/app.php */
+
+// End of file app.php
+// Location: ./models/Acl/app.php
