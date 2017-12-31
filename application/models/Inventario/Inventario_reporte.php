@@ -700,5 +700,5 @@ class Inventario_reporte extends Inventario {
 	}
 }
 
-// End of file inventario_reporte.php
-// Location: ./models/Inventario/inventario_reporte.php
+// End of file Inventario_reporte.php
+// Location: ./models/Inventario/Inventario_reporte.php
