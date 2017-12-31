@@ -1,10 +1,10 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Familia
  *
@@ -96,5 +98,6 @@ class Familia extends ORM_Model {
 	}
 
 }
-/* End of file familia.php */
-/* Location: ./application/models/Inventario/familia.php */
+
+// End of file familia.php
+// Location: ./models/Inventario/familia.php

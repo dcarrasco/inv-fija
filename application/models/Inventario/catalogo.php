@@ -1,10 +1,10 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Catalogo
  *
@@ -83,12 +85,14 @@ class Catalogo extends ORM_Model {
 					'es_obligatorio' => TRUE,
 					'default'        => 0
 				],
+
 				// 'foto' => [
 				// 	'label'          => 'Foto del material',
 				// 	'tipo'           => 'picture',
 				// 	'texto_ayuda'    => 'Foto o imagen del material.',
 				// 	'es_obligatorio' => FALSE,
 				// ],
+
 				'tip_material' => [
 					'tipo'           => Orm_field::TIPO_HAS_MANY,
 					'relation'       => [
@@ -184,5 +188,6 @@ class Catalogo extends ORM_Model {
 	}
 
 }
-/* End of file catalogo.php */
-/* Location: ./application/models/Inventario/catalogo.php */
+
+// End of file catalogo.php
+// Location: ./models/Inventario/catalogo.php

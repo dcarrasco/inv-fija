@@ -1,10 +1,10 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Tipo de Inventario
  *
@@ -86,5 +88,5 @@ class Tipo_inventario extends ORM_Model {
 
 }
 
-/* End of file tipo_inventario.php */
-/* Location: ./application/models/Inventario/tipo_inventario.php */
+// End of file tipo_inventario.php
+// Location: ./models/Inventario/tipo_inventario.php

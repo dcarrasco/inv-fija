@@ -1,10 +1,10 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,10 +15,11 @@ namespace Inventario;
  *
  */
 
+namespace Inventario;
+
 use Reporte;
 
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 /**
  * Clase Modelo Inventario
  *
@@ -50,6 +51,7 @@ class Inventario_reporte extends Inventario {
 	/**
 	 * Constructor de la clase
 	 *
+	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
 	 * @return void
 	 */
 	public function __construct($id_inventario = NULL)
@@ -59,6 +61,11 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Reglas de validacion formulario imprime inventario
+	 *
+	 * @return array
+	 */
 	public function rules_imprime_inventario()
 	{
 		return [
@@ -77,6 +84,13 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera reporte
+	 *
+	 * @param  string $tipo   Tipo de reporte
+	 * @param  mixed  $param1 Parametro
+	 * @return string
+	 */
 	public function reporte($tipo, $param1)
 	{
 		return $this->get_reporte($tipo, $param1)
@@ -93,13 +107,9 @@ class Inventario_reporte extends Inventario {
 
 	/**
 	 * Devuelve reporte por hojas
-	 * @param  string  $reporte       Nombre del reporte a ejecutar
-	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
-	 * @param  string  $sort_by       nombre del campo para ordenar el reporte
-	 * @param  string  $incl_ajustes  indica si se suman los ajustes realizados
-	 * @param  string  $elim_sin_dif  indica si se muestran registros que no tengan diferencias
-	 * @param  string  $param1        Parámetros adicionales
-	 * @return array                  arreglo con el detalle del reporte
+	 * @param  string $reporte Nombre del reporte a ejecutar
+	 * @param  string $param1  Parámetros adicionales
+	 * @return $this
 	 */
 	protected function get_reporte($reporte = '', $param1 = NULL)
 	{
@@ -474,6 +484,11 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve campos disponibles de los reportes
+	 *
+	 * @return Collection
+	 */
 	protected function get_all_campos_reporte()
 	{
 		return collect([
@@ -521,6 +536,12 @@ class Inventario_reporte extends Inventario {
 	}
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve campos de reporte de suma de stock
+	 *
+	 * @param  boolean $incl_ajustes Indica si incluye o no campos de ajuste de inventario
+	 * @return array
+	 */
 	protected function _get_campos_sum_stock($incl_ajustes = FALSE)
 	{
 		return $this->get_all_campos_reporte()->only(['sum_stock_sap', 'sum_stock_fisico'])
@@ -533,6 +554,12 @@ class Inventario_reporte extends Inventario {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve campos de reporte de stock
+	 *
+	 * @param  boolean $incl_ajustes Indica si incluye o no campos de ajuste de inventario
+	 * @return array
+	 */
 	protected function _get_campos_stock($incl_ajustes = FALSE)
 	{
 		return $this->get_all_campos_reporte()->only(['stock_sap', 'stock_fisico'])
@@ -671,7 +698,7 @@ class Inventario_reporte extends Inventario {
 
 		return $this->set_order_campos($campos, 'catalogo');
 	}
-
 }
-/* End of file inventario_reporte.php */
-/* Location: ./application/models/Inventario/inventario_reporte.php */
+
+// End of file inventario_reporte.php
+// Location: ./models/Inventario/inventario_reporte.php

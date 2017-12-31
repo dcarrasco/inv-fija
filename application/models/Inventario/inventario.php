@@ -1,8 +1,8 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
+ *
+ * PHP version 7
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
@@ -14,11 +14,13 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Inventario
  *
@@ -304,7 +306,7 @@ class Inventario extends ORM_Model {
 		}
 		else
 		{
-			if (is_numeric($stock_sap) AND is_numeric($hoja))
+			if (is_numeric($stock_sap) && is_numeric($hoja))
 			{
 				return [
 					$this->security->get_csrf_token_name() => $this->security->get_csrf_hash(),
@@ -339,8 +341,7 @@ class Inventario extends ORM_Model {
 		}
 	}
 
-
-
 }
-/* End of file inventario.php */
-/* Location: ./application/models/Inventario/inventario.php */
+
+// End of file inventario.php
+// Location: ./models/Inventario/inventario.php

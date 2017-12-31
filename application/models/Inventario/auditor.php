@@ -1,10 +1,10 @@
 <?php
-namespace inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Auditor
  *
@@ -86,5 +88,6 @@ class Auditor extends ORM_Model {
 
 
 }
-/* End of file auditor.php */
-/* Location: ./application/models/Inventario/auditor.php */
+
+// End of file auditor.php
+// Location: ./models/Inventario/auditor.php

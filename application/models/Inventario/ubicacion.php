@@ -1,10 +1,10 @@
 <?php
-namespace Inventario;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Inventario;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Inventario;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Ubicacion
  *
@@ -34,6 +36,7 @@ class Ubicacion extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
+	 * @param  integer $id_ubicacion ID de la ubicacion
 	 * @return void
 	 */
 	public function __construct($id_ubicacion = NULL)
@@ -179,25 +182,26 @@ class Ubicacion extends ORM_Model {
 	/**
 	 * Devuelve arreglo de validacion para la edicion de un conjunto de ubicaciones
 	 *
+	 * @param  array $ubicaciones Ubicaciones a editar
 	 * @return array Arreglo de validación
 	 */
 	public function get_validation_edit($ubicaciones)
 	{
 		return collect($ubicaciones)->map(function($ubicacion) {
-			$id = $ubicacion->id;
+			$id_ubicacion = $ubicacion->id;
 			return  [
 				[
-					'field' => "tipo_inventario[{$id}]",
+					'field' => "tipo_inventario[{$id_ubicacion}]",
 					'label' => 'Tipo de inventario',
 					'rules' => 'trim|required'
 				],
 				[
-					'field' => "tipo_ubicacion[{$id}]",
+					'field' => "tipo_ubicacion[{$id_ubicacion}]",
 					'label' => 'Tipo Ubicacion',
 					'rules' => 'trim|required'
 				],
 				[
-					'field' => "ubicacion[{$id}]",
+					'field' => "ubicacion[{$id_ubicacion}]",
 					'label' => 'Ubicacion',
 					'rules' => 'trim|required'
 				],
@@ -206,7 +210,7 @@ class Ubicacion extends ORM_Model {
 		->all();
 	}
 
-
 }
-/* End of file ubicacion.php */
-/* Location: ./application/models/Inventario/ubicacion.php */
+
+// End of file ubicacion.php
+// Location: ./models/Inventario/ubicacion.php
