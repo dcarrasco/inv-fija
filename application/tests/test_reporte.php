@@ -144,10 +144,53 @@ class test_reporte extends test_case {
 		);
 	}
 
+	public function test_genera_reporte()
+	{
+		$repo = new Repo();
+		$reporte = collect(explode("\n", $repo->get_reporte()->genera_reporte()));
+
+		$this->assert_count($reporte->filter(function($linea) {return substr($linea, 0, 22)==='<td class="text-muted"';})->all(), 3);
+		$this->assert_count($reporte->filter(function($linea) {return substr($linea, 0, 6)==='<table';})->all(), 1);
+		$this->assert_count($reporte->filter(function($linea) {return substr($linea, 0, 6)==='<thead';})->all(), 1);
+		$this->assert_count($reporte->filter(function($linea) {return substr($linea, 0, 3)==='<tr';})->all(), 3+2);
+
+		$this->assert_not_empty(collect($repo->campos)->pluck('sort')->implode());
+		$this->assert_not_empty(collect($repo->campos)->pluck('img_orden')->implode());
+	}
 
 
 }
 
 class Repo {
 	use Reporte;
+
+	public $campos;
+
+	public function get_campos_reporte()
+	{
+		return [
+			'campo1' => ['titulo' => 'titulo_campo1'],
+			'valor1' => ['titulo' => 'titulo_valor1', 'tipo' => 'numero'],
+			'valor2' => ['titulo' => 'titulo_valor2', 'tipo' => 'numero'],
+		];
+	}
+
+	public function get_datos_reporte()
+	{
+		return [
+			['campo1' => 'valor_campo1', 'valor1' => 100, 'valor2' => 200],
+			['campo1' => 'valor_campo2', 'valor1' => 300, 'valor2' => 400],
+			['campo1' => 'valor_campo3', 'valor1' => 500, 'valor2' => 600],
+		];
+	}
+
+	public function get_reporte()
+	{
+		$this->datos_reporte = $this->get_datos_reporte();
+		$this->campos_reporte = $this->get_campos_reporte();
+
+		$this->campos = $this->set_order_campos($this->campos_reporte, 'campo1');
+
+		return $this;
+	}
 }
