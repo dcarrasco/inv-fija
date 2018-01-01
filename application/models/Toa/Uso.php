@@ -1,11 +1,10 @@
 <?php
-
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,10 +14,12 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Uso Toa
  * *
@@ -103,27 +104,24 @@ class Uso extends ORM_Model {
 	/**
 	 * Devuelve las asignaciones realizados en TOA
 	 *
-	 * @param  string $tipo_reporte Tipo de reporte a desplegar
-	 * @param  string $fecha_desde  Fecha de los datos del reporte
-	 * @param  string $fecha_hasta  Fecha de los datos del reporte
-	 * @param  string $orden_campo  Campo para ordenar el resultado
-	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
-	 * @return string               Reporte
+	 * @param  string $mes_uso Mes a recuperar
+	 * @param  string $mostrar Campos a recuperar
+	 * @return Collection
 	 */
-	public function get_data($mes = NULL, $mostrar = NULL)
+	public function get_data($mes_uso = NULL, $mostrar = NULL)
 	{
-		if (empty($mes) OR empty($mostrar))
+		if (empty($mes_uso) OR empty($mostrar))
 		{
 			return;
 		}
 
-		$mes = substr($mes, 0, 4).'-'.substr($mes, 4, 2);
+		$mes_uso = substr($mes_uso, 0, 4).'-'.substr($mes_uso, 4, 2);
 
 		$this->db
 			->select('mes')->group_by('mes')
 			->select('uso')->group_by('uso')
 			->select_sum('cant_appt')
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->where('fecha', NULL);
 
 		$this->db->select($mostrar)
@@ -148,38 +146,43 @@ class Uso extends ORM_Model {
 	/**
 	 * Genera reporte
 	 *
-	 * @param  string $mes     Mes a desplegar (yyyy-mm)
+	 * @param  string $mes_uso Mes a desplegar (yyyy-mm)
 	 * @param  string $mostrar Tipo de reporte a mostrar
 	 * @return string          Reporte
 	 */
-	public function get($mes = NULL, $mostrar = NULL)
+	public function get($mes_uso = NULL, $mostrar = NULL)
 	{
-		if (empty($mes) OR empty($mostrar))
+		if (empty($mes_uso) OR empty($mostrar))
 		{
 			return;
 		}
 
-		$data = $this->get_data($mes, $mostrar);
+		$data = $this->get_data($mes_uso, $mostrar);
 		$id_col = request('mostrar');
 
 		$id_collection = $data->pluck($id_col)->unique()->sort();
 
-		$report_data = $id_collection->map_with_keys(function($id) use ($data, $id_col) {
-			$data_id = $data->filter(function($data_row) use ($id_col, $id) {
-				return $data_row[$id_col] === $id;
+		$report_data = $id_collection->map_with_keys(function($id_registro) use ($data, $id_col) {
+			$data_id = $data->filter(function($data_row) use ($id_col, $id_registro) {
+				return $data_row[$id_col] === $id_registro;
 			})->map_with_keys(function($data_row) {
 				return [$data_row['uso'] => $data_row['cant_appt']];
 			})->all();
 
-			return [$id => $data_id];
+			return [$id_registro => $data_id];
 		})->map(function($data_row) {
-			$ok      = array_get($data_row, 'OK', 0);
-			$nok     = array_get($data_row, 'NOK', 0);
-			$total   = $ok + $nok;
-			$uso     = 100* $ok / $total;
-			$ranking = ($uso >= 80) ? (($uso >= 90) ? 'OK' : 'CASI') : 'NO OK';
+			$total_ok  = array_get($data_row, 'OK', 0);
+			$total_nok = array_get($data_row, 'NOK', 0);
+			$total   = $total_ok + $total_nok;
+			$uso_toa = 100* $total_ok / $total;
+			$ranking = $uso_toa >= 80 ? ($uso_toa >= 90 ? 'OK' : 'CASI') : 'NO OK';
 
-			return ['cant_peticiones'=>$total, 'uso'=>$uso, 'ranking'=>$ranking, 'peticiones'=>$total];
+			return [
+				'cant_peticiones' => $total,
+				'uso'             => $uso_toa,
+				'ranking'         => $ranking,
+				'peticiones'      => $total
+			];
 		})->all();
 
 		$tipo_reporte = $this->tipo_chart($mostrar);
@@ -203,11 +206,13 @@ class Uso extends ORM_Model {
 			: "['Cant Peticiones', '% Uso']";
 
 		$report = $tipo_reporte === Uso::BUBBLE_CHART
-			? collect($report_data)->map(function($row, $row_id) {
-					return "['$row_id', {$row['cant_peticiones']}, {$row['uso']}, '{$row['ranking']}', {$row['peticiones']}]";
+			? collect($report_data)
+				->map(function($fila, $row_id) {
+					return "['{$row_id}', {$fila['cant_peticiones']}, {$fila['uso']}, '{$fila['ranking']}', {$fila['peticiones']}]";
 				})->implode(', ')
-			: collect($report_data)->map(function($row, $row_id) {
-					return "[{$row['cant_peticiones']}, {$row['uso']}]";
+			: collect($report_data)
+				->map(function($fila, $row_id) {
+					return "[{$fila['cant_peticiones']}, {$fila['uso']}]";
 				})->implode(', ');
 
 
@@ -219,30 +224,30 @@ class Uso extends ORM_Model {
 	/**
 	 * Devuelve resultado de agencias para un mes y empresa
 	 *
+	 * @param  string $mes_uso Mes a buscar
 	 * @param  string $empresa Empresa a buscar
-	 * @param  string $mes     Mes a buscar
 	 * @return array
 	 */
-	public function combo_agencia($mes = NULL, $empresa = NULL)
+	public function combo_agencia($mes_uso = NULL, $empresa = NULL)
 	{
 		$cabecera = ['' => 'Todas'];
 
-		if (empty($mes))
+		if (empty($mes_uso))
 		{
 			return $cabecera;
 		}
 
-		$mes = substr($mes, 0, 4).'-'.substr($mes, 4, 2);
+		$mes_uso = substr($mes_uso, 0, 4).'-'.substr($mes_uso, 4, 2);
 
 		if ( ! empty($empresa))
 		{
-			$this->db->where('empresa',$empresa);
+			$this->db->where('empresa', $empresa);
 		}
 
 		$agencias = $this->db
 			->distinct()
 			->select('agencia')
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->order_by('agencia')
 			->get(config('bd_uso_toa'))
 			->result_array();
@@ -260,31 +265,32 @@ class Uso extends ORM_Model {
 	/**
 	 * Devuelve resultado de agencias para un mes y empresa
 	 *
+	 * @param  string $mes_uso Mes a buscar
 	 * @param  string $empresa Empresa a buscar
-	 * @param  string $mes     Mes a buscar
+	 * @param  string $agencia Agencia a buscar
 	 * @return array
 	 */
-	public function combo_tecnico($mes = NULL, $empresa = NULL, $agencia = NULL)
+	public function combo_tecnico($mes_uso = NULL, $empresa = NULL, $agencia = NULL)
 	{
 		$cabecera = ['' => 'Todos'];
 
-		if (empty($empresa) OR empty($mes))
+		if (empty($empresa) OR empty($mes_uso))
 		{
 			return $cabecera;
 		}
 
-		$mes = substr($mes, 0, 4).'-'.substr($mes, 4, 2);
+		$mes_uso = substr($mes_uso, 0, 4).'-'.substr($mes_uso, 4, 2);
 
 		if ( ! empty($agencia))
 		{
-			$this->db->where('agencia',$agencia);
+			$this->db->where('agencia', $agencia);
 		}
 
 		$tecnicos = $this->db
 			->distinct()
 			->select('a.tecnico, b.tecnico as nombre', FALSE)
-			->where('a.empresa',$empresa)
-			->where('a.mes', $mes)
+			->where('a.empresa', $empresa)
+			->where('a.mes', $mes_uso)
 			->order_by('a.tecnico')
 			->from(config('bd_uso_toa').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.tecnico=b.rut', 'left')
@@ -314,6 +320,12 @@ class Uso extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Evolucion del uso de TOA por tecnico
+	 *
+	 * @param  string $tecnico ID del tecnico
+	 * @return array
+	 */
 	public function evolucion_tecnico($tecnico = NULL)
 	{
 		if (empty($tecnico))
@@ -322,19 +334,16 @@ class Uso extends ORM_Model {
 		}
 
 		$filtros = ['tipo_pet'];
-		foreach($filtros as $filtro)
-		{
-			if ( ! empty(request($filtro)))
-			{
-				$this->db->where($filtro, request($filtro));
-			}
-		}
+
+		request()->only($filtros)->each(function($filtro, $id_filtro) {
+			$this->db->where($id_filtro, $filtro);
+		});
 
 		$data = collect($this->db
 			->select('mes')->group_by('mes')
 			->select('uso')->group_by('uso')
 			->select_sum('cant_appt')
-			->where('tecnico',strtoupper($tecnico))
+			->where('tecnico', strtoupper($tecnico))
 			->where('fecha', NULL)
 			->order_by('mes')
 			->get(config('bd_uso_toa'))
@@ -342,19 +351,19 @@ class Uso extends ORM_Model {
 		);
 
 		$reporte = $data->pluck('mes')->unique()->sort()
-			->map_with_keys(function($mes) use ($data) {
-				return [$mes =>
-					$data->filter(function($row) use ($mes) {
-						return $row['mes'] === $mes;
-					})->map_with_keys(function ($row) {
-					return [$row['uso'] => $row['cant_appt']];
+			->map_with_keys(function($mes_uso) use ($data) {
+				return [$mes_uso =>
+					$data->filter(function($fila) use ($mes_uso) {
+						return $fila['mes'] === $mes_uso;
+					})->map_with_keys(function ($fila) {
+					return [$fila['uso'] => $fila['cant_appt']];
 					})->all()
 				];
-			})->map(function($row, $mes) {
-				$ok  = array_get($row, 'OK');
-				$nok = array_get($row, 'NOK');
+			})->map(function($fila, $mes_uso) {
+				$total_ok  = array_get($fila, 'OK');
+				$total_nok = array_get($fila, 'NOK');
 
-				return "['{$mes}'," . (100 * $ok / ($ok + $nok)) . "]";
+				return "['{$mes_uso}'," . (100 * $total_ok / ($total_ok + $total_nok)) . ']';
 			})->implode(', ');
 
 		return "[['Mes', 'Uso'], {$reporte}]";
@@ -366,25 +375,25 @@ class Uso extends ORM_Model {
 	/**
 	 * Genera data de los reportes
 	 *
-	 * @param  mes $mes Mes a generar
-	 * @return string   Mensaje resultado
+	 * @param  mes $mes_uso Mes a generar
+	 * @return string
 	 */
-	public function genera_reporte($mes = NULL)
+	public function genera_reporte($mes_uso = NULL)
 	{
-		if (empty($mes))
+		if (empty($mes_uso))
 		{
-			return "ERROR!!!";
+			return 'ERROR!!!';
 		}
 
-		$mes = substr($mes, 0, 4).'-'.substr($mes, 4, 2);
+		$mes_uso = substr($mes_uso, 0, 4).'-'.substr($mes_uso, 4, 2);
 
 		$rows = [];
 
 		// Borra mes del reporte
-		$this->db->where('mes', $mes)->delete(config('bd_uso_toa'));
+		$this->db->where('mes', $mes_uso)->delete(config('bd_uso_toa'));
 		$rows['borra_reporte_mes'] = $this->db->affected_rows();
 
-		$this->db->where('mes', $mes)->delete(config('bd_uso_toa_dia'));
+		$this->db->where('mes', $mes_uso)->delete(config('bd_uso_toa_dia'));
 		$rows['borra_reporte_dia'] = $this->db->affected_rows();
 
 		$this->db->truncate(config('bd_uso_toa_vpi'));
@@ -397,7 +406,7 @@ class Uso extends ORM_Model {
 			->from(config('bd_peticiones_vpi').' a')
 			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left')
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
-			->like('a.fecha', $mes, 'after')
+			->like('a.fecha', $mes_uso, 'after')
 			->where('a.astatus', 'complete')
 			->where('c.uso_vpi', 1)
 			->get_compiled_select();
@@ -411,7 +420,7 @@ class Uso extends ORM_Model {
 			->join(config('bd_materiales_peticiones_toa').' b', 'a.aid=b.aid', 'left')
 			->join(config('bd_catalogo_tip_material_toa').' c', 'b.xi_sap_code=c.id_catalogo', 'left')
 			->join(config('bd_tip_material_toa').' d', 'c.id_tip_material=d.id', 'left')
-			->like('a.date', $mes, 'after')
+			->like('a.date', $mes_uso, 'after')
 			->where('a.astatus', 'complete')
 			->where('d.uso_vpi', 1)
 			->group_by('a.date, a.appt_number, a.xa_original_agency, a.resource_external_id, a.contractor_company, a.aid, d.desc_tip_material')
@@ -429,7 +438,7 @@ class Uso extends ORM_Model {
 		$rows['peticiones_toa_dia'] = $this->db->affected_rows();
 
 		// Actualiza peticiones con informacion de uso toa
-		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes}'");
+		$this->db->query('UPDATE r SET r.cant_toa=t.cant_toa FROM '.config('bd_uso_toa_dia').' r JOIN '.config('bd_uso_toa_toa')." t on r.appt_number=t.appt_number and r.tipo_mat=t.tipo_mat WHERE r.mes='{$mes_uso}'");
 		$rows['actualiza_peticiones_toa_dia'] = $this->db->affected_rows();
 
 		// Agrega registros en TOA que no están en VPI
@@ -445,7 +454,7 @@ class Uso extends ORM_Model {
 
 		// Corrige uso de 2 o mas modem en VPI (Modem Speedy)
 		$this->db->set('cant_vpi', 1)
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->where('cant_vpi', 2)
 			->where('tipo_mat', 'Modem')
 			->update(config('bd_uso_toa_dia'));
@@ -455,7 +464,7 @@ class Uso extends ORM_Model {
 		$select_stmt = $this->db
 			->select('mes, fecha, tipo_pet, appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso, cant_appt, cant_vpi, cant_toa, cant_sap')
 			->from(config('bd_uso_toa_toa'))
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->where('tipo_pet', 'REPARA')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa_dia'). ' '.$select_stmt);
@@ -467,7 +476,7 @@ class Uso extends ORM_Model {
 			->from(config('bd_peticiones_toa').' a')
 			->join(config('bd_claves_cierre_tip_material_toa').' b', "case when a_complete_reason_rep_minor_stb is null then '' else a_complete_reason_rep_minor_stb end + case when a_complete_reason_rep_minor_ba is null then '' else a_complete_reason_rep_minor_ba end + case when a_complete_reason_rep_minor_tv is null then '' else a_complete_reason_rep_minor_tv end = b.clave", 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left')
-			->like('a.date', $mes, 'after')
+			->like('a.date', $mes_uso, 'after')
 			->where('a.astatus', 'complete')
 			->where("substring(appt_number,1,3)='INC'", NULL, FALSE)
 			->where('c.uso_vpi', 1)
@@ -476,7 +485,7 @@ class Uso extends ORM_Model {
 		$rows['peticiones_toa_repara2'] = $this->db->affected_rows();
 
 		// Actualiza peticiones con informacion de uso REPARA
-		$this->db->query('UPDATE d SET d.cant_vpi=r.cant_vpi FROM '.config('bd_uso_toa_dia').' d JOIN '.config('bd_uso_toa_repara')." r on d.appt_number=r.appt_number and d.tipo_mat=r.tipo_mat WHERE d.mes='{$mes}'");
+		$this->db->query('UPDATE d SET d.cant_vpi=r.cant_vpi FROM '.config('bd_uso_toa_dia').' d JOIN '.config('bd_uso_toa_repara')." r on d.appt_number=r.appt_number and d.tipo_mat=r.tipo_mat WHERE d.mes='{$mes_uso}'");
 		$rows['actualiza_peticiones_repara'] = $this->db->affected_rows();
 
 		// Agrega registros en TOA que no están en VPI
@@ -491,26 +500,26 @@ class Uso extends ORM_Model {
 
 		// Actualiza cantidades NULL a 0
 		$this->db->set('cant_toa', 0)
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->where('cant_toa', NULL)
 			->update(config('bd_uso_toa_dia'));
 
 		// Actualiza cantidades NULL a 0
 		$this->db->set('cant_vpi', 0)
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->where('cant_vpi', NULL)
 			->update(config('bd_uso_toa_dia'));
 
 
 		// Actualiza peticiones OK y NOK
-		$this->db->query('UPDATE '.config('bd_uso_toa_dia')." SET uso=case when cant_vpi=cant_toa then 'OK' else 'NOK' end, cant_appt=1 WHERE mes='{$mes}'");
+		$this->db->query('UPDATE '.config('bd_uso_toa_dia')." SET uso=case when cant_vpi=cant_toa then 'OK' else 'NOK' end, cant_appt=1 WHERE mes='{$mes_uso}'");
 		$rows['actualiza_ok_nok'] = $this->db->affected_rows();
 
 		// Puebla tabla mes
 		$select_stmt = $this->db
 			->select('mes, NULL as fecha, tipo_pet, NULL as appt_number, agencia, tecnico, empresa, aid, tipo_mat, uso, sum(cant_appt) as cant_appt, sum(cant_vpi) as cant_vpi, sum(cant_toa) as cant_toa, sum(cant_sap) as cant_sap', FALSE)
 			->from(config('bd_uso_toa_dia'))
-			->where('mes', $mes)
+			->where('mes', $mes_uso)
 			->group_by('mes, tipo_pet, agencia, tecnico, empresa, aid, tipo_mat, uso')
 			->get_compiled_select();
 		$this->db->query('INSERT into '.config('bd_uso_toa'). ' '.$select_stmt);
@@ -525,11 +534,11 @@ class Uso extends ORM_Model {
 			return '<li>'.str_replace('_', ' ', $step_key).' ('.fmt_cantidad($cant).' registros) </li>';
 		})->implode();
 
-		return "<ul>$mensaje</ul>";
+		return "<ul>{$mensaje}</ul>";
 	}
 
 
 }
 
-/* End of file Uso.php */
-/* Location: ./application/models/Toa/Uso.php */
+// End of file Uso.php
+// Location: ./models/Toa/Uso.php

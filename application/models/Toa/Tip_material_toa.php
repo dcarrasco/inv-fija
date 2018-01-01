@@ -1,10 +1,10 @@
 <?php
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Tipo Material de trabajos TOA
  *
@@ -36,7 +38,7 @@ class Tip_material_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tecnico Identificador del tecnico
+	 * @param  string $id_tip_material Identificador del tipo de material
 	 * @return void
 	 */
 	public function __construct($id_tip_material = NULL)
@@ -123,5 +125,5 @@ class Tip_material_toa extends ORM_Model {
 	}
 
 }
-/* End of file Tip_material_toa.php */
-/* Location: ./application/models/Toa/Tip_material_toa.php */
+// End of file Tip_material_toa.php
+// Location: ./models/Toa/Tip_material_toa.php

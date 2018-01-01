@@ -1,11 +1,10 @@
 <?php
-
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,12 +14,14 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Reporte;
 use Toa\Tecnico_toa;
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Stock TOA
  * *
@@ -181,7 +182,7 @@ class Stock extends ORM_Model {
 	 * @param  string $empresa Empresa a recuperar los almacenes
 	 * @return array           Arreglo con almacenes
 	 */
-	private function get_datos_almacenes($empresa = NULL)
+	protected function get_datos_almacenes($empresa = NULL)
 	{
 		return $this->db
 			->select('d.tipo')
@@ -361,5 +362,5 @@ class Stock extends ORM_Model {
 
 }
 
-/* End of file Stock.php */
-/* Location: ./application/models/Toa/Stock.php */
+// End of file Stock.php
+// Location: ./models/Toa/Stock.php

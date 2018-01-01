@@ -1,11 +1,10 @@
 <?php
-
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,13 +14,15 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Toa\Tecnico_toa;
 use Toa\Consumo_toa;
 use Model\Orm_model;
 use Stock\Clase_movimiento;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Movimientos fija
  * *
@@ -139,7 +140,7 @@ class Panel extends ORM_Model {
 				return collect($indicador)->map(function($indicador, $indicador_key) use ($item_key, $datos) {
 					return array_get($datos->get($indicador_key), $item_key, 0);
 				})->all();
-		})->all();
+			})->all();
 
 		return $this->gchart_data($arr_peticiones);
 	}
@@ -196,7 +197,7 @@ class Panel extends ORM_Model {
 	{
 		$sum_indicador1 = $this->get_resumen_usage($indicador1, $empresa, $anomes);
 		$sum_indicador2 = $this->get_resumen_usage($indicador2, $empresa, $anomes);
-		$usage = ($sum_indicador2 == 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
+		$usage = ($sum_indicador2 === 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
 		$usage = $usage > 100 ? 100 : (int) $usage;
 
 		return ($this->gchart_data(['usa' => $usage, 'no usa' => 100 - $usage]));
@@ -266,7 +267,7 @@ class Panel extends ORM_Model {
 
 		return $this->gchart_data([
 			'actual' => $valor_indicador,
-			'proy'   => $porc_mes == 0 ? 0 : (int) ($valor_indicador/$porc_mes) - $valor_indicador
+			'proy'   => $porc_mes === 0 ? 0 : (int) ($valor_indicador/$porc_mes) - $valor_indicador
 		]);
 	}
 
@@ -275,7 +276,7 @@ class Panel extends ORM_Model {
 	/**
 	 * Formatea un arreglo para ser usado por Google Charts
 	 *
-	 * @param  array $arr_orig Arreglo a formatear
+	 * @param  array $datos Arreglo a formatear
 	 * @return string
 	 */
 	public function gchart_data($datos = [])
@@ -285,8 +286,13 @@ class Panel extends ORM_Model {
 			return NULL;
 		}
 
-		$agrega_comillas = function($elem) {return "'".$elem."'";};
-		$nulos_a_cero    = function($elem) {return is_null($elem) ? 0 : $elem;};
+		$agrega_comillas = function($elem) {
+			return "'{$elem}'";
+		};
+
+		$nulos_a_cero = function($elem) {
+			return is_null($elem) ? 0 : $elem;
+		};
 
 		$datos = collect($datos)->map(function($dato, $dato_key) {
 			return ! is_array($dato) ? ['Data' => $dato] : $dato;
@@ -303,5 +309,5 @@ class Panel extends ORM_Model {
 
 }
 
-/* End of file Panel.php */
-/* Location: ./application/models/Toa/Panel.php */
+// End of file Panel.php
+// Location: ./models/Toa/Panel.php

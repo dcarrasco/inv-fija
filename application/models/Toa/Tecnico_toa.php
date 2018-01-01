@@ -1,10 +1,10 @@
 <?php
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Técnico TOA
  *
@@ -115,7 +117,7 @@ class Tecnico_toa extends ORM_Model {
 	 */
 	public function get_ciudades_tecnico()
 	{
-		if ($this->id_empresa AND $this->uri->segment(2) === 'editar')
+		if ($this->id_empresa && $this->uri->segment(2) === 'editar')
 		{
 			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa);
 
@@ -154,7 +156,7 @@ class Tecnico_toa extends ORM_Model {
 			->select('d.resource_external_id as rut')
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
-			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', "a.referencia=d.appt_number and d.astatus='complete'", 'left', FALSE)
 			->where("a.fecha_contabilizacion >= dateadd(day, {$dias_hasta}, convert(date, getdate()))")
 			->where_in('codigo_movimiento', Consumo_toa::create()->movimientos_consumo)
 			->where_in('centro', Consumo_toa::create()->centros_consumo)
@@ -188,7 +190,7 @@ class Tecnico_toa extends ORM_Model {
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
-			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', "a.referencia=d.appt_number and d.astatus='complete'", 'left', FALSE)
 			->where("a.fecha_contabilizacion >= dateadd(day, {$dias_hasta}, convert(date, getdate()))")
 			->where_in('codigo_movimiento', Consumo_toa::create()->movimientos_consumo)
 			->where_in('centro', Consumo_toa::create()->centros_consumo)
@@ -209,5 +211,5 @@ class Tecnico_toa extends ORM_Model {
 
 }
 
-/* End of file Tecnico_toa.php */
-/* Location: ./application/models/Toa/Tecnico_toa.php */
+// End of file Tecnico_toa.php
+// Location: ./models/Toa/Tecnico_toa.php

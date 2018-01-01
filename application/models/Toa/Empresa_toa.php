@@ -1,9 +1,10 @@
 <?php
-namespace Toa;
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -13,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Empresa TOA
  *
@@ -106,5 +109,5 @@ class Empresa_toa extends ORM_Model {
 	}
 
 }
-/* End of file empresa_toa.php */
-/* Location: ./application/models/Toa/empresa_toa.php */
+// End of file Empresa_toa.php
+// Location: ./models/Toa/Empresa_toa.php

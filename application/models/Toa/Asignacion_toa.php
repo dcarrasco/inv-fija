@@ -1,11 +1,10 @@
 <?php
-
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,7 +14,8 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Reporte;
 use Model\Orm_model;
@@ -23,6 +23,7 @@ use Model\Orm_field;
 use Toa\Tecnico_toa;
 use Stock\Clase_movimiento;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo TOA Asignacion
  * *
@@ -125,6 +126,11 @@ class Asignacion_toa extends ORM_Model {
 		'detalle'       => 'referencia',
 	];
 
+	/**
+	 * Campos de reporte
+	 *
+	 * @var array
+	 */
 	protected $campos = [
 		'empresa'            => ['titulo' => 'Empresa'],
 		'cliente'            => ['titulo' => 'Cod Tecnico'],
@@ -187,6 +193,15 @@ class Asignacion_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de las asignaciones
+	 *
+	 * @param  string  $reporte      Tipo de reporte
+	 * @param  string  $fecha_desde  Fecha inicial
+	 * @param  atring  $fecha_hasta  Fecha final
+	 * @param  boolean $filtra_signo Indicador si se filtra el signo
+	 * @return array
+	 */
 	protected function get_datos_asignaciones($reporte, $fecha_desde, $fecha_hasta, $filtra_signo = TRUE)
 	{
 		if ($reporte === 'tecnicos')
@@ -212,6 +227,14 @@ class Asignacion_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Devuelve los parametros para un link del reporte
+	 *
+	 * @param  string $reporte     Tipo de reporte
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de fin
+	 * @return array
+	 */
 	protected function texto_link($reporte, $fecha_desde, $fecha_hasta)
 	{
 		$href = [
@@ -237,12 +260,12 @@ class Asignacion_toa extends ORM_Model {
 	/**
 	 * Devuelve las asignaciones realizados en TOA
 	 *
-	 * @param  string $tipo_reporte Tipo de reporte a desplegar
-	 * @param  string $fecha_desde  Fecha de los datos del reporte
-	 * @param  string $fecha_hasta  Fecha de los datos del reporte
-	 * @param  string $orden_campo  Campo para ordenar el resultado
-	 * @param  string $orden_tipo   Orden del resultado (ascendente o descendente)
-	 * @return string               Reporte
+	 * @param  string $reporte     Tipo de reporte a desplegar
+	 * @param  string $fecha_desde Fecha de los datos del reporte
+	 * @param  string $fecha_hasta Fecha de los datos del reporte
+	 * @param  string $orden_campo Campo para ordenar el resultado
+	 * @param  string $orden_tipo  Orden del resultado (ascendente o descendente)
+	 * @return string
 	 */
 	public function asignaciones_toa($reporte = 'tecnicos', $fecha_desde = NULL, $fecha_hasta = NULL, $orden_campo = '', $orden_tipo = 'ASC')
 	{
@@ -397,7 +420,7 @@ class Asignacion_toa extends ORM_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '000')
+		if ($filtro_trx && $filtro_trx !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -460,5 +483,5 @@ class Asignacion_toa extends ORM_Model {
 
 }
 
-/* End of file Asignacion_toa.php */
-/* Location: ./application/models/Toa/Asignacion_toa.php */
+// End of file Asignacion_toa.php
+// Location: ./models/Toa/Asignacion_toa.php

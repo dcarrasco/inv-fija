@@ -1,11 +1,10 @@
 <?php
-
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -15,12 +14,14 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Reporte;
 use Model\Orm_model;
 use Stock\Clase_movimiento;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Movimientos fija
  * *
@@ -219,12 +220,20 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consump
+	 *
+	 * @param  string $empresa    Empresa
+	 * @param  string $anomes     Año y mes a recuperar
+	 * @param  string $filtro_trx Transacciones a filtrar
+	 * @return $this->db
+	 */
 	protected function datos_movimientos_consumo($empresa = NULL, $anomes = NULL, $filtro_trx = NULL)
 	{
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		if ($filtro_trx AND $filtro_trx !== '000')
+		if ($filtro_trx && $filtro_trx !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -255,7 +264,7 @@ class Consumo_toa extends ORM_Model {
 		$fecha_desde = $anomes.'01';
 		$fecha_hasta = get_fecha_hasta($anomes);
 
-		if (! $filtro_trx OR $filtro_trx === '000')
+		if ( ! $filtro_trx OR $filtro_trx === '000')
 		{
 			$select_sum = [
 				'unidades'   => 'cant',
@@ -388,6 +397,15 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Genera los parametros para un link
+	 *
+	 * @param  string $fecha_desde    Fecha de inicio
+	 * @param  string $fecha_hasta    Fecha de fin
+	 * @param  string $reporte        Tipo de reporte
+	 * @param  string $registros_href Registros
+	 * @return array
+	 */
 	private function _texto_link($fecha_desde, $fecha_hasta, $reporte, $registros_href)
 	{
 		return [
@@ -406,6 +424,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera detalle de los datos de consumo desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_detalle($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -463,6 +489,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por tipo de material desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_tip_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -490,6 +524,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -520,6 +562,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por lote desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_lote($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -544,6 +594,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por lote-material desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_lote_material($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -572,6 +630,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por PEP desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_pep($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -598,6 +664,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por tecnicos desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_tecnicos($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -612,7 +686,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = 'select q1.empresa, q1.cliente, q1.tecnico, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.cliente, q1.tecnico order by '.$this->get_order_by($orden_campo);
+		$query = "select q1.empresa, q1.cliente, q1.tecnico, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.cliente, q1.tecnico order by ".$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -629,6 +703,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por ciudades desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_ciudades($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -644,7 +726,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->join(config('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
 			->get_compiled_select();
-		$query = 'select q1.id_ciudad, q1.ciudad, q1.orden, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by '.$this->get_order_by($orden_campo);
+		$query = "select q1.id_ciudad, q1.ciudad, q1.orden, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by ".$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -660,6 +742,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por empresas desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_empresas($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -673,7 +763,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = 'select q1.empresa, q1.id_empresa, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.empresa, q1.id_empresa order by '.$this->get_order_by($orden_campo);
+		$query = "select q1.empresa, q1.id_empresa, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.id_empresa order by ".$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -688,6 +778,14 @@ class Consumo_toa extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera los datos de consumo por tipo de trabajo desde la BD
+	 *
+	 * @param  string $orden_campo Campo para ordenar la consulta
+	 * @param  string $fecha_desde Fecha de inicio
+	 * @param  string $fecha_hasta Fecha de termino
+	 * @return array
+	 */
 	private function _get_datos_consumo_tipo_trabajo($orden_campo = '', $fecha_desde = '', $fecha_hasta = '')
 	{
 		$select = [
@@ -698,7 +796,7 @@ class Consumo_toa extends ORM_Model {
 		$query = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
 			->get_compiled_select();
-		$query = 'select q1.carta_porte, \'ver peticiones\' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ('.$query.') q1 group by q1.carta_porte order by '.$this->get_order_by($orden_campo);
+		$query = "select q1.carta_porte, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.carta_porte order by ".$this->get_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -847,22 +945,28 @@ class Consumo_toa extends ORM_Model {
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
-			->join(config('bd_peticiones_toa').' d', 'a.referencia=d.appt_number and d.astatus=\'complete\'', 'left', FALSE)
+			->join(config('bd_peticiones_toa').' d', "a.referencia=d.appt_number and d.astatus='complete'", 'left', FALSE)
 			->join(config('bd_catalogo_tip_material_toa').' e', 'a.material = e.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' f', 'e.id_tip_material=f.id', 'left', FALSE)
 			->order_by('a.referencia', 'ASC')
 			->get()->result_array();
 
-		$peticiones =collect($reporte_peticiones)->pluck('referencia')->all();
-		$uso = $this->uso_peticiones($peticiones);
+		$peticiones     = collect($reporte_peticiones)->pluck('referencia')->all();
+		$uso_peticiones = $this->uso_peticiones($peticiones);
 
-		return collect($reporte_peticiones)->map(function($peticion) use ($uso) {
-			return array_merge($peticion, ['uso' => array_get($uso, $peticion['referencia'])]);
+		return collect($reporte_peticiones)->map(function($peticion) use ($uso_peticiones) {
+			return array_merge($peticion, ['uso' => array_get($uso_peticiones, $peticion['referencia'])]);
 		});
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupera el uso del sistema para unas peticiones
+	 *
+	 * @param  array $peticiones Arreglo con numeros de peticiones
+	 * @return array
+	 */
 	public function uso_peticiones($peticiones = [])
 	{
 		return collect($this->db
@@ -873,12 +977,11 @@ class Consumo_toa extends ORM_Model {
 			->get(config('bd_uso_toa_dia'))
 			->result_array()
 			)->map_with_keys(function($peticion) {
-				$uso = (int) (100*$peticion['OK']/$peticion['TOTAL']);
-				$class = ($uso >= 90)
-					? 'check-circle text-success' :
-					(($uso >= 80)
-						? 'minus-circle text-warning'
-						: 'times-circle text-danger');
+				$uso_peticion = (int) (100*$peticion['OK']/$peticion['TOTAL']);
+
+				$class = $uso_peticion >= 90
+					? 'check-circle text-success'
+					: ($uso_peticion >= 80 ? 'minus-circle text-warning' : 'times-circle text-danger');
 
 				return [$peticion['appt_number'] => "<i class=\"fa fa-{$class}\"></i>" ];
 			})->all();
@@ -890,8 +993,8 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Genera reporte de peticiones
 	 *
-	 * @param  array  $arr_data Arreglo con datos a desplegar
-	 * @return string           Reporte con las peticiones encontradas
+	 * @param  array $arr_data Arreglo con datos a desplegar
+	 * @return string          Reporte con las peticiones encontradas
 	 */
 	public function reporte_peticiones($arr_data = NULL)
 	{
@@ -1053,7 +1156,7 @@ class Consumo_toa extends ORM_Model {
 	 */
 	public function consumo_clientes($cliente = NULL, $fecha_desde = NULL, $fecha_hasta = NULL)
 	{
-		if (! $fecha_desde OR ! $fecha_hasta)
+		if ( ! $fecha_desde OR ! $fecha_hasta)
 		{
 			return NULL;
 		}
@@ -1114,30 +1217,39 @@ class Consumo_toa extends ORM_Model {
 		});
 
 		return $referencias->map_with_keys(function($referencia) use ($materiales, $datos) {
-				$data_referencia = $datos->filter(function($data) use ($referencia) {
-					return $data['referencia'] === $referencia;
-				});
-
-				$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
-					$data_material = $data_referencia->first(function($data) use ($material) {
-						return $data['material'] === $material['material'];
-					});
-
-					return [
-						'texto_material'    => $material['texto_material'],
-						'desc_tip_material' => $material['desc_tip_material'],
-						'color'             => $material['color'],
-						'fecha'             => array_get($data_material, 'fecha'),
-						'dato'              => array_get($data_material, 'dato'),
-					];
-				});
-
-				return [$referencia => $datos_referencia];
+			$data_referencia = $datos->filter(function($data) use ($referencia) {
+				return $data['referencia'] === $referencia;
 			});
+
+			$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
+				$data_material = $data_referencia->first(function($data) use ($material) {
+					return $data['material'] === $material['material'];
+				});
+
+				return [
+					'texto_material'    => $material['texto_material'],
+					'desc_tip_material' => $material['desc_tip_material'],
+					'color'             => $material['color'],
+					'fecha'             => array_get($data_material, 'fecha'),
+					'dato'              => array_get($data_material, 'dato'),
+				];
+			});
+
+			return [$referencia => $datos_referencia];
+		});
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Recupero datos por matriales
+	 *
+	 * @param  string $empresa        Empresa
+	 * @param  string $anomes         Año y mes a consultar
+	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
+	 * @param  string $dato_desplegar Indica si despliega monto o cantidad
+	 * @return array
+	 */
 	protected function get_datos_materiales($empresa, $anomes, $tipo_trabajo, $dato_desplegar)
 	{
 		if ($tipo_trabajo !== '000')
@@ -1162,5 +1274,5 @@ class Consumo_toa extends ORM_Model {
 
 }
 
-/* End of file Consumo_toa.php */
-/* Location: ./application/models/Toa/Consumo_toa.php */
+// End of file Consumo_toa.php
+// Location: ./models/Toa/Consumo_toa.php

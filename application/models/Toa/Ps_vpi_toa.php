@@ -1,10 +1,10 @@
 <?php
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Empresa Ciudad TOA
  *
@@ -36,7 +38,7 @@ class Ps_vpi_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_empresa Identificador de la empresa
+	 * @param  string $id_ps Identificador del PS
 	 * @return void
 	 */
 	public function __construct($id_ps = NULL)
@@ -97,5 +99,6 @@ class Ps_vpi_toa extends ORM_Model {
 	}
 
 }
-/* End of file ps_vpi_toa.php */
-/* Location: ./application/models/Toa/ps_vpi_toa.php */
+
+// End of file Ps_vpi_toa.php
+// Location: ./models/Toa/Ps_vpi_toa.php

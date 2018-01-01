@@ -1,10 +1,10 @@
 <?php
-namespace Toa;
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -14,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Ciudad TOA
  *
@@ -36,7 +38,7 @@ class Clave_cierre extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_empresa Identificador de la ciudad
+	 * @param  string $clave Identificador de la clave de cierre
 	 * @return void
 	 */
 	public function __construct($clave = NULL)
@@ -116,5 +118,5 @@ class Clave_cierre extends ORM_Model {
 	}
 
 }
-/* End of file Clave_cierre.php */
-/* Location: ./application/models/Toa/clave_cierre.php */
+// End of file Clave_cierre.php
+// Location: ./models/Toa/Clave_cierre.php

@@ -1,9 +1,10 @@
 <?php
-namespace Toa;
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -13,11 +14,13 @@ namespace Toa;
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+namespace Toa;
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Tipo de trabajo TOA
  *
@@ -84,11 +87,18 @@ class Tipo_trabajo_toa extends ORM_Model {
 		return (string) $this->id_tipo;
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Formatea un tipo de trabajo
+	 *
+	 * @return string
+	 */
 	public function mostrar_info()
 	{
 		$descripcion_trabajo = '';
 
-		if (strlen($this->id_tipo) === 10 AND in_array(substr($this->id_tipo, 0, 1), ['A', '-', 'M', 'B', 'T']))
+		if (strlen($this->id_tipo) === 10 && in_array(substr($this->id_tipo, 0, 1), ['A', '-', 'M', 'B', 'T']))
 		{
 			$descripcion_trabajo = '<span class="label label-default">BA</span><span class="label label-info">'.substr($this->id_tipo, 0, 2).'</span>';
 			$descripcion_trabajo .= ' <span class="label label-default">STB</span><span class="label label-info">'.substr($this->id_tipo, 2, 2).'</span>';
@@ -101,5 +111,5 @@ class Tipo_trabajo_toa extends ORM_Model {
 	}
 
 }
-/* End of file Tipo_trabajo_toa.php */
-/* Location: ./application/models/Toa/Tipo_trabajo_toa.php */
+// End of file Tipo_trabajo_toa.php
+// Location: ./models/Toa/Tipo_trabajo_toa.php
