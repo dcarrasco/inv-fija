@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,11 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Model\Orm_model;
 use Model\Orm_field;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Catalogo
  *
@@ -81,5 +83,5 @@ class Catalogo_foto extends ORM_Model {
 	}
 
 }
-/* End of file catalogo_foto.php */
-/* Location: ./application/models/catalogo_foto.php */
+// End of file catalogo_foto.php
+// Location: ./models/catalogo_foto.php

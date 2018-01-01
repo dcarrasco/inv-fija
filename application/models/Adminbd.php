@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Administrador de la base de datos
  * *
@@ -33,7 +35,7 @@ class Adminbd extends ORM_Model {
 	 *
 	 * @var object
 	 */
-	private $dbo;
+	protected $dbo_admin;
 
 	/**
 	 * Reglas de validación formulario exportar tablas
@@ -119,8 +121,8 @@ class Adminbd extends ORM_Model {
 		$users = collect($users_result)
 			->filter(function($registro) {
 				return trim($registro['Login']) !== 'sa'
-					AND trim($registro['Login']) !== ''
-					AND ! (trim($registro['Login']) === 'patripio' AND trim($registro['ProgramName']) === 'PHP freetds');
+					&& trim($registro['Login']) !== ''
+					&& ! (trim($registro['Login']) === 'patripio' && trim($registro['ProgramName']) === 'PHP freetds');
 			})->map_with_keys(function($registro) {
 				return [trim($registro['SPID']) => $registro];
 			})->all();
@@ -151,7 +153,7 @@ class Adminbd extends ORM_Model {
 			})
 			->filter(function($item) {
 				return strpos($item['index'], 'bd_') !== FALSE
-					AND ! in_array($item['index'], $this->table_blacklist);
+					&& ! in_array($item['index'], $this->table_blacklist);
 			})
 			->map_with_keys(function($item, $index) {
 				return [$item['item'] => $item['index']];
@@ -195,12 +197,12 @@ class Adminbd extends ORM_Model {
 	 */
 	public function table_to_csv($tabla = '')
 	{
-		if (! $this->table_exists($tabla))
+		if ( ! $this->table_exists($tabla))
 		{
 			return '--- Tabla no existe ---';
 		}
 
-		if (request('campo') AND request('filtro'))
+		if (request('campo') && request('filtro'))
 		{
 			$this->db->where(request('campo'), request('filtro'));
 		}
@@ -213,6 +215,12 @@ class Adminbd extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Indica si una tabla existe
+	 *
+	 * @param  string $tabla Nombre de la tabla
+	 * @return boolean
+	 */
 	protected function table_exists($tabla)
 	{
 		if (empty($tabla))
@@ -261,7 +269,7 @@ class Adminbd extends ORM_Model {
 	/**
 	 * Suma los campos de un arreglo de tamaños de tablas
 	 *
-	 * @param  array  $tables_sizes Arreglo con los tamaños de las tablas
+	 * @param  array $tables_sizes Arreglo con los tamaños de las tablas
 	 * @return array
 	 */
 	public function get_tables_sizes_sums($tables_sizes = [])
@@ -308,7 +316,7 @@ class Adminbd extends ORM_Model {
 	 */
 	protected function table_size_query($base_datos = '')
 	{
-		return "SELECT '$base_datos' AS DataBaseName,
+		return "SELECT '{$base_datos}' AS DataBaseName,
     t.NAME AS TableName,
     s.Name AS SchemaName,
     p.rows AS RowCounts,
@@ -339,5 +347,5 @@ ORDER BY
 
 
 }
-/* End of file Adminbd.php */
-/* Location: ./application/models/Adminbd.php */
+// End of file Adminbd.php
+// Location: ./models/Adminbd.php

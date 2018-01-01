@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Model\Orm_model;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Modelo Despachos
  * *
@@ -35,6 +37,11 @@ class Despachos extends ORM_Model {
 	 */
 	public $limite_facturas = 5;
 
+	/**
+	 * Reglas de validacion formulario despachos
+	 *
+	 * @var array
+	 */
 	public $rules = [
 		[
 			'field' => 'rut_retail',
@@ -115,17 +122,17 @@ class Despachos extends ORM_Model {
 	/**
 	 * Recupera listado de las ultimas facturas de un RUT y modelos de materiales
 	 *
-	 * @param string $rut     RUT del retail
-	 * @param string $modelos Modelo de materiales a consultar
-	 * @return array          Arreglo con los tipos de inventiaro
+	 * @param string $rut_retail RUT del retail
+	 * @param string $modelos    Modelo de materiales a consultar
+	 * @return array
 	 */
-	public function get_listado_ultimas_facturas($rut = NULL, $modelos = NULL)
+	public function get_listado_ultimas_facturas($rut_retail = NULL, $modelos = NULL)
 	{
-		if ($rut AND $modelos)
+		if ($rut_retail && $modelos)
 		{
 			return collect(explode("\r\n", $modelos))
-				->map_with_keys(function($modelo) use ($rut) {
-					return [$modelo => $this->get_ultimas_facturas($rut, $modelo)];
+				->map_with_keys(function($modelo) use ($rut_retail) {
+					return [$modelo => $this->get_ultimas_facturas($rut_retail, $modelo)];
 				});
 		}
 	}
@@ -135,12 +142,15 @@ class Despachos extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Recupera listado de las ultimas facturas de un RUT y modelos de materiales
 	 *
-	 * @return array Arreglo con los tipos de inventiaro
+	 * @param string $rut_retail RUT del retail
+	 * @param string $modelo     Modelo de materiales a consultar
+	 * @return array
 	 */
-	public function get_ultimas_facturas($rut = NULL, $modelo = NULL)
+	public function get_ultimas_facturas($rut_retail = NULL, $modelo = NULL)
 	{
-		if ( ! $rut OR ! $modelo)
+		if ( ! $rut_retail OR ! $modelo)
 		{
 			return;
 		}
@@ -151,7 +161,7 @@ class Despachos extends ORM_Model {
 		$facturas = collect(
 			$this->db
 				->limit($this->limite_facturas)
-				->where('rut', $rut)
+				->where('rut', $rut_retail)
 				->like('texto_breve_material', $modelo)
 				->from(config('bd_despachos_pack'))
 				->order_by('fecha', 'desc')
@@ -168,5 +178,5 @@ class Despachos extends ORM_Model {
 	}
 
 }
-/* End of file Despachos.php */
-/* Location: ./application/models/Despachos.php */
+// End of file Despachos.php
+// Location: ./models/Despachos.php
