@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,13 +14,13 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Stock\Almacen_sap;
 use Stock\Stock_sap_fija;
 use Stock\Tipoalmacen_sap;
 use Stock\Stock_sap_movil;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reportes de stock
  *
@@ -38,6 +40,25 @@ class Stock_sap extends Controller_base {
 	 */
 	public $llave_modulo = 'stock_sap';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'stock_movil' => ['url'=>'{{route}}/mostrar_stock/MOVIL', 'texto'=>'lang::stock_sap_menu_movil', 'icon'=>'mobile'],
+		'stock_fija' => ['url'=>'{{route}}/mostrar_stock/FIJA', 'texto'=>'lang::stock_sap_menu_fijo', 'icon'=>'phone'],
+		'transito_fija' => ['url'=>'{{route}}/transito/FIJA', 'texto'=>'lang::stock_sap_menu_transito', 'icon'=>'send'],
+		'reporte_clasif' => ['url'=>'{{route}}/reporte_clasif', 'texto'=>'lang::stock_sap_menu_clasif', 'icon'=>'th'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'stock';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -50,30 +71,6 @@ class Stock_sap extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('stock');
-
-		$this->set_menu_modulo([
-			'stock_movil' => [
-				'url'   => "{$this->router->class}/mostrar_stock/MOVIL",
-				'texto' => lang('stock_sap_menu_movil'),
-				'icon'  => 'mobile',
-			],
-			'stock_fija' => [
-				'url'   => "{$this->router->class}/mostrar_stock/FIJA",
-				'texto' => lang('stock_sap_menu_fijo'),
-				'icon'  => 'phone',
-			],
-			'transito_fija' => [
-				'url'   => "{$this->router->class}/transito/FIJA",
-				'texto' => lang('stock_sap_menu_transito'),
-				'icon'  => 'send',
-			],
-			'reporte_clasif' => [
-				'url'   => "{$this->router->class}/reporte_clasif",
-				'texto' => lang('stock_sap_menu_clasif'),
-				'icon'  => 'th',
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -196,7 +193,7 @@ class Stock_sap extends Controller_base {
 		$data = [
 			'menu_modulo'            => $this->get_menu_modulo('transito_fija'),
 			'tabla_stock'            => $tabla_stock,
-			'combo_fechas_todas'     => $combo_fechas[request('sel_fechas','ultimodia')],
+			'combo_fechas_todas'     => $combo_fechas[request('sel_fechas', 'ultimodia')],
 			'tipo_op'                => $tipo_op,
 			'arr_mostrar'            => $arr_mostrar,
 			'datos_grafico'          => '',
@@ -241,7 +238,7 @@ class Stock_sap extends Controller_base {
 			foreach ($reporte['datos'] as $linea)
 			{
 				//array_push($arrjs_reporte, '[\'' . $linea['clasificacion'] . '\', ' . (int)($linea['monto']/1000000) . ']');
-				array_push($js_slices, '{color: \'' . $linea['color'] . '\'}');
+				array_push($js_slices, "{color: '{$linea['color']}'}");
 			}
 		}
 
@@ -253,7 +250,7 @@ class Stock_sap extends Controller_base {
 			'tipo_op'         => $tipo_op,
 			'fechas'          => $fechas,
 			'reporte'         => $reporte,
-			'reporte_js'      => '[[\'Clasificacion\', \'Monto\'], ' . implode(', ', $arrjs_reporte) . ']',
+			'reporte_js'      => "[['Clasificacion', 'Monto'], ".implode(', ', $arrjs_reporte).']',
 			'js_slices'       => '[' . implode(',', $js_slices). ']',
 		]);
 	}
@@ -301,5 +298,5 @@ class Stock_sap extends Controller_base {
 
 
 }
-/* End of file stock_sap.php */
-/* Location: ./application/controllers/stock_sap.php */
+// End of file Stock_sap.php
+// Location: ./controllers/Stock_sap.php

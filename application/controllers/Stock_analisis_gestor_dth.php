@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Stock\Log_gestor;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Analisis gestor DTH
  *
@@ -97,5 +99,5 @@ class Stock_analisis_gestor_dth extends Controller_base {
 	}
 
 }
-/* End of file stock_analisis_gestor_dth.php */
-/* Location: ./application/controllers/stock_analisis_gestor_dth.php */
+// End of file Stock_analisis_gestor_dth.php
+// Location: ./controllers/Stock_analisis_gestor_dth.php

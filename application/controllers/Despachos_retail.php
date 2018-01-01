@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,6 +14,7 @@
  * @link      localhost:1520
  *
  */
+
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
@@ -33,6 +36,13 @@ class Despachos_retail extends Controller_base {
 	 */
 	public $llave_modulo = 'iojms9128_$$21';
 
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'despachos';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -43,7 +53,6 @@ class Despachos_retail extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('despachos');
 	}
 
 	// --------------------------------------------------------------------
@@ -86,5 +95,5 @@ class Despachos_retail extends Controller_base {
 	}
 
 }
-/* End of file despachos_retail.php */
-/* Location: ./application/controllers/despachos_retail.php */
+// End of file Despachos_retail.php
+// Location: ./controllers/Despachos_retail.php

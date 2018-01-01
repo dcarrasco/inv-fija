@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -54,18 +56,24 @@ class Migration extends CI_Controller {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Imprime ayuda
+	 *
+	 * @return void
+	 */
 	private function _print_help()
 	{
-		$tab = '    ';
+		$tab_space = '    ';
+
 		echo PHP_EOL;
 		echo 'Modo de uso'.PHP_EOL;
-		echo $tab.'php index.php migration _comando_ [param1]'.PHP_EOL;
+		echo $tab_space.'php index.php migration _comando_ [param1]'.PHP_EOL;
 		echo PHP_EOL;
-		echo $tab.'Comandos'.PHP_EOL;
-		echo $tab.'find          '.$tab.'Despliega listado de migraciones disponibles'.PHP_EOL;
-		echo $tab.'latest        '.$tab.'Actualiza a la última versión disponibles'.PHP_EOL;
-		echo $tab.'migrate_config'.$tab.'Actualiza a la version definida en config/migration.php -> migration_version'.PHP_EOL;
-		echo $tab.'version [ver] '.$tab.'Actualiza a la version especificada en [ver]'.PHP_EOL;
+		echo $tab_space.'Comandos'.PHP_EOL;
+		echo $tab_space.'find          '.$tab_space.'Despliega listado de migraciones disponibles'.PHP_EOL;
+		echo $tab_space.'latest        '.$tab_space.'Actualiza a la última versión disponibles'.PHP_EOL;
+		echo $tab_space.'migrate_config'.$tab_space.'Actualiza a la version definida en config/migration.php -> migration_version'.PHP_EOL;
+		echo $tab_space.'version [ver] '.$tab_space.'Actualiza a la version especificada en [ver]'.PHP_EOL;
 		echo PHP_EOL;
 	}
 
@@ -78,7 +86,7 @@ class Migration extends CI_Controller {
 	 */
 	public function migrate_config()
 	{
-		if ( config_item('migration_version')!==0 AND ! $this->migration->current())
+		if ( config_item('migration_version')!==0 && ! $this->migration->current())
 		{
 			show_error($this->migration->error_string());
 		}
@@ -125,7 +133,6 @@ class Migration extends CI_Controller {
 		dbg($this->migration->error_string());
 	}
 
-
 }
-/* End of file migration.php */
-/* Location: ./application/controllers/migration.php */
+// End of file Migration.php
+// Location: ./controllers/Migration.php

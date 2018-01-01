@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,13 +14,13 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Inventario\catalogo;
 use Inventario\Inventario;
 use Inventario\detalle_inventario;
 use Inventario\inventario_reporte;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Análisis de inventarios
  * *
@@ -37,6 +39,25 @@ class Inventario_analisis extends Controller_base {
 	 * @var  string
 	 */
 	public $llave_modulo = 'analisis';
+
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'ajustes' => ['url'=>'{{route}}/ajustes', 'texto'=>'lang::inventario_menu_ajustes', 'icon'=>'wrench'],
+		'sube_stock' => ['url'=>'{{route}}/sube_stock', 'texto'=>'lang::inventario_menu_upload', 'icon' =>'cloud-upload'],
+		'imprime_inventario' => ['url'=>'{{route}}/imprime_inventario', 'texto'=>'lang::inventario_menu_print', 'icon' =>'print'],
+		'actualiza_precios' => ['url'=>'{{route}}/actualiza_precios', 'texto'=>'lang::inventario_menu_act_precios', 'icon' =>'usd'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'inventario';
 
 	/**
 	 * Identificador del inventario
@@ -64,30 +85,6 @@ class Inventario_analisis extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('inventario');
-
-		$this->set_menu_modulo([
-			'ajustes' => [
-				'url'   => "{$this->router->class}/ajustes",
-				'texto' => lang('inventario_menu_ajustes'),
-				'icon'  => 'wrench'
-			],
-			'sube_stock' => [
-				'url'   => "{$this->router->class}/sube_stock",
-				'texto' => lang('inventario_menu_upload'),
-				'icon'  => 'cloud-upload'
-			],
-			'imprime_inventario' => [
-				'url'   => "{$this->router->class}/imprime_inventario",
-				'texto' => lang('inventario_menu_print'),
-				'icon'  => 'print'
-			],
-			'actualiza_precios' => [
-				'url'   => "{$this->router->class}/actualiza_precios",
-				'texto' => lang('inventario_menu_act_precios'),
-				'icon'  => 'usd'
-			],
-		]);
 	}
 
 
@@ -262,7 +259,6 @@ class Inventario_analisis extends Controller_base {
 	/**
 	 * Permite imprimir el detalle del inventario
 	 *
-	 * @param  integer $id_inventario Identificador del inventario a imprimir
 	 * @return void
 	 */
 	public function imprime_inventario()
@@ -281,6 +277,11 @@ class Inventario_analisis extends Controller_base {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despliega hojas del inventario
+	 *
+	 * @return void
+	 */
 	public function imprime_inventario_validate()
 	{
 		route_validation(Inventario_reporte::create()->rules_imprime_inventario());
@@ -343,5 +344,5 @@ class Inventario_analisis extends Controller_base {
 	}
 
 }
-/* End of file inventario_analisis.php */
-/* Location: ./application/controllers/inventario_analisis.php */
+// End of file Inventario_analisis.php
+// Location: ./controllers/Inventario_analisis.php

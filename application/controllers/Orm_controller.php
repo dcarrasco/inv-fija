@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -125,5 +127,5 @@ class Orm_controller extends Controller_base {
 	}
 
 }
-/* End of file orm_controller.php */
-/* Location: ./application/controllers/orm_controller.php */
+// End of file Orm_controller.php
+// Location: ./controllers/Orm_controller.php

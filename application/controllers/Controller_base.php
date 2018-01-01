@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -41,6 +43,13 @@ class Controller_base extends CI_Controller {
 	public $menu_opciones = [];
 
 	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = [];
+
+	/**
 	 * Errores de validación
 	 *
 	 * @var Collection
@@ -64,7 +73,26 @@ class Controller_base extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+		$this->load_lang_controller();
+		$this->set_menu_modulo();
+
 		$this->errors = collect($this->session->flashdata('errors'));
+
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Carga lenguajes del controller
+	 *
+	 * @return void
+	 */
+	public function load_lang_controller()
+	{
+		collect($this->lang_controller)->each(function($lang_file) {
+			$this->lang->load($lang_file);
+		});
+
 	}
 
 	// --------------------------------------------------------------------
@@ -72,12 +100,19 @@ class Controller_base extends CI_Controller {
 	/**
 	 * Fija arreglo para el menu modulo
 	 *
-	 * @param  array $menu Arreglo con el menu
 	 * @return void
 	 */
-	public function set_menu_modulo($menu = [])
+	public function set_menu_modulo()
 	{
-		$this->menu_opciones = $menu;
+		$this->menu_opciones = collect($this->menu_opciones)->map(function($menu) {
+			$menu['url'] = str_replace('{{route}}', $this->router->class, array_get($menu, 'url'));
+
+			$menu['texto'] = substr(array_get($menu, 'texto'), 0, 6) === 'lang::'
+				? lang(substr(array_get($menu, 'texto'), 6, strlen(array_get($menu, 'texto'))))
+				: array_get($menu, 'texto');
+
+			return $menu;
+		})->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -97,5 +132,5 @@ class Controller_base extends CI_Controller {
 	}
 
 }
-/* End of file Controller_base.php */
-/* Location: ./application/controllers/Controller_base.php */
+// End of file Controller_base.php
+// Location: ./controllers/Controller_base.php

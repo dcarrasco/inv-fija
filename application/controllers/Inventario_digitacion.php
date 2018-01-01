@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,6 +14,7 @@
  * @link      localhost:1520
  *
  */
+
 if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Acl\Acl;
@@ -38,6 +41,13 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public $llave_modulo = 'inventario';
 
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'inventario';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -48,7 +58,6 @@ class Inventario_digitacion extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('inventario');
 		$this->load->library('user_agent');
 	}
 
@@ -80,7 +89,7 @@ class Inventario_digitacion extends Controller_base {
 			return $this->hoja_mobile($hoja);
 		}
 
-		if ( $hoja === 0 AND ! empty(request('hoja')))
+		if ( $hoja === 0 && ! empty(request('hoja')))
 		{
 			redirect($this->router->class.'/ingreso/'.request('hoja'));
 		}
@@ -234,6 +243,15 @@ class Inventario_digitacion extends Controller_base {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Actualiza un registro de inventario
+	 *
+	 * @param  integer $hoja        Numero de la hoja a actualizar
+	 * @param  integer $id_auditor  ID del auditor que realiza la actualizacion
+	 * @param  integer $id_registro ID del registro a actualizar
+	 *
+	 * @return redirect
+	 */
 	public function update($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
 		$detalle_inventario = new Detalle_inventario($id_registro);
@@ -272,5 +290,5 @@ class Inventario_digitacion extends Controller_base {
 	}
 
 }
-/* End of file inventario_digitacion.php */
-/* Location: ./application/controllers/inventario_digitacion.php */
+// End of file Inventario_digitacion.php
+// Location: ./controllers/Inventario_digitacion.php

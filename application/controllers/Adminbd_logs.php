@@ -1,4 +1,21 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Revision de logs servidor
@@ -19,6 +36,23 @@ class Adminbd_logs extends Controller_base {
 	 */
 	public $llave_modulo = 'j8hdajhJKHHu12';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'borra_log' => ['url'=>'{{route}}/borra_log', 'texto'=>'lang::adminbd_log_menu_borra', 'icon'=>'database'],
+		'indices' => ['url'=>'{{route}}/indices', 'texto'=>'lang::adminbd_log_menu_indices', 'icon'=>'database'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'adminbd';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -31,20 +65,6 @@ class Adminbd_logs extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('adminbd');
-
-		$this->arr_menu = [
-			'borra_log' => [
-				'url'   => "{$this->router->class}/borra_log",
-				'texto' => lang('adminbd_log_menu_borra'),
-				'icon'  => 'database',
-			],
-			'indices' => [
-				'url'   => "{$this->router->class}/indices",
-				'texto' => lang('adminbd_log_menu_indices'),
-				'icon'  => 'database',
-			],
-		];
 	}
 
 	// --------------------------------------------------------------------
@@ -98,11 +118,11 @@ class Adminbd_logs extends Controller_base {
 		$log_file = file_exists($archivo) ? file($archivo) : ['--- Archivo no encontrado ---'];
 
 		app_render_view('admindb/logs', [
-			'menu_modulo' => ['menu' => $this->arr_menu, 'mod_selected' => $menu],
+			'menu_modulo' => $this->get_menu_modulo($menu),
 			'log_file'    => $log_file,
 		]);
 	}
 
 }
-/* End of file adminbd_logs.php */
-/* Location: ./application/controllers/adminbd_logs.php */
+// End of file Adminbd_logs.php
+// Location: ./controllers/Adminbd_logs.php

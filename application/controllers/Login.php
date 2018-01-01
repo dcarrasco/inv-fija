@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Acl\Acl;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Login ACL
  *
@@ -85,6 +87,11 @@ class Login extends Controller_base {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Realiza login en el sistea
+	 *
+	 * @return redirect
+	 */
 	public function do_login()
 	{
 		$rules = array_merge(
@@ -100,7 +107,7 @@ class Login extends Controller_base {
 		$remember_me  = request('remember_me');
 
 		// si el usuario existe y no tiene fijada una clave, lo obligamos a fijarla
-		if (Acl::create()->existe_usuario($usuario) AND ! Acl::create()->tiene_clave($usuario))
+		if (Acl::create()->existe_usuario($usuario) && ! Acl::create()->tiene_clave($usuario))
 		{
 			redirect('login/cambio_password/' . $usuario);
 		}
@@ -111,7 +118,7 @@ class Login extends Controller_base {
 			: TRUE;
 
 		// si el usuario valida correctamente, redireccionamos a la app
-		if ($captcha_valido AND Acl::create()->login($usuario, $password, $remember_me === 'remember'))
+		if ($captcha_valido && Acl::create()->login($usuario, $password, $remember_me === 'remember'))
 		{
 			redirect(request('redirect_to', Acl::create()->get_redirect_app()));
 		}
@@ -163,6 +170,12 @@ class Login extends Controller_base {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Realiza cambio de password
+	 *
+	 * @param  string $usr_param Usuario a cambiar
+	 * @return redirect
+	 */
 	public function do_cambio_password($usr_param = '')
 	{
 		$rules = array_merge(
@@ -189,5 +202,5 @@ class Login extends Controller_base {
 	}
 
 }
-/* End of file login.php */
-/* Location: ./application/controllers/login.php */
+// End of file Login.php
+// Location: ./controllers/Login.php

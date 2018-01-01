@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Inventario\inventario_reporte;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reportes de Inventario
  *
@@ -35,6 +37,27 @@ class Inventario_reportes extends Controller_base {
 	 */
 	public $llave_modulo = 'reportes';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'hoja' => ['url'=>'{{route}}/listado/hoja', 'texto'=>'lang::inventario_menu_reporte_hoja', 'icon'=>'file-text-o'],
+		'material' => ['url'=>'{{route}}/listado/material', 'texto'=>'lang::inventario_menu_reporte_mat', 'icon'=>'barcode'],
+		'material_faltante' => ['url'=>'{{route}}/listado/material_faltante', 'texto'=>'lang::inventario_menu_reporte_faltante', 'icon'=>'tasks'],
+		'ubicacion' => ['url'=>'{{route}}/listado/ubicacion', 'texto'=>'lang::inventario_menu_reporte_ubicacion', 'icon'=>'map-marker'],
+		'tipos_ubicacion' => ['url'=>'{{route}}/listado/tipos_ubicacion', 'texto'=>'lang::inventario_menu_reporte_tip_ubic', 'icon'=>'th'],
+		'ajustes' => ['url'=>'{{route}}/listado/ajustes', 'texto'=>'lang::inventario_menu_reporte_ajustes', 'icon'=>'wrench'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'inventario';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -47,40 +70,6 @@ class Inventario_reportes extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('inventario');
-
-		$this->set_menu_modulo([
-			'hoja' => [
-				'url'   => "{$this->router->class}/listado/hoja",
-				'texto' => lang('inventario_menu_reporte_hoja'),
-				'icon'  => 'file-text-o'
-			],
-			'material' => [
-				'url'   => "{$this->router->class}/listado/material",
-				'texto' => lang('inventario_menu_reporte_mat'),
-				'icon'  => 'barcode'
-			],
-			'material_faltante' => [
-				'url'   => "{$this->router->class}/listado/material_faltante",
-				'texto' => lang('inventario_menu_reporte_faltante'),
-				'icon'  => 'tasks'
-			],
-			'ubicacion' => [
-				'url'   => "{$this->router->class}/listado/ubicacion",
-				'texto' => lang('inventario_menu_reporte_ubicacion'),
-				'icon'  => 'map-marker'
-			],
-			'tipos_ubicacion' => [
-				'url'   => "{$this->router->class}/listado/tipos_ubicacion",
-				'texto' => lang('inventario_menu_reporte_tip_ubic'),
-				'icon'  => 'th'
-			],
-			'ajustes' => [
-				'url'   => "{$this->router->class}/listado/ajustes",
-				'texto' => lang('inventario_menu_reporte_ajustes'),
-				'icon'  => 'wrench'
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -121,5 +110,5 @@ class Inventario_reportes extends Controller_base {
 	}
 
 }
-/* End of file inventario_reportes.php */
-/* Location: ./application/controllers/inventario_reportes.php */
+// End of file Inventario_reportes.php
+// Location: ./controllers/Inventario_reportes.php

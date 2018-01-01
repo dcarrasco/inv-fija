@@ -1,4 +1,21 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Exportar tablas
@@ -19,6 +36,13 @@ class Adminbd_exportartablas extends Controller_base {
 	 */
 	public $llave_modulo = '9js7j6809pt43j01';
 
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'adminbd';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -31,7 +55,6 @@ class Adminbd_exportartablas extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('adminbd');
 	}
 
 	// --------------------------------------------------------------------
@@ -83,5 +106,5 @@ class Adminbd_exportartablas extends Controller_base {
 
 
 }
-/* End of file Adminbd_exportartablas.php */
-/* Location: ./application/controllers/Adminbd_exportartablas.php */
+// End of file Adminbd_exportartablas.php
+// Location: ./controllers/Adminbd_exportartablas.php

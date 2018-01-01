@@ -1,4 +1,21 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Revision de queries en ejecucion
@@ -19,6 +36,13 @@ class Adminbd_espacio extends Controller_base {
 	 */
 	public $llave_modulo = 'kishuh27hbsj';
 
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'adminbd';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -29,7 +53,6 @@ class Adminbd_espacio extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('adminbd');
 	}
 
 	// --------------------------------------------------------------------
@@ -62,5 +85,5 @@ class Adminbd_espacio extends Controller_base {
 	}
 
 }
-/* End of file Adminbd_espacio.php */
-/* Location: ./application/controllers/Adminbd_espacio.php */
+// End of file Adminbd_espacio.php
+// Location: ./controllers/Adminbd_espacio.php

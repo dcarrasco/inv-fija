@@ -1,9 +1,10 @@
 <?php
-
 /**
  * INVENTARIO FIJA
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
  *
  * @category  CodeIgniter
  * @package   InventarioFija
@@ -13,11 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
-use Stock\Analisis_series;
 use Stock\Log_gestor;
+use Stock\Analisis_series;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Analisis series
  *
@@ -161,5 +162,5 @@ class Stock_analisis_series extends Controller_base {
 
 
 }
-/* End of file stock_analisis_series.php */
-/* Location: ./application/controllers/stock_analisis_series.php */
+// End of file Stock_analisis_series.php
+// Location: ./controllers/Stock_analisis_series.php

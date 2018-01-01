@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,8 +14,8 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reportes de stock
  *
@@ -33,6 +35,23 @@ class Stock_reportes_trazabilidad extends Controller_base {
 	 */
 	public $llave_modulo = 'j*&on238=B';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'perm_consumo' => ['url'=>'{{route}}/listado/perm_consumo', 'texto' => 'Permanencia Consumo'],
+		'det_consumo' => ['url'=>'{{route}}/listado/det_consumo', 'texto' => 'Detalle Series Consumo'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'stock';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -45,17 +64,6 @@ class Stock_reportes_trazabilidad extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-
-		$this->set_menu_modulo([
-			'perm_consumo' => [
-				'url' => "{$this->router->class}/listado/perm_consumo",
-				'texto' => 'Permanencia Consumo'
-			],
-			'det_consumo' => [
-				'url' => "{$this->router->class}/listado/det_consumo",
-				'texto' => 'Detalle Series Consumo'
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -194,5 +202,5 @@ class Stock_reportes_trazabilidad extends Controller_base {
 	}
 
 }
-/* End of file stock_reportes_trazabilidad.php */
-/* Location: ./application/controllers/stock_reportes_trazabilidad.php */
+// End of file Stock_reportes_trazabilidad.php
+// Location: ./controllers/Stock_reportes_trazabilidad.php

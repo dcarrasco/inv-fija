@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -39,6 +41,31 @@ class Inventario_config extends Orm_controller {
 	public $llave_modulo  = 'config2';
 
 	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'auditor' => ['url'=>'{{route}}/listado/auditor/', 'texto'=>'lang::inventario_config_menu_auditores', 'icon'=>'user'],
+		'familia' => ['url'=>'{{route}}/listado/familia', 'texto'=>'lang::inventario_config_menu_familias', 'icon'=>'th'],
+		'catalogo' => ['url'=>'{{route}}/listado/catalogo', 'texto'=>'lang::inventario_config_menu_materiales', 'icon'=>'barcode'],
+		'tipo_inventario' => ['url'=>'{{route}}/listado/tipo_inventario', 'texto'=>'lang::inventario_config_menu_tipos_inventarios', 'icon'=>'th'],
+		'inventario' => ['url'=>'{{route}}/listado/inventario', 'texto'=>'lang::inventario_config_menu_inventarios', 'icon'=>'list'],
+		'tipo_ubicacion' => ['url'=>'{{route}}/listado/tipo_ubicacion', 'texto'=>'lang::inventario_config_menu_tipo_ubicacion', 'icon'=>'th'],
+		'ubicaciones' => ['url'=>'{{route}}/ubicacion', 'texto'=>'lang::inventario_config_menu_ubicaciones', 'icon'=>'map-marker'],
+		'centro' => ['url'=>'{{route}}/listado/centro', 'texto'=>'lang::inventario_config_menu_centros', 'icon'=>'th'],
+		'almacen' => ['url'=>'{{route}}/listado/almacen', 'texto'=>'lang::inventario_config_menu_almacenes', 'icon'=>'home'],
+		'unidad_medida' => ['url'=>'{{route}}/listado/unidad_medida', 'texto'=>'lang::inventario_config_menu_unidades_medida', 'icon'=>'balance-scale'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'inventario';
+
+	/**
 	 * Namespace de los modelos
 	 *
 	 * @var string
@@ -57,60 +84,6 @@ class Inventario_config extends Orm_controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('inventario');
-
-		$this->set_menu_modulo([
-			'auditor' => [
-				'url'   => "{$this->router->class}/listado/auditor/",
-				'texto' => lang('inventario_config_menu_auditores'),
-				'icon'  => 'user',
-			],
-			'familia' => [
-				'url'   => "{$this->router->class}/listado/familia",
-				'texto' => lang('inventario_config_menu_familias'),
-				'icon'  => 'th',
-			],
-			'catalogo' => [
-				'url'   => "{$this->router->class}/listado/catalogo",
-				'texto' => lang('inventario_config_menu_materiales'),
-				'icon'  => 'barcode',
-			],
-			'tipo_inventario' => [
-				'url'   => "{$this->router->class}/listado/tipo_inventario",
-				'texto' => lang('inventario_config_menu_tipos_inventarios'),
-				'icon'  => 'th',
-			],
-			'inventario' => [
-				'url'   => "{$this->router->class}/listado/inventario",
-				'texto' => lang('inventario_config_menu_inventarios'),
-				'icon'  => 'list',
-			],
-			'tipo_ubicacion' => [
-				'url'   => "{$this->router->class}/listado/tipo_ubicacion",
-				'texto' => lang('inventario_config_menu_tipo_ubicacion'),
-				'icon'  => 'th',
-			],
-			'ubicaciones' => [
-				'url'   => "{$this->router->class}/ubicacion",
-				'texto' => lang('inventario_config_menu_ubicaciones'),
-				'icon'  => 'map-marker',
-			],
-			'centro' => [
-				'url'   => "{$this->router->class}/listado/centro",
-				'texto' => lang('inventario_config_menu_centros'),
-				'icon'  => 'th',
-			],
-			'almacen' => [
-				'url'   => "{$this->router->class}/listado/almacen",
-				'texto' => lang('inventario_config_menu_almacenes'),
-				'icon'  => 'home',
-			],
-			'unidad_medida' => [
-				'url'   => "{$this->router->class}/listado/unidad_medida",
-				'texto' => lang('inventario_config_menu_unidades_medida'),
-				'icon'  => 'balance-scale',
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -255,8 +228,6 @@ class Inventario_config extends Orm_controller {
 			->set_output(json_encode($arr_ubic));
 	}
 
-
-
 }
-/* End of file inventario_config.php */
-/* Location: ./application/controllers/inventario_config.php */
+// End of file Inventario_config.php
+// Location: ./controllers/Inventario_config.php

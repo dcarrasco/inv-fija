@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,12 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
-
 
 use Toa\Uso;
 use Toa\Empresa_toa;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Uso TOA
  *
@@ -37,6 +38,24 @@ class Toa_uso extends Controller_base {
 	 */
 	public $llave_modulo = 'j8snpo92bpwt';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'reporte' => ['url'=>'{{route}}/uso', 'texto'=>'lang::uso_menu_reporte', 'icon'=>'bar-chart' ],
+		'genera' => ['url'=>'{{route}}/genera', 'texto'=>'lang::uso_menu_genera', 'icon'=>'list' ],
+		'evolucion_tecnico' => ['url'=>'{{route}}/evolucion_tecnico', 'texto'=>'lang::uso_menu_evolucion_tecnico', 'icon'=>'user' ],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'toa';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -47,25 +66,6 @@ class Toa_uso extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('toa');
-
-		$this->set_menu_modulo([
-			'reporte' => [
-				'url'   => "{$this->router->class}/uso",
-				'texto' => lang('uso_menu_reporte'),
-				'icon'  => 'bar-chart'
-			],
-			'genera' => [
-				'url'   => "{$this->router->class}/genera",
-				'texto' => lang('uso_menu_genera'),
-				'icon'  => 'list'
-			],
-			'evolucion_tecnico' => [
-				'url'   => "{$this->router->class}/evolucion_tecnico",
-				'texto' => lang('uso_menu_evolucion_tecnico'),
-				'icon'  => 'user'
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -110,15 +110,15 @@ class Toa_uso extends Controller_base {
 	/**
 	 * Actualiza combobox agencias
 	 *
-	 * @param  string $empresa Empresa a buscar
-	 * @param  string $mes     Mes a buscar
+	 * @param  string $mes_buscar Mes a buscar
+	 * @param  string $empresa    Empresa a buscar
 	 * @return void
 	 */
-	public function ajax_combo_agencia($mes = NULL, $empresa = NULL)
+	public function ajax_combo_agencia($mes_buscar = NULL, $empresa = NULL)
 	{
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Uso::create()->combo_agencia($mes, $empresa)));
+			->set_output(form_print_options(Uso::create()->combo_agencia($mes_buscar, $empresa)));
 
 	}
 
@@ -127,15 +127,15 @@ class Toa_uso extends Controller_base {
 	/**
 	 * Actualiza combobox tecnicos
 	 *
-	 * @param  string $empresa Empresa a buscar
-	 * @param  string $mes     Mes a buscar
+	 * @param  string $mes_buscar Mes a buscar
+	 * @param  string $empresa    Empresa a buscar
 	 * @return void
 	 */
-	public function ajax_combo_tecnico($mes = NULL, $empresa = NULL)
+	public function ajax_combo_tecnico($mes_buscar = NULL, $empresa = NULL)
 	{
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Uso::create()->combo_tecnico($mes, $empresa)));
+			->set_output(form_print_options(Uso::create()->combo_tecnico($mes_buscar, $empresa)));
 
 	}
 
@@ -174,6 +174,11 @@ class Toa_uso extends Controller_base {
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Despluega evolucion de uso de TOA en tecnicos
+	 *
+	 * @return void
+	 */
 	public function evolucion_tecnico()
 	{
 		form_validation(Uso::create()->rules_evolucion_uso_tecnico);
@@ -187,5 +192,5 @@ class Toa_uso extends Controller_base {
 	}
 
 }
-/* End of file Toa_uso.php */
-/* Location: ./application/controllers/Toa_uso.php */
+// End of file Toa_uso.php
+// Location: ./controllers/Toa_uso.php

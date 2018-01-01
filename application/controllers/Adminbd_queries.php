@@ -1,4 +1,21 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+/**
+ * INVENTARIO FIJA
+ *
+ * Aplicacion de conciliacion de inventario para la logistica fija.
+ *
+ * PHP version 7
+ *
+ * @category  CodeIgniter
+ * @package   InventarioFija
+ * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
+ * @copyright 2015 - DCR
+ * @license   MIT License
+ * @link      localhost:1520
+ *
+ */
+
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase Controller Revision de queries en ejecucion
@@ -19,6 +36,13 @@ class Adminbd_queries extends Controller_base {
 	 */
 	public $llave_modulo = 'jk8jkljKLJH28';
 
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'adminbd';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -29,7 +53,6 @@ class Adminbd_queries extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('adminbd');
 	}
 
 	// --------------------------------------------------------------------
@@ -57,11 +80,11 @@ class Adminbd_queries extends Controller_base {
 
 		app_render_view('admindb/queries', [
 			'queries_data' => Adminbd::create()->get_running_queries(),
-			'extra_styles' => $reload_secs > 0 ? "<meta http-equiv=\"refresh\" content=\"{$reload_secs};URL='".$this->router->class."'\">" : '',
+			'extra_styles' => $reload_secs > 0 ? "<meta http-equiv=\"refresh\" content=\"{$reload_secs};URL='{$this->router->class}'\">" : '',
 			'actualizado_el' => date('Y-m-d H:i:s'),
 		]);
 	}
 
 }
-/* End of file Adminbd_queries.php */
-/* Location: ./application/controllers/Adminbd_queries.php */
+// End of file Adminbd_queries.php
+// Location: ./controllers/Adminbd_queries.php

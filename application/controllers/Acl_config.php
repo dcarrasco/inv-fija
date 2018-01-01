@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,10 +14,10 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Acl\modulo;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Configuracion ACL (access control list)
  *
@@ -38,6 +40,25 @@ class Acl_config extends Orm_controller {
 	public $llave_modulo  = 'acl_config';
 
 	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'usuario' => ['url'=>'{{route}}/listado/usuario', 'texto'=>'lang::acl_config_menu_usuarios', 'icon'=>'user'],
+		'app' => ['url'=>'{{route}}/listado/app', 'texto'=>'lang::acl_config_menu_aplicaciones', 'icon'=>'folder-o'],
+		'rol' => ['url'=>'{{route}}/listado/rol', 'texto'=>'lang::acl_config_menu_roles', 'icon'=>'server'],
+		'modulo' => ['url'=>'{{route}}/listado/modulo', 'texto'=>'lang::acl_config_menu_modulos', 'icon'=>'list-alt'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'acl';
+
+	/**
 	 * Namespace de los modelos
 	 *
 	 * @var string
@@ -56,30 +77,6 @@ class Acl_config extends Orm_controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('acl');
-
-		$this->set_menu_modulo([
-			'usuario' => [
-				'url'   => "{$this->router->class}/listado/usuario",
-				'texto' => lang('acl_config_menu_usuarios'),
-				'icon'  => 'user',
-			],
-			'app' => [
-				'url'   => "{$this->router->class}/listado/app",
-				'texto' => lang('acl_config_menu_aplicaciones'),
-				'icon'  => 'folder-o',
-			],
-			'rol' => [
-				'url'   => "{$this->router->class}/listado/rol",
-				'texto' => lang('acl_config_menu_roles'),
-				'icon'  => 'server',
-			],
-			'modulo' => [
-				'url'   => "{$this->router->class}/listado/modulo",
-				'texto' => lang('acl_config_menu_modulos'),
-				'icon'  => 'list-alt',
-			],
-		]);
 	}
 
 
@@ -102,5 +99,5 @@ class Acl_config extends Orm_controller {
 	}
 
 }
-/* End of file acl_config.php */
-/* Location: ./application/controllers/acl_config.php */
+// End of file Acl_config.php
+// Location: ./controllers/Acl_config.php

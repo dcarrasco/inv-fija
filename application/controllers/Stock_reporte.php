@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,11 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Stock\Reporte_stock;
 use Stock\Tipoalmacen_sap;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reportes de stock
  *
@@ -38,6 +40,25 @@ class Stock_reporte extends Controller_base {
 	 */
 	public $llave_modulo = 'odk9@i2_23';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'permanencia' => ['url'=>'{{route}}/listado/permanencia', 'texto'=>'lang::stock_perm_menu_perm', 'icon'=>'clock-o'],
+		'mapastock' => ['url'=>'{{route}}/mapastock', 'texto'=>'lang::stock_perm_menu_mapa', 'icon'=>'globe'],
+		'movhist' => ['url'=>'{{route}}/movhist', 'texto'=>'lang::stock_perm_menu_movs', 'icon'=>'calendar'],
+		'est03' => ['url'=>'{{route}}/est03', 'texto'=>'lang::stock_perm_menu_est03', 'icon'=>'refresh'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'stock';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -50,30 +71,6 @@ class Stock_reporte extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('stock');
-
-		$this->set_menu_modulo([
-			'permanencia' => [
-				'url'   => "{$this->router->class}/listado/permanencia",
-				'texto' => lang('stock_perm_menu_perm'),
-				'icon'  => 'clock-o',
-			],
-			'mapastock' => [
-				'url'   => "{$this->router->class}/mapastock",
-				'texto' => lang('stock_perm_menu_mapa'),
-				'icon'  => 'globe',
-			],
-			'movhist' => [
-				'url'   => "{$this->router->class}/movhist",
-				'texto' => lang('stock_perm_menu_movs'),
-				'icon'  => 'calendar',
-			],
-			'est03' => [
-				'url'   => "{$this->router->class}/est03",
-				'texto' => lang('stock_perm_menu_est03'),
-				'icon'  => 'refresh',
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -105,7 +102,7 @@ class Stock_reporte extends Controller_base {
 
 		$reporte = new Reporte_stock;
 
-		if (form_validation($reporte->rules_permanencia) AND $tipo === 'permanencia')
+		if (form_validation($reporte->rules_permanencia) && $tipo === 'permanencia')
 		{
 			$reporte->get_campos_reporte_permanencia();
 			$reporte->get_reporte_permanencia($reporte->get_config_reporte_permanencia());
@@ -335,5 +332,5 @@ class Stock_reporte extends Controller_base {
 	}
 
 }
-/* End of file stock_reporte.php */
-/* Location: ./application/controllers/stock_reporte.php */
+// End of file Stock_reporte.php
+// Location: ./controllers/Stock_reporte.php

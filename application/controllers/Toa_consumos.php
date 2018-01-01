@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,11 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
 use Toa\Consumo_toa;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reporte de consumos TOA
  *
@@ -128,7 +130,7 @@ class Toa_consumos extends Controller_base {
 			])
 			->create_map();
 
-		set_message(($id_peticion AND ! $peticion) ? lang('toa_consumo_peticion_not_found') : '');
+		set_message(($id_peticion && ! $peticion) ? lang('toa_consumo_peticion_not_found') : '');
 
 		app_render_view('toa/detalle_peticion', [
 			'tipo_peticion' => strtoupper(substr($id_peticion, 0, 3)) === 'INC' ? 'repara' : 'instala',
@@ -138,5 +140,5 @@ class Toa_consumos extends Controller_base {
 	}
 
 }
-/* End of file Toa_consumos.php */
-/* Location: ./application/controllers/Toa_consumos.php */
+// End of file Toa_consumos.php
+// Location: ./controllers/Toa_consumos.php

@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,7 +14,6 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Toa\Stock;
 use Toa\Ciudad_toa;
@@ -23,6 +24,7 @@ use Toa\Asignacion_toa;
 use Toa\Tipo_trabajo_toa;
 use Toa\Empresa_ciudad_toa;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Reporte de consumos TOA
  *
@@ -42,6 +44,30 @@ class Toa_controles extends Controller_base {
 	 */
 	public $llave_modulo = 'oknsk82js7s';
 
+	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'consumos' => ['url'=>'{{route}}/consumos', 'texto'=>'lang::toa_controles_tecnicos', 'icon'=>'user'],
+		'materiales_consumidos' => ['url'=>'{{route}}/materiales_consumidos', 'texto'=>'lang::toa_controles_materiales_consumidos', 'icon'=>'tv'],
+		'materiales' => ['url'=>'{{route}}/materiales', 'texto'=>'lang::toa_controles_materiales', 'icon'=>'file-text-o'],
+		'asignaciones' => ['url'=>'{{route}}/asignaciones', 'texto'=>'lang::toa_controles_asignaciones', 'icon'=>'archive'],
+		'stock' => ['url'=>'{{route}}/stock', 'texto'=>'lang::toa_controles_stock', 'icon'=>'signal'],
+		'stock_tecnicos' => ['url'=>'{{route}}/stock_tecnicos', 'texto'=>'lang::toa_controles_stock_tecnicos', 'icon'=>'truck'],
+		'nuevos_tecnicos' => ['url'=>'{{route}}/nuevos_tecnicos', 'texto'=>'lang::toa_controles_nuevos_tecnicos', 'icon'=>'users'],
+		'tecnicos_sin_ciudad' => ['url'=>'{{route}}/tecnicos_sin_ciudad', 'texto'=>'lang::toa_controles_ciudades_tecnicos', 'icon'=>'map-marker'],
+		'clientes' => ['url'=>'{{route}}/clientes', 'texto'=>'lang::toa_controles_clientes', 'icon'=>'users'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'toa';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -52,55 +78,6 @@ class Toa_controles extends Controller_base {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('toa');
-
-		$this->set_menu_modulo([
-			'consumos' => [
-				'url'   => "{$this->router->class}/consumos",
-				'texto' => lang('toa_controles_tecnicos'),
-				'icon'  => 'user'
-			],
-			'materiales_consumidos' => [
-				'url'   => "{$this->router->class}/materiales_consumidos",
-				'texto' => lang('toa_controles_materiales_consumidos'),
-				'icon'  => 'tv'
-			],
-			'materiales' => [
-				'url'   => "{$this->router->class}/materiales",
-				'texto' => lang('toa_controles_materiales'),
-				'icon'  => 'file-text-o'
-			],
-			'asignaciones' => [
-				'url'   => "{$this->router->class}/asignaciones",
-				'texto' => lang('toa_controles_asignaciones'),
-				'icon'  => 'archive'
-			],
-			'stock' => [
-				'url'   => "{$this->router->class}/stock",
-				'texto' => lang('toa_controles_stock'),
-				'icon'  => 'signal'
-			],
-			'stock_tecnicos' => [
-				'url'   => "{$this->router->class}/stock_tecnicos",
-				'texto' => lang('toa_controles_stock_tecnicos'),
-				'icon'  => 'truck'
-			],
-			'nuevos_tecnicos' => [
-				'url'   => "{$this->router->class}/nuevos_tecnicos",
-				'texto' => lang('toa_controles_nuevos_tecnicos'),
-				'icon'  => 'users'
-			],
-			'tecnicos_sin_ciudad' => [
-				'url'   => "{$this->router->class}/tecnicos_sin_ciudad",
-				'texto' => lang('toa_controles_ciudades_tecnicos'),
-				'icon'  => 'map-marker'
-			],
-			'clientes' => [
-				'url'   => "{$this->router->class}/clientes",
-				'texto' => lang('toa_controles_clientes'),
-				'icon'  => 'users'
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -404,11 +381,11 @@ class Toa_controles extends Controller_base {
 			'menu_modulo'     => $this->get_menu_modulo('clientes'),
 			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
 			'clientes'        => Consumo_toa::create()->consumo_clientes(request('cliente'), request('fecha_desde'), request('fecha_hasta'), request('dato')),
-			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-','',request('fecha_desde')).'/'.str_replace('-','',request('fecha_hasta')).'/',
+			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-', '', request('fecha_desde')).'/'.str_replace('-', '', request('fecha_hasta')).'/',
 		]);
 	}
 
 }
 
-/* End of file Toa_controles.php */
-/* Location: ./application/controllers/Toa_controles.php */
+// End of file Toa_controles.php
+// Location: ./controllers/Toa_controles.php

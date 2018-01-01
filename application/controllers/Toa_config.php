@@ -4,6 +4,8 @@
  *
  * Aplicacion de conciliacion de inventario para la logistica fija.
  *
+ * PHP version 7
+ *
  * @category  CodeIgniter
  * @package   InventarioFija
  * @author    Daniel Carrasco <danielcarrasco17@gmail.com>
@@ -12,11 +14,11 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 use Toa\Ciudad_toa;
 use Toa\Empresa_ciudad_toa;
 
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * Clase Controller Configuracion de TOA
  *
@@ -39,6 +41,32 @@ class Toa_config extends Orm_controller {
 	public $llave_modulo  = 'config_toa';
 
 	/**
+	 * Menu de opciones del modulo
+	 *
+	 * @var  array
+	 */
+	public $menu_opciones = [
+		'tecnico_toa' => ['url'=>'{{route}}/listado/tecnico_toa', 'texto'=>'lang::toa_config_menu_tecnico', 'icon'=>'user'],
+		'empresa_toa' => ['url'=>'{{route}}/listado/empresa_toa', 'texto'=>'lang::toa_config_menu_empresa', 'icon'=>'home'],
+		'tipo_trabajo_toa' => ['url'=>'{{route}}/listado/tipo_trabajo_toa', 'texto'=>'lang::toa_config_menu_tipo_trabajo', 'icon'=>'television',
+		],
+		'tip_material_toa' => ['url'=>'{{route}}/listado/tip_material_toa', 'texto'=>'lang::toa_config_menu_tipo_material', 'icon'=>'object-group',
+		],
+		'ciudad_toa' => ['url'=>'{{route}}/listado/ciudad_toa', 'texto'=>'lang::toa_config_menu_ciudad', 'icon'=>'map-marker'],
+		'empresa_ciudad_toa' => ['url'=>'{{route}}/listado/empresa_ciudad_toa', 'texto'=>'lang::toa_config_menu_empresa_ciudad', 'icon'=>'map-marker',
+		],
+		'ps_vpi_toa' => ['url'=>'{{route}}/listado/ps_vpi_toa', 'texto'=>'lang::toa_config_menu_ps_vpi', 'icon'=>'list'],
+		'clave_cierre' => ['url'=>'{{route}}/listado/clave_cierre', 'texto'=>'lang::toa_config_menu_clave_cierre', 'icon'=>'list'],
+	];
+
+	/**
+	 * Lenguajes a cargar
+	 *
+	 * @var  array|string
+	 */
+	public $lang_controller = 'toa';
+
+	/**
 	 * Namespace de los modelos
 	 *
 	 * @var string
@@ -57,50 +85,6 @@ class Toa_config extends Orm_controller {
 	public function __construct()
 	{
 		parent::__construct();
-		$this->lang->load('toa');
-
-		$this->set_menu_modulo([
-			'tecnico_toa' => [
-				'url'   => "{$this->router->class}/listado/tecnico_toa",
-				'texto' => lang('toa_config_menu_tecnico'),
-				'icon'  => 'user',
-			],
-			'empresa_toa' => [
-				'url'   => "{$this->router->class}/listado/empresa_toa",
-				'texto' => lang('toa_config_menu_empresa'),
-				'icon'  => 'home',
-			],
-			'tipo_trabajo_toa' => [
-				'url'   => "{$this->router->class}/listado/tipo_trabajo_toa",
-				'texto' => lang('toa_config_menu_tipo_trabajo'),
-				'icon'  => 'television',
-			],
-			'tip_material_toa' => [
-				'url'   => "{$this->router->class}/listado/tip_material_toa",
-				'texto' => lang('toa_config_menu_tipo_material'),
-				'icon'  => 'object-group',
-			],
-			'ciudad_toa' => [
-				'url'   => "{$this->router->class}/listado/ciudad_toa",
-				'texto' => lang('toa_config_menu_ciudad'),
-				'icon'  => 'map-marker',
-			],
-			'empresa_ciudad_toa' => [
-				'url'   => "{$this->router->class}/listado/empresa_ciudad_toa",
-				'texto' => lang('toa_config_menu_empresa_ciudad'),
-				'icon'  => 'map-marker',
-			],
-			'ps_vpi_toa' => [
-				'url'   => "{$this->router->class}/listado/ps_vpi_toa",
-				'texto' => lang('toa_config_menu_ps_vpi'),
-				'icon'  => 'list',
-			],
-			'clave_cierre' => [
-				'url'   => "{$this->router->class}/listado/clave_cierre",
-				'texto' => lang('toa_config_menu_clave_cierre'),
-				'icon'  => 'list',
-			],
-		]);
 	}
 
 	// --------------------------------------------------------------------
@@ -122,5 +106,5 @@ class Toa_config extends Orm_controller {
 	}
 
 }
-/* End of file toa_config.php */
-/* Location: ./application/controllers/toa_config.php */
+// End of file Toa_config.php
+// Location: ./controllers/Toa_config.php
