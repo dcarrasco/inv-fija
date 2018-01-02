@@ -2,6 +2,8 @@
 
 namespace test;
 
+use ReflectionClass;
+
 /**
  * Clase de testeo
  *
@@ -103,6 +105,19 @@ class test_case {
 	public function get_backtrace()
 	{
 	    return $this->backtrace;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve un controller de codeigniter, sin usar el constructor
+	 *
+	 * @param  string $class Clase del controller a cargar
+	 * @return mixed
+	 */
+	public function load_controller($class)
+	{
+		return (new ReflectionClass($class))->newInstanceWithoutConstructor();
 	}
 
 	// --------------------------------------------------------------------

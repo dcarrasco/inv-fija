@@ -73,11 +73,11 @@ class Controller_base extends CI_Controller {
 	public function __construct()
 	{
 		parent::__construct();
+
 		$this->load_lang_controller();
 		$this->set_menu_modulo();
 
 		$this->errors = collect($this->session->flashdata('errors'));
-
 	}
 
 	// --------------------------------------------------------------------
@@ -126,7 +126,7 @@ class Controller_base extends CI_Controller {
 	public function get_menu_modulo($opcion = NULL)
 	{
 		return [
-			'menu'         => $this->menu_opciones,
+			'menu' => $this->menu_opciones,
 			'mod_selected' => $opcion
 		];
 	}
