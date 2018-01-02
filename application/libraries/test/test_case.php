@@ -117,7 +117,15 @@ class test_case {
 	 */
 	public function load_controller($class)
 	{
-		return (new ReflectionClass($class))->newInstanceWithoutConstructor();
+		$class_object = (new ReflectionClass($class))->newInstanceWithoutConstructor();
+
+		$ci_properties = ['benchmark', 'hooks', 'config', 'log', 'utf8', 'uri', 'router', 'output', 'security', 'input', 'lang', 'load', 'db', 'form_validation', 'session', 'parser', 'unit'];
+
+		collect($ci_properties)->each(function($property) use (&$class_object) {
+			$class_object->{$property} =& $this->ci->{$property};
+		});
+
+		return $class_object;
 	}
 
 	// --------------------------------------------------------------------

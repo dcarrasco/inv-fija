@@ -55,7 +55,6 @@ class test_controller_base extends test_case {
 	public function test_set_menu_modulo()
 	{
 		$controller = $this->load_controller('Controller_base');
-		$controller->router = $this->ci->router;
 
 		$controller->menu_opciones = [
 			'menu1' => ['url'=>'{{route}}/ruta1', 'texto'=>'lang::ut_passed'],
