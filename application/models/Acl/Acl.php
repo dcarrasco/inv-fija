@@ -135,11 +135,13 @@ class Acl extends Orm_Model {
 	/**
 	 * Constructor de la clase
 	 *
+	 * @param  string $id_object ID
+	 * @param  array  $ci_object Object CI
 	 * @return  void
 	 */
-	public function __construct()
+	public function __construct($id_object = NULL, $ci_object = [])
 	{
-		parent::__construct();
+		parent::__construct($id_object, $ci_object);
 
 		$this->load->helper('captcha');
 	}
@@ -702,7 +704,7 @@ class Acl extends Orm_Model {
 	 */
 	public function set_rememberme_cookie($usuario = '')
 	{
-		$token = substr(base64_encode(mcrypt_create_iv(32, MCRYPT_DEV_URANDOM)), 0, 32);
+		$token = random_bytes(32);
 		$salt  = $this->_create_salt();
 
 		// Graba la cookie que recuerda la sesion

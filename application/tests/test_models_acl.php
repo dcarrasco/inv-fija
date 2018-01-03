@@ -1,6 +1,7 @@
 <?php
 
 use test\test_case;
+use test\mock_object;
 
 /**
  * testeo clase collection
@@ -16,15 +17,6 @@ class test_models_acl extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	public function test_acl()
-	{
-		$this->assert_is_object(new Acl\Acl);
-		$this->assert_empty(Acl\Acl::create()->get_fields());
-		$this->assert_not_empty(Acl\Acl::create()->rules_login);
-		$this->assert_not_empty(Acl\Acl::create()->rules_captcha);
-		$this->assert_not_empty(Acl\Acl::create()->change_password_validation);
 	}
 
 	public function test_app()
