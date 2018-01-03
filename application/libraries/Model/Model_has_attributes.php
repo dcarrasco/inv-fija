@@ -60,6 +60,11 @@ trait Model_has_attributes {
 			return $this->values[$campo];
 		}
 
+		if (array_key_exists($campo, $this->ci_object))
+		{
+			return $this->ci_object[$campo];
+		}
+
 		return get_instance()->{$campo};
 	}
 
