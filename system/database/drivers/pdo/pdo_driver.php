@@ -131,6 +131,8 @@ class CI_DB_pdo_driver extends CI_DB {
 			$this->options[PDO::ATTR_PERSISTENT] = TRUE;
 		}
 
+		$this->options[PDO::ATTR_TIMEOUT] = 180;
+
 		try
 		{
 			return new PDO($this->dsn, $this->username, $this->password, $this->options);
