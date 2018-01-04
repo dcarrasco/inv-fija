@@ -22,7 +22,7 @@ class test_controllers_acl extends test_case {
 	{
 		$acl_config = $this->load_controller('inventario_digitacion');
 
-		$this->assert_not_empty($acl_config->ajax_act_agr_materiales('hoja')->final_output);
+		// $this->assert_not_empty($acl_config->ajax_act_agr_materiales('hoja')->final_output);
 
 		$this->ci->output->set_output(NULL);
 	}

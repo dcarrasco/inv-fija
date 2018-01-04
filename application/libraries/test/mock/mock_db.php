@@ -113,6 +113,20 @@ class mock_db {
 
 	// --------------------------------------------------------------------
 
+	public function count_all_results()
+	{
+		return count($this->return_result);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function num_rows()
+	{
+		return count($this->return_result);
+	}
+
+	// --------------------------------------------------------------------
+
 	public function row()
 	{
 		return (object) $this->return_result;
