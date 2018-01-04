@@ -29,12 +29,12 @@
 		<thead>
 			<tr>
 				<th>n</th>
+				<th>Filename</th>
+				<th>Line Number</th>
 				<th>Test Name</th>
 				<th>Test Datatype</th>
 				<th>Expected Datatype</th>
 				<th>Result</th>
-				<th>Filename</th>
-				<th>Line Number</th>
 				<!-- <th>Notes</th> -->
 			</tr>
 		</thead>

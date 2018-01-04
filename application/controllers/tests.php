@@ -46,7 +46,7 @@ class Tests extends Controller_base {
 	{
 		parent::__construct();
 
-		if ( ! is_cli())
+		if ( ! is_cli() && ENVIRONMENT === 'production')
 		{
 			show_404();
 		}

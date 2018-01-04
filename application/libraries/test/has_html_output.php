@@ -25,9 +25,23 @@ trait has_html_output {
 	{
 		$test_report = $results_collection
 			->map(function($result) {
-				$result['Result'] = $this->format_html_result(array_get($result, 'Result'));
+				return [
+					'n' => array_get($result, 'n'),
+					'File Name' => array_get($result, 'File Name'),
+					'Line Number' => array_get($result, 'Line Number'),
+					'Test Name' => array_get($result, 'Test Name'),
+					'Test Datatype' => array_get($result, 'Test Datatype'),
+					'Expected Datatype' => array_get($result, 'Expected Datatype'),
+					'Result' => $this->format_html_result(array_get($result, 'Result')),
+					'Notes' => array_get($result, 'Notes'),
+				];
+			})
+			->map(function($result) {
+				$class = strpos(array_get($result, 'Result'), lang('ut_passed')) === FALSE
+					? ' class="danger"'
+					: '';
 
-				return '<tr><td>'.collect($result)->except(['Notes'])->implode('</td><td>').'</td></tr>';
+				return "<tr{$class}><td>".collect($result)->except(['Notes'])->implode('</td><td>').'</td></tr>';
 			})
 			->implode();
 
