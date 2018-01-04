@@ -35,7 +35,7 @@
 				<th>Test Datatype</th>
 				<th>Expected Datatype</th>
 				<th>Result</th>
-				<!-- <th>Notes</th> -->
+				<th>Notes</th>
 			</tr>
 		</thead>
 		{test_report}

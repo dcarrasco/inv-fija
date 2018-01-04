@@ -33,7 +33,8 @@ trait has_html_output {
 					'Test Datatype' => array_get($result, 'Test Datatype'),
 					'Expected Datatype' => array_get($result, 'Expected Datatype'),
 					'Result' => $this->format_html_result(array_get($result, 'Result')),
-					'Notes' => array_get($result, 'Notes'),
+					'Notes' => array_get($result, 'Result') === lang('ut_passed')
+						? '' : str_replace("\n", '<br>', array_get($result, 'Notes.error_message')),
 				];
 			})
 			->map(function($result) {
@@ -41,7 +42,7 @@ trait has_html_output {
 					? ' class="danger"'
 					: '';
 
-				return "<tr{$class}><td>".collect($result)->except(['Notes'])->implode('</td><td>').'</td></tr>';
+				return "<tr{$class}><td>".collect($result)->implode('</td><td>').'</td></tr>';
 			})
 			->implode();
 
