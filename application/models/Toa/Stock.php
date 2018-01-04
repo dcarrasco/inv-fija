@@ -249,12 +249,13 @@ class Stock extends ORM_Model {
 
 		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
 		$stock = $this->result_to_month_table($this->get_datos_stock_tecnicos($empresa, $anomes, $dato_desplegar));
+		$arr_dias_mes = get_arr_dias_mes($anomes);
 
-		return $tecnicos->map_with_keys(function($tecnico) use ($stock) {
+		return $tecnicos->map_with_keys(function($tecnico) use ($stock, $arr_dias_mes) {
 			return [$tecnico->id_tecnico => [
 				'tecnico'     => $tecnico->tecnico,
 				'rut'         => $tecnico->rut,
-				'actuaciones' => $stock->get($tecnico->id_tecnico, []),
+				'actuaciones' => $stock->get($tecnico->id_tecnico, $arr_dias_mes),
 				'con_datos'   => collect($stock->get($tecnico->id_tecnico))->sum(),
 			]];
 		});
