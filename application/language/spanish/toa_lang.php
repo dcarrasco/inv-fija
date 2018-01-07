@@ -1,10 +1,11 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 
-$lang['consumo_parametros']  = 'Par&aacute;metros consulta';
-$lang['consumo_fechas']      = 'Seleccionar rango fechas';
-$lang['consumo_reporte']     = 'Seleccionar reporte';
-$lang['consumo_btn_reporte'] = 'Ver reporte';
+$lang['consumo_parametros']        = 'Par&aacute;metros consulta';
+$lang['consumo_fechas']            = 'Seleccionar rango fechas';
+$lang['consumo_reporte']           = 'Seleccionar reporte';
+$lang['consumo_btn_reporte']       = 'Ver reporte';
+$lang['consumo_btn_nuevo_reporte'] = 'Generar reporte';
 
 $lang['toa_consumo_peticion_legend']        = 'Buscar petici&oacute;n';
 $lang['toa_consumo_peticion_label']         = 'Petici&oacute;n';

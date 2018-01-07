@@ -1,5 +1,6 @@
 <div class="accordion">
 	<?= form_open('','method="get" id="frm_param" class="form-inline"'); ?>
+	<?= form_hidden('nuevo_reporte', ''); ?>
 	<div class="panel panel-default">
 
 
@@ -24,16 +25,20 @@
 						<?= form_dropdown('empresa', $combo_empresas, request('empresa'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-xs-6 form_group <?= form_has_error_class('mes') ?>">
+					<div class="col-xs-4 form_group <?= form_has_error_class('mes') ?>">
 						<label class="control-label">{_controles_tecnicos_meses_}</label>
 						<?= form_month('mes', request('mes'), 'class="form-control"'); ?>
 					</div>
 
-					<div class="col-xs-2">
+					<div class="col-xs-4">
 						<div class="pull-right">
 							<button type="submit" class="btn btn-primary">
 								<span class="fa fa-search"></span>
 								{_consumo_btn_reporte_}
+							</button>
+							<button type="button" class="btn btn-default" value="nuevo_reporte" id="nuevo-reporte">
+								<span class="fa fa-file-text-o"></span>
+								{_consumo_btn_nuevo_reporte_}
 							</button>
 						</div>
 					</div>
@@ -44,6 +49,8 @@
 	</div>
 	<?= form_close(); ?>
 </div>
+
+{genera_data}
 
 <?php if ($form_validated): ?>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -371,3 +378,13 @@ function drawCharts() {
 
 </script>
 <?php endif ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#nuevo-reporte').click(function (event) {
+		event.preventDefault();
+		$('#frm_param input[name="nuevo_reporte"]').val('nuevo_reporte');
+		$('#frm_param').submit();
+	});
+});
+</script>

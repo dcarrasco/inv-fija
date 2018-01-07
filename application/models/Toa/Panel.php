@@ -197,7 +197,7 @@ class Panel extends ORM_Model {
 	{
 		$sum_indicador1 = $this->get_resumen_usage($indicador1, $empresa, $anomes);
 		$sum_indicador2 = $this->get_resumen_usage($indicador2, $empresa, $anomes);
-		$usage = ($sum_indicador2 === 0) ? 0 : 100*($sum_indicador1/$sum_indicador2);
+		$usage = ($sum_indicador2 === 0 OR is_null($sum_indicador2)) ? 0 : 100*($sum_indicador1/$sum_indicador2);
 		$usage = $usage > 100 ? 100 : (int) $usage;
 
 		return ($this->gchart_data(['usa' => $usage, 'no usa' => 100 - $usage]));
@@ -307,6 +307,185 @@ class Panel extends ORM_Model {
 			.']';
 	}
 
+	// --------------------------------------------------------------------
+
+	/**
+	 * Genera nueva data del panel para un mes
+	 *
+	 * @param  string $mes_data Mes a generar
+	 * @return void
+	 */
+	public function genera_data_panel($mes_data)
+	{
+		$fecha_desde = $mes_data.'01';
+		$fecha_hasta = get_fecha_hasta($mes_data);
+
+		// Borra los datos del panel
+		$this->db
+			->where('fecha>=', $fecha_desde)
+			->where('fecha<', $fecha_hasta)
+			->delete(config('bd_resumen_panel_toa'));
+
+		// Genera Q peticiones SAP
+		$select = $this->db->from(config('bd_movimientos_sap_fija'))
+			->select("fecha_contabilizacion as fecha", FALSE)->group_by('fecha_contabilizacion')
+			->select('vale_acomp as empresa')->group_by('vale_acomp')
+			->select('referencia')->group_by('referencia')
+			->select('count(*) as Q', FALSE)
+			->where('fecha_contabilizacion>=', $fecha_desde)
+			->where('fecha_contabilizacion<', $fecha_hasta)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where_in('codigo_movimiento', ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'])
+			->get_compiled_select();
+		$this->db->query('insert into '.config('bd_resumen_panel_toa'). " select 'SAP_Q_PET' as tipo, empresa, fecha, count(*) as valor from ({$select}) as SQ1 where empresa is not null group by empresa, fecha");
+
+		// Genera Q peticiones instala SAP
+		$select = $this->db->from(config('bd_movimientos_sap_fija'))
+			->select("fecha_contabilizacion as fecha", FALSE)->group_by('fecha_contabilizacion')
+			->select('vale_acomp as empresa')->group_by('vale_acomp')
+			->select('referencia')->group_by('referencia')
+			->select('count(*) as Q', FALSE)
+			->where('fecha_contabilizacion>=', $fecha_desde)
+			->where('fecha_contabilizacion<', $fecha_hasta)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where_in('codigo_movimiento', ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'])
+			->where('substring(referencia, 1, 3)<>', "'INC'", FALSE)
+			->get_compiled_select();
+		$this->db->query('insert into '.config('bd_resumen_panel_toa'). " select 'SAP_Q_PET_INSTALA' as tipo, empresa, fecha, count(*) as valor from ({$select}) as SQ1 where empresa is not null group by empresa, fecha");
+
+		// Genera Q peticiones repara SAP
+		$select = $this->db->from(config('bd_movimientos_sap_fija'))
+			->select("fecha_contabilizacion as fecha", FALSE)->group_by('fecha_contabilizacion')
+			->select('vale_acomp as empresa')->group_by('vale_acomp')
+			->select('referencia')->group_by('referencia')
+			->select('count(*) as Q', FALSE)
+			->where('fecha_contabilizacion>=', $fecha_desde)
+			->where('fecha_contabilizacion<', $fecha_hasta)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where_in('codigo_movimiento', ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'])
+			->where('substring(referencia, 1, 3)=', "'INC'", FALSE)
+			->get_compiled_select();
+		$this->db->query('insert into '.config('bd_resumen_panel_toa'). " select 'SAP_Q_PET_REPARA' as tipo, empresa, fecha, count(*) as valor from ({$select}) as SQ1 where empresa is not null group by empresa, fecha");
+
+		// Genera Q peticiones TOA
+		$select = $this->db->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.resource_external_id=b.rut', 'left')
+			->select("'TOA_Q_PET' as tipo", FALSE)
+			->select('b.id_empresa as empresa')->group_by('b.id_empresa')
+			->select('convert(datetime, a.date, 102) as fecha', FALSE)->group_by('convert(datetime, a.date, 102)', FALSE)
+			->select('count(*) as referencia')
+			->where('a.date>=', fmt_fecha($fecha_desde))
+			->where('a.date<', fmt_fecha($fecha_hasta))
+			->where('a.astatus', 'complete')
+			->where('a.appt_number is NOT NULL', NULL, FALSE)
+			->where('b.id_empresa is NOT NULL', NULL, FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+		// Genera Q peticiones instala TOA
+		$select = $this->db->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.resource_external_id=b.rut', 'left')
+			->select("'TOA_Q_PET_INSTALA' as tipo", FALSE)
+			->select('b.id_empresa as empresa')->group_by('b.id_empresa')
+			->select('convert(datetime, a.date, 102) as fecha', FALSE)->group_by('convert(datetime, a.date, 102)', FALSE)
+			->select('count(*) as referencia')
+			->where('a.date>=', fmt_fecha($fecha_desde))
+			->where('a.date<', fmt_fecha($fecha_hasta))
+			->where('a.astatus', 'complete')
+			->where('a.appt_number is NOT NULL', NULL, FALSE)
+			->where('b.id_empresa is NOT NULL', NULL, FALSE)
+			->where('substring(a.appt_number, 1, 3)<>', "'INC'", FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+		// Genera Q peticiones repara TOA
+		$select = $this->db->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.resource_external_id=b.rut', 'left')
+			->select("'TOA_Q_PET_REPARA' as tipo", FALSE)
+			->select('b.id_empresa as empresa')->group_by('b.id_empresa')
+			->select('convert(datetime, a.date, 102) as fecha', FALSE)->group_by('convert(datetime, a.date, 102)', FALSE)
+			->select('count(*) as referencia')
+			->where('a.date>=', fmt_fecha($fecha_desde))
+			->where('a.date<', fmt_fecha($fecha_hasta))
+			->where('a.astatus', 'complete')
+			->where('a.appt_number is NOT NULL', NULL, FALSE)
+			->where('b.id_empresa is NOT NULL', NULL, FALSE)
+			->where('substring(a.appt_number, 1, 3)=', "'INC'", FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+		// Genera monto peticiones SAP
+		$select = $this->db->from(config('bd_movimientos_sap_fija'))
+			->select("'SAP_MONTO_PET' as tipo", FALSE)
+			->select('vale_acomp as empresa')->group_by('vale_acomp')
+			->select("fecha_contabilizacion as fecha", FALSE)->group_by('fecha_contabilizacion')
+			->select('sum(-importe_ml) as valor', FALSE)
+			->where('fecha_contabilizacion>=', $fecha_desde)
+			->where('fecha_contabilizacion<', $fecha_hasta)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where_in('codigo_movimiento', ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'])
+			->where('vale_acomp is NOT NULL', NULL, FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+		// Genera Q tecnicos SAP
+		$select = $this->db->from(config('bd_movimientos_sap_fija'))
+			->select('fecha_contabilizacion as fecha', FALSE)->group_by('fecha_contabilizacion')
+			->select('vale_acomp as empresa')->group_by('vale_acomp')
+			->select('cliente')->group_by('cliente')
+			->select('count(*) as Q', FALSE)
+			->where('fecha_contabilizacion>=', $fecha_desde)
+			->where('fecha_contabilizacion<', $fecha_hasta)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where_in('codigo_movimiento', ['Z35', 'Z45', 'Z39', 'Z41', 'Z87', 'Z89'])
+			->where('substring(referencia, 1, 3)=', "'INC'", FALSE)
+			->get_compiled_select();
+		$this->db->query('insert into '.config('bd_resumen_panel_toa'). " select 'SAP_Q_TECNICOS' as tipo, empresa, fecha, count(*) as valor from ({$select}) as SQ1 where empresa is not null group by empresa, fecha");
+
+		// Genera Q tecnicos TOA
+		$select = $this->db->from(config('bd_peticiones_toa').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.resource_external_id=b.rut', 'left')
+			->select('convert(datetime, a.date, 102) as fecha', FALSE)->group_by('convert(datetime, a.date, 102)', FALSE)
+			->select('b.id_empresa as empresa')->group_by('b.id_empresa')
+			->select('a.resource_external_id as tecnico')->group_by('a.resource_external_id')
+			->select('count(*) as Q', FALSE)
+			->where('a.date>=', fmt_fecha($fecha_desde))
+			->where('a.date<', fmt_fecha($fecha_hasta))
+			->where('a.astatus', 'complete')
+			->where('a.appt_number is NOT NULL', NULL, FALSE)
+			->get_compiled_select();
+		$this->db->query('insert into '.config('bd_resumen_panel_toa'). " select 'TOA_Q_TECNICOS' as tipo, empresa, fecha, count(*) as valor from ({$select}) as SQ1 WHERE empresa IS NOT NULL GROUP BY empresa, fecha");
+
+		// Genera monto stock almacenes SAP
+		$select = $this->db->from(config('bd_stock_fija').' a')
+			->join(config('bd_tipoalmacen_sap').' b', 'a.centro=b.centro and a.almacen=b.cod_almacen', 'left')
+			->join(config('bd_empresas_toa_tiposalm').' c', 'b.id_tipo=c.id_tipo', 'left')
+			->select("'SAP_MONTO_STOCK_ALM' as tipo", FALSE)
+			->select('c.id_empresa as empresa')->group_by('c.id_empresa')
+			->select("a.fecha_stock as fecha", FALSE)->group_by('a.fecha_stock')
+			->select('sum(a.valor) as valor', FALSE)
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where('c.id_empresa is NOT NULL', NULL, FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+		// Genera monto stock tecnicos
+		$select = $this->db->from(config('bd_stock_fija').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.acreedor=b.id_tecnico', 'left')
+			->select("'SAP_MONTO_STOCK_TEC' as tipo", FALSE)
+			->select('b.id_empresa as empresa')->group_by('b.id_empresa')
+			->select("a.fecha_stock as fecha", FALSE)->group_by('a.fecha_stock')
+			->select('sum(a.valor) as valor', FALSE)
+			->where('a.fecha_stock>=', $fecha_desde)
+			->where('a.fecha_stock<', $fecha_hasta)
+			->where('a.almacen', NULL)
+			->where_in('centro', ['CH32', 'CH33'])
+			->where('b.id_empresa is NOT NULL', NULL, FALSE)
+			->get_compiled_select();
+		$this->db->query('INSERT into '.config('bd_resumen_panel_toa').' '.$select);
+
+	}
 }
 
 // End of file Panel.php
