@@ -90,30 +90,28 @@ class Toa_panel extends Controller_base {
 				$panel->genera_data_panel($sel_mes);
 				$datos['genera_data'] = print_message("Genera datos mes {$sel_mes}");
 			}
-			else
-			{
-				$datos = array_merge($datos, [
-					'form_validated'               => TRUE,
-					'cant_peticiones_empresa'      => $panel->get_resumen_panel_gchart('SAP_Q_PET', $sel_empresa, $sel_mes),
-					'cant_peticiones_empresa_proy' => $panel->get_resumen_panel_proyeccion('SAP_Q_PET', $sel_empresa, $sel_mes),
 
-					'monto_peticiones_empresa'      => $panel->get_resumen_panel_gchart('SAP_MONTO_PET', $sel_empresa, $sel_mes),
-					'monto_peticiones_empresa_proy' => $panel->get_resumen_panel_proyeccion('SAP_MONTO_PET', $sel_empresa, $sel_mes),
+			$datos = array_merge($datos, [
+				'form_validated'               => TRUE,
+				'cant_peticiones_empresa'      => $panel->get_resumen_panel_gchart('SAP_Q_PET', $sel_empresa, $sel_mes),
+				'cant_peticiones_empresa_proy' => $panel->get_resumen_panel_proyeccion('SAP_Q_PET', $sel_empresa, $sel_mes),
 
-					'cant_peticiones_instala' => $panel->get_resumen_panel_gchart(['sap' => 'SAP_Q_PET_INSTALA', 'toa' => 'TOA_Q_PET_INSTALA'], $sel_empresa, $sel_mes),
-					'cant_peticiones_repara'  => $panel->get_resumen_panel_gchart(['sap'  => 'SAP_Q_PET_REPARA', 'toa' => 'TOA_Q_PET_REPARA'], $sel_empresa, $sel_mes),
-					'cant_tecnicos_empresa'   => $panel->get_resumen_panel_gchart(['sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'], $sel_empresa, $sel_mes),
-					'stock_empresa'           => $panel->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes),
-					'stock_tecnicos_empresa'  => $panel->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes),
+				'monto_peticiones_empresa'      => $panel->get_resumen_panel_gchart('SAP_MONTO_PET', $sel_empresa, $sel_mes),
+				'monto_peticiones_empresa_proy' => $panel->get_resumen_panel_proyeccion('SAP_MONTO_PET', $sel_empresa, $sel_mes),
 
-					'usage_peticiones_instala' => $panel->get_resumen_panel_usage('SAP_Q_PET_INSTALA', 'TOA_Q_PET_INSTALA', $sel_empresa, $sel_mes),
-					'usage_peticiones_repara'  => $panel->get_resumen_panel_usage('SAP_Q_PET_REPARA', 'TOA_Q_PET_REPARA', $sel_empresa, $sel_mes),
-					'usage_cant_tecnicos'      => $panel->get_resumen_panel_usage('SAP_Q_TECNICOS', 'TOA_Q_TECNICOS', $sel_empresa, $sel_mes),
+				'cant_peticiones_instala' => $panel->get_resumen_panel_gchart(['sap' => 'SAP_Q_PET_INSTALA', 'toa' => 'TOA_Q_PET_INSTALA'], $sel_empresa, $sel_mes),
+				'cant_peticiones_repara'  => $panel->get_resumen_panel_gchart(['sap'  => 'SAP_Q_PET_REPARA', 'toa' => 'TOA_Q_PET_REPARA'], $sel_empresa, $sel_mes),
+				'cant_tecnicos_empresa'   => $panel->get_resumen_panel_gchart(['sap' => 'SAP_Q_TECNICOS', 'toa' => 'TOA_Q_TECNICOS'], $sel_empresa, $sel_mes),
+				'stock_empresa'           => $panel->get_resumen_panel_gchart('SAP_MONTO_STOCK_ALM', $sel_empresa, $sel_mes),
+				'stock_tecnicos_empresa'  => $panel->get_resumen_panel_gchart('SAP_MONTO_STOCK_TEC', $sel_empresa, $sel_mes),
 
-					'proy_q_pet'     => fmt_cantidad($panel->get_resumen_usage('SAP_Q_PET', $sel_empresa, $sel_mes)/$panel->get_resumen_panel_porcentaje_mes('SAP_Q_PET', $sel_empresa, $sel_mes)),
-					'proy_monto_pet' => fmt_cantidad($panel->get_resumen_usage('SAP_MONTO_PET', $sel_empresa, $sel_mes)/$panel->get_resumen_panel_porcentaje_mes('SAP_MONTO_PET', $sel_empresa, $sel_mes)),
-				]);
-			}
+				'usage_peticiones_instala' => $panel->get_resumen_panel_usage('SAP_Q_PET_INSTALA', 'TOA_Q_PET_INSTALA', $sel_empresa, $sel_mes),
+				'usage_peticiones_repara'  => $panel->get_resumen_panel_usage('SAP_Q_PET_REPARA', 'TOA_Q_PET_REPARA', $sel_empresa, $sel_mes),
+				'usage_cant_tecnicos'      => $panel->get_resumen_panel_usage('SAP_Q_TECNICOS', 'TOA_Q_TECNICOS', $sel_empresa, $sel_mes),
+
+				'proy_q_pet'     => fmt_cantidad($panel->get_resumen_usage('SAP_Q_PET', $sel_empresa, $sel_mes)/$panel->get_resumen_panel_porcentaje_mes('SAP_Q_PET', $sel_empresa, $sel_mes)),
+				'proy_monto_pet' => fmt_cantidad($panel->get_resumen_usage('SAP_MONTO_PET', $sel_empresa, $sel_mes)/$panel->get_resumen_panel_porcentaje_mes('SAP_MONTO_PET', $sel_empresa, $sel_mes)),
+			]);
 
 		}
 
