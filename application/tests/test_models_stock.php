@@ -18,25 +18,6 @@ class test_models_stock extends test_case {
 		parent::__construct();
 	}
 
-	public function test_almacen_sap()
-	{
-		$almacen_sap = new Stock\Almacen_sap;
-
-		$this->assert_is_object($almacen_sap);
-		$this->assert_not_empty($almacen_sap->get_fields());
-		$this->assert_count($almacen_sap->get_fields(), 7);
-		$this->assert_is_string((string) $almacen_sap);
-	}
-
-	public function test_analisis_series()
-	{
-		$analisis_series = new Stock\Analisis_series;
-
-		$this->assert_is_object($analisis_series);
-		$this->assert_empty($analisis_series->get_fields());
-		$this->assert_not_empty($analisis_series->rules);
-	}
-
 	public function test_clase_movimiento()
 	{
 		$clase_movimiento = new Stock\Clase_movimiento;
