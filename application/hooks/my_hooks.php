@@ -30,8 +30,15 @@ class MY_Hooks {
 
 	public function pre_system_hook()
 	{
-		$dotenv = new Dotenv\Dotenv(BASEPATH.'../application');
-		$dotenv->load();
+		try
+		{
+			$dotenv = new Dotenv\Dotenv(BASEPATH.'../application');
+			$dotenv->load();
+		}
+		catch (Exception $e)
+		{
+			exit($e->getMessage());
+		}
 	}
 
 	/**
