@@ -58,16 +58,6 @@ class test_models_inventario extends test_case {
 		$this->assert_is_string((string) $centro);
 	}
 
-	public function test_detalle_inventario()
-	{
-		$detalle_inventario = new Inventario\Detalle_inventario;
-
-		$this->assert_is_object($detalle_inventario);
-		$this->assert_not_empty($detalle_inventario->get_fields());
-		$this->assert_count($detalle_inventario->get_fields(), 21);
-		$this->assert_is_string((string) $detalle_inventario);
-	}
-
 	public function test_familia()
 	{
 		$familia = new Inventario\Familia;
@@ -76,16 +66,6 @@ class test_models_inventario extends test_case {
 		$this->assert_not_empty($familia->get_fields());
 		$this->assert_count($familia->get_fields(), 3);
 		$this->assert_is_string((string) $familia);
-	}
-
-	public function test_inventario()
-	{
-		$inventario = new Inventario\Inventario;
-
-		$this->assert_is_object($inventario);
-		$this->assert_not_empty($inventario->get_fields());
-		$this->assert_count($inventario->get_fields(), 4);
-		$this->assert_is_string((string) $inventario);
 	}
 
 	public function test_inventario_reporte()
@@ -97,6 +77,7 @@ class test_models_inventario extends test_case {
 		$this->assert_count($inventario_reporte->get_fields(), 4);
 		$this->assert_is_string((string) $inventario_reporte);
 		$this->assert_not_empty($inventario_reporte->rules_reporte);
+		$this->assert_not_empty($inventario_reporte->rules_imprime_inventario());
 	}
 
 	public function test_tipo_inventario()
@@ -117,16 +98,6 @@ class test_models_inventario extends test_case {
 		$this->assert_not_empty($tipo_ubicacion->get_fields());
 		$this->assert_count($tipo_ubicacion->get_fields(), 3);
 		$this->assert_is_string((string) $tipo_ubicacion);
-	}
-
-	public function test_ubicacion()
-	{
-		$ubicacion = new Inventario\Ubicacion;
-
-		$this->assert_is_object($ubicacion);
-		$this->assert_not_empty($ubicacion->get_fields());
-		$this->assert_count($ubicacion->get_fields(), 4);
-		// $this->assert_is_string((string) $ubicacion);
 	}
 
 	public function test_unidad_medida()

@@ -52,7 +52,7 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  string $id_detalle Identificador del detalle de inventario
 	 * @return void
 	 */
-	public function __construct($id_detalle = NULL)
+	public function __construct($id_detalle = NULL, $ci_object = [])
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -185,7 +185,7 @@ class Detalle_inventario extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_detalle);
+		parent::__construct($id_detalle, $ci_object);
 	}
 
 	// --------------------------------------------------------------------
