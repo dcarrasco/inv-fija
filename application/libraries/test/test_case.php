@@ -191,7 +191,7 @@ class test_case {
 	{
 		$test_methods = collect(get_class_methods(get_class($this)))
 			->filter(function($method) { return substr($method, 0, 5) === 'test_'; })
-			->each(function($method)   { $this->{$method}(); });
+			->each(function($method) {$this->{$method}(); });
 	}
 
 	// --------------------------------------------------------------------
@@ -213,9 +213,14 @@ class test_case {
 			->map(function($file) { return substr($file, 0, strlen($file) - 4); })
 			->map(function($file) {
 				$test_object = new $file();
+
+				xdebug_start_code_coverage();
 				$test_object->all_methods();
-				return $test_object->get_backtrace()->flatten();
-			})->flatten();
+				$file_backtrace = xdebug_get_code_coverage();
+				xdebug_stop_code_coverage();
+
+				return $file_backtrace;
+			});
 
 		$tiempo_fin = new \DateTime();
 		$this->process_duration = $tiempo_inicio->diff($tiempo_fin);
@@ -276,33 +281,69 @@ class test_case {
 
 	public function print_coverage()
 	{
-		$backtrace = $this->sum_backtrace_lines();
-	    dump($backtrace_lines);
+		$this->all_files(FALSE);
+
+		$total_coverage = collect([]);
+		$backtrace = $this->backtrace;
+
+		$files = $this->backtrace
+			->map(function($test_file) { return collect($test_file)->keys();})
+			->flatten()
+			->sort()
+			->unique()
+			->map_with_keys(function($file) use ($backtrace) {
+				return [$file => $file];
+			})
+			->map(function($file) use ($backtrace) {
+				return $backtrace->map(function($test_file) use ($file) {
+					return array_get($test_file, $file, []);
+				});
+			})
+			->map(function($usage_collection, $file) {
+				return collect(collect($usage_collection)->reduce(function($elem1, $elem2) {
+					return $this->sum_backtrace_lines($elem1, $elem2);
+				}, []));
+			})
+			->map(function($usage_collection) {
+				return $usage_collection->map(function($usage, $line) {
+					return ['usage' => $usage, 'line' => $line];
+				})->sort(function($usage1, $usage2) {
+					return $usage1['line'] > $usage2['line'];
+				})->map(function($usage) {
+					return $usage['usage'];
+				})->all();
+			});
+
+		dump($files);
+
+		// dump('********************',$total_coverage);
 	}
 
 	// --------------------------------------------------------------------
 
-	public function sum_backtrace_lines()
+	public function sum_backtrace_lines($archivo1 = [], $archivo2 = [])
 	{
-		return $this->backtrace
-			// filtra aquellas lineas que no son de APPPATH
-			->filter(function($line) {
-				return strpos($line, APPPATH) !== FALSE;
-			})
-			// ->filter(function($line) {
-			// 	return strpos($line, APPPATH.'tests/') === FALSE;
-			// })
-			->reduce(function($total, $line) {
-				list($file_name, $file_line) = explode(':', $line);
-				return $total->add_item([
-					'file'  => $file_name,
-					'line'  => $file_line,
-					'count' => array_get($total->item($line), 'count', 0) + 1]
-				, $line);
-			}, collect())
-			->reduce(function($total, $line_data) {
-				return $total->add_item($total->get($line_data['file'], collect())->add_item($line_data['count'], $line_data['line']), $line_data['file']);
-			}, collect());
+		$suma = $archivo1;
+
+		// suma elementos comunes
+		foreach($suma as $num_linea => $cantidad)
+		{
+			if (array_key_exists($num_linea, $archivo2))
+			{
+				$suma[$num_linea] = $suma[$num_linea] + $archivo2[$num_linea];
+			}
+		}
+
+		// agrega elementos nuevos en archivo2
+		foreach($archivo2 as $num_linea => $cantidad)
+		{
+			if ( ! array_key_exists($num_linea, $suma))
+			{
+				$suma[$num_linea] = $cantidad;
+			}
+		}
+
+		return $suma;
 	}
 
 }

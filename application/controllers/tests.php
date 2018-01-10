@@ -99,7 +99,6 @@ class Tests extends Controller_base {
 	 */
 	public function coverage()
 	{
-		$this->test->resumen_all_files();
 		$this->test->print_coverage();
 	}
 
