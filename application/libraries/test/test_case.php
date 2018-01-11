@@ -208,18 +208,12 @@ class test_case {
 
 		$tiempo_inicio = new \DateTime();
 
-		$this->backtrace = collect(scandir(APPPATH.'/tests'))
+		collect(scandir(APPPATH.'/tests'))
 			->filter(function($file) { return substr($file, -4) === '.php'; })
 			->map(function($file) { return substr($file, 0, strlen($file) - 4); })
 			->map(function($file) {
 				$test_object = new $file();
-
-				xdebug_start_code_coverage();
 				$test_object->all_methods();
-				$file_backtrace = xdebug_get_code_coverage();
-				xdebug_stop_code_coverage();
-
-				return $file_backtrace;
 			});
 
 		$tiempo_fin = new \DateTime();
@@ -280,6 +274,17 @@ class test_case {
 	// --------------------------------------------------------------------
 
 	public function print_coverage()
+	{
+		// xdebug_start_code_coverage(XDEBUG_CC_UNUSED | XDEBUG_CC_DEAD_CODE);
+		xdebug_start_code_coverage();
+		$this->all_files(FALSE);
+		$this->backtrace = collect(xdebug_get_code_coverage());
+		xdebug_stop_code_coverage();
+
+		dump($this->backtrace->get('/Users/Daniel/Sites/sirioweb/www/inv-fija/application/libraries/Collection.php'));
+	}
+
+	public function xxprint_coverage()
 	{
 		$this->all_files(FALSE);
 
