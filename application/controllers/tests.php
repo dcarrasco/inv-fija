@@ -81,6 +81,18 @@ class Tests extends Controller_base {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Muestra detalle de los tests
+	 *
+	 * @return void
+	 */
+	public function file($filename = '')
+	{
+		$this->test->all_files(TRUE, $filename);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Muestra opciones de linea de comandos de los tests
 	 *
 	 * @return void

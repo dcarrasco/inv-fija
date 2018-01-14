@@ -202,7 +202,7 @@ class test_case {
 	 *
 	 * @return void
 	 */
-	public function all_files($detalle = TRUE)
+	public function all_files($detalle = TRUE, $filename = '')
 	{
 		get_instance()->load->helper('number');
 
@@ -210,6 +210,11 @@ class test_case {
 
 		collect(scandir(APPPATH.'/tests'))
 			->filter(function($file) { return substr($file, -4) === '.php'; })
+			->filter(function($file) use ($filename) {
+				$filename = substr($filename, -4) !== '.php' ? $filename.'.php' : $filename;
+
+				return empty($filename) OR ($file === $filename);
+			})
 			->map(function($file) { return substr($file, 0, strlen($file) - 4); })
 			->map(function($file) {
 				$test_object = new $file();
@@ -281,7 +286,10 @@ class test_case {
 		$this->backtrace = collect(xdebug_get_code_coverage());
 		xdebug_stop_code_coverage();
 
-		dump($this->backtrace->get('/Users/Daniel/Sites/sirioweb/www/inv-fija/application/libraries/Collection.php'));
+		dump(
+			$this->backtrace->map(function($data) {return count($data);}),
+			$this->backtrace->get('/Users/Daniel/Sites/sirioweb/www/inv-fija/application/libraries/Collection.php')
+		);
 	}
 
 	public function xxprint_coverage()
