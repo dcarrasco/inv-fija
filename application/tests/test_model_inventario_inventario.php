@@ -51,24 +51,24 @@ class test_model_inventario_inventario extends test_case {
 	public function test_get_id_inventario_activo()
 	{
 		$inventario = Inventario::create($this->new_ci_object());
-
 		$inventario->db->mock_set_return_result(['id'=>111]);
+
 		$this->assert_equals($inventario->get_id_inventario_activo(), 111);
 	}
 
 	public function test_get_inventario_activo()
 	{
 		$inventario = Inventario::create($this->new_ci_object());
-
 		$inventario->db->mock_set_return_result(['id'=>111, 'nombre' => 'prueba de inventario']);
+
 		$this->assert_equals($inventario->get_inventario_activo()->__toString(), 'prueba de inventario');
 	}
 
 	public function test_get_max_hoja_inventario()
 	{
 		$inventario = Inventario::create($this->new_ci_object());
-
 		$inventario->db->mock_set_return_result(['max_hoja'=>100]);
+
 		$this->assert_equals($inventario->get_max_hoja_inventario(), 100);
 	}
 

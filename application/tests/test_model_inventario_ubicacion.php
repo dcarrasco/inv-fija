@@ -45,28 +45,28 @@ class test_model_inventario_ubicacion extends test_case {
 	public function test_total_ubicacion_tipo_ubicacion()
 	{
 		$ubicacion = Ubicacion::create($this->new_ci_object());
-
 		$ubicacion->db->mock_set_return_result([0,1,2,3,4,5]);
+
 		$this->assert_equals($ubicacion->total_ubicacion_tipo_ubicacion(), 6);
 	}
 
 	public function test_get_ubicacion_tipo_ubicacion()
 	{
 		$ubicacion = Ubicacion::create($this->new_ci_object());
-
 		$ubicacion->db->mock_set_return_result([0,1,2,3,4,5]);
+
 		$this->assert_equals($ubicacion->get_ubicacion_tipo_ubicacion(), [0,1,2,3,4,5]);
 	}
 
 	public function test_get_combo_tipos_ubicacion()
 	{
 		$ubicacion = Ubicacion::create($this->new_ci_object());
-
 		$ubicacion->db->mock_set_return_result([
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
 			['llave'=>'llave3', 'valor'=>'valor3'],
 		]);
+
 		$this->assert_equals($ubicacion->get_combo_tipos_ubicacion(), [
 			''=>'Seleccione tipo de ubicacion...',
 			'llave1'=>'valor1',
@@ -78,12 +78,12 @@ class test_model_inventario_ubicacion extends test_case {
 	public function test_get_ubicaciones_libres()
 	{
 		$ubicacion = Ubicacion::create($this->new_ci_object());
-
 		$ubicacion->db->mock_set_return_result([
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
 			['llave'=>'llave3', 'valor'=>'valor3'],
 		]);
+
 		$this->assert_equals($ubicacion->get_ubicaciones_libres(), [
 			'llave1'=>'valor1',
 			'llave2'=>'valor2',

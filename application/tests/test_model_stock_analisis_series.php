@@ -134,19 +134,18 @@ class test_model_stock_analisis_series extends test_case {
 		$analisis_series = Analisis_series::create(['db'=> new mock_db]);
 
 		$analisis_series->db->mock_set_return_result([
-			['mes'=>'201712'],
-			['mes'=>'201711'],
-			['mes'=>'201710'],
+			['mes' => '201712'],
+			['mes' => '201711'],
+			['mes' => '201710'],
 		]);
 
 		$this->assert_equals($analisis_series->get_meses_trafico(), [
-			'201712'=>'2017-12',
-			'201711'=>'2017-11',
-			'201710'=>'2017-10',
+			'201712' => '2017-12',
+			'201711' => '2017-11',
+			'201710' => '2017-10',
 		]);
 
 	}
-
 
 }
 
@@ -157,6 +156,3 @@ class mock_db2 extends mock_db
 		return $this->return_result;
 	}
 }
-
-
-

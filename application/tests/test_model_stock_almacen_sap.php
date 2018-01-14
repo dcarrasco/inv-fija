@@ -77,11 +77,11 @@ class test_model_stock_almacen_sap extends test_case {
 	public function test_almacenes_no_ingresados()
 	{
 		$almacen_sap = Almacen_sap::create($this->new_ci_object());
-
 		$almacen_sap->db->mock_set_return_result([
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
 		]);
+
 		$this->assert_equals($almacen_sap->almacenes_no_ingresados(), [
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
@@ -92,6 +92,3 @@ class test_model_stock_almacen_sap extends test_case {
 
 
 }
-
-
-
