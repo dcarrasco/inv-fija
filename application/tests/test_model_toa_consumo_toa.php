@@ -100,15 +100,15 @@ class test_model_toa_consumo_toa extends test_case {
 		$consumo_toa = Consumo_toa::create($this->new_ci_object());
 
 		$consumo_toa->db->mock_set_return_result([
-			['llave'=>'llave1', 'valor'=>'valor1'],
-			['llave'=>'llave2', 'valor'=>'valor2'],
-			['llave'=>'llave3', 'valor'=>'valor3'],
+			['cmv'=>'cmv1', 'des_cmv'=>'des_cmv1'],
+			['cmv'=>'cmv2', 'des_cmv'=>'des_cmv2'],
+			['cmv'=>'cmv3', 'des_cmv'=>'des_cmv3'],
 		]);
 		$this->assert_equals($consumo_toa->combo_movimientos_consumo(), [
 			'000'=>'Todos los movimientos',
-			'llave1'=>'valor1',
-			'llave2'=>'valor2',
-			'llave3'=>'valor3',
+			'cmv1'=>'cmv1 des_cmv1',
+			'cmv2'=>'cmv2 des_cmv2',
+			'cmv3'=>'cmv3 des_cmv3',
 		]);
 
 	}
