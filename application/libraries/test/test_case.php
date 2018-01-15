@@ -211,7 +211,9 @@ class test_case {
 		collect(scandir(APPPATH.'/tests'))
 			->filter(function($file) { return substr($file, -4) === '.php'; })
 			->filter(function($file) use ($filename) {
-				$filename = substr($filename, -4) !== '.php' ? $filename.'.php' : $filename;
+				$filename = empty($filename)
+					? ''
+					: (substr($filename, -4) !== '.php' ? $filename.'.php' : $filename);
 
 				return empty($filename) OR ($file === $filename);
 			})
