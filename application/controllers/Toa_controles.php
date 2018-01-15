@@ -260,7 +260,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar'     => Consumo_toa::create()->combo_unidades_materiales_tipo_trabajo,
 			'url_detalle_dia'          => 'toa_consumos/detalle_peticion',
 			'anomes'                   => request('mes'),
-			'materiales_tipos_trabajo' => Consumo_toa::create()->materiales_tipos_trabajo(request('empresa'), request('mes'), request('tipo_trabajo'), request('dato')),
+			'materiales_tipos_trabajo' => Consumo_toa::create()->materiales_tipos_trabajo(request()),
 		]);
 	}
 
@@ -380,7 +380,7 @@ class Toa_controles extends Controller_base {
 		app_render_view('toa/controles_clientes', [
 			'menu_modulo'     => $this->get_menu_modulo('clientes'),
 			'url_detalle_dia' => 'toa_consumos/detalle_peticion',
-			'clientes'        => Consumo_toa::create()->consumo_clientes(request('cliente'), request('fecha_desde'), request('fecha_hasta'), request('dato')),
+			'clientes'        => Consumo_toa::create()->consumo_clientes(request()),
 			'link_peticiones' => 'toa_consumos/ver_peticiones/clientes/'.str_replace('-', '', request('fecha_desde')).'/'.str_replace('-', '', request('fecha_hasta')).'/',
 		]);
 	}

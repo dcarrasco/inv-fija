@@ -174,7 +174,7 @@ class Consumo_toa extends ORM_Model {
 	public function combo_movimientos_consumo()
 	{
 		return collect(['000' => 'Todos los movimientos'])
-			->merge(Clase_movimiento::create()->find('list', [
+			->merge(Clase_movimiento::create($this->ci_object)->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,
@@ -1040,45 +1040,45 @@ class Consumo_toa extends ORM_Model {
 	 * @param  string $id_peticion ID de la peticion
 	 * @return array            Detalle de la peticion
 	 */
-	public function detalle_peticion($id_peticion = NULL)
+	public function detalle_peticion($id_peticion = '')
 	{
-		if ( ! $id_peticion)
-		{
-			return [];
-		}
+		$peticion_toa = $this->get_data_peticion_toa($id_peticion);
+		$materiales_sap = $this->get_data_materiales_sap_peticion_toa($id_peticion);
+		$materiales_toa = $this->get_data_materiales_toa_peticion_toa(array_get($peticion_toa, 'aid', ''));
+		$materiales_vpi = $this->get_data_materiales_vpi_peticion_toa($id_peticion);
+		$peticion_repara = $this->get_data_peticion_repara($id_peticion);
 
-		$peticion_toa = $this->db
+		return compact('peticion_toa', 'materiales_sap', 'materiales_toa', 'materiales_vpi', 'peticion_repara');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera desde la BD los datos de una petición TOA
+	 * @param  string $id_peticion ID de la petición a recuperar
+	 * @return array
+	 */
+	public function get_data_peticion_toa($id_peticion = '')
+	{
+		return $this->db
 			->from(config('bd_peticiones_toa').' d')
 			->join(config('bd_empresas_toa').' c', 'd.contractor_company=c.id_empresa', 'left', FALSE)
 			->where('appt_number', $id_peticion)
 			->where('astatus', 'complete')
 			->get()->row_array();
+	}
 
-		$materiales_sap = $this->db
-			->select('a.fecha_contabilizacion as fecha')
-			->select('a.referencia')
-			->select('c.empresa')
-			->select('a.cliente')
-			->select('b.tecnico')
-			->select('a.codigo_movimiento')
-			->select('a.texto_movimiento')
-			->select('a.elemento_pep')
-			->select('a.documento_material')
-			->select('a.centro')
-			->select('a.almacen')
-			->select('a.material')
-			->select('a.texto_material')
-			->select('a.serie_toa')
-			->select('a.lote')
-			->select('a.valor')
-			->select('a.umb')
-			->select('(-a.cantidad_en_um) as cant', FALSE)
-			->select('(-a.importe_ml) as monto', FALSE)
-			->select('a.usuario')
-			->select('a.vale_acomp')
-			->select('a.carta_porte')
-			->select('a.usuario')
-			->select('e.desc_tip_material')
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera desde la BD los datos de materiales SAP de una petición TOA
+	 * @param  string $id_peticion ID de la petición a recuperar
+	 * @return array
+	 */
+	public function get_data_materiales_sap_peticion_toa($id_peticion = '')
+	{
+		return $this->db
+			->select('a.fecha_contabilizacion as fecha, a.referencia, c.empresa, a.cliente, b.tecnico, a.codigo_movimiento, a.texto_movimiento, a.elemento_pep, a.documento_material, a.centro, a.almacen, a.material, a.texto_material, a.serie_toa, a.lote, a.valor, a.umb, (-a.cantidad_en_um) as cant, (-a.importe_ml) as monto, a.usuario, a.vale_acomp, a.carta_porte, a.usuario, e.desc_tip_material', FALSE)
 			->from(config('bd_movimientos_sap_fija').' a')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp=c.id_empresa', 'left', FALSE)
@@ -1089,59 +1089,75 @@ class Consumo_toa extends ORM_Model {
 			->where_in('centro', $this->centros_consumo)
 			->order_by('e.desc_tip_material, a.material, a.codigo_movimiento')
 			->get()->result_array();
+	}
 
-		$materiales_toa = $this->db
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera desde la BD los datos de materiales TOA de una petición TOA
+	 * @param  string $id_peticion ID de la petición a recuperar
+	 * @return array
+	 */
+	public function get_data_materiales_toa_peticion_toa($id_peticion = '')
+	{
+		return $this->db
 			->select('a.*, c.desc_tip_material, d.*')
 			->from(config('bd_materiales_peticiones_toa').' a')
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.XI_SAP_CODE=b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id and c.uso_vpi=1', 'left', FALSE)
 			->join(config('bd_type_list_toa').' d', 'a.invtype=d.type_id', 'left', FALSE)
-			->where('aid', array_get($peticion_toa, 'aid'))
+			->where('aid', $id_peticion)
 			->order_by('c.desc_tip_material, XI_SAP_CODE')
 			->get()->result_array();
+	}
 
-		$materiales_vpi = ! $this->es_peticion_instala($id_peticion)
-			? []
-			: $this->db
-				->select('a.*, c.desc_tip_material')
-				->from(config('bd_peticiones_vpi').' a')
-				->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
-				->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
-				->where('appt_number', $id_peticion)
-				->order_by('c.desc_tip_material, a.ps_id')
-				->get()->result_array();
+	// --------------------------------------------------------------------
 
-		$peticion_repara = $this->es_peticion_instala($id_peticion)
-			? []
-			: $this->db->from(config('bd_peticiones_toa'))
-				->select('a_complete_reason_rep_minor_stb as stb_clave')
-				->select('a.rev_clave as stb_rev_clave')
-				->select('a.descripcion as stb_descripcion')
-				->select('a.agrupacion_cs as stb_agrupacion_cs')
-				->select('a.ambito as stb_ambito')
-				->select('a_complete_reason_rep_minor_ba as ba_clave')
-				->select('b.rev_clave as ba_rev_clave')
-				->select('b.descripcion as ba_descripcion')
-				->select('b.agrupacion_cs as ba_agrupacion_cs')
-				->select('b.ambito as ba_ambito')
-				->select('a_complete_reason_rep_minor_tv as tv_clave')
-				->select('c.rev_clave as tv_rev_clave')
-				->select('c.descripcion as tv_descripcion')
-				->select('c.agrupacion_cs as tv_agrupacion_cs')
-				->select('c.ambito as tv_ambito')
-				->join(config('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
-				->join(config('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
-				->join(config('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
-				->where('appt_number', $id_peticion)
-				->get()->result_array();
+	/**
+	 * Recupera desde la BD los datos de materiales VPI de una petición TOA de reparación
+	 * @param  string $id_peticion ID de la petición a recuperar
+	 * @return array
+	 */
+	public function get_data_materiales_vpi_peticion_toa($id_peticion = '')
+	{
+		if ( ! $this->es_peticion_instala($id_peticion))
+		{
+			return [];
+		}
 
-		return [
-			'peticion_toa'   => $peticion_toa,
-			'materiales_sap' => $materiales_sap,
-			'materiales_toa' => $materiales_toa,
-			'materiales_vpi' => $materiales_vpi,
-			'peticion_repara' => $peticion_repara,
-		];
+		return $this->db
+			->select('a.*, c.desc_tip_material')
+			->from(config('bd_peticiones_vpi').' a')
+			->join(config('bd_ps_tip_material_toa').' b', 'a.ps_id=b.ps_id', 'left', FALSE)
+			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
+			->where('appt_number', $id_peticion)
+			->order_by('c.desc_tip_material, a.ps_id')
+			->get()->result_array();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera desde la BD los datos de una petición de reparación
+	 * @param  string $id_peticion ID de la petición a recuperar
+	 * @return array
+	 */
+	public function get_data_peticion_repara($id_peticion = '')
+	{
+		if ($this->es_peticion_instala($id_peticion))
+		{
+			return [];
+		}
+
+		return $this->db->from(config('bd_peticiones_toa'))
+			->select('a_complete_reason_rep_minor_stb as stb_clave, a.rev_clave as stb_rev_clave, a.descripcion as stb_descripcion, a.agrupacion_cs as stb_agrupacion_cs, a.ambito as stb_ambito')
+			->select('a_complete_reason_rep_minor_ba as ba_clave, b.rev_clave as ba_rev_clave, b.descripcion as ba_descripcion, b.agrupacion_cs as ba_agrupacion_cs, b.ambito as ba_ambito')
+			->select('a_complete_reason_rep_minor_tv as tv_clave, c.rev_clave as tv_rev_clave, c.descripcion as tv_descripcion, c.agrupacion_cs as tv_agrupacion_cs, c.ambito as tv_ambito')
+			->join(config('bd_claves_cierre_toa').' a', 'a_complete_reason_rep_minor_stb=a.clave', 'left')
+			->join(config('bd_claves_cierre_toa').' b', 'a_complete_reason_rep_minor_ba=b.clave', 'left')
+			->join(config('bd_claves_cierre_toa').' c', 'a_complete_reason_rep_minor_tv=c.clave', 'left')
+			->where('appt_number', $id_peticion)
+			->get()->result_array();
 	}
 
 	// --------------------------------------------------------------------
@@ -1149,14 +1165,12 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Control de clientes
 	 *
-	 * @param  string $cliente     Cliente a buscar
-	 * @param  string $fecha_desde Fecha incial para buscar
-	 * @param  string $fecha_hasta Fecha final para buscar
-	 * @return void
+	 * @param  Collection $params Parámetros del reporte
+	 * @return array
 	 */
-	public function consumo_clientes($cliente = NULL, $fecha_desde = NULL, $fecha_hasta = NULL)
+	public function consumo_clientes($params = NULL)
 	{
-		if ( ! $fecha_desde OR ! $fecha_hasta)
+		if ( ! $params)
 		{
 			return NULL;
 		}
@@ -1166,16 +1180,16 @@ class Consumo_toa extends ORM_Model {
 			->select('customer_number')
 			->select_max('cname')
 			->select('count(*) as cantidad', FALSE)
-			->where('date>=', $fecha_desde)
-			->where('date<=', $fecha_hasta)
+			->where('date>=', $params->get('fecha_desde', ''))
+			->where('date<=', $params->get('fecha_hasta', ''))
 			->where('astatus', 'complete')
 			->where('customer_number IS NOT NULL')
 			->group_by('customer_number')
 			->order_by('cantidad', 'desc');
 
-		if ($cliente)
+		if ( ! empty($params->get('cliente', '')))
 		{
-			$this->db->like('cname', strtoupper($cliente));
+			$this->db->like('cname', strtoupper($params->get('cliente', '')));
 		}
 
 		return $this->db
@@ -1188,33 +1202,19 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Devuelve matriz de materiales por tipos de trabajo
 	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
+	 * @param  string $params Parametros del reporte
+	 * @return Collection
 	 */
-	public function materiales_tipos_trabajo($empresa = NULL, $anomes = NULL, $tipo_trabajo = NULL, $dato_desplegar = 'unidad')
+	public function materiales_tipos_trabajo($params = NULL)
 	{
-		if ( ! $empresa OR ! $anomes OR ! $tipo_trabajo)
+		if (empty($params))
 		{
 			return NULL;
 		}
-		$arr_dias = get_arr_dias_mes($anomes);
 
-		$datos       = collect($this->get_datos_materiales($empresa, $anomes, $tipo_trabajo, $dato_desplegar));
+		$datos = $this->get_datos_materiales($params);
+		$materiales = $this->get_materiales_distintos($datos);
 		$referencias = $datos->pluck('referencia')->unique()->sort();
-		$materiales  = $datos->map_with_keys(function($material) {
-			return [$material['material'] => [
-				'material'          => $material['material'],
-				'texto_material'    => $material['texto_material'],
-				'desc_tip_material' => $material['desc_tip_material'],
-				'color'             => $material['color'],
-			]];
-		})->unique()
-		->sort(function($material1, $material2) {
-			return $material1['desc_tip_material'].$material1['material'] > $material2['desc_tip_material'].$material2['material'];
-		});
 
 		return $referencias->map_with_keys(function($referencia) use ($materiales, $datos) {
 			$data_referencia = $datos->filter(function($data) use ($referencia) {
@@ -1242,33 +1242,52 @@ class Consumo_toa extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
+	 * Devuelve los materiales distintos de un conjunto de datos
+	 * @param  Collection $datos Datos de materiales
+	 * @return Collection
+	 */
+	public function get_materiales_distintos($datos = NULL)
+	{
+		return $datos->map_with_keys(function($material) {
+			return [$material['material'] => [
+				'material'          => $material['material'],
+				'texto_material'    => $material['texto_material'],
+				'desc_tip_material' => $material['desc_tip_material'],
+				'color'             => $material['color'],
+			]];
+		})->unique()
+		->sort(function($material1, $material2) {
+			return $material1['desc_tip_material'].$material1['material'] > $material2['desc_tip_material'].$material2['material'];
+		});
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
 	 * Recupero datos por matriales
 	 *
-	 * @param  string $empresa        Empresa
-	 * @param  string $anomes         Año y mes a consultar
-	 * @param  string $tipo_trabajo   Tipo de trabajo a consultar
-	 * @param  string $dato_desplegar Indica si despliega monto o cantidad
-	 * @return array
+	 * @param  string $parmas Parametros de la consulta
+	 * @return Collection
 	 */
-	protected function get_datos_materiales($empresa, $anomes, $tipo_trabajo, $dato_desplegar)
+	protected function get_datos_materiales($params)
 	{
-		if ($tipo_trabajo !== '000')
+		if ($params->get('tipo_trabajo', '') !== '000')
 		{
-			$this->db->where('a.carta_porte', $tipo_trabajo);
+			$this->db->where('a.carta_porte', $params->get('tipo_trabajo', ''));
 		}
 
-		return $this->datos_movimientos_consumo($empresa, $anomes)
+		return collect($this->datos_movimientos_consumo($params->get('empresa', ''), $params->get('mes', ''))
 			->select('a.referencia')->group_by('a.referencia')
 			->select('a.material')->group_by('a.material')
 			->select('a.texto_material')->group_by('a.texto_material')
 			->select('a.fecha_contabilizacion as fecha')->group_by('a.fecha_contabilizacion')
 			->select('d.desc_tip_material')->group_by('d.desc_tip_material')
 			->select('d.color')->group_by('d.color')
-			->select_sum($dato_desplegar === 'monto' ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
+			->select_sum($params->get('dato', 'unidad') === 'monto' ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
 			->order_by('referencia, material')
 			->join(config('bd_catalogo_tip_material_toa').' c', 'a.material=c.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' d', 'c.id_tip_material=d.id', 'left')
-			->get()->result_array();
+			->get()->result_array());
 	}
 
 
