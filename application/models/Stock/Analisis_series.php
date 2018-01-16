@@ -121,7 +121,7 @@ class Analisis_series extends ORM_Model {
 							return $serie;
 							break;
 			case 'celular':
-							return strlen($valor) === '9' ? substr($valor, 1, 8) : $valor;
+							return strlen($serie) === 9 ? substr($serie, 1, 8) : $serie;
 							break;
 			default:
 							return $serie;
