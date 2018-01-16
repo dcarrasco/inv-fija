@@ -148,7 +148,7 @@ trait has_cli_output {
 	protected function print_cli_header()
 	{
 		$texto_intervalo = $this->process_duration->s > 0
-			? ($this->process_duration->s + (property_exists($this->process_duration, 'f') ? $this->process_duration->f : 0)).' segundos'
+			? number_format($this->process_duration->s + (property_exists($this->process_duration, 'f') ? $this->process_duration->f : 0), 2).' segundos'
 			: (property_exists($this->process_duration, 'f') ? $this->process_duration->f*1000 : 0).' ms';
 
 		return "Codeigniter Unit Testing 1.0.0 by DC\n\n"
