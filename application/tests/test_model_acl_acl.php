@@ -104,6 +104,18 @@ class test_model_acl_acl extends test_case {
 		$this->assert_true($acl->is_user_logged());
 	}
 
+	public function test_is_user_remembered()
+	{
+		$acl = Acl\Acl::create($this->new_ci_object());
+		$method = new ReflectionMethod('Acl\Acl', '_is_user_remembered');
+		$method->setAccessible(TRUE);
+
+		$this->assert_false($method->invoke($acl));
+
+		$acl->input->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
+		$this->assert_true($method->invoke($acl));
+	}
+
 	public function test_check_user_credentials()
 	{
 		$acl = Acl\Acl::create($this->new_ci_object());
@@ -180,6 +192,57 @@ class test_model_acl_acl extends test_case {
 
 		$acl->db->mock_set_return_result(['user' => 'user']);
 		$this->assert_true($acl->existe_usuario('usuario'));
+	}
+
+	public function test_get_llaves_modulos()
+	{
+		$acl = Acl\Acl::create($this->new_ci_object());
+		$method = new ReflectionMethod('Acl\Acl', '_get_llaves_modulos');
+		$method->setAccessible(TRUE);
+
+		$acl->db->mock_set_return_result([
+			['llave_modulo' => 'llave_modulo1'],
+			['llave_modulo' => 'llave_modulo2'],
+			['llave_modulo' => 'llave_modulo3'],
+		]);
+
+		$this->assert_equals($method->invoke($acl, 'usuario'), ['llave_modulo1', 'llave_modulo2', 'llave_modulo3']);
+	}
+
+	public function test_create_salt()
+	{
+		$acl = Acl\Acl::create($this->new_ci_object());
+		$method = new ReflectionMethod('Acl\Acl', '_create_salt');
+		$method->setAccessible(TRUE);
+
+		$largo_salt_algo = 7;
+
+		$this->assert_is_string($method->invoke($acl));
+		$this->assert_equals(strlen($method->invoke($acl)), $largo_salt_algo + 22);
+
+		$this->assert_is_string($method->invoke($acl, 10));
+		$this->assert_equals(strlen($method->invoke($acl, 10)), $largo_salt_algo + 10);
+	}
+
+	public function test_valida_password()
+	{
+		$acl = Acl\Acl::create($this->new_ci_object());
+		$method = new ReflectionMethod('Acl\Acl', '_valida_password');
+		$method->setAccessible(TRUE);
+
+		$hash = crypt('password', '$2a$10$ksi38hdnsheusowismiejd');
+		$this->assert_true($method->invoke($acl, 'password', $hash));
+		$this->assert_false($method->invoke($acl, 'PassWord', $hash));
+	}
+
+	public function test_hash_password()
+	{
+		$acl = Acl\Acl::create($this->new_ci_object());
+		$method = new ReflectionMethod('Acl\Acl', '_hash_password');
+		$method->setAccessible(TRUE);
+
+		$this->assert_is_string($method->invoke($acl, 'password'));
+		$this->assert_equals(strlen($method->invoke($acl, 'password')), 60);
 	}
 
 
