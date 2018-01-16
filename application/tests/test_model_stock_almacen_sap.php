@@ -44,7 +44,14 @@ class test_model_stock_almacen_sap extends test_case {
 
 	public function test_to_string()
 	{
-		$this->assert_is_string((string) Almacen_sap::create());
+		$almacen_sap = Almacen_sap::create($this->new_ci_object());
+		$almacen_sap->db->mock_set_return_result([
+			'centro' => 'centro',
+			'cod_almacen' => 'cod_almacen',
+			'des_almacen' => 'des_almacen',
+		]);
+
+		$this->assert_equals((string) $almacen_sap->find('first'), 'centro-cod_almacen des_almacen');
 	}
 
 	public function test_get_combo_almacenes_db()
