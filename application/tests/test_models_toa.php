@@ -1,6 +1,9 @@
 <?php
 
 use test\test_case;
+use test\mock\mock_db;
+use test\mock\mock_input;
+use test\mock\mock_session;
 
 /**
  * testeo clase collection
@@ -18,6 +21,14 @@ class test_models_toa extends test_case {
 		parent::__construct();
 	}
 
+	protected function new_ci_object()
+	{
+		return [
+			'session' => new mock_session,
+			'db'      => new mock_db,
+			'input'   => new mock_input,
+		];
+	}
 	public function test_asignacion_toa()
 	{
 		$asignacion_toa = new Toa\Asignacion_toa;
@@ -39,8 +50,14 @@ class test_models_toa extends test_case {
 		$this->assert_empty($asignacion_toa->detalle_asignacion_toa());
 		$this->assert_empty($asignacion_toa->detalle_asignacion_toa('20170101'));
 
-		$this->assert_empty($asignacion_toa->control_asignaciones());
-		$this->assert_empty($asignacion_toa->control_asignaciones('20170101'));
+		$asignacion_toa = Toa\Asignacion_toa::create($this->new_ci_object());
+		$asignacion_toa->db->mock_set_return_result([
+			['fecha'=>'20170101', 'llave'=>'123456', 'dato'=>'12'],
+			['fecha'=>'20170102', 'llave'=>'123456', 'dato'=>'12'],
+		]);
+
+		$this->assert_empty($asignacion_toa->control_asignaciones()->all());
+		$this->assert_empty($asignacion_toa->control_asignaciones(collect(['mes'=>'201701']))->all());
 	}
 
 	public function test_ciudad_toa()

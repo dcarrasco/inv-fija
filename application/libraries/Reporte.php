@@ -406,11 +406,13 @@ trait Reporte {
 			->sort()
 			->unique()
 			->map_with_keys(function($llave) use ($dias, $data) {
-				$data_llave = $data->filter(function($dato) use ($llave) {
-					return $dato['llave'] === $llave;
-				})->map_with_keys(function($dato) {
-					return [fmt_fecha($dato['fecha'], 'd') => $dato['dato']];
-				});
+				$data_llave = $data
+					->filter(function($dato) use ($llave) {
+						return array_get($dato, 'llave') === $llave;
+					})
+					->map_with_keys(function($dato) {
+						return [fmt_fecha(array_get($dato, 'fecha'), 'd') => array_get($dato, 'dato')];
+					});
 
 				return [$llave => $dias->merge($data_llave)->all()];
 			});

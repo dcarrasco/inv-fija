@@ -35,14 +35,23 @@ class test_reporte extends test_case {
 	{
 		$expected = ['llave' => [
 			'01'=>NULL,'02'=>NULL,'03'=>NULL,'04'=>10,'05'=>NULL,
-			'06'=>NULL,'07'=>NULL,'08'=>NULL,'09'=>NULL,10=>NULL,
-			11=>NULL,12=>NULL,13=>NULL,14=>NULL,15=>NULL,16=>NULL,17=>NULL,18=>NULL,19=>NULL,20=>NULL,
+			'06'=>20,'07'=>NULL,'08'=>NULL,'09'=>NULL,10=>NULL,
+			11=>NULL,12=>NULL,13=>NULL,14=>NULL,15=>NULL,16=>30,17=>NULL,18=>NULL,19=>NULL,20=>NULL,
 			21=>NULL,22=>NULL,23=>NULL,24=>NULL,25=>NULL,26=>NULL,27=>NULL,28=>NULL,
 		]];
 
 		$this->assert_equals(
-			(new Repo())->result_to_month_table([['fecha' => '20170204', 'dato' => 10, 'llave' => 'llave']])->all(),
+			(new Repo())->result_to_month_table([
+				['fecha' => '20170204', 'dato' => 10, 'llave' => 'llave'],
+				['fecha' => '20170206', 'dato' => 20, 'llave' => 'llave'],
+				['fecha' => '20170216', 'dato' => 30, 'llave' => 'llave'],
+			])->all(),
 			$expected
+		);
+
+		$this->assert_equals(
+			(new Repo())->result_to_month_table([['campo1' => '20170204', 'campo2' => 10, 'campo3' => 'llave']])->all(),
+			[''=>[''=>null]]
 		);
 
 	}

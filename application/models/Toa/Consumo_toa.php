@@ -186,23 +186,20 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Devuelve matriz de consumos de técnicos por dia
 	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
+	 * @param  Collection $params Parametros a consultar
+	 * @return Collection
 	 */
-	public function control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
+	public function control_tecnicos($params = NULL)
 	{
-		if ( ! $empresa OR ! $anomes)
+		if ( ! $params)
 		{
-			return NULL;
+			return collect();
 		}
 
-		$datos = $this->result_to_month_table($this->datos_control_tecnicos($empresa, $anomes, $filtro_trx, $dato_desplegar));
+		$datos = $this->result_to_month_table($this->datos_control_tecnicos($params));
 
 		return Tecnico_toa::create()
-			->find('all', ['conditions' => ['id_empresa' => $empresa]])
+			->find('all', ['conditions' => ['id_empresa' => $params->get('empresa')]])
 			->map_with_keys(function($tecnico) use ($datos) {
 				return [$tecnico->id_tecnico => [
 					'nombre'       => $tecnico->tecnico,
@@ -253,62 +250,90 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Devuelve datos de consumos de técnicos por dia
 	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
+	 * @param  Collection $params Parametros de la consulta
+	 * @return array
 	 */
-	protected function datos_control_tecnicos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'peticiones')
+	protected function datos_control_tecnicos($params = NULL)
 	{
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = get_fecha_hasta($anomes);
-
-		if ( ! $filtro_trx OR $filtro_trx === '000')
+		if ($params->get('filtro_trx', '000') === '000')
 		{
-			$select_sum = [
-				'unidades'   => 'cant',
-				'monto'      => 'monto',
-				'peticiones' => '1',
-			];
-			$this->db->select_sum(array_get($select_sum, $dato_desplegar, '1'), 'dato');
-
-			return $this->db
-				->select('a.fecha')->group_by('a.fecha')
-				->select('a.tecnico as llave')->group_by('a.tecnico')
-				->where('a.fecha>=', $fecha_desde)
-				->where('a.fecha<', $fecha_hasta)
-				->where('b.id_empresa', $empresa)
-				// ->where_in('codigo_movimiento', $this->movimientos_consumo)
-				// ->where_in('centro', $this->centros_consumo)
-				->from(config('bd_peticiones_sap').' a')
-				->join(config('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
-				->get()->result_array();
+			return $this->datos_control_tecnicos_todas_las_trx($params);
 		}
-		else
-		{
-			$query = $this->datos_movimientos_consumo($empresa, $anomes)
-				->select('a.fecha_contabilizacion as fecha')
-				->select('a.cliente as tecnico')
-				->select('a.referencia')
-				->select_sum('(-a.cantidad_en_um)', 'cant')
-				->select_sum('(-a.importe_ml)', 'monto')
-				->group_by('a.fecha_contabilizacion')
-				->group_by('a.cliente')
-				->group_by('a.referencia')
-				->where('codigo_movimiento', $filtro_trx)
-				->get_compiled_select();
 
-			$arr_dato_desplegar = [
-				'peticiones' => 'count(q1.referencia)',
-				'unidades'   => 'sum(q1.cant)',
-				'monto'      => 'sum(q1.monto)'
-			];
+		return $this->datos_control_tecnicos_filtra_trx($params);
+	}
 
-			$query = 'select q1.fecha, q1.tecnico as llave, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
+	// --------------------------------------------------------------------
 
-			return $this->db->query($query)->result_array();
-		}
+	/**
+	 * Devuelve datos de consumos de técnicos por dia para todos los movimientos
+	 *
+	 * @param  Collection $params Parametros de la consulta
+	 * @return array
+	 */
+	protected function datos_control_tecnicos_todas_las_trx($params = NULL)
+	{
+		$fecha_desde = $params->get('mes', '').'01';
+		$fecha_hasta = get_fecha_hasta($params->get('mes', ''));
+		$dato_desplegar = $params->get('dato_desplegar', 'peticiones');
+		$empresa = $params->get('empresa', '');
+
+		$select_sum = [
+			'unidades'   => 'cant',
+			'monto'      => 'monto',
+			'peticiones' => '1',
+		];
+		$this->db->select_sum(array_get($select_sum, $dato_desplegar , '1'), 'dato');
+
+		return $this->db
+			->select('a.fecha')->group_by('a.fecha')
+			->select('a.tecnico as llave')->group_by('a.tecnico')
+			->where('a.fecha>=', $fecha_desde)
+			->where('a.fecha<', $fecha_hasta)
+			->where('b.id_empresa', $empresa)
+			// ->where_in('codigo_movimiento', $this->movimientos_consumo)
+			// ->where_in('centro', $this->centros_consumo)
+			->from(config('bd_peticiones_sap').' a')
+			->join(config('bd_tecnicos_toa').' b', 'a.tecnico = b.id_tecnico', 'left', FALSE)
+			->get()->result_array();
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de consumos de técnicos por dia filtrado por los movimientos
+	 *
+	 * @param  Collection $params Parametros de la consulta
+	 * @return array
+	 */
+	protected function datos_control_tecnicos_filtra_trx($params = NULL)
+	{
+		$anomes = $params->get('mes', '');
+		$empresa = $params->get('empresa', '');
+		$dato_desplegar = $params->get('dato_desplegar', 'peticiones');
+		$filtro_trx = $params->get('filtro_trx', '');
+
+		$query = $this->datos_movimientos_consumo($empresa, $anomes)
+			->select('a.fecha_contabilizacion as fecha')
+			->select('a.cliente as tecnico')
+			->select('a.referencia')
+			->select_sum('(-a.cantidad_en_um)', 'cant')
+			->select_sum('(-a.importe_ml)', 'monto')
+			->group_by('a.fecha_contabilizacion')
+			->group_by('a.cliente')
+			->group_by('a.referencia')
+			->where('codigo_movimiento', $filtro_trx)
+			->get_compiled_select();
+
+		$arr_dato_desplegar = [
+			'peticiones' => 'count(q1.referencia)',
+			'unidades'   => 'sum(q1.cant)',
+			'monto'      => 'sum(q1.monto)'
+		];
+
+		$query = 'select q1.fecha, q1.tecnico as llave, '.$arr_dato_desplegar[$dato_desplegar].' as dato from ('.$query.') q1 group by q1.fecha, q1.tecnico order by q1.tecnico, q1.fecha';
+
+		return $this->db->query($query)->result_array();
 	}
 
 	// --------------------------------------------------------------------
@@ -316,20 +341,18 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Devuelve matriz de materiales consumidos por dia
 	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
+	 * @param  Collection $params Parametros de la consulta
+	 * @return Collection
 	 */
-	public function materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades')
+	public function materiales_consumidos($params = NULL)
 	{
-		if ( ! $empresa OR ! $anomes)
+		if ( ! $params)
 		{
-			return NULL;
+			return collect();
 		}
 
-		$materiales = collect($this->datos_materiales_consumidos($empresa, $anomes, $filtro_trx, $dato_desplegar));
+		$materiales = collect($this->datos_materiales_consumidos($params));
+
 		$datos = $this->result_to_month_table($materiales->map(function($material) {
 			return [
 				'fecha' => $material['fecha'],
@@ -348,14 +371,9 @@ class Consumo_toa extends ORM_Model {
 			];
 		})->unique()
 		->map(function ($material) use ($datos) {
-			return [
-				'material'     => $material['material'],
-				'descripcion'  => $material['descripcion'],
-				'unidad'       => $material['unidad'],
-				'tip_material' => $material['tip_material'],
-				'color'        => $material['color'],
-				'actuaciones'  => $datos->get($material['material']),
-			];
+			return collect($material)
+				->merge(['actuaciones' => $datos->get($material['material'])])
+				->all();
 		})->sort(function($material1, $material2) {
 			return $material1['tip_material'].$material1['material'] > $material2['tip_material'].$material2['material'];
 		});
@@ -367,26 +385,19 @@ class Consumo_toa extends ORM_Model {
 	/**
 	 * Recupera los datos para reporte de control de materiales consumidos
 	 *
-	 * @param  string $empresa        Empresa a recuperar
-	 * @param  string $anomes         Año y mes a recuperar (formato YYYYMM)
-	 * @param  string $filtro_trx     Filtro de las transacciones
-	 * @param  string $dato_desplegar Dato a desplegar
+	 * @param  Collection $params Parametros de la consulta
 	 * @return array
 	 */
-	protected function datos_materiales_consumidos($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'unidades')
+	protected function datos_materiales_consumidos($params)
 	{
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = get_fecha_hasta($anomes);
-
-
-		return $this->datos_movimientos_consumo($empresa, $anomes, $filtro_trx)
+		return $this->datos_movimientos_consumo($params->get('empresa'), $params->get('mes'), $params->get('filtro_trx'))
 			->select('a.fecha_contabilizacion as fecha')->group_by('a.fecha_contabilizacion')
 			->select('a.material')->group_by('a.material')
 			->select('c.descripcion')
 			->select('a.ume')->group_by('a.ume')
 			->select('e.desc_tip_material')->group_by('e.desc_tip_material')
 			->select('e.color')->group_by('e.color')
-			->select_sum(($dato_desplegar === 'monto') ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
+			->select_sum(($params->get('dato_desplegar', 'unidades') === 'monto') ? '(-a.importe_ml)' : '(-a.cantidad_en_um)', 'dato')
 			->group_by('c.descripcion')
 			// ->where('almacen', NULL)
 			->join(config('bd_catalogos').' c', 'a.material=c.catalogo', 'left', FALSE)

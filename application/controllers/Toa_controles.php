@@ -110,7 +110,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => Consumo_toa::create()->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => Consumo_toa::create()->control_tecnicos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Consumo_toa::create()->control_tecnicos(request()),
 		]);
 	}
 
@@ -133,7 +133,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => Asignacion_toa::create()->combo_unidades_asignacion,
 			'url_detalle_dia'      => 'toa_asignaciones/ver_asignaciones/tecnicos',
 			'anomes'               => request('mes'),
-			'control'              => Asignacion_toa::create()->control_asignaciones(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Asignacion_toa::create()->control_asignaciones(request()),
 		]);
 	}
 
@@ -155,7 +155,7 @@ class Toa_controles extends Controller_base {
 			'combo_dato_desplegar' => Consumo_toa::create()->combo_unidades_consumo,
 			'url_detalle_dia'      => 'toa_consumos/ver_peticiones/material',
 			'anomes'               => request('mes'),
-			'control'              => Consumo_toa::create()->materiales_consumidos(request('empresa'), request('mes'), request('filtro_trx'), request('dato')),
+			'control'              => Consumo_toa::create()->materiales_consumidos(request()),
 		]);
 	}
 

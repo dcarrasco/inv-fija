@@ -160,9 +160,9 @@ class Asignacion_toa extends ORM_Model {
 	 *
 	 * @return  void
 	 */
-	public function __construct()
+	public function __construct($id = NULL, $ci_object = [])
 	{
-		parent::__construct();
+		parent::__construct($id, $ci_object);
 		$this->load->helper('date');
 	}
 
@@ -403,24 +403,53 @@ class Asignacion_toa extends ORM_Model {
 	/**
 	 * Devuelve matriz de asignaciones a técnicos por dia
 	 *
-	 * @param  string $empresa        Empresa a consultar
-	 * @param  string $anomes         Mes a consultar, formato YYYYMM
-	 * @param  string $filtro_trx     Filtro para revisar un codigo movimiento
-	 * @param  string $dato_desplegar Tipo de dato a desplegar
-	 * @return array                  Arreglo con los datos del reporte
+	 * @param  Collection $params Parametros del reporte
+	 * @return Collection
 	 */
-	public function control_asignaciones($empresa = NULL, $anomes = NULL, $filtro_trx = NULL, $dato_desplegar = 'asignaciones')
+	public function control_asignaciones($params = NULL)
 	{
-		if ( ! $empresa OR ! $anomes)
+		if ( ! $params)
 		{
-			return NULL;
+			return collect();
 		}
 
+		$datos = $this->result_to_month_table($this->control_asignaciones_datos($params));
 
-		$fecha_desde = $anomes.'01';
-		$fecha_hasta = get_fecha_hasta($anomes);
+		return Tecnico_toa::create($this->ci_object)
+			->find('all', ['conditions' => ['id_empresa' => $params->get('empresa')]])
+			->map_with_keys(function($tecnico) use ($datos) {
+				return [$tecnico->id_tecnico => [
+					'nombre'       => $tecnico->tecnico,
+					'rut'          => $tecnico->rut,
+					'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
+					'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
+					'actuaciones'  => $datos->get($tecnico->id_tecnico),
+				]];
+			})
+			->filter(function($tecnico) {
+				return collect($tecnico['actuaciones'])->sum() !== 0;
+			})
+			->sort(function($tecnico1, $tecnico2) {
+				return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
+			});
+	}
 
-		if ($filtro_trx && $filtro_trx !== '000')
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve datos de asignaciones a técnicos por dia
+	 *
+	 * @param  Collection $params Parametros del reporte
+	 * @return array
+	 */
+	public function control_asignaciones_datos($params)
+	{
+		$fecha_desde = $params->get('mes', '').'01';
+		$fecha_hasta = get_fecha_hasta($params->get('mes', ''));
+		$dato_desplegar = $params->get('dato_desplegar', 'asignaciones');
+		$empresa = $params->get('empresa', '');
+
+		if ($params->get('filtro_trx', '000') !== '000')
 		{
 			$this->db->where('codigo_movimiento', $filtro_trx);
 		}
@@ -434,7 +463,7 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->select('count(*) as dato', FALSE);
 		}
 
-		$datos = $this->rango_asignaciones($fecha_desde, $fecha_hasta, FALSE)
+		return $this->rango_asignaciones($fecha_desde, $fecha_hasta, FALSE)
 			->select('a.fecha_contabilizacion as fecha')
 			->select('a.cliente as llave')
 			->group_by('a.fecha_contabilizacion')
@@ -443,23 +472,6 @@ class Asignacion_toa extends ORM_Model {
 			->where('almacen', NULL)
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
 			->get()->result_array();
-
-		$tecnicos = Tecnico_toa::create()->find('all', ['conditions' => ['id_empresa' => $empresa]]);
-		$datos    = $this->result_to_month_table(collect($datos));
-
-		return $tecnicos->map_with_keys(function($tecnico) use ($datos) {
-			return [$tecnico->id_tecnico => [
-				'nombre'       => $tecnico->tecnico,
-				'rut'          => $tecnico->rut,
-				'ciudad'       => (string) $tecnico->get_relation_object('id_ciudad'),
-				'orden_ciudad' => (int) $tecnico->get_relation_object('id_ciudad')->orden,
-				'actuaciones'  => $datos->get($tecnico->id_tecnico),
-			]];
-		})->filter(function($tecnico) {
-			return collect($tecnico['actuaciones'])->sum() !== 0;
-		})->sort(function($tecnico1, $tecnico2) {
-			return $tecnico1['orden_ciudad'] > $tecnico2['orden_ciudad'];
-		});
 	}
 
 

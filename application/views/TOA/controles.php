@@ -53,7 +53,7 @@
 </div>
 
 <div class="content-module-main">
-<?php if ($control): ?>
+<?php if (! $control->is_empty()): ?>
 	<?php $num_lin = 0; $tot_col = []; $count_col = [];?>
 	<table class="table table-bordered table-hover table-condensed reporte">
 
