@@ -29,36 +29,6 @@ class test_models_toa extends test_case {
 			'input'   => new mock_input,
 		];
 	}
-	public function test_asignacion_toa()
-	{
-		$asignacion_toa = new Toa\Asignacion_toa;
-
-		$this->assert_is_object($asignacion_toa);
-		$this->assert_empty($asignacion_toa->get_fields());
-
-		$this->assert_not_empty($asignacion_toa->rules);
-		$this->assert_not_empty($asignacion_toa->tipos_reporte_asignaciones);
-		$this->assert_not_empty($asignacion_toa->movimientos_asignaciones);
-		$this->assert_not_empty($asignacion_toa->centros_asignacion);
-
-		$this->assert_empty($asignacion_toa->asignaciones_toa());
-		$this->assert_empty($asignacion_toa->asignaciones_toa('tecnicos'));
-		$this->assert_empty($asignacion_toa->asignaciones_toa('tecnicos', '201701'));
-
-		$this->assert_empty($asignacion_toa->documentos_asignaciones_toa());
-
-		$this->assert_empty($asignacion_toa->detalle_asignacion_toa());
-		$this->assert_empty($asignacion_toa->detalle_asignacion_toa('20170101'));
-
-		$asignacion_toa = Toa\Asignacion_toa::create($this->new_ci_object());
-		$asignacion_toa->db->mock_set_return_result([
-			['fecha'=>'20170101', 'llave'=>'123456', 'dato'=>'12'],
-			['fecha'=>'20170102', 'llave'=>'123456', 'dato'=>'12'],
-		]);
-
-		$this->assert_empty($asignacion_toa->control_asignaciones()->all());
-		$this->assert_empty($asignacion_toa->control_asignaciones(collect(['mes'=>'201701']))->all());
-	}
 
 	public function test_ciudad_toa()
 	{

@@ -131,7 +131,7 @@ class Asignacion_toa extends ORM_Model {
 	 *
 	 * @var array
 	 */
-	protected $campos = [
+	protected $configuracion_campos = [
 		'empresa'            => ['titulo' => 'Empresa'],
 		'cliente'            => ['titulo' => 'Cod Tecnico'],
 		'tecnico'            => ['titulo' => 'Nombre Tecnico'],
@@ -150,6 +150,18 @@ class Asignacion_toa extends ORM_Model {
 		'usuario'            => ['titulo' => 'Usuario SAP'],
 		'cant'               => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
 		'monto'              => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+	];
+
+	/**
+	 * Configuración de los campos de los reportes
+	 * @var array
+	 */
+	protected $config_campos_reportes = [
+		'tecnicos'      => ['empresa', 'cliente', 'tecnico', 'cant', 'monto'],
+		'material'      => ['material', 'texto_material', 'cant', 'monto'],
+		'lote'          => ['valor', 'lote', 'cant', 'monto'],
+		'lote-material' => ['valor', 'lote', 'material', 'texto_material', 'cant', 'monto'],
+		'detalle'       => ['fecha', 'referencia', 'empresa', 'cliente', 'tecnico', 'codigo_movimiento', 'texto_movimiento', 'elemento_pep', 'documento_material', 'centro', 'material', 'texto_material', 'lote', 'valor', 'umb', 'cant', 'monto', 'usuario'],
 	];
 
 
@@ -244,15 +256,34 @@ class Asignacion_toa extends ORM_Model {
 			'lote-material' => ['lote', 'material'],
 		];
 
-		return ! array_key_exists($reporte, $href)
-			? []
-			: ['texto_link' => [
-				'titulo'         => '',
-				'tipo'           => 'link_registro',
-				'class'          => 'text-right',
-				'href'           => "toa_asignaciones/ver_asignaciones/{$reporte}/{$fecha_desde}/{$fecha_hasta}",
-				'href_registros' => $href[$reporte],
-			]];
+		return ['texto_link' => [
+			'titulo'         => '',
+			'tipo'           => 'link_registro',
+			'class'          => 'text-right',
+			'href'           => "toa_asignaciones/ver_asignaciones/{$reporte}/{$fecha_desde}/{$fecha_hasta}",
+			'href_registros' => array_get($href, $reporte, []),
+		]];
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Devuelve los campos a mostrar en reporte de asignación
+	 * @param  string $reporte     Tipo de reporte a desplegar
+	 * @param  string $orden_campo Campo para ordenar el resultado
+	 * @param  string $orden_tipo  Orden del resultado (ascendente o descendente)
+	 * @return array
+	 */
+	protected function get_campos_reporte_asignaciones($reporte = 'tecnicos', $fecha_desde = NULL, $fecha_hasta = NULL, $orden_campo = '', $orden_tipo = 'ASC')
+	{
+		$orden_tipo = ($orden_tipo === '') ? 'ASC' : $orden_tipo;
+		$orden_campo = empty($orden_campo) ? array_get($this->order_fields, $reporte) : $orden_campo;
+
+		$arr_campos = collect($this->configuracion_campos)
+			->only(array_get($this->config_campos_reportes, $reporte))
+			->merge($this->texto_link($reporte, $fecha_desde, $fecha_hasta));
+
+		return $this->set_order_campos($arr_campos, $orden_campo);
 	}
 
 	// --------------------------------------------------------------------
@@ -274,24 +305,8 @@ class Asignacion_toa extends ORM_Model {
 			return '';
 		}
 
-		$campos_reporte = [
-			'tecnicos'      => ['empresa', 'cliente', 'tecnico', 'cant', 'monto'],
-			'material'      => ['material', 'texto_material', 'cant', 'monto'],
-			'lote'          => ['valor', 'lote', 'cant', 'monto'],
-			'lote-material' => ['valor', 'lote', 'material', 'texto_material', 'cant', 'monto'],
-			'detalle'       => ['fecha', 'referencia', 'empresa', 'cliente', 'tecnico', 'codigo_movimiento', 'texto_movimiento', 'elemento_pep', 'documento_material', 'centro', 'material', 'texto_material', 'lote', 'valor', 'umb', 'cant', 'monto', 'usuario'],
-		];
-
-		$orden_tipo = ($orden_tipo === '') ? 'ASC' : $orden_tipo;
-		$orden_campo = empty($orden_campo) ? array_get($this->order_fields, $reporte) : $orden_campo;
-
 		$this->datos_reporte = $this->get_datos_asignaciones($reporte, $fecha_desde, $fecha_hasta);
-
-		$arr_campos = collect($this->campos)
-			->only(array_get($campos_reporte, $reporte))
-			->merge($this->texto_link($reporte, $fecha_desde, $fecha_hasta));
-
-		$this->campos_reporte = $this->set_order_campos($arr_campos, $orden_campo);
+		$this->campos_reporte = $this->get_campos_reporte_asignaciones($reporte, $fecha_desde, $fecha_hasta, $orden_campo, $orden_tipo);
 
 		return $this->genera_reporte();
 	}
@@ -299,22 +314,17 @@ class Asignacion_toa extends ORM_Model {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Recupera peticiones dados argumentos de busqueda
+	 * Recupera datos peticiones dados argumentos de busqueda
 	 *
 	 * @param  string $tipo_reporte Tipo de reporte a buscar
 	 * @param  string $param1       Primer parametro
 	 * @param  string $param2       Segundo parametro
 	 * @param  string $param3       Tercer parametro
 	 * @param  string $param4       Cuarto parametro
-	 * @return string               Reporte con las peticiones encontradas
+	 * @return array
 	 */
-	public function documentos_asignaciones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
+	protected function datos_documentos_asignaciones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
 	{
-		if ( ! $tipo_reporte)
-		{
-			return '';
-		}
-
 		$filtros = [
 			'material' => 'a.material',
 			'lote'     => 'a.lote',
@@ -336,7 +346,7 @@ class Asignacion_toa extends ORM_Model {
 			$this->db->where('a.elemento_pep', $param4);
 		}
 
-		$this->datos_reporte = $this->rango_asignaciones($param1, $param2)
+		return $this->rango_asignaciones($param1, $param2)
 			->select("convert(varchar(20), a.fecha_contabilizacion, 112) as fecha, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote, 'ver detalle' as texto_link, sum(-a.cantidad_en_um) as cant, sum(-a.importe_ml) as monto", FALSE)
 			->group_by('a.fecha_contabilizacion, a.documento_material, c.empresa, a.cliente, b.tecnico, a.centro, a.almacen, d.des_almacen, a.material, a.texto_material, a.valor, a.lote')
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente=b.id_tecnico', 'left', FALSE)
@@ -345,29 +355,65 @@ class Asignacion_toa extends ORM_Model {
 			->order_by('a.documento_material', 'ASC')
 			->get()->result_array();
 
-		$arr_campos = [];
-		$arr_campos['fecha']              = ['titulo' => 'Fecha', 'tipo' => 'fecha'];
-		$arr_campos['documento_material'] = ['titulo' => 'Documento SAP'];
-		$arr_campos['empresa']            = ['titulo' => 'Empresa'];
-		$arr_campos['cliente']            = ['titulo' => 'Cod Tecnico'];
-		$arr_campos['tecnico']            = ['titulo' => 'Nombre Tecnico'];
-		$arr_campos['centro']             = ['titulo' => 'Centro'];
-		$arr_campos['almacen']            = ['titulo' => 'Almac&eacute;n'];
-		$arr_campos['des_almacen']        = ['titulo' => 'Desc Almac&eacute;n'];
-		$arr_campos['material']           = ['titulo' => 'Material'];
-		$arr_campos['texto_material']     = ['titulo' => 'Desc Material'];
-		$arr_campos['lote']               = ['titulo' => 'Lote'];
-		$arr_campos['valor']              = ['titulo' => 'Valor'];
-		$arr_campos['cant']               = ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'];
-		$arr_campos['monto']              = ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'];
-		$arr_campos['texto_link']         = [
-			'titulo'         => '',
-			'class'          => 'text-right',
-			'tipo'           => 'link_registro',
-			'href'           => 'toa_asignaciones/detalle_asignacion',
-			'href_registros' => ['fecha','documento_material']
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera campos peticiones dados argumentos de busqueda
+	 *
+	 * @return array
+	 */
+	protected function campos_documentos_asignaciones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
+	{
+		$campos_reporte = [
+			'fecha'              => ['titulo' => 'Fecha', 'tipo' => 'fecha'],
+			'documento_material' => ['titulo' => 'Documento SAP'],
+			'empresa'            => ['titulo' => 'Empresa'],
+			'cliente'            => ['titulo' => 'Cod Tecnico'],
+			'tecnico'            => ['titulo' => 'Nombre Tecnico'],
+			'centro'             => ['titulo' => 'Centro'],
+			'almacen'            => ['titulo' => 'Almac&eacute;n'],
+			'des_almacen'        => ['titulo' => 'Desc Almac&eacute;n'],
+			'material'           => ['titulo' => 'Material'],
+			'texto_material'     => ['titulo' => 'Desc Material'],
+			'lote'               => ['titulo' => 'Lote'],
+			'valor'              => ['titulo' => 'Valor'],
+			'cant'               => ['titulo' => 'Cantidad', 'tipo' => 'numero', 'class' => 'text-right'],
+			'monto'              => ['titulo' => 'Monto', 'tipo' => 'valor', 'class' => 'text-right'],
+			'texto_link'         => [
+				'titulo'         => '',
+				'class'          => 'text-right',
+				'tipo'           => 'link_registro',
+				'href'           => 'toa_asignaciones/detalle_asignacion',
+				'href_registros' => ['fecha','documento_material']
+			],
 		];
-		$this->campos_reporte = $this->set_order_campos($arr_campos, 'documento_material');
+
+		return $this->set_order_campos($campos_reporte, 'documento_material');
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera peticiones dados argumentos de busqueda
+	 *
+	 * @param  string $tipo_reporte Tipo de reporte a buscar
+	 * @param  string $param1       Primer parametro
+	 * @param  string $param2       Segundo parametro
+	 * @param  string $param3       Tercer parametro
+	 * @param  string $param4       Cuarto parametro
+	 * @return string               Reporte con las peticiones encontradas
+	 */
+	public function documentos_asignaciones_toa($tipo_reporte = NULL, $param1 = NULL, $param2 = NULL, $param3 = NULL, $param4 = NULL)
+	{
+		if ( ! $tipo_reporte)
+		{
+			return '';
+		}
+
+		$this->datos_reporte = $this->datos_documentos_asignaciones_toa($tipo_reporte, $param1, $param2, $param3, $param4);
+		$this->campos_reporte = $this->campos_documentos_asignaciones_toa();
 
 		return $this->genera_reporte();
 	}
