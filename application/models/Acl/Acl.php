@@ -704,8 +704,10 @@ class Acl extends Orm_Model {
 	 */
 	public function set_rememberme_cookie($usuario = '')
 	{
+		$token_to_hash  = $this->_create_salt();
 		$salt  = $this->_create_salt();
-		$token = substr($this->_hash_password($token, $salt), 32);
+
+		$token = substr($this->_hash_password($token_to_hash, $salt), 32);
 
 		// Graba la cookie que recuerda la sesion
 		$this->input->set_cookie([
