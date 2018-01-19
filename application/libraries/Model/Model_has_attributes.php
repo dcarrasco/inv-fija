@@ -147,7 +147,6 @@ trait Model_has_attributes {
 	 */
 	public function fill_from_array($data = [])
 	{
-
 		collect($this->fields)
 			->only(collect($data)->keys()->all())
 			->each(function($campo, $nombre_campo) use ($data) {

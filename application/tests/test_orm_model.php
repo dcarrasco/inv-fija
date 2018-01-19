@@ -18,6 +18,7 @@ class test_orm_model extends test_case {
 	public function __construct()
 	{
 		$this->mock = ['db'];
+		$this->test_class = model_test::class;
 
 	    parent::__construct();
 	}
@@ -155,6 +156,11 @@ class test_orm_model extends test_case {
 		$this->assert_equals($model->get_fields_values(), $expected);
 	}
 
+	public function test_has_attributes_determina_campo_id()
+	{
+		$this->assert_equals($this->get_method('_determina_campo_id'), ['campo01', 'campo02']);
+	}
+
 	public function test_has_attributes_get_id()
 	{
 		$model = $this->get_model()->fill($this->get_data01());
@@ -209,6 +215,12 @@ class test_orm_model extends test_case {
 		$model = $this->get_model()->fill($this->get_data01());
 
 		$this->assert_is_string($model->form_item('campo01'));
+		$this->assert_contains($model->form_item('campo01'), '<div class="form-group');
+		$this->assert_contains($model->form_item('campo01'), '<label for');
+		$this->assert_contains($model->form_item('campo01'), 'Label_campo01');
+		$this->assert_contains($model->form_item('campo01'), '<span class="text-danger">*</span>');
+		$this->assert_contains($model->form_item('campo01'), '<span class="help-block">');
+		$this->assert_contains($model->form_item('campo01'), 'texto_ayuda_campo01');
 	}
 
 	public function test_has_form_get_field_label()

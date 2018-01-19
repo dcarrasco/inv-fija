@@ -163,7 +163,7 @@ class test_case {
 		$method = new ReflectionMethod($this->test_class, $method_name);
 		$method->setAccessible(TRUE);
 
-		return $method->invoke($this->test_class::create(), ...$args);
+		return $method->invoke(new $this->test_class, ...$args);
 	}
 
 	// --------------------------------------------------------------------
