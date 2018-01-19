@@ -272,7 +272,7 @@ class test_orm_model extends test_case {
 
 class model_test extends ORM_Model {
 
-	public function __construct($id = NULL, $ci_object = [])
+	public function __construct($id = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -315,7 +315,7 @@ class model_test extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id, $ci_object);
+		parent::__construct($id);
 	}
 
 	public function __toString()
