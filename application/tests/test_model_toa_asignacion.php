@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Toa\Asignacion\Asignacion;
 
 /**
@@ -19,21 +16,10 @@ class test_model_toa_asignacion extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
+		$this->test_class = Asignacion::class;
+
 		parent::__construct();
-
-		$this->mock = [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
-	}
-
-	protected function getProperty($property_name = '')
-	{
-		$prop = new ReflectionProperty('Toa\Asignacion\Asignacion', $property_name);
-		$prop->setAccessible(TRUE);
-
-		return $prop->getValue(Asignacion::create());
 	}
 
 	public function test_new()
@@ -79,32 +65,32 @@ class test_model_toa_asignacion extends test_case {
 
 	public function test_select_fields()
 	{
-		$this->assert_not_empty($this->getProperty('select_fields'));
-		$this->assert_count($this->getProperty('select_fields'), 5);
+		$this->assert_not_empty($this->get_property('select_fields'));
+		$this->assert_count($this->get_property('select_fields'), 5);
 	}
 
 	public function test_group_by_fields()
 	{
-		$this->assert_not_empty($this->getProperty('group_by_fields'));
-		$this->assert_count($this->getProperty('group_by_fields'), 5);
+		$this->assert_not_empty($this->get_property('group_by_fields'));
+		$this->assert_count($this->get_property('group_by_fields'), 5);
 	}
 
 	public function test_order_fields()
 	{
-		$this->assert_not_empty($this->getProperty('order_fields'));
-		$this->assert_count($this->getProperty('order_fields'), 5);
+		$this->assert_not_empty($this->get_property('order_fields'));
+		$this->assert_count($this->get_property('order_fields'), 5);
 	}
 
 	public function test_configuracion_campos()
 	{
-		$this->assert_not_empty($this->getProperty('configuracion_campos'));
-		$this->assert_count($this->getProperty('configuracion_campos'), 18);
+		$this->assert_not_empty($this->get_property('configuracion_campos'));
+		$this->assert_count($this->get_property('configuracion_campos'), 18);
 	}
 
 	public function test_config_campos_reportes()
 	{
-		$this->assert_not_empty($this->getProperty('config_campos_reportes'));
-		$this->assert_count($this->getProperty('config_campos_reportes'), 5);
+		$this->assert_not_empty($this->get_property('config_campos_reportes'));
+		$this->assert_count($this->get_property('config_campos_reportes'), 5);
 	}
 
 	public function test_asignaciones_toa()
@@ -121,7 +107,7 @@ class test_model_toa_asignacion extends test_case {
 		$this->assert_empty($asignacion->detalle('20170101'));
 
 		$asignacion = Asignacion::create();
-		$this->mock['db']->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['fecha'=>'20170101', 'llave'=>'123456', 'dato'=>'12'],
 			['fecha'=>'20170102', 'llave'=>'123456', 'dato'=>'12'],
 		]);

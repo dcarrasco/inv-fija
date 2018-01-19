@@ -3,9 +3,6 @@
 use test\test_case;
 use Model\Orm_model;
 use Model\Orm_field;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 
 /**
  * testeo clase collection
@@ -20,6 +17,8 @@ class test_orm_model extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
+
 	    parent::__construct();
 	}
 
@@ -244,20 +243,16 @@ class test_orm_model extends test_case {
 
 	public function test_has_persistance_find()
 	{
-		$model = model_test::create([
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		]);
+		$model = model_test::create();
 
 		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
 		$rs_2 = ['campo01' => 'valor12', 'campo02' => 'valor22', 'campo03' => 32, 'campo04' => 1];
 		$rs_3 = ['campo01' => 'valor13', 'campo02' => 'valor23', 'campo03' => 33, 'campo04' => 1];
 
-		$model->db->mock_set_return_result($rs_1);
+		app('db')->mock_set_return_result($rs_1);
 		$this->assert_equals($model->find('first')->get_fields_values(), $rs_1);
 
-		$model->db->mock_set_return_result([$rs_1, $rs_2, $rs_3]);
+		app('db')->mock_set_return_result([$rs_1, $rs_2, $rs_3]);
 		$this->assert_equals(json_encode($model->find('all')->get(0)), json_encode(model_test::create()->fill_from_array($rs_1)));
 		$this->assert_equals(json_encode($model->find('all')->get(1)), json_encode(model_test::create()->fill_from_array($rs_2)));
 		$this->assert_equals(json_encode($model->find('all')->get(2)), json_encode(model_test::create()->fill_from_array($rs_3)));

@@ -2,8 +2,6 @@
 
 use test\test_case;
 use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Stock\Analisis_series;
 
 /**
@@ -19,25 +17,10 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
+		$this->test_class = Analisis_series::class;
+
 		parent::__construct();
-
-		$this->mock = [
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-			'session' => new mock_session,
-		];
-
-		App::mock('db', $this->mock['db']);
-		App::mock('input', $this->mock['input']);
-		App::mock('session', $this->mock['session']);
-	}
-
-	protected function getMethod($method_name = '', ...$args)
-	{
-		$method = new ReflectionMethod('Stock\Analisis_series', $method_name);
-		$method->setAccessible(TRUE);
-
-		return $method->invoke(Analisis_series::create(), ...$args);
 	}
 
 	public function test_new()
@@ -54,7 +37,7 @@ class test_model_stock_analisis_series extends test_case {
 	{
 		$series = "012345678901234\r\n012345678901235\r\n890123456789012\r\n";
 
-		$this->assert_equals($this->getMethod('_series_list_to_array', $series), [
+		$this->assert_equals($this->get_method('_series_list_to_array', $series), [
 			'12345678901234',
 			'12345678901235',
 			'890123456789012',
@@ -63,31 +46,31 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function test_format_serie()
 	{
-		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'SAP'), '12345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'SAP'), '12345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'SAP'), '312345678901234');
+		$this->assert_equals($this->get_method('format_serie', '012345678901234', 'SAP'), '12345678901234');
+		$this->assert_equals($this->get_method('format_serie', '12345678901234', 'SAP'), '12345678901234');
+		$this->assert_equals($this->get_method('format_serie', '312345678901234', 'SAP'), '312345678901234');
 
-		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'trafico'), '012345678901230');
-		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'trafico'), '012345678901230');
-		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'trafico'), '312345678901230');
+		$this->assert_equals($this->get_method('format_serie', '012345678901234', 'trafico'), '012345678901230');
+		$this->assert_equals($this->get_method('format_serie', '12345678901234', 'trafico'), '012345678901230');
+		$this->assert_equals($this->get_method('format_serie', '312345678901234', 'trafico'), '312345678901230');
 
-		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'SCL'), '012345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'SCL'), '012345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'SCL'), '312345678901234');
+		$this->assert_equals($this->get_method('format_serie', '012345678901234', 'SCL'), '012345678901234');
+		$this->assert_equals($this->get_method('format_serie', '12345678901234', 'SCL'), '012345678901234');
+		$this->assert_equals($this->get_method('format_serie', '312345678901234', 'SCL'), '312345678901234');
 
-		$this->assert_equals($this->getMethod('format_serie', '123456789', 'celular'), '23456789');
-		$this->assert_equals($this->getMethod('format_serie', '12345678', 'celular'), '12345678');
+		$this->assert_equals($this->get_method('format_serie', '123456789', 'celular'), '23456789');
+		$this->assert_equals($this->get_method('format_serie', '12345678', 'celular'), '12345678');
 
-		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'otro'), '012345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'otro'), '12345678901234');
-		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'otros'), '312345678901234');
+		$this->assert_equals($this->get_method('format_serie', '012345678901234', 'otro'), '012345678901234');
+		$this->assert_equals($this->get_method('format_serie', '12345678901234', 'otro'), '12345678901234');
+		$this->assert_equals($this->get_method('format_serie', '312345678901234', 'otros'), '312345678901234');
 	}
 
 	public function test_get_dv_imei()
 	{
-		$this->assert_equals($this->getMethod('_get_dv_imei', '012345678901234'), '012345678901237');
-		$this->assert_equals($this->getMethod('_get_dv_imei', '12345678901234'), '012345678901237');
-		$this->assert_equals($this->getMethod('_get_dv_imei', '223456789012345'), '223456789012346');
+		$this->assert_equals($this->get_method('_get_dv_imei', '012345678901234'), '012345678901237');
+		$this->assert_equals($this->get_method('_get_dv_imei', '12345678901234'), '012345678901237');
+		$this->assert_equals($this->get_method('_get_dv_imei', '223456789012345'), '223456789012346');
 	}
 
 	public function test_get_historia()
@@ -112,8 +95,7 @@ class test_model_stock_analisis_series extends test_case {
 					return strpos($linea, 'table class') !== FALSE;
 				})
 				->all(), 3);
-
-		App::mock('db', $this->mock['db']);
+		App::mock('db', new mock_db);
 	}
 
 	public function test_get_despacho()
@@ -138,8 +120,7 @@ class test_model_stock_analisis_series extends test_case {
 					return strpos($linea, 'table class') !== FALSE;
 				})
 				->all(), 1);
-
-		App::mock('db', $this->mock['db']);
+		App::mock('db', new mock_db);
 	}
 
 	public function test_get_stock_sap()
@@ -165,7 +146,7 @@ class test_model_stock_analisis_series extends test_case {
 				})
 				->all(), 1);
 
-		App::mock('db', $this->mock['db']);
+		App::mock('db', new mock_db);
 	}
 
 	public function test_get_stock_scl()
@@ -194,7 +175,7 @@ class test_model_stock_analisis_series extends test_case {
 	{
 		$analisis_series = Analisis_series::create();
 
-		$this->mock['db']->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['mes' => '201712'],
 			['mes' => '201711'],
 			['mes' => '201710'],
@@ -214,6 +195,6 @@ class mock_db2 extends mock_db
 {
 	public function get()
 	{
-		return $this->return_result;
+		return $this->return_data;
 	}
 }

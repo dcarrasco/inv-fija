@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 
 /**
  * testeo clase collection
@@ -19,15 +16,6 @@ class test_models_toa extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
 	}
 
 	public function test_ciudad_toa()

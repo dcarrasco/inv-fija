@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Inventario\Ubicacion;
 
 /**
@@ -19,16 +16,9 @@ class test_model_inventario_ubicacion extends test_case {
 
 	public function __construct()
 	{
-		parent::__construct();
-	}
+		$this->mock = ['db'];
 
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
+		parent::__construct();
 	}
 
 	public function test_new()
@@ -44,24 +34,24 @@ class test_model_inventario_ubicacion extends test_case {
 
 	public function test_total_ubicacion_tipo_ubicacion()
 	{
-		$ubicacion = Ubicacion::create($this->new_ci_object());
-		$ubicacion->db->mock_set_return_result([0,1,2,3,4,5]);
+		$ubicacion = Ubicacion::create();
+		app('db')->mock_set_return_result([0,1,2,3,4,5]);
 
 		$this->assert_equals($ubicacion->total_ubicacion_tipo_ubicacion(), 6);
 	}
 
 	public function test_get_ubicacion_tipo_ubicacion()
 	{
-		$ubicacion = Ubicacion::create($this->new_ci_object());
-		$ubicacion->db->mock_set_return_result([0,1,2,3,4,5]);
+		$ubicacion = Ubicacion::create();
+		app('db')->mock_set_return_result([0,1,2,3,4,5]);
 
 		$this->assert_equals($ubicacion->get_ubicacion_tipo_ubicacion(), [0,1,2,3,4,5]);
 	}
 
 	public function test_get_combo_tipos_ubicacion()
 	{
-		$ubicacion = Ubicacion::create($this->new_ci_object());
-		$ubicacion->db->mock_set_return_result([
+		$ubicacion = Ubicacion::create();
+		app('db')->mock_set_return_result([
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
 			['llave'=>'llave3', 'valor'=>'valor3'],
@@ -77,8 +67,8 @@ class test_model_inventario_ubicacion extends test_case {
 
 	public function test_get_ubicaciones_libres()
 	{
-		$ubicacion = Ubicacion::create($this->new_ci_object());
-		$ubicacion->db->mock_set_return_result([
+		$ubicacion = Ubicacion::create();
+		app('db')->mock_set_return_result([
 			['llave'=>'llave1', 'valor'=>'valor1'],
 			['llave'=>'llave2', 'valor'=>'valor2'],
 			['llave'=>'llave3', 'valor'=>'valor3'],
@@ -101,7 +91,7 @@ class test_model_inventario_ubicacion extends test_case {
 
 	public function test_get_validation_edit()
 	{
-		$ubicacion = Ubicacion::create($this->new_ci_object());
+		$ubicacion = Ubicacion::create();
 
 		$data_collection = [
 			(object) ['id' => 'id_1'],

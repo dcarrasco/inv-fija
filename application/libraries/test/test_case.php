@@ -5,6 +5,10 @@ namespace test;
 use App;
 use ReflectionClass;
 use ReflectionMethod;
+use ReflectionProperty;
+use test\mock\mock_db;
+use test\mock\mock_input;
+use test\mock\mock_session;
 
 /**
  * Clase de testeo
@@ -75,14 +79,20 @@ class test_case {
 	protected $process_duration;
 
 	/**
-	 * Objecto para realizar mocks de librerias
+	 * Arreglo librerias a cambiar por mocks
 	 */
-	protected $mock;
+	protected $mock = [];
 
 	/**
 	 * Clase a testear
 	 */
 	protected $test_class;
+
+	protected $mock_classes = [
+		'db' => mock_db::class,
+		'input' => mock_input::class,
+		'session' => mock_session::class,
+	];
 
 	// --------------------------------------------------------------------
 
@@ -108,23 +118,72 @@ class test_case {
 		$this->backtrace = collect([]);
 
 		$this->unit->use_strict(TRUE);
+
+		// Mock CI objects
+		foreach($this->mock as $mock)
+		{
+			if (array_key_exists($mock, $this->mock_classes))
+			{
+				App::mock($mock, new $this->mock_classes[$mock]);
+			}
+		}
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Inicializa antes de ejecutar un tests
+	 */
 	protected function set_up()
 	{
-		return;
+		foreach($this->mock as $mock)
+		{
+			if (array_key_exists($mock, $this->mock_classes))
+			{
+				app($mock)->class_reset();
+			}
+		}
 	}
 
 	// --------------------------------------------------------------------
 
+	/**
+	 * Ejecuta un metodo private o protected
+	 * @param  string $method_name Nombre del metodo a ejecutar
+	 * @param  mixed  $args        Argumentos
+	 * @return mixed
+	 */
 	protected function get_method($method_name = '', ...$args)
 	{
+		if ( ! $this->test_class)
+		{
+			return NULL;
+		}
+
 		$method = new ReflectionMethod($this->test_class, $method_name);
 		$method->setAccessible(TRUE);
 
 		return $method->invoke($this->test_class::create(), ...$args);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera una propiedad privada o protected
+	 * @param  string $property_name Nombre de la propiedad
+	 * @return mixed
+	 */
+	protected function get_property($property_name = '')
+	{
+		if ( ! $this->test_class)
+		{
+			return NULL;
+		}
+
+		$prop = new ReflectionProperty($this->test_class, $property_name);
+		$prop->setAccessible(TRUE);
+
+		return $prop->getValue(new $this->test_class);
 	}
 
 	// --------------------------------------------------------------------

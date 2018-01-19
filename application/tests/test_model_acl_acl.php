@@ -18,32 +18,15 @@ use Acl\Acl;
  */
 class test_model_acl_acl extends test_case {
 
-	protected $mock;
-
 	public function __construct()
 	{
+		$this->test_class = Acl::class;
+		$this->mock = ['db', 'input', 'session'];
+
 		parent::__construct();
 
-		$this->test_class = Acl::class;
 
-		$this->mock = [
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-			'session' => new mock_session,
-		];
-
-		App::mock('db', $this->mock['db']);
-		App::mock('input', $this->mock['input']);
-		App::mock('session', $this->mock['session']);
 	}
-
-	public function set_up()
-	{
-		$this->mock['db']->class_reset();
-		$this->mock['input']->class_reset();
-		$this->mock['session']->class_reset();
-	}
-
 
 	public function test_new()
 	{
@@ -69,7 +52,7 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$this->mock['session']->mock_set_userdata('user', 'session_user');
+		app('session')->mock_set_userdata('user', 'session_user');
 		$this->assert_equals($acl->get_user('test'), 'session_user');
 	}
 
@@ -77,11 +60,11 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result(NULL);
+		app('db')->mock_set_return_result(NULL);
 		$this->assert_is_string($acl->get_id_usr());
 		$this->assert_empty($acl->get_id_usr());
 
-		$acl->db->mock_set_return_result(['id' => '1']);
+		app('db')->mock_set_return_result(['id' => '1']);
 		$this->assert_equals($acl->get_id_usr(), '1');
 		$this->assert_equals($acl->get_id_usr('test'), '1');
 	}
@@ -90,13 +73,13 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result(['nombre' => 'Nombre1 Apellido1 Apellido2']);
+		app('db')->mock_set_return_result(['nombre' => 'Nombre1 Apellido1 Apellido2']);
 		$this->assert_equals($acl->get_user_firstname(), 'Nombre1');
 
-		$acl->db->mock_set_return_result(['nombre' => 'Nombre1Apellido1Apellido2']);
+		app('db')->mock_set_return_result(['nombre' => 'Nombre1Apellido1Apellido2']);
 		$this->assert_equals($acl->get_user_firstname(), 'Nombre1Apellido1Apellido2');
 
-		$acl->session->mock_set_userdata('user_firstname', 'first_name_from_session');
+		app('session')->mock_set_userdata('user_firstname', 'first_name_from_session');
 		$this->assert_equals($acl->get_user_firstname(), 'first_name_from_session');
 	}
 
@@ -106,14 +89,14 @@ class test_model_acl_acl extends test_case {
 
 		$this->assert_false($acl->is_user_logged());
 
-		$acl->input->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
-		$acl->db->mock_set_return_result([[
+		app('input')->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
+		app('db')->mock_set_return_result([[
 			'user_id'   => 'user_id',
 			'cookie_id' => crypt('token', '$2a$10$1g7RmPUspQEh5FNNJJsJn2'),
 		]]);
 		$this->assert_true($acl->is_user_logged());
 
-		$acl->session
+		app('session')
 			->mock_set_userdata('user', 'session_user')
 			->mock_set_userdata('modulos', 'session_modulos');
 		$this->assert_true($acl->is_user_logged());
@@ -123,7 +106,7 @@ class test_model_acl_acl extends test_case {
 	{
 		$this->assert_false($this->get_method('_is_user_remembered'));
 
-		$this->mock['input']->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
+		app('input')->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
 		$this->assert_true($this->get_method('_is_user_remembered'));
 	}
 
@@ -131,7 +114,7 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			'password' => crypt('password', '$2a$10$1g7RmPUspQEh5FNNJJsJn2'),
 		]);
 
@@ -142,10 +125,10 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result(['login_errors' => 10]);
+		app('db')->mock_set_return_result(['login_errors' => 10]);
 		$this->assert_true($acl->use_captcha('usuario'));
 
-		$acl->db->mock_set_return_result(['login_errors' => 1]);
+		app('db')->mock_set_return_result(['login_errors' => 1]);
 		$this->assert_false($acl->use_captcha('usuario'));
 	}
 
@@ -157,7 +140,7 @@ class test_model_acl_acl extends test_case {
 			['app'=>'app', 'app_icono'=>'app_icono2', 'modulo'=>'modulo2', 'url'=>'url2', 'llave_modulo'=>'llave_modulo2', 'modulo_icono'=>'modulo_icono2', 'orden'=>'orden'],
 		];
 
-		$acl->session->mock_set_userdata('menu_app', json_encode($arr_menu_app));
+		app('session')->mock_set_userdata('menu_app', json_encode($arr_menu_app));
 		$this->assert_equals((array) $acl->get_user_menu('usuario'), (array) collect($arr_menu_app));
 	}
 
@@ -166,7 +149,7 @@ class test_model_acl_acl extends test_case {
 		$acl = Acl::create();
 		$arr_modulos = ['llave_modulo1', 'llave_modulo2', 'llave_modulo3', 'llave_modulo4'];
 
-		$acl->session
+		app('session')
 			->mock_set_userdata('user', 'user')
 			->mock_set_userdata('modulos', json_encode($arr_modulos));
 
@@ -178,16 +161,16 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result(NULL);
+		app('db')->mock_set_return_result(NULL);
 		$this->assert_false($acl->tiene_clave('usuario'));
 
-		$acl->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_false($acl->tiene_clave('usuario'));
 
-		$acl->db->mock_set_return_result(['password' => '']);
+		app('db')->mock_set_return_result(['password' => '']);
 		$this->assert_false($acl->tiene_clave('usuario'));
 
-		$acl->db->mock_set_return_result(['password' => 'password']);
+		app('db')->mock_set_return_result(['password' => 'password']);
 		$this->assert_true($acl->tiene_clave('usuario'));
 	}
 
@@ -195,65 +178,48 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		$acl->db->mock_set_return_result(NULL);
+		app('db')->mock_set_return_result(NULL);
 		$this->assert_false($acl->existe_usuario('usuario'));
 
-		$acl->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_false($acl->existe_usuario('usuario'));
 
-		$acl->db->mock_set_return_result(['user' => 'user']);
+		app('db')->mock_set_return_result(['user' => 'user']);
 		$this->assert_true($acl->existe_usuario('usuario'));
 	}
 
 	public function test_get_llaves_modulos()
 	{
-		$acl = Acl::create();
-		$method = new ReflectionMethod('Acl\Acl', '_get_llaves_modulos');
-		$method->setAccessible(TRUE);
-
-		$acl->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['llave_modulo' => 'llave_modulo1'],
 			['llave_modulo' => 'llave_modulo2'],
 			['llave_modulo' => 'llave_modulo3'],
 		]);
-
-		$this->assert_equals($method->invoke($acl, 'usuario'), ['llave_modulo1', 'llave_modulo2', 'llave_modulo3']);
+		$this->assert_equals($this->get_method('_get_llaves_modulos', 'usuario'), ['llave_modulo1', 'llave_modulo2', 'llave_modulo3']);
 	}
 
 	public function test_create_salt()
 	{
-		$acl = Acl::create();
-		$method = new ReflectionMethod('Acl\Acl', '_create_salt');
-		$method->setAccessible(TRUE);
-
 		$largo_salt_algo = 7;
 
-		$this->assert_is_string($method->invoke($acl));
-		$this->assert_equals(strlen($method->invoke($acl)), $largo_salt_algo + 22);
+		$this->assert_is_string($this->get_method('_create_salt'));
+		$this->assert_equals(strlen($this->get_method('_create_salt')), $largo_salt_algo + 22);
 
-		$this->assert_is_string($method->invoke($acl, 10));
-		$this->assert_equals(strlen($method->invoke($acl, 10)), $largo_salt_algo + 10);
+		$this->assert_is_string($this->get_method('_create_salt', 10));
+		$this->assert_equals(strlen($this->get_method('_create_salt', 10)), $largo_salt_algo + 10);
 	}
 
 	public function test_valida_password()
 	{
-		$acl = Acl::create();
-		$method = new ReflectionMethod('Acl\Acl', '_valida_password');
-		$method->setAccessible(TRUE);
-
 		$hash = crypt('password', '$2a$10$ksi38hdnsheusowismiejd');
-		$this->assert_true($method->invoke($acl, 'password', $hash));
-		$this->assert_false($method->invoke($acl, 'PassWord', $hash));
+		$this->assert_true($this->get_method('_valida_password', 'password', $hash));
+		$this->assert_false($this->get_method('_valida_password', 'PassWord', $hash));
 	}
 
 	public function test_hash_password()
 	{
-		$acl = Acl::create();
-		$method = new ReflectionMethod('Acl\Acl', '_hash_password');
-		$method->setAccessible(TRUE);
-
-		$this->assert_is_string($method->invoke($acl, 'password'));
-		$this->assert_equals(strlen($method->invoke($acl, 'password')), 60);
+		$this->assert_is_string($this->get_method('_hash_password', 'password'));
+		$this->assert_equals(strlen($this->get_method('_hash_password', 'password')), 60);
 	}
 
 

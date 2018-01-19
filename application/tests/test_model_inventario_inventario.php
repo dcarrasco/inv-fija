@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Inventario\Inventario;
 
 /**
@@ -19,18 +16,10 @@ class test_model_inventario_inventario extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
+
 		parent::__construct();
 	}
-
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
-	}
-
 
 	public function test_new()
 	{
@@ -50,38 +39,37 @@ class test_model_inventario_inventario extends test_case {
 
 	public function test_get_id_inventario_activo()
 	{
-		$inventario = Inventario::create($this->new_ci_object());
-		$inventario->db->mock_set_return_result(['id'=>111]);
+		$inventario = Inventario::create();
 
+		app('db')->mock_set_return_result(['id'=>111]);
 		$this->assert_equals($inventario->get_id_inventario_activo(), 111);
 	}
 
 	public function test_get_inventario_activo()
 	{
-		$inventario = Inventario::create($this->new_ci_object());
-		$inventario->db->mock_set_return_result(['id'=>111, 'nombre' => 'prueba de inventario']);
+		$inventario = Inventario::create();
 
+		app('db')->mock_set_return_result(['id'=>111, 'nombre' => 'prueba de inventario']);
 		$this->assert_equals($inventario->get_inventario_activo()->__toString(), 'prueba de inventario');
 	}
 
 	public function test_get_max_hoja_inventario()
 	{
-		$inventario = Inventario::create($this->new_ci_object());
-		$inventario->db->mock_set_return_result(['max_hoja'=>100]);
+		$inventario = Inventario::create();
 
+		app('db')->mock_set_return_result(['max_hoja'=>100]);
 		$this->assert_equals($inventario->get_max_hoja_inventario(), 100);
 	}
 
 	public function test_get_combo_inventarios()
 	{
-		$inventario = Inventario::create($this->new_ci_object());
+		$inventario = Inventario::create();
 
-		$inventario->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['desc_tipo_inventario'=>'tipo1', 'id'=>1, 'nombre'=>'inventario1'],
 			['desc_tipo_inventario'=>'tipo1', 'id'=>2, 'nombre'=>'inventario2'],
 			['desc_tipo_inventario'=>'tipo2', 'id'=>3, 'nombre'=>'inventario3'],
 		]);
-
 		$this->assert_equals($inventario->get_combo_inventarios(), [
 			'tipo1' => [1 => 'inventario1', 2 => 'inventario2'],
 			'tipo2' => [3 => 'inventario3'],

@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Inventario\Detalle_inventario;
 
 /**
@@ -20,15 +17,6 @@ class test_model_inventario_detalle_inventario extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
-
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
 	}
 
 	public function test_new()
@@ -49,7 +37,7 @@ class test_model_inventario_detalle_inventario extends test_case {
 
 	public function test_rules_ajustes()
 	{
-		$detalle = Detalle_inventario::create($this->new_ci_object());
+		$detalle = Detalle_inventario::create();
 
 		$data_collection = collect([
 			(object) ['id' => 'id_1', 'ubicacion' => 'ubicacion_1', 'catalogo' => 'catalogo_1'],
@@ -69,7 +57,7 @@ class test_model_inventario_detalle_inventario extends test_case {
 
 	public function test_rules_digitacion()
 	{
-		$detalle = Detalle_inventario::create($this->new_ci_object());
+		$detalle = Detalle_inventario::create();
 
 		$data_collection = collect([
 			(object) ['id' => 'id_1', 'ubicacion' => 'ubicacion_1', 'catalogo' => 'catalogo_1'],
@@ -92,7 +80,7 @@ class test_model_inventario_detalle_inventario extends test_case {
 
 	public function test_rules_upload()
 	{
-		$detalle = Detalle_inventario::create($this->new_ci_object());
+		$detalle = Detalle_inventario::create();
 
 		$this->assert_is_array($detalle->rules_upload());
 		$this->assert_count($detalle->rules_upload(), 2);
@@ -102,6 +90,3 @@ class test_model_inventario_detalle_inventario extends test_case {
 
 
 }
-
-
-

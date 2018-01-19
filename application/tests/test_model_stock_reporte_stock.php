@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Stock\Reporte_stock;
 
 /**
@@ -19,16 +16,8 @@ class test_model_stock_reporte_stock extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
 		parent::__construct();
-	}
-
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-		];
 	}
 
 	public function test_new()
@@ -50,9 +39,9 @@ class test_model_stock_reporte_stock extends test_case {
 
 	public function test_get_fecha_reporte()
 	{
-		$reporte = Reporte_stock::create($this->new_ci_object());
+		$reporte = Reporte_stock::create();
 
-		$reporte->db->mock_set_return_result((object) ['fecha_stock'=>'20171010']);
+		app('db')->mock_set_return_result((object) ['fecha_stock'=>'20171010']);
 		$this->assert_equals($reporte->get_fecha_reporte(),'2017-10-10');
 	}
 
@@ -64,9 +53,9 @@ class test_model_stock_reporte_stock extends test_case {
 
 	public function test_combo_tipo_alm_consumo()
 	{
-		$reporte = Reporte_stock::create($this->new_ci_object());
+		$reporte = Reporte_stock::create();
 
-		$reporte->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['llave' => 'llave1', 'valor' => 'valor1'],
 			['llave' => 'llave2', 'valor' => 'valor2'],
 			['llave' => 'llave3', 'valor' => 'valor3'],
@@ -77,7 +66,7 @@ class test_model_stock_reporte_stock extends test_case {
 			'llave3' => 'valor3',
 		]);
 
-		$reporte->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_equals($reporte->combo_tipo_alm_consumo(), []);
 		$this->assert_empty($reporte->combo_tipo_alm_consumo());
 	}
@@ -108,9 +97,9 @@ class test_model_stock_reporte_stock extends test_case {
 
 	public function test_get_combo_fechas()
 	{
-		$reporte = Reporte_stock::create($this->new_ci_object());
+		$reporte = Reporte_stock::create();
 
-		$reporte->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['llave' => 'llave1', 'valor' => 'valor1'],
 			['llave' => 'llave2', 'valor' => 'valor2'],
 			['llave' => 'llave3', 'valor' => 'valor3'],
@@ -121,16 +110,16 @@ class test_model_stock_reporte_stock extends test_case {
 			'llave3' => 'valor3',
 		]);
 
-		$reporte->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_equals($reporte->get_combo_fechas(), []);
 		$this->assert_empty($reporte->get_combo_fechas());
 	}
 
 	public function test_get_combo_cmv()
 	{
-		$reporte = Reporte_stock::create($this->new_ci_object());
+		$reporte = Reporte_stock::create();
 
-		$reporte->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['llave' => 'llave1', 'valor' => 'valor1'],
 			['llave' => 'llave2', 'valor' => 'valor2'],
 			['llave' => 'llave3', 'valor' => 'valor3'],
@@ -141,7 +130,7 @@ class test_model_stock_reporte_stock extends test_case {
 			'llave3' => 'valor3',
 		]);
 
-		$reporte->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_equals($reporte->get_combo_cmv(), []);
 		$this->assert_empty($reporte->get_combo_cmv());
 	}
@@ -167,9 +156,9 @@ class test_model_stock_reporte_stock extends test_case {
 
 	public function test_get_combo_materiales()
 	{
-		$reporte = Reporte_stock::create($this->new_ci_object());
+		$reporte = Reporte_stock::create();
 
-		$reporte->db->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['llave' => 'llave1', 'valor' => 'valor1'],
 			['llave' => 'llave2', 'valor' => 'valor2'],
 			['llave' => 'llave3', 'valor' => 'valor3'],
@@ -180,7 +169,7 @@ class test_model_stock_reporte_stock extends test_case {
 			'llave3' => 'valor3',
 		]);
 
-		$reporte->db->mock_set_return_result([]);
+		app('db')->mock_set_return_result([]);
 		$this->assert_equals($reporte->get_combo_materiales(), []);
 		$this->assert_empty($reporte->get_combo_materiales());
 	}

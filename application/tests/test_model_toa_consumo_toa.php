@@ -1,9 +1,6 @@
 <?php
 
 use test\test_case;
-use test\mock\mock_db;
-use test\mock\mock_input;
-use test\mock\mock_session;
 use Toa\Consumo_toa;
 
 /**
@@ -19,17 +16,9 @@ class test_model_toa_consumo_toa extends test_case {
 
 	public function __construct()
 	{
+		$this->mock = ['db'];
+
 		parent::__construct();
-
-		$this->mock = [
-			'db'      => new mock_db,
-			'input'   => new mock_input,
-			'session' => new mock_session,
-		];
-
-		App::mock('db', $this->mock['db']);
-		App::mock('input', $this->mock['input']);
-		App::mock('session', $this->mock['session']);
 	}
 
 	public function test_new()
@@ -100,7 +89,7 @@ class test_model_toa_consumo_toa extends test_case {
 	{
 		$consumo_toa = Consumo_toa::create();
 
-		$this->mock['db']->mock_set_return_result([
+		app('db')->mock_set_return_result([
 			['cmv'=>'cmv1', 'des_cmv'=>'des_cmv1'],
 			['cmv'=>'cmv2', 'des_cmv'=>'des_cmv2'],
 			['cmv'=>'cmv3', 'des_cmv'=>'des_cmv3'],
