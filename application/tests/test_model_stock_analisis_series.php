@@ -31,6 +31,14 @@ class test_model_stock_analisis_series extends test_case {
 		];
 	}
 
+	protected function getMethod($method_name = '', ...$args)
+	{
+		$method = new ReflectionMethod('Stock\Analisis_series', $method_name);
+		$method->setAccessible(TRUE);
+
+		return $method->invoke(Analisis_series::create(), ...$args);
+	}
+
 	public function test_new()
 	{
 		$this->assert_is_object(Analisis_series::create());
@@ -43,13 +51,9 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function test_series_list_to_array()
 	{
-		$analisis_series = Analisis_series::create();
-		$method = new ReflectionMethod('Stock\Analisis_series', '_series_list_to_array');
-		$method->setAccessible(TRUE);
-
 		$series = "012345678901234\r\n012345678901235\r\n890123456789012\r\n";
 
-		$this->assert_equals($method->invoke($analisis_series, $series), [
+		$this->assert_equals($this->getMethod('_series_list_to_array', $series), [
 			'12345678901234',
 			'12345678901235',
 			'890123456789012',
@@ -58,39 +62,31 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function test_format_serie()
 	{
-		$analisis_series = Analisis_series::create();
-		$method = new ReflectionMethod('Stock\Analisis_series', 'format_serie');
-		$method->setAccessible(TRUE);
+		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'SAP'), '12345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'SAP'), '12345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'SAP'), '312345678901234');
 
-		$this->assert_equals($method->invoke($analisis_series, '012345678901234', 'SAP'), '12345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '12345678901234', 'SAP'), '12345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '312345678901234', 'SAP'), '312345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'trafico'), '012345678901230');
+		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'trafico'), '012345678901230');
+		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'trafico'), '312345678901230');
 
-		$this->assert_equals($method->invoke($analisis_series, '012345678901234', 'trafico'), '012345678901230');
-		$this->assert_equals($method->invoke($analisis_series, '12345678901234', 'trafico'), '012345678901230');
-		$this->assert_equals($method->invoke($analisis_series, '312345678901234', 'trafico'), '312345678901230');
+		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'SCL'), '012345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'SCL'), '012345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'SCL'), '312345678901234');
 
-		$this->assert_equals($method->invoke($analisis_series, '012345678901234', 'SCL'), '012345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '12345678901234', 'SCL'), '012345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '312345678901234', 'SCL'), '312345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '123456789', 'celular'), '23456789');
+		$this->assert_equals($this->getMethod('format_serie', '12345678', 'celular'), '12345678');
 
-		$this->assert_equals($method->invoke($analisis_series, '123456789', 'celular'), '23456789');
-		$this->assert_equals($method->invoke($analisis_series, '12345678', 'celular'), '12345678');
-
-		$this->assert_equals($method->invoke($analisis_series, '012345678901234', 'otro'), '012345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '12345678901234', 'otro'), '12345678901234');
-		$this->assert_equals($method->invoke($analisis_series, '312345678901234', 'otros'), '312345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '012345678901234', 'otro'), '012345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '12345678901234', 'otro'), '12345678901234');
+		$this->assert_equals($this->getMethod('format_serie', '312345678901234', 'otros'), '312345678901234');
 	}
 
 	public function test_get_dv_imei()
 	{
-		$analisis_series = Analisis_series::create();
-		$method = new ReflectionMethod('Stock\Analisis_series', '_get_dv_imei');
-		$method->setAccessible(TRUE);
-
-		$this->assert_equals($method->invoke($analisis_series, '012345678901234'), '012345678901237');
-		$this->assert_equals($method->invoke($analisis_series, '12345678901234'), '012345678901237');
-		$this->assert_equals($method->invoke($analisis_series, '223456789012345'), '223456789012346');
+		$this->assert_equals($this->getMethod('_get_dv_imei', '012345678901234'), '012345678901237');
+		$this->assert_equals($this->getMethod('_get_dv_imei', '12345678901234'), '012345678901237');
+		$this->assert_equals($this->getMethod('_get_dv_imei', '223456789012345'), '223456789012346');
 	}
 
 	public function test_get_historia()
