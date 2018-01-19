@@ -12,7 +12,7 @@ namespace test\mock;
  * @license  MIT License
  * @link     localhost:1520
  */
-class mock_input {
+class mock_input extends mock_object {
 
 	// --------------------------------------------------------------------
 

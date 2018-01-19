@@ -12,7 +12,7 @@ namespace test\mock;
  * @license  MIT License
  * @link     localhost:1520
  */
-class mock_session {
+class mock_session extends mock_object {
 
 	// --------------------------------------------------------------------
 
