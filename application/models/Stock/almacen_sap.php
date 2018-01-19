@@ -41,7 +41,7 @@ class Almacen_sap extends ORM_Model {
 	 * @param  string $id_almacen Identificador del almacen
 	 * @return void
 	 */
-	public function __construct($id_almacen = NULL, $ci_object = [])
+	public function __construct($id_almacen = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -112,7 +112,7 @@ class Almacen_sap extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_almacen, $ci_object);
+		parent::__construct($id_almacen);
 	}
 
 

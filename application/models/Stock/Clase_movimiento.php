@@ -40,7 +40,7 @@ class Clase_movimiento extends ORM_Model {
 	 * @param  string $id_cmv Identificador de la clase de movimiento
 	 * @return void
 	 */
-	public function __construct($id_cmv = NULL, $ci_object = [])
+	public function __construct($id_cmv = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -70,7 +70,7 @@ class Clase_movimiento extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_cmv, $ci_object);
+		parent::__construct($id_cmv);
 	}
 
 	// --------------------------------------------------------------------

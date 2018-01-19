@@ -56,6 +56,9 @@ class MY_Hooks {
 		// 	exit;
 		// }
 
+		// Inicializa objeto de la aplicacion
+		\App::instance();
+
 		$ci =& get_instance();
 		$ci->config->load('inv-fija');
 

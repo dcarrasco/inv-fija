@@ -109,12 +109,6 @@ class Orm_model implements IteratorAggregate {
 	 */
 	protected $model_config = [];
 
-	/**
-	 * Arreglo con la clases CI para overload
-	 *
-	 * @var array
-	 */
-	protected $ci_object = [];
 
 	// --------------------------------------------------------------------
 
@@ -126,7 +120,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param   mixed $id_modelo Identificador o arreglo de valores para inicializar el modelo
 	 * @return  void
 	 **/
-	public function __construct($id_modelo = NULL, $ci_object = [])
+	public function __construct($id_modelo = NULL)
 	{
 		$this->lang->load('orm');
 
@@ -138,8 +132,6 @@ class Orm_model implements IteratorAggregate {
 		$this->relation_objects = new Collection();
 
 		$this->config_model($this->model_config);
-
-		$this->ci_object = $ci_object;
 
 		if ($id_modelo)
 		{
@@ -169,9 +161,9 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return static
 	 */
-	public static function create($ci_object = [])
+	public static function create()
 	{
-		return new static(NULL, $ci_object);
+		return new static;
 	}
 
 	// --------------------------------------------------------------------

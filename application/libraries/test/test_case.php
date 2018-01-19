@@ -2,7 +2,9 @@
 
 namespace test;
 
+use App;
 use ReflectionClass;
+use ReflectionMethod;
 
 /**
  * Clase de testeo
@@ -72,6 +74,16 @@ class test_case {
 	 */
 	protected $process_duration;
 
+	/**
+	 * Objecto para realizar mocks de librerias
+	 */
+	protected $mock;
+
+	/**
+	 * Clase a testear
+	 */
+	protected $test_class;
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -80,6 +92,9 @@ class test_case {
 	 */
 	public function __construct()
 	{
+
+		App::instance();
+
 		$this->ci =& get_instance();
 		$this->ci->load->library('unit_test');
 		$this->ci->output->enable_profiler(FALSE);
@@ -93,6 +108,23 @@ class test_case {
 		$this->backtrace = collect([]);
 
 		$this->unit->use_strict(TRUE);
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function set_up()
+	{
+		return;
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function get_method($method_name = '', ...$args)
+	{
+		$method = new ReflectionMethod($this->test_class, $method_name);
+		$method->setAccessible(TRUE);
+
+		return $method->invoke($this->test_class::create(), ...$args);
 	}
 
 	// --------------------------------------------------------------------
@@ -191,7 +223,10 @@ class test_case {
 	{
 		$test_methods = collect(get_class_methods(get_class($this)))
 			->filter(function($method) { return substr($method, 0, 5) === 'test_'; })
-			->each(function($method) {$this->{$method}(); });
+			->each(function($method) {
+				$this->set_up();
+				$this->{$method}();
+			});
 	}
 
 	// --------------------------------------------------------------------

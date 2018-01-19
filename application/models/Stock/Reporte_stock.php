@@ -150,9 +150,9 @@ class Reporte_stock extends ORM_Model {
 	 *
 	 * @return void
 	 */
-	public function __construct($id = NULL, $ci_object = [])
+	public function __construct($id = NULL)
 	{
-		parent::__construct($id, $ci_object);
+		parent::__construct($id);
 	}
 
 	// --------------------------------------------------------------------

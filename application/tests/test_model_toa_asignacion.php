@@ -20,11 +20,8 @@ class test_model_toa_asignacion extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
 
-	protected function new_ci_object()
-	{
-		return [
+		$this->mock = [
 			'session' => new mock_session,
 			'db'      => new mock_db,
 			'input'   => new mock_input,
@@ -42,7 +39,7 @@ class test_model_toa_asignacion extends test_case {
 	public function test_new()
 	{
 		$this->assert_is_object(new Asignacion);
-		$this->assert_is_object(Asignacion::create($this->new_ci_object()));
+		$this->assert_is_object(Asignacion::create());
 	}
 
 	public function test_fields()
@@ -123,8 +120,8 @@ class test_model_toa_asignacion extends test_case {
 		$this->assert_empty($asignacion->detalle());
 		$this->assert_empty($asignacion->detalle('20170101'));
 
-		$asignacion = Asignacion::create($this->new_ci_object());
-		$asignacion->db->mock_set_return_result([
+		$asignacion = Asignacion::create();
+		$this->mock['db']->mock_set_return_result([
 			['fecha'=>'20170101', 'llave'=>'123456', 'dato'=>'12'],
 			['fecha'=>'20170102', 'llave'=>'123456', 'dato'=>'12'],
 		]);

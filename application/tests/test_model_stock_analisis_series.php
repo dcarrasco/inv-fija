@@ -20,15 +20,16 @@ class test_model_stock_analisis_series extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
 
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
-			'db'      => new mock_db2,
+		$this->mock = [
+			'db'      => new mock_db,
 			'input'   => new mock_input,
+			'session' => new mock_session,
 		];
+
+		App::mock('db', $this->mock['db']);
+		App::mock('input', $this->mock['input']);
+		App::mock('session', $this->mock['session']);
 	}
 
 	protected function getMethod($method_name = '', ...$args)
@@ -91,9 +92,11 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function test_get_historia()
 	{
-		$analisis_series = Analisis_series::create($this->new_ci_object());
+		$analisis_series = Analisis_series::create();
 
-		$analisis_series->db->mock_set_return_result([
+		$mock_db = new mock_db2;
+		App::mock('db', $mock_db);
+		$mock_db->mock_set_return_result([
 			['serie'=>'serie1', 'valor'=>'valor1'],
 			['serie'=>'serie2', 'valor'=>'valor2'],
 			['serie'=>'serie3', 'valor'=>'valor3'],
@@ -109,13 +112,17 @@ class test_model_stock_analisis_series extends test_case {
 					return strpos($linea, 'table class') !== FALSE;
 				})
 				->all(), 3);
+
+		App::mock('db', $this->mock['db']);
 	}
 
 	public function test_get_despacho()
 	{
-		$analisis_series = Analisis_series::create($this->new_ci_object());
+		$analisis_series = Analisis_series::create();
 
-		$analisis_series->db->mock_set_return_result([
+		$mock_db = new mock_db2;
+		App::mock('db', $mock_db);
+		$mock_db->mock_set_return_result([
 			['serie'=>'serie1', 'valor'=>'valor1'],
 			['serie'=>'serie2', 'valor'=>'valor2'],
 			['serie'=>'serie3', 'valor'=>'valor3'],
@@ -131,13 +138,17 @@ class test_model_stock_analisis_series extends test_case {
 					return strpos($linea, 'table class') !== FALSE;
 				})
 				->all(), 1);
+
+		App::mock('db', $this->mock['db']);
 	}
 
 	public function test_get_stock_sap()
 	{
-		$analisis_series = Analisis_series::create($this->new_ci_object());
+		$analisis_series = Analisis_series::create();
 
-		$analisis_series->db->mock_set_return_result([
+		$mock_db = new mock_db2;
+		App::mock('db', $mock_db);
+		$mock_db->mock_set_return_result([
 			['serie'=>'serie1', 'valor'=>'valor1'],
 			['serie'=>'serie2', 'valor'=>'valor2'],
 			['serie'=>'serie3', 'valor'=>'valor3'],
@@ -153,11 +164,13 @@ class test_model_stock_analisis_series extends test_case {
 					return strpos($linea, 'table class') !== FALSE;
 				})
 				->all(), 1);
+
+		App::mock('db', $this->mock['db']);
 	}
 
 	public function test_get_stock_scl()
 	{
-		$analisis_series = Analisis_series::create($this->new_ci_object());
+		$analisis_series = Analisis_series::create();
 
 		$analisis_series->db->mock_set_return_result([
 			['serie'=>'serie1', 'valor'=>'valor1'],
@@ -179,9 +192,9 @@ class test_model_stock_analisis_series extends test_case {
 
 	public function test_get_meses_trafico()
 	{
-		$analisis_series = Analisis_series::create(['db'=> new mock_db]);
+		$analisis_series = Analisis_series::create();
 
-		$analisis_series->db->mock_set_return_result([
+		$this->mock['db']->mock_set_return_result([
 			['mes' => '201712'],
 			['mes' => '201711'],
 			['mes' => '201710'],

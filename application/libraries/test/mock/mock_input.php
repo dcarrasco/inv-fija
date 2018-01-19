@@ -37,6 +37,14 @@ class mock_input {
 
 	// --------------------------------------------------------------------
 
+	public function class_reset()
+	{
+		$this->input_variables = [];
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	public function cookie($index)
 	{
 		return array_get($this->input_variables, $index, NULL);
@@ -59,6 +67,13 @@ class mock_input {
 	// --------------------------------------------------------------------
 
 	public function user_agent()
+	{
+		return '';
+	}
+
+	// --------------------------------------------------------------------
+
+	public function method()
 	{
 		return '';
 	}

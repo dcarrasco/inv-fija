@@ -20,15 +20,16 @@ class test_model_toa_consumo_toa extends test_case {
 	public function __construct()
 	{
 		parent::__construct();
-	}
 
-	protected function new_ci_object()
-	{
-		return [
+		$this->mock = [
 			'db'      => new mock_db,
 			'input'   => new mock_input,
 			'session' => new mock_session,
 		];
+
+		App::mock('db', $this->mock['db']);
+		App::mock('input', $this->mock['input']);
+		App::mock('session', $this->mock['session']);
 	}
 
 	public function test_new()
@@ -97,9 +98,9 @@ class test_model_toa_consumo_toa extends test_case {
 
 	public function test_combo_movimientos_consumo()
 	{
-		$consumo_toa = Consumo_toa::create($this->new_ci_object());
+		$consumo_toa = Consumo_toa::create();
 
-		$consumo_toa->db->mock_set_return_result([
+		$this->mock['db']->mock_set_return_result([
 			['cmv'=>'cmv1', 'des_cmv'=>'des_cmv1'],
 			['cmv'=>'cmv2', 'des_cmv'=>'des_cmv2'],
 			['cmv'=>'cmv3', 'des_cmv'=>'des_cmv3'],

@@ -55,9 +55,9 @@ class Analisis_series extends ORM_Model {
 	 *
 	 * @return void
 	 */
-	public function __construct($id = NULL, $ci_object = [])
+	public function __construct()
 	{
-		parent::__construct($id, $ci_object);
+		parent::__construct();
 
 		$this->load->library('table');
 		$this->table->set_template([

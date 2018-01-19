@@ -5,6 +5,8 @@ use test\mock\mock_db;
 use test\mock\mock_input;
 use test\mock\mock_session;
 
+use Acl\Acl;
+
 /**
  * testeo clase collection
  *
@@ -16,51 +18,64 @@ use test\mock\mock_session;
  */
 class test_model_acl_acl extends test_case {
 
+	protected $mock;
+
 	public function __construct()
 	{
 		parent::__construct();
-	}
 
-	protected function new_ci_object()
-	{
-		return [
-			'session' => new mock_session,
+		$this->test_class = Acl::class;
+
+		$this->mock = [
 			'db'      => new mock_db,
 			'input'   => new mock_input,
+			'session' => new mock_session,
 		];
+
+		App::mock('db', $this->mock['db']);
+		App::mock('input', $this->mock['input']);
+		App::mock('session', $this->mock['session']);
 	}
+
+	public function set_up()
+	{
+		$this->mock['db']->class_reset();
+		$this->mock['input']->class_reset();
+		$this->mock['session']->class_reset();
+	}
+
 
 	public function test_new()
 	{
-		$this->assert_is_object(Acl\Acl::create());
+		$this->assert_is_object(Acl::create());
 	}
 
 	public function test_rules_login()
 	{
-		$this->assert_not_empty(Acl\Acl::create()->rules_login);
+		$this->assert_not_empty(Acl::create()->rules_login);
 	}
 
 	public function test_rules_captcha()
 	{
-		$this->assert_not_empty(Acl\Acl::create()->rules_captcha);
+		$this->assert_not_empty(Acl::create()->rules_captcha);
 	}
 
 	public function test_rules_change_password_validation()
 	{
-		$this->assert_not_empty(Acl\Acl::create()->change_password_validation);
+		$this->assert_not_empty(Acl::create()->change_password_validation);
 	}
 
 	public function test_get_user()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
-		$acl->session->mock_set_userdata('user', 'session_user');
+		$this->mock['session']->mock_set_userdata('user', 'session_user');
 		$this->assert_equals($acl->get_user('test'), 'session_user');
 	}
 
 	public function test_get_id_usr()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result(NULL);
 		$this->assert_is_string($acl->get_id_usr());
@@ -73,7 +88,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_get_user_firstname()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result(['nombre' => 'Nombre1 Apellido1 Apellido2']);
 		$this->assert_equals($acl->get_user_firstname(), 'Nombre1');
@@ -87,7 +102,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_is_user_logged()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$this->assert_false($acl->is_user_logged());
 
@@ -106,19 +121,15 @@ class test_model_acl_acl extends test_case {
 
 	public function test_is_user_remembered()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
-		$method = new ReflectionMethod('Acl\Acl', '_is_user_remembered');
-		$method->setAccessible(TRUE);
+		$this->assert_false($this->get_method('_is_user_remembered'));
 
-		$this->assert_false($method->invoke($acl));
-
-		$acl->input->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
-		$this->assert_true($method->invoke($acl));
+		$this->mock['input']->mock_set_input_variable('login_token', json_encode(['usr' => 'usuario', 'token' => 'token']));
+		$this->assert_true($this->get_method('_is_user_remembered'));
 	}
 
 	public function test_check_user_credentials()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result([
 			'password' => crypt('password', '$2a$10$1g7RmPUspQEh5FNNJJsJn2'),
@@ -129,7 +140,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_use_captcha()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result(['login_errors' => 10]);
 		$this->assert_true($acl->use_captcha('usuario'));
@@ -140,7 +151,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_get_user_menu()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$arr_menu_app = [
 			['app'=>'app', 'app_icono'=>'app_icono1', 'modulo'=>'modulo1', 'url'=>'url1', 'llave_modulo'=>'llave_modulo1', 'modulo_icono'=>'modulo_icono1', 'orden'=>'orden'],
 			['app'=>'app', 'app_icono'=>'app_icono2', 'modulo'=>'modulo2', 'url'=>'url2', 'llave_modulo'=>'llave_modulo2', 'modulo_icono'=>'modulo_icono2', 'orden'=>'orden'],
@@ -152,7 +163,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_autentica_modulo()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$arr_modulos = ['llave_modulo1', 'llave_modulo2', 'llave_modulo3', 'llave_modulo4'];
 
 		$acl->session
@@ -165,7 +176,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_tiene_clave()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result(NULL);
 		$this->assert_false($acl->tiene_clave('usuario'));
@@ -182,7 +193,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_existe_usuario()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 
 		$acl->db->mock_set_return_result(NULL);
 		$this->assert_false($acl->existe_usuario('usuario'));
@@ -196,7 +207,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_get_llaves_modulos()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$method = new ReflectionMethod('Acl\Acl', '_get_llaves_modulos');
 		$method->setAccessible(TRUE);
 
@@ -211,7 +222,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_create_salt()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$method = new ReflectionMethod('Acl\Acl', '_create_salt');
 		$method->setAccessible(TRUE);
 
@@ -226,7 +237,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_valida_password()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$method = new ReflectionMethod('Acl\Acl', '_valida_password');
 		$method->setAccessible(TRUE);
 
@@ -237,7 +248,7 @@ class test_model_acl_acl extends test_case {
 
 	public function test_hash_password()
 	{
-		$acl = Acl\Acl::create($this->new_ci_object());
+		$acl = Acl::create();
 		$method = new ReflectionMethod('Acl\Acl', '_hash_password');
 		$method->setAccessible(TRUE);
 

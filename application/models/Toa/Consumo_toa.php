@@ -159,9 +159,9 @@ class Consumo_toa extends ORM_Model {
 	 *
 	 * @return  void
 	 */
-	public function __construct($id = NULL, $ci_object = [])
+	public function __construct()
 	{
-		parent::__construct($id, $ci_object);
+		parent::__construct();
 	}
 
 	// --------------------------------------------------------------------
@@ -174,7 +174,7 @@ class Consumo_toa extends ORM_Model {
 	public function combo_movimientos_consumo()
 	{
 		return collect(['000' => 'Todos los movimientos'])
-			->merge(Clase_movimiento::create($this->ci_object)->find('list', [
+			->merge(Clase_movimiento::create()->find('list', [
 				'conditions' => ['cmv' => $this->movimientos_consumo],
 				'order_by'   => 'des_cmv',
 				'opc_ini'    => FALSE,

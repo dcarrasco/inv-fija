@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use App as AppContainer;
+
 /**
  * INVENTARIO FIJA
  *
@@ -60,12 +62,12 @@ trait Model_has_attributes {
 			return $this->values[$campo];
 		}
 
-		if (array_key_exists($campo, $this->ci_object))
+		if (is_null(app($campo)) && ! is_null(get_instance()->{$campo}))
 		{
-			return $this->ci_object[$campo];
+			AppContainer::add_component($campo, get_instance()->{$campo});
 		}
 
-		return get_instance()->{$campo};
+		return app($campo);
 	}
 
 	// --------------------------------------------------------------------

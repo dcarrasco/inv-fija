@@ -41,7 +41,7 @@ class Tecnico_toa extends ORM_Model {
 	 * @param  string $id_tecnico Identificador del tecnico
 	 * @return void
 	 */
-	public function __construct($id_tecnico = NULL, $ci_object = [])
+	public function __construct($id_tecnico = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -90,7 +90,7 @@ class Tecnico_toa extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_tecnico, $ci_object);
+		parent::__construct($id_tecnico);
 
 		$this->get_ciudades_tecnico();
 	}

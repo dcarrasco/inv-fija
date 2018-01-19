@@ -39,7 +39,7 @@ class Ubicacion extends ORM_Model {
 	 * @param  integer $id_ubicacion ID de la ubicacion
 	 * @return void
 	 */
-	public function __construct($id_ubicacion = NULL, $ci_object = [])
+	public function __construct($id_ubicacion = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -72,7 +72,7 @@ class Ubicacion extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_ubicacion, $ci_object);
+		parent::__construct($id_ubicacion);
 	}
 
 	// --------------------------------------------------------------------

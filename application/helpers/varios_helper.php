@@ -59,6 +59,22 @@ if ( ! function_exists('dd'))
 
 // --------------------------------------------------------------------
 
+if ( ! function_exists('app'))
+{
+	/**
+	 * Recupera el objeto de la aplicación CI
+	 * @param  string $component Objeto a recuperar
+	 * @return mixed
+	 */
+	function app($component = '')
+	{
+		return App::get($component);
+	}
+}
+
+
+// --------------------------------------------------------------------
+
 if ( ! function_exists('menu_app'))
 {
 	/**

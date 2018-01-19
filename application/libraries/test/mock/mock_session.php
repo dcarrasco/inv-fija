@@ -37,6 +37,14 @@ class mock_session {
 
 	// --------------------------------------------------------------------
 
+	public function class_reset()
+	{
+		$this->session_variables = [];
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	public function userdata($index)
 	{
 		return array_get($this->session_variables, $index, NULL);

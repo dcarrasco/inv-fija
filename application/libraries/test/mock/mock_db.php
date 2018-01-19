@@ -36,6 +36,14 @@ class mock_db {
 
 	// --------------------------------------------------------------------
 
+	public function class_reset()
+	{
+		$this->return_result = [];
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
 	public function get_where()
 	{
 		return $this;

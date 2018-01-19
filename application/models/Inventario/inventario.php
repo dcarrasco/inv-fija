@@ -41,7 +41,7 @@ class Inventario extends ORM_Model {
 	 * @param  string $id_inventario Identificador del inventario
 	 * @return void
 	 */
-	public function __construct($id_inventario = NULL, $ci_object = [])
+	public function __construct($id_inventario = NULL)
 	{
 		$this->model_config = [
 			'modelo' => [
@@ -75,7 +75,7 @@ class Inventario extends ORM_Model {
 			],
 		];
 
-		parent::__construct($id_inventario, $ci_object);
+		parent::__construct($id_inventario);
 	}
 
 	// --------------------------------------------------------------------

@@ -176,9 +176,9 @@ class Asignacion extends ORM_Model {
 	 *
 	 * @return  void
 	 */
-	public function __construct($id = NULL, $ci_object = [])
+	public function __construct()
 	{
-		parent::__construct($id, $ci_object);
+		parent::__construct();
 		$this->load->helper('date');
 	}
 
@@ -250,7 +250,7 @@ class Asignacion extends ORM_Model {
 
 		$datos = $this->result_to_month_table($this->control_asignaciones_datos($params));
 
-		return Tecnico_toa::create($this->ci_object)
+		return Tecnico_toa::create()
 			->find('all', ['conditions' => ['id_empresa' => $params->get('empresa')]])
 			->map_with_keys(function($tecnico) use ($datos) {
 				return [$tecnico->id_tecnico => [
