@@ -14,6 +14,8 @@ namespace test\mock;
  */
 class mock_object {
 
+	public $return_data = [];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -24,15 +26,18 @@ class mock_object {
 	{
 	}
 
-	public function add_function($name, $function)
+	// --------------------------------------------------------------------
+
+	/**
+	 * Limpia el arreglo de datos
+	 *
+	 * @return array
+	 */
+	public function class_reset()
 	{
-		$this->{$name} = $function;
+		$this->return_data = [];
 		return $this;
 	}
 
-	public static function create()
-	{
-		return new static();
-	}
 
 }

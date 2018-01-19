@@ -12,9 +12,7 @@ namespace test\mock;
  * @license  MIT License
  * @link     localhost:1520
  */
-class mock_db {
-
-	public $return_result = [];
+class mock_db extends mock_object{
 
 	// --------------------------------------------------------------------
 
@@ -30,15 +28,7 @@ class mock_db {
 
 	public function mock_set_return_result($data)
 	{
-		$this->return_result = $data;
-		return $this;
-	}
-
-	// --------------------------------------------------------------------
-
-	public function class_reset()
-	{
-		$this->return_result = [];
+		$this->return_data = $data;
 		return $this;
 	}
 
@@ -165,49 +155,49 @@ class mock_db {
 
 	public function count_all()
 	{
-		return count($this->return_result);
+		return count($this->return_data);
 	}
 
 	// --------------------------------------------------------------------
 
 	public function count_all_results()
 	{
-		return count($this->return_result);
+		return count($this->return_data);
 	}
 
 	// --------------------------------------------------------------------
 
 	public function num_rows()
 	{
-		return count($this->return_result);
+		return count($this->return_data);
 	}
 
 	// --------------------------------------------------------------------
 
 	public function query()
 	{
-		return $this->return_result;
+		return $this->return_data;
 	}
 
 	// --------------------------------------------------------------------
 
 	public function row()
 	{
-		return (object) $this->return_result;
+		return (object) $this->return_data;
 	}
 
 	// --------------------------------------------------------------------
 
 	public function row_array()
 	{
-		return $this->return_result;
+		return $this->return_data;
 	}
 
 	// --------------------------------------------------------------------
 
 	public function result_array()
 	{
-		return $this->return_result;
+		return $this->return_data;
 	}
 
 }

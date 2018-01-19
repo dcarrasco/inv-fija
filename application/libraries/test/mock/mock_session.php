@@ -14,9 +14,6 @@ namespace test\mock;
  */
 class mock_session {
 
-	public $session_variables = [
-	];
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -31,15 +28,7 @@ class mock_session {
 
 	public function mock_set_userdata($index, $data)
 	{
-		$this->session_variables[$index] = $data;
-		return $this;
-	}
-
-	// --------------------------------------------------------------------
-
-	public function class_reset()
-	{
-		$this->session_variables = [];
+		$this->return_data[$index] = $data;
 		return $this;
 	}
 
@@ -47,7 +36,7 @@ class mock_session {
 
 	public function userdata($index)
 	{
-		return array_get($this->session_variables, $index, NULL);
+		return array_get($this->return_data, $index, NULL);
 	}
 
 	// --------------------------------------------------------------------

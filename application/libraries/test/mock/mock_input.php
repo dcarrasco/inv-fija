@@ -14,9 +14,6 @@ namespace test\mock;
  */
 class mock_input {
 
-	public $input_variables = [
-	];
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -31,15 +28,7 @@ class mock_input {
 
 	public function mock_set_input_variable($index, $data)
 	{
-		$this->input_variables[$index] = $data;
-		return $this;
-	}
-
-	// --------------------------------------------------------------------
-
-	public function class_reset()
-	{
-		$this->input_variables = [];
+		$this->return_data[$index] = $data;
 		return $this;
 	}
 
@@ -47,7 +36,7 @@ class mock_input {
 
 	public function cookie($index)
 	{
-		return array_get($this->input_variables, $index, NULL);
+		return array_get($this->return_data, $index, NULL);
 	}
 
 	// --------------------------------------------------------------------
