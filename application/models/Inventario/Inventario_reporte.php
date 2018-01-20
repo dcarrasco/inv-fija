@@ -72,12 +72,12 @@ class Inventario_reporte extends Inventario {
 			[
 				'field' => 'pag_desde',
 				'label' => lang('inventario_print_label_page_from'),
-				'rules' => 'trim|required|greater_than[0]',
+				'rules' => 'trim|required|integer|greater_than[0]',
 			],
 			[
 				'field' => 'pag_hasta',
 				'label' => lang('inventario_print_label_page_to'),
-				'rules' => 'trim|required|greater_than[0]',
+				'rules' => 'trim|required|integer|greater_than['.(request('pag_desde', 1) - 1).']',
 			],
 		];
 	}
@@ -177,9 +177,8 @@ class Inventario_reporte extends Inventario {
 	 */
 	protected function _db_base_reporte($id_inventario = 0)
 	{
-
 		$this->db->from(config('bd_detalle_inventario').' di')
-			->join(config('bd_catalogos').' c', 'c.catalogo = di.catalogo collate Latin1_General_CI_AS', 'left', FALSE)
+			->join(config('bd_catalogos').' c', 'c.catalogo = di.catalogo '.BD_COLLATE, 'left', FALSE)
 			->where('id_inventario', $id_inventario);
 
 		return $this;
@@ -289,8 +288,8 @@ class Inventario_reporte extends Inventario {
 			->select("f.codigo + '_' + sf.codigo as fam_subfam", FALSE)
 			->select('di.catalogo, di.descripcion, di.um, c.pmp')
 			->select_max('fecha_modificacion', 'fecha')
-			->join(config('bd_familias').' f', "f.codigo = substring(di.catalogo,1,5) collate Latin1_General_CI_AS and f.tipo='FAM'", 'left', FALSE)
-			->join(config('bd_familias').' sf', "sf.codigo = substring(di.catalogo,1,7) collate Latin1_General_CI_AS and sf.tipo='SUBFAM'", 'left', FALSE)
+			->join(config('bd_familias').' f', 'f.codigo = substring(di.catalogo,1,5) '.BD_COLLATE." and f.tipo='FAM'", 'left', FALSE)
+			->join(config('bd_familias').' sf', 'sf.codigo = substring(di.catalogo,1,7) '.BD_COLLATE." and sf.tipo='SUBFAM'", 'left', FALSE)
 			->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre")
 			->group_by("f.codigo + '_' + sf.codigo")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')

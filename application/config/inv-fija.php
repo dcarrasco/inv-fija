@@ -27,6 +27,7 @@ define('BD_TOA', getenv('BD_TOA'));
 define('BD_LOGISTICA', getenv('BD_LOGISTICA'));
 define('BD_CONTROLES', getenv('BD_CONTROLES'));
 define('BD_PLANIFICACION', getenv('BD_PLANIFICACION'));
+define('BD_COLLATE', getenv('BD_COLLATE'));
 
 // Inventarios
 $config['bd_usuarios']           = BD_INVENTARIO.'fija_usuarios';
