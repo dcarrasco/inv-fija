@@ -7,3 +7,4 @@ application/.env
 public/img/captcha/
 !public/img/captcha/.gitkeep
 vendor/
+application/helpers/varios_helper.php
