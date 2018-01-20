@@ -196,10 +196,6 @@ class test_orm_model extends test_case {
 		$this->assert_equals($model->get_field_value('campo04', FALSE), 1);
 	}
 
-	public function test_has_attributes_get_field_value_boolean_not_formatted()
-	{
-	}
-
 	public function test_has_attributes_fill_from_array()
 	{
 		$data01 = $this->get_data01();
@@ -273,6 +269,61 @@ class test_orm_model extends test_case {
 		$rs_list = ['valor11~valor21' => 'valor11', 'valor12~valor22' => 'valor12', 'valor13~valor23' => 'valor13'];
 		$this->assert_equals($model->find('list', ['opc_ini'=>FALSE]), $rs_list);
 		$this->assert_equals($model->find('list'), array_merge(['' => 'Seleccione model_label...'], $rs_list));
+	}
+
+	public function test_has_persistance_array_id()
+	{
+		$model = model_test::create();
+		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		app('db')->mock_set_return_result($rs_1);
+		$model->find('first');
+
+		$this->assert_equals($this->get_method('array_id', $model->get_id()), ['campo01'=>'valor11', 'campo02'=>'valor21']);
+	}
+
+	public function test_has_persistance_values_id_fields()
+	{
+		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		app('db')->mock_set_return_result($rs_1);
+		$model = model_test::create();
+		$model->find('first');
+
+		$method = new ReflectionMethod($this->test_class, 'values_id_fields');
+		$method->setAccessible(TRUE);
+
+		$this->assert_equals($method->invoke($model, $model->get_id()), ['campo01'=>'valor11', 'campo02'=>'valor21']);
+	}
+
+	public function test_has_persistance_values_not_id_fields()
+	{
+		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		app('db')->mock_set_return_result($rs_1);
+		$model = model_test::create();
+		$model->find('first');
+
+		$method = new ReflectionMethod($this->test_class, 'values_not_id_fields');
+		$method->setAccessible(TRUE);
+
+		$this->assert_equals($method->invoke($model, $model->get_id()), ['campo03'=>31, 'campo04'=>1]);
+	}
+
+	public function test_has_persistance_has_autoincrement_id()
+	{
+		$this->assert_false($this->get_method('has_autoincrement_id'));
+	}
+
+	public function test_has_persistance_is_new_record()
+	{
+		app('db')->mock_set_return_result(NULL);
+		$this->assert_true($this->get_method('is_new_record'));
+
+		app('db')->mock_set_return_result([1]);
+		$this->assert_false($this->get_method('is_new_record'));
+	}
+
+	public function test_has_relationship_junta_campos_select()
+	{
+		$this->assert_equals($this->get_method('_junta_campos_select', ['campo01', 'campo02', 'campo03']), "campo01+'~'+campo02+'~'+campo03");
 	}
 
 }

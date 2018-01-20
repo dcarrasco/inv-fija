@@ -14,6 +14,8 @@ namespace test\mock;
  */
 class mock_db extends mock_object{
 
+	public $dbdriver = 'mock_driver';
+
 	// --------------------------------------------------------------------
 
 	/**
