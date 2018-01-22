@@ -86,6 +86,8 @@ class App {
 
 			static::$instance = $app;
 		}
+
+		return static::$instance;
 	}
 
 	// --------------------------------------------------------------------
@@ -110,8 +112,13 @@ class App {
 	 * @param  string $item Nombre del objeto
 	 * @return mixed
 	 */
-	public static function get($item = '')
+	public static function get($item = NULL)
 	{
+		if (is_null($item))
+		{
+			return static::$instance;
+		}
+
 		return static::$instance->{$item};
 	}
 

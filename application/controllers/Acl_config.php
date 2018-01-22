@@ -90,7 +90,7 @@ class Acl_config extends Orm_controller {
 	 */
 	public function get_select_modulo($id_app = '')
 	{
-		$this->output
+		return $this->output
 			->set_content_type('text')
 			->set_output(form_print_options(modulo::create()->find('list', [
 				'conditions' => ['id_app' => $id_app],
