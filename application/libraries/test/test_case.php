@@ -286,6 +286,8 @@ class test_case {
 				$this->set_up();
 				$this->{$method}();
 			});
+
+		$this->ci->output->set_output(NULL);
 	}
 
 	// --------------------------------------------------------------------

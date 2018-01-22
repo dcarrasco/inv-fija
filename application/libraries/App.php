@@ -31,24 +31,26 @@ class App {
 	 *
 	 * @var array
 	 */
-	protected $db;
-	protected $form_validation;
-	protected $load;
-	protected $lang;
-	protected $input;
-	protected $security;
-	protected $output;
-	protected $uri;
-	protected $utf8;
-	protected $log;
-	protected $config;
-	protected $hooks;
 	protected $benchmark;
+	protected $hooks;
+	protected $config;
+	protected $log;
+	protected $utf8;
+	protected $uri;
+	protected $router;
+	protected $output;
+	protected $security;
+	protected $input;
+	protected $lang;
+	protected $form_validation;
+	protected $session;
+	protected $db;
+	protected $load;
 	protected $table;
 
 	protected static $instance = NULL;
 
-	protected $ci_objects = ['db', 'form_validation', 'load', 'lang', 'input', 'security', 'output', 'uri', 'utf8', 'log', 'config', 'hooks', 'benchmark', 'table'];
+	protected $ci_objects = ['benchmark', 'hooks', 'config', 'log', 'utf8', 'uri', 'router', 'output', 'security', 'input', 'lang', 'form_validation', 'session', 'db', 'load', 'table'];
 
 
 	// --------------------------------------------------------------------

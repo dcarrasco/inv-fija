@@ -104,15 +104,18 @@ class Controller_base extends CI_Controller {
 	 */
 	public function set_menu_modulo()
 	{
-		$this->menu_opciones = collect($this->menu_opciones)->map(function($menu) {
-			$menu['url'] = str_replace('{{route}}', $this->router->class, array_get($menu, 'url'));
+		$router = $this->router;
 
-			$menu['texto'] = substr(array_get($menu, 'texto'), 0, 6) === 'lang::'
-				? lang(substr(array_get($menu, 'texto'), 6, strlen(array_get($menu, 'texto'))))
-				: array_get($menu, 'texto');
+		$this->menu_opciones = collect($this->menu_opciones)
+			->map(function($menu) use ($router) {
+				$menu['url'] = str_replace('{{route}}', $router->class, array_get($menu, 'url'));
+				$menu['texto'] = substr(array_get($menu, 'texto'), 0, 6) === 'lang::'
+					? lang(substr(array_get($menu, 'texto'), 6, strlen(array_get($menu, 'texto'))))
+					: array_get($menu, 'texto');
 
-			return $menu;
-		})->all();
+				return $menu;
+			})
+			->all();
 	}
 
 	// --------------------------------------------------------------------

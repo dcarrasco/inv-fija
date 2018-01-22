@@ -66,7 +66,7 @@ if ( ! function_exists('app'))
 	 * @param  string $component Objeto a recuperar
 	 * @return mixed
 	 */
-	function app($component = '')
+	function app($component = NULL)
 	{
 		return App::get($component);
 	}
