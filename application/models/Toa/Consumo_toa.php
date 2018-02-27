@@ -273,6 +273,11 @@ class Consumo_toa extends ORM_Model {
 	 */
 	protected function datos_control_tecnicos_todas_las_trx($params = NULL)
 	{
+		if (empty($params->get('empresa')) OR empty($params->get('mes')));
+		{
+			return [];
+		}
+
 		$fecha_desde = $params->get('mes', '').'01';
 		$fecha_hasta = get_fecha_hasta($params->get('mes', ''));
 		$dato_desplegar = $params->get('dato_desplegar', 'peticiones');
