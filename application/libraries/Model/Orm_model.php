@@ -34,6 +34,7 @@ use IteratorAggregate;
 class Orm_model implements IteratorAggregate {
 
 	use Model_has_form;
+	use Model_uses_database;
 	use Model_has_attributes;
 	use Model_has_pagination;
 	use Model_has_persistance;
@@ -126,9 +127,15 @@ class Orm_model implements IteratorAggregate {
 
 		$this->model_class      = get_class($this);
 		$this->model_nombre     = strtolower($this->model_class);
-		$this->tabla            = $this->model_nombre;
-		$this->label            = $this->model_nombre;
-		$this->label_plural     = $this->label . 's';
+
+		$this->tabla = empty($this->tabla) ? $this->model_nombre : $this->tabla;
+		$this->tabla = substr($this->tabla, 0, 8) === 'config::'
+			? config(substr($this->tabla, 8, strlen($this->tabla)))
+			: $this->tabla;
+
+		$this->label = empty($this->label) ? $this->model_nombre : $this->label;
+		$this->label_plural = empty($this->label_plural) ? $this->label .'s' : $this->label_plural;
+
 		$this->relation_objects = new Collection();
 
 		$this->config_model($this->model_config);
@@ -177,29 +184,10 @@ class Orm_model implements IteratorAggregate {
 	 **/
 	public function config_model($param = [])
 	{
-		$this->config_modelo(array_get($param, 'modelo', []));
 		$this->config_campos(array_get($param, 'campos', []));
 
 		$this->campo_id = $this->_determina_campo_id();
 		//$this->get_relation_fields();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Configura las propiedades del modelo
-	 *
-	 * @param  array $arr_config arreglo con la configuración del modelo
-	 * @return nada
-	 */
-	protected function config_modelo($arr_config = [])
-	{
-		collect($arr_config)->each(function($value, $index) {
-			if (isset($this->{$index}))
-			{
-				$this->{$index} = $value;
-			}
-		});
 	}
 
 	// --------------------------------------------------------------------
