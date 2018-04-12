@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Centro extends ORM_Model {
 
+	protected $tabla = 'config::bd_centros';
+	protected $label = 'Centro';
+	protected $label_plural = 'Centros';
+	protected $order_by = 'centro';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Centro extends ORM_Model {
 	public function __construct($id_centro = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_centros'),
-				'label'        => 'Centro',
-				'label_plural' => 'Centros',
-				'order_by'     => 'centro',
-			],
 			'campos' => [
 				'centro' => [
 					'label'          => 'Centro',

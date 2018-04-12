@@ -33,6 +33,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Ubicacion extends ORM_Model {
 
+	protected $tabla = 'config::bd_ubic_tipoubic';
+	protected $label = 'Ubicaci&oacute;n';
+	protected $label_plural = 'Ubicaciones';
+	protected $order_by = 'tipo_inventario, id_tipo_ubicacion, ubicacion';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -42,12 +47,6 @@ class Ubicacion extends ORM_Model {
 	public function __construct($id_ubicacion = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_ubic_tipoubic'),
-				'label'        => 'Ubicaci&oacute;n',
-				'label_plural' => 'Ubicaciones',
-				'order_by'     => 'tipo_inventario, id_tipo_ubicacion, ubicacion',
-			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'tipo_inventario' => [

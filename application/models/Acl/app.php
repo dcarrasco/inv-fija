@@ -34,6 +34,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class App extends ORM_Model {
 
+	protected $tabla = 'config::bd_app';
+	protected $label = 'Aplicaci&oacute;n';
+	protected $label_plural = 'Aplicaciones';
+	protected $order_by = 'app';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -43,12 +48,6 @@ class App extends ORM_Model {
 	public function __construct($id_app = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_app'),
-				'label'        => 'Aplicaci&oacute;n',
-				'label_plural' => 'Aplicaciones',
-				'order_by'     => 'app',
-			],
 			'campos' => [
 				'id'  => ['tipo' => Orm_field::TIPO_ID],
 				'app' => [

@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Familia extends ORM_Model {
 
+	protected $tabla = 'config::bd_familias';
+	protected $label = 'Familia';
+	protected $label_plural = 'Familias';
+	protected $order_by = 'codigo';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Familia extends ORM_Model {
 	public function __construct($id_familia = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_familias'),
-				'label'        => 'Familia',
-				'label_plural' => 'Familias',
-				'order_by'     => 'codigo',
-			],
 			'campos' => [
 				'codigo' => [
 					'label'          => 'C&oacute;digo de la familia',

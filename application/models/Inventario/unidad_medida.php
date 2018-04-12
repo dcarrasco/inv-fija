@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Unidad_medida extends ORM_Model {
 
+	protected $tabla = 'config::bd_unidades';
+	protected $label = 'Unidad de medida';
+	protected $label_plural = 'Unidades de medida';
+	protected $order_by = 'unidad';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Unidad_medida extends ORM_Model {
 	public function __construct($id_unidad_medida = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_unidades'),
-				'label'        => 'Unidad de medida',
-				'label_plural' => 'Unidades de medida',
-				'order_by'     => 'unidad',
-			],
 			'campos' => [
 				'unidad' => [
 					'label'          => 'Unidad',

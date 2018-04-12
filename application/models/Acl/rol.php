@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Rol extends ORM_Model {
 
+	protected $tabla = 'config::bd_rol';
+	protected $label = 'Rol';
+	protected $label_plural = 'Roles';
+	protected $order_by = 'rol';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Rol extends ORM_Model {
 	public function __construct($id_rol = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_rol'),
-				'label'        => 'Rol',
-				'label_plural' => 'Roles',
-				'order_by'     => 'rol',
-			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'id_app' => [
@@ -77,8 +76,8 @@ class Rol extends ORM_Model {
 					'relation' => [
 						'model'         => modulo::class,
 						'join_table'    => 'acl_rol_modulo',
-						'id_one_table'  => ['id_rol'],
-						'id_many_table' => ['id_modulo'],
+						'id_one_table'  => ['rol_id'],
+						'id_many_table' => ['modulo_id'],
 						'conditions'    => ['id_app' => '@field_value:id_app:NULL'],
 					],
 					'texto_ayuda'    => 'M&oacute;dulos del rol.',

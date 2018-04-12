@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Modulo extends ORM_Model {
 
+	protected $tabla = 'config::bd_modulos';
+	protected $label = 'M&oacute;dulo';
+	protected $label_plural = 'M&oacute;dulos';
+	protected $order_by = 'id_app, orden, modulo';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Modulo extends ORM_Model {
 	public function __construct($id_modulo = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_modulos'),
-				'label'        => 'M&oacute;dulo',
-				'label_plural' => 'M&oacute;dulos',
-				'order_by'     => 'id_app, orden, modulo',
-			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'id_app' => [

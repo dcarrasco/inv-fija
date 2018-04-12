@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_inventario extends ORM_Model {
 
+	protected $tabla = 'config::bd_tipos_inventario';
+	protected $label = 'Tipo de inventario';
+	protected $label_plural = 'Tipos de inventario';
+	protected $order_by = 'desc_tipo_inventario';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Tipo_inventario extends ORM_Model {
 	public function __construct($id_tipo_inventario = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipos_inventario'),
-				'label'        => 'Tipo de inventario',
-				'label_plural' => 'Tipos de inventario',
-				'order_by'     => 'desc_tipo_inventario',
-			],
 			'campos' => [
 				'id_tipo_inventario' => [
 					'label'          => 'Tipo de inventario',

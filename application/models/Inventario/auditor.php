@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Auditor extends ORM_Model {
 
+	protected $tabla = 'config::bd_auditores';
+	protected $label = 'Auditor';
+	protected $label_plural = 'Auditores';
+	protected $order_by = 'nombre';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Auditor extends ORM_Model {
 	public function __construct($id_auditor = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_auditores'),
-				'label'        => 'Auditor',
-				'label_plural' => 'Auditores',
-				'order_by'     => 'nombre',
-			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'nombre' => [

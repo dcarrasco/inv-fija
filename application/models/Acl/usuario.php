@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Usuario extends ORM_Model {
 
+	protected $tabla = 'config::bd_usuarios';
+	protected $label = 'Usuario';
+	protected $label_plural = 'Usuarios';
+	protected $order_by = 'nombre';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Usuario extends ORM_Model {
 	public function __construct($id_usuario = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_usuarios'),
-				'label'        => 'Usuario',
-				'label_plural' => 'Usuarios',
-				'order_by'     => 'nombre',
-			],
 			'campos' => [
 				'id'     => ['tipo' => Orm_field::TIPO_ID],
 				'nombre' => [

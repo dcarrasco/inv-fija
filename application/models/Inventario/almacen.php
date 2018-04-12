@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Almacen extends ORM_Model {
 
+	protected $tabla = 'config::bd_almacenes';
+	protected $label = 'Almac&eacute;n';
+	protected $label_plural = 'Almacenes';
+	protected $order_by = 'almacen';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Almacen extends ORM_Model {
 	public function __construct($id_almacen = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_almacenes'),
-				'label'        => 'Almac&eacute;n',
-				'label_plural' => 'Almacenes',
-				'order_by'     => 'almacen',
-			],
 			'campos' => [
 				'almacen' => [
 					'label'          => 'Almac&eacute;n',
