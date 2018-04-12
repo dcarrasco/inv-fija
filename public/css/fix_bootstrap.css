@@ -7,7 +7,7 @@
 }
 
 body {
-	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 	font-size: 14px;
 	line-height: 1.42857143;
 	color: #333;
@@ -18,11 +18,11 @@ body {
 .checkbox > label,
 label.checkbox-inline,
 label.radio-inline {
-	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .btn {
-	font-family: "TelefonicaWeb-Light", Calibri, "Helvetica Neue", Arial, sans-serif;
+	font-family: "TelefonicaWeb-Regular", Calibri, "Helvetica Neue", Arial, sans-serif;
 }
 
 .navbar {
@@ -174,12 +174,12 @@ Hoja de estilos para tipografias corporativas
 }
 
 @font-face {
-	font-family: 'TelefonicaWeb-Light';
+	font-family: 'TelefonicaWeb';
 	src: local('☺'),
-		 url('../fonts/TelefonicaWeb-Light.eot') format('embedded-opentype'),
-		 url('../fonts/TelefonicaWeb-Light.svg') format('svg'),
-		 url('../fonts/TelefonicaWeb-Light.woff') format('woff'),
-		 url('../fonts/TelefonicaWeb-Light.woff2') format('woff2');
+		 url('../fonts/TelefonicaWeb-Regular.eot') format('embedded-opentype'),
+		 url('../fonts/TelefonicaWeb-Regular.svg') format('svg'),
+		 url('../fonts/TelefonicaWeb-Regular.woff') format('woff'),
+		 url('../fonts/TelefonicaWeb-Regular.woff2') format('woff2');
 	font-weight: normal;
 	font-style: normal;
 }
