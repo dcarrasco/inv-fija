@@ -118,7 +118,7 @@ class Inventario_config extends Orm_controller {
 			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 			'ubicaciones'            => $ubicaciones,
 
-			'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
+			'combo_tipos_inventario' => Tipo_inventario::create()->get_dropdown_list(),
 			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 			'add_url_form'           => "{$this->router->class}/add_ubicacion".url_params(),
 			'update_url_form'        => "{$this->router->class}/update_ubicacion".url_params(),

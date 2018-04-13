@@ -40,142 +40,23 @@ trait Model_has_persistance {
 	 */
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
-		return $this->find('first', ['conditions' => $this->array_id($id_modelo)], $recupera_relation);
+		return $this->first()
+			->where($this->array_id($id_modelo))
+			->get($recupera_relation);
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera registros de la base de datos
-	 *
-	 * @param  string  $tipo              Indica el tipo de consulta
-	 *                                    * all    todos los registros
-	 *                                    * first  primer registro
-	 *                                    * list   listado para combobox
-	 *                                    * count  cantidad de registros
-	 * @param  array   $param             Parametros para la consulta
-	 *                                    * condition arreglo con condiciones para where
-	 *                                    * filtro    string  con filtro de resultaods
-	 *                                    * limit     cantidad de registros a devolver
-	 *                                    * offset    pagina de registros a recuperar
-	 * @param  boolean $recupera_relation Indica si se recuperan los modelos relacionados
-	 * @return mixed                      Arreglo de resultados
-	 */
-	public function find($tipo = 'first', $param = [], $recupera_relation = TRUE)
+	public function get_dropdown_list($opcion_inicial = TRUE)
 	{
-		$result = $this->get_db_result($tipo, $param);
+		$opc_ini = collect($opcion_inicial
+			? ['' => 'Seleccione '.strtolower($this->label).'...']
+			: []
+		);
 
-		if ($tipo === 'first')
-		{
-			$this->fill_from_array($result);
+		$opciones = collect($this->get())->map_with_keys(function ($obj_modelo) {
+			return [$obj_modelo->get_id() => (string) $obj_modelo];
+		});
 
-			if ($recupera_relation)
-			{
-				$this->get_relation_fields();
-			}
-
-			return $this;
-		}
-		elseif ($tipo === 'all')
-		{
-			return collect($result)->map(function ($registro) use ($recupera_relation) {
-				$obj_modelo = new $this->model_class($registro);
-
-				if ($recupera_relation)
-				{
-					$obj_modelo->get_relation_fields($this->relation_objects);
-					$this->_add_relation_fields($obj_modelo);
-				}
-
-				return $obj_modelo;
-			});
-		}
-		elseif ($tipo === 'count')
-		{
-			return $result;
-		}
-		elseif ($tipo === 'list')
-		{
-			$opc_ini = collect(array_get($param, 'opc_ini', TRUE)
-				? ['' => 'Seleccione '.strtolower($this->label).'...']
-				: []
-			);
-
-			$opciones = collect($result)->map_with_keys(function ($registro) {
-				$obj_modelo = new $this->model_class($registro);
-
-				return [$obj_modelo->get_id() => (string) $obj_modelo];
-			});
-
-			return $opc_ini->merge($opciones)->all();
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera uno o varios registros desde la BD
-	 *
-	 * @param  string $tipo  Tipo de query a ejecutar
-	 * @param  array  $param Parámetros
-	 * @return mixed         Registros de la BD
-	 */
-	protected function get_db_result($tipo = 'first', $param = [])
-	{
-		$this->db_filter($param);
-
-		if ($tipo === 'first')
-		{
-			return $this->db->get($this->tabla)->row_array();
-		}
-		elseif ($tipo === 'all' OR $tipo === 'list')
-		{
-			return $this->db->get($this->tabla)->result_array();
-		}
-		elseif ($tipo === 'count')
-		{
-			return $this->db->from($this->tabla)->count_all_results();
-		}
-
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Genera las restricciones para consultar la BD
-	 *
-	 * @param  array $param Parámetros
-	 * @return void
-	 */
-	protected function db_filter($param)
-	{
-		foreach (array_get($param, 'conditions', []) as $campo => $valor)
-		{
-			if (is_array($valor))
-			{
-				if (count($valor) === 0)
-				{
-					$this->db->where($campo.'=', 'NULL', FALSE);
-				}
-				else
-				{
-					$this->db->where_in($campo, $valor);
-				}
-			}
-			else
-			{
-				$this->db->where($campo, $valor);
-			}
-		}
-
-		$this->_put_filtro(array_get($param, 'filtro'));
-
-		if (array_key_exists('limit', $param))
-		{
-			$this->db->limit(array_get($param, 'limit', NULL), array_get($param, 'offset', NULL));
-		}
-
-		$this->db->order_by(array_get($param, 'order_by', $this->order_by));
+		return $opc_ini->merge($opciones)->all();
 	}
 
 	// --------------------------------------------------------------------

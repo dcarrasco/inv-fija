@@ -38,7 +38,7 @@
 			<?php foreach ($modelos as $obj_modelo): ?>
 				<tr>
 					<?php foreach ($obj_modelo->get_fields(TRUE) as $campo => $valor): ?>
-						<td><?= $obj_modelo->get_field_value($campo); ?></td>
+						<td><?= $obj_modelo->$campo; ?></td>
 					<?php endforeach; ?>
 					<td class="text-center">
 						<a href="{url_editar}<?= $obj_modelo->get_id() ?>{url_params}" class="">

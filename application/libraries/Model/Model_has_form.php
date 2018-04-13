@@ -152,7 +152,12 @@ trait Model_has_form {
 
 		$this->fields[$campo]->set_relation($arr_relation);
 
-		return $this->fields[$campo]->form_field($this->{$campo}, $filtra_activos, $clase_adic, $field_error);
+		return $this->fields[$campo]->form_field(
+			array_get($this->values, $campo),
+			$filtra_activos,
+			$clase_adic,
+			$field_error
+		);
 	}
 
 	// --------------------------------------------------------------------

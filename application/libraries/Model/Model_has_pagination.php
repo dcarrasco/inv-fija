@@ -65,7 +65,8 @@ trait Model_has_pagination {
 	public function crea_links_paginas()
 	{
 		$this->load->library('pagination');
-		$total_rows = $this->find('count', ['filtro' => $this->filtro], FALSE);
+
+		$total_rows = $this->filter_by($this->filtro)->count();
 
 		$cfg_pagination = [
 			'uri_segment'     => 5,
@@ -120,11 +121,12 @@ trait Model_has_pagination {
 	{
 		$page = is_null($page) ? request($this->page_name, 1) : $page;
 
-		return $this->find('all', [
-			'filtro' => $this->filtro,
-			'limit'  => $this->page_results,
-			'offset' => ($page - 1) * $this->page_results,
-		]);
+		return collect($this
+			->limit($this->page_results, ($page - 1) * $this->page_results)
+			->filter_by($this->filtro)
+			->order_by($this->order_by)
+			->get()
+		);
 	}
 
 

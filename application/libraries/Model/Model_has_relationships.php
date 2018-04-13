@@ -109,19 +109,19 @@ trait Model_has_relationships {
 		// recupera el objeto del arreglo y no va a buscarlo a la BD
 		if ($relations_collection
 			AND $relations_collection->key_exists($nombre_campo)
-			AND $relations_collection->item($nombre_campo)->key_exists($this->{$nombre_campo})
+			AND $relations_collection->item($nombre_campo)->key_exists($this->values[$nombre_campo])
 		)
 		{
-			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->{$nombre_campo});
+			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->values[$nombre_campo]);
 		}
 		else
 		{
 			$model_relacionado = new $class_relacionado();
 
 			// si el valor del campo es distinto de nulo, lo va abuscar a la BD
-			if ($this->{$nombre_campo} !== NULL)
+			if ($this->values[$nombre_campo] !== NULL)
 			{
-				$model_relacionado->find_id($this->{$nombre_campo}, FALSE);
+				$model_relacionado->find_id($this->values[$nombre_campo], FALSE);
 			}
 		}
 
@@ -182,12 +182,14 @@ trait Model_has_relationships {
 			->select($this->_junta_campos_select($relation['id_many_table']), FALSE)
 			->get_where($relation['join_table'], $where_pivot)
 			->result_array())
-			->flatten()
-			->all();
+			->flatten();
 
-		$arr_condiciones = [$this->_junta_campos_select($model->get_campo_id()) => $where_related];
-
-		return $model->find('all', ['conditions' => $arr_condiciones], FALSE);	}
+		return collect($where_related->count() > 0
+			? $model->where_in($this->_junta_campos_select($model->get_campo_id()), $where_related->all())
+				->get(FALSE)
+			: NULL
+		);
+	}
 
 	// --------------------------------------------------------------------
 

@@ -41,26 +41,38 @@ trait Model_uses_database {
 		return $this;
 	}
 
-	protected function get()
+	protected function get($recupera_relation = TRUE)
 	{
 		$this->select_from_database();
-		$this->db_query = $this->db_query->get()->result_array();
+		$results = $this->db_query->get()->result_array();
+		$this->db_query = NULL;
 
-		if (count($this->db_query) === 1)
+		if (count($results) === 1)
 		{
-			$this->fill_from_array($this->db_query[0]);
+			$this->fill_from_array($results[0]);
+
+			if ($recupera_relation)
+			{
+				$this->get_relation_fields();
+			}
 		}
 
-		if (count($this->db_query) > 1)
+		if (count($results) > 1)
 		{
 			$class = get_class($this);
 
-			return collect($this->db_query)->map(function($result) use ($class) {
-				return new $class($result);
+			return collect($results)->map(function($result) use ($class, $recupera_relation) {
+				$obj_modelo = new $class($result);
+
+				if ($recupera_relation)
+				{
+					$obj_modelo->get_relation_fields($this->relation_objects);
+					$this->_add_relation_fields($obj_modelo);
+				}
+
+				return $obj_modelo;
 			});
 		}
-
-		$this->db_query = NULL;
 
 		return $this;
 	}
@@ -72,6 +84,91 @@ trait Model_uses_database {
 
 		return $this;
 	}
+
+
+	public function where_in($key = NULL, $values = NULL, $escape = NULL)
+	{
+		$this->select_from_database();
+		$this->db_query = $this->db_query->where_in($key, $values, $escape);
+
+		return $this;
+	}
+
+	public function count()
+	{
+		$this->select_from_database();
+
+		$cantidad = $this->db_query
+			->select('count(*) as cantidad', FALSE)
+			->get()->row()
+			->cantidad;
+
+		$this->db_query = NULL;
+
+		return $cantidad;
+	}
+
+
+	public function first()
+	{
+		return $this->limit(1);
+	}
+
+	public function limit($value, $offset = 0)
+	{
+		$this->select_from_database();
+		$this->db_query = $this->db_query->limit($value, $offset);
+
+		return $this;
+	}
+
+
+	public function offset($offset)
+	{
+		$this->select_from_database();
+		$this->db_query = $this->db_query->offset($offset);
+
+		return $this;
+	}
+
+	public function order_by($orderby, $direction = '', $escape = NULL)
+	{
+		$this->select_from_database();
+		$this->db_query = $this->db_query->order_by($orderby, $direction, $escape);
+
+		return $this;
+	}
+
+
+
+	protected function filter_by_array($filtro = '')
+	{
+		return collect($this->fields)
+			->filter(function ($field) {
+				return $field->get_tipo() === Orm_field::TIPO_CHAR;
+			})
+			->map(function($elem) use ($filtro) {
+				return $filtro;
+			});
+	}
+
+	protected function filter_by($filtro = '')
+	{
+		if ( ! empty($filtro))
+		{
+			$filtros = $this->filter_by_array($filtro);
+
+			if ($filtros->count() > 0)
+			{
+				$this->select_from_database();
+				$this->db_query = $this->db_query->or_like($filtros->all(), $filtro, 'both');
+			}
+		}
+
+		return $this;
+	}
+
+
 
 }
 /* End of file model_uses_database.php */

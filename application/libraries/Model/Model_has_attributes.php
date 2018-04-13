@@ -57,8 +57,30 @@ trait Model_has_attributes {
 	 */
 	public function __get($campo)
 	{
+		$method = 'get_'.$campo;
+
+		if (method_exists($this, $method))
+		{
+			return $this->$method($campo);
+		}
+
 		if (array_key_exists($campo, $this->values))
 		{
+			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
+			{
+				return (string) array_get($this->fields[$campo]->get_relation(), 'model');
+			}
+
+			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
+			{
+				return ul(array_get($this->fields[$campo]->get_relation(), 'data', collect())->all());
+			}
+
+			if (count($this->fields[$campo]->get_choices()) > 0)
+			{
+				return array_get($this->fields[$campo]->get_choices(), $this->values[$campo]);
+			}
+
 			return $this->values[$campo];
 		}
 

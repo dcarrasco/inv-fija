@@ -278,6 +278,11 @@ class Orm_field {
 		return $this->es_id;
 	}
 
+	public function get_choices()
+	{
+		return $this->choices;
+	}
+
 	/**
 	 * Recupera indicador si el campo tiene valores unicos
 	 *
@@ -467,7 +472,7 @@ class Orm_field {
 
 			$form = form_dropdown(
 				$this->nombre,
-				$modelo_rel->find('list', $dropdown_conditions, FALSE),
+				$modelo_rel->get_dropdown_list(FALSE),
 				$valor_field,
 				$param_adic
 			);
@@ -494,7 +499,7 @@ class Orm_field {
 
 			$form = form_multiselect(
 				$this->nombre.'[]',
-				$modelo_rel->find('list', $dropdown_conditions, FALSE),
+				$modelo_rel->get_dropdown_list(FALSE),
 				$opciones,
 				$param_adic
 			);
