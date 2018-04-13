@@ -99,10 +99,10 @@ class Toa_config extends Orm_controller {
 	{
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Ciudad_toa::create()->find('list', [
-				'conditions' => ['id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)],
-				'opc_ini'    => FALSE,
-			])));
+			->set_output(form_print_options(Ciudad_toa::create()
+				->where('id_ciudad', Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa))
+				->get_dropdown_list(FALSE)
+			));
 	}
 
 }

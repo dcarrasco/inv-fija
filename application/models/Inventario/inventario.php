@@ -119,9 +119,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_id_inventario_activo()
 	{
-		$this->find('first', ['conditions' => ['activo' => 1]]);
-
-		return (int) $this->get_id();
+		return $this->first()->where('activo', 1)->get(FALSE)->get_id();
 	}
 
 

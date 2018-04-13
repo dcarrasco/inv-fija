@@ -152,7 +152,7 @@ trait Model_uses_database {
 			});
 	}
 
-	protected function filter_by($filtro = '')
+	public function filter_by($filtro = '')
 	{
 		if ( ! empty($filtro))
 		{

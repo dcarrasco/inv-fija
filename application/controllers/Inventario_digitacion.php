@@ -286,7 +286,7 @@ class Inventario_digitacion extends Controller_base {
 	{
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Catalogo::create()->find('list', ['filtro' => $filtro])));
+			->set_output(form_print_options(Catalogo::create()->filter_by($filtro)->get_dropdown_list(FALSE)));
 	}
 
 }

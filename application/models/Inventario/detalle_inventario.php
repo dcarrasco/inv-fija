@@ -37,6 +37,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Detalle_inventario extends ORM_Model {
 
+	protected $tabla = 'config::bd_detalle_inventario';
+	protected $label = 'Detalle inventario';
+	protected $label_plural = 'Detalles inventario';
+	protected $order_by = 'id';
+
 	/**
 	 * Define la cantidad de registros por página para los ajustes
 	 *
@@ -55,12 +60,6 @@ class Detalle_inventario extends ORM_Model {
 	public function __construct($id_detalle = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_detalle_inventario'),
-				'label'        => 'Detalle inventario',
-				'label_plural' => 'Detalles inventario',
-				'order_by'     => 'id',
-			],
 			'campos' => [
 				'id'            => ['tipo' => Orm_field::TIPO_ID],
 				'id_inventario' => [
@@ -211,10 +210,11 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_hoja($id_inventario = 0, $hoja = 0)
 	{
-		return $this->find('all', [
-			'conditions' => ['id_inventario' => $id_inventario, 'hoja' => $hoja],
-			'order_by'   => 'ubicacion, catalogo, id'
-		]);
+		return $this
+			->where('id_inventario', $id_inventario)
+			->where('hoja', $hoja)
+			->order_by('ubicacion, catalogo, id')
+			->get();
 	}
 
 	// --------------------------------------------------------------------
