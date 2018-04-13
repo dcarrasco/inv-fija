@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tecnico_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_tecnicos_toa';
+	protected $label = 'T&eacute;cnico TOA';
+	protected $label_plural = 'T&eacute;cnicos TOA';
+	protected $order_by = 'tecnico';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Tecnico_toa extends ORM_Model {
 	public function __construct($id_tecnico = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tecnicos_toa'),
-				'label'        => 'T&eacute;cnico TOA',
-				'label_plural' => 'T&eacute;cnicos TOA',
-				'order_by'     => 'tecnico',
-			],
 			'campos' => [
 				'id_tecnico' => [
 					'label'          => 'ID T&eacute;cnico',
@@ -106,6 +105,14 @@ class Tecnico_toa extends ORM_Model {
 	public function __toString()
 	{
 		return (string) $this->tecnico;
+	}
+
+
+	public function get_rut()
+	{
+		list($numero_rut, $dv_rut) = explode('-', $this->values['rut']);
+
+		return fmt_cantidad($numero_rut).'-'.$dv_rut;
 	}
 
 	// --------------------------------------------------------------------

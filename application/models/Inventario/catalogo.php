@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Catalogo extends ORM_Model {
 
+	protected $tabla = 'config::bd_catalogos';
+	protected $label = 'Cat&aacute;logo';
+	protected $label_plural = 'Cat&aacute;logos';
+	protected $order_by = 'catalogo';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Catalogo extends ORM_Model {
 	public function __construct($id_catalogo = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_catalogos'),
-				'label'        => 'Cat&aacute;logo',
-				'label_plural' => 'Cat&aacute;logos',
-				'order_by'     => 'catalogo',
-			],
 			'campos' => [
 				'catalogo' => [
 					'label'          => 'Cat&aacute;logo',

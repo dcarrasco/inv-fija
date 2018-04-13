@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Empresa_ciudad_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_empresas_ciudades_toa';
+	protected $label = 'Empresa ciudad TOA';
+	protected $label_plural = 'Empresas ciudades TOA';
+	protected $order_by = 'id_empresa, id_ciudad';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Empresa_ciudad_toa extends ORM_Model {
 	public function __construct($id_empresa = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_empresas_ciudades_toa'),
-				'label'        => 'Empresa ciudad TOA',
-				'label_plural' => 'Empresas ciudades TOA',
-				'order_by'     => 'id_empresa, id_ciudad',
-			],
 			'campos' => [
 				'id_empresa' => [
 					'tipo'           => Orm_field::TIPO_HAS_ONE,
@@ -105,7 +104,9 @@ class Empresa_ciudad_toa extends ORM_Model {
 	 */
 	public function ciudades_por_empresa($id_empresa = NULL)
 	{
-		return $this->find('all', ['conditions' => ['id_empresa' => $id_empresa]])
+		return collect($this->where('id_empresa', $id_empresa)
+				->get()
+			)
 			->map(function ($ciudad_empresa) {
 				return $ciudad_empresa->id_ciudad;
 			})

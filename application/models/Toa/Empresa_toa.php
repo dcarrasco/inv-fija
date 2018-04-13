@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Empresa_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_empresas_toa';
+	protected $label = 'Empresa TOA';
+	protected $label_plural = 'Empresas TOA';
+	protected $order_by = 'empresa';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Empresa_toa extends ORM_Model {
 	public function __construct($id_empresa = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_empresas_toa'),
-				'label'        => 'Empresa TOA',
-				'label_plural' => 'Empresas TOA',
-				'order_by'     => 'empresa',
-			],
 			'campos' => [
 				'id_empresa' => [
 					'label'          => 'ID Empresa',

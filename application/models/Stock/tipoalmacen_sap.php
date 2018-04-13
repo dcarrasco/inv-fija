@@ -34,6 +34,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipoalmacen_sap extends ORM_Model {
 
+	protected $tabla = 'config::bd_tiposalm_sap';
+	protected $label = 'Tipo de Almac&eacute;n';
+	protected $label_plural = 'Tipos de Almac&eacute;n';
+	protected $order_by = 'tipo_op, tipo';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -43,12 +48,6 @@ class Tipoalmacen_sap extends ORM_Model {
 	public function __construct($id_tipo_alm_sap = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tiposalm_sap'),
-				'label'        => 'Tipo Almac&eacute;n',
-				'label_plural' => 'Tipos de Almac&eacute;n',
-				'order_by'     => 'tipo_op, tipo',
-			],
 			'campos' => [
 				'id_tipo' => [
 					'label'            => 'id',

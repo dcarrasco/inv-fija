@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Ciudad_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_ciudades_toa';
+	protected $label = 'Ciudad TOA';
+	protected $label_plural = 'Ciudades TOA';
+	protected $order_by = 'orden';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Ciudad_toa extends ORM_Model {
 	public function __construct($id_ciudad = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_ciudades_toa'),
-				'label'        => 'Ciudad TOA',
-				'label_plural' => 'Ciudades TOA',
-				'order_by'     => 'orden',
-			],
 			'campos' => [
 				'id_ciudad' => [
 					'label'          => 'ID de la ciudad',

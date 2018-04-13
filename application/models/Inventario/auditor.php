@@ -85,6 +85,11 @@ class Auditor extends ORM_Model {
 		return (string) $this->nombre;
 	}
 
+	public function get_activo()
+	{
+		return $this->values['activo'] ? 'Activo' : 'Inactivo';
+	}
+
 
 }
 

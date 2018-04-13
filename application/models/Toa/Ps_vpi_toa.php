@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Ps_vpi_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_ps_vpi_toa';
+	protected $label = 'PS VPI';
+	protected $label_plural = 'PS VPI';
+	protected $order_by = 'ps_id';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Ps_vpi_toa extends ORM_Model {
 	public function __construct($id_ps = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_ps_vpi_toa'),
-				'label'        => 'PS VPI',
-				'label_plural' => 'PS VPI',
-				'order_by'     => 'ps_id',
-			],
 			'campos' => [
 				'ps_id' => [
 					'label'          => 'PS ID',

@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Clave_cierre extends ORM_Model {
 
+	protected $tabla = 'config::bd_claves_cierre_toa';
+	protected $label = 'Clave cierre TOA';
+	protected $label_plural = 'Claves cierre TOA';
+	protected $order_by = 'clave';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Clave_cierre extends ORM_Model {
 	public function __construct($clave = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_claves_cierre_toa'),
-				'label'        => 'Clave cierre TOA',
-				'label_plural' => 'Claves cierre TOA',
-				'order_by'     => 'clave',
-			],
 			'campos' => [
 				'clave' => [
 					'label'          => 'ID de la ciudad',

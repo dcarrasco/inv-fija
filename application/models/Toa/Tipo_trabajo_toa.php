@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_trabajo_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_tipos_trabajo_toa';
+	protected $label = 'Tipo de trabajo TOA';
+	protected $label_plural = 'Tipos de trabajo TOA';
+	protected $order_by = 'id_tipo';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Tipo_trabajo_toa extends ORM_Model {
 	public function __construct($id_tipo = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipos_trabajo_toa'),
-				'label'        => 'Tipo de trabajo TOA',
-				'label_plural' => 'Tipos de trabajo TOA',
-				'order_by'     => 'id_tipo',
-			],
 			'campos' => [
 				'id_tipo' => [
 					'label'          => 'Tipo de rabajo',

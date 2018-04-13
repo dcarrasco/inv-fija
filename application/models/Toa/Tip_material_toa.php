@@ -35,6 +35,11 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tip_material_toa extends ORM_Model {
 
+	protected $tabla = 'config::bd_tip_material_toa';
+	protected $label = 'Tipo de Material';
+	protected $label_plural = 'Tipos de Material';
+	protected $order_by = 'desc_tip_material';
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -44,12 +49,6 @@ class Tip_material_toa extends ORM_Model {
 	public function __construct($id_tip_material = NULL)
 	{
 		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tip_material_toa'),
-				'label'        => 'Tipo de Material',
-				'label_plural' => 'Tipos de Material',
-				'order_by'     => 'desc_tip_material',
-			],
 			'campos' => [
 				'id'                => ['tipo' => Orm_field::TIPO_ID],
 				'desc_tip_material' => [
