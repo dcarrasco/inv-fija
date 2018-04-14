@@ -35,10 +35,30 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_inventario extends ORM_Model {
 
-	protected $tabla = 'config::bd_tipos_inventario';
+	protected $db_table = 'config::bd_tipos_inventario';
 	protected $label = 'Tipo de inventario';
 	protected $label_plural = 'Tipos de inventario';
 	protected $order_by = 'desc_tipo_inventario';
+
+	protected $fields = [
+		'id_tipo_inventario' => [
+			'label'          => 'Tipo de inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+		'desc_tipo_inventario' => [
+			'label'          => 'Descripci&oacute;n tipo de inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,28 +68,6 @@ class Tipo_inventario extends ORM_Model {
 	 */
 	public function __construct($id_tipo_inventario = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id_tipo_inventario' => [
-					'label'          => 'Tipo de inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'desc_tipo_inventario' => [
-					'label'          => 'Descripci&oacute;n tipo de inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-			],
-		];
-
 		parent::__construct($id_tipo_inventario);
 	}
 

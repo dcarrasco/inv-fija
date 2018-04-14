@@ -45,6 +45,10 @@ trait Model_has_attributes {
 	 */
 	protected $values = [];
 
+	protected $list_fields = [];
+
+	protected $fechas = [];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -68,7 +72,7 @@ trait Model_has_attributes {
 		{
 			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
 			{
-				return (string) array_get($this->fields[$campo]->get_relation(), 'model');
+				return array_get($this->fields[$campo]->get_relation(), 'model');
 			}
 
 			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
@@ -78,10 +82,10 @@ trait Model_has_attributes {
 
 			if (count($this->fields[$campo]->get_choices()) > 0)
 			{
-				return array_get($this->fields[$campo]->get_choices(), $this->values[$campo]);
+				return array_get($this->fields[$campo]->get_choices(), $this->get_value($campo));
 			}
 
-			return $this->values[$campo];
+			return $this->get_value($campo);
 		}
 
 		if (is_null(app($campo)) && ! is_null(get_instance()->{$campo}))
@@ -102,6 +106,22 @@ trait Model_has_attributes {
 	public function get_campo_id()
 	{
 		return $this->campo_id;
+	}
+
+	public function get_value($campo)
+	{
+		return array_get($this->values, $campo);
+	}
+
+	public function set_value($campo, $valor)
+	{
+		return $this->values[$campo] = $valor;
+	}
+
+
+	public function get_list_fields()
+	{
+		return empty($this->list_fields) ? collect($this->fields)->keys()->all() : $this->list_fields;
 	}
 
 	// --------------------------------------------------------------------
@@ -172,7 +192,7 @@ trait Model_has_attributes {
 		collect($this->fields)
 			->only(collect($data)->keys()->all())
 			->each(function($campo, $nombre_campo) use ($data) {
-				$this->values[$nombre_campo] = $campo->cast_value(array_get($data, $nombre_campo));
+				$this->set_value($nombre_campo, $campo->cast_value(array_get($data, $nombre_campo)));
 			});
 
 		return $this;

@@ -35,10 +35,35 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Ciudad_toa extends ORM_Model {
 
-	protected $tabla = 'config::bd_ciudades_toa';
+	protected $db_table = 'config::bd_ciudades_toa';
 	protected $label = 'Ciudad TOA';
 	protected $label_plural = 'Ciudades TOA';
 	protected $order_by = 'orden';
+
+	protected $fields  = [
+		'id_ciudad' => [
+			'label'          => 'ID de la ciudad',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 5,
+			'texto_ayuda'    => 'ID de la ciudad. M&aacute;ximo 50 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+		'ciudad' => [
+			'label'          => 'Nombre de la ciudad',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre de la ciudad. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'orden' => [
+			'label'          => 'Orden de la ciudad',
+			'tipo'           => Orm_field::TIPO_INT,
+			'texto_ayuda'    => 'Orden de despliegue de la ciudad.',
+			'es_obligatorio' => TRUE,
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,33 +73,6 @@ class Ciudad_toa extends ORM_Model {
 	 */
 	public function __construct($id_ciudad = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id_ciudad' => [
-					'label'          => 'ID de la ciudad',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 5,
-					'texto_ayuda'    => 'ID de la ciudad. M&aacute;ximo 50 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'ciudad' => [
-					'label'          => 'Nombre de la ciudad',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre de la ciudad. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'orden' => [
-					'label'          => 'Orden de la ciudad',
-					'tipo'           => Orm_field::TIPO_INT,
-					'texto_ayuda'    => 'Orden de despliegue de la ciudad.',
-					'es_obligatorio' => TRUE,
-				],
-			],
-		];
-
 		parent::__construct($id_ciudad);
 	}
 

@@ -67,7 +67,7 @@ trait Model_has_form {
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_INT)  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_REAL) ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['.$this->tabla
+			? '|edit_unique['.$this->get_db_table()
 				.':'.$field->get_nombre_bd()
 				.':'.implode($this->separador_campos, $this->get_campo_id())
 				.':'.$this->get_id().']'
@@ -170,13 +170,6 @@ trait Model_has_form {
 	 */
 	public function get_field_label($campo = '')
 	{
-		// $tipo = $this->fields[$campo]->get_tipo();
-
-		// if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->got_relations)
-		// {
-		// 	$this->get_relation_fields();
-		// }
-
 		return $this->fields[$campo]->get_label();
 	}
 

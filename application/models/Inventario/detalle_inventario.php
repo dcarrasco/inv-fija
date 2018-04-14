@@ -201,6 +201,13 @@ class Detalle_inventario extends ORM_Model {
 
 	// --------------------------------------------------------------------
 
+	public function get_stock_sap()
+	{
+		return fmt_cantidad($this->get_value('stock_sap'));
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Devuelve registros de inventario de una hoja específica
 	 *

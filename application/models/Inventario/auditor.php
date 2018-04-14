@@ -35,10 +35,29 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Auditor extends ORM_Model {
 
-	protected $tabla = 'config::bd_auditores';
+	protected $db_table = 'config::bd_auditores';
 	protected $label = 'Auditor';
 	protected $label_plural = 'Auditores';
 	protected $order_by = 'nombre';
+
+	protected $fields = [
+		'id'     => ['tipo' => Orm_field::TIPO_ID],
+		'nombre' => [
+			'label'          => 'Nombre del auditor',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'activo' => [
+			'label'          => 'Activo',
+			'tipo'           =>  Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
+			'es_obligatorio' => TRUE,
+			'default'        => 1
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,30 +67,8 @@ class Auditor extends ORM_Model {
 	 */
 	public function __construct($id_auditor = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'nombre' => [
-					'label'          => 'Nombre del auditor',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'activo' => [
-					'label'          => 'Activo',
-					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
-					'es_obligatorio' => TRUE,
-					'default'        => 1
-				],
-			],
-		];
-
 		parent::__construct($id_auditor);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -85,9 +82,11 @@ class Auditor extends ORM_Model {
 		return (string) $this->nombre;
 	}
 
+	// --------------------------------------------------------------------
+
 	public function get_activo()
 	{
-		return $this->values['activo'] ? 'Activo' : 'Inactivo';
+		return $this->get_value('activo') ? 'Activo' : 'Inactivo';
 	}
 
 

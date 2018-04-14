@@ -117,7 +117,6 @@ class Collection implements IteratorAggregate {
 		}
 		else
 		{
-
 			$this->items[$llave] = $item;
 		}
 

@@ -35,10 +35,34 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Inventario extends ORM_Model {
 
-	protected $tabla = 'config::bd_inventarios';
+	protected $db_table = 'config::bd_inventarios';
 	protected $label = 'Inventario';
 	protected $label_plural = 'Inventarios';
 	protected $order_by = 'nombre';
+
+	protected $fields = [
+		'id'     => ['tipo' => Orm_field::TIPO_ID],
+		'nombre' => [
+			'label'          => 'Nombre del inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'activo' => [
+			'label'          => 'Activo',
+			'tipo'           => Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
+			'es_obligatorio' => TRUE,
+		],
+		'tipo_inventario' => [
+			'tipo'           =>  Orm_field::TIPO_HAS_ONE,
+			'relation'       => ['model' => tipo_inventario::class],
+			'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+			'es_obligatorio' => TRUE,
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,32 +72,6 @@ class Inventario extends ORM_Model {
 	 */
 	public function __construct($id_inventario = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'nombre' => [
-					'label'          => 'Nombre del inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'activo' => [
-					'label'          => 'Activo',
-					'tipo'           => Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
-					'es_obligatorio' => TRUE,
-				],
-				'tipo_inventario' => [
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => ['model' => tipo_inventario::class],
-					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-					'es_obligatorio' => TRUE,
-				],
-			],
-		];
-
 		parent::__construct($id_inventario);
 	}
 
@@ -119,7 +117,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_id_inventario_activo()
 	{
-		return $this->first()->where('activo', 1)->get(FALSE)->get_id();
+		return $this->where('activo', 1)->get_first(FALSE)->get_id();
 	}
 
 

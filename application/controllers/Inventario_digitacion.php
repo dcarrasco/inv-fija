@@ -96,7 +96,7 @@ class Inventario_digitacion extends Controller_base {
 
 		// recupera el inventario activo
 		$hoja = empty($hoja) ? 1 : $hoja;
-		$inventario = Inventario::create()->get_inventario_activo();
+		$inventario = Inventario::new()->get_inventario_activo();
 		$id_auditor = Detalle_inventario::create()->get_auditor_hoja($inventario->get_id(), $hoja);
 
 		app_render_view('inventario/inventario', [

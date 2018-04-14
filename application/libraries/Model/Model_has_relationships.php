@@ -109,19 +109,19 @@ trait Model_has_relationships {
 		// recupera el objeto del arreglo y no va a buscarlo a la BD
 		if ($relations_collection
 			AND $relations_collection->key_exists($nombre_campo)
-			AND $relations_collection->item($nombre_campo)->key_exists($this->values[$nombre_campo])
+			AND $relations_collection->item($nombre_campo)->key_exists($this->get_value($nombre_campo))
 		)
 		{
-			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->values[$nombre_campo]);
+			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->get_value($nombre_campo));
 		}
 		else
 		{
 			$model_relacionado = new $class_relacionado();
 
 			// si el valor del campo es distinto de nulo, lo va abuscar a la BD
-			if ($this->values[$nombre_campo] !== NULL)
+			if ($this->get_value($nombre_campo) !== NULL)
 			{
-				$model_relacionado->find_id($this->values[$nombre_campo], FALSE);
+				$model_relacionado->find_id($this->get_value($nombre_campo), FALSE);
 			}
 		}
 
@@ -152,9 +152,9 @@ trait Model_has_relationships {
 
 		$relation['data']  = $pivot_objects;
 
-		$this->values[$nombre_campo] = collect($pivot_objects)->map(function($model) {
+		$this->set_value($nombre_campo, collect($pivot_objects)->map(function($model) {
 			return $model->get_id();
-		})->all();
+		})->all());
 
 		$this->fields[$nombre_campo]->set_relation($relation);
 		$this->got_relations = TRUE;
@@ -180,7 +180,7 @@ trait Model_has_relationships {
 		// recupera la llave del modelo en tabla de la relacion (n:m)
 		$where_related = collect($this->db
 			->select($this->_junta_campos_select($relation['id_many_table']), FALSE)
-			->get_where($relation['join_table'], $where_pivot)
+			->get_where($this->get_db_table($relation['join_table']), $where_pivot)
 			->result_array())
 			->flatten();
 
@@ -214,9 +214,9 @@ trait Model_has_relationships {
 					{
 						$this->relation_objects->add_item(new Collection(), $campo);
 					}
-					if ( ! $this->relation_objects->item($campo)->key_exists($obj_model->{$campo}))
+					if ( ! $this->relation_objects->item($campo)->key_exists($obj_model->get_value($campo)))
 					{
-						$this->relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->{$campo});
+						$this->relation_objects->item($campo)->add_item($relation_model['model'], $obj_model->get_value($campo));
 					}
 				}
 			});

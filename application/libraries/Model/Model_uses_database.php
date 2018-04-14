@@ -29,17 +29,41 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 trait Model_uses_database {
 
+	/**
+	 * Tabla de la BD donde se almacena el modelo
+	 *
+	 * @var  string
+	 */
+	protected $db_table = '';
+
 	protected $db_query = NULL;
+
+	// --------------------------------------------------------------------
+
+	protected function get_db_table($db_table = '')
+	{
+		$db_table = empty($db_table) ? $this->db_table : $db_table;
+
+		return empty($db_table)
+			? str_replace('\\', '_', $this->model_nombre)
+			: (substr($db_table, 0, 8) === 'config::'
+				? config(substr($db_table, 8, strlen($db_table)))
+				: $db_table);
+	}
+
+	// --------------------------------------------------------------------
 
 	protected function select_from_database()
 	{
 		if ($this->db_query === NULL)
 		{
-			$this->db_query = $this->db->from($this->tabla);
+			$this->db_query = $this->db->from($this->get_db_table());
 		}
 
 		return $this;
 	}
+
+	// --------------------------------------------------------------------
 
 	protected function get($recupera_relation = TRUE)
 	{
@@ -77,6 +101,15 @@ trait Model_uses_database {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
+
+	public function get_first($recupera_relation = TRUE)
+	{
+		return $this->limit(1)->get($recupera_relation);
+	}
+
+	// --------------------------------------------------------------------
+
 	public function where($key, $value = NULL, $escape = NULL)
 	{
 		$this->select_from_database();
@@ -85,6 +118,7 @@ trait Model_uses_database {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
 
 	public function where_in($key = NULL, $values = NULL, $escape = NULL)
 	{
@@ -93,6 +127,8 @@ trait Model_uses_database {
 
 		return $this;
 	}
+
+	// --------------------------------------------------------------------
 
 	public function count()
 	{
@@ -108,11 +144,7 @@ trait Model_uses_database {
 		return $cantidad;
 	}
 
-
-	public function first()
-	{
-		return $this->limit(1);
-	}
+	// --------------------------------------------------------------------
 
 	public function limit($value, $offset = 0)
 	{
@@ -122,6 +154,7 @@ trait Model_uses_database {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
 
 	public function offset($offset)
 	{
@@ -131,6 +164,8 @@ trait Model_uses_database {
 		return $this;
 	}
 
+	// --------------------------------------------------------------------
+
 	public function order_by($orderby, $direction = '', $escape = NULL)
 	{
 		$this->select_from_database();
@@ -139,7 +174,7 @@ trait Model_uses_database {
 		return $this;
 	}
 
-
+	// --------------------------------------------------------------------
 
 	protected function filter_by_array($filtro = '')
 	{
@@ -151,6 +186,8 @@ trait Model_uses_database {
 				return $filtro;
 			});
 	}
+
+	// --------------------------------------------------------------------
 
 	public function filter_by($filtro = '')
 	{
@@ -167,8 +204,6 @@ trait Model_uses_database {
 
 		return $this;
 	}
-
-
 
 }
 /* End of file model_uses_database.php */

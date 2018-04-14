@@ -35,10 +35,41 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Familia extends ORM_Model {
 
-	protected $tabla = 'config::bd_familias';
+	protected $db_table = 'config::bd_familias';
 	protected $label = 'Familia';
 	protected $label_plural = 'Familias';
 	protected $order_by = 'codigo';
+
+	protected $fields = [
+		'codigo' => [
+			'label'          => 'C&oacute;digo de la familia',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+		'tipo' => [
+			'label'       => 'Tipo de familia',
+			'tipo'        => Orm_field::TIPO_CHAR,
+			'largo'       => 30,
+			'texto_ayuda' => 'Seleccione el tipo de familia.',
+			'choices'     => [
+				'FAM'    => 'Familia',
+				'SUBFAM' => 'SubFamilia',
+			],
+			'es_obligatorio' => TRUE,
+		],
+		'nombre' => [
+			'label'          => 'Nombre de la familia',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,38 +79,6 @@ class Familia extends ORM_Model {
 	 */
 	public function __construct($id_familia = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'codigo' => [
-					'label'          => 'C&oacute;digo de la familia',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'tipo' => [
-					'label'       => 'Tipo de familia',
-					'tipo'        => Orm_field::TIPO_CHAR,
-					'largo'       => 30,
-					'texto_ayuda' => 'Seleccione el tipo de familia.',
-					'choices'     => [
-						'FAM'    => 'Familia',
-						'SUBFAM' => 'SubFamilia',
-					],
-					'es_obligatorio' => TRUE,
-				],
-				'nombre' => [
-					'label'          => 'Nombre de la familia',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-			],
-		];
 
 		parent::__construct($id_familia);
 	}

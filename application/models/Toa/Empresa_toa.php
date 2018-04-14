@@ -35,10 +35,52 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Empresa_toa extends ORM_Model {
 
-	protected $tabla = 'config::bd_empresas_toa';
+	protected $db_table = 'config::bd_empresas_toa';
 	protected $label = 'Empresa TOA';
 	protected $label_plural = 'Empresas TOA';
 	protected $order_by = 'empresa';
+
+	protected $fields = [
+		'id_empresa' => [
+			'label'          => 'ID Empresa',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'ID de la empresa. M&aacute;ximo 20 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'empresa' => [
+			'label'          => 'Nombre de la empresa',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre de la empresa. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'tipoalm' => [
+			'tipo'     => Orm_field::TIPO_HAS_MANY,
+			'relation' => [
+				'model'         => \Stock\tipoalmacen_sap::class,
+				'join_table'    => 'config::bd_empresas_toa_tiposalm',
+				'id_one_table'  => ['id_empresa'],
+				'id_many_table' => ['id_tipo'],
+				//'conditions'    => ['id_app' => '@field_value:id_app'),
+			],
+			'texto_ayuda' => 'Tipos de almacen asociados a empresa TOA.',
+		],
+		'ciudades' => [
+			'tipo'     => Orm_field::TIPO_HAS_MANY,
+			'relation' => [
+				'model'         => ciudad_toa::class,
+				'join_table'    => 'config::bd_empresas_ciudades_toa',
+				'id_one_table'  => ['id_empresa'],
+				'id_many_table' => ['id_ciudad'],
+				//'conditions'    => ['id_app' => '@field_value:id_app'],
+			],
+			'texto_ayuda' => 'Ciudades asociados a empresa TOA.',
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,50 +90,6 @@ class Empresa_toa extends ORM_Model {
 	 */
 	public function __construct($id_empresa = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id_empresa' => [
-					'label'          => 'ID Empresa',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'ID de la empresa. M&aacute;ximo 20 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'empresa' => [
-					'label'          => 'Nombre de la empresa',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre de la empresa. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'tipoalm' => [
-					'tipo'     => Orm_field::TIPO_HAS_MANY,
-					'relation' => [
-						'model'         => \Stock\tipoalmacen_sap::class,
-						'join_table'    => config('bd_empresas_toa_tiposalm'),
-						'id_one_table'  => ['id_empresa'],
-						'id_many_table' => ['id_tipo'],
-						//'conditions'    => ['id_app' => '@field_value:id_app'),
-					],
-					'texto_ayuda' => 'Tipos de almacen asociados a empresa TOA.',
-				],
-				'ciudades' => [
-					'tipo'     => Orm_field::TIPO_HAS_MANY,
-					'relation' => [
-						'model'         => ciudad_toa::class,
-						'join_table'    => config('bd_empresas_ciudades_toa'),
-						'id_one_table'  => ['id_empresa'],
-						'id_many_table' => ['id_ciudad'],
-						//'conditions'    => ['id_app' => '@field_value:id_app'],
-					],
-					'texto_ayuda' => 'Ciudades asociados a empresa TOA.',
-				],
-			],
-		];
-
 		parent::__construct($id_empresa);
 	}
 

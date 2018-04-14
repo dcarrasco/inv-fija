@@ -33,10 +33,33 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Ubicacion extends ORM_Model {
 
-	protected $tabla = 'config::bd_ubic_tipoubic';
+	protected $db_table = 'config::bd_ubic_tipoubic';
 	protected $label = 'Ubicaci&oacute;n';
 	protected $label_plural = 'Ubicaciones';
 	protected $order_by = 'tipo_inventario, id_tipo_ubicacion, ubicacion';
+
+	protected $fields = [
+		'id' => ['tipo' => Orm_field::TIPO_ID],
+		'tipo_inventario' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => tipo_inventario::class],
+			'texto_ayuda'    => 'Seleccione un tipo de inventario.',
+		],
+		'id_tipo_ubicacion' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => tipo_ubicacion::class],
+			'texto_ayuda'    => 'Seleccione un tipo de ubicaci&oacute;n.',
+		],
+		'ubicacion' => [
+			'label'          => 'Ubicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 45,
+			'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -46,31 +69,6 @@ class Ubicacion extends ORM_Model {
 	 */
 	public function __construct($id_ubicacion = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'tipo_inventario' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => tipo_inventario::class],
-					'texto_ayuda'    => 'Seleccione un tipo de inventario.',
-				],
-				'id_tipo_ubicacion' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => tipo_ubicacion::class],
-					'texto_ayuda'    => 'Seleccione un tipo de ubicaci&oacute;n.',
-				],
-				'ubicacion' => [
-					'label'          => 'Ubicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 45,
-					'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-			],
-		];
-
 		parent::__construct($id_ubicacion);
 	}
 

@@ -55,13 +55,6 @@ class Orm_model implements IteratorAggregate {
 	protected $model_class = '';
 
 	/**
-	 * Tabla de la BD donde se almacena el modelo
-	 *
-	 * @var  string
-	 */
-	protected $tabla = '';
-
-	/**
 	 * Nombre (etiqueta) del modelo
 	 *
 	 * @var string
@@ -128,21 +121,32 @@ class Orm_model implements IteratorAggregate {
 		$this->model_class      = get_class($this);
 		$this->model_nombre     = strtolower($this->model_class);
 
-		$this->tabla = empty($this->tabla) ? $this->model_nombre : $this->tabla;
-		$this->tabla = substr($this->tabla, 0, 8) === 'config::'
-			? config(substr($this->tabla, 8, strlen($this->tabla)))
-			: $this->tabla;
-
 		$this->label = empty($this->label) ? $this->model_nombre : $this->label;
 		$this->label_plural = empty($this->label_plural) ? $this->label .'s' : $this->label_plural;
 
+		$this->fields = $this->config_fields($this->fields);
+
 		$this->relation_objects = new Collection();
 
-		$this->config_model($this->model_config);
+		$this->campo_id = $this->_determina_campo_id();
 
 		if ($id_modelo)
 		{
 			$this->fill($id_modelo);
+		}
+	}
+
+	// --------------------------------------------------------------------
+
+	public static function __callStatic($metodo, $argumentos)
+	{
+		if ($metodo === 'new')
+		{
+			return new static;
+		}
+		else
+		{
+			throw new \LogicException("Unknown method '{$metodo}'");
 		}
 	}
 
@@ -176,36 +180,21 @@ class Orm_model implements IteratorAggregate {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Configuración del modelo
-	 * Define las propiedades basicas de un nuevo modelo
-	 *
-	 * @param   array $param Arreglo con los parametros a configurar
-	 * @return  void
-	 **/
-	public function config_model($param = [])
-	{
-		$this->config_campos(array_get($param, 'campos', []));
-
-		$this->campo_id = $this->_determina_campo_id();
-		//$this->get_relation_fields();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Configura las propiedades de los campos del modelo
 	 *
 	 * @param  array $arr_config arreglo con la configuración de los campos del modelo
 	 * @return nada
 	 */
-	protected function config_campos($arr_config = [])
+	protected function config_fields($arr_fields = [])
 	{
-		collect($arr_config)->each(function($config_value, $campo) {
-			$config_value['tabla_bd'] = $this->tabla;
-
-			$this->fields[$campo] = new Orm_field($campo, $config_value);
-			$this->values[$campo] = NULL;
-		});
+		return collect($arr_fields)->map(function($config_field, $nombre_campo) {
+			return is_array($config_field)
+				? new Orm_field(
+					$nombre_campo,
+					array_merge($config_field, ['tabla_bd' => $this->get_db_table()])
+				)
+				: $config_field;
+		})->all();
 	}
 
 
@@ -231,18 +220,6 @@ class Orm_model implements IteratorAggregate {
 		$arr_model_nombre = explode('\\', $this->model_nombre);
 
 		return $arr_model_nombre[count($arr_model_nombre) - 1];
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Recupera el nombre de la tabla del modelo en la base de datos
-	 *
-	 * @return string Nombre de la tabla
-	 */
-	public function get_tabla()
-	{
-		return $this->tabla;
 	}
 
 	// --------------------------------------------------------------------

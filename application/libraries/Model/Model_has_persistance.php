@@ -40,9 +40,7 @@ trait Model_has_persistance {
 	 */
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
-		return $this->first()
-			->where($this->array_id($id_modelo))
-			->get($recupera_relation);
+		return $this->where($this->array_id($id_modelo))->get_first($recupera_relation);
 	}
 
 	public function get_dropdown_list($opcion_inicial = TRUE)
@@ -126,7 +124,7 @@ trait Model_has_persistance {
 			if ($this->has_autoincrement_id())
 			{
 				collect($this->values_id_fields())->each(function($campo, $campo_id) {
-					$this->values[$campo_id] = $this->db->insert_id();
+					$this->set_value($campo_id, $this->db->insert_id());
 				});
 			}
 		}
@@ -137,7 +135,7 @@ trait Model_has_persistance {
 			{
 				$this->db
 					->where($this->values_id_fields())
-					->update($this->tabla, $this->values_not_id_fields());
+					->update($this->get_db_table(), $this->values_not_id_fields());
 			}
 		}
 
@@ -203,8 +201,8 @@ trait Model_has_persistance {
 
 		return $this->has_autoincrement_id()
 			? empty(collect($values_id)->sum())
-			: ($this->db->get_where($this->tabla, $values_id)->row() === NULL
-				OR $this->db->get_where($this->tabla, $values_id)->num_rows() === 0);
+			: ($this->db->get_where($this->get_db_table(), $values_id)->row() === NULL
+				OR $this->db->get_where($this->get_db_table(), $values_id)->num_rows() === 0);
 	}
 
 	// --------------------------------------------------------------------
@@ -220,7 +218,7 @@ trait Model_has_persistance {
 			? $this->values_not_id_fields()
 			: array_merge($this->values_id_fields(), $this->values_not_id_fields());
 
-		return $this->db->insert($this->tabla, $fields);
+		return $this->db->insert($this->get_db_table(), $fields);
 	}
 
 	// --------------------------------------------------------------------
@@ -289,7 +287,7 @@ trait Model_has_persistance {
 			->map(function($campo, $nombre) { return $this->{$nombre}; })
 			->all();
 
-		$this->db->delete($this->tabla, $data_where);
+		$this->db->delete($this->get_db_table(), $data_where);
 
 		$this->delete_pivot_values();
 	}

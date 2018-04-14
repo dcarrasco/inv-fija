@@ -26,10 +26,8 @@
 	<table class="table table-hover table-condensed">
 		<thead>
 			<tr>
-				<?php foreach ($modelo as $campo => $valor): ?>
-					<?php if ($modelo->get_mostrar_lista($campo)): ?>
-						<th><?= strtolower($modelo->get_field_label($campo)); ?></th>
-					<?php endif; ?>
+				<?php foreach ($modelo->get_list_fields() as $campo): ?>
+					<th><?= strtolower($modelo->get_field_label($campo)); ?></th>
 				<?php endforeach; ?>
 				<th class="text-center"></th>
 			</tr>
@@ -37,8 +35,8 @@
 		<tbody>
 			<?php foreach ($modelos as $obj_modelo): ?>
 				<tr>
-					<?php foreach ($obj_modelo->get_fields(TRUE) as $campo => $valor): ?>
-						<td><?= $obj_modelo->$campo; ?></td>
+					<?php foreach ($obj_modelo->get_list_fields() as $campo): ?>
+						<td><?= $obj_modelo->{$campo}; ?></td>
 					<?php endforeach; ?>
 					<td class="text-center">
 						<a href="{url_editar}<?= $obj_modelo->get_id() ?>{url_params}" class="">

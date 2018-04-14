@@ -35,10 +35,22 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Centro extends ORM_Model {
 
-	protected $tabla = 'config::bd_centros';
+	protected $db_table = 'config::bd_centros';
 	protected $label = 'Centro';
 	protected $label_plural = 'Centros';
 	protected $order_by = 'centro';
+
+	protected $fields = [
+		'centro' => [
+			'label'          => 'Centro',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Nombre del centro. M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,20 +60,6 @@ class Centro extends ORM_Model {
 	 */
 	public function __construct($id_centro = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'centro' => [
-					'label'          => 'Centro',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Nombre del centro. M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-			],
-		];
-
 		parent::__construct($id_centro);
 	}
 

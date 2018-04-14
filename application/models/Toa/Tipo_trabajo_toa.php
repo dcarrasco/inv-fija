@@ -35,10 +35,30 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_trabajo_toa extends ORM_Model {
 
-	protected $tabla = 'config::bd_tipos_trabajo_toa';
+	protected $db_table = 'config::bd_tipos_trabajo_toa';
 	protected $label = 'Tipo de trabajo TOA';
 	protected $label_plural = 'Tipos de trabajo TOA';
 	protected $order_by = 'id_tipo';
+
+	protected $fields = [
+		'id_tipo' => [
+			'label'          => 'Tipo de rabajo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 30,
+			'texto_ayuda'    => 'Tipo de trabajo. M&aacute;ximo 30 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'desc_tipo' => [
+			'label'          => 'Descripci&oacute;n tipo de trabajo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n del tipo de trabajo. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -48,28 +68,6 @@ class Tipo_trabajo_toa extends ORM_Model {
 	 */
 	public function __construct($id_tipo = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id_tipo' => [
-					'label'          => 'Tipo de rabajo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 30,
-					'texto_ayuda'    => 'Tipo de trabajo. M&aacute;ximo 30 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'desc_tipo' => [
-					'label'          => 'Descripci&oacute;n tipo de trabajo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del tipo de trabajo. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-			],
-		];
-
 		parent::__construct($id_tipo);
 	}
 
