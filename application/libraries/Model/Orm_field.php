@@ -268,6 +268,11 @@ class Orm_field {
 		return $this->mostrar_lista;
 	}
 
+	public function get_default()
+	{
+		return $this->default;
+	}
+
 	/**
 	 * Recupera indicador si el campo es ID
 	 *

@@ -118,16 +118,15 @@ class Orm_model implements IteratorAggregate {
 	{
 		$this->lang->load('orm');
 
-		$this->model_class      = get_class($this);
-		$this->model_nombre     = strtolower($this->model_class);
-
-		$this->label = empty($this->label) ? $this->model_nombre : $this->label;
-		$this->label_plural = empty($this->label_plural) ? $this->label .'s' : $this->label_plural;
+		$this->model_class = get_class($this);
+		$this->model_nombre = strtolower($this->model_class);
 
 		$this->fields = $this->config_fields($this->fields);
-
+		foreach ($this->fields as $field_nombre => $field)
+		{
+			$this->values[$field_nombre] = $field->get_default();
+		}
 		$this->relation_objects = new Collection();
-
 		$this->campo_id = $this->_determina_campo_id();
 
 		if ($id_modelo)
@@ -231,7 +230,10 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_label()
 	{
-		return $this->label;
+		$model_nombre = explode('\\', $this->model_nombre);
+		$model_nombre = $model_nombre[count($model_nombre)-1];
+
+		return empty($this->label) ? $model_nombre : $this->label;
 	}
 
 	// --------------------------------------------------------------------
@@ -243,7 +245,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_label_plural()
 	{
-		return $this->label_plural;
+		return empty($this->label_plural) ? $this->get_label().'s' : $this->label_plural;
 	}
 
 	// --------------------------------------------------------------------

@@ -36,10 +36,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Usuario extends ORM_Model {
 
 	protected $db_table = 'config::bd_usuarios';
-	protected $label = 'Usuario';
-	protected $label_plural = 'Usuarios';
 	protected $order_by = 'nombre';
-	protected $fechas = ['fecha_login'];
 
 	protected $list_fields = ['id', 'nombre', 'activo', 'username', 'fecha_login', 'rol'];
 	protected $fields = [
@@ -66,6 +63,7 @@ class Usuario extends ORM_Model {
 			'tipo'           => Orm_field::TIPO_BOOLEAN,
 			'texto_ayuda'    => 'Indica se el usuario est&aacute; activo dentro del sistema.',
 			'es_obligatorio' => TRUE,
+			'default'        => TRUE,
 		],
 		'username' => [
 			'label'          => 'Username',
