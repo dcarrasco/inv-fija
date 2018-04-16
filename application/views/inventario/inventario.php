@@ -72,7 +72,6 @@
 		<tbody>
 			<?php $sum_sap = 0; $sum_fisico = 0;?>
 			<?php $tab_index = 10; ?>
-			<?= dump($detalle_inventario) ?>
 			<?php foreach ($detalle_inventario as $linea_det): ?>
 				<?php $text_error = $this->errors->has("stock_fisico_{$linea_det->id}") ? 'text-danger' : ''; ?>
 				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>

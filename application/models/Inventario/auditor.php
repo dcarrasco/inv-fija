@@ -36,7 +36,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 class Auditor extends ORM_Model {
 
 	protected $db_table = 'config::bd_auditores';
-	protected $label = 'Auditor';
 	protected $label_plural = 'Auditores';
 	protected $order_by = 'nombre';
 

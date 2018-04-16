@@ -63,12 +63,11 @@ class Orm_controller extends Controller_base {
 	{
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
 		$modelo = new $nombre_modelo_full;
-		$modelo->set_filtro(request('filtro'));
 
 		app_render_view('ORM/orm_listado', [
 			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
-			'modelos'     => $modelo->paginate(),
+			'modelos'     => $modelo->list_paginated(),
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => url_params(),
 		]);

@@ -200,13 +200,9 @@ class Acl extends Orm_Model {
 	 */
 	public function get_id_usr($usuario = '')
 	{
-		$user = empty($usuario) ? $this->get_user() : $usuario;
+		$usuario = empty($usuario) ? $this->get_user() : $usuario;
 
-		$registro = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $user])
-			->row_array();
-
-		return is_array($registro) ? $registro['id'] : '';
+		return Usuario::create()->user($usuario)->get_first()->id;
 	}
 
 	// --------------------------------------------------------------------
@@ -469,11 +465,9 @@ class Acl extends Orm_Model {
 	 */
 	private function _reset_login_errors($usuario = '')
 	{
-		$this->db
-			->where('username', $usuario)
-			->update(config('bd_usuarios'), [
-				'login_errors'  => 0,
-			]);
+		Usuario::create()->user($usuario)->get_first()
+			->set_value('login_errors', 0)
+			->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -486,10 +480,9 @@ class Acl extends Orm_Model {
 	 */
 	private function _inc_login_errors($usuario = '')
 	{
-		$this->db
-			->set('login_errors', 'login_errors + 1', FALSE)
-			->where('username', $usuario)
-			->update(config('bd_usuarios'));
+		$user = Usuario::create()->user($usuario)->get_first();
+		$user->set_value('login_errors', $user->login_errors + 1);
+		$user->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -607,12 +600,15 @@ class Acl extends Orm_Model {
 	 */
 	private function _get_menu_usuario($usuario = '')
 	{
+		// dump(Usuario::new()->where('username', (string) $usuario)->get());
+		// dump(\inventario\Auditor::create()->get());
+
 		return $this->db->distinct()
 			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
 			->from(config('bd_usuarios').' u')
 			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
-			->join(config('bd_modulos').' m', 'm.id = rm.id_modulo')
+			->join(config('bd_rol_modulo').' rm', 'rm.rol_id = ur.id_rol')
+			->join(config('bd_modulos').' m', 'm.id = rm.modulo_id')
 			->join(config('bd_app').' a', 'a.id = m.id_app')
 			->where('username', (string) $usuario)
 			->order_by('a.orden, m.orden')
@@ -652,8 +648,8 @@ class Acl extends Orm_Model {
 			->select('llave_modulo')
 			->from(config('bd_usuarios').' u')
 			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.id_modulo')
+			->join(config('bd_rol_modulo').' rm', 'rm.rol_id = ur.id_rol')
+			->join('acl_modulo m', 'm.id = rm.modulo_id')
 			->where('username', $usuario)
 			->get()
 			->result_array();
@@ -910,18 +906,7 @@ class Acl extends Orm_Model {
 	 */
 	public function tiene_clave($usuario = '')
 	{
-		$arr_rs = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $usuario])
-			->row_array();
-
-		if (count($arr_rs) > 0)
-		{
-			return (is_null($arr_rs['password']) OR trim($arr_rs['password']) === '') ? FALSE : TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
+		return ! empty(Usuario::create()->user($usuario)->get_first()->password);
 	}
 
 	// --------------------------------------------------------------------
@@ -934,11 +919,7 @@ class Acl extends Orm_Model {
 	 */
 	public function existe_usuario($usuario = '')
 	{
-		$regs = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $usuario])
-			->num_rows();
-
-		return ($regs > 0) ? TRUE : FALSE;
+		return (int) Usuario::create()->user($usuario)->count() > 0;
 	}
 
 	// --------------------------------------------------------------------
@@ -957,11 +938,9 @@ class Acl extends Orm_Model {
 
 		if ($chk_usr)
 		{
-			$this->db
-				->where('username', $usuario)
-				->update(config('bd_usuarios'), [
-					'password' => $this->_hash_password($clave_new)
-				]);
+			Usuario::create()->user($usuario)->get_first()
+				->set_value('password', $this->_hash_password($clave_new))
+				->grabar();
 
 			return TRUE;
 		}

@@ -103,6 +103,10 @@ class Usuario extends ORM_Model {
 			'largo'          => 200,
 			'texto_ayuda'    => 'Agente web de la &uacute;ltima entrada al sistema.',
 		],
+		'login_errors' => [
+			'label'          => 'Errores de login',
+			'tipo'           => Orm_field::TIPO_INT,
+		],
 		'rol' => [
 			'tipo'           => Orm_field::TIPO_HAS_MANY,
 			'relation'       => [
@@ -114,6 +118,8 @@ class Usuario extends ORM_Model {
 			'texto_ayuda'    => 'Roles asociados al usuario.',
 		],
 	];
+
+	// --------------------------------------------------------------------
 
 	/**
 	 * Constructor de la clase
@@ -143,6 +149,13 @@ class Usuario extends ORM_Model {
 	public function get_activo()
 	{
 		return $this->get_value('activo') ? 'Activo' : 'Inactivo';
+	}
+
+	// --------------------------------------------------------------------
+
+	public function user($usuario)
+	{
+		return $this->where('username', $usuario);
 	}
 
 }

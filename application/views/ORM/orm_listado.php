@@ -27,7 +27,7 @@
 		<thead>
 			<tr>
 				<?php foreach ($modelo->get_list_fields() as $campo): ?>
-					<th><?= strtolower($modelo->get_field_label($campo)); ?></th>
+					<th><?= strtolower($modelo->get_field($campo)->get_label()); ?></th>
 				<?php endforeach; ?>
 				<th class="text-center"></th>
 			</tr>
@@ -51,7 +51,7 @@
 	<?= form_close(); ?>
 
 	<div class="text-center">
-		<?= $modelo->crea_links_paginas(); ?>
+		<?= $modelo->get_pagination_links(); ?>
 	</div>
 </div>
 

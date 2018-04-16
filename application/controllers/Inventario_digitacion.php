@@ -96,11 +96,11 @@ class Inventario_digitacion extends Controller_base {
 
 		// recupera el inventario activo
 		$hoja = empty($hoja) ? 1 : $hoja;
-		$inventario = Inventario::new()->get_inventario_activo();
+		$inventario = Inventario::create()->get_inventario_activo();
 		$id_auditor = Detalle_inventario::create()->get_auditor_hoja($inventario->get_id(), $hoja);
 
 		app_render_view('inventario/inventario', [
-			'detalle_inventario' => Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja),
+			'detalle_inventario' => Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja),
 			'hoja'               => $hoja,
 			'nombre_inventario'  => $inventario->nombre,
 			'combo_auditores'    => Detalle_inventario::create()->fill(['auditor' => $id_auditor])->print_form_field('auditor', FALSE, 'input-sm'),
@@ -129,7 +129,7 @@ class Inventario_digitacion extends Controller_base {
 		Detalle_inventario::create()->set_field_validation_rules('auditor');
 		$this->form_validation->set_rules(
 			Detalle_inventario::create()->rules_digitacion(
-				Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja)
+				Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja)
 			)
 		);
 
@@ -159,7 +159,7 @@ class Inventario_digitacion extends Controller_base {
 		if ($this->form_validation->run() === FALSE)
 		{
 			app_render_view('inventario/inventario_mobile', [
-				'detalle_inventario' => Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja),
+				'detalle_inventario' => Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja),
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
 				'id_auditor'         => Detalle_inventario::create()->get_auditor_hoja($inventario->get_id(), $hoja),

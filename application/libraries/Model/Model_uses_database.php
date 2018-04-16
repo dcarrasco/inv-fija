@@ -36,7 +36,73 @@ trait Model_uses_database {
 	 */
 	protected $db_table = '';
 
+	/**
+	 * Objeto para mantener querys
+	 *
+	 * @var object
+	 */
 	protected $db_query = NULL;
+
+	/**
+	 * Campos para ordenar el modelo cuando se recupera de la BD
+	 *
+	 * @var string
+	 */
+	protected $order_by = '';
+
+	/**
+	 * Filtro para buscar resultados
+	 *
+	 * @var string
+	 */
+	protected $filtro = '';
+
+	// --------------------------------------------------------------------
+
+	public function get_order_by()
+	{
+		return $this->order_by;
+	}
+
+	// --------------------------------------------------------------------
+
+
+	/**
+	 * Recupera el valor del filtro a utilizar para recuperar datos del modelo
+	 *
+	 * @return string Filtro a usar
+	 */
+	public function get_filtro()
+	{
+		return ($this->filtro === '_') ? '' : $this->filtro;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Fija el valor del filtro a utilizar para recuperar datos del modelo
+	 *
+	 * @param  string $filtro Filtro a usar
+	 * @return void
+	 */
+	public function set_filtro($filtro = '')
+	{
+		$this->filtro = $filtro;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Recupera registros por el ID
+	 *
+	 * @param  string  $id_modelo         Identificador del registro a recuperar
+	 * @param  boolean $recupera_relation Indica si se recuperará la información de relación
+	 * @return void
+	 */
+	public function find_id($id_modelo = '', $recupera_relation = TRUE)
+	{
+		return $this->where($this->array_id($id_modelo))->get_first($recupera_relation);
+	}
 
 	// --------------------------------------------------------------------
 
@@ -71,41 +137,26 @@ trait Model_uses_database {
 		$results = $this->db_query->get()->result_array();
 		$this->db_query = NULL;
 
-		if (count($results) === 1)
-		{
-			$this->fill_from_array($results[0]);
+		$class = get_class($this);
+
+		return collect($results)->map(function($result) use ($class, $recupera_relation) {
+			$obj_modelo = new $class($result);
 
 			if ($recupera_relation)
 			{
-				$this->get_relation_fields();
+				$obj_modelo->get_relation_fields($this->relation_objects);
+				$this->_add_relation_fields($obj_modelo);
 			}
-		}
 
-		if (count($results) > 1)
-		{
-			$class = get_class($this);
-
-			return collect($results)->map(function($result) use ($class, $recupera_relation) {
-				$obj_modelo = new $class($result);
-
-				if ($recupera_relation)
-				{
-					$obj_modelo->get_relation_fields($this->relation_objects);
-					$this->_add_relation_fields($obj_modelo);
-				}
-
-				return $obj_modelo;
-			});
-		}
-
-		return $this;
+			return $obj_modelo;
+		});
 	}
 
 	// --------------------------------------------------------------------
 
 	public function get_first($recupera_relation = TRUE)
 	{
-		return $this->limit(1)->get($recupera_relation);
+		return $this->get($recupera_relation)->first();
 	}
 
 	// --------------------------------------------------------------------

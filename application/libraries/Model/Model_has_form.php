@@ -60,7 +60,7 @@ trait Model_has_form {
 			});
 		}
 
-		$field = $this->fields[$campo];
+		$field = $this->get_field($campo);
 
 		$reglas = 'trim';
 		$reglas .= ($field->get_es_obligatorio() AND ! $field->get_es_autoincrement()) ? '|required' : '';
@@ -107,14 +107,14 @@ trait Model_has_form {
 		{
 			$data = [
 				'form_label'    => form_label(
-					ucfirst($this->get_field_label($campo)).$this->get_field_marca_obligatorio($campo),
+					ucfirst($this->get_field($campo)->get_label()).$this->get_marca_obligatorio($campo),
 					"id_{$campo}",
 					['class' => 'control-label col-sm-4']
 				),
 				'item_error'    => form_has_error_class($campo),
 				'item-feedback' => is_null($field_error) ? '' : 'has-feedback',
 				'item_form'     => $this->print_form_field($campo, FALSE, '', $field_error),
-				'item_help'     => $show_help ? $this->get_field_texto_ayuda($campo) : '',
+				'item_help'     => $show_help ? $this->get_field($campo)->get_texto_ayuda() : '',
 			];
 
 			return $this->parser->parse('orm/form_item', $data, TRUE);
@@ -163,53 +163,16 @@ trait Model_has_form {
 	// --------------------------------------------------------------------
 
 	/**
-	 * Devuelve el texto label de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return string        Label del campo
-	 */
-	public function get_field_label($campo = '')
-	{
-		return $this->fields[$campo]->get_label();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el texto de ayuda de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return string        Texto de ayuda del campo
-	 */
-	public function get_field_texto_ayuda($campo = '')
-	{
-		return $this->fields[$campo]->get_texto_ayuda();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve la propiedad es_obligatorio de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return boolean       Indicador si el campo es obligatorio
-	 */
-	public function field_es_obligatorio($campo = '')
-	{
-		return $this->fields[$campo]->get_es_obligatorio();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
 	 * Devuelve marca de campo obligatorio (*), si el campo así lo es
 	 *
 	 * @param  string $campo Nombre del campo
 	 * @return string Texto html con la marca del campo
 	 */
-	public function get_field_marca_obligatorio($campo = '')
+	public function get_marca_obligatorio($campo = '')
 	{
-		return $this->field_es_obligatorio($campo) ? ' <span class="text-danger">*</span>' : '';
+		return $this->get_field($campo)->get_es_obligatorio()
+			? ' <span class="text-danger">*</span>'
+			: '';
 	}
 
 	// --------------------------------------------------------------------

@@ -108,16 +108,23 @@ trait Model_has_attributes {
 		return $this->campo_id;
 	}
 
+	// --------------------------------------------------------------------
+
 	public function get_value($campo)
 	{
 		return array_get($this->values, $campo);
 	}
 
+	// --------------------------------------------------------------------
+
 	public function set_value($campo, $valor)
 	{
-		return $this->values[$campo] = $valor;
+		$this->values[$campo] = $valor;
+
+		return $this;
 	}
 
+	// --------------------------------------------------------------------
 
 	public function get_list_fields()
 	{
@@ -131,7 +138,7 @@ trait Model_has_attributes {
 	 *
 	 * @return array Arreglo con los valores de los campos del modelo
 	 */
-	public function get_fields_values()
+	public function get_values()
 	{
 		return $this->values;
 	}

@@ -31,18 +31,6 @@ trait Model_has_persistance {
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Recupera registros por el ID
-	 *
-	 * @param  string  $id_modelo         Identificador del registro a recuperar
-	 * @param  boolean $recupera_relation Indica si se recuperará la información de relación
-	 * @return void
-	 */
-	public function find_id($id_modelo = '', $recupera_relation = TRUE)
-	{
-		return $this->where($this->array_id($id_modelo))->get_first($recupera_relation);
-	}
-
 	public function get_dropdown_list($opcion_inicial = TRUE)
 	{
 		$opc_ini = collect($opcion_inicial
@@ -96,7 +84,7 @@ trait Model_has_persistance {
 		$model_fields = $this->fields;
 
 		return collect($this->campo_id)
-			->combine(explode($this->separador_campos, $id_modelo))
+			->combine(explode($this->separador_campos, (string) $id_modelo))
 			->map(function($valor, $llave) use ($model_fields) {
 				$tipo = collect($model_fields)->get($llave)->get_tipo();
 
@@ -238,7 +226,7 @@ trait Model_has_persistance {
 				$relation  = $campo->get_relation();
 				$id_fields = collect($relation['id_one_table'])->combine($this->values_id_fields())->all();
 
-				collect($this->{$nombre_campo})
+				collect($this->get_value($nombre_campo))
 					->map(function($valor_campo) use ($relation, $id_fields) {
 						return collect($relation['id_many_table'])
 							->combine(explode($this->separador_campos, $valor_campo))
@@ -246,7 +234,7 @@ trait Model_has_persistance {
 							->all();
 					})
 					->each(function($insert_values) use ($relation) {
-						$this->db->insert($relation['join_table'], $insert_values);
+						$this->db->insert($this->get_db_table($relation['join_table']), $insert_values);
 					});
 			});
 	}
@@ -268,7 +256,7 @@ trait Model_has_persistance {
 				$relation = $campo->get_relation();
 				$where_delete = collect($relation['id_one_table'])->combine($id_fields)->all();
 
-				$this->db->delete($relation['join_table'], $where_delete);
+				$this->db->delete($this->get_db_table($relation['join_table']), $where_delete);
 			});
 	}
 

@@ -69,20 +69,6 @@ class Orm_model implements IteratorAggregate {
 	protected $label_plural = '';
 
 	/**
-	 * Campos para ordenar el modelo cuando se recupera de la BD
-	 *
-	 * @var string
-	 */
-	protected $order_by = '';
-
-	/**
-	 * Filtro para buscar resultados
-	 *
-	 * @var string
-	 */
-	protected $filtro = '';
-
-	/**
 	 * Caracter separador de los campos cuando la llave tiene más de un campo
 	 *
 	 * @var string
@@ -95,14 +81,6 @@ class Orm_model implements IteratorAggregate {
 	 * @var array
 	 */
 	protected $fields = [];
-
-	/**
-	 * Arreglo con la configuración del modelo
-	 *
-	 * @var array
-	 */
-	protected $model_config = [];
-
 
 	// --------------------------------------------------------------------
 
@@ -132,20 +110,6 @@ class Orm_model implements IteratorAggregate {
 		if ($id_modelo)
 		{
 			$this->fill($id_modelo);
-		}
-	}
-
-	// --------------------------------------------------------------------
-
-	public static function __callStatic($metodo, $argumentos)
-	{
-		if ($metodo === 'new')
-		{
-			return new static;
-		}
-		else
-		{
-			throw new \LogicException("Unknown method '{$metodo}'");
 		}
 	}
 
@@ -230,10 +194,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_label()
 	{
-		$model_nombre = explode('\\', $this->model_nombre);
-		$model_nombre = $model_nombre[count($model_nombre)-1];
-
-		return empty($this->label) ? $model_nombre : $this->label;
+		return empty($this->label) ? $this->get_model_nombre(FALSE) : $this->label;
 	}
 
 	// --------------------------------------------------------------------
@@ -255,54 +216,16 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return array Arreglo con los campos del modelo
 	 */
-	public function get_fields($filtrar_listado = FALSE)
+	public function get_fields()
 	{
-		if ($filtrar_listado)
-		{
-			return collect($this->fields)->filter(function($campo) {
-					return $campo->get_mostrar_lista();
-				})->all();
-		}
-
 		return $this->fields;
 	}
 
 	// --------------------------------------------------------------------
 
-	/**
-	 * Recupera el valor del filtro a utilizar para recuperar datos del modelo
-	 *
-	 * @return string Filtro a usar
-	 */
-	public function get_filtro()
+	public function get_field($campo)
 	{
-		return ($this->filtro === '_') ? '' : $this->filtro;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Fija el valor del filtro a utilizar para recuperar datos del modelo
-	 *
-	 * @param  string $filtro Filtro a usar
-	 * @return void
-	 */
-	public function set_filtro($filtro = '')
-	{
-		$this->filtro = $filtro;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve indicador si el campo se mostrará o no en listado
-	 *
-	 * @param string $campo Nombre del campo
-	 * @return boolean Indicador mostrar o no en la lista
-	 */
-	public function get_mostrar_lista($campo = '')
-	{
-		return (isset($this->fields[$campo])) ? $this->fields[$campo]->get_mostrar_lista() : FALSE;
+		return array_get($this->fields, $campo);
 	}
 
 	// --------------------------------------------------------------------
@@ -315,7 +238,9 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function fill($id_modelo = NULL)
 	{
-		return is_array($id_modelo) ? $this->fill_from_array($id_modelo) : $this->find_id($id_modelo);
+		$id_modelo = is_array($id_modelo) ? $id_modelo : $this->find_id($id_modelo)->get_values();
+
+		return $this->fill_from_array($id_modelo);
 	}
 
 }

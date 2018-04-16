@@ -161,16 +161,13 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		app('db')->mock_set_return_result(NULL);
-		$this->assert_false($acl->tiene_clave('usuario'));
-
 		app('db')->mock_set_return_result([]);
 		$this->assert_false($acl->tiene_clave('usuario'));
 
-		app('db')->mock_set_return_result(['password' => '']);
+		app('db')->mock_set_return_result([['password' => '']]);
 		$this->assert_false($acl->tiene_clave('usuario'));
 
-		app('db')->mock_set_return_result(['password' => 'password']);
+		app('db')->mock_set_return_result([['password' => 'password']]);
 		$this->assert_true($acl->tiene_clave('usuario'));
 	}
 
@@ -178,13 +175,10 @@ class test_model_acl_acl extends test_case {
 	{
 		$acl = Acl::create();
 
-		app('db')->mock_set_return_result(NULL);
+		app('db')->mock_set_return_result(['cantidad' => 0]);
 		$this->assert_false($acl->existe_usuario('usuario'));
 
-		app('db')->mock_set_return_result([]);
-		$this->assert_false($acl->existe_usuario('usuario'));
-
-		app('db')->mock_set_return_result(['user' => 'user']);
+		app('db')->mock_set_return_result(['cantidad' => 1]);
 		$this->assert_true($acl->existe_usuario('usuario'));
 	}
 
