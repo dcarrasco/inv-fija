@@ -13,7 +13,7 @@
 		<div class="form-group <?= form_has_error_class('catalogo'); ?>">
 			<label class="control-label col-sm-4">
 				{_inventario_form_new_material_}
-				<?= $detalle_inventario->get_field_marca_obligatorio('catalogo'); ?>
+				<?= $detalle_inventario->get_marca_obligatorio('catalogo'); ?>
 			</label>
 			<div class="col-sm-3">
 				<div class="input-group">

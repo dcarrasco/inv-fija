@@ -103,7 +103,7 @@ class Inventario extends ORM_Model {
 		{
 			$this->db
 				->where('id <>', (int) $this->id)
-				->update($this->get_tabla(), ['activo' => 0]);
+				->update($this->get_db_table(), ['activo' => 0]);
 		}
 	}
 

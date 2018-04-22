@@ -89,7 +89,7 @@ class Inventario_digitacion extends Controller_base {
 			return $this->hoja_mobile($hoja);
 		}
 
-		if ( $hoja === 0 && ! empty(request('hoja')))
+		if ($hoja === 0 && ! empty(request('hoja')))
 		{
 			redirect($this->router->class.'/ingreso/'.request('hoja'));
 		}

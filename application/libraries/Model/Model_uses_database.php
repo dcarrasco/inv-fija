@@ -101,12 +101,19 @@ trait Model_uses_database {
 	 */
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
-		$this->fill($this->where($this->array_id($id_modelo))->get_first(FALSE)->get_values());
+		$modelo = $this->where($this->array_id($id_modelo))->get_first(FALSE);
 
-		if ($recupera_relation)
+		if ( ! is_null($modelo))
 		{
-			$this->get_relation_fields();
+			$this->fill($modelo->get_values());
+
+			if ($recupera_relation)
+			{
+				$this->get_relation_fields();
+			}
 		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------
