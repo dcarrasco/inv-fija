@@ -46,16 +46,16 @@ class Inventario_config extends Orm_controller {
 	 * @var  array
 	 */
 	public $menu_opciones = [
-		'auditor' => ['url'=>'{{route}}/listado/auditor/', 'texto'=>'lang::inventario_config_menu_auditores', 'icon'=>'user'],
-		'familia' => ['url'=>'{{route}}/listado/familia', 'texto'=>'lang::inventario_config_menu_familias', 'icon'=>'th'],
-		'catalogo' => ['url'=>'{{route}}/listado/catalogo', 'texto'=>'lang::inventario_config_menu_materiales', 'icon'=>'barcode'],
-		'tipo_inventario' => ['url'=>'{{route}}/listado/tipo_inventario', 'texto'=>'lang::inventario_config_menu_tipos_inventarios', 'icon'=>'th'],
-		'inventario' => ['url'=>'{{route}}/listado/inventario', 'texto'=>'lang::inventario_config_menu_inventarios', 'icon'=>'list'],
-		'tipo_ubicacion' => ['url'=>'{{route}}/listado/tipo_ubicacion', 'texto'=>'lang::inventario_config_menu_tipo_ubicacion', 'icon'=>'th'],
-		'ubicaciones' => ['url'=>'{{route}}/ubicacion', 'texto'=>'lang::inventario_config_menu_ubicaciones', 'icon'=>'map-marker'],
-		'centro' => ['url'=>'{{route}}/listado/centro', 'texto'=>'lang::inventario_config_menu_centros', 'icon'=>'th'],
-		'almacen' => ['url'=>'{{route}}/listado/almacen', 'texto'=>'lang::inventario_config_menu_almacenes', 'icon'=>'home'],
-		'unidad_medida' => ['url'=>'{{route}}/listado/unidad_medida', 'texto'=>'lang::inventario_config_menu_unidades_medida', 'icon'=>'balance-scale'],
+		'auditor'         => ['icon'=>'user'],
+		'familia'         => ['icon'=>'th'],
+		'catalogo'        => ['icon'=>'barcode'],
+		'tipo_inventario' => ['icon'=>'th'],
+		'inventario'      => ['icon'=>'list'],
+		'tipo_ubicacion'  => ['icon'=>'th'],
+		'ubicacion'       => ['icon'=>'map-marker'],
+		'centro'          => ['icon'=>'th'],
+		'almacen'         => ['icon'=>'home'],
+		'unidad_medida'   => ['icon'=>'balance-scale'],
 	];
 
 	/**

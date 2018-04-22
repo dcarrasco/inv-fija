@@ -34,10 +34,60 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipoalmacen_sap extends ORM_Model {
 
-	protected $tabla = 'config::bd_tiposalm_sap';
+	protected $db_table = 'config::bd_tiposalm_sap';
 	protected $label = 'Tipo de Almac&eacute;n';
 	protected $label_plural = 'Tipos de Almac&eacute;n';
 	protected $order_by = 'tipo_op, tipo';
+
+	protected $fields = [
+		'id_tipo' => [
+			'label'            => 'id',
+			'tipo'             => Orm_field::TIPO_INT,
+			'largo'            => 10,
+			'texto_ayuda'      => '',
+			'es_id'            => TRUE,
+			'es_obligatorio'   => TRUE,
+			'es_unico'         => TRUE,
+			'es_autoincrement' => TRUE,
+		],
+		'tipo' => [
+			'label'          => 'Tipo de Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Tipo del almac&eacute;n. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'tipo_op' => [
+			'label'       => 'Tipo operaci&oacute;n',
+			'tipo'        => Orm_field::TIPO_CHAR,
+			'largo'       => 50,
+			'texto_ayuda' => 'Seleccione el tipo de operaci&oacute;n.',
+			'choices'     => [
+				'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
+				'FIJA'  => 'Operaci&oacute;n Fija'
+			],
+			'es_obligatorio' => TRUE,
+			// 'onchange'       => form_onchange('tipo_op', 'almacenes', 'stock_config/get_select_almacen'),
+		],
+		'es_sumable' => [
+			'label'          => 'Es sumable',
+			'tipo'           => Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica si el tipo de almac&eacute;n se incluir&aacute; en la suma del stock.',
+			'es_obligatorio' => TRUE,
+			'default'        => 1,
+		],
+		'almacenes' => [
+			'tipo'           => Orm_field::TIPO_HAS_MANY,
+			'relation'       => [
+				'model'         => almacen_sap::class,
+				'join_table'    => 'config::bd_tipoalmacen_sap',
+				'id_one_table'  => ['id_tipo'],
+				'id_many_table' => ['centro', 'cod_almacen'],
+				'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
+			],
+			'texto_ayuda'    => 'Tipos asociados al almac&eacute;n.',
+		],
+	];
 
 	/**
 	 * Constructor de la clase
@@ -47,58 +97,6 @@ class Tipoalmacen_sap extends ORM_Model {
 	 */
 	public function __construct($id_tipo_alm_sap = NULL)
 	{
-		$this->model_config = [
-			'campos' => [
-				'id_tipo' => [
-					'label'            => 'id',
-					'tipo'             => Orm_field::TIPO_INT,
-					'largo'            => 10,
-					'texto_ayuda'      => '',
-					'es_id'            => TRUE,
-					'es_obligatorio'   => TRUE,
-					'es_unico'         => TRUE,
-					'es_autoincrement' => TRUE,
-				],
-				'tipo' => [
-					'label'          => 'Tipo de Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Tipo del almac&eacute;n. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'tipo_op' => [
-					'label'       => 'Tipo operaci&oacute;n',
-					'tipo'        => Orm_field::TIPO_CHAR,
-					'largo'       => 50,
-					'texto_ayuda' => 'Seleccione el tipo de operaci&oacute;n.',
-					'choices'     => [
-						'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
-						'FIJA'  => 'Operaci&oacute;n Fija'
-					],
-					'es_obligatorio' => TRUE,
-					'onchange'       => form_onchange('tipo_op', 'almacenes', 'stock_config/get_select_almacen'),
-				],
-				'es_sumable' => [
-					'label'          => 'Es sumable',
-					'tipo'           => Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica si el tipo de almac&eacute;n se incluir&aacute; en la suma del stock.',
-					'es_obligatorio' => TRUE,
-					'default'        => 1,
-				],
-				'almacenes' => [
-					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => [
-						'model'         => almacen_sap::class,
-						'join_table'    => config('bd_tipoalmacen_sap'),
-						'id_one_table'  => ['id_tipo'],
-						'id_many_table' => ['centro', 'cod_almacen'],
-						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
-					],
-					'texto_ayuda'    => 'Tipos asociados al almac&eacute;n.',
-				],
-			],
-		];
-
 		parent::__construct($id_tipo_alm_sap);
 	}
 
@@ -112,6 +110,11 @@ class Tipoalmacen_sap extends ORM_Model {
 	public function __toString()
 	{
 		return (string) $this->tipo;
+	}
+
+	public function get_es_sumable()
+	{
+		return $this->get_value('es_sumable') ? 'Si' : 'No';
 	}
 
 

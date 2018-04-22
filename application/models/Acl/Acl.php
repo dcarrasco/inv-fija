@@ -906,7 +906,9 @@ class Acl extends Orm_Model {
 	 */
 	public function tiene_clave($usuario = '')
 	{
-		return ! empty(Usuario::create()->user($usuario)->get_first()->password);
+		$password = Usuario::create()->user($usuario)->get_first()->password;
+
+		return ! empty($password);
 	}
 
 	// --------------------------------------------------------------------

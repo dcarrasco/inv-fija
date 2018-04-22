@@ -34,6 +34,23 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_movimiento extends ORM_Model {
 
+	protected $db_table = 'config::bd_tipos_movimientos';
+	protected $label = 'Tipo de movimiento';
+	protected $label_plural = 'Tipos de movimiento';
+	protected $order_by = 'tipo_movimiento';
+
+	protected $fields = [
+		'id'     => ['tipo' => Orm_field::TIPO_ID],
+		'tipo_movimiento' => [
+			'label'          => 'Tipo de movimiento',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Tipo de movimiento. M&aacute;ximo 50 caracteres',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -42,26 +59,6 @@ class Tipo_movimiento extends ORM_Model {
 	 */
 	public function __construct($id_tipo_movimiento = NULL)
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipos_movimientos'),
-				'label'        => 'Tipo de movimiento',
-				'label_plural' => 'Tipos de movimiento',
-				'order_by'     => 'tipo_movimiento',
-			],
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'tipo_movimiento' => [
-					'label'          => 'Tipo de movimiento',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Tipo de movimiento. M&aacute;ximo 50 caracteres',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-			],
-		];
-
 		parent::__construct($id_tipo_movimiento);
 	}
 

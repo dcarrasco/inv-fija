@@ -45,10 +45,10 @@ class Acl_config extends Orm_controller {
 	 * @var  array
 	 */
 	public $menu_opciones = [
-		'usuario' => ['url'=>'{{route}}/listado/usuario', 'texto'=>'lang::acl_config_menu_usuarios', 'icon'=>'user'],
-		'app' => ['url'=>'{{route}}/listado/app', 'texto'=>'lang::acl_config_menu_aplicaciones', 'icon'=>'folder-o'],
-		'rol' => ['url'=>'{{route}}/listado/rol', 'texto'=>'lang::acl_config_menu_roles', 'icon'=>'server'],
-		'modulo' => ['url'=>'{{route}}/listado/modulo', 'texto'=>'lang::acl_config_menu_modulos', 'icon'=>'list-alt'],
+		'usuario' => ['icon'=>'user'],
+		'app'     => ['icon'=>'folder-o'],
+		'rol'     => ['icon'=>'server'],
+		'modulo'  => ['icon'=>'list-alt'],
 	];
 
 	/**

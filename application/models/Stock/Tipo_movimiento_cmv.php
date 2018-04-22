@@ -34,6 +34,39 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_movimiento_cmv extends ORM_Model {
 
+	protected $db_table = 'config::bd_tipos_movs_cmv';
+	protected $label = 'Tipo y clase de movimiento';
+	protected $label_plural = 'Tipos y clases de movimiento';
+	protected $order_by = 'id_tipo_movimiento, signo DESC, cmv';
+
+	protected $fields = [
+		'id_tipo_movimiento' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => Tipo_movimiento::class],
+			'texto_ayuda'    => 'Seleccione un tipo de movimiento.',
+		],
+		'cmv' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => Clase_movimiento::class],
+			'texto_ayuda'    => 'Seleccione una clase de movimiento TOA.',
+		],
+		'signo' => [
+			'label'          => 'Signo',
+			'tipo'           => Orm_field::TIPO_INT,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Signo del movimiento.',
+			'es_obligatorio' => TRUE,
+			'choices'     => [
+				'1'  => 'Positivo',
+				'-1' => 'Negativo',
+			],
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -42,42 +75,6 @@ class Tipo_movimiento_cmv extends ORM_Model {
 	 */
 	public function __construct($id_tipo_movimiento_cmv = NULL)
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipos_movs_cmv'),
-				'label'        => 'Tipo y clase de movimiento',
-				'label_plural' => 'Tipos y clases de movimiento',
-				'order_by'     => 'id_tipo_movimiento, signo DESC, cmv',
-			],
-			'campos' => [
-				'id_tipo_movimiento' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => Tipo_movimiento::class],
-					'texto_ayuda'    => 'Seleccione un tipo de movimiento.',
-				],
-				'cmv' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => Clase_movimiento::class],
-					'texto_ayuda'    => 'Seleccione una clase de movimiento TOA.',
-				],
-				'signo' => [
-					'label'          => 'Signo',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Signo del movimiento.',
-					'es_obligatorio' => TRUE,
-					'choices'     => [
-						'1'  => 'Positivo',
-						'-1' => 'Negativo',
-					],
-				],
-			],
-		];
-
 		parent::__construct($id_tipo_movimiento_cmv);
 	}
 

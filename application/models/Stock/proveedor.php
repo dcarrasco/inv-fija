@@ -35,6 +35,30 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Proveedor extends ORM_Model {
 
+	protected $db_table = 'config::bd_proveedores';
+	protected $label_plural = 'Proveedores';
+	protected $order_by = 'des_proveedor';
+
+	protected $fields = [
+		'cod_proveedor' => [
+			'label'          => 'C&oacute;digo del proveedor',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+		'des_proveedor' => [
+			'label'          => 'Nombre del proveedor',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => FALSE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -43,34 +67,6 @@ class Proveedor extends ORM_Model {
 	 */
 	public function __construct($id_proveedor = NULL)
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_proveedores'),
-				'label'        => 'Proveedor',
-				'label_plural' => 'Proveedores',
-				'order_by'     => 'des_proveedor',
-			],
-			'campos' => [
-				'cod_proveedor' => [
-					'label'          => 'C&oacute;digo del proveedor',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'des_proveedor' => [
-					'label'          => 'Nombre del proveedor',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => FALSE,
-				],
-			],
-		];
-
 		parent::__construct($id_proveedor);
 	}
 

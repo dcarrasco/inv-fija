@@ -81,7 +81,7 @@ trait Model_has_form {
 			$campo_rules = $campo.'[]';
 		}
 
-		return $this->form_validation->set_rules($campo_rules, ucfirst($this->get_field_label($campo)), $reglas);
+		return $this->form_validation->set_rules($campo_rules, ucfirst($this->get_field($campo)->get_label()), $reglas);
 	}
 
 	// --------------------------------------------------------------------

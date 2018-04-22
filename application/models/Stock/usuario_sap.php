@@ -35,6 +35,31 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Usuario_sap extends ORM_Model {
 
+	protected $db_table = 'config::bd_usuarios_sap';
+	protected $label = 'Usuario SAP';
+	protected $label_plural = 'Usuarios SAP';
+	protected $order_by = 'usuario';
+
+	protected $fields = [
+		'usuario' => [
+			'label'          => 'Codigo Usuario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'C&oacute;digo del usuario SAP. M&aacute;ximo 10 caracteres',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'nom_usuario' => [
+			'label'          => 'Nombre de usuario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre del usuario. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => FALSE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -43,34 +68,6 @@ class Usuario_sap extends ORM_Model {
 	 */
 	public function __construct($id_usuario_sap = NULL)
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_usuarios_sap'),
-				'label'        => 'Usuario SAP',
-				'label_plural' => 'Usuarios SAP',
-				'order_by'     => 'usuario',
-			],
-			'campos' => [
-				'usuario' => [
-					'label'          => 'Codigo Usuario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'C&oacute;digo del usuario SAP. M&aacute;ximo 10 caracteres',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'nom_usuario' => [
-					'label'          => 'Nombre de usuario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del usuario. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => FALSE,
-				],
-			],
-		];
-
 		parent::__construct($id_usuario_sap);
 	}
 
