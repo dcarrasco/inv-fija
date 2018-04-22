@@ -109,7 +109,7 @@ class Orm_model implements IteratorAggregate {
 
 		if ($id_modelo)
 		{
-			$this->fill($id_modelo);
+			$this->find_id($id_modelo);
 		}
 	}
 
@@ -226,21 +226,6 @@ class Orm_model implements IteratorAggregate {
 	public function get_field($campo)
 	{
 		return array_get($this->fields, $campo);
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Puebla el modelo con datos de la base de datos o de un arreglo entregado
-	 *
-	 * @param  mixed $id_modelo ID del registro a recuperar o arreglo con datos
-	 * @return void
-	 */
-	public function fill($id_modelo = NULL)
-	{
-		$id_modelo = is_array($id_modelo) ? $id_modelo : $this->find_id($id_modelo)->get_values();
-
-		return $this->fill_from_array($id_modelo);
 	}
 
 }

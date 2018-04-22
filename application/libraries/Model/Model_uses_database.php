@@ -101,7 +101,12 @@ trait Model_uses_database {
 	 */
 	public function find_id($id_modelo = '', $recupera_relation = TRUE)
 	{
-		return $this->where($this->array_id($id_modelo))->get_first($recupera_relation);
+		$this->fill($this->where($this->array_id($id_modelo))->get_first(FALSE)->get_values());
+
+		if ($recupera_relation)
+		{
+			$this->get_relation_fields();
+		}
 	}
 
 	// --------------------------------------------------------------------
@@ -139,17 +144,19 @@ trait Model_uses_database {
 
 		$class = get_class($this);
 
-		return collect($results)->map(function($result) use ($class, $recupera_relation) {
-			$obj_modelo = new $class($result);
+		return collect($results)
+			->map(function($result) use ($class, $recupera_relation) {
+				$obj_modelo = new $class;
+				$obj_modelo->fill($result);
 
-			if ($recupera_relation)
-			{
-				$obj_modelo->get_relation_fields($this->relation_objects);
-				$this->_add_relation_fields($obj_modelo);
-			}
+				if ($recupera_relation)
+				{
+					$obj_modelo->get_relation_fields($this->relation_objects);
+					$this->_add_relation_fields($obj_modelo);
+				}
 
-			return $obj_modelo;
-		});
+				return $obj_modelo;
+			});
 	}
 
 	// --------------------------------------------------------------------

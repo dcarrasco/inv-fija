@@ -194,7 +194,7 @@ trait Model_has_attributes {
 	 * @param  array $arr_data Arreglo con los valores
 	 * @return void
 	 */
-	public function fill_from_array($data = [])
+	public function fill($data = [])
 	{
 		collect($this->fields)
 			->only(collect($data)->keys()->all())

@@ -190,7 +190,7 @@ trait Model_has_form {
 			})->merge(request())
 			->all();
 
-		return $this->fill_from_array($post_request);
+		return $this->fill($post_request);
 	}
 
 }

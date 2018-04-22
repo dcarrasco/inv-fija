@@ -116,12 +116,10 @@ trait Model_has_relationships {
 		}
 		else
 		{
-			$model_relacionado = new $class_relacionado();
-
 			// si el valor del campo es distinto de nulo, lo va abuscar a la BD
 			if ($this->get_value($nombre_campo) !== NULL)
 			{
-				$model_relacionado->find_id($this->get_value($nombre_campo), FALSE);
+				$model_relacionado = new $class_relacionado($this->get_value($nombre_campo));
 			}
 		}
 
@@ -152,9 +150,13 @@ trait Model_has_relationships {
 
 		$relation['data']  = $pivot_objects;
 
-		$this->set_value($nombre_campo, collect($pivot_objects)->map(function($model) {
-			return $model->get_id();
-		})->all());
+		$this->set_value(
+			$nombre_campo,
+			collect($pivot_objects)->map(function($model) {
+				return $model->get_id();
+			})
+			->all()
+		);
 
 		$this->fields[$nombre_campo]->set_relation($relation);
 		$this->got_relations = TRUE;
@@ -184,11 +186,10 @@ trait Model_has_relationships {
 			->result_array())
 			->flatten();
 
-		return collect($where_related->count() > 0
+		return $where_related->count() > 0
 			? $model->where_in($this->_junta_campos_select($model->get_campo_id()), $where_related->all())
 				->get(FALSE)
-			: NULL
-		);
+			: collect();
 	}
 
 	// --------------------------------------------------------------------
@@ -241,7 +242,8 @@ trait Model_has_relationships {
 		}
 
 		// CONCAT_WS es especifico para MYSQL
-		if ($this->db->dbdriver === 'mysqli')
+		if ($this->db->dbdriver === 'mysqli'
+			OR ($this->db->dbdriver === 'pdo' && $this->db->subdriver === 'mysql'))
 		{
 			$lista_campos = $campos->implode(',');
 
