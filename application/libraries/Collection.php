@@ -651,7 +651,15 @@ class Collection implements IteratorAggregate {
 
 		foreach ($this->items as $item)
 		{
-			$itemValue = array_get($item, $value);
+			if (is_array($item))
+			{
+				$itemValue = array_get($item, $value);
+			}
+			else if (is_object($item))
+			{
+				$itemValue = $item->{$value};
+			}
+
 
 			// If the key is "null", we will just append the value to the array and keep
 			// looping. Otherwise we will key the array using the value of the key we

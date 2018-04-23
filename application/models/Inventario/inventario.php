@@ -172,24 +172,11 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_combo_inventarios()
 	{
-		$inventarios = collect(
-			$this->db
-				->from(config('bd_inventarios').' a')
-				->join(config('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
-				->order_by('desc_tipo_inventario, nombre')
-				->get()->result_array()
-		);
-
-		return $inventarios->pluck('desc_tipo_inventario')
-			->unique()
-			->map_with_keys(function($tipo_inventario) use ($inventarios) {
-				return [
-					$tipo_inventario => $inventarios
-						->filter(function($inventario) use ($tipo_inventario) {
-							return $inventario['desc_tipo_inventario'] === $tipo_inventario;
-						})->map_with_keys(function($inventario) {
-							return [$inventario['id'] => $inventario['nombre']];
-						})->all()
+		return tipo_inventario::create()->get()
+			->map_with_keys(function($tipo_inventario) {
+				return [(string) $tipo_inventario => Inventario::create()
+					->where('tipo_inventario', $tipo_inventario->get_id())
+					->get_dropdown_list(FALSE)
 				];
 			})->all();
 	}

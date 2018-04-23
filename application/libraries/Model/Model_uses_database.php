@@ -143,9 +143,16 @@ trait Model_uses_database {
 
 	// --------------------------------------------------------------------
 
-	protected function get($recupera_relation = TRUE)
+	public function get($recupera_relation = TRUE)
 	{
-		$this->select_from_database();
+		if (is_null($this->db_query))
+		{
+			$this->select_from_database()->order_by($this->order_by);
+		}
+		else
+		{
+			$this->select_from_database();
+		}
 		$results = $this->db_query->get()->result_array();
 		$this->db_query = NULL;
 
@@ -164,6 +171,53 @@ trait Model_uses_database {
 
 				return $obj_modelo;
 			});
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_array()
+	{
+		$this->select_from_database();
+		$results = $this->db_query->get()->result_array();
+		$this->db_query = NULL;
+
+		return collect($results);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_dropdown_list($opcion_inicial = TRUE)
+	{
+		$opc_ini = collect($opcion_inicial
+			? ['' => 'Seleccione '.strtolower($this->label).'...']
+			: []
+		);
+
+		$opciones = collect($this->get())->map_with_keys(function ($obj_modelo) {
+			return [$obj_modelo->get_id() => (string) $obj_modelo];
+		});
+
+		return $opc_ini->merge($opciones)->all();
+	}
+
+	// --------------------------------------------------------------------
+
+	public function with($campo)
+	{
+		$this->select_from_database();
+
+		if ($this->get_field($campo)->get_tipo() === Orm_field::TIPO_HAS_ONE)
+		{
+			$related_model = array_get($this->get_field($campo)->get_relation(), 'model');
+			$related_object = new $related_model;
+			$related_table = $related_object->get_db_table();
+			$related_id = collect($related_object->get_campo_id())->first();
+
+			$this->db_query = $this->db_query
+				->join($related_table, $campo.'='.$related_table.'.'.$related_id, 'left');
+		}
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------

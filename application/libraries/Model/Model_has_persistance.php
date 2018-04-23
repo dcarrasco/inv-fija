@@ -31,22 +31,6 @@ trait Model_has_persistance {
 
 	// --------------------------------------------------------------------
 
-	public function get_dropdown_list($opcion_inicial = TRUE)
-	{
-		$opc_ini = collect($opcion_inicial
-			? ['' => 'Seleccione '.strtolower($this->label).'...']
-			: []
-		);
-
-		$opciones = collect($this->get())->map_with_keys(function ($obj_modelo) {
-			return [$obj_modelo->get_id() => (string) $obj_modelo];
-		});
-
-		return $opc_ini->merge($opciones)->all();
-	}
-
-	// --------------------------------------------------------------------
-
 	/**
 	 * Agrega un filtro para seleccionar elementos del modelo
 	 *
