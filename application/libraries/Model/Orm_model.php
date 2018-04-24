@@ -194,7 +194,7 @@ class Orm_model implements IteratorAggregate {
 	 */
 	public function get_label()
 	{
-		return empty($this->label) ? $this->get_model_nombre(FALSE) : $this->label;
+		return empty($this->label) ? ucfirst(strtolower($this->get_model_nombre(FALSE))) : $this->label;
 	}
 
 	// --------------------------------------------------------------------

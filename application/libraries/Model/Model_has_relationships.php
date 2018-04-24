@@ -68,6 +68,23 @@ trait Model_has_relationships {
 
 	// --------------------------------------------------------------------
 
+	public function get_relation($campo)
+	{
+		if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
+		{
+			$this->get_relation_fields();
+			return array_get($this->fields[$campo]->get_relation(), 'model');
+		}
+
+		if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
+		{
+			$this->get_relation_fields();
+			return array_get($this->fields[$campo]->get_relation(), 'data', collect());
+		}
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera los modelos dependientes (de las relaciones has_one y has_many)
 	 *
@@ -76,15 +93,18 @@ trait Model_has_relationships {
 	 */
 	public function get_relation_fields($relations_collection = NULL)
 	{
-		foreach ($this->fields as $nombre_campo => $obj_campo)
+		if ( ! $this->got_relations)
 		{
-			if($obj_campo->get_tipo() === Orm_field::TIPO_HAS_ONE)
+			foreach ($this->fields as $nombre_campo => $obj_campo)
 			{
-				$this->_recuperar_relation_field_has_one($nombre_campo, $obj_campo, $relations_collection);
-			}
-			elseif ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
-			{
-				$this->_recuperar_relation_field_has_many($nombre_campo, $obj_campo, $relations_collection);
+				if($obj_campo->get_tipo() === Orm_field::TIPO_HAS_ONE)
+				{
+					$this->_recuperar_relation_field_has_one($nombre_campo, $obj_campo, $relations_collection);
+				}
+				elseif ($obj_campo->get_tipo() === Orm_field::TIPO_HAS_MANY)
+				{
+					$this->_recuperar_relation_field_has_many($nombre_campo, $obj_campo, $relations_collection);
+				}
 			}
 		}
 	}

@@ -228,11 +228,7 @@ class Acl extends Orm_Model {
 	{
 		if ( ! $this->session->userdata('user_firstname'))
 		{
-			$usuario = $this->db
-				->where('username', $this->get_user())
-				->get(config('bd_usuarios'))
-				->row();
-
+			$usuario = Usuario::create()->user($this->get_user())->get_first();
 			$nombre = $usuario ? $usuario->nombre : '';
 			$user_firstname = strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 
@@ -291,11 +287,7 @@ class Acl extends Orm_Model {
 	 */
 	public function check_user_credentials($usuario = '', $password = '')
 	{
-		$reg_usuario = $this->db
-			->where('username', $usuario)
-			->where('activo', 1)
-			->get(config('bd_usuarios'))
-			->row();
+		$reg_usuario = Usuario::create()->user($usuario)->where('activo',1)->get_first();
 
 		if ($reg_usuario)
 		{
@@ -315,13 +307,11 @@ class Acl extends Orm_Model {
 	 */
 	private function _write_login_audit($usuario = '')
 	{
-		$this->db
-			->where('username', $usuario)
-			->update(config('bd_usuarios'), [
-				'fecha_login'  => date('Y-m-d H:i:s'),
-				'ip_login'     => $this->input->ip_address(),
-				'agente_login' => $this->input->user_agent(),
-			]);
+		return Usuario::create()->user($usuario)->get_first()
+			->set_value('fecha_login', date('Y-m-d H:i:s'))
+			->set_value('ip_login', $this->input->ip_address())
+			->set_value('agente_login', $this->input->user_agent())
+			->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -373,12 +363,8 @@ class Acl extends Orm_Model {
 	 */
 	public function use_captcha($usuario = '')
 	{
-		$row_user = $this->db
-			->get_where(config('bd_usuarios'), [
-				'username' => (string) $usuario,
-			])->row();
-
-		$login_attempts = isset($row_user) ? (int) $row_user->login_errors : 0;
+		$usuario = Usuario::create()->user($usuario)->get_first();
+		$login_attempts = is_null($usuario) ? 0 : (int) $usuario->login_errors;
 
 		return (boolean) ($login_attempts > $this->login_failed_attempts);
 	}
@@ -600,20 +586,26 @@ class Acl extends Orm_Model {
 	 */
 	private function _get_menu_usuario($usuario = '')
 	{
-		// dump(Usuario::new()->where('username', (string) $usuario)->get());
-		// dump(\inventario\Auditor::create()->get());
+		$usuario = Usuario::create()->user($usuario)->get_first();
 
-		return $this->db->distinct()
-			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
-			->from(config('bd_usuarios').' u')
-			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.rol_id = ur.id_rol')
-			->join(config('bd_modulos').' m', 'm.id = rm.modulo_id')
-			->join(config('bd_app').' a', 'a.id = m.id_app')
-			->where('username', (string) $usuario)
-			->order_by('a.orden, m.orden')
-			->get()
-			->result_array();
+		return is_null($usuario)
+			? []
+			: $usuario->get_relation('rol')->map(function($rol) {
+				return $rol->get_relation('modulo')->map(function($modulo) {
+					return [
+						'app' => $modulo->id_app->app,
+						'app_icono' => $modulo->id_app->icono,
+						'modulo' => $modulo->modulo,
+						'url' => $modulo->url,
+						'llave_modulo' => $modulo->llave_modulo,
+						'modulo_icono' => $modulo->modulo_icono,
+						'orden' => $modulo->id_app->orden.'-'.$modulo->orden,
+					];
+				});
+			})->flatten(1)
+			->sort(function($item1, $item2) {
+				return $item1['orden'] >= $item2['orden'];
+			})->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -644,17 +636,15 @@ class Acl extends Orm_Model {
 	 */
 	private function _get_llaves_modulos($usuario = '')
 	{
-		$arr_rs = $this->db->distinct()
-			->select('llave_modulo')
-			->from(config('bd_usuarios').' u')
-			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.rol_id = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.modulo_id')
-			->where('username', $usuario)
-			->get()
-			->result_array();
+		$usuario = Usuario::create()->user($usuario)->get_first();
 
-		return array_column($arr_rs, 'llave_modulo');
+		return is_null($usuario)
+			? []
+			: $usuario->get_relation('rol')->map(function($rol) {
+				return $rol->get_relation('modulo')->map(function($modulo) {
+					return $modulo->llave_modulo;
+				});
+			})->flatten()->all();
 	}
 
 	// --------------------------------------------------------------------

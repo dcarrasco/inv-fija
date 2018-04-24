@@ -72,12 +72,12 @@ trait Model_has_attributes {
 		{
 			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
 			{
-				return array_get($this->fields[$campo]->get_relation(), 'model');
+				return $this->get_relation($campo);
 			}
 
 			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
-				return ul(array_get($this->fields[$campo]->get_relation(), 'data', collect())->all());
+				return $this->get_relation($campo);
 			}
 
 			if (count($this->fields[$campo]->get_choices()) > 0)
