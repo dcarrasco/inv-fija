@@ -77,7 +77,7 @@ trait Model_has_attributes {
 
 			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
 			{
-				return $this->get_relation($campo);
+				return ul($this->get_relation($campo)->all());
 			}
 
 			if (count($this->fields[$campo]->get_choices()) > 0)
