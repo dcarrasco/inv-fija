@@ -32,6 +32,13 @@ use Collection;
 trait Model_has_relationships {
 
 	/**
+	 * Arreglo con los datos de la relación
+	 *
+	 * @var  array
+	 */
+	protected $relation = [];
+
+	/**
 	 * Indicador si se recuperaron los datos de las relaciones
 	 *
 	 * @var boolean
@@ -68,8 +75,13 @@ trait Model_has_relationships {
 
 	// --------------------------------------------------------------------
 
-	public function get_relation($campo)
+	public function get_relation($campo = NULL)
 	{
+		if (! $campo)
+		{
+			return $this->relation;
+		}
+
 		if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
 		{
 			$this->get_relation_fields();

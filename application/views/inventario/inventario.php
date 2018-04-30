@@ -76,7 +76,7 @@
 				<?php $text_error = $this->errors->has("stock_fisico_{$linea_det->id}") ? 'text-danger' : ''; ?>
 				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>
 					<td class="text-center <?=$text_error?>" nowrap>
-						<?= $linea_det->get_field_value('ubicacion') ?>
+						<?= $linea_det->ubicacion ?>
 
 						<?php if ($linea_det->reg_nuevo === 'S'):?>
 							<a href="<?= site_url("{$this->router->class}/editar/{$hoja}/{$id_auditor}/{$linea_det->id}") ?>" class="btn btn-default btn-xs">

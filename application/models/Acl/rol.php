@@ -46,7 +46,7 @@ class Rol extends ORM_Model {
 			'tipo'        => Orm_field::TIPO_HAS_ONE,
 			'relation'    => ['model' => app::class],
 			'texto_ayuda' => 'Aplicaci&oacute;n a la que pertenece el rol.',
-			// 'onchange'    => form_onchange('id_app', 'modulo', 'acl_config/get_select_modulo'),
+			'onchange'    => 'form_onchange::id_app:modulo:acl_config/get_select_modulo',
 		],
 		'rol' => [
 			'label'          => 'Rol',

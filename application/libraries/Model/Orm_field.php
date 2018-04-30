@@ -349,7 +349,6 @@ class Orm_field {
 		$this->relation = $arr_relation;
 	}
 
-
 	// --------------------------------------------------------------------
 
 	/**
@@ -405,7 +404,7 @@ class Orm_field {
 		if ( ! empty($this->choices))
 		{
 			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
-			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->onchange.'"' : '';
+			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->form_onchange($this->onchange).'"' : '';
 
 			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}
@@ -469,11 +468,12 @@ class Orm_field {
 			$modelo_rel = new $nombre_rel_modelo();
 
 			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
-			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->onchange.'"' : '';
+			$param_adic .= ($this->onchange !== '') ? ' onchange="'.form_onchange($this->onchange).'"' : '';
 
-			$dropdown_conditions = array_key_exists('conditions', $this->relation)
-				? ['conditions' => $this->relation['conditions'], 'opc_ini' => FALSE]
-				: [];
+			collect(array_get($this->relation, 'conditions', []))
+				->each(function($condition, $id_condition) use ($modelo_rel) {
+					$modelo_rel->where($id_condition, $condition);
+				});
 
 			$form = form_dropdown(
 				$this->nombre,
@@ -490,17 +490,14 @@ class Orm_field {
 			$nombre_rel_modelo = $this->relation['model'];
 			$modelo_rel = new $nombre_rel_modelo();
 
+			collect(array_get($this->relation, 'conditions', []))
+				->each(function($condition, $id_condition) use ($modelo_rel) {
+					$modelo_rel->where($id_condition, $condition);
+				});
+
+			$opciones = request($this->nombre, $valor_field);
+
 			$param_adic = ' id="'.$id_prefix.$this->nombre.'" size="7" class="form-control '.$clase_adic.'"';
-
-			$dropdown_conditions = array_key_exists('conditions', $this->relation)
-				? ['conditions' => $this->relation['conditions']]
-				: [];
-
-			$dropdown_conditions['opc_ini'] = FALSE;
-
-			// Para que el formulario muestre multiples opciones seleccionadas, debemos usar este hack
-			//$form = form_multiselect($this->nombre.'[]', $modelo_rel->find('list', $dropdown_conditions, FALSE), $valor_field, $param_adic);
-			$opciones = request($this->nombre) ? request($this->nombre) : $valor_field;
 
 			$form = form_multiselect(
 				$this->nombre.'[]',

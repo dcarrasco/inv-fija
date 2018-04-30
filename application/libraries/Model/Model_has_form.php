@@ -134,23 +134,7 @@ trait Model_has_form {
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '', $field_error = NULL)
 	{
-		$arr_relation = $this->fields[$campo]->get_relation();
-
-		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
-		$arr_relation['conditions'] = collect($arr_relation)
-			->map(function ($elem) { return collect($elem); })
-			->get('conditions', collect())
-			->map(function ($condition) {
-				if (! is_array($condition) AND strpos($condition, '@field_value') === 0)
-				{
-					list($cond_tipo, $cond_campo, $cond_default) = explode(':', $condition);
-					return $this->{$cond_campo} ? $this->{$cond_campo} : $cond_default;
-				}
-
-				return $condition;
-			})->all();
-
-		$this->fields[$campo]->set_relation($arr_relation);
+		$this->set_values_condition($campo);
 
 		return $this->fields[$campo]->form_field(
 			array_get($this->values, $campo),
@@ -159,6 +143,30 @@ trait Model_has_form {
 			$field_error
 		);
 	}
+
+	// --------------------------------------------------------------------
+
+	protected function set_values_condition($campo = '')
+	{
+		$arr_relation = $this->fields[$campo]->get_relation();
+
+		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
+		$arr_relation['conditions'] = collect(collect($arr_relation)->get('conditions', []))
+			->map(function ($condition) {
+				if (is_string($condition) AND strpos($condition, '@field_value') === 0)
+				{
+					list($cond_tipo, $cond_campo, $cond_default) = explode(':', $condition);
+					return $this->{$cond_campo}
+						? (gettype($this->{$cond_campo}) === 'object' ? $this->{$cond_campo}->get_id() : $this->{$cond_campo})
+						: $cond_default;
+				}
+
+				return $condition;
+			})->all();
+
+		$this->fields[$campo]->set_relation($arr_relation);
+	}
+
 
 	// --------------------------------------------------------------------
 
