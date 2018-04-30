@@ -67,7 +67,7 @@ class Tipoalmacen_sap extends ORM_Model {
 				'FIJA'  => 'Operaci&oacute;n Fija'
 			],
 			'es_obligatorio' => TRUE,
-			// 'onchange'       => form_onchange('tipo_op', 'almacenes', 'stock_config/get_select_almacen'),
+			'onchange'       => 'form_onchange::tipo_op:almacenes:stock_config/get_select_almacen',
 		],
 		'es_sumable' => [
 			'label'          => 'Es sumable',

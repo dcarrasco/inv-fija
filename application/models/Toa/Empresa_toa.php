@@ -61,7 +61,7 @@ class Empresa_toa extends ORM_Model {
 		'tipoalm' => [
 			'tipo'     => Orm_field::TIPO_HAS_MANY,
 			'relation' => [
-				'model'         => \Stock\tipoalmacen_sap::class,
+				'model'         => \Stock\Tipoalmacen_sap::class,
 				'join_table'    => 'config::bd_empresas_toa_tiposalm',
 				'id_one_table'  => ['id_empresa'],
 				'id_many_table' => ['id_tipo'],
@@ -72,7 +72,7 @@ class Empresa_toa extends ORM_Model {
 		'ciudades' => [
 			'tipo'     => Orm_field::TIPO_HAS_MANY,
 			'relation' => [
-				'model'         => ciudad_toa::class,
+				'model'         => Ciudad_toa::class,
 				'join_table'    => 'config::bd_empresas_ciudades_toa',
 				'id_one_table'  => ['id_empresa'],
 				'id_many_table' => ['id_ciudad'],

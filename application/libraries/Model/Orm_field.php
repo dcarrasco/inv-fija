@@ -404,7 +404,7 @@ class Orm_field {
 		if ( ! empty($this->choices))
 		{
 			$param_adic = ' id="'.$id_prefix.$this->nombre.'" class="form-control '.$clase_adic.'"';
-			$param_adic .= ($this->onchange !== '') ? ' onchange="'.$this->form_onchange($this->onchange).'"' : '';
+			$param_adic .= ($this->onchange !== '') ? ' onchange="'.form_onchange($this->onchange).'"' : '';
 
 			return form_dropdown($this->nombre, $this->choices, $valor_field, $param_adic);
 		}

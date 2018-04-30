@@ -102,9 +102,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 	 */
 	public function ciudades_por_empresa($id_empresa = NULL)
 	{
-		return collect($this->where('id_empresa', $id_empresa)
-				->get()
-			)
+		return $this->where('id_empresa', $id_empresa)->get()
 			->map(function ($ciudad_empresa) {
 				return $ciudad_empresa->id_ciudad;
 			})

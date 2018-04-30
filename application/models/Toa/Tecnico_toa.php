@@ -68,9 +68,9 @@ class Tecnico_toa extends ORM_Model {
 		],
 		'id_empresa' => [
 			'tipo'        => Orm_field::TIPO_HAS_ONE,
-			'relation'    => ['model' => empresa_toa::class],
+			'relation'    => ['model' => Empresa_toa::class],
 			'texto_ayuda' => 'Empresa a la que pertenece el t&eacute;cnico.',
-			// 'onchange'    => form_onchange('id_empresa', 'id_ciudad', 'toa_config/get_select_ciudad'),
+			'onchange'    => 'form_onchange::id_empresa:id_ciudad:toa_config/get_select_ciudad',
 		],
 		'id_ciudad' => [
 			'tipo'        => Orm_field::TIPO_HAS_ONE,
@@ -124,7 +124,7 @@ class Tecnico_toa extends ORM_Model {
 	{
 		if ($this->id_empresa && $this->uri->segment(2) === 'editar')
 		{
-			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa);
+			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa->get_id());
 
 			$arr_config_ciudad = [
 				'id_ciudad' => [
@@ -137,8 +137,8 @@ class Tecnico_toa extends ORM_Model {
 				],
 			];
 
-			$this->config_campos($arr_config_ciudad);
-			$this->get_relation_fields();
+			// $this->config_campos($arr_config_ciudad);
+			// $this->get_relation_fields();
 		}
 	}
 

@@ -153,6 +153,7 @@ trait Model_uses_database {
 		{
 			$this->select_from_database();
 		}
+
 		$results = $this->db_query->get()->result_array();
 		$this->db_query = NULL;
 

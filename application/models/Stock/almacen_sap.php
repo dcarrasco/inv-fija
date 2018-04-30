@@ -86,7 +86,7 @@ class Almacen_sap extends ORM_Model {
 				'FIJA'  => 'Operaci&oacute;n Fija'
 			],
 			'es_obligatorio' => TRUE,
-			// 'onchange'       => form_onchange('tipo_op', 'tipos', 'stock_config/get_select_tipoalmacen'),
+			'onchange'       => 'form_onchange::tipo_op:tipos:stock_config/get_select_tipoalmacen',
 		],
 		'tipos' => [
 			'tipo'           => Orm_field::TIPO_HAS_MANY,
@@ -154,10 +154,7 @@ class Almacen_sap extends ORM_Model {
 	{
 		if ($filtro === '')
 		{
-			return $this->find('list', [
-				'conditions' => ['tipo_op' => $tipo_op],
-				'opc_ini'    => FALSE
-			]);
+			return $this->where('tipo_op', $tipo_op)->get_dropdown_list(FALSE);
 		}
 		else
 		{

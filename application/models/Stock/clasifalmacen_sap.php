@@ -106,7 +106,7 @@ class Clasifalmacen_sap extends ORM_Model {
 				'FIJA'  => 'Operaci&oacute;n Fija'
 			],
 			'es_obligatorio' => TRUE,
-			// 'onchange'       => form_onchange('tipo_op', 'tiposalm', 'stock_config/get_select_tipoalmacen'),
+			'onchange'       => 'form_onchange::tipo_op:tiposalm:stock_config/get_select_tipoalmacen',
 		],
 		'tiposalm' => [
 			'tipo'           => Orm_field::TIPO_HAS_MANY,
