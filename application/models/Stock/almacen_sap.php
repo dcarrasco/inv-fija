@@ -91,11 +91,11 @@ class Almacen_sap extends ORM_Model {
 		'tipos' => [
 			'tipo'           => Orm_field::TIPO_HAS_MANY,
 			'relation'       => [
-			'model'         => tipoalmacen_sap::class,
-			'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
-			'join_table'    => 'config::bd_tipoalmacen_sap',
-			'id_one_table'  => ['centro', 'cod_almacen'],
-			'id_many_table' => ['id_tipo'],
+				'model'         => tipoalmacen_sap::class,
+				'join_table'    => 'config::bd_tipoalmacen_sap',
+				'id_one_table'  => ['centro', 'cod_almacen'],
+				'id_many_table' => ['id_tipo'],
+				'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
 			],
 			'texto_ayuda'    => 'Tipos asociados al almac&eacuten.',
 			],

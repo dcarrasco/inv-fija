@@ -77,11 +77,6 @@ trait Model_has_relationships {
 
 	public function get_relation($campo = NULL)
 	{
-		if (! $campo)
-		{
-			return $this->relation;
-		}
-
 		if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
 		{
 			$this->get_relation_fields();
@@ -146,15 +141,8 @@ trait Model_has_relationships {
 		{
 			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->get_value($nombre_campo));
 		}
-		else
-		{
-			// si el valor del campo es distinto de nulo, lo va abuscar a la BD
-			if ($this->get_value($nombre_campo) !== NULL)
-			{
-				$model_relacionado = new $class_relacionado($this->get_value($nombre_campo));
-			}
-		}
 
+		$model_relacionado = new $class_relacionado($this->get_value($nombre_campo));
 		$arr_props_relation['model'] = $model_relacionado;
 		$this->fields[$nombre_campo]->set_relation($arr_props_relation);
 		$this->got_relations = TRUE;
