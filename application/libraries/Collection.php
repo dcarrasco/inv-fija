@@ -363,7 +363,9 @@ class Collection implements IteratorAggregate {
 			else
 			{
 				$elem = is_array($elem) ? $elem : (array)$elem;
-				$valor_campo = array_get($elem, $campo);
+				$valor_campo = is_numeric(array_get($elem, $campo, 0))
+					? array_get($elem, $campo, 0)
+					: 0;
 			}
 
 			return $total + $valor_campo;

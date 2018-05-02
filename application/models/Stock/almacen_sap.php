@@ -163,7 +163,7 @@ class Almacen_sap extends ORM_Model {
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
-				->from($this->get_tabla().' a')
+				->from($this->get_db_table().' a')
 				->join(config('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
 				->where_in('ta.id_tipo', explode($this->separador_campos, $filtro))
 				->get()->result_array();

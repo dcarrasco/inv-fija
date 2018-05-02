@@ -118,7 +118,7 @@ trait Model_uses_database {
 
 	// --------------------------------------------------------------------
 
-	protected function get_db_table($db_table = '')
+	public function get_db_table($db_table = '')
 	{
 		$db_table = empty($db_table) ? $this->db_table : $db_table;
 

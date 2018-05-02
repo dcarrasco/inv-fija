@@ -49,9 +49,9 @@ class test_orm_model extends test_case {
 		$this->assert_equals($this->get_model()->get_model_nombre(), 'model_test');
 	}
 
-	public function test_get_tabla()
+	public function test_get_db_table()
 	{
-		$this->assert_equals($this->get_model()->get_tabla(), 'model_tabla');
+		$this->assert_equals($this->get_model()->get_db_table(), 'model_tabla');
 	}
 
 	public function test_get_label()
@@ -123,24 +123,23 @@ class test_orm_model extends test_case {
 		$this->assert_equals($model->get_filtro(), 'filtro');
 	}
 
-	public function test_get_mostrar_lista()
+	public function test_get_list_fields()
 	{
-		$this->assert_true($this->get_model()->get_mostrar_lista('campo01'));
-		$this->assert_false($this->get_model()->get_mostrar_lista('campo_no_existe'));
+		$this->assert_equals($this->get_model()->get_list_fields(), ['campo01', 'campo02', 'campo03', 'campo04']);
 	}
 
 	public function test_fill_array()
 	{
-		$this->assert_equals($this->get_model()->fill($this->get_data01())->get_fields_values(), $this->get_data01());
+		$this->assert_equals($this->get_model()->fill($this->get_data01())->get_values(), $this->get_data01());
 
 		$fill = array_merge($this->get_data01(), ['campo05' => 'campo05', 'campo06' => 6]);
-		$this->assert_equals($this->get_model()->fill($fill)->get_fields_values(), $this->get_data01());
+		$this->assert_equals($this->get_model()->fill($fill)->get_values(), $this->get_data01());
 	}
 
 	public function test_has_attributes_get_campo()
 	{
 		$this->assert_equals($this->get_model()->fill(['campo01' => 'value01'])->campo01, 'value01');
-		$this->assert_null($this->get_model()->fill(['campo01' => 'value01'])->campo02);
+		$this->assert_equals($this->get_model()->fill(['campo01' => 'value01'])->campo02, '');
 	}
 
 	public function test_has_attributes_get_campo_id()
@@ -148,12 +147,12 @@ class test_orm_model extends test_case {
 		$this->assert_equals($this->get_model()->get_campo_id(), ['campo01', 'campo02']);
 	}
 
-	public function test_has_attributes_get_fields_values()
+	public function test_has_attributes_get_values()
 	{
 		$expected = $this->get_data01();
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_equals($model->get_fields_values(), $expected);
+		$this->assert_equals($model->get_values(), $expected);
 	}
 
 	public function test_has_attributes_determina_campo_id()
@@ -196,14 +195,14 @@ class test_orm_model extends test_case {
 		$this->assert_equals($model->get_field_value('campo04', FALSE), 1);
 	}
 
-	public function test_has_attributes_fill_from_array()
+	public function test_has_attributes_fill()
 	{
 		$data01 = $this->get_data01();
 		$data01['campo_xxx'] = 'xxx';
 
-		$model = $this->get_model()->fill_from_array($data01);
+		$model = $this->get_model()->fill($data01);
 
-		$this->assert_equals($model->get_fields_values(), $this->get_data01());
+		$this->assert_equals($model->get_values(), $this->get_data01());
 	}
 
 	public function test_has_form_form_item()
@@ -223,70 +222,71 @@ class test_orm_model extends test_case {
 	{
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_equals($model->get_field_label('campo01'), 'label_campo01');
+		$this->assert_equals($model->get_field('campo01')->get_label(), 'label_campo01');
 	}
 
 	public function test_has_form_get_field_texto_ayuda()
 	{
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_equals($model->get_field_texto_ayuda('campo01'), 'texto_ayuda_campo01');
+		$this->assert_equals($model->get_field('campo01')->get_texto_ayuda(), 'texto_ayuda_campo01');
 	}
 
 	public function test_has_form_field_es_obligatorio()
 	{
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_true($model->field_es_obligatorio('campo01'));
-		$this->assert_false($model->field_es_obligatorio('campo03'));
+		$this->assert_true($model->get_field('campo01')->get_es_obligatorio());
+		$this->assert_false($model->get_field('campo03')->get_es_obligatorio());
 	}
 
 	public function test_has_form_get_field_marca_obligatorio()
 	{
 		$model = $this->get_model()->fill($this->get_data01());
 
-		$this->assert_equals($model->get_field_marca_obligatorio('campo01'), ' <span class="text-danger">*</span>');
-		$this->assert_equals($model->get_field_marca_obligatorio('campo03'), '');
+		$this->assert_equals($model->get_marca_obligatorio('campo01'), ' <span class="text-danger">*</span>');
+		$this->assert_equals($model->get_marca_obligatorio('campo03'), '');
 	}
 
 	public function test_has_persistance_find()
 	{
 		$model = model_test::create();
 
-		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		$rs_1 = [0 => ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1]];
 		$rs_2 = ['campo01' => 'valor12', 'campo02' => 'valor22', 'campo03' => 32, 'campo04' => 1];
 		$rs_3 = ['campo01' => 'valor13', 'campo02' => 'valor23', 'campo03' => 33, 'campo04' => 1];
 
 		app('db')->mock_set_return_result($rs_1);
-		$this->assert_equals($model->find('first')->get_fields_values(), $rs_1);
+		$this->assert_equals($model->get_first()->get_values(), $rs_1[0]);
 
-		app('db')->mock_set_return_result([$rs_1, $rs_2, $rs_3]);
-		$this->assert_equals(json_encode($model->find('all')->get(0)), json_encode(model_test::create()->fill_from_array($rs_1)));
-		$this->assert_equals(json_encode($model->find('all')->get(1)), json_encode(model_test::create()->fill_from_array($rs_2)));
-		$this->assert_equals(json_encode($model->find('all')->get(2)), json_encode(model_test::create()->fill_from_array($rs_3)));
-		$this->assert_equals($model->find('count'), 3);
+		app('db')->mock_set_return_result([$rs_1[0], $rs_2, $rs_3]);
+		$this->assert_equals(json_encode($model->get()->get(0)), json_encode(model_test::create()->fill($rs_1)));
+		$this->assert_equals(json_encode($model->get()->get(1)), json_encode(model_test::create()->fill($rs_2)));
+		$this->assert_equals(json_encode($model->get()->get(2)), json_encode(model_test::create()->fill($rs_3)));
 
+		app('db')->mock_set_return_result(['cantidad' => 3]);
+		$this->assert_equals($model->count(), 3);
+
+		app('db')->mock_set_return_result([$rs_1[0], $rs_2, $rs_3]);
 		$rs_list = ['valor11~valor21' => 'valor11', 'valor12~valor22' => 'valor12', 'valor13~valor23' => 'valor13'];
-		$this->assert_equals($model->find('list', ['opc_ini'=>FALSE]), $rs_list);
-		$this->assert_equals($model->find('list'), array_merge(['' => 'Seleccione model_label...'], $rs_list));
+		$this->assert_equals($model->get_dropdown_list(FALSE), $rs_list);
+		$this->assert_equals($model->get_dropdown_list(), array_merge(['' => 'Seleccione model_label...'], $rs_list));
 	}
 
 	public function test_has_persistance_array_id()
 	{
-		$model = model_test::create();
-		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		$rs_1 = [0 => ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1]];
 		app('db')->mock_set_return_result($rs_1);
-		$model->find('first');
+		$model = model_test::create()->get_first();
 
 		$this->assert_equals($this->get_method('array_id', $model->get_id()), ['campo01'=>'valor11', 'campo02'=>'valor21']);
 	}
 
 	public function test_has_persistance_values_id_fields()
 	{
-		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		$rs_1 = [0 => ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1]];
 		app('db')->mock_set_return_result($rs_1);
-		$model = model_test::create();
-		$model->find('first');
+		$model = model_test::create()->get_first();
 
 		$method = new ReflectionMethod($this->test_class, 'values_id_fields');
 		$method->setAccessible(TRUE);
@@ -296,10 +296,9 @@ class test_orm_model extends test_case {
 
 	public function test_has_persistance_values_not_id_fields()
 	{
-		$rs_1 = ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1];
+		$rs_1 = [0 => ['campo01' => 'valor11', 'campo02' => 'valor21', 'campo03' => 31, 'campo04' => 1]];
 		app('db')->mock_set_return_result($rs_1);
-		$model = model_test::create();
-		$model->find('first');
+		$model = model_test::create()->get_first();
 
 		$method = new ReflectionMethod($this->test_class, 'values_not_id_fields');
 		$method->setAccessible(TRUE);
@@ -330,49 +329,46 @@ class test_orm_model extends test_case {
 
 class model_test extends ORM_Model {
 
-	public function __construct($id = NULL)
-	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => 'model_tabla',
-				'label'        => 'model_label',
-				'label_plural' => 'model_label_plural',
-				'order_by'     => 'model_order_by',
+	protected $db_table     = 'model_tabla';
+	protected $label        = 'model_label';
+	protected $label_plural = 'model_label_plural';
+	protected $order_by     = 'model_order_by';
+
+	protected $fields = [
+			'campo01' => [
+				'label'          => 'label_campo01',
+				'tipo'           => Orm_field::TIPO_CHAR,
+				'largo'          => 10,
+				'texto_ayuda'    => 'texto_ayuda_campo01',
+				'es_id'          => TRUE,
+				'es_obligatorio' => TRUE,
+				'es_unico'       => TRUE
 			],
-			'campos' => [
-				'campo01' => [
-					'label'          => 'label_campo01',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'texto_ayuda_campo01',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'campo02' => [
-					'label'          => 'label_campo02',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'texto_ayuda_campo02',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'campo03' => [
-					'label'          => 'label_campo03',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'texto_ayuda_campo03',
-					'formato'        => 'cantidad,0',
-				],
-				'campo04' => [
-					'label'          => 'label_campo04',
-					'tipo'           => Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'texto_ayuda_campo04',
-				],
+			'campo02' => [
+				'label'          => 'label_campo02',
+				'tipo'           => Orm_field::TIPO_CHAR,
+				'largo'          => 10,
+				'texto_ayuda'    => 'texto_ayuda_campo02',
+				'es_id'          => TRUE,
+				'es_obligatorio' => TRUE,
+				'es_unico'       => TRUE
+			],
+			'campo03' => [
+				'label'          => 'label_campo03',
+				'tipo'           => Orm_field::TIPO_INT,
+				'largo'          => 10,
+				'texto_ayuda'    => 'texto_ayuda_campo03',
+				'formato'        => 'cantidad,0',
+			],
+			'campo04' => [
+				'label'          => 'label_campo04',
+				'tipo'           => Orm_field::TIPO_BOOLEAN,
+				'texto_ayuda'    => 'texto_ayuda_campo04',
 			],
 		];
 
+	public function __construct($id = NULL)
+	{
 		parent::__construct($id);
 	}
 

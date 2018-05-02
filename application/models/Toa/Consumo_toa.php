@@ -174,11 +174,11 @@ class Consumo_toa extends ORM_Model {
 	public function combo_movimientos_consumo()
 	{
 		return collect(['000' => 'Todos los movimientos'])
-			->merge(Clase_movimiento::create()->find('list', [
-				'conditions' => ['cmv' => $this->movimientos_consumo],
-				'order_by'   => 'des_cmv',
-				'opc_ini'    => FALSE,
-			]))->all();
+			->merge(Clase_movimiento::create()
+				->where('cmv', $this->movimientos_consumo)
+				->order_by('des_cmv')
+				->get_dropdown_list(FALSE)
+			)->all();
 	}
 
 	// --------------------------------------------------------------------
