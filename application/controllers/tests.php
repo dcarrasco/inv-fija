@@ -85,9 +85,9 @@ class Tests extends Controller_base {
 	 *
 	 * @return void
 	 */
-	public function file($filename = '')
+	public function file($filename = '', $method = '')
 	{
-		$this->test->all_files(TRUE, $filename);
+		$this->test->all_files(TRUE, $filename, $method);
 	}
 
 	// --------------------------------------------------------------------

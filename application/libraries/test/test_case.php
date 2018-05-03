@@ -278,9 +278,12 @@ class test_case {
 	 *
 	 * @return void
 	 */
-	public function all_methods()
+	public function all_methods($filter_method = '')
 	{
 		$test_methods = collect(get_class_methods(get_class($this)))
+			->filter(function($method) use ($filter_method) {
+				return empty($filter_method) || $method === $filter_method;
+			})
 			->filter(function($method) { return substr($method, 0, 5) === 'test_'; })
 			->each(function($method) {
 				$this->set_up();
@@ -298,7 +301,7 @@ class test_case {
 	 *
 	 * @return void
 	 */
-	public function all_files($detalle = TRUE, $filename = '')
+	public function all_files($detalle = TRUE, $filename = '', $method = '')
 	{
 		get_instance()->load->helper('number');
 
@@ -314,9 +317,9 @@ class test_case {
 				return empty($filename) OR ($file === $filename);
 			})
 			->map(function($file) { return substr($file, 0, strlen($file) - 4); })
-			->map(function($file) {
+			->map(function($file) use ($method) {
 				$test_object = new $file();
-				$test_object->all_methods();
+				$test_object->all_methods($method);
 			});
 
 		$tiempo_fin = new \DateTime();
