@@ -470,7 +470,7 @@ class Consumo_toa extends ORM_Model {
 		$datos = $this->db->select($select, FALSE)
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'a.vale_acomp = c.id_empresa', 'left', FALSE)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = [
@@ -518,7 +518,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
@@ -554,7 +554,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->join(config('bd_catalogo_tip_material_toa').' b', 'a.material = b.id_catalogo', 'left', FALSE)
 			->join(config('bd_tip_material_toa').' c', 'b.id_tip_material=c.id', 'left', FALSE)
 			->get()->result_array();
@@ -590,7 +590,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -624,7 +624,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -659,7 +659,7 @@ class Consumo_toa extends ORM_Model {
 
 		$datos = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
-			->order_by($this->get_order_by($orden_campo))
+			->order_by($this->format_order_by($orden_campo))
 			->get()->result_array();
 
 		$campos = array_merge([
@@ -697,7 +697,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = "select q1.empresa, q1.cliente, q1.tecnico, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.cliente, q1.tecnico order by ".$this->get_order_by($orden_campo);
+		$query = "select q1.empresa, q1.cliente, q1.tecnico, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.cliente, q1.tecnico order by ".$this->format_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -737,7 +737,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->join(config('bd_ciudades_toa').' d', 'b.id_ciudad = d.id_ciudad', 'left')
 			->get_compiled_select();
-		$query = "select q1.id_ciudad, q1.ciudad, q1.orden, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by ".$this->get_order_by($orden_campo);
+		$query = "select q1.id_ciudad, q1.ciudad, q1.orden, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.id_ciudad, q1.ciudad, q1.orden order by ".$this->format_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -774,7 +774,7 @@ class Consumo_toa extends ORM_Model {
 			->join(config('bd_tecnicos_toa').' b', 'a.cliente = b.id_tecnico', 'left', FALSE)
 			->join(config('bd_empresas_toa').' c', 'b.id_empresa = c.id_empresa', 'left')
 			->get_compiled_select();
-		$query = "select q1.empresa, q1.id_empresa, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.id_empresa order by ".$this->get_order_by($orden_campo);
+		$query = "select q1.empresa, q1.id_empresa, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.empresa, q1.id_empresa order by ".$this->format_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([
@@ -807,7 +807,7 @@ class Consumo_toa extends ORM_Model {
 		$query = $this->db->select(array_merge($this->_select_base, $select), FALSE)
 			->group_by($select)
 			->get_compiled_select();
-		$query = "select q1.carta_porte, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.carta_porte order by ".$this->get_order_by($orden_campo);
+		$query = "select q1.carta_porte, 'ver peticiones' as texto_link, count(referencia) as referencia, sum(cant) as cant, sum(monto) as monto from ({$query}) q1 group by q1.carta_porte order by ".$this->format_order_by($orden_campo);
 		$datos = $this->db->query($query)->result_array();
 
 		$campos = array_merge([

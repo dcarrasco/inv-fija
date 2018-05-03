@@ -33,6 +33,29 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Catalogo_foto extends ORM_Model {
 
+	protected $db_table     = 'config::bd_catalogos_fotos';
+	protected $label        = 'Cat&aacute;logo foto';
+	protected $label_plural = 'Cat&aacute;logos fotos';
+	protected $order_by     = 'catalogo';
+
+	protected $fields = [
+		'catalogo' => [
+			'label'          => 'Cat&aacute;logo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'foto' => [
+			'label'          => 'Foto del material',
+			'tipo'           => 'picture',
+			'texto_ayuda'    => 'Foto del material.',
+			'es_obligatorio' => TRUE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
@@ -41,32 +64,6 @@ class Catalogo_foto extends ORM_Model {
 	 */
 	public function __construct($id_catalogo = NULL)
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_catalogos_fotos'),
-				'label'        => 'Cat&aacute;logo foto',
-				'label_plural' => 'Cat&aacute;logos fotos',
-				'order_by'     => 'catalogo',
-			],
-			'campos' => [
-				'catalogo' => [
-					'label'          => 'Cat&aacute;logo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'foto' => [
-					'label'          => 'Foto del material',
-					'tipo'           => 'picture',
-					'texto_ayuda'    => 'Foto del material.',
-					'es_obligatorio' => TRUE,
-				],
-			],
-		];
-
 		parent::__construct($id_catalogo);
 	}
 

@@ -28,7 +28,7 @@ class mock_db extends mock_object{
 
 	// --------------------------------------------------------------------
 
-	public function mock_set_return_result($data)
+	public function mock_set_return_result($data = [])
 	{
 		$this->return_data = $data;
 		return $this;
@@ -171,7 +171,7 @@ class mock_db extends mock_object{
 
 	public function num_rows()
 	{
-		return count($this->return_data);
+		return count((array) $this->return_data);
 	}
 
 	// --------------------------------------------------------------------

@@ -108,7 +108,9 @@ class Tecnico_toa extends ORM_Model {
 
 	public function get_rut()
 	{
-		list($numero_rut, $dv_rut) = explode('-', $this->get_value('rut'));
+		list($numero_rut, $dv_rut) = (strpos($this->get_value('rut'), '-') !== FALSE)
+			? explode('-', $this->get_value('rut'))
+			: [$this->get_value('rut'), ''];
 
 		return fmt_cantidad($numero_rut).'-'.$dv_rut;
 	}

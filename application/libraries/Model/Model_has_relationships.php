@@ -196,7 +196,7 @@ trait Model_has_relationships {
 		// genera arreglo where con la llave del modelo
 		$where_pivot = collect($relation['id_one_table'])
 			->combine($this->campo_id)
-			->map(function($id) {return $this->{$id};})
+			->map(function($id) {return $this->get_value($id);})
 			->all();
 
 		// recupera la llave del modelo en tabla de la relacion (n:m)

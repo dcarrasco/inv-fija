@@ -154,7 +154,7 @@ trait Reporte {
 	 * @param  string $sort_by Orden en formato: +campo1,+campo2,-campo3
 	 * @return string          Orden en formato: campo1 ASC, campo2 ASC, campo3 DESC
 	 */
-	public function get_order_by($sort_by)
+	public function format_order_by($sort_by)
 	{
 		return collect(explode(',', $sort_by))
 			->map(function($value) {

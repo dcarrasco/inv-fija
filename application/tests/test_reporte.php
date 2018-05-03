@@ -18,17 +18,17 @@ class test_reporte extends test_case {
 	    parent::__construct();
 	}
 
-	public function test_get_order_by()
+	public function test_format_order_by()
 	{
 		$this->assert_equals(
-			(new Repo())->get_order_by('+campo1, -campo2, campo3'),
+			(new Repo())->format_order_by('+campo1, -campo2, campo3'),
 			'campo1 ASC, campo2 DESC, campo3 ASC'
 		);
 
-		$this->assert_equals((new Repo())->get_order_by('+campo1'), 'campo1 ASC');
-		$this->assert_equals((new Repo())->get_order_by('-campo1'), 'campo1 DESC');
-		$this->assert_equals((new Repo())->get_order_by('campo1'), 'campo1 ASC');
-		$this->assert_equals((new Repo())->get_order_by(''), ' ASC');
+		$this->assert_equals((new Repo())->format_order_by('+campo1'), 'campo1 ASC');
+		$this->assert_equals((new Repo())->format_order_by('-campo1'), 'campo1 DESC');
+		$this->assert_equals((new Repo())->format_order_by('campo1'), 'campo1 ASC');
+		$this->assert_equals((new Repo())->format_order_by(''), ' ASC');
 	}
 
 	public function test_result_to_month_table()
