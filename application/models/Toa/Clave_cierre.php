@@ -94,12 +94,12 @@ class Clave_cierre extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $clave Identificador de la clave de cierre
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($clave = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($clave);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

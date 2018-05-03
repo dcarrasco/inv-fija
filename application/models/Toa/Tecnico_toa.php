@@ -82,12 +82,12 @@ class Tecnico_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tecnico Identificador del tecnico
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tecnico = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_tecnico);
+		parent::__construct($atributos);
 
 		$this->get_ciudades_tecnico();
 	}
@@ -173,7 +173,7 @@ class Tecnico_toa extends ORM_Model {
 		);
 
 		return $data->map(function($result_row) {
-			return static::create()->fill($result_row);
+			return static::create($result_row);
 		});
 	}
 

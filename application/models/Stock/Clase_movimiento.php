@@ -62,12 +62,12 @@ class Clase_movimiento extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_cmv Identificador de la clase de movimiento
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_cmv = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_cmv);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

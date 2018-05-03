@@ -99,12 +99,12 @@ class Catalogo extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_catalogo Identificador del catalogo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_catalogo = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_catalogo);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

@@ -55,7 +55,7 @@
 				<tr>
 					<td class="ac"><?= $detalle->ubicacion; ?></td>
 					<!-- <td class="ac"><?php //echo $detalle->hu; ?></td> -->
-					<td class="ac"><?= $detalle->catalogo; ?></td>
+					<td class="ac"><?= $detalle->get_value('catalogo'); ?></td>
 					<td><?= $detalle->descripcion; ?></td>
 					<td class="ac"><?= $detalle->lote; ?></td>
 					<td class="ac"><?= $detalle->centro; ?></td>

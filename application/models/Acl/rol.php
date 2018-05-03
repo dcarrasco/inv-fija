@@ -80,12 +80,12 @@ class Rol extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_rol Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_rol = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_rol);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

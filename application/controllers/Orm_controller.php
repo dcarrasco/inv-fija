@@ -89,7 +89,7 @@ class Orm_controller extends Controller_base {
 
 		app_render_view('ORM/orm_editar', [
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
-			'modelo'        => new $nombre_modelo_full($id_modelo),
+			'modelo'        => (new $nombre_modelo_full)->find_id($id_modelo),
 			'url_form'      => site_url("{$this->router->class}/update/{$nombre_modelo}/{$id_modelo}{$url_params}"),
 			'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
 		]);
@@ -107,7 +107,7 @@ class Orm_controller extends Controller_base {
 	public function update($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
-		$modelo = new $nombre_modelo_full($id_modelo);
+		$modelo = (new $nombre_modelo_full)->find_id($id_modelo);
 		$modelo->recuperar_post();
 
 		route_validation($modelo->valida_form());

@@ -135,12 +135,12 @@ class Acl extends Orm_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_object ID
+	 * @param   array $atributos Valores para inicializar el modelo
 	 * @return  void
 	 */
-	public function __construct($id_object = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_object);
+		parent::__construct($atributos);
 
 		$this->load->helper('captcha');
 	}

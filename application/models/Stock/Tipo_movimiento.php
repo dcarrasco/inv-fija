@@ -54,12 +54,12 @@ class Tipo_movimiento extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipo_movimiento Identificador del tipo de movimiento
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipo_movimiento = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_tipo_movimiento);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

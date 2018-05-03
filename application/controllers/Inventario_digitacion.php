@@ -103,7 +103,7 @@ class Inventario_digitacion extends Controller_base {
 			'detalle_inventario' => Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja),
 			'hoja'               => $hoja,
 			'nombre_inventario'  => $inventario->nombre,
-			'combo_auditores'    => Detalle_inventario::create()->fill(['auditor' => $id_auditor])->print_form_field('auditor', FALSE, 'input-sm'),
+			'combo_auditores'    => Detalle_inventario::create(['auditor' => $id_auditor])->print_form_field('auditor', FALSE, 'input-sm'),
 			'id_auditor'         => $id_auditor,
 			'url_form'           => "{$this->router->class}/update_hoja/{$hoja}/{$id_auditor}",
 			'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
@@ -223,7 +223,7 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function editar($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
-		$detalle_inventario = new Detalle_inventario($id_registro);
+		$detalle_inventario = (new Detalle_inventario)->find_id($id_registro);
 
 		$arr_catalogo = is_null($id_registro)
 			? ['' => 'Buscar y seleccionar material...']
@@ -254,7 +254,7 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function update($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
-		$detalle_inventario = new Detalle_inventario($id_registro);
+		$detalle_inventario = (new Detalle_inventario)->find_id($id_registro);
 		$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
 		$detalle_inventario->get_validation_editar();

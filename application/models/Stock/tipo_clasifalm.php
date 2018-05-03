@@ -70,12 +70,12 @@ class Tipo_clasifalm extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipoclasif Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipoclasif = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_tipoclasif);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

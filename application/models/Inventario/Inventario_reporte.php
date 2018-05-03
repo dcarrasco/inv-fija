@@ -51,12 +51,12 @@ class Inventario_reporte extends Inventario {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_inventario = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_inventario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

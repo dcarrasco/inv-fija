@@ -71,12 +71,12 @@ class Empresa_ciudad_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_empresa Identificador de la empresa
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_empresa = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_empresa);
+		parent::__construct($atributos);
 	}
 
 

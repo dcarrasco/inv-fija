@@ -124,12 +124,12 @@ class Usuario extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_usuario Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_usuario = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_usuario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

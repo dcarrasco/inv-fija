@@ -67,12 +67,12 @@ class Inventario extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_inventario Identificador del inventario
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_inventario = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_inventario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

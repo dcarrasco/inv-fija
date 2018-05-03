@@ -178,12 +178,12 @@ class Detalle_inventario extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_detalle Identificador del detalle de inventario
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_detalle = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_detalle);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------
@@ -458,7 +458,7 @@ class Detalle_inventario extends ORM_Model {
 	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
 	{
 		$id_inventario = Inventario::create()->get_id_inventario_activo();
-		$material      = new Catalogo(request('catalogo'));
+		$material      = (new Catalogo)->find_id(request('catalogo'));
 		$id_auditor    = $this->get_auditor_hoja($id_inventario, $hoja);
 
 		if ($id_detalle)

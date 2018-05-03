@@ -82,12 +82,12 @@ class App extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_app Identificador de la app
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_app = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_app);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

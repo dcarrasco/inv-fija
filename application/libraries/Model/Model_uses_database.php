@@ -161,8 +161,7 @@ trait Model_uses_database {
 
 		return collect($results)
 			->map(function($result) use ($class, $recupera_relation) {
-				$obj_modelo = new $class;
-				$obj_modelo->fill($result);
+				$obj_modelo = new $class($result);
 
 				if ($recupera_relation)
 				{

@@ -74,12 +74,12 @@ class Ps_vpi_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_ps Identificador del PS
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_ps = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_ps);
+		parent::__construct($atributos);
 	}
 
 

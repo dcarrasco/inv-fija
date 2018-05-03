@@ -140,7 +140,7 @@ class Inventario_config extends Orm_controller {
 
 		$count = collect(request('agr-ubicacion'))
 			->each(function($ubicacion) {
-				return Ubicacion::create()->fill([
+				return Ubicacion::create([
 					'tipo_inventario'   => request('agr-tipo_inventario'),
 					'id_tipo_ubicacion' => request('agr-tipo_ubicacion'),
 					'ubicacion'         => $ubicacion,
@@ -188,7 +188,7 @@ class Inventario_config extends Orm_controller {
 	{
 		route_validation([['field'=>'id_borrar', 'label'=>'', 'rules'=>'trim|required']]);
 
-		Ubicacion::create()->fill(request('id_borrar'))->borrar();
+		Ubicacion::create(request('id_borrar'))->borrar();
 		set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
 
 		redirect($this->router->class.'/ubicacion'.url_params());

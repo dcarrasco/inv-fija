@@ -89,10 +89,10 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * Define las propiedades basicas de un nuevo modelo
 	 *
-	 * @param   mixed $id_modelo Identificador o arreglo de valores para inicializar el modelo
+	 * @param   array $atributos Valores para inicializar el modelo
 	 * @return  void
 	 **/
-	public function __construct($id_modelo = NULL)
+	public function __construct($atributos = [])
 	{
 		$this->lang->load('orm');
 
@@ -107,9 +107,9 @@ class Orm_model implements IteratorAggregate {
 		$this->relation_objects = new Collection();
 		$this->campo_id = $this->_determina_campo_id();
 
-		if ($id_modelo)
+		if ($atributos)
 		{
-			$this->find_id($id_modelo);
+			$this->fill($atributos);
 		}
 	}
 
@@ -135,9 +135,9 @@ class Orm_model implements IteratorAggregate {
 	 *
 	 * @return static
 	 */
-	public static function create()
+	public static function create($atributos = [])
 	{
-		return new static;
+		return new static($atributos);
 	}
 
 	// --------------------------------------------------------------------

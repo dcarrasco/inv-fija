@@ -62,12 +62,12 @@ class Proveedor extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_proveedor Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_proveedor = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_proveedor);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

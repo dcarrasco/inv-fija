@@ -74,13 +74,12 @@ class Familia extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_familia Identificador de la familia
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_familia = NULL)
+	public function __construct($atributos = [])
 	{
-
-		parent::__construct($id_familia);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

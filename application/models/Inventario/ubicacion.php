@@ -64,12 +64,12 @@ class Ubicacion extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_ubicacion ID de la ubicacion
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_ubicacion = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_ubicacion);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

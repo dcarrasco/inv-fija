@@ -356,7 +356,7 @@ class Toa_controles extends Controller_base {
 		})->filter(function($update_tecnico) {
 			return $update_tecnico['ciudad'] !== '';
 		})->each(function($update_tecnico, $id_tecnico) {
-			$tecnico = new Tecnico_toa($id_tecnico);
+			$tecnico = (new Tecnico_toa)->find_id($id_tecnico);
 			$tecnico->fill(['id_ciudad' => $update_tecnico['ciudad'], 'id_empresa' => $update_tecnico['empresa']]);
 			$tecnico->grabar();
 		})->count();

@@ -61,12 +61,12 @@ class Auditor extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_auditor Identificador del auditor
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_auditor = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_auditor);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

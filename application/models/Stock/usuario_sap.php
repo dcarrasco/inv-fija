@@ -63,12 +63,12 @@ class Usuario_sap extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_usuario_sap Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_usuario_sap = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_usuario_sap);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

@@ -63,12 +63,12 @@ class Tipo_trabajo_toa extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipo Identificador del tipo de trabajo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipo = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_tipo);
+		parent::__construct($atributos);
 	}
 
 

@@ -99,7 +99,7 @@ class Inventario_reportes extends Controller_base {
 		form_validation(Inventario_reporte::create()->rules_reporte);
 
 		$id_inventario = request('inv_activo', Inventario_reporte::create()->get_id_inventario_activo());
-		$inventario = new Inventario_reporte($id_inventario);
+		$inventario = Inventario_reporte::create()->find_id($id_inventario);
 
 		app_render_view('inventario/reporte', [
 			'menu_modulo'       => $this->get_menu_modulo($tipo),

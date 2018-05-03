@@ -148,11 +148,12 @@ class Reporte_stock extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------
