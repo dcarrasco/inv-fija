@@ -197,13 +197,12 @@ class Inventario_digitacion extends Controller_base {
 		}
 		else
 		{
-			$detalle_inventario->recuperar_post();
-			$detalle_inventario->fill([
-				'digitador' => Acl::create()->get_id_usr(),
-				'auditor'   => Acl::create()->get_id_usr(),
-				'fecha_modificacion' => date('Y-m-d H:i:s'),
-			]);
-			$detalle_inventario->grabar();
+			$detalle_inventario->fill(request())
+				->fill([
+					'digitador' => Acl::create()->get_id_usr(),
+					'auditor'   => Acl::create()->get_id_usr(),
+					'fecha_modificacion' => date('Y-m-d H:i:s'),
+				])->grabar();
 
 			set_message(sprintf(lang('inventario_digit_msg_save'), 1, $hoja));
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());

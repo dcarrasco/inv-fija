@@ -251,9 +251,7 @@ class Inventario_analisis extends Controller_base {
 	 */
 	public function inserta_linea_archivo()
 	{
-		$detalle = new Detalle_inventario;
-		$detalle->recuperar_post();
-		$detalle->grabar();
+		return Detalle_inventario::create(request())->grabar();
 	}
 
 	// --------------------------------------------------------------------

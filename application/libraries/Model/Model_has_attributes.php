@@ -196,10 +196,12 @@ trait Model_has_attributes {
 	 */
 	public function fill($data = [])
 	{
+		$data = collect($data);
+
 		collect($this->fields)
-			->only(collect($data)->keys()->all())
+			->only($data->keys()->all())
 			->each(function($campo, $nombre_campo) use ($data) {
-				$this->set_value($nombre_campo, $campo->cast_value(array_get($data, $nombre_campo)));
+				$this->set_value($nombre_campo, $campo->cast_value($data->get($nombre_campo)));
 			});
 
 		return $this;

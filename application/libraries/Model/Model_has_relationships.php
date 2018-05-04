@@ -142,7 +142,7 @@ trait Model_has_relationships {
 			$model_relacionado = $relations_collection->item($nombre_campo)->item($this->get_value($nombre_campo));
 		}
 
-		$model_relacionado = new $class_relacionado($this->get_value($nombre_campo));
+		$model_relacionado = (new $class_relacionado)->find_id($this->get_value($nombre_campo));
 		$arr_props_relation['model'] = $model_relacionado;
 		$this->fields[$nombre_campo]->set_relation($arr_props_relation);
 		$this->got_relations = TRUE;

@@ -183,24 +183,6 @@ trait Model_has_form {
 			: '';
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Puebla los campos del modelo con los valores del post
-	 *
-	 * @return void
-	 */
-	public function recuperar_post()
-	{
-		$post_request = collect($this->fields)
-			->map(function($field) {
-				return NULL;
-			})->merge(request())
-			->all();
-
-		return $this->fill($post_request);
-	}
-
 }
 /* End of file model_has_form.php */
 /* Location: ./application/libraries/model_has_form.php */
