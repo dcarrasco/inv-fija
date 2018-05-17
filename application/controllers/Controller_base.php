@@ -110,9 +110,15 @@ class Controller_base extends CI_Controller {
 		return collect($this->menu_opciones)
 			->map(function($menu, $modulo) use ($router, $model_namespace) {
 				$module_class = $model_namespace.$modulo;
+				$label_plural = '';
+				if (class_exists($module_class))
+				{
+					$label_plural = (new $module_class())->get_label_plural();
+				}
+
 				return collect($menu)->merge([
 					'url' => array_get($menu, 'url', $router->class.'/listado/'.$modulo.'/'),
-					'texto' => array_get($menu, 'texto', (new $module_class())->get_label_plural()),
+					'texto' => array_get($menu, 'texto', $label_plural),
 				])->all();
 			})
 			->map(function($menu) use ($router) {
