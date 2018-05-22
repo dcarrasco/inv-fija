@@ -126,6 +126,7 @@ trait Model_has_pagination {
 	 */
 	public function paginate($recupera_relation = TRUE)
 	{
+		$this->select_from_database();
 		$total_query = clone $this->db_query;
 		$total_rows = $total_query->select('count(*) as cantidad')->get()->row()->cantidad;
 		$this->pagination_links = $this->crea_links_paginas($total_rows);

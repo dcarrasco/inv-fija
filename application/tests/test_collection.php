@@ -51,7 +51,7 @@ class test_collection extends test_case {
 		$this->assert_null(collect([1,2,3,4,5])->item('A'));
 	}
 
-	public function test_get_keys()
+	public function test_keys()
 	{
 		$this->assert_equals(collect([1,2,3,4])->keys()->all(), [0,1,2,3]);
 		$this->assert_equals(collect(['a'=>1,'b'=>2,'aa'=>3,'bb'=>4])->keys()->all(), ['a','b','aa','bb']);
