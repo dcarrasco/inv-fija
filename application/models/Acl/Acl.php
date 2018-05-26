@@ -493,10 +493,7 @@ class Acl extends Orm_Model {
 			})
 			->unique()
 			->map(function($application) use ($modulos) {
-				$application['modulos'] = $modulos
-					->filter(function($modulo) use ($application) {
-						return $modulo['app'] === $application['app'];
-					})
+				$application['modulos'] = $modulos->where('app', $application['app'])
 					->map(function($modulo) {
 						return [
 							'modulo_url'      => site_url(array_get($modulo, 'url')),
@@ -523,12 +520,7 @@ class Acl extends Orm_Model {
 	public function titulo_modulo()
 	{
 		$url_actual = $this->uri->segment(1);
-
-		$modulo_selected = $this->get_user_menu()
-			->filter(function($item) use ($url_actual) {
-				return array_get($item, 'url') === $url_actual;
-			})
-			->first();
+		$modulo_selected = $this->get_user_menu()->where('url', $url_actual)->first();
 
 		return "<i class=\"fa fa-{$modulo_selected['modulo_icono']} fa-fw\"></i> {$modulo_selected['modulo']}";
 	}

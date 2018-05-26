@@ -332,6 +332,58 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	public function where($key, $operator, $value = NULL)
+	{
+		return $this->filter($this->callback_where($key, $operator, $value));
+	}
+
+	// --------------------------------------------------------------------
+
+	public function where_in($key, $values = [])
+	{
+		return $this->where($key, 'IN', $values);
+	}
+
+	// --------------------------------------------------------------------
+
+	private function callback_where($key, $operator, $value = NULL)
+	{
+		if ($value == NULL)
+		{
+			$value = $operator;
+			$operator = '=';
+		}
+
+		return function ($item) use ($key, $operator, $value) {
+			if (is_object($item) && isset($item->{$key}))
+			{
+				$recuperado = $item->{$key};
+			}
+			else
+			{
+				$recuperado = is_array($item) ? array_get($item, $key) : NULL;
+			}
+
+			switch ($operator) {
+				default:
+				case '=':
+				case '==':  return $recuperado == $value;
+				case '!=':
+				case '<>':  return $recuperado != $value;
+				case '<':   return $recuperado < $value;
+				case '>':   return $recuperado > $value;
+				case '<=':  return $recuperado <= $value;
+				case '>=':  return $recuperado >= $value;
+				case '===': return $recuperado === $value;
+				case '!==': return $recuperado !== $value;
+				case 'IN': return in_array($recuperado, $value);
+			}
+		};
+	}
+
+
+	// --------------------------------------------------------------------
+
 	/**
 	* Reduce la coleccion a un unico valor.
 	*

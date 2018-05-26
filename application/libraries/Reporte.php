@@ -194,10 +194,8 @@ trait Reporte {
 
 		$arr_totales  = [
 			'campos' => $campos_totalizables,
-			'total'  => collect($campos)
-				->filter(function($campo) use ($campos_totalizables) {
-					return in_array($campo['tipo'], $campos_totalizables);
-				})->map(function($elem, $campo) use ($datos) {
+			'total'  => collect($campos)->where_in('tipo', $campos_totalizables)
+				->map(function($elem, $campo) use ($datos) {
 					return $datos->sum($campo);
 				})->all(),
 			'subtotal' => [],
@@ -406,10 +404,7 @@ trait Reporte {
 			->sort()
 			->unique()
 			->map_with_keys(function($llave) use ($dias, $data) {
-				$data_llave = $data
-					->filter(function($dato) use ($llave) {
-						return array_get($dato, 'llave') === $llave;
-					})
+				$data_llave = $data->where('llave', $llave)
 					->map_with_keys(function($dato) {
 						return [fmt_fecha(array_get($dato, 'fecha'), 'd') => array_get($dato, 'dato')];
 					});

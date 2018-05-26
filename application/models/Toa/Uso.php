@@ -164,11 +164,10 @@ class Uso extends ORM_Model {
 		$id_collection = $data->pluck($id_col)->unique()->sort();
 
 		$report_data = $id_collection->map_with_keys(function($id_registro) use ($data, $id_col) {
-			$data_id = $data->filter(function($data_row) use ($id_col, $id_registro) {
-				return $data_row[$id_col] === $id_registro;
-			})->map_with_keys(function($data_row) {
-				return [$data_row['uso'] => $data_row['cant_appt']];
-			})->all();
+			$data_id = $data->where($id_col, $id_registro)
+				->map_with_keys(function($data_row) {
+					return [$data_row['uso'] => $data_row['cant_appt']];
+				})->all();
 
 			return [$id_registro => $data_id];
 		})->map(function($data_row) {
@@ -353,11 +352,9 @@ class Uso extends ORM_Model {
 
 		$reporte = $data->pluck('mes')->unique()->sort()
 			->map_with_keys(function($mes_uso) use ($data) {
-				return [$mes_uso =>
-					$data->filter(function($fila) use ($mes_uso) {
-						return $fila['mes'] === $mes_uso;
-					})->map_with_keys(function ($fila) {
-					return [$fila['uso'] => $fila['cant_appt']];
+				return [$mes_uso => $data->where('mes', $mes_uso)
+					->map_with_keys(function ($fila) {
+						return [$fila['uso'] => $fila['cant_appt']];
 					})->all()
 				];
 			})->map(function($fila, $mes_uso) {

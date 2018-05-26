@@ -166,11 +166,8 @@ trait has_cli_output {
 	{
 		$results_collection = $this->results();
 
-		$results_passed = $results_collection
-			->filter(function($result) {return $result['Result'] === lang('ut_passed');});
-
-		$results_failed = $results_collection
-			->filter(function($result) {return $result['Result'] === lang('ut_failed');});
+		$results_passed = $results_collection->where('Result', lang('ut_passed'));
+		$results_failed = $results_collection->where('Result', lang('ut_failed'));
 
 		$tests = $results_passed
 			->pluck('Notes')
@@ -206,9 +203,7 @@ trait has_cli_output {
 	protected function print_failures_details($results)
 	{
 		$count = 0;
-		$failed_results = $results->filter(function($result) {
-			return array_get($result, 'Result') === lang('ut_failed');
-		});
+		$failed_results = $results->where('Result', lang('ut_failed'));
 
 		return $failed_results->count() === 0
 			? ''

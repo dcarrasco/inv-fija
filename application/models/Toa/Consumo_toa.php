@@ -1229,9 +1229,7 @@ class Consumo_toa extends ORM_Model {
 		$referencias = $datos->pluck('referencia')->unique()->sort();
 
 		return $referencias->map_with_keys(function($referencia) use ($materiales, $datos) {
-			$data_referencia = $datos->filter(function($data) use ($referencia) {
-				return $data['referencia'] === $referencia;
-			});
+			$data_referencia = $datos->where('referencia', $referencia);
 
 			$datos_referencia = $materiales->map(function($material) use ($data_referencia) {
 				$data_material = $data_referencia->first(function($data) use ($material) {
