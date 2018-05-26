@@ -231,7 +231,7 @@ trait has_cli_output {
 				."{$titulo}Opciones:{$reset}\n"
 				."  {$opcion}help{$reset}                     Muestra esta ayuda.\n"
 				."  {$opcion}detalle{$reset}                  Muestra cada linea de test.\n"
-				."  {$opcion}file [file_name]{$reset}           Muestra cada linea de test de un archivo.\n"
+				."  {$opcion}file [file_name]{$reset}         Muestra cada linea de test de un archivo.\n"
 				."  {$opcion}coverage{$reset}                 Muestra el % de cobertura de los tests.\n"
 				."  {$opcion}rake [detalle] [sort]{$reset}    Muestra estadisticas de la aplicacion.\n";
 		}
