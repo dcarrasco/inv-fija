@@ -153,7 +153,7 @@ trait Model_has_attributes {
 	private function _determina_campo_id()
 	{
 		return collect($this->fields)
-			->filter(function($campo) {return $campo->get_es_id(); })
+			->where('get_es_id', TRUE)
 			->keys()
 			->all();
 	}

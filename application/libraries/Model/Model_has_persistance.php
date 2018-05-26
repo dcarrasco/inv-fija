@@ -112,7 +112,7 @@ trait Model_has_persistance {
 	{
 		return collect($this->fields)
 			->except($this->get_campo_id())
-			->filter(function($campo) { return $campo->get_tipo() !== Orm_field::TIPO_HAS_MANY; })
+			->where('get_tipo', '!==', Orm_field::TIPO_HAS_MANY)
 			->map(function($campo, $nombre) { return array_get($this->values, $nombre); })
 			->all();
 	}
@@ -128,7 +128,7 @@ trait Model_has_persistance {
 	{
 		return ! collect($this->fields)
 			->only($this->get_campo_id())
-			->filter(function($campo) { return $campo->get_es_autoincrement(); })
+			->where('get_es_autoincrement', TRUE)
 			->is_empty();
 	}
 
@@ -177,7 +177,7 @@ trait Model_has_persistance {
 		$this->delete_pivot_values();
 
 		collect($this->fields)
-			->filter(function($campo) { return $campo->get_tipo() === Orm_field::TIPO_HAS_MANY; })
+			->where('get_tipo', Orm_field::TIPO_HAS_MANY)
 			->each(function($campo, $nombre_campo) {
 				$relation  = $campo->get_relation();
 				$id_fields = collect($relation['id_one_table'])->combine($this->values_id_fields())->all();
@@ -207,7 +207,7 @@ trait Model_has_persistance {
 		$id_fields  = $this->values_id_fields();
 
 		collect($this->fields)
-			->filter(function($campo) { return $campo->get_tipo() === Orm_field::TIPO_HAS_MANY; })
+			->where('get_tipo', Orm_field::TIPO_HAS_MANY)
 			->each(function($campo, $nombre_campo) use ($id_fields) {
 				$relation = $campo->get_relation();
 				$where_delete = collect($relation['id_one_table'])->combine($id_fields)->all();

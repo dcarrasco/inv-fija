@@ -224,9 +224,8 @@ trait Model_has_relationships {
 	protected function _add_relation_fields($obj_model)
 	{
 		collect($obj_model->get_fields())
-			->filter(function($campo) {
-				return $campo->get_tipo() === Orm_field::TIPO_HAS_ONE;
-			})->each(function($obj_campo, $campo) use ($obj_model) {
+			->where('get_tipo', Orm_field::TIPO_HAS_ONE)
+			->each(function($obj_campo, $campo) use ($obj_model) {
 				$relation_model = $obj_campo->get_relation();
 
 				if (array_key_exists('model', $relation_model))
