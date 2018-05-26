@@ -359,6 +359,10 @@ class Collection implements IteratorAggregate {
 			{
 				$recuperado = $item->{$key};
 			}
+			if (is_object($item) && method_exists($item, $key))
+			{
+				$recuperado = $item->$key();
+			}
 			else
 			{
 				$recuperado = is_array($item) ? array_get($item, $key) : NULL;

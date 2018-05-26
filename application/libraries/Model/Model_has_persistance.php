@@ -29,34 +29,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 trait Model_has_persistance {
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Agrega un filtro para seleccionar elementos del modelo
-	 *
-	 * @param  string $filtro Filtro para seleccionar elementos
-	 * @return nada
-	 */
-	protected function _put_filtro($filtro = '')
-	{
-		if ( ! empty($filtro))
-		{
-			$arr_like = collect($this->fields)
-				->filter(function ($field) {
-					return $field->get_tipo() === Orm_field::TIPO_CHAR;
-				})->map(function($elem) use ($filtro) {
-					return $filtro;
-				})->all();
-
-			if (count($arr_like) > 0)
-			{
-				$this->db->or_like($arr_like, $filtro, 'both');
-			}
-		}
-	}
-
-	// --------------------------------------------------------------------
-
 	/**
 	 * Crea un arreglo con campos y valores del ID del modelo
 	 *

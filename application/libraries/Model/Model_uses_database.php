@@ -295,29 +295,19 @@ trait Model_uses_database {
 
 	// --------------------------------------------------------------------
 
-	protected function filter_by_array($filtro = '')
-	{
-		return collect($this->fields)
-			->filter(function ($field) {
-				return $field->get_tipo() === Orm_field::TIPO_CHAR;
-			})
-			->map(function($elem) use ($filtro) {
-				return $filtro;
-			});
-	}
-
-	// --------------------------------------------------------------------
-
 	public function filter_by($filtro = '')
 	{
 		if ( ! empty($filtro))
 		{
-			$filtros = $this->filter_by_array($filtro);
+			$filtros = collect($this->fields)
+				->where('get_tipo', Orm_field::TIPO_CHAR)
+				->map(function($elem) use ($filtro) {return $filtro;})
+				->all();
 
-			if ($filtros->count() > 0)
+			if (count($filtros) > 0)
 			{
 				$this->select_from_database();
-				$this->db_query = $this->db_query->or_like($filtros->all(), $filtro, 'both');
+				$this->db_query = $this->db_query->or_like($filtros, $filtro, 'both');
 			}
 		}
 
