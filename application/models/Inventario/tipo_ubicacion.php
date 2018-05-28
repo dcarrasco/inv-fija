@@ -35,41 +35,38 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_ubicacion extends ORM_Model {
 
+	protected $db_table = 'config::bd_tipo_ubicacion';
+	protected $label = 'Tipo de ubicaci&oacute;n';
+	protected $label_plural = 'Tipos de ubicaci&oacute;n';
+	protected $order_by = 'tipo_inventario, tipo_ubicacion';
+
+	protected $fields = [
+		'id' => ['tipo' => Orm_field::TIPO_ID],
+		'tipo_inventario' => [
+			'tipo'           =>  Orm_field::TIPO_HAS_ONE,
+			'relation'       => ['model' => tipo_inventario::class],
+			'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+			'es_obligatorio' => TRUE,
+		],
+		'tipo_ubicacion' => [
+			'label'          => 'Tipo de ubicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 30,
+			'texto_ayuda'    => 'M&aacute;ximo 30 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipo_ubicacion Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipo_ubicacion = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipo_ubicacion'),
-				'label'        => 'Tipo de ubicaci&oacute;n',
-				'label_plural' => 'Tipos de ubicaci&oacute;n',
-				'order_by'     => 'tipo_inventario, tipo_ubicacion',
-			],
-			'campos' => [
-				'id'              => ['tipo' => Orm_field::TIPO_ID],
-				'tipo_inventario' => [
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => ['model' => tipo_inventario::class],
-					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-					'es_obligatorio' => TRUE,
-				],
-				'tipo_ubicacion' => [
-					'label'          => 'Tipo de ubicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 30,
-					'texto_ayuda'    => 'M&aacute;ximo 30 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-			],
-		];
-
-		parent::__construct($id_tipo_ubicacion);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

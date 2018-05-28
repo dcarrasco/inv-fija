@@ -135,12 +135,12 @@ class Acl extends Orm_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_object ID
+	 * @param   array $atributos Valores para inicializar el modelo
 	 * @return  void
 	 */
-	public function __construct($id_object = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_object);
+		parent::__construct($atributos);
 
 		$this->load->helper('captcha');
 	}
@@ -200,13 +200,9 @@ class Acl extends Orm_Model {
 	 */
 	public function get_id_usr($usuario = '')
 	{
-		$user = empty($usuario) ? $this->get_user() : $usuario;
+		$usuario = empty($usuario) ? $this->get_user() : $usuario;
 
-		$registro = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $user])
-			->row_array();
-
-		return is_array($registro) ? $registro['id'] : '';
+		return Usuario::create()->user($usuario)->get_first()->id;
 	}
 
 	// --------------------------------------------------------------------
@@ -232,11 +228,7 @@ class Acl extends Orm_Model {
 	{
 		if ( ! $this->session->userdata('user_firstname'))
 		{
-			$usuario = $this->db
-				->where('username', $this->get_user())
-				->get(config('bd_usuarios'))
-				->row();
-
+			$usuario = Usuario::create()->user($this->get_user())->get_first();
 			$nombre = $usuario ? $usuario->nombre : '';
 			$user_firstname = strpos($nombre, ' ') ? substr($nombre, 0, strpos($nombre, ' ')) : $nombre;
 
@@ -295,11 +287,7 @@ class Acl extends Orm_Model {
 	 */
 	public function check_user_credentials($usuario = '', $password = '')
 	{
-		$reg_usuario = $this->db
-			->where('username', $usuario)
-			->where('activo', 1)
-			->get(config('bd_usuarios'))
-			->row();
+		$reg_usuario = Usuario::create()->user($usuario)->where('activo',1)->get_first();
 
 		if ($reg_usuario)
 		{
@@ -319,13 +307,11 @@ class Acl extends Orm_Model {
 	 */
 	private function _write_login_audit($usuario = '')
 	{
-		$this->db
-			->where('username', $usuario)
-			->update(config('bd_usuarios'), [
-				'fecha_login'  => date('Y-m-d H:i:s'),
-				'ip_login'     => $this->input->ip_address(),
-				'agente_login' => $this->input->user_agent(),
-			]);
+		return Usuario::create()->user($usuario)->get_first()
+			->set_value('fecha_login', date('Y-m-d H:i:s'))
+			->set_value('ip_login', $this->input->ip_address())
+			->set_value('agente_login', $this->input->user_agent())
+			->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -377,12 +363,8 @@ class Acl extends Orm_Model {
 	 */
 	public function use_captcha($usuario = '')
 	{
-		$row_user = $this->db
-			->get_where(config('bd_usuarios'), [
-				'username' => (string) $usuario,
-			])->row();
-
-		$login_attempts = isset($row_user) ? (int) $row_user->login_errors : 0;
+		$usuario = Usuario::create()->user($usuario)->get_first();
+		$login_attempts = is_null($usuario) ? 0 : (int) $usuario->login_errors;
 
 		return (boolean) ($login_attempts > $this->login_failed_attempts);
 	}
@@ -469,11 +451,9 @@ class Acl extends Orm_Model {
 	 */
 	private function _reset_login_errors($usuario = '')
 	{
-		$this->db
-			->where('username', $usuario)
-			->update(config('bd_usuarios'), [
-				'login_errors'  => 0,
-			]);
+		Usuario::create()->user($usuario)->get_first()
+			->set_value('login_errors', 0)
+			->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -486,10 +466,9 @@ class Acl extends Orm_Model {
 	 */
 	private function _inc_login_errors($usuario = '')
 	{
-		$this->db
-			->set('login_errors', 'login_errors + 1', FALSE)
-			->where('username', $usuario)
-			->update(config('bd_usuarios'));
+		$user = Usuario::create()->user($usuario)->get_first();
+		$user->set_value('login_errors', $user->login_errors + 1);
+		$user->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -514,10 +493,7 @@ class Acl extends Orm_Model {
 			})
 			->unique()
 			->map(function($application) use ($modulos) {
-				$application['modulos'] = $modulos
-					->filter(function($modulo) use ($application) {
-						return $modulo['app'] === $application['app'];
-					})
+				$application['modulos'] = $modulos->where('app', $application['app'])
 					->map(function($modulo) {
 						return [
 							'modulo_url'      => site_url(array_get($modulo, 'url')),
@@ -544,12 +520,7 @@ class Acl extends Orm_Model {
 	public function titulo_modulo()
 	{
 		$url_actual = $this->uri->segment(1);
-
-		$modulo_selected = $this->get_user_menu()
-			->filter(function($item) use ($url_actual) {
-				return array_get($item, 'url') === $url_actual;
-			})
-			->first();
+		$modulo_selected = $this->get_user_menu()->where('url', $url_actual)->first();
 
 		return "<i class=\"fa fa-{$modulo_selected['modulo_icono']} fa-fw\"></i> {$modulo_selected['modulo']}";
 	}
@@ -607,17 +578,26 @@ class Acl extends Orm_Model {
 	 */
 	private function _get_menu_usuario($usuario = '')
 	{
-		return $this->db->distinct()
-			->select('a.app, a.icono as app_icono, m.modulo, m.url, m.llave_modulo, m.icono as modulo_icono, a.orden, m.orden')
-			->from(config('bd_usuarios').' u')
-			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
-			->join(config('bd_modulos').' m', 'm.id = rm.id_modulo')
-			->join(config('bd_app').' a', 'a.id = m.id_app')
-			->where('username', (string) $usuario)
-			->order_by('a.orden, m.orden')
-			->get()
-			->result_array();
+		$usuario = Usuario::create()->user($usuario)->get_first();
+
+		return is_null($usuario)
+			? []
+			: $usuario->get_relation('rol')->map(function($rol) {
+				return $rol->get_relation('modulo')->map(function($modulo) {
+					return [
+						'app' => $modulo->id_app->app,
+						'app_icono' => $modulo->id_app->icono,
+						'modulo' => $modulo->modulo,
+						'url' => $modulo->url,
+						'llave_modulo' => $modulo->llave_modulo,
+						'modulo_icono' => $modulo->modulo_icono,
+						'orden' => $modulo->id_app->orden.'-'.$modulo->orden,
+					];
+				});
+			})->flatten(1)
+			->sort(function($item1, $item2) {
+				return $item1['orden'] >= $item2['orden'];
+			})->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -648,17 +628,15 @@ class Acl extends Orm_Model {
 	 */
 	private function _get_llaves_modulos($usuario = '')
 	{
-		$arr_rs = $this->db->distinct()
-			->select('llave_modulo')
-			->from(config('bd_usuarios').' u')
-			->join(config('bd_usuario_rol').' ur', 'ur.id_usuario = u.id')
-			->join(config('bd_rol_modulo').' rm', 'rm.id_rol = ur.id_rol')
-			->join('acl_modulo m', 'm.id = rm.id_modulo')
-			->where('username', $usuario)
-			->get()
-			->result_array();
+		$usuario = Usuario::create()->user($usuario)->get_first();
 
-		return array_column($arr_rs, 'llave_modulo');
+		return is_null($usuario)
+			? []
+			: $usuario->get_relation('rol')->map(function($rol) {
+				return $rol->get_relation('modulo')->map(function($modulo) {
+					return $modulo->llave_modulo;
+				});
+			})->flatten()->all();
 	}
 
 	// --------------------------------------------------------------------
@@ -910,18 +888,10 @@ class Acl extends Orm_Model {
 	 */
 	public function tiene_clave($usuario = '')
 	{
-		$arr_rs = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $usuario])
-			->row_array();
+		$usuario = Usuario::create()->user($usuario)->get_first();
+		$password = $usuario ? $usuario->password : NULL;
 
-		if (count($arr_rs) > 0)
-		{
-			return (is_null($arr_rs['password']) OR trim($arr_rs['password']) === '') ? FALSE : TRUE;
-		}
-		else
-		{
-			return FALSE;
-		}
+		return ! empty($password);
 	}
 
 	// --------------------------------------------------------------------
@@ -934,11 +904,7 @@ class Acl extends Orm_Model {
 	 */
 	public function existe_usuario($usuario = '')
 	{
-		$regs = $this->db
-			->get_where(config('bd_usuarios'), ['username' => $usuario])
-			->num_rows();
-
-		return ($regs > 0) ? TRUE : FALSE;
+		return (int) Usuario::create()->user($usuario)->count() > 0;
 	}
 
 	// --------------------------------------------------------------------
@@ -957,11 +923,9 @@ class Acl extends Orm_Model {
 
 		if ($chk_usr)
 		{
-			$this->db
-				->where('username', $usuario)
-				->update(config('bd_usuarios'), [
-					'password' => $this->_hash_password($clave_new)
-				]);
+			Usuario::create()->user($usuario)->get_first()
+				->set_value('password', $this->_hash_password($clave_new))
+				->grabar();
 
 			return TRUE;
 		}

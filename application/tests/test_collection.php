@@ -51,7 +51,7 @@ class test_collection extends test_case {
 		$this->assert_null(collect([1,2,3,4,5])->item('A'));
 	}
 
-	public function test_get_keys()
+	public function test_keys()
 	{
 		$this->assert_equals(collect([1,2,3,4])->keys()->all(), [0,1,2,3]);
 		$this->assert_equals(collect(['a'=>1,'b'=>2,'aa'=>3,'bb'=>4])->keys()->all(), ['a','b','aa','bb']);
@@ -125,6 +125,48 @@ class test_collection extends test_case {
 		$this->assert_equals(collect([1,2,3,4,5])->filter(function($el) {return $el<=2;})->all(), [1,2]);
 		$this->assert_equals(collect([1,2,3,4,5])->filter(function($el) {return $el>20;}), 'is_object');
 		$this->assert_equals(collect([1,2,3,4,5])->filter(function($el) {return $el>20;})->all(), []);
+	}
+
+	public function test_where()
+	{
+		$collect1 = collect([
+			['campo1'=>1, 'campo2'=>'a', 'campo3'=>100],
+			['campo1'=>2, 'campo2'=>'b', 'campo3'=>100],
+			['campo1'=>3, 'campo2'=>'c', 'campo3'=>200],
+			['campo1'=>4, 'campo2'=>'d', 'campo3'=>200],
+		]);
+
+		$this->assert_equals($collect1->where('campo1',1)->all(), [['campo1'=>1, 'campo2'=>'a', 'campo3'=>100]]);
+
+		$this->assert_equals($collect1->where('campo2','b')->all(), ['1'=>['campo1'=>2, 'campo2'=>'b', 'campo3'=>100]]);
+
+		$this->assert_equals($collect1->where('campo3', 200)->all(), [
+			'2'=>['campo1'=>3, 'campo2'=>'c', 'campo3'=>200],
+			'3'=>['campo1'=>4, 'campo2'=>'d', 'campo3'=>200],
+		]);
+
+		$this->assert_equals($collect1->where('campo1','>=',3)->all(), [
+			'2'=>['campo1'=>3, 'campo2'=>'c', 'campo3'=>200],
+			'3'=>['campo1'=>4, 'campo2'=>'d', 'campo3'=>200],
+		]);
+
+		$this->assert_equals($collect1->where('campo1', 'zzz')->all(), []);
+	}
+
+	public function test_where_in()
+	{
+		$collect1 = collect([
+			['campo1'=>1, 'campo2'=>'a', 'campo3'=>100],
+			['campo1'=>2, 'campo2'=>'b', 'campo3'=>100],
+			['campo1'=>3, 'campo2'=>'c', 'campo3'=>200],
+			['campo1'=>4, 'campo2'=>'d', 'campo3'=>200],
+		]);
+
+		$this->assert_equals($collect1->where_in('campo1',[1,2,3])->all(), [
+			['campo1'=>1, 'campo2'=>'a', 'campo3'=>100],
+			['campo1'=>2, 'campo2'=>'b', 'campo3'=>100],
+			['campo1'=>3, 'campo2'=>'c', 'campo3'=>200],
+		]);
 	}
 
 	public function test_sum()

@@ -46,16 +46,16 @@ class Stock_config extends Orm_controller {
 	 * @var  array
 	 */
 	public $menu_opciones = [
-		'almacen_sap' => ['url'=>'{{route}}/listado/almacen_sap', 'texto'=>'lang::stock_config_menu_alm', 'icon'=>'home'],
-		'tipoalmacen_sap' => ['url'=>'{{route}}/listado/tipoalmacen_sap', 'texto'=>'lang::stock_config_menu_tipalm', 'icon'=>'th'],
-		'clasifalmacen_sap' => ['url'=>'{{route}}/listado/clasifalmacen_sap', 'texto'=>'lang::stock_config_menu_clasifalm', 'icon'=>'th'],
-		'tipo_clasifalm' => ['url'=>'{{route}}/listado/tipo_clasifalm', 'texto'=>'lang::stock_config_menu_tipo_clasifalm', 'icon'=>'th'],
-		'proveedor' => ['url'=>'{{route}}/listado/proveedor', 'texto'=>'lang::stock_config_menu_proveedores', 'icon'=>'shopping-cart'],
-		'usuario_sap' => ['url'=>'{{route}}/listado/usuario_sap', 'texto'=>'lang::stock_config_menu_usuarios_sap', 'icon'=>'user'],
+		'almacen_sap'         => ['icon'=>'home'],
+		'tipoalmacen_sap'     => ['icon'=>'th'],
+		'clasifalmacen_sap'   => ['icon'=>'th'],
+		'tipo_clasifalm'      => ['icon'=>'th'],
+		'proveedor'           => ['icon'=>'shopping-cart'],
+		'usuario_sap'         => ['icon'=>'user'],
+		'clase_movimiento'    => ['icon'=>'th'],
+		'tipo_movimiento'     => ['icon'=>'th'],
+		'tipo_movimiento_cmv' => ['icon'=>'th'],
 		'almacenes_no_ingresados' => ['url'=>'{{route}}/almacenes_no_ingresados', 'texto'=>'lang::stock_config_menu_alm_no_ing', 'icon'=>'home'],
-		'clase_movimiento' => ['url'=>'{{route}}/listado/clase_movimiento', 'texto'=>'lang::stock_config_menu_cmv', 'icon'=>'th'],
-		'tipo_movimiento' => ['url'=>'{{route}}/listado/tipo_movimiento', 'texto'=>'lang::stock_config_menu_tipos_movs', 'icon'=>'th'],
-		'tipo_movimiento_cmv' => ['url'=>'{{route}}/listado/tipo_movimiento_cmv', 'texto'=>'lang::stock_config_menu_tipos_movs_cmv', 'icon'=>'th'],
 	];
 
 	/**

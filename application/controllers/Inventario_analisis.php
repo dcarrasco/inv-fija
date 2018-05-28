@@ -128,11 +128,13 @@ class Inventario_analisis extends Controller_base {
 		$pagina = request('page', 1);
 		$ocultar_reg = request('ocultar_reg') ? 1 : 0;
 
+		$detalle_inventario = Detalle_inventario::create();
+
 		app_render_view('inventario/ajustes', [
 			'menu_modulo'     => $this->get_menu_modulo('ajustes'),
 			'inventario'      => $this->_id_inventario.' - '.$this->_nombre_inventario,
-			'detalle_ajustes' => Detalle_inventario::create()->get_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
-			'links_paginas'   => Detalle_inventario::create()->get_pagination_ajustes($this->_id_inventario, $ocultar_reg, $pagina),
+			'detalle_ajustes' => $detalle_inventario->get_ajustes($this->_id_inventario, $ocultar_reg),
+			'links_paginas'   => $detalle_inventario->get_pagination_links(),
 			'ocultar_reg'     => $ocultar_reg,
 			'url_form'        => site_url("{$this->router->class}/update_ajustes".url_params()),
 		]);
@@ -249,9 +251,7 @@ class Inventario_analisis extends Controller_base {
 	 */
 	public function inserta_linea_archivo()
 	{
-		$detalle = new Detalle_inventario;
-		$detalle->recuperar_post();
-		$detalle->grabar();
+		return Detalle_inventario::create(request())->grabar();
 	}
 
 	// --------------------------------------------------------------------
@@ -264,7 +264,7 @@ class Inventario_analisis extends Controller_base {
 	public function imprime_inventario()
 	{
 		$this->_get_datos_inventario();
-		$inventario = new Inventario($this->_id_inventario);
+		$inventario = (new Inventario)->find_id($this->_id_inventario);
 
 		app_render_view('inventario/imprime_inventario', [
 			'menu_modulo'       => $this->get_menu_modulo('imprime_inventario'),
@@ -315,14 +315,15 @@ class Inventario_analisis extends Controller_base {
 
 		$this->load->view('inventario/inventario_print_head');
 
-		collect(range($hoja_desde, $hoja_hasta))->each(function($hoja) use ($oculta_stock_sap, $nombre_inventario) {
-			$this->load->view('inventario/inventario_print_body', [
-				'datos_hoja'        => Detalle_inventario::create()->get_hoja($this->_id_inventario, $hoja),
-				'hoja'              => $hoja,
-				'oculta_stock_sap'  => $oculta_stock_sap,
-				'nombre_inventario' => $nombre_inventario,
-			]);
-		});
+		collect(range($hoja_desde, $hoja_hasta))
+			->each(function($hoja) use ($oculta_stock_sap, $nombre_inventario) {
+				$this->load->view('inventario/inventario_print_body', [
+					'datos_hoja' => Detalle_inventario::create()->get_hoja_inventario($this->_id_inventario, $hoja),
+					'hoja' => $hoja,
+					'oculta_stock_sap' => $oculta_stock_sap,
+					'nombre_inventario' => $nombre_inventario,
+				]);
+			});
 
 		$this->load->view('inventario/inventario_print_footer');
 	}

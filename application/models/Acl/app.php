@@ -34,63 +34,61 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class App extends ORM_Model {
 
+	protected $db_table = 'config::bd_app';
+	protected $label = 'Aplicaci&oacute;n';
+	protected $label_plural = 'Aplicaciones';
+	protected $order_by = 'app';
+
+	protected $fields = [
+		'id'  => ['tipo' => Orm_field::TIPO_ID],
+		'app' => [
+			'label'          => 'Aplicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'descripcion' => [
+			'label'          => 'Descripci&oacute;n de la Aplicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Breve descripcion de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'orden' => [
+			'label'          => 'Orden de la Aplicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_INT,
+			'texto_ayuda'    => 'Orden de la aplicaci&oacute;n en el menu.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'url' => [
+			'label'          => 'Direcci&oacute;n de la Aplicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 100,
+			'texto_ayuda'    => 'Direcci&oacute;n web (URL) de la aplicaci&oacute;n. M&aacute;ximo 100 caracteres.',
+		],
+		'icono' => [
+			'label'          => '&Iacute;cono de la aplicaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre del archivo del &iacute;cono de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
+		],
+	];
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_app Identificador de la app
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_app = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_app'),
-				'label'        => 'Aplicaci&oacute;n',
-				'label_plural' => 'Aplicaciones',
-				'order_by'     => 'app',
-			],
-			'campos' => [
-				'id'  => ['tipo' => Orm_field::TIPO_ID],
-				'app' => [
-					'label'          => 'Aplicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'descripcion' => [
-					'label'          => 'Descripci&oacute;n de la Aplicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Breve descripcion de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'orden' => [
-					'label'          => 'Orden de la Aplicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_INT,
-					'texto_ayuda'    => 'Orden de la aplicaci&oacute;n en el menu.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'url' => [
-					'label'          => 'Direcci&oacute;n de la Aplicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 100,
-					'texto_ayuda'    => 'Direcci&oacute;n web (URL) de la aplicaci&oacute;n. M&aacute;ximo 100 caracteres.',
-				],
-				'icono' => [
-					'label'          => '&Iacute;cono de la aplicaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del archivo del &iacute;cono de la aplicaci&oacute;n. M&aacute;ximo 50 caracteres.',
-				],
-			],
-		];
-
-		parent::__construct($id_app);
+		parent::__construct($atributos);
 	}
-
 
 	// --------------------------------------------------------------------
 

@@ -51,11 +51,11 @@ class test_models_acl extends test_case {
 
 	public function test_usuario()
 	{
-		$usuario = new Acl\usuario;
+		$usuario = new Acl\Usuario;
 
 		$this->assert_is_object($usuario);
 		$this->assert_not_empty($usuario->get_fields());
-		$this->assert_count($usuario->get_fields(), 10);
+		$this->assert_count($usuario->get_fields(), 11);
 		$this->assert_is_string((string) $usuario);
 	}
 

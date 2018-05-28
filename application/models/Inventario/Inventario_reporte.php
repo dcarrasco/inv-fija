@@ -51,12 +51,12 @@ class Inventario_reporte extends Inventario {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_inventario ID del inventario que se usará para generar el reporte
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_inventario = NULL)
+	public function __construct($atributos = [])
 	{
-		parent::__construct($id_inventario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------
@@ -228,7 +228,7 @@ class Inventario_reporte extends Inventario {
 			->join(config('bd_usuarios').' d', 'd.id = di.digitador', 'left')
 			->join(config('bd_auditores').' a', 'a.id = di.auditor', 'left')
 			->group_by('di.hoja, d.nombre, a.nombre')
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -261,7 +261,7 @@ class Inventario_reporte extends Inventario {
 			->select('di.almacen')
 			->select('di.um')
 			->where('di.hoja', $hoja)
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -293,7 +293,7 @@ class Inventario_reporte extends Inventario {
 			->group_by("f.codigo + '-' + f.nombre + ' >> ' + sf.codigo + '-' + sf.nombre")
 			->group_by("f.codigo + '_' + sf.codigo")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -326,7 +326,7 @@ class Inventario_reporte extends Inventario {
 			->select("c.pmp * {$min_sap_fisico} as v_coincidente")
 			->select("c.pmp * (SUM({$stock_fisico}) - {$min_sap_fisico}) as v_sobrante")
 			->group_by('di.catalogo, di.descripcion, di.um, c.pmp')
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		if ($elim_sin_dif === '1')
 		{
@@ -365,7 +365,7 @@ class Inventario_reporte extends Inventario {
 			->select("pmp * ({$min_sap_fisico}) as v_coincidente")
 			->select("pmp * (stock_fisico - {$min_sap_fisico}) as v_sobrante")
 			->where('di.catalogo', $catalogo)
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -391,7 +391,7 @@ class Inventario_reporte extends Inventario {
 		$this->db->select('di.ubicacion')
 			->select_max('fecha_modificacion', 'fecha')
 			->group_by('di.ubicacion')
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}
@@ -422,7 +422,7 @@ class Inventario_reporte extends Inventario {
 			->join(config('bd_tipo_ubicacion').' t', 't.id=ut.id_tipo_ubicacion', 'left')
 			->group_by('t.tipo_ubicacion')
 			->group_by('di.ubicacion')
-			->order_by($this->get_order_by($orden_campo));
+			->order_by($this->format_order_by($orden_campo));
 
 		return $this->db->get()->result_array();
 	}

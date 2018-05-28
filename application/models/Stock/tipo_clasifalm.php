@@ -35,50 +35,47 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_clasifalm extends ORM_Model {
 
+	protected $db_table = 'config::bd_tipo_clasifalm_sap';
+	protected $label = 'Tipo Clasificaci&oacute;n Almac&eacute;n';
+	protected $label_plural = 'Tipos Clasificaci&oacute;n Almac&eacute;n';
+	protected $order_by = 'tipo';
+
+	protected $fields = [
+		'id_tipoclasif' => [
+			'label'            => 'id',
+			'tipo'             => Orm_field::TIPO_INT,
+			'largo'            => 10,
+			'texto_ayuda'      => '',
+			'es_id'            => TRUE,
+			'es_obligatorio'   => TRUE,
+			'es_unico'         => TRUE,
+			'es_autoincrement' => TRUE,
+		],
+		'tipo' => [
+			'label'          => 'Tipo Clasificaci&oacute;n de Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Tipo Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'color' => [
+			'label'          => 'Color del tipo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Color del tipo para graficar. M&aacute;ximo 20 caracteres.',
+			'es_obligatorio' => FALSE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipoclasif Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipoclasif = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipo_clasifalm_sap'),
-				'label'        => 'Tipo Clasificaci&oacute;n Almac&eacute;n',
-				'label_plural' => 'Tipos Clasificaci&oacute;n de Almacenes',
-				'order_by'     => 'tipo',
-			],
-			'campos' => [
-				'id_tipoclasif' => [
-					'label'            => 'id',
-					'tipo'             => Orm_field::TIPO_INT,
-					'largo'            => 10,
-					'texto_ayuda'      => '',
-					'es_id'            => TRUE,
-					'es_obligatorio'   => TRUE,
-					'es_unico'         => TRUE,
-					'es_autoincrement' => TRUE,
-				],
-				'tipo' => [
-					'label'          => 'Tipo Clasificaci&oacute;n de Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Tipo Clasificaci&oacute;n del almac&eacute;n. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'color' => [
-					'label'          => 'Color del tipo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Color del tipo para graficar. M&aacute;ximo 20 caracteres.',
-					'es_obligatorio' => FALSE,
-				],
-			],
-		];
-
-		parent::__construct($id_tipoclasif);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

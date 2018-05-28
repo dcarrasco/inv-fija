@@ -61,17 +61,13 @@ class Orm_controller extends Controller_base {
 	 */
 	public function listado($nombre_modelo = '')
 	{
-		$filtro = request('filtro');
-
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
 		$modelo = new $nombre_modelo_full;
-		$modelo->set_filtro($filtro);
 
 		app_render_view('ORM/orm_listado', [
 			'menu_modulo' => $this->get_menu_modulo($nombre_modelo),
 			'modelo'      => $modelo,
-			'modelos'     => $modelo->paginate(),
-			'orm_filtro'  => $filtro,
+			'modelos'     => $modelo->list_paginated(),
 			'url_editar'  => site_url("{$this->router->class}/editar/{$nombre_modelo}/"),
 			'url_params'  => url_params(),
 		]);
@@ -93,7 +89,7 @@ class Orm_controller extends Controller_base {
 
 		app_render_view('ORM/orm_editar', [
 			'menu_modulo'   => $this->get_menu_modulo($nombre_modelo),
-			'modelo'        => new $nombre_modelo_full($id_modelo),
+			'modelo'        => (new $nombre_modelo_full)->find_id($id_modelo),
 			'url_form'      => site_url("{$this->router->class}/update/{$nombre_modelo}/{$id_modelo}{$url_params}"),
 			'link_cancelar' => site_url("{$this->router->class}/listado/{$nombre_modelo}{$url_params}"),
 		]);
@@ -111,8 +107,7 @@ class Orm_controller extends Controller_base {
 	public function update($nombre_modelo = '', $id_modelo = NULL)
 	{
 		$nombre_modelo_full = $this->model_namespace.$nombre_modelo;
-		$modelo = new $nombre_modelo_full($id_modelo);
-		$modelo->recuperar_post();
+		$modelo = (new $nombre_modelo_full)->find_id($id_modelo)->fill(request());
 
 		route_validation($modelo->valida_form());
 

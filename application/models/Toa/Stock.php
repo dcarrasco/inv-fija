@@ -137,9 +137,9 @@ class Stock extends ORM_Model {
 	 *
 	 * @return  void
 	 */
-	public function __construct()
+	public function __construct($atributos = [])
 	{
-		parent::__construct();
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

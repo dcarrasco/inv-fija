@@ -46,16 +46,16 @@ class Inventario_config extends Orm_controller {
 	 * @var  array
 	 */
 	public $menu_opciones = [
-		'auditor' => ['url'=>'{{route}}/listado/auditor/', 'texto'=>'lang::inventario_config_menu_auditores', 'icon'=>'user'],
-		'familia' => ['url'=>'{{route}}/listado/familia', 'texto'=>'lang::inventario_config_menu_familias', 'icon'=>'th'],
-		'catalogo' => ['url'=>'{{route}}/listado/catalogo', 'texto'=>'lang::inventario_config_menu_materiales', 'icon'=>'barcode'],
-		'tipo_inventario' => ['url'=>'{{route}}/listado/tipo_inventario', 'texto'=>'lang::inventario_config_menu_tipos_inventarios', 'icon'=>'th'],
-		'inventario' => ['url'=>'{{route}}/listado/inventario', 'texto'=>'lang::inventario_config_menu_inventarios', 'icon'=>'list'],
-		'tipo_ubicacion' => ['url'=>'{{route}}/listado/tipo_ubicacion', 'texto'=>'lang::inventario_config_menu_tipo_ubicacion', 'icon'=>'th'],
-		'ubicaciones' => ['url'=>'{{route}}/ubicacion', 'texto'=>'lang::inventario_config_menu_ubicaciones', 'icon'=>'map-marker'],
-		'centro' => ['url'=>'{{route}}/listado/centro', 'texto'=>'lang::inventario_config_menu_centros', 'icon'=>'th'],
-		'almacen' => ['url'=>'{{route}}/listado/almacen', 'texto'=>'lang::inventario_config_menu_almacenes', 'icon'=>'home'],
-		'unidad_medida' => ['url'=>'{{route}}/listado/unidad_medida', 'texto'=>'lang::inventario_config_menu_unidades_medida', 'icon'=>'balance-scale'],
+		'auditor'         => ['icon'=>'user'],
+		'familia'         => ['icon'=>'th'],
+		'catalogo'        => ['icon'=>'barcode'],
+		'tipo_inventario' => ['icon'=>'th'],
+		'inventario'      => ['icon'=>'list'],
+		'tipo_ubicacion'  => ['icon'=>'th'],
+		'ubicacion'       => ['icon'=>'map-marker'],
+		'centro'          => ['icon'=>'th'],
+		'almacen'         => ['icon'=>'home'],
+		'unidad_medida'   => ['icon'=>'balance-scale'],
 	];
 
 	/**
@@ -118,7 +118,7 @@ class Inventario_config extends Orm_controller {
 			'menu_modulo'            => $this->get_menu_modulo('ubicaciones'),
 			'ubicaciones'            => $ubicaciones,
 
-			'combo_tipos_inventario' => Tipo_inventario::create()->find('list'),
+			'combo_tipos_inventario' => Tipo_inventario::create()->get_dropdown_list(),
 			'combo_tipos_ubicacion'  => $arr_combo_tipo_ubic,
 			'add_url_form'           => "{$this->router->class}/add_ubicacion".url_params(),
 			'update_url_form'        => "{$this->router->class}/update_ubicacion".url_params(),
@@ -140,7 +140,7 @@ class Inventario_config extends Orm_controller {
 
 		$count = collect(request('agr-ubicacion'))
 			->each(function($ubicacion) {
-				return Ubicacion::create()->fill([
+				return Ubicacion::create([
 					'tipo_inventario'   => request('agr-tipo_inventario'),
 					'id_tipo_ubicacion' => request('agr-tipo_ubicacion'),
 					'ubicacion'         => $ubicacion,
@@ -188,7 +188,7 @@ class Inventario_config extends Orm_controller {
 	{
 		route_validation([['field'=>'id_borrar', 'label'=>'', 'rules'=>'trim|required']]);
 
-		Ubicacion::create()->fill(request('id_borrar'))->borrar();
+		Ubicacion::create(request('id_borrar'))->borrar();
 		set_message('Registro (id=' . request('id_borrar') . ') borrado correctamente');
 
 		redirect($this->router->class.'/ubicacion'.url_params());

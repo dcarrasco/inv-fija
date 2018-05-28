@@ -134,7 +134,7 @@ class App {
 	 */
 	public static function add_component($item = '', $object)
 	{
-		return static::$instance->add($item, $object);
+		return \App::instance()->add($item, $object);
 	}
 
 	// --------------------------------------------------------------------

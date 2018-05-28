@@ -526,9 +526,9 @@ if ( ! function_exists('request'))
 
 		if ( ! $ci->request)
 		{
-			$old_request = collect($ci->session->flashdata('old_request'));
-			$ci->request = collect(array_merge($ci->input->post(), $ci->input->get()))
-				->merge($old_request);
+			$ci->request = collect($ci->input->post())
+				->merge($ci->input->get())
+				->merge($ci->session->flashdata('old_request'));
 		}
 
 		if (is_null($field))

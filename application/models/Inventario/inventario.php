@@ -35,47 +35,44 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Inventario extends ORM_Model {
 
+	protected $db_table = 'config::bd_inventarios';
+	protected $label = 'Inventario';
+	protected $label_plural = 'Inventarios';
+	protected $order_by = 'nombre';
+
+	protected $fields = [
+		'id'     => ['tipo' => Orm_field::TIPO_ID],
+		'nombre' => [
+			'label'          => 'Nombre del inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'activo' => [
+			'label'          => 'Activo',
+			'tipo'           => Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
+			'es_obligatorio' => TRUE,
+		],
+		'tipo_inventario' => [
+			'tipo'           =>  Orm_field::TIPO_HAS_ONE,
+			'relation'       => ['model' => tipo_inventario::class],
+			'texto_ayuda'    => 'Seleccione el tipo de inventario.',
+			'es_obligatorio' => TRUE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_inventario Identificador del inventario
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_inventario = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_inventarios'),
-				'label'        => 'Inventario',
-				'label_plural' => 'Inventarios',
-				'order_by'     => 'nombre',
-			],
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'nombre' => [
-					'label'          => 'Nombre del inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'activo' => [
-					'label'          => 'Activo',
-					'tipo'           => Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica se el inventario est&aacute; activo dentro del sistema.',
-					'es_obligatorio' => TRUE,
-				],
-				'tipo_inventario' => [
-					'tipo'           =>  Orm_field::TIPO_HAS_ONE,
-					'relation'       => ['model' => tipo_inventario::class],
-					'texto_ayuda'    => 'Seleccione el tipo de inventario.',
-					'es_obligatorio' => TRUE,
-				],
-			],
-		];
-
-		parent::__construct($id_inventario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------
@@ -106,7 +103,7 @@ class Inventario extends ORM_Model {
 		{
 			$this->db
 				->where('id <>', (int) $this->id)
-				->update($this->get_tabla(), ['activo' => 0]);
+				->update($this->get_db_table(), ['activo' => 0]);
 		}
 	}
 
@@ -120,9 +117,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_id_inventario_activo()
 	{
-		$this->find('first', ['conditions' => ['activo' => 1]]);
-
-		return (int) $this->get_id();
+		return $this->get_inventario_activo()->get_id();
 	}
 
 
@@ -135,9 +130,7 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_inventario_activo()
 	{
-		$inventario_activo = $this->get_id_inventario_activo();
-
-		return $this->find_id($inventario_activo);
+		return $this->where('activo', 1)->get_first(FALSE);
 	}
 
 
@@ -179,24 +172,11 @@ class Inventario extends ORM_Model {
 	 */
 	public function get_combo_inventarios()
 	{
-		$inventarios = collect(
-			$this->db
-				->from(config('bd_inventarios').' a')
-				->join(config('bd_tipos_inventario').' b', 'a.tipo_inventario=b.id_tipo_inventario')
-				->order_by('desc_tipo_inventario, nombre')
-				->get()->result_array()
-		);
-
-		return $inventarios->pluck('desc_tipo_inventario')
-			->unique()
-			->map_with_keys(function($tipo_inventario) use ($inventarios) {
-				return [
-					$tipo_inventario => $inventarios
-						->filter(function($inventario) use ($tipo_inventario) {
-							return $inventario['desc_tipo_inventario'] === $tipo_inventario;
-						})->map_with_keys(function($inventario) {
-							return [$inventario['id'] => $inventario['nombre']];
-						})->all()
+		return tipo_inventario::create()->get()
+			->map_with_keys(function($tipo_inventario) {
+				return [(string) $tipo_inventario => Inventario::create()
+					->where('tipo_inventario', $tipo_inventario->get_id())
+					->get_dropdown_list(FALSE)
 				];
 			})->all();
 	}

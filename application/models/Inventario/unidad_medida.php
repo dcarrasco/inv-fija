@@ -35,43 +35,40 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Unidad_medida extends ORM_Model {
 
+	protected $db_table = 'config::bd_unidades';
+	protected $label = 'Unidad de medida';
+	protected $label_plural = 'Unidades de medida';
+	protected $order_by = 'unidad';
+
+	protected $fields = [
+		'unidad' => [
+			'label'          => 'Unidad',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Unidad de medida. M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'desc_unidad' => [
+			'label'          => 'Descripci&oacute;n unidad de medida',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_unidad_medida Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_unidad_medida = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_unidades'),
-				'label'        => 'Unidad de medida',
-				'label_plural' => 'Unidades de medida',
-				'order_by'     => 'unidad',
-			],
-			'campos' => [
-				'unidad' => [
-					'label'          => 'Unidad',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Unidad de medida. M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'desc_unidad' => [
-					'label'          => 'Descripci&oacute;n unidad de medida',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n de la unidad de medida. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-			],
-		];
-
-		parent::__construct($id_unidad_medida);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

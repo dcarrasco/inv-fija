@@ -45,6 +45,10 @@ trait Model_has_attributes {
 	 */
 	protected $values = [];
 
+	protected $list_fields = [];
+
+	protected $fechas = [];
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -57,9 +61,31 @@ trait Model_has_attributes {
 	 */
 	public function __get($campo)
 	{
+		$method = 'get_'.$campo;
+
+		if (method_exists($this, $method))
+		{
+			return $this->$method($campo);
+		}
+
 		if (array_key_exists($campo, $this->values))
 		{
-			return $this->values[$campo];
+			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_ONE)
+			{
+				return $this->get_relation($campo);
+			}
+
+			if ($this->fields[$campo]->get_tipo() === Orm_field::TIPO_HAS_MANY)
+			{
+				return ul($this->get_relation($campo)->all());
+			}
+
+			if (count($this->fields[$campo]->get_choices()) > 0)
+			{
+				return array_get($this->fields[$campo]->get_choices(), $this->get_value($campo));
+			}
+
+			return $this->get_value($campo);
 		}
 
 		if (is_null(app($campo)) && ! is_null(get_instance()->{$campo}))
@@ -84,12 +110,35 @@ trait Model_has_attributes {
 
 	// --------------------------------------------------------------------
 
+	public function get_value($campo)
+	{
+		return array_get($this->values, $campo);
+	}
+
+	// --------------------------------------------------------------------
+
+	public function set_value($campo, $valor)
+	{
+		$this->values[$campo] = $valor;
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_list_fields()
+	{
+		return empty($this->list_fields) ? collect($this->fields)->keys()->all() : $this->list_fields;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Recupera los valores de los campos del modelo
 	 *
 	 * @return array Arreglo con los valores de los campos del modelo
 	 */
-	public function get_fields_values()
+	public function get_values()
 	{
 		return $this->values;
 	}
@@ -104,7 +153,7 @@ trait Model_has_attributes {
 	private function _determina_campo_id()
 	{
 		return collect($this->fields)
-			->filter(function($campo) {return $campo->get_es_id(); })
+			->where('get_es_id', TRUE)
 			->keys()
 			->all();
 	}
@@ -145,12 +194,14 @@ trait Model_has_attributes {
 	 * @param  array $arr_data Arreglo con los valores
 	 * @return void
 	 */
-	public function fill_from_array($data = [])
+	public function fill($data = [])
 	{
+		$data = collect($data);
+
 		collect($this->fields)
-			->only(collect($data)->keys()->all())
+			->only($data->keys()->all())
 			->each(function($campo, $nombre_campo) use ($data) {
-				$this->values[$nombre_campo] = $campo->cast_value(array_get($data, $nombre_campo));
+				$this->set_value($nombre_campo, $campo->cast_value($data->get($nombre_campo)));
 			});
 
 		return $this;

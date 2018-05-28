@@ -75,7 +75,7 @@ class Controller_base extends CI_Controller {
 		parent::__construct();
 
 		$this->load_lang_controller();
-		$this->set_menu_modulo();
+		$this->menu_opciones = $this->set_menu_modulo();
 
 		$this->errors = collect($this->session->flashdata('errors'));
 	}
@@ -105,8 +105,22 @@ class Controller_base extends CI_Controller {
 	public function set_menu_modulo()
 	{
 		$router = $this->router;
+		$model_namespace = isset($this->model_namespace) ? $this->model_namespace : '';
 
-		$this->menu_opciones = collect($this->menu_opciones)
+		return collect($this->menu_opciones)
+			->map(function($menu, $modulo) use ($router, $model_namespace) {
+				$module_class = $model_namespace.$modulo;
+				$label_plural = '';
+				if (class_exists($module_class))
+				{
+					$label_plural = (new $module_class())->get_label_plural();
+				}
+
+				return collect($menu)->merge([
+					'url' => array_get($menu, 'url', $router->class.'/listado/'.$modulo.'/'),
+					'texto' => array_get($menu, 'texto', $label_plural),
+				])->all();
+			})
 			->map(function($menu) use ($router) {
 				$menu['url'] = str_replace('{{route}}', $router->class, array_get($menu, 'url'));
 				$menu['texto'] = substr(array_get($menu, 'texto'), 0, 6) === 'lang::'

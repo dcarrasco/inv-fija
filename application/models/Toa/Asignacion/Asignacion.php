@@ -251,7 +251,8 @@ class Asignacion extends ORM_Model {
 		$datos = $this->result_to_month_table($this->control_asignaciones_datos($params));
 
 		return Tecnico_toa::create()
-			->find('all', ['conditions' => ['id_empresa' => $params->get('empresa')]])
+			->where('id_empresa', $params->get('empresa'))
+			->get()
 			->map_with_keys(function($tecnico) use ($datos) {
 				return [$tecnico->id_tecnico => [
 					'nombre'       => $tecnico->tecnico,

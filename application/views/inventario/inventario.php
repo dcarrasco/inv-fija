@@ -76,7 +76,7 @@
 				<?php $text_error = $this->errors->has("stock_fisico_{$linea_det->id}") ? 'text-danger' : ''; ?>
 				<tr <?= $this->errors->has("stock_fisico_{$linea_det->id}") ? 'class="danger"' : '' ?>>
 					<td class="text-center <?=$text_error?>" nowrap>
-						<?= $linea_det->get_field_value('ubicacion') ?>
+						<?= $linea_det->ubicacion ?>
 
 						<?php if ($linea_det->reg_nuevo === 'S'):?>
 							<a href="<?= site_url("{$this->router->class}/editar/{$hoja}/{$id_auditor}/{$linea_det->id}") ?>" class="btn btn-default btn-xs">
@@ -93,13 +93,13 @@
 						<?php endif; ?>
 					</td>
 					<!-- <td><?php //echo $linea_det->hu; ?></td> -->
-					<td class="text-center <?=$text_error?>"><?= $linea_det->catalogo ?></td>
-					<td class="text_left <?=$text_error?>"><?= $linea_det->get_field_value('descripcion') ?></td>
-					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('lote') ?></td>
-					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('centro') ?></td>
-					<td class="text-center <?=$text_error?>"><?= $linea_det->get_field_value('almacen') ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->catalogo->catalogo ?></td>
+					<td class="text_left <?=$text_error?>"><?= $linea_det->descripcion ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->lote ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->centro ?></td>
+					<td class="text-center <?=$text_error?>"><?= $linea_det->almacen ?></td>
 					<td class="text-center <?=$text_error?>"><?= $linea_det->um ?></td>
-					<td class="text-right <?=$text_error?>"><?= fmt_cantidad($linea_det->stock_sap) ?></td>
+					<td class="text-right <?=$text_error?>"><?= $linea_det->stock_sap ?></td>
 					<td class="text-center col-md-1 <?= form_has_error_class("stock_fisico_{$linea_det->id}") ?>">
 						<?= form_input(
 							"stock_fisico_{$linea_det->id}",

@@ -89,7 +89,7 @@ class Inventario_digitacion extends Controller_base {
 			return $this->hoja_mobile($hoja);
 		}
 
-		if ( $hoja === 0 && ! empty(request('hoja')))
+		if ($hoja === 0 && ! empty(request('hoja')))
 		{
 			redirect($this->router->class.'/ingreso/'.request('hoja'));
 		}
@@ -100,10 +100,10 @@ class Inventario_digitacion extends Controller_base {
 		$id_auditor = Detalle_inventario::create()->get_auditor_hoja($inventario->get_id(), $hoja);
 
 		app_render_view('inventario/inventario', [
-			'detalle_inventario' => Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja),
+			'detalle_inventario' => Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja),
 			'hoja'               => $hoja,
 			'nombre_inventario'  => $inventario->nombre,
-			'combo_auditores'    => Detalle_inventario::create()->fill(['auditor' => $id_auditor])->print_form_field('auditor', FALSE, 'input-sm'),
+			'combo_auditores'    => Detalle_inventario::create(['auditor' => $id_auditor])->print_form_field('auditor', FALSE, 'input-sm'),
 			'id_auditor'         => $id_auditor,
 			'url_form'           => "{$this->router->class}/update_hoja/{$hoja}/{$id_auditor}",
 			'link_hoja_ant'      => base_url($this->router->class . '/ingreso/' . (($hoja <= 1) ? 1 : $hoja - 1) . '/' . time()),
@@ -129,7 +129,7 @@ class Inventario_digitacion extends Controller_base {
 		Detalle_inventario::create()->set_field_validation_rules('auditor');
 		$this->form_validation->set_rules(
 			Detalle_inventario::create()->rules_digitacion(
-				Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja)
+				Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja)
 			)
 		);
 
@@ -159,7 +159,7 @@ class Inventario_digitacion extends Controller_base {
 		if ($this->form_validation->run() === FALSE)
 		{
 			app_render_view('inventario/inventario_mobile', [
-				'detalle_inventario' => Detalle_inventario::create()->get_hoja($inventario->get_id(), $hoja),
+				'detalle_inventario' => Detalle_inventario::create()->get_hoja_inventario($inventario->get_id(), $hoja),
 				'hoja'               => $hoja,
 				'nombre_inventario'  => $inventario->nombre,
 				'id_auditor'         => Detalle_inventario::create()->get_auditor_hoja($inventario->get_id(), $hoja),
@@ -197,13 +197,12 @@ class Inventario_digitacion extends Controller_base {
 		}
 		else
 		{
-			$detalle_inventario->recuperar_post();
-			$detalle_inventario->fill([
-				'digitador' => Acl::create()->get_id_usr(),
-				'auditor'   => Acl::create()->get_id_usr(),
-				'fecha_modificacion' => date('Y-m-d H:i:s'),
-			]);
-			$detalle_inventario->grabar();
+			$detalle_inventario->fill(request())
+				->fill([
+					'digitador' => Acl::create()->get_id_usr(),
+					'auditor'   => Acl::create()->get_id_usr(),
+					'fecha_modificacion' => date('Y-m-d H:i:s'),
+				])->grabar();
 
 			set_message(sprintf(lang('inventario_digit_msg_save'), 1, $hoja));
 			redirect($this->router->class . '/ingreso/' . $hoja . '/' . time());
@@ -223,7 +222,7 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function editar($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
-		$detalle_inventario = new Detalle_inventario($id_registro);
+		$detalle_inventario = (new Detalle_inventario)->find_id($id_registro);
 
 		$arr_catalogo = is_null($id_registro)
 			? ['' => 'Buscar y seleccionar material...']
@@ -254,7 +253,7 @@ class Inventario_digitacion extends Controller_base {
 	 */
 	public function update($hoja = 0, $id_auditor = 0, $id_registro = NULL)
 	{
-		$detalle_inventario = new Detalle_inventario($id_registro);
+		$detalle_inventario = (new Detalle_inventario)->find_id($id_registro);
 		$detalle_inventario->get_editar_post_data($id_registro, $hoja);
 
 		$detalle_inventario->get_validation_editar();
@@ -286,7 +285,7 @@ class Inventario_digitacion extends Controller_base {
 	{
 		return $this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Catalogo::create()->find('list', ['filtro' => $filtro])));
+			->set_output(form_print_options(Catalogo::create()->filter_by($filtro)->get_dropdown_list(FALSE)));
 	}
 
 }

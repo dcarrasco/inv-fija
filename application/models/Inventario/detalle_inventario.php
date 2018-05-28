@@ -37,6 +37,135 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Detalle_inventario extends ORM_Model {
 
+	protected $db_table = 'config::bd_detalle_inventario';
+	protected $label = 'Detalle inventario';
+	protected $label_plural = 'Detalles inventario';
+	protected $order_by = 'id';
+	protected $page_results = 20;
+
+	protected $fields = [
+		'id' => ['tipo' => Orm_field::TIPO_ID],
+		'id_inventario' => [
+			'tipo'     => Orm_field::TIPO_HAS_ONE,
+			'relation' => ['model' => inventario::class],
+		],
+		'hoja' => [
+			'label'          => 'Hoja',
+			'tipo'           => Orm_field::TIPO_INT,
+			'largo'          => 10,
+			'texto_ayuda'    => 'N&uacute;mero de la hoja usada en el inventario',
+			'es_obligatorio' => TRUE,
+		],
+		'ubicacion' => [
+			'label'          => 'Ubicaci&oacute;n del material',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Indica la posici&oacute;n del material en el almac&eacute;n.',
+			'es_obligatorio' => TRUE,
+		],
+		'hu' => [
+			'label'          => 'HU del material',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'Indica la HU del material en el almac&eacute;n.',
+			'es_obligatorio' => FALSE,
+		],
+		'catalogo' => [
+			'tipo'        => Orm_field::TIPO_HAS_ONE,
+			'relation'    => ['model' => catalogo::class],
+			'texto_ayuda' => 'Cat&aacute;logo del material.',
+		],
+		'descripcion' => [
+			'label'          => 'Descripci&oacute;n del material',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 45,
+			'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'lote' => [
+			'label'          => 'Lote del material',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Lote del material.',
+			'es_obligatorio' => TRUE,
+		],
+		'centro' => [
+			'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+			'relation' => ['model' => centro::class],
+		],
+		'almacen' => [
+			'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+			'relation' => ['model' => almacen::class],
+		],
+		'um' => [
+			'tipo'     =>  Orm_field::TIPO_HAS_ONE,
+			'relation' => ['model' => unidad_medida::class],
+		],
+		'stock_sap' => [
+			'label'          => 'Stock SAP del material',
+			'tipo'           => Orm_field::TIPO_INT,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Stock sist&eacute;mico (SAP) del material.',
+			'es_obligatorio' => TRUE,
+		],
+		'stock_fisico' => [
+			'label'          => 'Stock f&iacute;sico del material',
+			'tipo'           => Orm_field::TIPO_INT,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Stock f&iacute;sico (inventariado) del material.',
+			'es_obligatorio' => TRUE,
+		],
+		'digitador' => [
+			'tipo'        => Orm_field::TIPO_HAS_ONE,
+			'relation'    => ['model' => \Acl\usuario::class],
+			'texto_ayuda' => 'Digitador de la hoja.',
+		],
+		'auditor' => [
+			'tipo'        => Orm_field::TIPO_HAS_ONE,
+			'relation'    => [
+				'model'      => auditor::class,
+				'conditions' => ['activo' => 1],
+			],
+			'texto_ayuda' => 'Auditor de la hoja.',
+		],
+		'reg_nuevo' => [
+			'label'          => 'Registro nuevo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 1,
+			'texto_ayuda'    => 'Indica si el registro es nuevo.',
+			'es_obligatorio' => TRUE,
+		],
+		'fecha_modificacion' => [
+			'label'          => 'Fecha de modificacion',
+			'tipo'           => Orm_field::TIPO_DATETIME,
+			'texto_ayuda'    => 'Fecha de modificaci&oacute;n del registro.',
+			'es_obligatorio' => TRUE,
+		],
+		'observacion' => [
+			'label'       => 'Observaci&oacute;n de registro',
+			'tipo'        => Orm_field::TIPO_CHAR,
+			'largo'       => 200,
+			'texto_ayuda' => 'M&aacute;ximo 200 caracteres.',
+		],
+		'stock_ajuste' => [
+			'label'       => 'Stock de ajuste del material',
+			'tipo'        => Orm_field::TIPO_INT,
+			'largo'       => 10,
+			'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
+		],
+		'glosa_ajuste' => [
+			'label'       => 'Observaci&oacute;n del ajuste',
+			'tipo'        => Orm_field::TIPO_CHAR,
+			'largo'       => 100,
+			'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
+		],
+		'fecha_ajuste' => [
+			'label'       => 'Fecha del ajuste',
+			'tipo'        => Orm_field::TIPO_DATETIME,
+			'texto_ayuda' => 'Fecha de modificacion del ajuste.',
+		],
+	];
+
 	/**
 	 * Define la cantidad de registros por página para los ajustes
 	 *
@@ -49,143 +178,12 @@ class Detalle_inventario extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_detalle Identificador del detalle de inventario
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_detalle = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_detalle_inventario'),
-				'label'        => 'Detalle inventario',
-				'label_plural' => 'Detalles inventario',
-				'order_by'     => 'id',
-			],
-			'campos' => [
-				'id'            => ['tipo' => Orm_field::TIPO_ID],
-				'id_inventario' => [
-					'tipo'     => Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => inventario::class],
-				],
-				'hoja' => [
-					'label'          => 'Hoja',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'N&uacute;mero de la hoja usada en el inventario',
-					'es_obligatorio' => TRUE,
-				],
-				'ubicacion' => [
-					'label'          => 'Ubicaci&oacute;n del material',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Indica la posici&oacute;n del material en el almac&eacute;n.',
-					'es_obligatorio' => TRUE,
-				],
-				'hu' => [
-					'label'          => 'HU del material',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'Indica la HU del material en el almac&eacute;n.',
-					'es_obligatorio' => FALSE,
-				],
-				'catalogo' => [
-					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => catalogo::class],
-					'texto_ayuda' => 'Cat&aacute;logo del material.',
-				],
-				'descripcion' => [
-					'label'          => 'Descripci&oacute;n del material',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 45,
-					'texto_ayuda'    => 'M&aacute;ximo 45 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'lote' => [
-					'label'          => 'Lote del material',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Lote del material.',
-					'es_obligatorio' => TRUE,
-				],
-				'centro' => [
-					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => centro::class],
-				],
-				'almacen' => [
-					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => almacen::class],
-				],
-				'um' => [
-					'tipo'     =>  Orm_field::TIPO_HAS_ONE,
-					'relation' => ['model' => unidad_medida::class],
-				],
-				'stock_sap' => [
-					'label'          => 'Stock SAP del material',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Stock sist&eacute;mico (SAP) del material.',
-					'es_obligatorio' => TRUE,
-				],
-				'stock_fisico' => [
-					'label'          => 'Stock f&iacute;sico del material',
-					'tipo'           => Orm_field::TIPO_INT,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Stock f&iacute;sico (inventariado) del material.',
-					'es_obligatorio' => TRUE,
-				],
-				'digitador' => [
-					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => \Acl\usuario::class],
-					'texto_ayuda' => 'Digitador de la hoja.',
-				],
-				'auditor' => [
-					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => [
-						'model'      => auditor::class,
-						'conditions' => ['activo' => 1],
-					],
-					'texto_ayuda' => 'Auditor de la hoja.',
-				],
-				'reg_nuevo' => [
-					'label'          => 'Registro nuevo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 1,
-					'texto_ayuda'    => 'Indica si el registro es nuevo.',
-					'es_obligatorio' => TRUE,
-				],
-				'fecha_modificacion' => [
-					'label'          => 'Fecha de modificacion',
-					'tipo'           => Orm_field::TIPO_DATETIME,
-					'texto_ayuda'    => 'Fecha de modificaci&oacute;n del registro.',
-					'es_obligatorio' => TRUE,
-				],
-				'observacion' => [
-					'label'       => 'Observaci&oacute;n de registro',
-					'tipo'        => Orm_field::TIPO_CHAR,
-					'largo'       => 200,
-					'texto_ayuda' => 'M&aacute;ximo 200 caracteres.',
-				],
-				'stock_ajuste' => [
-					'label'       => 'Stock de ajuste del material',
-					'tipo'        => Orm_field::TIPO_INT,
-					'largo'       => 10,
-					'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
-				],
-				'glosa_ajuste' => [
-					'label'       => 'Observaci&oacute;n del ajuste',
-					'tipo'        => Orm_field::TIPO_CHAR,
-					'largo'       => 100,
-					'texto_ayuda' => 'M&aacute;ximo 100 caracteres.',
-				],
-				'fecha_ajuste' => [
-					'label'       => 'Fecha del ajuste',
-					'tipo'        => Orm_field::TIPO_DATETIME,
-					'texto_ayuda' => 'Fecha de modificacion del ajuste.',
-				],
-			],
-		];
-
-		parent::__construct($id_detalle);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------
@@ -197,7 +195,14 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function __toString()
 	{
-		return (string) $this->hoja;
+		return (string) $this->get_value('hoja');
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_stock_sap()
+	{
+		return fmt_cantidad($this->get_value('stock_sap'));
 	}
 
 	// --------------------------------------------------------------------
@@ -209,12 +214,13 @@ class Detalle_inventario extends ORM_Model {
 	 * @param  integer $hoja          Numero de la hoja a rescatar
 	 * @return Collection             Registros de detalle inventario
 	 */
-	public function get_hoja($id_inventario = 0, $hoja = 0)
+	public function get_hoja_inventario($id_inventario = 0, $hoja = 0)
 	{
-		return $this->find('all', [
-			'conditions' => ['id_inventario' => $id_inventario, 'hoja' => $hoja],
-			'order_by'   => 'ubicacion, catalogo, id'
-		]);
+		return $this
+			->where('id_inventario', $id_inventario)
+			->where('hoja', $hoja)
+			->order_by('ubicacion, catalogo, id')
+			->get();
 	}
 
 	// --------------------------------------------------------------------
@@ -228,13 +234,11 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function get_auditor_hoja($id_inventario = 0, $hoja = 0)
 	{
-		return $this->db
-			->select_max('auditor')
-			->where('id_inventario', $id_inventario)
-			->where('hoja', $hoja)
-			->get($this->get_tabla())
-			->row()
-			->auditor;
+		return $this->get_hoja_inventario($id_inventario, $hoja)
+			->map(function($detalle) {
+				return $detalle->get_value('auditor');
+			})
+			->max();
 	}
 
 	// --------------------------------------------------------------------
@@ -256,24 +260,16 @@ class Detalle_inventario extends ORM_Model {
 	 *
 	 * @param  integer $id_inventario         ID del inventario a consultar
 	 * @param  integer $ocultar_regularizadas indicador si se ocultan los registros ya regularizados
-	 * @param  integer $pagina                Pagina a mostrar
 	 * @return Collection                     Arreglo con el detalle de los registros
 	 */
-	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0, $pagina = 1)
+	public function get_ajustes($id_inventario = 0, $ocultar_regularizadas = 0)
 	{
 		$stock_ajuste = $ocultar_regularizadas === 1 ? '+ stock_ajuste ' : '';
 
-		$arr_detalles = $this->db
-			->order_by('catalogo, lote, centro, almacen, ubicacion')
-			->where('id_inventario', $id_inventario)
+		return $this->where('id_inventario', $id_inventario)
 			->where("stock_fisico - stock_sap {$stock_ajuste}<> 0",	NULL, FALSE)
-			->limit($this->page_ajustes, ($pagina-1)*$this->page_ajustes)
-			->get($this->get_tabla())
-			->result_array();
-
-		return collect($arr_detalles)->map(function($linea_detalle) {
-			return new Detalle_inventario($linea_detalle);
-		});
+			->order_by('catalogo, lote, centro, almacen, ubicacion')
+			->paginate();
 	}
 
 	// --------------------------------------------------------------------
@@ -289,10 +285,9 @@ class Detalle_inventario extends ORM_Model {
 	{
 		//determina la cantidad de registros
 		$stock_ajuste = $ocultar_regularizadas === 1 ? '+ stock_ajuste ' : '';
-		$total_rows   = $this->db
-			->where('id_inventario', $id_inventario)
+		$total_rows   = $this->where('id_inventario', $id_inventario)
 			->where("stock_fisico - stock_sap {$stock_ajuste}<> 0",	NULL, FALSE)
-			->count_all_results($this->get_tabla());
+			->count();
 
 		$this->load->library('pagination');
 		$this->pagination->initialize([
@@ -463,7 +458,7 @@ class Detalle_inventario extends ORM_Model {
 	public function get_editar_post_data($id_detalle = NULL, $hoja = 0)
 	{
 		$id_inventario = Inventario::create()->get_id_inventario_activo();
-		$material      = new Catalogo(request('catalogo'));
+		$material      = (new Catalogo)->find_id(request('catalogo'));
 		$id_auditor    = $this->get_auditor_hoja($id_inventario, $hoja);
 
 		if ($id_detalle)
@@ -535,7 +530,7 @@ class Detalle_inventario extends ORM_Model {
 	 */
 	public function update_digitacion($id_inventario = 0, $hoja = 0, $id_usr = 0)
 	{
-		return $this->get_hoja($id_inventario, $hoja)
+		return $this->get_hoja_inventario($id_inventario, $hoja)
 			->map(function($linea_detalle) use ($id_usr) {
 				return $linea_detalle->fill([
 					'digitador'          => $id_usr,

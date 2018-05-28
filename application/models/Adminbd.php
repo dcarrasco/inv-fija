@@ -92,11 +92,12 @@ class Adminbd extends ORM_Model {
 	/**
 	 * Constructor de la clase
 	 *
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return  void
 	 */
-	public function __construct()
+	public function __construct($atributos = [])
 	{
-		parent::__construct();
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

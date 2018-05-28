@@ -35,35 +35,32 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Almacen extends ORM_Model {
 
+	protected $db_table = 'config::bd_almacenes';
+	protected $label = 'Almac&eacute;n';
+	protected $label_plural = 'Almacenes';
+	protected $order_by = 'almacen';
+
+	protected $fields = [
+		'almacen' => [
+			'label'          => 'Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'Nombre del almac&eacute;n. M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_almacen Identificador del almacen
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_almacen = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_almacenes'),
-				'label'        => 'Almac&eacute;n',
-				'label_plural' => 'Almacenes',
-				'order_by'     => 'almacen',
-			],
-			'campos' => [
-				'almacen' => [
-					'label'          => 'Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'Nombre del almac&eacute;n. M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-			],
-		];
-
-		parent::__construct($id_almacen);
+		parent::__construct($atributos);
 	}
 
 

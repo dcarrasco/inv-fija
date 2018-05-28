@@ -46,17 +46,14 @@ class Toa_config extends Orm_controller {
 	 * @var  array
 	 */
 	public $menu_opciones = [
-		'tecnico_toa' => ['url'=>'{{route}}/listado/tecnico_toa', 'texto'=>'lang::toa_config_menu_tecnico', 'icon'=>'user'],
-		'empresa_toa' => ['url'=>'{{route}}/listado/empresa_toa', 'texto'=>'lang::toa_config_menu_empresa', 'icon'=>'home'],
-		'tipo_trabajo_toa' => ['url'=>'{{route}}/listado/tipo_trabajo_toa', 'texto'=>'lang::toa_config_menu_tipo_trabajo', 'icon'=>'television',
-		],
-		'tip_material_toa' => ['url'=>'{{route}}/listado/tip_material_toa', 'texto'=>'lang::toa_config_menu_tipo_material', 'icon'=>'object-group',
-		],
-		'ciudad_toa' => ['url'=>'{{route}}/listado/ciudad_toa', 'texto'=>'lang::toa_config_menu_ciudad', 'icon'=>'map-marker'],
-		'empresa_ciudad_toa' => ['url'=>'{{route}}/listado/empresa_ciudad_toa', 'texto'=>'lang::toa_config_menu_empresa_ciudad', 'icon'=>'map-marker',
-		],
-		'ps_vpi_toa' => ['url'=>'{{route}}/listado/ps_vpi_toa', 'texto'=>'lang::toa_config_menu_ps_vpi', 'icon'=>'list'],
-		'clave_cierre' => ['url'=>'{{route}}/listado/clave_cierre', 'texto'=>'lang::toa_config_menu_clave_cierre', 'icon'=>'list'],
+		'tecnico_toa'        => ['icon'=>'user'],
+		'empresa_toa'        => ['icon'=>'home'],
+		'tipo_trabajo_toa'   => ['icon'=>'television'],
+		'tip_material_toa'   => ['icon'=>'object-group'],
+		'ciudad_toa'         => ['icon'=>'map-marker'],
+		'empresa_ciudad_toa' => ['icon'=>'map-marker'],
+		'ps_vpi_toa'         => ['icon'=>'list'],
+		'clave_cierre'       => ['icon'=>'list'],
 	];
 
 	/**
@@ -99,10 +96,10 @@ class Toa_config extends Orm_controller {
 	{
 		$this->output
 			->set_content_type('text')
-			->set_output(form_print_options(Ciudad_toa::create()->find('list', [
-				'conditions' => ['id_ciudad' => Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa)],
-				'opc_ini'    => FALSE,
-			])));
+			->set_output(form_print_options(Ciudad_toa::create()
+				->where('id_ciudad', Empresa_ciudad_toa::create()->ciudades_por_empresa($id_empresa))
+				->get_dropdown_list(FALSE)
+			));
 	}
 
 }

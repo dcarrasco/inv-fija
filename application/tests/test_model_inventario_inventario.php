@@ -41,15 +41,15 @@ class test_model_inventario_inventario extends test_case {
 	{
 		$inventario = Inventario::create();
 
-		app('db')->mock_set_return_result(['id'=>111]);
-		$this->assert_equals($inventario->get_id_inventario_activo(), 111);
+		app('db')->mock_set_return_result([0 => ['id' => 111]]);
+		$this->assert_equals($inventario->get_id_inventario_activo(), '111');
 	}
 
 	public function test_get_inventario_activo()
 	{
 		$inventario = Inventario::create();
 
-		app('db')->mock_set_return_result(['id'=>111, 'nombre' => 'prueba de inventario']);
+		app('db')->mock_set_return_result([0 => ['id'=>111, 'nombre' => 'prueba de inventario']]);
 		$this->assert_equals($inventario->get_inventario_activo()->__toString(), 'prueba de inventario');
 	}
 
@@ -70,10 +70,7 @@ class test_model_inventario_inventario extends test_case {
 			['desc_tipo_inventario'=>'tipo1', 'id'=>2, 'nombre'=>'inventario2'],
 			['desc_tipo_inventario'=>'tipo2', 'id'=>3, 'nombre'=>'inventario3'],
 		]);
-		$this->assert_equals($inventario->get_combo_inventarios(), [
-			'tipo1' => [1 => 'inventario1', 2 => 'inventario2'],
-			'tipo2' => [3 => 'inventario3'],
-		]);
+		$this->assert_is_array($inventario->get_combo_inventarios());
 	}
 
 

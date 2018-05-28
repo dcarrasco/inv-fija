@@ -35,79 +35,76 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Catalogo extends ORM_Model {
 
+	protected $db_table = 'config::bd_catalogos';
+	protected $label = 'Cat&aacute;logo';
+	protected $label_plural = 'Cat&aacute;logos';
+	protected $order_by = 'catalogo';
+
+	protected $fields = [
+		'catalogo' => [
+			'label'          => 'Cat&aacute;logo',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'descripcion' => [
+			'label'          => 'Descripci&oacute;n del material',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n del material. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			//'es_unico'       => TRUE
+		],
+		'pmp' => [
+			'label'          => 'Precio Medio Ponderado (PMP)',
+			'tipo'           => Orm_field::TIPO_REAL,
+			'largo'          => 10,
+			'decimales'      => 2,
+			'texto_ayuda'    => 'Valor PMP del material',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => FALSE,
+			'formato'        => 'monto,1',
+		],
+		'es_seriado' => [
+			'label'          => 'Material seriado',
+			'tipo'           => Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica si el material est&aacute; seriado en el sistema.',
+			'es_obligatorio' => TRUE,
+			'default'        => 0
+		],
+
+		// 'foto' => [
+		// 	'label'          => 'Foto del material',
+		// 	'tipo'           => 'picture',
+		// 	'texto_ayuda'    => 'Foto o imagen del material.',
+		// 	'es_obligatorio' => FALSE,
+		// ],
+
+		'tip_material' => [
+			'tipo'           => Orm_field::TIPO_HAS_MANY,
+			'relation'       => [
+				'model'         => \Toa\Tip_material_toa::class,
+				'join_table'    => 'config::bd_catalogo_tip_material_toa',
+				'id_one_table'  => ['id_catalogo'],
+				'id_many_table' => ['id_tip_material'],
+				//'conditions'    => ['id_app' => '@field_value:id_app'],
+			],
+			'texto_ayuda'    => 'Tipo de material TOA.',
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_catalogo Identificador del catalogo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_catalogo = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_catalogos'),
-				'label'        => 'Cat&aacute;logo',
-				'label_plural' => 'Cat&aacute;logos',
-				'order_by'     => 'catalogo',
-			],
-			'campos' => [
-				'catalogo' => [
-					'label'          => 'Cat&aacute;logo',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'C&oacute;digo del cat&aacute;logo. M&aacute;ximo 20 caracteres',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'descripcion' => [
-					'label'          => 'Descripci&oacute;n del material',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del material. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					//'es_unico'       => TRUE
-				],
-				'pmp' => [
-					'label'          => 'Precio Medio Ponderado (PMP)',
-					'tipo'           => Orm_field::TIPO_REAL,
-					'largo'          => 10,
-					'decimales'      => 2,
-					'texto_ayuda'    => 'Valor PMP del material',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => FALSE,
-					'formato'        => 'monto,1',
-				],
-				'es_seriado' => [
-					'label'          => 'Material seriado',
-					'tipo'           => Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica si el material est&aacute; seriado en el sistema.',
-					'es_obligatorio' => TRUE,
-					'default'        => 0
-				],
-
-				// 'foto' => [
-				// 	'label'          => 'Foto del material',
-				// 	'tipo'           => 'picture',
-				// 	'texto_ayuda'    => 'Foto o imagen del material.',
-				// 	'es_obligatorio' => FALSE,
-				// ],
-
-				'tip_material' => [
-					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => [
-						'model'         => \Toa\Tip_material_toa::class,
-						'join_table'    => config('bd_catalogo_tip_material_toa'),
-						'id_one_table'  => ['id_catalogo'],
-						'id_many_table' => ['id_tip_material'],
-						//'conditions'    => ['id_app' => '@field_value:id_app'],
-					],
-					'texto_ayuda'    => 'Tipo de material TOA.',
-				],
-			],
-		];
-
-		parent::__construct($id_catalogo);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

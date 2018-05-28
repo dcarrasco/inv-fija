@@ -213,14 +213,12 @@ END";
 		})->unique();
 
 		return $result_temp->map(function($registro) use ($result) {
-			$regs = $result->filter(function($reg_tmp) use ($registro) {
-				return $reg_tmp['_llave_'] === $registro['_llave_'];
-			});
+			$result->where('_llave_', $registro['_llave_'])
+				->each(function($reg_tmp) use(&$registro) {
+					$registro[$reg_tmp['tipo_articulo']] = $reg_tmp['total'];
+					$registro['VAL_'.$reg_tmp['tipo_articulo']] = $reg_tmp['VAL_total'];
+				});
 
-			$regs->each(function($reg_tmp) use(&$registro) {
-				$registro[$reg_tmp['tipo_articulo']] = $reg_tmp['total'];
-				$registro['VAL_'.$reg_tmp['tipo_articulo']] = $reg_tmp['VAL_total'];
-			});
 			return $registro;
 		});
 	}

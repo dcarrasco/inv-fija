@@ -117,7 +117,6 @@ class Collection implements IteratorAggregate {
 		}
 		else
 		{
-
 			$this->items[$llave] = $item;
 		}
 
@@ -333,6 +332,62 @@ class Collection implements IteratorAggregate {
 
 	// --------------------------------------------------------------------
 
+	public function where($key, $operator, $value = NULL)
+	{
+		return $this->filter($this->callback_where($key, $operator, $value));
+	}
+
+	// --------------------------------------------------------------------
+
+	public function where_in($key, $values = [])
+	{
+		return $this->where($key, 'IN', $values);
+	}
+
+	// --------------------------------------------------------------------
+
+	private function callback_where($key, $operator, $value = NULL)
+	{
+		if ($value == NULL)
+		{
+			$value = $operator;
+			$operator = '=';
+		}
+
+		return function ($item) use ($key, $operator, $value) {
+			if (is_object($item) && isset($item->{$key}))
+			{
+				$recuperado = $item->{$key};
+			}
+			if (is_object($item) && method_exists($item, $key))
+			{
+				$recuperado = $item->$key();
+			}
+			else
+			{
+				$recuperado = is_array($item) ? array_get($item, $key) : NULL;
+			}
+
+			switch ($operator) {
+				default:
+				case '=':
+				case '==':  return $recuperado == $value;
+				case '!=':
+				case '<>':  return $recuperado != $value;
+				case '<':   return $recuperado < $value;
+				case '>':   return $recuperado > $value;
+				case '<=':  return $recuperado <= $value;
+				case '>=':  return $recuperado >= $value;
+				case '===': return $recuperado === $value;
+				case '!==': return $recuperado !== $value;
+				case 'IN': return in_array($recuperado, $value);
+			}
+		};
+	}
+
+
+	// --------------------------------------------------------------------
+
 	/**
 	* Reduce la coleccion a un unico valor.
 	*
@@ -364,7 +419,9 @@ class Collection implements IteratorAggregate {
 			else
 			{
 				$elem = is_array($elem) ? $elem : (array)$elem;
-				$valor_campo = array_get($elem, $campo);
+				$valor_campo = is_numeric(array_get($elem, $campo, 0))
+					? array_get($elem, $campo, 0)
+					: 0;
 			}
 
 			return $total + $valor_campo;
@@ -652,7 +709,15 @@ class Collection implements IteratorAggregate {
 
 		foreach ($this->items as $item)
 		{
-			$itemValue = array_get($item, $value);
+			if (is_array($item))
+			{
+				$itemValue = array_get($item, $value);
+			}
+			else if (is_object($item))
+			{
+				$itemValue = $item->{$value};
+			}
+
 
 			// If the key is "null", we will just append the value to the array and keep
 			// looping. Otherwise we will key the array using the value of the key we

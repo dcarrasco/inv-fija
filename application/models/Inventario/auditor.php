@@ -35,44 +35,39 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Auditor extends ORM_Model {
 
+	protected $db_table = 'config::bd_auditores';
+	protected $label_plural = 'Auditores';
+	protected $order_by = 'nombre';
+
+	protected $fields = [
+		'id'     => ['tipo' => Orm_field::TIPO_ID],
+		'nombre' => [
+			'label'          => 'Nombre del auditor',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'activo' => [
+			'label'          => 'Activo',
+			'tipo'           =>  Orm_field::TIPO_BOOLEAN,
+			'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
+			'es_obligatorio' => TRUE,
+			'default'        => TRUE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  integer $id_auditor Identificador del auditor
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_auditor = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_auditores'),
-				'label'        => 'Auditor',
-				'label_plural' => 'Auditores',
-				'order_by'     => 'nombre',
-			],
-			'campos' => [
-				'id'     => ['tipo' => Orm_field::TIPO_ID],
-				'nombre' => [
-					'label'          => 'Nombre del auditor',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'activo' => [
-					'label'          => 'Activo',
-					'tipo'           =>  Orm_field::TIPO_BOOLEAN,
-					'texto_ayuda'    => 'Indica se el auditor est&aacute; activo dentro del sistema.',
-					'es_obligatorio' => TRUE,
-					'default'        => 1
-				],
-			],
-		];
-
-		parent::__construct($id_auditor);
+		parent::__construct($atributos);
 	}
-
 
 	// --------------------------------------------------------------------
 
@@ -84,6 +79,13 @@ class Auditor extends ORM_Model {
 	public function __toString()
 	{
 		return (string) $this->nombre;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function get_activo()
+	{
+		return $this->get_value('activo') ? 'Activo' : 'Inactivo';
 	}
 
 

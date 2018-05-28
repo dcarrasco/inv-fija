@@ -35,62 +35,59 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tecnico_toa extends ORM_Model {
 
+	protected $db_table = 'config::bd_tecnicos_toa';
+	protected $label = 'T&eacute;cnico TOA';
+	protected $label_plural = 'T&eacute;cnicos TOA';
+	protected $order_by = 'tecnico';
+
+	protected $fields = [
+		'id_tecnico' => [
+			'label'          => 'ID T&eacute;cnico',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'ID del t&eacute;cnico. M&aacute;ximo 20 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE
+		],
+		'tecnico' => [
+			'label'          => 'Nombre t&eacute;cnico',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre del t&eacute;cnico. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			// 'es_unico'       => TRUE
+		],
+		'rut' => [
+			'label'          => 'RUT del t&eacute;cnico',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 20,
+			'texto_ayuda'    => 'RUT del t&eacute;cnico. Sin puntos, con guion y d&iacute;gito verificador (en min&uacute;scula). M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			// 'es_unico'       => TRUE
+		],
+		'id_empresa' => [
+			'tipo'        => Orm_field::TIPO_HAS_ONE,
+			'relation'    => ['model' => Empresa_toa::class],
+			'texto_ayuda' => 'Empresa a la que pertenece el t&eacute;cnico.',
+			'onchange'    => 'form_onchange::id_empresa:id_ciudad:toa_config/get_select_ciudad',
+		],
+		'id_ciudad' => [
+			'tipo'        => Orm_field::TIPO_HAS_ONE,
+			'relation'    => ['model' => Ciudad_toa::class],
+			'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tecnico Identificador del tecnico
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tecnico = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tecnicos_toa'),
-				'label'        => 'T&eacute;cnico TOA',
-				'label_plural' => 'T&eacute;cnicos TOA',
-				'order_by'     => 'tecnico',
-			],
-			'campos' => [
-				'id_tecnico' => [
-					'label'          => 'ID T&eacute;cnico',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'ID del t&eacute;cnico. M&aacute;ximo 20 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE
-				],
-				'tecnico' => [
-					'label'          => 'Nombre t&eacute;cnico',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del t&eacute;cnico. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					// 'es_unico'       => TRUE
-				],
-				'rut' => [
-					'label'          => 'RUT del t&eacute;cnico',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 20,
-					'texto_ayuda'    => 'RUT del t&eacute;cnico. Sin puntos, con guion y d&iacute;gito verificador (en min&uacute;scula). M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					// 'es_unico'       => TRUE
-				],
-				'id_empresa' => [
-					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => empresa_toa::class],
-					'texto_ayuda' => 'Empresa a la que pertenece el t&eacute;cnico.',
-					'onchange'    => form_onchange('id_empresa', 'id_ciudad', 'toa_config/get_select_ciudad'),
-				],
-				'id_ciudad' => [
-					'tipo'        => Orm_field::TIPO_HAS_ONE,
-					'relation'    => ['model' => Ciudad_toa::class],
-					'texto_ayuda' => 'Ciudad a la que pertenece el t&eacute;cnico.',
-				],
-			],
-		];
-
-		parent::__construct($id_tecnico);
+		parent::__construct($atributos);
 
 		$this->get_ciudades_tecnico();
 	}
@@ -108,6 +105,16 @@ class Tecnico_toa extends ORM_Model {
 		return (string) $this->tecnico;
 	}
 
+
+	public function get_rut()
+	{
+		list($numero_rut, $dv_rut) = (strpos($this->get_value('rut'), '-') !== FALSE)
+			? explode('-', $this->get_value('rut'))
+			: [$this->get_value('rut'), ''];
+
+		return fmt_cantidad($numero_rut).'-'.$dv_rut;
+	}
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -119,7 +126,7 @@ class Tecnico_toa extends ORM_Model {
 	{
 		if ($this->id_empresa && $this->uri->segment(2) === 'editar')
 		{
-			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa);
+			$arr_ciudades = Empresa_ciudad_toa::create()->ciudades_por_empresa($this->id_empresa->get_id());
 
 			$arr_config_ciudad = [
 				'id_ciudad' => [
@@ -132,8 +139,8 @@ class Tecnico_toa extends ORM_Model {
 				],
 			];
 
-			$this->config_campos($arr_config_ciudad);
-			$this->get_relation_fields();
+			// $this->config_campos($arr_config_ciudad);
+			// $this->get_relation_fields();
 		}
 	}
 
@@ -166,7 +173,7 @@ class Tecnico_toa extends ORM_Model {
 		);
 
 		return $data->map(function($result_row) {
-			return static::create()->fill($result_row);
+			return static::create($result_row);
 		});
 	}
 

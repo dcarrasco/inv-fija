@@ -60,14 +60,14 @@ trait Model_has_form {
 			});
 		}
 
-		$field = $this->fields[$campo];
+		$field = $this->get_field($campo);
 
 		$reglas = 'trim';
 		$reglas .= ($field->get_es_obligatorio() AND ! $field->get_es_autoincrement()) ? '|required' : '';
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_INT)  ? '|integer' : '';
 		$reglas .= ($field->get_tipo() === Orm_field::TIPO_REAL) ? '|numeric' : '';
 		$reglas .= ($field->get_es_unico() AND ! $field->get_es_id())
-			? '|edit_unique['.$this->tabla
+			? '|edit_unique['.$this->get_db_table()
 				.':'.$field->get_nombre_bd()
 				.':'.implode($this->separador_campos, $this->get_campo_id())
 				.':'.$this->get_id().']'
@@ -81,7 +81,7 @@ trait Model_has_form {
 			$campo_rules = $campo.'[]';
 		}
 
-		return $this->form_validation->set_rules($campo_rules, ucfirst($this->get_field_label($campo)), $reglas);
+		return $this->form_validation->set_rules($campo_rules, ucfirst($this->get_field($campo)->get_label()), $reglas);
 	}
 
 	// --------------------------------------------------------------------
@@ -107,14 +107,14 @@ trait Model_has_form {
 		{
 			$data = [
 				'form_label'    => form_label(
-					ucfirst($this->get_field_label($campo)).$this->get_field_marca_obligatorio($campo),
+					ucfirst($this->get_field($campo)->get_label()).$this->get_marca_obligatorio($campo),
 					"id_{$campo}",
 					['class' => 'control-label col-sm-4']
 				),
 				'item_error'    => form_has_error_class($campo),
 				'item-feedback' => is_null($field_error) ? '' : 'has-feedback',
 				'item_form'     => $this->print_form_field($campo, FALSE, '', $field_error),
-				'item_help'     => $show_help ? $this->get_field_texto_ayuda($campo) : '',
+				'item_help'     => $show_help ? $this->get_field($campo)->get_texto_ayuda() : '',
 			];
 
 			return $this->parser->parse('orm/form_item', $data, TRUE);
@@ -134,72 +134,39 @@ trait Model_has_form {
 	 */
 	public function print_form_field($campo = '', $filtra_activos = FALSE, $clase_adic = '', $field_error = NULL)
 	{
+		$this->set_values_condition($campo);
+
+		return $this->fields[$campo]->form_field(
+			array_get($this->values, $campo),
+			$filtra_activos,
+			$clase_adic,
+			$field_error
+		);
+	}
+
+	// --------------------------------------------------------------------
+
+	protected function set_values_condition($campo = '')
+	{
 		$arr_relation = $this->fields[$campo]->get_relation();
 
 		// busca condiciones en la relacion a las cuales se les deba buscar un valor de filtro
-		$arr_relation['conditions'] = collect($arr_relation)
-			->map(function ($elem) { return collect($elem); })
-			->get('conditions', collect())
+		$arr_relation['conditions'] = collect(collect($arr_relation)->get('conditions', []))
 			->map(function ($condition) {
-				if (! is_array($condition) AND strpos($condition, '@field_value') === 0)
+				if (is_string($condition) AND strpos($condition, '@field_value') === 0)
 				{
 					list($cond_tipo, $cond_campo, $cond_default) = explode(':', $condition);
-					return $this->{$cond_campo} ? $this->{$cond_campo} : $cond_default;
+					return $this->{$cond_campo}
+						? (gettype($this->{$cond_campo}) === 'object' ? $this->{$cond_campo}->get_id() : $this->{$cond_campo})
+						: $cond_default;
 				}
 
 				return $condition;
 			})->all();
 
 		$this->fields[$campo]->set_relation($arr_relation);
-
-		return $this->fields[$campo]->form_field($this->{$campo}, $filtra_activos, $clase_adic, $field_error);
 	}
 
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el texto label de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return string        Label del campo
-	 */
-	public function get_field_label($campo = '')
-	{
-		// $tipo = $this->fields[$campo]->get_tipo();
-
-		// if (($tipo === Orm_field::TIPO_HAS_ONE OR $tipo === Orm_field::TIPO_HAS_MANY) AND ! $this->got_relations)
-		// {
-		// 	$this->get_relation_fields();
-		// }
-
-		return $this->fields[$campo]->get_label();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve el texto de ayuda de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return string        Texto de ayuda del campo
-	 */
-	public function get_field_texto_ayuda($campo = '')
-	{
-		return $this->fields[$campo]->get_texto_ayuda();
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Devuelve la propiedad es_obligatorio de un campo del modelo
-	 *
-	 * @param  string $campo Nombre del campo
-	 * @return boolean       Indicador si el campo es obligatorio
-	 */
-	public function field_es_obligatorio($campo = '')
-	{
-		return $this->fields[$campo]->get_es_obligatorio();
-	}
 
 	// --------------------------------------------------------------------
 
@@ -209,27 +176,11 @@ trait Model_has_form {
 	 * @param  string $campo Nombre del campo
 	 * @return string Texto html con la marca del campo
 	 */
-	public function get_field_marca_obligatorio($campo = '')
+	public function get_marca_obligatorio($campo = '')
 	{
-		return $this->field_es_obligatorio($campo) ? ' <span class="text-danger">*</span>' : '';
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Puebla los campos del modelo con los valores del post
-	 *
-	 * @return void
-	 */
-	public function recuperar_post()
-	{
-		$post_request = collect($this->fields)
-			->map(function($field) {
-				return NULL;
-			})->merge(request())
-			->all();
-
-		return $this->fill_from_array($post_request);
+		return $this->get_field($campo)->get_es_obligatorio()
+			? ' <span class="text-danger">*</span>'
+			: '';
 	}
 
 }

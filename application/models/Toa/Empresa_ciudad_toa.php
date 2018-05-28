@@ -35,51 +35,48 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Empresa_ciudad_toa extends ORM_Model {
 
+	protected $db_table = 'config::bd_empresas_ciudades_toa';
+	protected $label = 'Empresa ciudad TOA';
+	protected $label_plural = 'Empresas ciudades TOA';
+	protected $order_by = 'id_empresa, id_ciudad';
+
+	protected $fields = [
+		'id_empresa' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => empresa_toa::class],
+			'texto_ayuda'    => 'Seleccione una empresa TOA.',
+		],
+		'id_ciudad' => [
+			'tipo'           => Orm_field::TIPO_HAS_ONE,
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'relation'       => ['model' => ciudad_toa::class],
+			'texto_ayuda'    => 'Seleccione una Ciudad TOA.',
+		],
+		'almacenes' => [
+			'tipo'     => Orm_field::TIPO_HAS_MANY,
+			'relation' => [
+				'model'         => \Stock\almacen_sap::class,
+				'join_table'    => 'config::bd_empresas_ciudades_almacenes_toa',
+				'id_one_table'  => ['id_empresa', 'id_ciudad'],
+				'id_many_table' => ['centro', 'cod_almacen'],
+				'conditions'    => ['centro' => ['CH32','CH33']],
+			],
+			'texto_ayuda' => 'Almacenes asociados a la empresa - ciudad.',
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_empresa Identificador de la empresa
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_empresa = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_empresas_ciudades_toa'),
-				'label'        => 'Empresa ciudad TOA',
-				'label_plural' => 'Empresas ciudades TOA',
-				'order_by'     => 'id_empresa, id_ciudad',
-			],
-			'campos' => [
-				'id_empresa' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => empresa_toa::class],
-					'texto_ayuda'    => 'Seleccione una empresa TOA.',
-				],
-				'id_ciudad' => [
-					'tipo'           => Orm_field::TIPO_HAS_ONE,
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'relation'       => ['model' => ciudad_toa::class],
-					'texto_ayuda'    => 'Seleccione una Ciudad TOA.',
-				],
-				'almacenes' => [
-					'tipo'     => Orm_field::TIPO_HAS_MANY,
-					'relation' => [
-						'model'         => \Stock\almacen_sap::class,
-						'join_table'    => config('bd_empresas_ciudades_almacenes_toa'),
-						'id_one_table'  => ['id_empresa', 'id_ciudad'],
-						'id_many_table' => ['centro', 'cod_almacen'],
-						'conditions'    => ['centro' => ['CH32','CH33']],
-					],
-					'texto_ayuda' => 'Almacenes asociados a la empresa - ciudad.',
-				],
-			],
-		];
-
-		parent::__construct($id_empresa);
+		parent::__construct($atributos);
 	}
 
 
@@ -105,7 +102,7 @@ class Empresa_ciudad_toa extends ORM_Model {
 	 */
 	public function ciudades_por_empresa($id_empresa = NULL)
 	{
-		return $this->find('all', ['conditions' => ['id_empresa' => $id_empresa]])
+		return $this->where('id_empresa', $id_empresa)->get()
 			->map(function ($ciudad_empresa) {
 				return $ciudad_empresa->id_ciudad;
 			})

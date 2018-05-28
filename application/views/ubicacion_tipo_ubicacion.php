@@ -102,7 +102,7 @@
 		</div>
 
 		<div class="text-center">
-			<?= $ubicaciones->first()->crea_links_paginas(); ?>
+			<?= Inventario\Ubicacion::create()->crea_links_paginas(); ?>
 		</div>
 	</div> <!-- fin content-module-main -->
 

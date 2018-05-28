@@ -43,6 +43,8 @@ trait Model_has_pagination {
 	 */
 	protected $page_name = 'page';
 
+	protected $pagination_links = '';
+
 	// --------------------------------------------------------------------
 
 	/**
@@ -57,15 +59,22 @@ trait Model_has_pagination {
 
 	// --------------------------------------------------------------------
 
+
+	public function get_pagination_links()
+	{
+		return $this->pagination_links;
+	}
+
+	// --------------------------------------------------------------------
+
 	/**
 	 * Crea links de paginación para desplegar un listado del modelo
 	 *
 	 * @return string         Links de paginación
 	 */
-	public function crea_links_paginas()
+	public function crea_links_paginas($total_rows = 0)
 	{
 		$this->load->library('pagination');
-		$total_rows = $this->find('count', ['filtro' => $this->filtro], FALSE);
 
 		$cfg_pagination = [
 			'uri_segment'     => 5,
@@ -113,20 +122,25 @@ trait Model_has_pagination {
 	/**
 	 * Recupera listado paginado
 	 *
-	 * @param  integer $page Numero de página a recuperar
-	 * @return void
+	 * @return Collection
 	 */
-	public function paginate($page = NULL)
+	public function paginate($recupera_relation = TRUE)
 	{
-		$page = is_null($page) ? request($this->page_name, 1) : $page;
+		$this->select_from_database();
+		$total_query = clone $this->db_query;
+		$total_rows = $total_query->select('count(*) as cantidad')->get()->row()->cantidad;
+		$this->pagination_links = $this->crea_links_paginas($total_rows);
 
-		return $this->find('all', [
-			'filtro' => $this->filtro,
-			'limit'  => $this->page_results,
-			'offset' => ($page - 1) * $this->page_results,
-		]);
+		return $this->limit($this->page_results, (request($this->page_name, 1) - 1) * $this->page_results)
+			->get($recupera_relation);
 	}
 
+	// --------------------------------------------------------------------
+
+	public function list_paginated()
+	{
+		return $this->filter_by(request('filtro'))->order_by($this->order_by)->paginate(TRUE);
+	}
 
 }
 /* End of file model_has_pagination.php */

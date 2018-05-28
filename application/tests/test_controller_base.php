@@ -62,16 +62,16 @@ class test_controller_base extends test_case {
 			'menu3' => ['url'=>'{{otra}}/ruta3', 'texto'=>'lang::clave_no_existe3'],
 		];
 
-		$controller->set_menu_modulo();
+		$menu = $controller->set_menu_modulo();
 
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu1.url'), 'tests/ruta1');
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu1.texto'), 'Passed');
+		$this->assert_equals(array_get($menu, 'menu1.url'), 'tests/ruta1');
+		$this->assert_equals(array_get($menu, 'menu1.texto'), 'Passed');
 
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu2.url'), 'ruta2');
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu2.texto'), FALSE);
+		$this->assert_equals(array_get($menu, 'menu2.url'), 'ruta2');
+		$this->assert_equals(array_get($menu, 'menu2.texto'), FALSE);
 
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu3.url'), '{{otra}}/ruta3');
-		$this->assert_equals(array_get($controller->menu_opciones, 'menu3.texto'), FALSE);
+		$this->assert_equals(array_get($menu, 'menu3.url'), '{{otra}}/ruta3');
+		$this->assert_equals(array_get($menu, 'menu3.texto'), FALSE);
 
 		$controller->menu_opciones = [];
 		$controller->set_menu_modulo();

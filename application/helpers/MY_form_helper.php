@@ -567,24 +567,30 @@ if ( ! function_exists('form_onchange'))
 	 * @param	string $controller Controlador
 	 * @return	string
 	 */
-	function form_onchange($elem_orig = '', $elem_dest = '', $controller = '')
+	function form_onchange($params = '')
 	{
-		$form_elem_prefix = '#id_';
+		list($func, $params) = explode('::', $params);
 
-		$elem_orig = $form_elem_prefix.$elem_orig;
-		$elem_dest = $form_elem_prefix.$elem_dest;
-
-		$script_js = '';
-		if ($elem_orig)
+		if ($func === 'form_onchange')
 		{
-			// limpia elem destino
-			$script_js .= "\$('{$elem_dest}').html('');";
+			list($elem_orig, $elem_dest, $controller) = explode(':', $params);
 
-			// recupera opciones
-			$script_js .= "\$.get('".site_url($controller)."'+'/'+\$('{$elem_orig}').val(), function(data){\$('{$elem_dest}').html(data);});";
+			$form_elem_prefix = '#id_';
+			$elem_orig = $form_elem_prefix.$elem_orig;
+			$elem_dest = $form_elem_prefix.$elem_dest;
+
+			$script_js = '';
+			if ($elem_orig)
+			{
+				// limpia elem destino
+				$script_js .= "\$('{$elem_dest}').html('');";
+
+				// recupera opciones
+				$script_js .= "\$.get('".site_url($controller)."'+'/'+\$('{$elem_orig}').val(), function(data){\$('{$elem_dest}').html(data);});";
+			}
+
+			return $script_js;
 		}
-
-		return $script_js;
 	}
 
 }

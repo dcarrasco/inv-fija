@@ -35,43 +35,40 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Tipo_inventario extends ORM_Model {
 
+	protected $db_table = 'config::bd_tipos_inventario';
+	protected $label = 'Tipo de inventario';
+	protected $label_plural = 'Tipos de inventario';
+	protected $order_by = 'desc_tipo_inventario';
+
+	protected $fields = [
+		'id_tipo_inventario' => [
+			'label'          => 'Tipo de inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+		'desc_tipo_inventario' => [
+			'label'          => 'Descripci&oacute;n tipo de inventario',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+			'es_unico'       => TRUE,
+		],
+	];
+
 	/**
 	 * Constructor de la clase
 	 *
-	 * @param  string $id_tipo_inventario Identificador del modulo
+	 * @param  array $atributos Valores para inicializar el modelo
 	 * @return void
 	 */
-	public function __construct($id_tipo_inventario = NULL)
+	public function __construct($atributos = [])
 	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_tipos_inventario'),
-				'label'        => 'Tipo de inventario',
-				'label_plural' => 'Tipos de inventario',
-				'order_by'     => 'desc_tipo_inventario',
-			],
-			'campos' => [
-				'id_tipo_inventario' => [
-					'label'          => 'Tipo de inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-				'desc_tipo_inventario' => [
-					'label'          => 'Descripci&oacute;n tipo de inventario',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del tipo de inventario. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-					'es_unico'       => TRUE,
-				],
-			],
-		];
-
-		parent::__construct($id_tipo_inventario);
+		parent::__construct($atributos);
 	}
 
 	// --------------------------------------------------------------------

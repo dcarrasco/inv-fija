@@ -35,84 +35,81 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
  */
 class Almacen_sap extends ORM_Model {
 
-	/**
-	 * Constructor de la clase
-	 *
-	 * @param  string $id_almacen Identificador del almacen
-	 * @return void
-	 */
-	public function __construct($id_almacen = NULL)
-	{
-		$this->model_config = [
-			'modelo' => [
-				'tabla'        => config('bd_almacenes_sap'),
-				'label'        => 'Almac&eacute;n',
-				'label_plural' => 'Almacenes',
-				'order_by'     => 'centro, cod_almacen',
+	protected $db_table = 'config::bd_almacenes_sap';
+	protected $label = 'Almac&eacute;n SAP';
+	protected $label_plural = 'Almacenes SAP';
+	protected $order_by = 'centro, cod_almacen';
+
+	protected $fields = [
+		'centro' => [
+			'label'          => 'Centro',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'C&oacute;digo SAP del centro. M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+		],
+		'cod_almacen' => [
+			'label'          => 'Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 10,
+			'texto_ayuda'    => 'C&oacute;digo SAP del almac&eacuten. M&aacute;ximo 10 caracteres.',
+			'es_id'          => TRUE,
+			'es_obligatorio' => TRUE,
+		],
+		'des_almacen' => [
+			'label'          => 'Descripci&oacute;n Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Descripci&oacute;n del almac&eacuten. M&aacute;ximo 50 caracteres.',
+			'es_obligatorio' => TRUE,
+		],
+		'uso_almacen' => [
+			'label'          => 'Uso Almac&eacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
+		],
+		'responsable' => [
+			'label'          => 'Responsable',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Nombre del responsable del almac&eacuten. M&aacute;ximo 50 caracteres.',
+		],
+		'tipo_op' => [
+			'label'          => 'Tipo operaci&oacute;n',
+			'tipo'           => Orm_field::TIPO_CHAR,
+			'largo'          => 50,
+			'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
+			'choices'        => [
+				'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
+				'FIJA'  => 'Operaci&oacute;n Fija'
 			],
-			'campos' => [
-				'centro' => [
-					'label'          => 'Centro',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'C&oacute;digo SAP del centro. M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-				],
-				'cod_almacen' => [
-					'label'          => 'Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 10,
-					'texto_ayuda'    => 'C&oacute;digo SAP del almac&eacuten. M&aacute;ximo 10 caracteres.',
-					'es_id'          => TRUE,
-					'es_obligatorio' => TRUE,
-				],
-				'des_almacen' => [
-					'label'          => 'Descripci&oacute;n Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Descripci&oacute;n del almac&eacuten. M&aacute;ximo 50 caracteres.',
-					'es_obligatorio' => TRUE,
-				],
-				'uso_almacen' => [
-					'label'          => 'Uso Almac&eacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Indica para que se usa el almac&eacute;n. M&aacute;ximo 50 caracteres.',
-				],
-				'responsable' => [
-					'label'          => 'Responsable',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Nombre del responsable del almac&eacuten. M&aacute;ximo 50 caracteres.',
-				],
-				'tipo_op' => [
-					'label'          => 'Tipo operaci&oacute;n',
-					'tipo'           => Orm_field::TIPO_CHAR,
-					'largo'          => 50,
-					'texto_ayuda'    => 'Seleccione el tipo de operaci&oacute;n.',
-					'choices'        => [
-						'MOVIL' => 'Operaci&oacute;n M&oacute;vil',
-						'FIJA'  => 'Operaci&oacute;n Fija'
-					],
-					'es_obligatorio' => TRUE,
-					'onchange'       => form_onchange('tipo_op', 'tipos', 'stock_config/get_select_tipoalmacen'),
-				],
-				'tipos' => [
-					'tipo'           => Orm_field::TIPO_HAS_MANY,
-					'relation'       => [
-						'model'         => tipoalmacen_sap::class,
-						'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
-						'join_table'    => config('bd_tipoalmacen_sap'),
-						'id_one_table'  => ['centro', 'cod_almacen'],
-						'id_many_table' => ['id_tipo'],
-					],
-					'texto_ayuda'    => 'Tipos asociados al almac&eacuten.',
-				],
+			'es_obligatorio' => TRUE,
+			'onchange'       => 'form_onchange::tipo_op:tipos:stock_config/get_select_tipoalmacen',
+		],
+		'tipos' => [
+			'tipo'           => Orm_field::TIPO_HAS_MANY,
+			'relation'       => [
+				'model'         => tipoalmacen_sap::class,
+				'join_table'    => 'config::bd_tipoalmacen_sap',
+				'id_one_table'  => ['centro', 'cod_almacen'],
+				'id_many_table' => ['id_tipo'],
+				'conditions'    => ['tipo_op' => '@field_value:tipo_op:MOVIL'],
+			],
+			'texto_ayuda'    => 'Tipos asociados al almac&eacuten.',
 			],
 		];
 
-		parent::__construct($id_almacen);
+	/**
+	 * Constructor de la clase
+	 *
+	 * @param  array $atributos Valores para inicializar el modelo
+	 * @return void
+	 */
+	public function __construct($atributos = [])
+	{
+		parent::__construct($atributos);
 	}
 
 
@@ -157,10 +154,7 @@ class Almacen_sap extends ORM_Model {
 	{
 		if ($filtro === '')
 		{
-			return $this->find('list', [
-				'conditions' => ['tipo_op' => $tipo_op],
-				'opc_ini'    => FALSE
-			]);
+			return $this->where('tipo_op', $tipo_op)->get_dropdown_list(FALSE);
 		}
 		else
 		{
@@ -169,7 +163,7 @@ class Almacen_sap extends ORM_Model {
 				->select("a.centro + '-' + a.cod_almacen + ' ' + a.des_almacen as valor", FALSE)
 				->order_by('a.centro, a.cod_almacen')
 				->where('a.tipo_op', $tipo_op)
-				->from($this->get_tabla().' a')
+				->from($this->get_db_table().' a')
 				->join(config('bd_tipoalmacen_sap') . ' ta', 'a.centro=ta.centro and a.cod_almacen=ta.cod_almacen')
 				->where_in('ta.id_tipo', explode($this->separador_campos, $filtro))
 				->get()->result_array();
