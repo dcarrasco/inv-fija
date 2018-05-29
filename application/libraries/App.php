@@ -121,7 +121,12 @@ class App {
 			return static::$instance;
 		}
 
-		return static::$instance->{$item};
+		if (isset(static::$instance->{$item}))
+		{
+			return static::$instance->{$item};
+		}
+
+		return;
 	}
 
 	// --------------------------------------------------------------------

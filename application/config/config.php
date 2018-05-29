@@ -517,18 +517,21 @@ $config['proxy_ips'] = '';
  * @param  string $class Nombre de la clase a cargar
  * @return void
  */
-function orm_models_autoload($class)
+if ( ! function_exists('orm_models_autoload'))
 {
-	$class = str_replace('\\', '/', $class);
+    function orm_models_autoload($class)
+    {
+    	$class = str_replace('\\', '/', $class);
 
-	foreach(['models', 'controllers', 'libraries', 'tests'] as $path)
-	{
-		if (file_exists(APPPATH.$path.'/'.$class.'.php'))
-		{
-			include_once(APPPATH.$path.'/'.$class.'.php');
-			return;
-		}
-	}
+    	foreach(['models', 'controllers', 'libraries', 'tests'] as $path)
+    	{
+    		if (file_exists(APPPATH.$path.'/'.$class.'.php'))
+    		{
+    			include_once(APPPATH.$path.'/'.$class.'.php');
+    			return;
+    		}
+    	}
+    }
 }
 
 spl_autoload_register('orm_models_autoload');

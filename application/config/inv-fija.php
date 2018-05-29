@@ -22,12 +22,12 @@ $config['app_nombre'] = 'Inventario Fija';
 */
 
 // Nombres de las bases de datos
-define('BD_INVENTARIO', getenv('BD_INVENTARIO'));
-define('BD_TOA', getenv('BD_TOA'));
-define('BD_LOGISTICA', getenv('BD_LOGISTICA'));
-define('BD_CONTROLES', getenv('BD_CONTROLES'));
-define('BD_PLANIFICACION', getenv('BD_PLANIFICACION'));
-define('BD_COLLATE', getenv('BD_COLLATE'));
+defined('BD_INVENTARIO') OR define('BD_INVENTARIO', getenv('BD_INVENTARIO'));
+defined('BD_TOA') OR define('BD_TOA', getenv('BD_TOA'));
+defined('BD_LOGISTICA') OR define('BD_LOGISTICA', getenv('BD_LOGISTICA'));
+defined('BD_CONTROLES') OR define('BD_CONTROLES', getenv('BD_CONTROLES'));
+defined('BD_PLANIFICACION') OR define('BD_PLANIFICACION', getenv('BD_PLANIFICACION'));
+defined('BD_COLLATE') OR define('BD_COLLATE', getenv('BD_COLLATE'));
 
 // Inventarios
 $config['bd_usuarios']           = BD_INVENTARIO.'fija_usuarios';

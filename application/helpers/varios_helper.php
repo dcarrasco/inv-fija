@@ -325,6 +325,11 @@ if ( ! function_exists('form_has_error_class'))
 	{
 		$ci =& get_instance();
 
+		if ( ! isset($ci->errors))
+		{
+			return '';
+		}
+
 		if ($ci->errors->is_empty())
 		{
 			$ci->errors = collect($ci->form_validation->error_array());
@@ -524,7 +529,7 @@ if ( ! function_exists('request'))
 	{
 		$ci =& get_instance();
 
-		if ( ! $ci->request)
+		if ( ! isset($ci->request) OR ! $ci->request)
 		{
 			$ci->request = collect($ci->input->post())
 				->merge($ci->input->get())
