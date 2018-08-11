@@ -105,7 +105,7 @@ class Orm_model implements IteratorAggregate {
 			$this->values[$field_nombre] = $field->get_default();
 		}
 		$this->relation_objects = new Collection();
-		$this->campo_id = $this->_determina_campo_id();
+		$this->campo_id = $this->determina_campo_id();
 
 		if ($atributos)
 		{
@@ -148,7 +148,7 @@ class Orm_model implements IteratorAggregate {
 	 * @param  array $arr_config arreglo con la configuración de los campos del modelo
 	 * @return nada
 	 */
-	protected function config_fields($arr_fields = [])
+	public function config_fields($arr_fields = [])
 	{
 		return collect($arr_fields)->map(function($config_field, $nombre_campo) {
 			return is_array($config_field)
@@ -219,6 +219,15 @@ class Orm_model implements IteratorAggregate {
 	public function get_fields()
 	{
 		return $this->fields;
+	}
+
+	// --------------------------------------------------------------------
+
+	public function set_fields($fields = [])
+	{
+		$this->fields = is_array($fields) ? $fields : (array) $fields;
+
+		return $this;
 	}
 
 	// --------------------------------------------------------------------

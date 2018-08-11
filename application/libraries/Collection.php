@@ -12,7 +12,6 @@
  * @link      localhost:1520
  *
  */
-if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 /**
  * Clase que modela una collección
@@ -98,6 +97,32 @@ class Collection implements IteratorAggregate {
 	public function getIterator()
 	{
 		return new ArrayIterator($this->items);
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Dump la coleccion
+	 *
+	 * @return $this
+	 */
+	public function dump()
+	{
+		dump($this);
+
+		return $this;
+	}
+
+	// --------------------------------------------------------------------
+
+	/**
+	 * Dump la coleccion y termina
+	 *
+	 * @return $this
+	 */
+	public function dd()
+	{
+		dd($this);
 	}
 
 	// --------------------------------------------------------------------
@@ -292,7 +317,7 @@ class Collection implements IteratorAggregate {
 	 * Determina si un elemento existe en la colección
 	 *
 	 * @param  string $elem Elemento a buscar
-	 * @return boolean        Indicador de existencia del indice
+	 * @return boolean      Indicador de existencia del indice
 	 */
 	public function contains($elem = NULL)
 	{
@@ -307,7 +332,7 @@ class Collection implements IteratorAggregate {
 	 * @param  string $glue String para concatenar los elementos de la coleccion
 	 * @return string       String concatenado
 	 */
-	function implode($glue = '')
+	public function implode($glue = '')
 	{
 		return implode($glue, $this->items);
 	}
@@ -477,32 +502,6 @@ class Collection implements IteratorAggregate {
 		$callback ? uasort($this->items, $callback) : asort($this->items);
 
 		return $this;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Dump la coleccion
-	 *
-	 * @return $this
-	 */
-	public function dump()
-	{
-		dump($this);
-
-		return $this;
-	}
-
-	// --------------------------------------------------------------------
-
-	/**
-	 * Dump la coleccion y termina
-	 *
-	 * @return $this
-	 */
-	public function dd()
-	{
-		dd($this);
 	}
 
 	// --------------------------------------------------------------------

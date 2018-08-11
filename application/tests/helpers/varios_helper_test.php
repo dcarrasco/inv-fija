@@ -11,6 +11,32 @@
  */
 class varios_helper_test extends TestCase {
 
+	public function setUp()
+	{
+		$this->resetInstance();
+	}
+
+	public function test_menu_app()
+	{
+		$this->assertEquals([], menu_app());
+	}
+
+	public function test_titulo_modulo()
+	{
+		$this->assertInternalType('string', titulo_modulo());
+		$this->assertContains('<i class=', titulo_modulo());
+	}
+
+	public function test_menu_modulo()
+	{
+		$this->assertEquals([], menu_modulo());
+	}
+
+	public function test_app_render_view()
+	{
+		$this->assertNull(app_render_view());
+	}
+
 	public function test_lang()
 	{
 		get_instance()->lang->load('acl_lang');
@@ -20,7 +46,29 @@ class varios_helper_test extends TestCase {
 
 	public function test_print_message()
 	{
+		$this->assertEquals('', print_message());
+		$this->assertInternalType('string', print_message(''));
 		$this->assertInternalType('string', print_message('prueba'));
+		$this->assertContains('prueba', print_message('prueba'));
+		$this->assertContains('info-sign', print_message('prueba'));
+		$this->assertContains('warning-sign', print_message('prueba', 'warning'));
+		$this->assertContains('exclamation-sign', print_message('prueba', 'danger'));
+		$this->assertContains('exclamation-sign', print_message('prueba', 'error'));
+		$this->assertContains('ok-sign', print_message('prueba', 'success'));
+	}
+
+	// public function test_set_message()
+	// {
+	// 	MonkeyPatch::patchMethod('CI_Session', ['set_flashdata' => 'set_flashdata']);
+	// 	$this->assertEquals('', set_message());
+	// }
+
+	public function test_print_validation_errors()
+	{
+		// $this->resetInstance();
+		// $this->CI->errors = collect();
+		// dump($this->CI);
+		$this->assertEquals('', print_validation_errors('a'));
 	}
 
 	public function test_form_array_format()

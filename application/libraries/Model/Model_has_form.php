@@ -137,7 +137,7 @@ trait Model_has_form {
 		$this->set_values_condition($campo);
 
 		return $this->fields[$campo]->form_field(
-			array_get($this->values, $campo),
+			$this->get_value($campo),
 			$filtra_activos,
 			$clase_adic,
 			$field_error

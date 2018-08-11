@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use App as AppContainer;
+use \App as AppContainer;
 
 /**
  * INVENTARIO FIJA
@@ -150,7 +150,7 @@ trait Model_has_attributes {
 	 *
 	 * @return arreglo con nombre de los campos marcados como id
 	 */
-	private function _determina_campo_id()
+	public function determina_campo_id()
 	{
 		return collect($this->fields)
 			->where('get_es_id', TRUE)

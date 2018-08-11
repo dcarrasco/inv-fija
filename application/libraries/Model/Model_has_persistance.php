@@ -35,7 +35,7 @@ trait Model_has_persistance {
 	 * @param  string $id_modelo ID del modelo
 	 * @return array
 	 */
-	protected function array_id($id_modelo)
+	public function array_id($id_modelo)
 	{
 		$model_fields = $this->fields;
 
@@ -93,11 +93,11 @@ trait Model_has_persistance {
 	 *
 	 * @return array
 	 */
-	protected function values_id_fields()
+	public function values_id_fields()
 	{
 		return collect($this->fields)
 			->only($this->get_campo_id())
-			->map(function($campo, $nombre) { return array_get($this->values, $nombre); })
+			->map(function($campo, $nombre) { return $this->get_value($nombre); })
 			->all();
 	}
 
@@ -108,12 +108,12 @@ trait Model_has_persistance {
 	 *
 	 * @return array
 	 */
-	protected function values_not_id_fields()
+	public function values_not_id_fields()
 	{
 		return collect($this->fields)
 			->except($this->get_campo_id())
 			->where('get_tipo', '!==', Orm_field::TIPO_HAS_MANY)
-			->map(function($campo, $nombre) { return array_get($this->values, $nombre); })
+			->map(function($campo, $nombre) { return $this->get_value($nombre); })
 			->all();
 	}
 
@@ -124,7 +124,7 @@ trait Model_has_persistance {
 	 *
 	 * @return boolean
 	 */
-	protected function has_autoincrement_id()
+	public function has_autoincrement_id()
 	{
 		return ! collect($this->fields)
 			->only($this->get_campo_id())

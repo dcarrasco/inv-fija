@@ -118,7 +118,8 @@ class Orm_field_test extends TestCase {
 
 	public function test_form_field_text_placeholder()
 	{
-		$this->assertContains('placeholder="label_label_label"', $this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'));
+		$this->assertContains('placeholder="', $this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'));
+		$this->assertContains('label_label_label', $this->get_field(['es_id'=>FALSE, 'label'=>'label_label_label'])->form_field('abc'));
 	}
 
 	public function test_form_field_choices()

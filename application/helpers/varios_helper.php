@@ -240,6 +240,8 @@ if ( ! function_exists('print_message'))
 
 			return $ci->parser->parse('common/alert', $arr_datos_view, TRUE);
 		}
+
+		return '';
 	}
 }
 
@@ -274,7 +276,7 @@ if ( ! function_exists('print_validation_errors'))
 		// carga objeto global CI
 		$ci =& get_instance();
 
-		if ($ci->errors->is_empty())
+		if ( ! isset($ci->errors) OR $ci->errors->is_empty())
 		{
 			$ci->errors = collect($ci->form_validation->error_array());
 		}
