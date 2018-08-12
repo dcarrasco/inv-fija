@@ -135,6 +135,7 @@ trait Model_uses_database {
 	{
 		if ($this->db_query === NULL)
 		{
+			$this->db->initialize();
 			$this->db_query = $this->db->from($this->get_db_table());
 		}
 
