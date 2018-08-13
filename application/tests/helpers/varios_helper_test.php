@@ -101,6 +101,7 @@ class varios_helper_test extends TestCase {
 		$this->assertEquals(fmt_monto(0, 'UN', '$', 0, FALSE), '');
 		$this->assertEquals(fmt_monto(1222, 'UN', 'CLP'), 'CLP&nbsp;1.222');
 		$this->assertEquals(fmt_monto(222123123, 'MM'), 'MM$&nbsp;222');
+		$this->assertEquals(fmt_monto('casa'), NULL);
 	}
 
 	public function test_fmt_hora()
@@ -126,6 +127,8 @@ class varios_helper_test extends TestCase {
 	public function test_fmt_rut()
 	{
 		$this->assertEquals(fmt_rut('138889998'), '13.888.999-8');
+		$this->assertEquals(fmt_rut('13888999-8'), '13.888.999-8');
+		$this->assertEquals(fmt_rut(), NULL);
 
 	}
 

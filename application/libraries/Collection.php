@@ -297,7 +297,6 @@ class Collection implements IteratorAggregate {
 	{
 		if (is_array($indice))
 		{
-			$has_indices = FALSE;
 			foreach ($indice as $indice_string)
 			{
 				if (array_key_exists($indice_string, $this->items))
@@ -714,7 +713,14 @@ class Collection implements IteratorAggregate {
 			}
 			else if (is_object($item))
 			{
-				$itemValue = $item->{$value};
+				if (property_exists($item, $value))
+				{
+					$itemValue = $item->{$value};
+				}
+				else
+				{
+					$itemValue = NULL;
+				}
 			}
 
 
